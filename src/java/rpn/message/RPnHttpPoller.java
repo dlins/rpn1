@@ -17,6 +17,11 @@ import java.net.*;
 public class RPnHttpPoller implements RPnResetableListener {
     
 
+    public static int  TEXT_POLLER = 0;
+    public static int OBJ_POLLER = 1;
+    public static int POLLING_MODE = TEXT_POLLER;
+
+
     private RPnMessageListener messageParser_ = null;
     private String hitURL_ = null;
     private boolean end_ = false;
@@ -81,31 +86,65 @@ public class RPnHttpPoller implements RPnResetableListener {
 
                 
 
-                String fullURL = new String(hitURL_ + "?" + RPnNetworkStatus.RPN_MEDIATORPROXY_REQ_ID_TAG + '=' +
+                String msgCommandURL = new String(hitURL_ + "?" + RPnNetworkStatus.RPN_MEDIATORPROXY_REQ_ID_TAG + '=' +
                                              RPnNetworkStatus.RPN_MEDIATORPROXY_POLL_TAG + '&' +
                                              RPnNetworkStatus.RPN_MEDIATORPROXY_CLIENT_ID_TAG + '=' + RPnNetworkStatus.instance().clientID());
                 
-                URL rpnMediatorURL = new URL(fullURL);
 
-                //System.out.println("Will now hit RPn Mediator with URL..." + fullURL + '\n');
+                String objCommandURL = new String(hitURL_ + "?" + RPnNetworkStatus.RPN_MEDIATORPROXY_REQ_ID_TAG + '=' +
+                                             RPnNetworkStatus.RPN_MEDIATORPROXY_NOTEBOARD_POLL_TAG + '&' +
+                                             RPnNetworkStatus.RPN_MEDIATORPROXY_CLIENT_ID_TAG + '=' + RPnNetworkStatus.instance().clientID());
 
-                URLConnection rpnMediatorConn = rpnMediatorURL.openConnection();
-		BufferedReader buffReader = new BufferedReader(new InputStreamReader(rpnMediatorConn.getInputStream()));
+                // TODO > HttpObjPoller
+                if (POLLING_MODE == TEXT_POLLER) {
+                
+                    URL rpnMediatorURL = new URL(msgCommandURL);
 
-		String text;
-		StringBuffer fullText = new StringBuffer();
-		Boolean buffFlag = false;
+                    URLConnection rpnMediatorConn = rpnMediatorURL.openConnection();
 
-		while ((text = buffReader.readLine()) != null) {
-			buffFlag = true;
-			fullText.append(text);
-		}
 
-		if ((buffFlag) && (fullText.length() > 5))
-                    messageParser_.parseMessageText(fullText.toString());
-                //else
-                  //  System.out.println("no message retrieved from proxy... " + '\n');
+		    BufferedReader buffReader = new BufferedReader(new InputStreamReader(rpnMediatorConn.getInputStream()));
 
+                    String text;
+                    StringBuffer fullText = new StringBuffer();
+                    Boolean buffFlag = false;
+
+                    while ((text = buffReader.readLine()) != null) {
+                        buffFlag = true;
+                        fullText.append(text);
+                    }
+
+                    if ((buffFlag) && (fullText.length() > 5)) {
+                        messageParser_.parseMessageText(fullText.toString());
+                    }
+                    //else
+                    //  System.out.println("no message retrieved from proxy... " + '\n');
+                } else {
+
+                    if (messageParser_.listeningName() == RPnNetworkStatus.RPN_COMMAND_TOPIC_NAME) {
+
+                        URL rpnMediatorURL = new URL(objCommandURL);
+
+
+
+                        URLConnection rpnMediatorConn = rpnMediatorURL.openConnection();
+
+                        
+                        System.out.println("Will now check command proxy objects...");
+
+                        try {
+                            ObjectInputStream in = new ObjectInputStream(rpnMediatorConn.getInputStream());
+                            messageParser_.parseMessageObject(in.readObject());
+                        } catch (java.io.EOFException ex) {
+
+                            System.out.println("No objects to be returned yet...");
+
+                        }
+
+                        
+                    }
+
+                }
 
                 // this is for not bringing JBoss down !!!
                 Thread.sleep((long)500);
@@ -120,6 +159,12 @@ public class RPnHttpPoller implements RPnResetableListener {
 
     public void parseMessageText(String text) {
         messageParser_.parseMessageText(text);
+    }
+
+    public void parseMessageObject(Object obj) {
+
+        messageParser_.parseMessageObject(obj);
+
     }
 
     public static String buildHitURL(String hitTarget) throws java.net.MalformedURLException {

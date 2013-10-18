@@ -7,6 +7,7 @@
 package rpn.message;
 
 
+import java.io.Serializable;
 import javax.naming.*;
 import javax.jms.*;
 
@@ -45,12 +46,7 @@ public class RPnPublisher {
 
                 context = new InitialContext();
                 cf = (TopicConnectionFactory) context.lookup("java:/ConnectionFactory"); 
-            }
-
-
-
-            
-
+            }         
 
             topic = (Topic) context.lookup(topicName);
 
@@ -58,7 +54,7 @@ public class RPnPublisher {
             connection = cf.createTopicConnection("rpn","rpn.fluid");
             //TopicSession topicSession = connection.createTopicSession(false, Session.AUTO_ACKNOWLEDGE);
             topicSession = connection.createTopicSession(false, Session.AUTO_ACKNOWLEDGE);
-
+            
             publisher = topicSession.createPublisher(topic);
 
             connection.start();
@@ -75,11 +71,36 @@ public class RPnPublisher {
        try {
 
   
+            
 
             TextMessage messageTo = topicSession.createTextMessage(msg);
+
             publisher.send(messageTo);
 
+
             System.out.println("Message sent to the JMS Provider : " + messageTo + '\n');
+
+        } catch (Exception exc) {
+
+            exc.printStackTrace();
+
+        } 
+    }
+
+    public void publish(Object obj) {
+
+       try {
+
+  
+            
+            
+            ObjectMessage messageTo = topicSession.createObjectMessage();
+            messageTo.setObject((Serializable)obj);
+            
+            publisher.send(messageTo);
+           
+
+   //         System.out.println("Message sent to the JMS Provider : " + messageTo + '\n');
 
         } catch (Exception exc) {
 

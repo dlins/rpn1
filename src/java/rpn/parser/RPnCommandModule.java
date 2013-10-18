@@ -6,6 +6,7 @@
 package rpn.parser;
 
 import java.awt.Point;
+import java.awt.geom.PathIterator;
 import org.xml.sax.Attributes;
 import org.xml.sax.Locator;
 
@@ -36,16 +37,18 @@ import rpn.controller.ui.FILE_ACTION_SELECTED;
 import rpn.controller.ui.UndoActionController;
 import rpn.controller.ui.UserInputHandler;
 import rpn.glasspane.RPnGlassPane;
+import rpn.message.RPnHttpPoller;
+import rpn.message.RPnNetworkStatus;
 import rpnumerics.RPnCurve;
 
 /** With this class the calculus made in a previous session can be reloaded. A previous state can be reloaded reading a XML file that is used by this class */
 public class RPnCommandModule {
 
-        public static String SESSION_ID_ = "";
+    public static String SESSION_ID_ = "";
 
-        static public class RPnCommandParser implements ContentHandler {
-
+    static public class RPnCommandParser implements ContentHandler {
        
+
         private String currentElement_;
         private String currentCommand_;
         private StringBuilder stringBuffer_ = new StringBuilder();
@@ -53,7 +56,7 @@ public class RPnCommandModule {
         private boolean isChangePhysicsParamsCommand_;
         private Integer curveId_;
 
-        private RealVector glassPointVals_;
+        private RealVector pointVals_;
         private int glassDrawMode_;
 
         
@@ -83,26 +86,19 @@ public class RPnCommandModule {
                     SESSION_ID_ = att.getValue("id");
             }
 
-
-
             if (isChangePhysicsParamsCommand_) {
 
                 if (currentElement_.equals("PHYSICSCONFIG")) {
                     System.out.println("Current configuration: " + currentConfiguration_.getName());
 
                     currentConfiguration_ = currentConfiguration_.getConfiguration(att.getValue("name"));
-
                 }
 
                 if (currentElement_.equals("PHYSICSPARAM")) {
 
                     currentConfiguration_.setParamValue(att.getValue("name"), att.getValue("value"));
-
                 }
-
             }
-
-
 
             if (currentElement_.equals("CURVECONFIGURATION")) {
                 currentConfiguration_ = rpnumerics.RPNUMERICS.getConfiguration(att.getValue("name"));
@@ -121,36 +117,29 @@ public class RPnCommandModule {
                     System.out.println(att.getValue(i));
                 }
 
-
                 if (att.getValue("name").equals("phasespace")) {
 
                     UIController.instance().setActivePhaseSpace(RPnDataModule.getPhaseSpace(att.getValue("value")));
-
                 }
 
                 if (att.getValue("name").equals("curveid")) {
                     curveId_ = new Integer(att.getValue("value"));
                 }
 
-                if (att.getValue("name").equals("lineto")) {
-                    glassPointVals_ = new RealVector(att.getValue("value"));
-                    glassDrawMode_ = RPnGlassPane.LINE_TO;
+                if (att.getValue("name").equals("pane_index")) {
+
+                    RPnNetworkStatus.instance().NOTEBOARD_PANE_INDEX = new Integer(att.getValue("value")).intValue();
                 }
 
-                if (att.getValue("name").equals("moveto")) {
-                    glassPointVals_ = new RealVector(att.getValue("value"));
-                    glassDrawMode_ = RPnGlassPane.MOVE_TO;
+
+                if (att.getValue("name").equals("pane_frame_char")) {
+
+                    RPnNetworkStatus.instance().NOTEBOARD_PANE_FRAME_CHAR = att.getValue("value").charAt(0);
                 }
 
-                if (att.getValue("name").equals("paneIndex")) {
 
-                        int paneIndex = Integer.parseInt(att.getValue("value"));                  
-                        ((RPnGlassPane)RPnUIFrame.getPhaseSpaceFrames()[paneIndex].getGlassPane()).updatePath(glassDrawMode_,glassPointVals_);
-                }
 
             }
-
-
 
             if (currentElement_.equalsIgnoreCase("COMMAND")) {
                 if (att.getValue("curveid") != null) {
@@ -215,11 +204,54 @@ public class RPnCommandModule {
 
                     System.out.println("Will now parse the TOGGLE_NOTEBOARD_MODE");
                     JFrame[] frames = RPnUIFrame.getPhaseSpaceFrames();
+                    JFrame[] aux_frames = RPnUIFrame.getAuxFrames();
+                    JFrame[] riemann_frames = RPnUIFrame.getRiemannFrames();
 
                     for (int i = 0; i < frames.length; i++) {
                         frames[i].getGlassPane().setVisible(!frames[i].getGlassPane().isVisible());
                     }
+
+                    for (int i = 0; i < aux_frames.length; i++) {
+                        aux_frames[i].getGlassPane().setVisible(!aux_frames[i].getGlassPane().isVisible());
+                    }
+
+                    if (riemann_frames != null)
+                    for (int i = 0; i < riemann_frames.length; i++) {
+                        riemann_frames[i].getGlassPane().setVisible(!riemann_frames[i].getGlassPane().isVisible());
+                    }
+
+
+
+                    if (RPnHttpPoller.POLLING_MODE == RPnHttpPoller.TEXT_POLLER)
+                        RPnHttpPoller.POLLING_MODE = RPnHttpPoller.OBJ_POLLER;
+                    else RPnHttpPoller.POLLING_MODE = RPnHttpPoller.TEXT_POLLER;
                 }
+
+                else if (currentCommand_.equalsIgnoreCase("TOGGLE_NOTEBOARD_CLEAR")) {
+
+                    System.out.println("Will now parse the TOGGLE_NOTEBOARD_CLEAR");
+                    JFrame[] frames = RPnUIFrame.getPhaseSpaceFrames();
+                    JFrame[] aux_frames = RPnUIFrame.getAuxFrames();
+                    JFrame[] riemann_frames = RPnUIFrame.getRiemannFrames();
+
+                    for (int i = 0; i < frames.length; i++) {
+                        ((RPnGlassPane) frames[i].getGlassPane()).clear();
+                    }
+
+                    for (int i = 0; i < aux_frames.length; i++) {
+                        ((RPnGlassPane) aux_frames[i].getGlassPane()).clear();
+                    }
+
+                    if (riemann_frames != null) {
+                        for (int i = 0; i < riemann_frames.length; i++) {
+                            ((RPnGlassPane) riemann_frames[i].getGlassPane()).clear();
+                        }
+                    }
+                }
+
+
+
+
 
             }
 

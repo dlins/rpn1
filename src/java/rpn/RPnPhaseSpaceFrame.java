@@ -16,6 +16,7 @@ import java.util.*;
 import rpn.component.util.GeometryGraph;
 import rpn.component.util.GeometryGraphND;
 import rpn.controller.ui.UIController;
+import rpn.message.RPnNetworkStatus;
 
 public class RPnPhaseSpaceFrame extends JFrame {
 
@@ -33,26 +34,27 @@ public class RPnPhaseSpaceFrame extends JFrame {
     private JSlider slider = new JSlider(-5, 5, 0);
     private Hashtable labels_ = new Hashtable();
     private Dimension frameSize_ = null;
-    private int frameIndex_ = 0;
+    private int frameIndex_;
+    private char frameChar_ = ' ';
 
     //    int sliderValue_;
     public RPnPhaseSpaceFrame(Scene scene, RPnMenuCommand command) {
 
         // a non indexed frame has an index of -1
-        this(-1,scene,command);
+        this(-1,'f',scene,command);
     }
 
-    public RPnPhaseSpaceFrame(int frameIndex,Scene scene, RPnMenuCommand command) {
+    public RPnPhaseSpaceFrame(int frameIndex,char frameChar,Scene scene, RPnMenuCommand command) {
 
         frameIndex_ = frameIndex;
-
+        frameChar_ = frameChar;
 
         enableEvents(AWTEvent.WINDOW_EVENT_MASK);
         enableEvents(AWTEvent.COMPONENT_EVENT_MASK);
         //	enableEvents(AWTEvent.FOCUS_EVENT_MASK);
         commandMenu_ = command;
        
-        setGlassPane(new rpn.glasspane.RPnGlassPane(frameIndex));
+        setGlassPane(new rpn.glasspane.RPnGlassPane());
         getGlassPane().setVisible(false);
 
         try {
@@ -120,6 +122,27 @@ public class RPnPhaseSpaceFrame extends JFrame {
         public void windowGainedFocus(WindowEvent e) {
 
             UIController.instance().setFocusPanel(phaseSpacePanel);
+            
+            // TODO : get the Pane Index from PhaseSpace
+            if ((RPnNetworkStatus.instance().isOnline() && RPnNetworkStatus.instance().isMaster())
+                    || (!RPnNetworkStatus.instance().isOnline())) {
+                RPnNetworkStatus.instance().NOTEBOARD_PANE_INDEX = frameIndex_;
+                RPnNetworkStatus.instance().NOTEBOARD_PANE_FRAME_CHAR = frameChar_;
+
+
+
+                if (RPnNetworkStatus.instance().isOnline() && RPnNetworkStatus.instance().isMaster()) {
+
+                    StringBuilder buffer = new StringBuilder();
+
+                    buffer.append("<COMMAND name=\"TOGGLE_NOTEBOARD_FRAME\" >\n");
+                    buffer.append("<COMMANDPARAM name=\"pane_index\" value=\"" + RPnNetworkStatus.instance().NOTEBOARD_PANE_INDEX + "\" />\n");
+                    buffer.append("<COMMANDPARAM name=\"pane_frame_char\" value=\"" + RPnNetworkStatus.instance().NOTEBOARD_PANE_FRAME_CHAR + "\" />\n");
+                    buffer.append("</COMMAND>\n");
+
+                    RPnNetworkStatus.instance().sendCommand(buffer.toString());
+                }
+            }
 
         }
 

@@ -70,7 +70,52 @@ public class RPnHttpPublisher extends RPnPublisher {
 
 
 
-    }
+    } 
     
+    public void publish(Object obj) {
+
+        try {              
+                
+
+                System.out.println("Will now publish object for URL : " + hitURL_);
+                
+                URL url = new URL(hitURL_);
+                HttpURLConnection urlCon = (HttpURLConnection)url.openConnection();
+
+                urlCon.setRequestProperty("Content-Type", "application/octet-stream");
+                urlCon.setDoOutput(true); // to be able to write.
+                urlCon.setDoInput(true); // to be able to read.
+
+                ObjectOutputStream out =  new ObjectOutputStream(urlCon.getOutputStream());
+                out.writeObject(obj);
+                out.flush();
+                //out.writeObject(new String("bla"));
+                out.close();
+
+                int result = urlCon.getResponseCode();
+                //ObjectInputStream in = new ObjectInputStream(urlCon.getInputStream());
+                //in.close();
+
+                /*BufferedReader buffReader = new BufferedReader(new InputStreamReader(urlCon.getInputStream()));
+
+                String text;
+		StringBuffer fullText = new StringBuffer();
+		Boolean buffFlag = false;
+
+		while ((text = buffReader.readLine()) != null) {
+
+		}*/
+
+
+
+
+
+        } catch (Exception exc) {
+
+            exc.printStackTrace();
+
+        }
+    }
+
     public void close() {    }
 }

@@ -7,6 +7,7 @@ package rpn.message;
 
 import java.net.*;
 import java.io.*;
+import rpn.RPnDesktopPlotter;
 
 /**
  *
@@ -18,6 +19,9 @@ public class RPnNetworkStatus {
 
 
     private static RPnNetworkStatus instance_= null;
+
+    public static int NOTEBOARD_PANE_INDEX = -1;
+    public static char NOTEBOARD_PANE_FRAME_CHAR = ' ';
 
     private String clientID_;
     private boolean isMaster_;
@@ -94,6 +98,7 @@ public class RPnNetworkStatus {
     public static String RPN_MEDIATORPROXY_MASTER_CHECK_TAG="MASTER_CHECK";
     public static String RPN_MEDIATORPROXY_MASTER_RESET_TAG="MASTER_RESET";
     public static String RPN_MEDIATORPROXY_POLL_TAG="POLL";
+    public static String RPN_MEDIATORPROXY_NOTEBOARD_POLL_TAG="OBJ_POLL";
 
     public static String RPN_MEDIATORPROXY_SEND_TAG="SEND";
     public static String RPN_MEDIATORPROXY_PUBLISH_TAG="PUB";
@@ -257,9 +262,13 @@ public class RPnNetworkStatus {
             // TODO notify that SESSION has no MASTER now...
         }
             
-        else
-            log("All Connections closed for SLAVE session ...");
+        else {
 
+
+            log("All Connections closed for SLAVE session ...");
+            RPnDesktopPlotter.getUIFrame().enableNoteboard();
+
+        }
 
         isOnline_ = false;
 
@@ -501,6 +510,15 @@ public class RPnNetworkStatus {
 
             log("You are now following RPNSESSION with ID : " + rpn.parser.RPnCommandModule.SESSION_ID_ + '\n');
             RPnNetworkDialog.instance().setTitle(RPnNetworkDialog.TITLE + "PUPIL");
+
+
+            // TODO > disable ALL interface
+            RPnDesktopPlotter.getUIFrame().disableNoteboard();
+
+
+
+
+
         }
 
     }
@@ -534,6 +552,11 @@ public class RPnNetworkStatus {
         System.out.println(commandDesc);
     }
 
+    public void sendCommand(Object obj) {
+
+
+        commandPublisher_.publish(obj);       
+    }
 
     public static RPnNetworkStatus instance() {
 

@@ -211,6 +211,10 @@ public class RPnConsumer implements RPnResetableListener {
         return false;
     }
 
+     public void parseMessageObject(Object obj) {
+
+     }
+
     public void parseMessageText(String text) {
 
         try {

@@ -70,7 +70,8 @@ public class RPnSlaveAckProxy extends RPnMediatorProxy {
                         System.out.println("Message received at RPnSlaveAckProxy : " + '\n' + command);
                         writer.println(command);
                     }
-              //  }
+
+                  
     } else if (reqId.compareTo(RPnNetworkStatus.RPN_MEDIATORPROXY_LISTENING_TAG) == 0) {
 
             System.out.println("Listener " + clientId + " willing to be registred...");

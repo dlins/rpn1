@@ -76,8 +76,7 @@ public class RPnSlaveReqProxy extends RPnMediatorProxy {
                     }
 
                 consumer_.stopsListening();
-
-               // }
+            
 
         } else if (reqId.compareTo(RPnNetworkStatus.RPN_MEDIATORPROXY_LISTENING_TAG) == 0) {
 

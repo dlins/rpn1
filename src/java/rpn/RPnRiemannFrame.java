@@ -29,8 +29,17 @@ public class RPnRiemannFrame extends RPnPhaseSpaceFrame {
     private Dimension frameSize_ = null;
 
     //    int sliderValue_;
+
     public RPnRiemannFrame(Scene scene, RPnMenuCommand command) {
-        super(scene,command);
+
+        this (-1,' ',scene,command);
+
+    }
+
+
+    public RPnRiemannFrame(int frameIndex,char frameChar,Scene scene, RPnMenuCommand command) {
+
+        super(frameIndex,frameChar,scene,command);
         enableEvents(AWTEvent.WINDOW_EVENT_MASK);
         enableEvents(AWTEvent.COMPONENT_EVENT_MASK);
         //	enableEvents(AWTEvent.FOCUS_EVENT_MASK);

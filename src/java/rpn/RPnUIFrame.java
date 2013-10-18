@@ -15,6 +15,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 import java.awt.event.*;
+import java.awt.geom.AffineTransform;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeEvent;
 import java.io.File;
@@ -28,6 +29,9 @@ import rpn.command.ClassifierCommand;
 import rpn.command.VelocityCommand;
 import rpn.controller.ui.*;
 import rpn.controller.ui.UI_ACTION_SELECTED;
+import rpn.glasspane.RPnGlassPane;
+import rpn.message.RPnNetworkStatus;
+import salvo.jesus.graph.java.awt.geom.SerializablePathIterator;
 import wave.multid.Space;
 import wave.util.RealVector;
 import wave.util.RectBoundary;
@@ -78,6 +82,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     private JMenuItem editMenuItem5 = new JMenuItem("Starts with Black Background");
     private JMenuItem editMenuItem6 = new JMenuItem("Starts with White Background");
     private JMenuItem editMenuItem7 = new JMenuItem("Toggle Noteboard mode");
+    private JMenuItem editMenuItem8 = new JMenuItem("Clears Noteboard");
 
     public static String dir = "";
     private RPnPhaseSpaceFrame frameZoom = null;
@@ -409,7 +414,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
             try {
                 wave.multid.view.Scene riemannScene = RPnDataModule.RIEMANNPHASESPACE.createScene(riemanTesteTransform, new wave.multid.view.ViewingAttr(Color.black));
-                riemannFrames_[i] = new RPnRiemannFrame(riemannScene, commandMenu_);
+                riemannFrames_[i] = new RPnRiemannFrame(i,'r',riemannScene, commandMenu_);
 
             } catch (DimMismatchEx ex) {
                 ex.printStackTrace();
@@ -441,8 +446,8 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 wave.multid.view.Scene rightScene = RPnDataModule.RIGHTPHASESPACE.createScene(auxViewingTransf,
                         new wave.multid.view.ViewingAttr(Color.black));
 
-                auxFrames_[2 * i] = new RPnPhaseSpaceFrame(2*i,leftScene, commandMenu_);
-                auxFrames_[2 * i + 1] = new RPnPhaseSpaceFrame(2*i + 1,rightScene, commandMenu_);
+                auxFrames_[2 * i] = new RPnPhaseSpaceFrame(2*i,'a',leftScene, commandMenu_);
+                auxFrames_[2 * i + 1] = new RPnPhaseSpaceFrame(2*i + 1,'a',rightScene, commandMenu_);
 
                 auxFrames_[2 * i].setTitle(((RPnProjDescriptor) RPnVisualizationModule.AUXDESCRIPTORS.get(i)).label());
                 auxFrames_[2 * i + 1].setTitle(((RPnProjDescriptor) RPnVisualizationModule.AUXDESCRIPTORS.get(i + 1)).label());
@@ -474,7 +479,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                         new wave.multid.view.ViewingAttr(Color.black));
 
 
-                frames_[i] = new RPnPhaseSpaceFrame(i,scene, commandMenu_);
+                frames_[i] = new RPnPhaseSpaceFrame(i,'f',scene, commandMenu_);
                 frames_[i].setTitle(((RPnProjDescriptor) RPnVisualizationModule.DESCRIPTORS.get(i)).label());
 
                  /*
@@ -1005,9 +1010,38 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 });
 
 
-        editMenuItem7.addActionListener(new rpn.glasspane.RPnToggleNoteboardModeListener(frames_));
+        editMenuItem7.addActionListener(new rpn.glasspane.RPnToggleNoteboardModeListener());
 
-                
+        editMenuItem8.addActionListener(new java.awt.event.ActionListener() {
+
+            public void actionPerformed(ActionEvent e) {
+
+                for (int i = 0; i < frames_.length; i++) {
+                    ((RPnGlassPane)frames_[i].getGlassPane()).clear();
+                }
+
+                for (int i = 0; i < auxFrames_.length; i++) {
+                    ((RPnGlassPane)auxFrames_[i].getGlassPane()).clear();
+                }
+
+
+                if (riemannFrames_ != null)
+                for (int i = 0; i < riemannFrames_.length; i++) {
+                    ((RPnGlassPane)riemannFrames_[i].getGlassPane()).clear();
+                }
+
+
+                // TODO add coords
+                if (RPnNetworkStatus.instance().isOnline() && RPnNetworkStatus.instance().isMaster()) {
+                  StringBuilder buffer = new StringBuilder();
+
+                    buffer.append("<COMMAND name=\"TOGGLE_NOTEBOARD_CLEAR\" >\n");
+                    buffer.append("</COMMAND>\n");
+                }
+
+
+            }
+        });
 
         inputCoordsMenuItem.addActionListener(
                 new java.awt.event.ActionListener() {
@@ -1121,6 +1155,9 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         editMenu.addSeparator();
         editMenu.add(editMenuItem7);
         editMenu.addSeparator();
+        editMenu.add(editMenuItem8);
+        editMenu.addSeparator();
+
 
         editMenu.add(FillPhaseSpaceCommand.instance());
 
@@ -1215,6 +1252,19 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
             frame.getSlider().setEnabled(true);
         }
     }
+
+    public void enableNoteboard() {
+
+        editMenuItem7.setEnabled(true);
+        editMenuItem8.setEnabled(true);
+    }
+
+    public void disableNoteboard() {
+        editMenuItem7.setEnabled(false);
+        editMenuItem8.setEnabled(false);
+    }
+
+
 
     private class ConfigAction implements Action {
 

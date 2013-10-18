@@ -44,4 +44,20 @@ public class RPnProxySubscriber extends RPnSubscriber {
 
         }
     }
+
+    public void parseMessageObject(Object obj) {
+
+        System.out.println("Subscriber Proxy will parse object now...");
+        Set entries = subsDatalog_.entrySet();
+
+        Iterator it = entries.iterator();
+        while (it.hasNext()) {
+
+            System.out.println("Map for subs has entries...");
+            Map.Entry entry = (Map.Entry) it.next();
+            Vector data = (Vector) entry.getValue();
+            data.add(obj);
+        }
+
+    }
 }

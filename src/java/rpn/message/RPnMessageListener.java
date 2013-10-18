@@ -13,6 +13,7 @@ public interface RPnMessageListener {
 
     void connect();
     void parseMessageText(String text);
+    void parseMessageObject(Object obj);
     String listeningName();
     void startsListening();
     void stopsListening();

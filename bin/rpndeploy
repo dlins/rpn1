@@ -10,7 +10,7 @@ cd deploy_tmp
 cp ../rpnmediatorproxy.war .
 jar -xf rpnmediatorproxy.war
 mkdir WEB-INF/classes
-mv rpn rpnmediator rpnumerics wave WEB-INF/classes
+mv salvo rpn rpnmediator rpnumerics wave WEB-INF/classes
 jar -cf rpnmediatorproxy.war WEB-INF
 export SSHPASS=rpn.fluid
 sshpass -e sftp -oBatchMode=no -b - jboss@heitor << !

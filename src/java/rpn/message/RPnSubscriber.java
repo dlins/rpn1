@@ -5,12 +5,19 @@
  */
 package rpn.message;
 
+import java.awt.geom.GeneralPath;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.naming.*;
 import javax.jms.*;
 import java.io.StringBufferInputStream;
+import javax.swing.JFrame;
+import org.xml.sax.SAXException;
 import rpn.parser.*;
 import org.xml.sax.helpers.XMLReaderFactory;
-
+import rpn.RPnUIFrame;
+import rpn.glasspane.RPnGlassPane;
+import salvo.jesus.graph.java.awt.geom.*;
 /**
  *
  * @author mvera
@@ -135,6 +142,12 @@ public class RPnSubscriber implements MessageListener,RPnMessageListener {
 
                 parseMessageText(text);
 
+            } else if (message instanceof ObjectMessage) {
+
+
+                // the NOTEBOARD case
+                parseMessageObject(((ObjectMessage)message).getObject());
+
             }
 
         } catch (Exception exc) {
@@ -142,6 +155,35 @@ public class RPnSubscriber implements MessageListener,RPnMessageListener {
             exc.printStackTrace();
 
         } 
+    }
+
+    public void parseMessageObject(Object obj) {
+
+        // TODO > NOTEBOARD NULL OBJECT
+        if (obj instanceof String) {
+            try {
+                // COMMAND MESSAGES PARSING
+                RPnCommandModule.init(XMLReaderFactory.createXMLReader(), new StringBufferInputStream((String) obj));
+            } catch (SAXException ex) {
+                Logger.getLogger(RPnSubscriber.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+
+        } else {
+
+            SerializablePathIterator it = (SerializablePathIterator) obj;
+
+            if (RPnNetworkStatus.instance().NOTEBOARD_PANE_FRAME_CHAR == 'f') {
+                ((RPnGlassPane) RPnUIFrame.getPhaseSpaceFrames()[RPnNetworkStatus.instance().NOTEBOARD_PANE_INDEX].getGlassPane()).updatePath(it);
+            } else if (RPnNetworkStatus.instance().NOTEBOARD_PANE_FRAME_CHAR == 'a') {
+                ((RPnGlassPane) RPnUIFrame.getAuxFrames()[RPnNetworkStatus.instance().NOTEBOARD_PANE_INDEX].getGlassPane()).updatePath(it);
+            } else if (RPnNetworkStatus.instance().NOTEBOARD_PANE_FRAME_CHAR == 'r') {
+                ((RPnGlassPane) RPnUIFrame.getRiemannFrames()[RPnNetworkStatus.instance().NOTEBOARD_PANE_INDEX].getGlassPane()).updatePath(it);
+            }
+
+
+            
+        }
     }
 
     public void parseMessageText(String text) {

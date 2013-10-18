@@ -43,34 +43,57 @@ public class RPnCommandProxy extends RPnMediatorProxy {
         String reqId = (String) request.getParameter(RPnNetworkStatus.RPN_MEDIATORPROXY_REQ_ID_TAG);
         String clientId = (String) request.getParameter(RPnNetworkStatus.RPN_MEDIATORPROXY_CLIENT_ID_TAG);
 
+
         if ((reqId == null) || (clientId == null))
 
-            responseErrorMsg(response,WRONG_INPUT_ERROR_MSG);
-
+               responseErrorMsg(response,WRONG_INPUT_ERROR_MSG);
+                
         else if (reqId.compareTo(RPnNetworkStatus.RPN_MEDIATORPROXY_POLL_TAG) == 0) {
-
-                //response.setContentType("text/xml");
-                //response.setContentType("text/html");
-
-                // this will enable the browser output...
-                response.setContentType( "text/xml;charset=UTF-8" );
-
-                PrintWriter writer = response.getWriter();
-
-              //  if (subsDatalog_.containsKey(clientId)) {
-
-
+                
                     Vector msgQueue = (Vector)subsDatalog_.get(clientId);
+                    
                     if (msgQueue != null)
                     while (!msgQueue.isEmpty()) {
 
-                        String command = (String) msgQueue.remove(msgQueue.size() - 1);
+                        Object removed = msgQueue.remove(msgQueue.size() - 1);
 
-                        // for DEBUGING
-                        System.out.println("Message received at RPnCommandProxy : " + '\n' + command);
-                        writer.println(command);
+                        if (removed instanceof String) {
+
+                            // this will enable the browser output...
+                            response.setContentType("text/xml;charset=UTF-8");
+
+                            PrintWriter writer = response.getWriter();
+
+                            String command = (String) removed;
+
+                            // for DEBUGING
+                            System.out.println("Message being retrieved by RPnCommandProxy : " + '\n' + command);
+                            writer.println(command);
+
+                        } 
                     }
-              //  }
+
+        } else if (reqId.compareTo(RPnNetworkStatus.RPN_MEDIATORPROXY_NOTEBOARD_POLL_TAG) == 0) {
+
+
+            Vector msgQueue = (Vector)subsDatalog_.get(clientId);
+
+            if (msgQueue != null)
+            while (!msgQueue.isEmpty()) {
+
+                Object removed = msgQueue.remove(msgQueue.size() - 1);
+                response.setContentType("application/octet-stream");
+
+                ObjectOutputStream out = new ObjectOutputStream(response.getOutputStream());
+
+                System.out.println("Object being retrieved by RPnCommandProxy : " + '\n');
+                out.writeObject(removed);
+
+
+
+
+            }
+           
         } else if (reqId.compareTo(RPnNetworkStatus.RPN_MEDIATORPROXY_LISTENING_TAG) == 0) {
 
          System.out.println("Listener " + clientId + " willing to be registred...");

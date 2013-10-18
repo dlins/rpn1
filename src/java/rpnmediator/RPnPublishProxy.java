@@ -38,9 +38,27 @@ public class RPnPublishProxy extends RPnMediatorProxy {
         String reqId = (String) request.getParameter(RPnNetworkStatus.RPN_MEDIATORPROXY_REQ_ID_TAG);
         String clientId = (String) request.getParameter(RPnNetworkStatus.RPN_MEDIATORPROXY_CLIENT_ID_TAG);
 
-        if ((reqId == null) || (clientId == null))
+        if ((reqId == null) && (clientId == null))  {
 
-            responseErrorMsg(response,WRONG_INPUT_ERROR_MSG);
+                System.out.println("preparing to publish the object instance... \n");
+                RPnPublisher publisher = new RPnPublisher(RPnNetworkStatus.trimLocalJmsPrefix(RPnNetworkStatus.RPN_COMMAND_TOPIC_NAME),true);
+                ObjectInputStream in = new ObjectInputStream(request.getInputStream());
+
+                try {
+
+                    System.out.println("Will now publish the object instance... \n");
+                    Object obj = in.readObject();
+                    publisher.publish(obj);
+
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
+
+                in.close();
+                publisher.close();           
+        }
+
+//            responseErrorMsg(response,WRONG_INPUT_ERROR_MSG);
 
         else if (reqId.compareTo(RPnNetworkStatus.RPN_MEDIATORPROXY_PUBLISH_TAG) == 0) {
 
@@ -49,8 +67,10 @@ public class RPnPublishProxy extends RPnMediatorProxy {
             String logMsg = (String) request.getParameter(RPnNetworkStatus.RPN_MEDIATORPROXY_LOG_MSG_TAG);
 
             RPnPublisher publisher = new RPnPublisher(topicName,true);
-            publisher.publish(logMsg);
 
+            
+            publisher.publish(logMsg);
+            
             publisher.close();
 
         }
