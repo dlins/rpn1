@@ -147,11 +147,6 @@ public class RPnPhaseSpaceFrame extends JFrame {
                 Point ntbLoc = ntbToggleButton.getLocationOnScreen();
                 Point clearLoc = ntbClearButton.getLocationOnScreen();
 
-                System.out.println("click x = " + clickLoc.x);
-                System.out.println("click y = " + clickLoc.y);
-
-                System.out.println("ntb x = " + ntbLoc.x);
-                System.out.println("ntb y = " + ntbLoc.y);
 
                 Rectangle ntbArea1 = new Rectangle(ntbLoc.x,ntbLoc.y,ntbToggleButton.getWidth(),ntbToggleButton.getHeight());
                 Rectangle ntbArea2 = new Rectangle(clearLoc.x,clearLoc.y,ntbClearButton.getWidth(),ntbClearButton.getHeight());
