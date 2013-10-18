@@ -81,9 +81,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     private JMenuItem editMenuItem4 = new JMenuItem("Clears Classifiers");
     private JMenuItem editMenuItem5 = new JMenuItem("Starts with Black Background");
     private JMenuItem editMenuItem6 = new JMenuItem("Starts with White Background");
-    private JMenuItem editMenuItem7 = new JMenuItem("Toggle Noteboard mode");
-    private JMenuItem editMenuItem8 = new JMenuItem("Clears Noteboard");
-
+   
     public static String dir = "";
     private RPnPhaseSpaceFrame frameZoom = null;
     private ArrayList<RPnPhaseSpaceFrame> listFrameZoom = new ArrayList();
@@ -1010,40 +1008,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 });
 
 
-        editMenuItem7.addActionListener(new rpn.glasspane.RPnToggleNoteboardModeListener());
-
-        editMenuItem8.addActionListener(new java.awt.event.ActionListener() {
-
-            public void actionPerformed(ActionEvent e) {
-
-                for (int i = 0; i < frames_.length; i++) {
-                    ((RPnGlassPane)frames_[i].getGlassPane()).clear();
-                }
-
-                for (int i = 0; i < auxFrames_.length; i++) {
-                    ((RPnGlassPane)auxFrames_[i].getGlassPane()).clear();
-                }
-
-
-                if (riemannFrames_ != null)
-                for (int i = 0; i < riemannFrames_.length; i++) {
-                    ((RPnGlassPane)riemannFrames_[i].getGlassPane()).clear();
-                }
-
-
-                // TODO add coords
-                if (RPnNetworkStatus.instance().isOnline() && RPnNetworkStatus.instance().isMaster()) {
-                  StringBuilder buffer = new StringBuilder();
-
-                    buffer.append("<COMMAND name=\"TOGGLE_NOTEBOARD_CLEAR\" >\n");
-                    buffer.append("</COMMAND>\n");
-
-                    RPnNetworkStatus.instance().sendCommand(buffer.toString());
-                }
-
-
-            }
-        });
+       
 
         inputCoordsMenuItem.addActionListener(
                 new java.awt.event.ActionListener() {
@@ -1155,10 +1120,8 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         editMenu.addSeparator();
         editMenu.add(editMenuItem6);
         editMenu.addSeparator();
-        editMenu.add(editMenuItem7);
-        editMenu.addSeparator();
-        editMenu.add(editMenuItem8);
-        editMenu.addSeparator();
+        
+      
 
 
         editMenu.add(FillPhaseSpaceCommand.instance());
@@ -1257,13 +1220,46 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
     public void enableNoteboard() {
 
-        editMenuItem7.setEnabled(true);
-        editMenuItem8.setEnabled(true);
+            for (int i = 0; i < RPnUIFrame.getPhaseSpaceFrames().length; i++) {
+
+            RPnPhaseSpaceFrame frame = RPnUIFrame.getPhaseSpaceFrames()[i];
+            frame.getNoteboardToggleButton().setEnabled(true);
+        }
+
+        for (int i = 0; i < RPnUIFrame.getAuxFrames().length; i++) {
+            RPnPhaseSpaceFrame frame = RPnUIFrame.getAuxFrames()[i];
+            frame.getNoteboardToggleButton().setEnabled(true);
+        }
+
+
+        if (RPnUIFrame.getRiemannFrames() != null) {
+            for (int i = 0; i < RPnUIFrame.getRiemannFrames().length; i++) {
+                RPnPhaseSpaceFrame frame = RPnUIFrame.getRiemannFrames()[i];
+                frame.getNoteboardToggleButton().setEnabled(true);
+            }
+        }
     }
 
     public void disableNoteboard() {
-        editMenuItem7.setEnabled(false);
-        editMenuItem8.setEnabled(false);
+
+        for (int i = 0; i < RPnUIFrame.getPhaseSpaceFrames().length; i++) {
+
+            RPnPhaseSpaceFrame frame = RPnUIFrame.getPhaseSpaceFrames()[i];
+            frame.getNoteboardToggleButton().setEnabled(false);
+        }
+
+        for (int i = 0; i < RPnUIFrame.getAuxFrames().length; i++) {
+            RPnPhaseSpaceFrame frame = RPnUIFrame.getAuxFrames()[i];
+            frame.getNoteboardToggleButton().setEnabled(false);
+        }
+
+
+        if (RPnUIFrame.getRiemannFrames() != null) {
+            for (int i = 0; i < RPnUIFrame.getRiemannFrames().length; i++) {
+                RPnPhaseSpaceFrame frame = RPnUIFrame.getRiemannFrames()[i];
+                frame.getNoteboardToggleButton().setEnabled(false);
+            }
+        }
     }
 
 

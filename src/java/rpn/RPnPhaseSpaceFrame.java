@@ -16,6 +16,7 @@ import java.util.*;
 import rpn.component.util.GeometryGraph;
 import rpn.component.util.GeometryGraphND;
 import rpn.controller.ui.UIController;
+import rpn.glasspane.RPnGlassPane;
 import rpn.message.RPnNetworkStatus;
 
 public class RPnPhaseSpaceFrame extends JFrame {
@@ -28,6 +29,10 @@ public class RPnPhaseSpaceFrame extends JFrame {
     JPanel jPanel3 = new JPanel();
     JPanel jPanel4 = new JPanel();
     JPanel jPanel5 = new JPanel();
+
+    JButton ntbToggleButton = new JButton("PAD toggle");
+    JButton ntbClearButton = new JButton("PAD clear");
+
     RPnCursorMonitor coordsField = new RPnCursorMonitor();
     BorderLayout borderLayout2 = new BorderLayout();
     RPnMenuCommand commandMenu_ = null;
@@ -94,8 +99,83 @@ public class RPnPhaseSpaceFrame extends JFrame {
         contentPane.add(jPanel4, BorderLayout.NORTH);
         statusPanel.add(coordsField, BorderLayout.EAST);
         statusPanel.add(jPanel5, BorderLayout.SOUTH);
-        jPanel5.add(slider);
 
+        ntbToggleButton.addActionListener(new rpn.glasspane.RPnToggleNoteboardModeListener());
+        ntbClearButton.addActionListener(new java.awt.event.ActionListener() {
+
+            public void actionPerformed(ActionEvent e) {
+
+                for (int i = 0; i < RPnUIFrame.getPhaseSpaceFrames().length; i++) {
+                    ((RPnGlassPane)RPnUIFrame.getPhaseSpaceFrames()[i].getGlassPane()).clear();
+                }
+
+                for (int i = 0; i < RPnUIFrame.getAuxFrames().length; i++) {
+                    ((RPnGlassPane)RPnUIFrame.getAuxFrames()[i].getGlassPane()).clear();
+                }
+
+
+                if (RPnUIFrame.getRiemannFrames() != null)
+                for (int i = 0; i < RPnUIFrame.getRiemannFrames().length; i++) {
+                    ((RPnGlassPane)RPnUIFrame.getRiemannFrames()[i].getGlassPane()).clear();
+                }
+
+
+                // TODO add coords
+                if (RPnNetworkStatus.instance().isOnline() && RPnNetworkStatus.instance().isMaster()) {
+                  StringBuilder buffer = new StringBuilder();
+
+                    buffer.append("<COMMAND name=\"TOGGLE_NOTEBOARD_CLEAR\">");
+                    buffer.append("</COMMAND>");
+
+                    RPnNetworkStatus.instance().sendCommand(buffer.toString());
+                }
+
+
+            }
+        });
+
+
+        ntbToggleButton.setEnabled(true);
+
+
+        getGlassPane().addMouseListener(new MouseAdapter() {
+
+            public void mousePressed(MouseEvent e) {
+
+
+                Point clickLoc = e.getLocationOnScreen();
+                Point ntbLoc = ntbToggleButton.getLocationOnScreen();
+                Point clearLoc = ntbClearButton.getLocationOnScreen();
+
+                System.out.println("click x = " + clickLoc.x);
+                System.out.println("click y = " + clickLoc.y);
+
+                System.out.println("ntb x = " + ntbLoc.x);
+                System.out.println("ntb y = " + ntbLoc.y);
+
+                Rectangle ntbArea1 = new Rectangle(ntbLoc.x,ntbLoc.y,ntbToggleButton.getWidth(),ntbToggleButton.getHeight());
+                Rectangle ntbArea2 = new Rectangle(clearLoc.x,clearLoc.y,ntbClearButton.getWidth(),ntbClearButton.getHeight());
+
+                if (ntbArea1.contains(clickLoc))
+                    ntbToggleButton.doClick();
+
+                if (ntbArea2.contains(clickLoc))
+                    ntbClearButton.doClick();
+            }
+
+        });
+
+        ntbClearButton.setEnabled(true);
+        
+        JPanel jPanel6 = new JPanel();
+        jPanel6.setLayout(new FlowLayout());
+        jPanel6.add(ntbToggleButton);
+        jPanel6.add(ntbClearButton);
+
+        jPanel5.setLayout(new BorderLayout());
+        jPanel5.add(slider,BorderLayout.EAST);
+        jPanel5.add(jPanel6,BorderLayout.WEST);
+        
         slider.setMajorTickSpacing(1);
         slider.setPaintLabels(true);
 
@@ -117,6 +197,9 @@ public class RPnPhaseSpaceFrame extends JFrame {
         return slider;
     }
 
+    public JButton getNoteboardToggleButton() {return ntbToggleButton;}
+
+
     private class FocusController implements WindowFocusListener {
 
         public void windowGainedFocus(WindowEvent e) {
@@ -135,10 +218,10 @@ public class RPnPhaseSpaceFrame extends JFrame {
 
                     StringBuilder buffer = new StringBuilder();
 
-                    buffer.append("<COMMAND name=\"TOGGLE_NOTEBOARD_FRAME\" >\n");
-                    buffer.append("<COMMANDPARAM name=\"pane_index\" value=\"" + RPnNetworkStatus.instance().NOTEBOARD_PANE_INDEX + "\" />\n");
-                    buffer.append("<COMMANDPARAM name=\"pane_frame_char\" value=\"" + RPnNetworkStatus.instance().NOTEBOARD_PANE_FRAME_CHAR + "\" />\n");
-                    buffer.append("</COMMAND>\n");
+                    buffer.append("<COMMAND name=\"TOGGLE_NOTEBOARD_FRAME\">");
+                    buffer.append("<COMMANDPARAM name=\"pane_index\" value=\"" + RPnNetworkStatus.instance().NOTEBOARD_PANE_INDEX + "\"/>");
+                    buffer.append("<COMMANDPARAM name=\"pane_frame_char\" value=\"" + RPnNetworkStatus.instance().NOTEBOARD_PANE_FRAME_CHAR + "\"/>");
+                    buffer.append("</COMMAND>");
 
                     RPnNetworkStatus.instance().sendCommand(buffer.toString());
                 }
@@ -373,19 +456,6 @@ public class RPnPhaseSpaceFrame extends JFrame {
 
 
                 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

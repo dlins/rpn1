@@ -47,10 +47,10 @@ public class RPnToggleNoteboardModeListener implements ActionListener {
 
             StringBuilder buffer = new StringBuilder();
 
-            buffer.append("<COMMAND name=\"TOGGLE_NOTEBOARD_MODE\" >\n");
-            buffer.append("<COMMANDPARAM name=\"pane_index\" value=\"" + RPnNetworkStatus.instance().NOTEBOARD_PANE_INDEX + "\" />\n");
-            buffer.append("<COMMANDPARAM name=\"pane_frame_char\" value=\"" + RPnNetworkStatus.instance().NOTEBOARD_PANE_FRAME_CHAR + "\" />\n");
-            buffer.append("</COMMAND>\n");
+            buffer.append("<COMMAND name=\"TOGGLE_NOTEBOARD_MODE\" >");
+            buffer.append("<COMMANDPARAM name=\"pane_index\" value=\"" + RPnNetworkStatus.instance().NOTEBOARD_PANE_INDEX + "\" />");
+            buffer.append("<COMMANDPARAM name=\"pane_frame_char\" value=\"" + RPnNetworkStatus.instance().NOTEBOARD_PANE_FRAME_CHAR + "\" />");
+            buffer.append("</COMMAND>");
 
 
             RPnNetworkStatus.instance().sendCommand(buffer.toString());
