@@ -549,7 +549,7 @@ function compile() {
 	check_software java
 
 	cd $RPNDIR/src
-	echo $RPNDIR/bin/rpn -R
+	$RPNDIR/bin/rpn -R
 	. $RPNDIR/src/make/env
 	ant $compilecmd 2> .error.log | tee 1> compile.log
 
