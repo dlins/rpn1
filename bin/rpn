@@ -549,11 +549,7 @@ function compile() {
 	check_software java
 
 	cd $RPNDIR/src
-echo HI
-echo `pwd`
 	echo $RPNDIR/bin/rpn -R
-
-exit
 	. $RPNDIR/src/make/env
 	ant $compilecmd 2> .error.log | tee 1> compile.log
 
