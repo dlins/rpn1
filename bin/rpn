@@ -229,7 +229,7 @@ function check_software() {
 function check_git_status() {
 	if [ -z `git status | grep "nothing to commit"` ]; then
 		echo -e "\033[31mPlease, commit all changes before setting up a new release!\033[0m (use: git commit -a -m '<message>')"
-		#exit 1
+		exit 1
 	else
 		return 0
 	fi
@@ -410,6 +410,8 @@ mvera
 EOF
 
 	compile
+
+	echo -n "RPn directory: "; echo_color green "$RPNDIR"
 }
 
 
@@ -433,6 +435,8 @@ function install_executable_code() {
 		make_env_sh >> ~/.bashrc
 	fi
 	
+	echo -n "RPn directory: "; echo_color green "$base_dir/rpn-v$latest_version"
+	echo -n "Link "; echo_color -n "'rpn -> rpn-v$latest_version'"; echo " created."
 }
 
 #
@@ -542,15 +546,16 @@ function read_sshpass() {
 # Compile
 #
 function compile() {
-	echo_color red "> Compiling the code... "
 
 	check_software g++
 	check_software ant
 	check_software java
 
 	cd $RPNDIR/src
-	$RPNDIR/bin/rpn -R
+	reconfigure
 	. $RPNDIR/src/make/env
+
+	echo_color green "> Compiling the code... "
 	ant $compilecmd 2> .error.log | tee 1> compile.log
 
 	if [ -s .error.log ]; then
@@ -564,7 +569,7 @@ function compile() {
 		exit 1
 	fi
 
-	echo_color green "> Ok!"; echo
+	echo_color green "> Compilation done!"; echo
 	rm -f .error.log
 
 	return 0
@@ -576,7 +581,7 @@ function compile() {
 # Reconfigure
 #
 function reconfigure() {
-	echo_color red "> Reconfiguring build and makefile... "
+	echo_color green "> Reconfiguring build and makefile... "
 
 	#
 	# Create INCLUDE and SRC macros for makefile
@@ -625,7 +630,7 @@ function reconfigure() {
 	# Set or Reset environment variables
 	#
 	if [ $reconfigenv == true ] || [ ! -f "$SRCDIR/make/env" ]; then
-		echo_color red "> Reconfiguring environment variables... "
+		echo_color green "> Reconfiguring environment variables... "
 
 		# 
 		# Set JAVAHOME and JAVAINC
@@ -776,7 +781,7 @@ bye
 # Deploy New Version
 #
 function deploy_version() {
-	echo_color red "> Deploying new RPn version... "
+	echo_color green "> Deploying new RPn version... "
 
 	check_maintainer
 	check_software sshpass
@@ -785,6 +790,7 @@ function deploy_version() {
 	check_git_status
 	new_version="0.0.0"
 	cur_version=$(find_biggest_version)
+	[ -z $cur_version ] && cur_version=$new_version
 
 	#
 	# read the new version number
@@ -800,12 +806,13 @@ function deploy_version() {
 		else
 			if [[ $(is_version_bigger $new_version $cur_version) -eq 0 ]]; then
 				echo -e "\033[31m > New version must be greater than the last version \033[0m"
-			else
-				echo -e "\033[32m > Ok\033[0m"
+			#else
+			#	echo -e "\033[32m> Ok\033[0m"
 			fi
 		fi
 	done
 
+	echo
 	compile
 	if [ $? -eq 1 ]; then
 		echo Not ok!
@@ -818,7 +825,7 @@ function deploy_version() {
 	# 
 	# Tag local and remote repositories
 	#
-	echo -e "\033[31m > Tagging local and remote git repositories... \033[0m"
+	echo_color green "> Tagging local and remote git repositories..."
 	echo "v$new_version" > $RPNDIR/etc/version
 	echo git commit -a -m "Deploying new release 'v$new_version'"
 	git tag "v$new_version"
@@ -828,7 +835,7 @@ function deploy_version() {
 	#
 	# Create tar gzip file
 	#
-	echo -n -e "\033[31m > Creating tar gzip file... \033[0m"
+	echo_color green "> Creating tar gzip file..."
 	DISTVERSIONDIR=$DISTDIR"/rpn-v"$new_version
 	tarfile=$DISTDIR"/RPn-"$HOSTTYPE"-"$new_version".tar.gz"
 	mkdir -p $DISTVERSIONDIR
@@ -841,14 +848,17 @@ function deploy_version() {
 
 	[ -z $SSHPASS ] && read_sshpass
         sshpass -p$SSHPASS sftp -oBatchMode=no -b - daniel@qin << !
-cd rpn
+cd /var/www/rpn
 put $tarfile
+put $RPNDIR/bin/rpn
+put $RPNDIR/bin/rpninstall
 bye
 !
 	
-	echo -e "\033[31m Done! \033[0m"
+	echo_color green "> New version done!"
 	echo
-	echo -e " > Distribution \033[32m $tarfile\033[0m created."
+	echo -e "> Distribution \033[32m$tarfile\033[0m created."
+	echo
 
 }
 
@@ -858,7 +868,7 @@ bye
 # Install
 #
 function install() {
-	echo_color red "> Installing RPn... "
+	echo_color green "> Installing RPn... "
 
 	latest_version=`wget $RPNURL -O /dev/stdout 2> /dev/null |tee |grep RPn-linux |cut -d'"' -f8 |tail -1 | cut -d"-" -f3 |cut -d"." -f1,2,3`
 	rpn_tar="RPn-$HOSTTYPE-$latest_version.tar.gz"
@@ -874,15 +884,15 @@ function install() {
 	#[ -z $ans ] && (ans="1"; echo $ans; echo)
 
 	if [ "$ans" == "2" ]; then
-		echo_color green "Installing RPn developer code..."
+		echo_color green "> Installing RPn developer code..."
 		install_developer_code
 	else
-		echo_color green "Installing RPn executable code..."
+		echo_color green "> Installing RPn executable code..."
 		install_executable_code
 	fi
 
 	echo
-	echo_color green "> Ok!"; echo
+	echo_color green "> Instalation done!"; echo
 }
 
 
@@ -891,7 +901,7 @@ function install() {
 # Upgrade
 #
 function upgrade() {
-	echo_color red "> Upgrading RPn to the newest version... "
+	echo_color green "> Upgrading RPn to the newest version... "
 
 	latest_version=`wget $RPNURL -O /dev/stdout 2> /dev/null |tee |grep RPn-linux |cut -d'"' -f8 |tail -1 | cut -d"-" -f3 |cut -d"." -f1,2,3`
 	rpn_tar="RPn-$HOSTTYPE-$latest_version.tar.gz"
@@ -916,7 +926,7 @@ function upgrade() {
 	fi
 
 	echo
-	echo_color green "> Ok!"; echo
+	echo_color green "> Upgrade done!"; echo
 
 }
 
