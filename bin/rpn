@@ -13,9 +13,11 @@ GITURL="git://gitorious.impa.br/rpn/rpn.git"
 CURRDIR=`pwd`
 PROGDIR=$(dirname $(readlink -f $0))
 RPNDIR=$(dirname $PROGDIR)
+[ -f $RPNDIR/bin/env.sh ] && . $RPNDIR/bin/env.sh
 BASEDIR=$(dirname $RPNDIR)
 SRCDIR=$RPNDIR/src
 LIBDIR=$RPNDIR/lib
+BINDIR=$RPNDIR/bin
 DISTDIR=$BASEDIR"/rpn_dist"
 HOSTSYS=`uname -s | tr '[:upper:]' '[:lower:]'`
 HOSTMACH=`uname -m`
@@ -44,15 +46,16 @@ function print_help() {
 	rpn_banner
 	echo "rpn - utility to Run, Compile, Reconfigure, Deploy, Install and Upgrade RPn Project."
 	echo
-	echo "	rpn <input-file> [<output-file]	- Run RPn "
-	echo "	rpn [-c] [c++|java|plugins]	- Compile all code or c++, or java, or plugins code"
-	echo "	rpn [-r|-R]			- Reconfigure build and makefile and (-R) environment variables"
-	echo "	rpn [-d]			- Deploy RPn Server Mediator (For code maintainers only)"
-	echo "	rpn [-dv]			- Deploy new version (For code maintainers only)"
-	echo "	rpn [-i]			- Install development or binary-only code"
-	echo "	rpn [-u]			- Upgrade current version"
-	echo "	rpn [-v]			- Show version"
-	echo "	rpn [-h]			- Help (this message)"
+	echo "    rpn <input-file> [<output-file]	- Run RPn "
+	echo "    rpn [-c] [-s] [c++|java|plugins]	- Compile all code or c++ or java or plugins, (-s) silent mode"
+	echo "    rpn [-r|-R]				- Reconfigure build and makefile and (-R) environment variables"
+	echo "    rpn [-d]				- Deploy RPn Server Mediator (For code maintainers only)"
+	echo "    rpn [-dv]				- Deploy new version (For code maintainers only)"
+	echo "    rpn [-i]				- Install development or binary-only code"
+	echo "    rpn [-u]				- Upgrade current version"
+	echo "    rpn [-t]				- Create binary-only code tarball file"
+	echo "    rpn [-v]				- Show version"
+	echo "    rpn [-h]				- Help (this message)"
 	echo
 	echo
 }
@@ -64,6 +67,13 @@ function print_version() {
 	echo -e "\033[32m"`cat $RPNDIR/etc/version | cut -c2-30`"\033[0m"
 	echo
 
+}
+
+
+function print_maintainer_error() {
+	echo 
+	echo_color pink "Sorry, you are not a code maintainer!"
+	echo
 }
 
 
@@ -80,8 +90,10 @@ deploy=false
 deployversion=false
 install=false
 upgrade=false
+tarball=false
 showhelp=false
 silent=false
+already_compiled=false
 
 function check_param() {
 	[ $compile == true ] && c=1
@@ -91,8 +103,9 @@ function check_param() {
 	[ $deployversion == true ] && v=1
 	[ $install == true ] && i=1
 	[ $upgrade == true ] && u=1
+	[ $tarball == true ] && t=1
 
-	if [ $(($c+$r+$e+$d+$v+$i+$u)) -gt 1 ]; then
+	if [ $(($c+$r+$e+$d+$v+$i+$u+$t)) -gt 1 ]; then
 		print_help
 		exit 1
 	fi
@@ -100,25 +113,34 @@ function check_param() {
 }
 
 function get_compile_cmd() {
-	if [ $# -eq 1 ]; then
+	while [ $# -gt 0 ]; do
         	case "$1" in
         	c++)
                 	compilecmd=compile-c++
+			shift
                 	;;
         	java)
+			echo java
                 	compilecmd=compile-java
+			shift
                 	;;
         	plugins)
                 	compilecmd=compile-plugins
+			shift
                 	;;
+		-s)
+			echo silent
+			silent=true
+			shift
+			;;
         	*)
+			echo $1 "<<"
                 	print_help
 			exit 1
                 	;;
 		
         	esac
-	fi
-
+	done
 }
 
 
@@ -157,12 +179,12 @@ elif [ $# -ge 1 ]; then
 		-u)
 			upgrade=true
 			;;
+		-t)
+			tarball=true
+			;;
 		-v)
 			print_version
 			exit 1
-			;;
-		-s)
-			silent=true
 			;;
 		-h)
 			print_help
@@ -229,7 +251,8 @@ function check_software() {
 function check_git_status() {
 	if [ -z `git status | grep "nothing to commit"` ]; then
 		echo -e "\033[31mPlease, commit all changes before setting up a new release!\033[0m (use: git commit -a -m '<message>')"
-		exit 1
+#DEBUG
+		#exit 1
 	else
 		return 0
 	fi
@@ -302,20 +325,16 @@ function find_biggest_version() {
 #
 # Read Base Dir from user input
 #
-function get_rpn_dir() {
-
+function set_rpn_dir() {
 	echo
 	echo "Enter the base directory where you want to install RPn "
 	echo
 	echo -n "   [$CURRDIR]: "
 	read answer
 
-	[ "x$answer" == "x" ] && base_dir="$(readlink -f './')" || base_dir="$(readlink -f $answer)"
+	[ "x$answer" == "x" ] && BASEDIR="$(readlink -f './')" || BASEDIR="$(readlink -f $answer)"
 
-	rpn_dir="$base_dir/rpn"
-
-	return 1
-
+	RPNDIR="$BASEDIR/rpn"
 }
 
 
@@ -323,13 +342,12 @@ function get_rpn_dir() {
 # create env file
 #
 function make_env() {
-
 		cat << EOF 
 # env - RPn makefile environment variable settings
 #       If left empty, makefile will get shell settings
 RPGNU=yes
 RPHOSTTYPE=$HOSTTYPE
-JAVA_HOME=$JAVAHOME
+JAVA_HOME=$JAVA_HOME
 JAVA_INC=$JAVAINC
 PATH=$PATH:$RPNDIR/bin
 EOF
@@ -341,33 +359,45 @@ EOF
 # create env.sh file
 #
 function make_env_sh() {
-	
 	cat << EOF 
 # env - RPn makefile environment variable settings
 #       If left empty, makefile will get shell settings
+RPNDIR=$RPNDIR
 RPGNU=yes
 RPHOSTTYPE=$HOSTTYPE
-JAVA_HOME=$JAVAHOME
+JAVA_HOME=$JAVA_HOME
 JAVA_INC=$JAVAINC
-PATH=\$PATH:$RPNDIR/bin:$JAVAHOME/bin
+PATH=\$PATH:$RPNDIR/bin:$JAVA_HOME/bin
 EOF
 
 }
 
 
-#
-# create env csh file
-#
-function make_env_csh() {
-	
+function make_path_sh() {
+	if [ -z "$JAVA_HOME" ]; then
+		RPNPATH=$RPNDIR/bin
+	else
+		RPNPATH=$RPNDIR/bin:$JAVA_HOME/bin
+	fi
 	cat << EOF
 # env - RPn makefile environment variable settings
 #       If left empty, makefile will get shell settings
-setenv RPGNU yes
-setenv RPHOSTTYPE $HOSTTYPE
-setenv JAVA_HOME $JAVAHOME
-setenv JAVA_INC $JAVAINC
-setenv PATH \$PATH:$JAVAHOME/bin:$RPNDIR/bin
+PATH=\$PATH:$RPNPATH
+EOF
+
+}
+
+
+function make_path_csh() {
+	if [ -z "$JAVA_HOME" ]; then
+		RPNPATH=$RPNDIR/bin
+	else
+		RPNPATH=$RPNDIR/bin:$JAVA_HOME/bin
+	fi
+	cat << EOF
+# env - RPn makefile environment variable settings
+#       If left empty, makefile will get shell settings
+setenv PATH \$PATH:$RPNPATH
 EOF
 
 }
@@ -378,16 +408,16 @@ EOF
 #
 function install_developer_code() {
 	check_software git
-
-	get_rpn_dir
-	RPNDIR=$rpn_dir
+	set_rpn_dir
 
 	if [ -d "$RPNDIR" ]; then
 		echo_color red "Direcotry '$RPNDIR' already exists!"
 		exit 1
 	fi
 
+	echo
 	git clone $GITURL $RPNDIR
+	echo
 	cat << EOF >> $RPNDIR/.git/info/exclude
 *.[oa]
 *.so
@@ -395,10 +425,9 @@ function install_developer_code() {
 *.class
 *.war
 *.log
+bin/env.sh
 src/build.xml
 src/make/env
-src/make/env.sh
-src/make/env.csh
 src/make/inc
 lib/build
 EOF
@@ -409,9 +438,15 @@ edsonlan
 mvera
 EOF
 
+
+	BINDIR="$RPNDIR/bin"
+	SRCDIR="$RPNDIR/src"
+	silent=true
 	compile
 
 	echo -n "RPn directory: "; echo_color green "$RPNDIR"
+
+	installed_version=`cat $RPNDIR/etc/version`
 }
 
 
@@ -421,37 +456,42 @@ EOF
 function install_executable_code() {
 	check_software wget
 
-	get_rpn_dir
-	wget -P /tmp $RPNURL/$rpn_tar > /dev/null 2>&1
-	tar zxf /tmp/$rpn_tar -C $base_dir
-	cd $base_dir
+	set_rpn_dir
+	if [ -d "rpn-v$latest_version" ]; then
+		echo; echo -n "You already have the latest version "
+		echo_color red -n "'$latest_version'"; echo "installed!"; echo
+		exit 1
+	fi
+	wget -P . $RPNURL/$rpn_tar > /dev/null 2>&1
+	tar zxf ./$rpn_tar -C $BASEDIR
+	rm -f ./$rpn_tar
+	cd $BASEDIR
+	[ -L rpn ] && rm -f rpn
 	ln -s rpn-v$latest_version rpn
 
-	if [ $SHELL == "/bin/csh" ]; then
-		sed -i -e '/env - RPn/,+6 d' ~/.cshrc
-		make_env_csh >> ~/.cshrc
-	elif [ $SHELL == "/bin/bash" ]; then
-		sed -i -e '/env - RPn/,+6 d' ~/.bashrc
-		make_env_sh >> ~/.bashrc
-	fi
-	
-	echo -n "RPn directory: "; echo_color green "$base_dir/rpn-v$latest_version"
-	echo -n "Link "; echo_color -n "'rpn -> rpn-v$latest_version'"; echo " created."
+	RPNDIR=$BASEDIR/rpn
+	BINDIR=$RPNDIR/bin
+	reconfigure
+
+	echo
+	echo -n "RPn directory: "; echo_color green "$BASEDIR/rpn-v$latest_version"
+	echo -n "Link "; echo_color green -n "'rpn -> rpn-v$latest_version'"; echo " created."
+
+	installed_version=$latest_version
 }
 
 #
 # upgrade developer code via git
 #
 function upgrade_developer_code() {
-
 	if [ -z `git status | grep "nothing to commit"` ]; then
         	echo -e "\033[31mPlease, commit all changes before upgrading to a new release!\033[0m (use: git commit -a -m '<message>')"
-        	exit 1
+#DEBUG
+        	#exit 1
 	fi
 
 	cd $RPNDIR
 	git pull
-	compile
 }
 
 
@@ -459,8 +499,6 @@ function upgrade_developer_code() {
 # upgade binary-only code via wget
 #
 function upgrade_executable_code() {
-
-
 	wget -P /tmp $RPNURL/$rpn_tar > /dev/null 2>&1
 	tar zxf /tmp/$rpn_tar -C $BASEDIR
 	cd $BASEDIR
@@ -487,7 +525,6 @@ function upgrade_executable_code() {
 # check maintainer
 #
 function check_maintainer() {
-
 	maintainers=( $(cat $RPNDIR/.git/info/maintainers) )
 	n=${#maintainers[@]}
 
@@ -500,11 +537,13 @@ function check_maintainer() {
 	done
 
 	if [ -z "$who" ]; then
-		echo 
-		echo_color pink "Sorry, you are not a code maintainer!"
-		echo
-		exit 1
+		# not found
+		return 1
+	else
+		# is a maintainer
+		return 0
 	fi
+
 }
 
 
@@ -528,7 +567,7 @@ function read_sshpass() {
 			echo 
                 	pass[$i]=$password
         	done
-        	if [ ${pass[1]} == ${pass[2]} ]; then
+        	if [ "${pass[1]}" == "${pass[2]}" ]; then
 			break
 		else
 			echo "Password does not match. Try again!"
@@ -540,13 +579,104 @@ function read_sshpass() {
 }
 
 
+#
+# set mimetype if linux machine
+#
+function set_linux_mimetype() {
+	MIMEDIR=$HOME/.local/share/applications
+
+	if [ ! -d $MIMEDIR ]; then
+		mkdir -p $MIMEDIR
+		cd $MIMEDIR
+
+		echo "[Default Applications]" > default.list
+		cat << EOF > mimeapps.list
+
+[Added Associations]
+
+[Default Applications]
+
+EOF
+	fi
+
+	cd $MIMEDIR
+
+	if [ -z "`grep rpn mimetapps.list`" ]; then
+		sed -i '/Added Associations/a \
+application/x-rpn=rpn.desktop;' mimeapps.list
+		sed -i '/Default Applications/a \
+application/x-rpn=rpn.desktop' mimeapps.list
+	fi
+	if [ -z "`grep rpn default.list`" ]; then
+		sed -i '/Default Applications/a \
+application/x-rpn=rpn.desktop' default.list
+	fi
+
+	cat << EOF > rpn.desktop
+[Desktop Entry]
+Name=RPn - Riemann Problem N-dimensional
+Exec=$BINDIR/rpn %f
+MimeType=application/x-rpn;
+Type=Application
+StartupNotify=true
+Path=$BINDIR
+Icon=$RPNDIR/share/icons/rpn.ico
+EOF
+}
+
+
+
+#######################################################################
+#
+# Tarball
+#
+function tarball() {
+	echo_color green "> Creating tar gzip file..."
+
+	if [ $already_compiled == false ]; then
+		silent=true
+		compile
+	fi
+	
+	this_version=`cat $RPNDIR/etc/version | cut -c 2-30`
+	DISTVERSIONDIR=$DISTDIR"/rpn-v"$this_version
+	tarfile=$DISTDIR"/RPn-"$HOSTTYPE"-"$this_version".tar.gz"
+	mkdir -p $DISTVERSIONDIR
+	cd $RPNDIR
+	rm -f $tarfile
+	tar cf - bin etc in out share lib/*.jar lib/*.war lib/$HOSTTYPE/*.so \
+        	lib/$HOSTTYPE/plugins/*.so | ( cd $DISTVERSIONDIR; tar xfp - )
+	cd $DISTDIR
+	tar cfz $tarfile "rpn-v"$this_version
+	rm -rf "rpn-v"$this_version
+
+	check_maintainer
+	if [ $? -eq 0 ]; then
+		echo -n "Do you want to upload the new tarball to RPn site [Y/n] ? "
+		read ans
+
+		if [ "x$ans" != "xn" ] || [ "x$ans" != "xN" ]; then
+
+			[ -z $SSHPASS ] && read_sshpass
+        		sshpass -p$SSHPASS sftp -oBatchMode=no -b - daniel@qin << ! 
+cd /var/www/rp
+put $tarfile
+put $RPNDIR/bin/rpn
+put $RPNDIR/bin/rpninstall
+bye
+!
+		fi
+	fi
+
+	echo -e "> Distribution \033[32m$tarfile\033[0m created."
+}
+
 
 #######################################################################
 #
 # Compile
 #
 function compile() {
-
 	check_software g++
 	check_software ant
 	check_software java
@@ -555,8 +685,12 @@ function compile() {
 	reconfigure
 	. $RPNDIR/src/make/env
 
-	echo_color green "> Compiling the code... "
-	ant $compilecmd 2> .error.log | tee 1> compile.log
+	echo_color green "> Compiling RPn... "
+	if [ $silent == true ]; then
+		ant $compilecmd 2> .error.log 1> compile.log
+	else
+		ant $compilecmd | tee compile.log | tee 2> .error.log
+	fi
 
 	if [ -s .error.log ]; then
         	rm -f .error.log
@@ -569,7 +703,7 @@ function compile() {
 		exit 1
 	fi
 
-	echo_color green "> Compilation done!"; echo
+	echo_color green "> Done!"; echo
 	rm -f .error.log
 
 	return 0
@@ -581,7 +715,40 @@ function compile() {
 # Reconfigure
 #
 function reconfigure() {
-	echo_color green "> Reconfiguring build and makefile... "
+	echo_color green -n "> Reconfiguring environment variables... "
+
+	make_env_sh  > $BINDIR/env.sh
+
+	# 
+	# Setup environment file 
+	#
+	if [ $SHELL == "/bin/csh" ]; then
+		rcFile="$HOME/.cshrc"
+		sed -i -e '/env - RPn/,+3 d' $rcFile
+		make_path_csh >> $rcFile
+
+	else
+		if [ $SHELL == "/bin/bash" ]; then
+			if [ $HOSTSYS == "darwin" ]; then
+				rcFile="$HOME/.profile"
+			else
+				rcFile="$HOME/.bashrc"
+			fi
+		else
+			rcFile="$HOME/.profile"
+		fi
+		sed -i -e '/env - RPn/,+3 d' $rcFile
+		make_path_sh >> $rcFile
+	fi
+
+	echo_color green "Ok!"
+
+	#
+	# If this is a binary-code instalation, end function here
+	#
+	[ ! -d $SRCDIR ] && return 1
+
+	echo_color green -n "> Reconfiguring build and makefile... "
 
 	#
 	# Create INCLUDE and SRC macros for makefile
@@ -624,20 +791,21 @@ function reconfigure() {
 	# Create build.xml
 	#
 	sed -e "s,PRE_CONFIG_HOSTTYPE,$HOSTTYPE,g" $SRCDIR/make/build.xml.in > $SRCDIR/build.xml
+	echo_color green "Ok!"
 
  
 	#
 	# Set or Reset environment variables
 	#
 	if [ $reconfigenv == true ] || [ ! -f "$SRCDIR/make/env" ]; then
-		echo_color green "> Reconfiguring environment variables... "
+		echo_color green -n "> Reconfiguring development variables... "
 
 		# 
-		# Set JAVAHOME and JAVAINC
+		# Set JAVA_HOME and JAVAINC
 		#
 		if [ $HOSTSYS == "darwin" ]; then
 			# Fixed path for MacOS
-			JAVAHOME="/System/Library/Frameworks/JavaVM.framework/Versions/CurrentJDK/Home"
+			JAVA_HOME="/System/Library/Frameworks/JavaVM.framework/Versions/CurrentJDK/Home"
 		else
 			echo; echo "Choose the JAVA_HOME installation path below: "; echo
 
@@ -657,68 +825,44 @@ function reconfigure() {
 
 			if [ "$ans" == "$i" ]; then
 				echo -n "Enter JAVA_HOME path: "
-				read JAVAHOME
+				read JAVA_HOME
 			else 
-				JAVAHOME=${JNIDIR[$ans]}
+				JAVA_HOME=${JNIDIR[$ans]}
 			fi
 		fi
 	
-		JAVAINC=$JAVAHOME/include
+		JAVAINC=$JAVA_HOME/include
 	
 		#
 		# Create make/env file
 		#
 		make_env     > $SRCDIR/make/env
-		make_env_sh  > $SRCDIR/make/env.sh
-		make_env_csh > $SRCDIR/make/env.csh
+		make_env_sh  > $BINDIR/env.sh
 	
 		# 
-		# Choose setup environment file 
+		# Setup environment file 
 		#
 		if [ $SHELL == "/bin/csh" ]; then
 			rcFile="$HOME/.cshrc"
-			envFile="$SRCDIR/make/env.csh"
-	
-		elif [ $SHELL == "/bin/bash" ]; then
-			if [ $HOSTSYS == "darwin" ]; then
-				rcFile="$HOME/.profile"
+			sed -i -e '/env - RPn/,+3 d' $rcFile
+			make_path_csh >> $rcFile
+
+		else
+			if [ $SHELL == "/bin/bash" ]; then
+				if [ $HOSTSYS == "darwin" ]; then
+					rcFile="$HOME/.profile"
+				else
+					rcFile="$HOME/.bashrc"
+				fi
 			else
-				rcFile="$HOME/.bashrc"
+				rcFile="$HOME/.profile"
 			fi
-			envFile="$SRCDIR/make/env.sh"
-	
-		else
-			rcFile="$HOME/.bashrc"
-			envFile="$SRCDIR/make/env.sh"
-		fi
-		
-		ans=3
-		echo "Select the shell setup file you want to include"
-		echo "the environment variables needed to run RPn:"
-		echo
-		echo "      1) "$rcFile
-		echo "      2) Enter filename manually."
-		echo "      3) None of the above."
-		echo -n "      > "; read ans; echo
-
-		if [ -z $ans ]; then ans=1; echo $ans; fi
-
-		if [ "$ans" -lt 3 ]; then
-			if [ "$ans" -eq 2 ]; then
-				echo -n "Enter filename with its path: "
-				read rcFile
-			fi
-	
-			sed -i -e '/env - RPn/,+6 d' $rcFile
-			cat $envFile >> $rcFile
-		else
-	
-			echo "Ok. Don't forget to do following command next time you login:"
-			echo; echo "      > source "$envFile; echo
+			sed -i -e '/env - RPn/,+3 d' $rcFile
+			make_path_sh >> $rcFile
 		fi
 
+		echo_color green "Ok!"
 	fi
-
 
 	#
 	# Show final setup
@@ -729,16 +873,9 @@ function reconfigure() {
 		echo "==========================================================="
 		echo "  Environment configuration:"
 		echo
-		echo -e "\tRPn_HOME:  \033[31m $RPNDIR \033[0m"
+		echo -e "\tRPNDIR:    \033[31m $RPNDIR \033[0m"
 		echo -e "\tMACHNINE:  \033[31m $HOSTTYPE \033[0m"
 		echo -e "\tJAVA_HOME: \033[31m $JAVA_HOME \033[0m"
-		if [ ! -f $envFile ] || [ $reconfigenv == true ]; then
-			echo
-			echo
-			echo -e "  Now, run the command: \033[32m'source "$envFile"'\033[0m"
-			echo -e "  Run\033[32m 'rpncompile' \033[0mto build RPn."
-			echo -e "  Use\033[32m 'rpn <input-file>'\033[0m to execute the program."
-		fi
 		echo "==========================================================="
 		echo
 	fi
@@ -753,6 +890,7 @@ function deploy() {
 	echo_color red "> Deploying RPn server meditor... "
 
 	check_maintainer
+	[ $? -eq 1 ] && ( print_maintainer_error; exit 1)
 	check_software sshpass
 
 	cd $RPNLIB
@@ -784,6 +922,7 @@ function deploy_version() {
 	echo_color green "> Deploying new RPn version... "
 
 	check_maintainer
+	[ $? -eq 1 ] && ( print_maintainer_error; exit 1)
 	check_software sshpass
 
 	cd $RPNDIR
@@ -791,6 +930,10 @@ function deploy_version() {
 	new_version="0.0.0"
 	cur_version=$(find_biggest_version)
 	[ -z $cur_version ] && cur_version=$new_version
+
+echo $new_version
+echo $cur_version
+read
 
 	#
 	# read the new version number
@@ -812,54 +955,37 @@ function deploy_version() {
 		fi
 	done
 
-	echo
-	compile
-	if [ $? -eq 1 ]; then
-		echo Not ok!
-		echo
-		echo "The code does not compile!"
-		echo "Fix the errors and run this script again."
-		exit 1
-	fi
+#	compile
+echo compile
+read
 	
 	# 
 	# Tag local and remote repositories
 	#
 	echo_color green "> Tagging local and remote git repositories..."
 	echo "v$new_version" > $RPNDIR/etc/version
+cat $RPNDIR/etc/version
+read
+
 	echo git commit -a -m "Deploying new release 'v$new_version'"
 	git tag "v$new_version"
+git tag
+read
 	echo git push
 	echo git push origin tag "v$new_version"
-	
-	#
-	# Create tar gzip file
-	#
-	echo_color green "> Creating tar gzip file..."
-	DISTVERSIONDIR=$DISTDIR"/rpn-v"$new_version
-	tarfile=$DISTDIR"/RPn-"$HOSTTYPE"-"$new_version".tar.gz"
-	mkdir -p $DISTVERSIONDIR
-	cd $RPNDIR
-	tar cf - bin etc in out share lib/*.jar lib/*.war lib/$HOSTTYPE/*.so \
-        	lib/$HOSTTYPE/plugins/*.so | ( cd $DISTVERSIONDIR; tar xfp - )
-	cd $DISTDIR
-	tar cfz $tarfile "rpn-v"$new_version
-	rm -rf "rpn-v"$new_version
 
-	[ -z $SSHPASS ] && read_sshpass
-        sshpass -p$SSHPASS sftp -oBatchMode=no -b - daniel@qin << !
-cd /var/www/rpn
-put $tarfile
-put $RPNDIR/bin/rpn
-put $RPNDIR/bin/rpninstall
-bye
-!
+	echo -n "Do you want to create a tarball of the current machine architecture ($HOSTTYPE) [Y/n] ? "
+	read ans
+
+	if [ "x$ans" != "xn" ] || [ "x$ans" != "xN" ]; then
+echo make tarball
+read
+		already_compiled=true
+		tarball $already_compiled
+	fi
 	
 	echo_color green "> New version done!"
 	echo
-	echo -e "> Distribution \033[32m$tarfile\033[0m created."
-	echo
-
 }
 
 
@@ -868,10 +994,11 @@ bye
 # Install
 #
 function install() {
-	echo_color green "> Installing RPn... "
+	echo_color green "> Installing the latest RPn version... "
 
 	latest_version=`wget $RPNURL -O /dev/stdout 2> /dev/null |tee |grep RPn-linux |cut -d'"' -f8 |tail -1 | cut -d"-" -f3 |cut -d"." -f1,2,3`
 	rpn_tar="RPn-$HOSTTYPE-$latest_version.tar.gz"
+	silent=true
 
 	echo
 	echo "What kind of RPn version do you want to install: "
@@ -881,8 +1008,6 @@ function install() {
 	echo
 	echo -n "      > "; read ans; echo
 		
-	#[ -z $ans ] && (ans="1"; echo $ans; echo)
-
 	if [ "$ans" == "2" ]; then
 		echo_color green "> Installing RPn developer code..."
 		install_developer_code
@@ -892,7 +1017,13 @@ function install() {
 	fi
 
 	echo
-	echo_color green "> Instalation done!"; echo
+
+	# If linux, set RPn mimetype
+	if [ "$HOSTSYS" == linux ]; then
+		set_linux_mimetype
+	fi
+	
+	echo_color green "> RPn version '$installed_version' done!"; echo
 }
 
 
@@ -901,23 +1032,20 @@ function install() {
 # Upgrade
 #
 function upgrade() {
-	echo_color green "> Upgrading RPn to the newest version... "
-
 	latest_version=`wget $RPNURL -O /dev/stdout 2> /dev/null |tee |grep RPn-linux |cut -d'"' -f8 |tail -1 | cut -d"-" -f3 |cut -d"." -f1,2,3`
 	rpn_tar="RPn-$HOSTTYPE-$latest_version.tar.gz"
 	curr_version=`cat $RPNDIR/etc/version | cut -c2-20`
 
-	echo
-	echo -n "Current version: "; echo_color red $curr_version
-	echo -n "Latest  version: "; echo_color cyan $latest_version
-	echo
-
-	if [ -d "$SRCDIR" ]; then
-		echo_color green "Upgrading RPn developer code..."
+	if [ -d $SRCDIR ]; then
+		echo_color green "> Upgrading RPn developer code..."
 		upgrade_developer_code
 	else
 		if [ "$curr_version" != "$latest_version" ]; then
-			echo_color green "Upgrading RPn executable code..."
+			echo_color green "> Upgrading RPn executable code..."
+			echo
+			echo -n "Current version: "; echo_color red $curr_version
+			echo -n "New version:     "; echo_color cyan $latest_version
+			echo
 			upgrade_executable_code
 		else
 			echo "You already have the latest version!"
@@ -925,9 +1053,7 @@ function upgrade() {
 		fi
 	fi
 
-	echo
 	echo_color green "> Upgrade done!"; echo
-
 }
 
 #######################################################################
@@ -935,15 +1061,25 @@ function upgrade() {
 # Run
 #
 function run() {
-	if [ ! -f $SRCDIR/make/env ]; then
-		reconfigure
+	if [ -d $SRCDIR ]; then
+		if [ ! -f $SRCDIR/make/env ]; then
+			reconfigure
+		fi
+
+		. $SRCDIR/make/env
+
+	else
+		. $BINDIR/env.sh
 	fi
 
-	. $SRCDIR/src/make/env
+	if [ ! -z "$JAVA_HOME" ]; then
+		JAVABINDIR=$JAVA_HOME/bin
+	else
+		JAVABINDIR=/usr/bin
+	fi
 
-
-	$JAVA_HOME/bin/java -cp $RPNDIR/lib/jboss-client-7.1.0.Final.jar -DRPHOSTTYPE=$RPHOSTTYPE \
-		-Djava.library.path=$RPNDIR/lib/$RPHOSTTYPE -Drpnhome=$RPNDIR -jar $RPNDIR/lib/rpn.jar $IN
+	$JAVABINDIR/java -cp $RPNDIR/lib/jboss-client-7.1.0.Final.jar -DRPHOSTTYPE=$RPHOSTTYPE \
+		-Djava.library.path=$RPNDIR/lib/$RPHOSTTYPE -Drpnhome=$RPNDIR -jar $RPNDIR/lib/rpn.jar $IN $OUT
 }
 
 
@@ -962,6 +1098,7 @@ rpn_banner
 [ $deployversion == true ] && deploy_version
 [ $install == true ] && install
 [ $upgrade == true ] && upgrade
+[ $tarball == true ] && tarball
 
 
 

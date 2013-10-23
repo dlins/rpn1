@@ -8,7 +8,6 @@
 
 RPNURL="http://qin.impa.br/rpn"
 
-
 function check_software() {
 	if [ -z "`which $1`" ]; then
 		echo
@@ -18,10 +17,13 @@ function check_software() {
 	fi
 }
 
-
+# Check if wget is installed
 check_software wget
-rm -f /tmp/rpn
-wget -P /tmp $RPNURL/rpn > /dev/null 2>&1
-chmod 755 /tmp/rpn
-/tmp/rpn -i
+# Get rpn utility script
+wget -P . $RPNURL/rpn -O rpn_util > /dev/null 2>&1
+# Run rpn util script with install option
+chmod 755 rpn_util
+./rpn_util -i
+# Clean up
+rm -f ./rpn_util
 
