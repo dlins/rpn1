@@ -669,7 +669,7 @@ function tarball() {
 		if [ "x$answer" != "xn" ] || [ "x$answer" != "xN" ]; then
 			[ -z $SSHPASS ] && read_sshpass
         		sshpass -p$SSHPASS sftp -oBatchMode=no -b - jboss@$RPNSERVER << ! 
-cd /var/www/rp/repo
+cd /var/www/rpn/repo
 put $tarfile
 put $RPNDIR/bin/rpn
 put $RPNDIR/bin/rpninstall
