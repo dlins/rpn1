@@ -277,7 +277,7 @@ function check_software() {
 #
 function check_git_status() {
 
-	if [ -z `git status | grep "nothing to commit"` ]; then
+	if [[ -z `git status | grep "nothing to commit"` ]]; then
 		echo -e "\033[31mPlease, commit all changes before setting up a new release!\033[0m (use: git commit -a -m '<message>')"
 		echo
 		exit 1
