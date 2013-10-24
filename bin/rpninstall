@@ -6,7 +6,8 @@
 # rpninstall - utility to Install RPn Project.
 #
 
-RPNURL="http://qin.impa.br/rpn"
+RPNSERVER="rpn.fluid.impa.br"
+RPNURL="http://$RPNSERVER/repo"
 
 function check_software() {
 	if [ -z "`which $1`" ]; then
