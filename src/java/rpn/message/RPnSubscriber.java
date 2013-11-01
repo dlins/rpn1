@@ -139,6 +139,10 @@ public class RPnSubscriber implements MessageListener,RPnMessageListener {
                     System.out.println("Message recieved from rpn command topic..." + '\n');
 
                 String text = ((TextMessage) message).getText();
+                
+                System.out.println("Mensagem recebida: -----");
+                
+                System.out.println(text);
 
                 parseMessageText(text);
 
