@@ -126,18 +126,58 @@ public class RPnCommandModule {
                     curveId_ = new Integer(att.getValue("value"));
                 }
 
-                if (att.getValue("name").equals("pane_index")) {
+                if (att.getValue("name").equals("note_frame_title")) {
 
-                    RPnNetworkStatus.instance().NOTEBOARD_PANE_INDEX = new Integer(att.getValue("value")).intValue();
+                    RPnNetworkStatus.instance().NOTE_FRAME_TITLE = att.getValue("value");
+
+
+                    JFrame[] frames = RPnUIFrame.getPhaseSpaceFrames();
+                    JFrame[] aux_frames = RPnUIFrame.getAuxFrames();
+                    JFrame[] riemann_frames = RPnUIFrame.getRiemannFrames();
+
+                    JFrame[] allFrames = null;
+                    if (riemann_frames != null) {
+                        allFrames = new JFrame[frames.length + aux_frames.length + riemann_frames.length];
+                    } else {
+                        allFrames = new JFrame[frames.length + aux_frames.length];
+                    }
+
+                    // FILL UP the allFrames strucutre
+                    int count = 0;
+                    for (int i = 0; i < frames.length; i++) {
+                        allFrames[count++] = frames[i];
+                    }
+                    for (int i = 0; i < aux_frames.length; i++) {
+                        allFrames[count++] = aux_frames[i];
+                    }
+                    if (riemann_frames != null) {
+                        for (int i = 0; i < riemann_frames.length; i++) {
+                            allFrames[count++] = riemann_frames[i];
+                        }
+                    }
+                   
+                    if (currentCommand_.equalsIgnoreCase("TOGGLE_NOTEBOARD_MODE")) {
+                        for (int i = 0; i < allFrames.length; i++) {
+                            if (allFrames[i].getTitle().compareTo(RPnNetworkStatus.instance().NOTE_FRAME_TITLE) == 0) {
+
+                                System.out.println("Toggling Frame : " + allFrames[i].getTitle());
+                                allFrames[i].getGlassPane().setVisible(!allFrames[i].getGlassPane().isVisible());
+
+                            } else {
+                                allFrames[i].getGlassPane().setVisible(false);
+                            }
+                        }
+
+                    } else if (currentCommand_.equalsIgnoreCase("TOGGLE_NOTEBOARD_CLEAR")) {
+                        for (int i = 0; i < allFrames.length; i++) {
+                            if (allFrames[i].getTitle().compareTo(RPnNetworkStatus.instance().NOTE_FRAME_TITLE) == 0)
+                                ((RPnGlassPane) allFrames[i].getGlassPane()).clear();
+
+                            
+
+                        }
+                    }
                 }
-
-
-                if (att.getValue("name").equals("pane_frame_char")) {
-
-                    RPnNetworkStatus.instance().NOTEBOARD_PANE_FRAME_CHAR = att.getValue("value").charAt(0);
-                }
-
-
 
             }
 
@@ -151,8 +191,7 @@ public class RPnCommandModule {
 
                 System.out.println("Current command :" + currentCommand_);
 
-                if (att.getValue("phasespace") != null)
-                    UIController.instance().setActivePhaseSpace(RPnDataModule.getPhaseSpace(att.getValue("phasespace")));
+                UIController.instance().setActivePhaseSpace(RPnDataModule.getPhaseSpace(att.getValue("phasespace")));
 
 
                 if (currentCommand_.equalsIgnoreCase("Change Flux Parameters")) {
@@ -203,56 +242,11 @@ public class RPnCommandModule {
                 } else if (currentCommand_.equalsIgnoreCase("TOGGLE_NOTEBOARD_MODE")) {
 
                     System.out.println("Will now parse the TOGGLE_NOTEBOARD_MODE");
-                    JFrame[] frames = RPnUIFrame.getPhaseSpaceFrames();
-                    JFrame[] aux_frames = RPnUIFrame.getAuxFrames();
-                    JFrame[] riemann_frames = RPnUIFrame.getRiemannFrames();
-
-                    for (int i = 0; i < frames.length; i++) {
-                        frames[i].getGlassPane().setVisible(!frames[i].getGlassPane().isVisible());
-                    }
-
-                    for (int i = 0; i < aux_frames.length; i++) {
-                        aux_frames[i].getGlassPane().setVisible(!aux_frames[i].getGlassPane().isVisible());
-                    }
-
-                    if (riemann_frames != null)
-                    for (int i = 0; i < riemann_frames.length; i++) {
-                        riemann_frames[i].getGlassPane().setVisible(!riemann_frames[i].getGlassPane().isVisible());
-                    }
-
-
-
+                    
                     if (RPnHttpPoller.POLLING_MODE == RPnHttpPoller.TEXT_POLLER)
                         RPnHttpPoller.POLLING_MODE = RPnHttpPoller.OBJ_POLLER;
                     else RPnHttpPoller.POLLING_MODE = RPnHttpPoller.TEXT_POLLER;
-                }
-
-                else if (currentCommand_.equalsIgnoreCase("TOGGLE_NOTEBOARD_CLEAR")) {
-
-                    System.out.println("Will now parse the TOGGLE_NOTEBOARD_CLEAR");
-                    JFrame[] frames = RPnUIFrame.getPhaseSpaceFrames();
-                    JFrame[] aux_frames = RPnUIFrame.getAuxFrames();
-                    JFrame[] riemann_frames = RPnUIFrame.getRiemannFrames();
-
-                    for (int i = 0; i < frames.length; i++) {
-                        ((RPnGlassPane) frames[i].getGlassPane()).clear();
-                    }
-
-                    for (int i = 0; i < aux_frames.length; i++) {
-                        ((RPnGlassPane) aux_frames[i].getGlassPane()).clear();
-                    }
-
-                    if (riemann_frames != null) {
-                        for (int i = 0; i < riemann_frames.length; i++) {
-                            ((RPnGlassPane) riemann_frames[i].getGlassPane()).clear();
-                        }
-                    }
-                }
-
-
-
-
-
+                }              
             }
 
             if (currentElement_.equals("REALVECTOR")) {

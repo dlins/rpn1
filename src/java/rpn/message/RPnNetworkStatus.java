@@ -20,9 +20,6 @@ public class RPnNetworkStatus {
 
     private static RPnNetworkStatus instance_= null;
 
-    public static int NOTEBOARD_PANE_INDEX = -1;
-    public static char NOTEBOARD_PANE_FRAME_CHAR = ' ';
-
     private String clientID_;
     private boolean isMaster_;
     private boolean isOnline_;
@@ -110,13 +107,15 @@ public class RPnNetworkStatus {
     //public static String RPN_MEDIATORPROXY_URL="http://" + SERVERNAME + ":8080/rpnmediatorproxy/rpnmediatorproxy?REQ_ID=";
     public static String RPN_MEDIATORPROXY_URL="http://" + SERVERNAME + ":8080/rpnmediatorproxy/";    
 
+    public static String NOTE_FRAME_TITLE = "NO_TITLE";
+
     //
     // Constructors/Initializers
     //
     private RPnNetworkStatus() {
 
         isOnline_ = false;
-        isFirewalled_ = false;
+        isFirewalled_ = true;
     }
 
     //
@@ -156,8 +155,10 @@ public class RPnNetworkStatus {
     public void connect(String clientID,boolean isMaster,boolean isFirewalled) {
 
         clientID_ = clientID;
-        isMaster_ = isMaster;        
-        isFirewalled_ = isFirewalled;
+        isMaster_ = isMaster;
+        
+        //isFirewalled_ = isFirewalled;
+        isFirewalled_ = true;
 
 
 

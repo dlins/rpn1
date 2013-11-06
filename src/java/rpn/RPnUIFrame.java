@@ -412,7 +412,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
             try {
                 wave.multid.view.Scene riemannScene = RPnDataModule.RIEMANNPHASESPACE.createScene(riemanTesteTransform, new wave.multid.view.ViewingAttr(Color.black));
-                riemannFrames_[i] = new RPnRiemannFrame(i,'r',riemannScene, commandMenu_);
+                riemannFrames_[i] = new RPnRiemannFrame(riemannScene, commandMenu_);
 
             } catch (DimMismatchEx ex) {
                 ex.printStackTrace();
@@ -444,14 +444,15 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 wave.multid.view.Scene rightScene = RPnDataModule.RIGHTPHASESPACE.createScene(auxViewingTransf,
                         new wave.multid.view.ViewingAttr(Color.black));
 
-                auxFrames_[2 * i] = new RPnPhaseSpaceFrame(2*i,'a',leftScene, commandMenu_);
-                auxFrames_[2 * i + 1] = new RPnPhaseSpaceFrame(2*i + 1,'a',rightScene, commandMenu_);
+                auxFrames_[2 * i] = new RPnPhaseSpaceFrame(leftScene, commandMenu_);
+                auxFrames_[2 * i + 1] = new RPnPhaseSpaceFrame(rightScene, commandMenu_);
 
                 auxFrames_[2 * i].setTitle(((RPnProjDescriptor) RPnVisualizationModule.AUXDESCRIPTORS.get(i)).label());
                 auxFrames_[2 * i + 1].setTitle(((RPnProjDescriptor) RPnVisualizationModule.AUXDESCRIPTORS.get(i + 1)).label());
 
-                System.out.println("auxFrames_[i].getTitle() ::::::: " + auxFrames_[i].getTitle());
-                System.out.println("auxFrames_[i+1].getTitle() ::::: " + auxFrames_[i + 1].getTitle());
+                auxFrames_[2 * i].setTitle("Aux " + auxFrames_[2 * i].getTitle());
+
+
 
                 UIController.instance().install(auxFrames_[2 * i].phaseSpacePanel());
                 UIController.instance().install(auxFrames_[2 * i + 1].phaseSpacePanel());
@@ -477,7 +478,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                         new wave.multid.view.ViewingAttr(Color.black));
 
 
-                frames_[i] = new RPnPhaseSpaceFrame(i,'f',scene, commandMenu_);
+                frames_[i] = new RPnPhaseSpaceFrame(scene, commandMenu_);
                 frames_[i].setTitle(((RPnProjDescriptor) RPnVisualizationModule.DESCRIPTORS.get(i)).label());
 
                  /*
@@ -1200,6 +1201,37 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
     public static RPnPhaseSpaceFrame[] getPhaseSpaceFrames() {
         return frames_;
+    }
+
+    public static RPnPhaseSpaceFrame getPhaseSpaceFrame(String frameTitle) throws Exception {
+
+        RPnPhaseSpaceFrame[] allFrames = null;
+        if (riemannFrames_ != null)
+            allFrames = new RPnPhaseSpaceFrame[frames_.length + auxFrames_.length + riemannFrames_.length];
+        else
+            allFrames = new RPnPhaseSpaceFrame[frames_.length + auxFrames_.length];
+
+
+        // FILL UP the allFrames strucutre
+        int count = 0;
+        for (int i = 0; i < frames_.length; i++) {
+            allFrames[count++] = frames_[i];
+        }
+        for (int i = 0; i < auxFrames_.length; i++) {
+            allFrames[count++] = auxFrames_[i];
+        }
+        if (riemannFrames_ != null) {
+            for (int i = 0; i < riemannFrames_.length; i++) {
+                allFrames[count++] = riemannFrames_[i];
+            }
+        }
+        for (int i = 0; i < allFrames.length; i++)
+
+            if (allFrames[i].getTitle().compareTo(frameTitle) == 0)
+                return allFrames[i];
+
+        throw new Exception("Frame Title not found...");
+
     }
 
     public static void disableSliders() {

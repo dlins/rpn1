@@ -11,6 +11,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JFrame;
 import rpn.RPnPhaseSpaceFrame;
 import rpn.RPnUIFrame;
+import rpn.controller.ui.UIController;
 import rpn.message.*;
 
 
@@ -69,7 +70,8 @@ public class RPnToggleNoteboardModeListener implements ActionListener {
 
             StringBuilder buffer = new StringBuilder();
 
-            buffer.append("<COMMAND name=\"TOGGLE_NOTEBOARD_MODE\" phasespace=\"Phase Space\">");
+            buffer.append("<COMMAND name=\"TOGGLE_NOTEBOARD_MODE\" ");
+            buffer.append("phasespace=\"").append(UIController.instance().getActivePhaseSpace().getName()).append("\">");
             buffer.append("<COMMANDPARAM name=\"note_frame_title\" value=\"" + noteFrameTitle.toString() + "\"/>");
             buffer.append("</COMMAND>");
 

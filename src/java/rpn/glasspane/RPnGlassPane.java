@@ -48,19 +48,7 @@ public class RPnGlassPane extends JComponent {
 
                 public void mousePressed(MouseEvent e){
 
-                    path_.moveTo(new Double(e.getPoint().getX()),new Double(e.getPoint().getY()));
-
-                    
-                    // this is to guarantee the mousePressed sent
-                    try {
-
-                        Thread.sleep(100);
-
-                    } catch (Exception ex) {
-
-                        ex.printStackTrace();
-
-                    }
+                    path_.moveTo(new Double(e.getPoint().getX()),new Double(e.getPoint().getY()));                                      
                         
                 }
 
@@ -104,7 +92,9 @@ public class RPnGlassPane extends JComponent {
 
             path_.reset();
             path_.append(it, false);
+            invalidate();
             repaint();
+
         }
     }
 
@@ -135,6 +125,7 @@ public class RPnGlassPane extends JComponent {
     public void clear() {
         
         path_.reset();
+        invalidate();
         repaint();
 
    

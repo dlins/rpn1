@@ -19,7 +19,7 @@ public class RPnHttpPoller implements RPnResetableListener {
 
     public static int  TEXT_POLLER = 0;
     public static int OBJ_POLLER = 1;
-    public static int POLLING_MODE = TEXT_POLLER;
+    public static volatile int POLLING_MODE = TEXT_POLLER;
 
 
     private RPnMessageListener messageParser_ = null;
@@ -147,7 +147,7 @@ public class RPnHttpPoller implements RPnResetableListener {
                 }
 
                 // this is for not bringing JBoss down !!!
-                Thread.sleep((long)500);
+                //Thread.sleep((long)500);
             }
 
         } catch (Exception exc) {

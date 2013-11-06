@@ -173,15 +173,17 @@ public class RPnSubscriber implements MessageListener,RPnMessageListener {
 
             SerializablePathIterator it = (SerializablePathIterator) obj;
 
-            if (RPnNetworkStatus.instance().NOTEBOARD_PANE_FRAME_CHAR == 'f') {
-                ((RPnGlassPane) RPnUIFrame.getPhaseSpaceFrames()[RPnNetworkStatus.instance().NOTEBOARD_PANE_INDEX].getGlassPane()).updatePath(it);
-            } else if (RPnNetworkStatus.instance().NOTEBOARD_PANE_FRAME_CHAR == 'a') {
-                ((RPnGlassPane) RPnUIFrame.getAuxFrames()[RPnNetworkStatus.instance().NOTEBOARD_PANE_INDEX].getGlassPane()).updatePath(it);
-            } else if (RPnNetworkStatus.instance().NOTEBOARD_PANE_FRAME_CHAR == 'r') {
-                ((RPnGlassPane) RPnUIFrame.getRiemannFrames()[RPnNetworkStatus.instance().NOTEBOARD_PANE_INDEX].getGlassPane()).updatePath(it);
+            try {
+
+                ((RPnGlassPane) RPnUIFrame.getPhaseSpaceFrame(RPnNetworkStatus.instance().NOTE_FRAME_TITLE).getGlassPane()).updatePath(it);
+
+            } catch (Exception e) {
+
+                e.printStackTrace();
+
             }
 
-
+            
             
         }
     }
@@ -226,9 +228,9 @@ public class RPnSubscriber implements MessageListener,RPnMessageListener {
 
                     commandName = text.substring(14, text.indexOf("phasespace")) + '\0';
 
-                } else // TOGGLE NOTEBOARD MODE (USE DOM please...)
+                } else // TOGGLE NOTEBOARD MODE or CLEAR (USE DOM please...)
 
-                    commandName = text.substring(14, text.indexOf("/>")) + '\0';
+                    commandName = text.substring(14, text.indexOf(">")) + '\0';
 
                 logString = logString.concat(commandName);
 

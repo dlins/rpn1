@@ -17,6 +17,7 @@ import rpn.component.util.GeometryGraph;
 import rpn.component.util.GeometryGraphND;
 import rpn.controller.ui.UIController;
 import rpn.glasspane.RPnGlassPane;
+import rpn.glasspane.RPnNoteModeToggleButton;
 import rpn.message.RPnNetworkStatus;
 
 public class RPnPhaseSpaceFrame extends JFrame {
@@ -30,8 +31,8 @@ public class RPnPhaseSpaceFrame extends JFrame {
     JPanel jPanel4 = new JPanel();
     JPanel jPanel5 = new JPanel();
 
-    JButton ntbToggleButton = new JButton("PAD toggle");
-    JButton ntbClearButton = new JButton("PAD clear");
+    JButton ntbToggleButton;
+    JButton ntbClearButton;
 
     RPnCursorMonitor coordsField = new RPnCursorMonitor();
     BorderLayout borderLayout2 = new BorderLayout();
@@ -39,20 +40,9 @@ public class RPnPhaseSpaceFrame extends JFrame {
     private JSlider slider = new JSlider(-5, 5, 0);
     private Hashtable labels_ = new Hashtable();
     private Dimension frameSize_ = null;
-    private int frameIndex_;
-    private char frameChar_ = ' ';
 
     //    int sliderValue_;
     public RPnPhaseSpaceFrame(Scene scene, RPnMenuCommand command) {
-
-        // a non indexed frame has an index of -1
-        this(-1,'f',scene,command);
-    }
-
-    public RPnPhaseSpaceFrame(int frameIndex,char frameChar,Scene scene, RPnMenuCommand command) {
-
-        frameIndex_ = frameIndex;
-        frameChar_ = frameChar;
 
         enableEvents(AWTEvent.WINDOW_EVENT_MASK);
         enableEvents(AWTEvent.COMPONENT_EVENT_MASK);
@@ -84,7 +74,7 @@ public class RPnPhaseSpaceFrame extends JFrame {
         jPanel3.setBackground(Color.gray);
         jPanel4.setBackground(Color.gray);
         contentPane.setBackground(Color.gray);
-        setTitle(" RPn - "
+        setTitle(" Phase Space Frame - "
                 + new Integer(((PhaseSpacePanelController) phaseSpacePanel.getCastedUI()).getAbsIndex()).intValue() + ','
                 + new Integer(((PhaseSpacePanelController) phaseSpacePanel.getCastedUI()).getOrdIndex()).intValue());
         phaseSpacePanel.addMouseMotionListener(coordsField.getMouseMotionController());
@@ -100,24 +90,15 @@ public class RPnPhaseSpaceFrame extends JFrame {
         statusPanel.add(coordsField, BorderLayout.EAST);
         statusPanel.add(jPanel5, BorderLayout.SOUTH);
 
+        ntbToggleButton = new RPnNoteModeToggleButton(this,"PAD toggle");
+        ntbClearButton = new RPnNoteModeToggleButton(this,"PAD clear");
+
         ntbToggleButton.addActionListener(new rpn.glasspane.RPnToggleNoteboardModeListener());
         ntbClearButton.addActionListener(new java.awt.event.ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
 
-                for (int i = 0; i < RPnUIFrame.getPhaseSpaceFrames().length; i++) {
-                    ((RPnGlassPane)RPnUIFrame.getPhaseSpaceFrames()[i].getGlassPane()).clear();
-                }
-
-                for (int i = 0; i < RPnUIFrame.getAuxFrames().length; i++) {
-                    ((RPnGlassPane)RPnUIFrame.getAuxFrames()[i].getGlassPane()).clear();
-                }
-
-
-                if (RPnUIFrame.getRiemannFrames() != null)
-                for (int i = 0; i < RPnUIFrame.getRiemannFrames().length; i++) {
-                    ((RPnGlassPane)RPnUIFrame.getRiemannFrames()[i].getGlassPane()).clear();
-                }
+                ((RPnGlassPane)getGlassPane()).clear();
 
 
                 // TODO add coords
@@ -186,8 +167,7 @@ public class RPnPhaseSpaceFrame extends JFrame {
         addMouseWheelListener(new MouseListener());
 
     }
-
-
+    
     public JSlider getSlider() {
         return slider;
     }
@@ -202,7 +182,9 @@ public class RPnPhaseSpaceFrame extends JFrame {
             UIController.instance().setFocusPanel(phaseSpacePanel);
             
             // TODO : get the Pane Index from PhaseSpace
-            if ((RPnNetworkStatus.instance().isOnline() && RPnNetworkStatus.instance().isMaster())
+            /* this might be the right way ...
+
+             if ((RPnNetworkStatus.instance().isOnline() && RPnNetworkStatus.instance().isMaster())
                     || (!RPnNetworkStatus.instance().isOnline())) {
                 RPnNetworkStatus.instance().NOTEBOARD_PANE_INDEX = frameIndex_;
                 RPnNetworkStatus.instance().NOTEBOARD_PANE_FRAME_CHAR = frameChar_;
@@ -220,7 +202,7 @@ public class RPnPhaseSpaceFrame extends JFrame {
 
                     RPnNetworkStatus.instance().sendCommand(buffer.toString());
                 }
-            }
+            }*/
 
         }
 
