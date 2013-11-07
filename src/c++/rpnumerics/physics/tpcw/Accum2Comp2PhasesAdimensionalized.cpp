@@ -14,9 +14,9 @@ Accum2Comp2PhasesAdimensionalized::Accum2Comp2PhasesAdimensionalized(const Accum
 Accum2Comp2PhasesAdimensionalized::Accum2Comp2PhasesAdimensionalized(const Accum2Comp2PhasesAdimensionalized_Params &param):AccumulationFunction(param) {
     TD = param.get_thermodynamics();
     phi = param.component(0);
-    if ( Debug::get_debug_level() == 5 ) {
-        cout <<"Valor de phi no accum2 comp: "<<phi<<endl;
-    }
+//    if ( Debug::get_debug_level() == 5 ) {
+//        cout <<"Valor de phi no accum2 comp: "<<phi<<endl;
+//    }
     reducedAccum_= new ReducedAccum2Comp2PhasesAdimensionalized(this);
 }
 
@@ -92,9 +92,9 @@ int Accum2Comp2PhasesAdimensionalized::jet(const WaveState &w, JetMatrix &m, int
         out1 = phi * (rhosiw * s + rhoaw * (1.0 - s)); // G2
         out2 = Hr + phi * (Hsi * s + Ha * (1.0 - s)); // G3
 
-        m(0, out0);
-        m(1, out1);
-        m(2, out2);
+        m.set(0, out0);
+        m.set(1, out1);
+        m.set(2, out2);
 
         // Jacobian
         if (degree >= 1) {
@@ -116,23 +116,23 @@ int Accum2Comp2PhasesAdimensionalized::jet(const WaveState &w, JetMatrix &m, int
             out21 = d_Hr + phi * (d_Hsi * s + d_Ha * (1.0 - s)); // dG3_dTheta
             out22 = 0.; // dG3_dU
 
-            m(0, 0, out00);
-            m(0, 1, out01);
-            m(0, 2, out02);
+            m.set(0, 0, out00);
+            m.set(0, 1, out01);
+            m.set(0, 2, out02);
 
-            m(1, 0, out10);
-            m(1, 1, out11);
-            m(1, 2, out12);
+            m.set(1, 0, out10);
+            m.set(1, 1, out11);
+            m.set(1, 2, out12);
 
-            m(2, 0, out20);
-            m(2, 1, out21);
-            m(2, 2, out22);
+            m.set(2, 0, out20);
+            m.set(2, 1, out21);
+            m.set(2, 2, out22);
 
 
             if ( Debug::get_debug_level() == 5 ) {
                 for (int i = 0; i < 3; i++){
                     for (int j = 0; j < 3; j++){
-                        printf("aa(%d, %d) = %g\n", i, j, m(i, j));
+                        printf("aa(%d, %d) = %g\n", i, j, m.get(i, j));
                     }
                 }
             }
@@ -169,37 +169,37 @@ int Accum2Comp2PhasesAdimensionalized::jet(const WaveState &w, JetMatrix &m, int
                 out221 = 0.; // d2G3_dUdTheta
                 out222 = 0.; // d2G3_dU2
 
-                m(0, 0, 0, out000);
-                m(0, 0, 1, out001);
-                m(0, 0, 2, out002);
-                m(0, 1, 0, out010);
-                m(0, 1, 1, out011);
-                m(0, 1, 2, out012);
-                m(0, 2, 0, out020);
-                m(0, 2, 1, out021);
-                m(0, 2, 2, out022);
+                m.set(0, 0, 0, out000);
+                m.set(0, 0, 1, out001);
+                m.set(0, 0, 2, out002);
+                m.set(0, 1, 0, out010);
+                m.set(0, 1, 1, out011);
+                m.set(0, 1, 2, out012);
+                m.set(0, 2, 0, out020);
+                m.set(0, 2, 1, out021);
+                m.set(0, 2, 2, out022);
 
 
-                m(1, 0, 0, out100);
-                m(1, 0, 1, out101);
-                m(1, 0, 2, out102);
-                m(1, 1, 0, out110);
-                m(1, 1, 1, out111);
-                m(1, 1, 2, out112);
-                m(1, 2, 0, out120);
-                m(1, 2, 1, out121);
-                m(1, 2, 2, out122);
+                m.set(1, 0, 0, out100);
+                m.set(1, 0, 1, out101);
+                m.set(1, 0, 2, out102);
+                m.set(1, 1, 0, out110);
+                m.set(1, 1, 1, out111);
+                m.set(1, 1, 2, out112);
+                m.set(1, 2, 0, out120);
+                m.set(1, 2, 1, out121);
+                m.set(1, 2, 2, out122);
 
 
-                m(2, 0, 0, out200);
-                m(2, 0, 1, out201);
-                m(2, 0, 2, out202);
-                m(2, 1, 0, out210);
-                m(2, 1, 1, out211);
-                m(2, 1, 2, out212);
-                m(2, 2, 0, out220);
-                m(2, 2, 1, out221);
-                m(2, 2, 2, out222);
+                m.set(2, 0, 0, out200);
+                m.set(2, 0, 1, out201);
+                m.set(2, 0, 2, out202);
+                m.set(2, 1, 0, out210);
+                m.set(2, 1, 1, out211);
+                m.set(2, 1, 2, out212);
+                m.set(2, 2, 0, out220);
+                m.set(2, 2, 1, out221);
+                m.set(2, 2, 2, out222);
             }
         }
     }
@@ -272,9 +272,9 @@ int Accum2Comp2PhasesAdimensionalized::ReducedAccum2Comp2PhasesAdimensionalized:
         out1 = totalAccum_->phi*(rhosiw*s + rhoaw*(1.0 - s)); // G2
         out2 = Hr + totalAccum_->phi*(Hsi*s + Ha*(1.0 - s) ); // G3
 
-        m(0, out0);
-        m(1, out1);
-        m(2, out2);
+        m.set(0, out0);
+        m.set(1, out1);
+        m.set(2, out2);
 
         // Jacobian
         if (degree >= 1){
@@ -292,19 +292,19 @@ int Accum2Comp2PhasesAdimensionalized::ReducedAccum2Comp2PhasesAdimensionalized:
             out20 = totalAccum_->phi*(Hsi-Ha); // dG3_ds
             out21 = d_Hr + totalAccum_->phi*( d_Hsi*s + d_Ha*(1.0 - s) ); // dG3_dTheta
 
-            m(0, 0, out00);
-            m(0, 1, out01);
+            m.set(0, 0, out00);
+            m.set(0, 1, out01);
 
-            m(1, 0, out10);
-            m(1, 1, out11);
+            m.set(1, 0, out10);
+            m.set(1, 1, out11);
 
-            m(2, 0, out20);
-            m(2, 1, out21);
+            m.set(2, 0, out20);
+            m.set(2, 1, out21);
 
             if ( Debug::get_debug_level() == 5 ) {
                 for (int i = 0; i < 3; i++){
                     for (int j = 0; j < 3; j++){
-                        printf("aa(%d, %d) = %g\n", i, j, m(i, j));
+                        printf("aa(%d, %d) = %g\n", i, j, m.get(i, j));
                     }
                 }
             }
@@ -327,20 +327,20 @@ int Accum2Comp2PhasesAdimensionalized::ReducedAccum2Comp2PhasesAdimensionalized:
                 out210 = out201; // d2G3_dThetads
                 out211 = d2_Hr + totalAccum_->phi*(d2_Hsi*s + d2_Ha*(1.0 - s) ); // d2G3_dTheta2
 
-                m(0, 0, 0, out000);
-                m(0, 0, 1, out001);
-                m(0, 1, 0, out010);
-                m(0, 1, 1, out011);
+                m.set(0, 0, 0, out000);
+                m.set(0, 0, 1, out001);
+                m.set(0, 1, 0, out010);
+                m.set(0, 1, 1, out011);
 
-                m(1, 0, 0, out100);
-                m(1, 0, 1, out101);
-                m(1, 1, 0, out110);
-                m(1, 1, 1, out111);
+                m.set(1, 0, 0, out100);
+                m.set(1, 0, 1, out101);
+                m.set(1, 1, 0, out110);
+                m.set(1, 1, 1, out111);
 
-                m(2, 0, 0, out200);
-                m(2, 0, 1, out201);
-                m(2, 1, 0, out210);
-                m(2, 1, 1, out211);
+                m.set(2, 0, 0, out200);
+                m.set(2, 0, 1, out201);
+                m.set(2, 1, 0, out210);
+                m.set(2, 1, 1, out211);
             }
         }
     }

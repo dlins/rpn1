@@ -38,10 +38,10 @@ public:
     void updateZeroTerms();
     void setParams(const ShockFlowParams & params);
 
-
-    int flux(const RealVector &, RealVector &) ;
-    int fluxDeriv(const RealVector &, JacobianMatrix &);
-    int fluxDeriv2(const RealVector &, HessianMatrix &);
+//
+//    int flux(const RealVector &, RealVector &) ;
+//    int fluxDeriv(const RealVector &, JacobianMatrix &);
+//    int fluxDeriv2(const RealVector &, HessianMatrix &);
 
     WaveFlow * clone()const;
     

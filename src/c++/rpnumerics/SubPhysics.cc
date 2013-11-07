@@ -106,11 +106,11 @@ void SubPhysics::setDoubleContactFunction(Double_Contact_Function *dcf) {
     doubleContactFunction_ = dcf;
 }
 
-void SubPhysics::setShockMethod(ShockMethod * shockMethod) {
+void SubPhysics::setShockMethod(HugoniotContinuation * shockMethod) {
     shock_method_ = shockMethod;
 }
 
-ShockMethod * SubPhysics::getShockMethod() {
+HugoniotContinuation * SubPhysics::getShockMethod() {
     return shock_method_;
 }
 

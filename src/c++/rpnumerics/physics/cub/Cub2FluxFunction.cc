@@ -64,8 +64,8 @@ int Cub2FluxFunction::jet(const WaveState & x, JetMatrix & y, int degree = 2) co
     out0 = 0.5 * ( (a1*u*u) + (2.0*b1*u*v) + (c1*v*v) ) + d1*u + e1*v + f1*u*u*u + g1*u*u*v + h1*u*v*v + k1*v*v*v;
     out1 = 0.5 * ( (a2*u*u) + (2.0*b2*u*v) + (c2*v*v) ) + d2*u + e2*v + f2*u*u*u + g2*u*u*v + h2*u*v*v + k2*v*v*v;
 
-    y(0, out0);
-    y(1, out1);
+    y.get(0, out0);
+    y.get(1, out1);
 
     if (degree > 0) {
         // Calculate DF
@@ -76,10 +76,10 @@ int Cub2FluxFunction::jet(const WaveState & x, JetMatrix & y, int degree = 2) co
         out10 = a2*u + b2*v + d2 + 3.0*f2*u*u + 2.0*g2*u*v + h2*v*v;
         out11 = b2*u + c2*v + e2 + g2*u*u + 2.0*h2*u*v + 3.0*k2*v*v;
 
-        y(0, 0, out00);
-        y(0, 1, out01);
-        y(1, 0, out10);
-        y(1, 1, out11);
+        y.set(0, 0, out00);
+        y.set(0, 1, out01);
+        y.set(1, 0, out10);
+        y.set(1, 1, out11);
 
         if (degree > 1) {
 	double out000, out001, out010, out011, out100, out101, out110, out111;
@@ -94,14 +94,14 @@ int Cub2FluxFunction::jet(const WaveState & x, JetMatrix & y, int degree = 2) co
 	    out110 = out101;
 	    out111 = c2 + 2.0*h2*u + 6.0*k2*v;
 
-            y(0, 0, 0, out000);
-            y(0, 0, 1, out001);
-            y(0, 1, 0, out010);
-            y(0, 1, 1, out011);
-            y(1, 0, 0, out100);
-            y(1, 0, 1, out101);
-            y(1, 1, 0, out110);
-            y(1, 1, 1, out111);
+            y.set(0, 0, 0, out000);
+            y.set(0, 0, 1, out001);
+            y.set(0, 1, 0, out010);
+            y.set(0, 1, 1, out011);
+            y.set(1, 0, 0, out100);
+            y.set(1, 0, 1, out101);
+            y.set(1, 1, 0, out110);
+            y.set(1, 1, 1, out111);
 
             if (degree > 2) {
                 return 0; //UNSUCCESSFUL_PROCEDURE;

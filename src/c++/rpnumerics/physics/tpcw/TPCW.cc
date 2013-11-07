@@ -12,7 +12,7 @@
  */
 #include "TPCW.h"
 #include "Double_Contact_TP.h"
-#include "ShockContinuationMethod3D2D.h"
+
 #include "Debug.h"
 
 /*
@@ -78,7 +78,7 @@ SubPhysics(*defaultBoundary(), *new Space("R3", 3), "TPCW", _GENERAL_ACCUMULATIO
 
     setHugoniotFunction(new Hugoniot_TP());
     setDoubleContactFunction(new Double_Contact_TP());
-    setShockMethod(new ShockContinuationMethod3D2D());
+    setShockMethod(new HugoniotContinuation3D2D(fluxFunction_,accumulationFunction_,&getBoundary()));
 
 
     RealVector min(getBoundary().minimums());
@@ -179,7 +179,7 @@ TD(new Thermodynamics_SuperCO2_WaterAdimensionalized(*copy.TD)) {
 
     setHugoniotFunction(new Hugoniot_TP());
     setDoubleContactFunction(new Double_Contact_TP());
-    setShockMethod(new ShockContinuationMethod3D2D());
+    setShockMethod(new HugoniotContinuation3D2D(fluxFunction_,accumulationFunction_,&getBoundary()));
 
     
     setViscosityMatrix(new Viscosity_Matrix());

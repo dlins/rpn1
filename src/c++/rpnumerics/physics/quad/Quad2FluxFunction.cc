@@ -105,9 +105,6 @@ int Quad2FluxFunction::jet(const WaveState & x, JetMatrix & y, int degree = 2) c
 
     const FluxParams params = fluxParams();
 
-    if ( Debug::get_debug_level() == 5 ) {
-               cout << "Params em jet "<< params.params() << "\n";
-    }
 
     a1 = params.component(0);
     b1 = params.component(1);
@@ -115,13 +112,13 @@ int Quad2FluxFunction::jet(const WaveState & x, JetMatrix & y, int degree = 2) c
     d1 = params.component(3);
     e1 = params.component(4);
 
-    if ( Debug::get_debug_level() == 5 ) {
-                cout << "a1 0: " << a1 << "\n";
-                cout << "b1 1: " << b1 << "\n";
-                cout << "c1 2: " << c1 << "\n";
-                cout << "d1 3: " << d1 << "\n";
-                cout << "e1 4: " << e1 << "\n";
-    }
+//    if ( Debug::get_debug_level() == 5 ) {
+//                cout << "a1 0: " << a1 << "\n";
+//                cout << "b1 1: " << b1 << "\n";
+//                cout << "c1 2: " << c1 << "\n";
+//                cout << "d1 3: " << d1 << "\n";
+//                cout << "e1 4: " << e1 << "\n";
+//    }
 
     a2 = params.component(5);
     b2 = params.component(6);
@@ -130,22 +127,22 @@ int Quad2FluxFunction::jet(const WaveState & x, JetMatrix & y, int degree = 2) c
     e2 = params.component(9);
 
 
-    if ( Debug::get_debug_level() == 5 ) {
-                cout << "a2 5: " << a2 << "\n";
-                cout << "b2 6: " << b2 << "\n";
-                cout << "c2 7: " << c2 << "\n";
-                cout << "d2 8: " << d2 << "\n";
-                cout << "e2 9: " << e2 << "\n";
-    }
+//    if ( Debug::get_debug_level() == 5 ) {
+//                cout << "a2 5: " << a2 << "\n";
+//                cout << "b2 6: " << b2 << "\n";
+//                cout << "c2 7: " << c2 << "\n";
+//                cout << "d2 8: " << d2 << "\n";
+//                cout << "e2 9: " << e2 << "\n";
+//    }
     
 
     double u = x(0);
     double v = x(1);
 
 
-    if ( Debug::get_debug_level() == 5 ) {
-        cout <<"Valor da entrada: "<<u<<" "<<v<<" "<<endl;
-    }
+//    if ( Debug::get_debug_level() == 5 ) {
+//        cout <<"Valor da entrada: "<<u<<" "<<v<<" "<<endl;
+//    }
 
     //    
     //    out0 = 0.5 * (a1 * pow(u, (double) 2) + 2.0 * b1 * u * v + c1 * pow(v, (double) 2)) + d1 * u + e1*v;
@@ -169,13 +166,13 @@ int Quad2FluxFunction::jet(const WaveState & x, JetMatrix & y, int degree = 2) c
     //    out1 = (a2 * u * u) + b2 * u * v + c2 * (v * v) + d2 * u + e2*v;
     //    
 
-    y(0, out0);
-    y(1, out1);
+    y.set(0, out0);
+    y.set(1, out1);
 
 
-    if ( Debug::get_debug_level() == 5 ) {
-        cout << "f (C++): " << y(0) << " "<< y(1)<<"\n";
-    }
+//    if ( Debug::get_debug_level() == 5 ) {
+//        cout << "f (C++): " << y.get(0) << " "<< y.get(1)<<"\n";
+//    }
 
 
     if (degree > 0) {
@@ -196,22 +193,22 @@ int Quad2FluxFunction::jet(const WaveState & x, JetMatrix & y, int degree = 2) c
 
 
 
-        y(0, 0, out00);
-        y(0, 1, out01);
-        y(1, 0, out10);
-        y(1, 1, out11);
+        y.set(0, 0, out00);
+        y.set(0, 1, out01);
+        y.set(1, 0, out10);
+        y.set(1, 1, out11);
 
         if (degree > 1) {
             // Calculate D2F
 
-            y(0, 0, 0, a1);
-            y(0, 1, 0, b1);
-            y(0, 0, 1, b1);
-            y(0, 1, 1, c1);
-            y(1, 0, 0, a2);
-            y(1, 1, 0, b2);
-            y(1, 0, 1, b2);
-            y(1, 1, 1, c2);
+            y.set(0, 0, 0, a1);
+            y.set(0, 1, 0, b1);
+            y.set(0, 0, 1, b1);
+            y.set(0, 1, 1, c1);
+            y.set(1, 0, 0, a2);
+            y.set(1, 1, 0, b2);
+            y.set(1, 0, 1, b2);
+            y.set(1, 1, 1, c2);
 
             if (degree > 2) {
                 return 0; //UNSUCCESSFUL_PROCEDURE;

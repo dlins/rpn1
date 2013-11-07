@@ -3,6 +3,7 @@
 
 #include <stdlib.h>
 #include <math.h>
+#include <iostream>
 
 /*    SIMPLE USE EXAMPLE:
 
@@ -51,7 +52,7 @@ class Matrix {
         Matrix(const Matrix<T> &original);
         Matrix(const Matrix<T> *original);
         Matrix(int n, int m, const T *original);
-        ~Matrix();
+        virtual ~Matrix();
 
         virtual T&       operator()(int i, int j);
         virtual T const& operator()(int i, int j) const;
@@ -79,6 +80,7 @@ template <typename T> int Matrix<T>::min(int x, int y){
 template <typename T> void Matrix<T>::copy(int n, int m, const T *orig){
     resize(n, m);
 
+    #pragma omp parallel for schedule(dynamic)
     for (int i = 0; i < n*m; i++) vec[i] = orig[i];
 
     return;
@@ -116,6 +118,7 @@ template <typename T> Matrix<T>::Matrix(int n, int m, const T *original){
 
 template <typename T> Matrix<T>::~Matrix(){
     if (vec != 0) delete [] vec;
+//    std::cout << "Matrix<T>::~Matrix()" << std::endl;
 }
 
 template <typename T> T& Matrix<T>::operator()(int i, int j){
@@ -154,6 +157,8 @@ template <typename T> void Matrix<T>::resize(int newn, int newm){
     if (vec == 0) vec = new T[newn*newm];
     else {
         T *temp = new T[newn * newm];
+
+        #pragma omp parallel for schedule(dynamic)
         for (int i = 0; i < min(rows_, newn); i++){
             for (int j = 0; j < min(cols_, newm); j++){
                 temp[i*newm + j] = vec[i*cols_ + j];

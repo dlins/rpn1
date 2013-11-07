@@ -1,329 +1,220 @@
-/*
- * IMPA - Fluid Dynamics Laboratory
- *
- * RPn Project
- *
- * @(#) JetMatrix.h
- */
+#ifndef _JETMATRIX_
+#define _JETMATRIX_
 
-#ifndef _JetMatrix_H
-#define _JetMatrix_H
-
-/*
- * ---------------------------------------------------------------
- * Includes:
- */
-//#include "Vector.h"
+#include <vector>
+#include <iostream>
 #include "RealVector.h"
-#include "except.h"
-#include "JacobianMatrix.h"
-#include "HessianMatrix.h"
-#include "RealVector.h"
-#include <sstream>
-
-/*
- * ---------------------------------------------------------------
- * Definitions:
- */
-
-/*!@brief Utility class to store a function value and its derivatives
- * 
- * 
- *
- * @ingroup wave
- */
-
+#include "DoubleMatrix.h"
 
 class JetMatrix {
-private:
-    int n_comps_, size_;
-    RealVector v_;
-    bool c0_, c1_, c2_;
+    private:
+    protected:
+        // Number of conservation equations and number of variables.
+        //
+        int Ceqs, vars;
 
-    class RangeViolation : public exception {
-    };
+        // Total number of stored elements (size and space).
+        //
+        long int vec_size;
+        double *vec;
 
-public:
+        void resize();
+        void copy(const JetMatrix &o);
+    public:
+        JetMatrix();
+        JetMatrix(int n);
+        JetMatrix(int v, int e);
+        JetMatrix(const JetMatrix *o);
+        JetMatrix(const JetMatrix &o);
 
-    JetMatrix(void);
+        ~JetMatrix();
 
-    /*! Constructs a matrix with a arbitrary dimension
-     *
-     *  Dimension is the number of components whose function are stored into the JetMatrix
-     *
-     *@param n_comps Dimension of the function stored into the JetMatrix
-     */
+        JetMatrix operator=(const JetMatrix &original);
 
-    JetMatrix(const int n_comps);
+        void resize(int n);
+        void resize(int v, int e);
 
-    /*! Copy constructor
-     */
+        int number_of_conservation_equations() const;
+        int number_of_variables() const;
+        int size() const;
 
-    JetMatrix(const JetMatrix & jetMatrix);
+        // Extract the function, Jacobian and Hessian.
+        //
+        RealVector function() const;
+        DoubleMatrix Jacobian() const;
+        std::vector<DoubleMatrix> Hessian() const;
 
-    /*! Constructs a Jet matrix filling initial values
-     *@param n_comps Dimension of the function stored into the JetMatrix
-     *@param degree Derivative degree associated with the initial array
-     *@param values The new array of function, first and second derivative values
-     */
+        // Extract a matrix from the Hessian, associated to the the i-th component of the mapping's domain.
+        // The matrix has components (j, k) of the form:
+        //
+        //     d^2 F_j / d u_i d u_k
+        //
+        // where F_j are the functions that form the mapping.
+        //
+        DoubleMatrix extract_matrix_from_Hessian(int i) const;
 
-    JetMatrix(int degree, int n_comps, double * values);
+        // Set/get the values of the function.
+        //
+        void set(int i, double x);
+        double get(int i) const;
 
-    virtual ~JetMatrix();
+        // Set/get the values of the Jacobian.
+        //
+        void set(int i, int j, double x);
+        double get(int i, int j) const;
 
-    /*! Fills a RealVector with the function components values
-     *@param [out] values The RealVector to be filled
-     */
-    void f(RealVector &);
+        // Set/get the values of the Hessian.
+        //
+        void set(int i, int j, int k, double x);
+        double get(int i, int j, int k) const;
 
-    /*!Fills a JacobianMatrix with the first derivative components values stored into the JetMatrix
-     * Function components values accessor
-     *@param [out] jMatrix The JacobianMatrix to be filled
-     */
+        // Access the data directly
+        double * data();
+        const double * data() const;
 
-    void jacobian(JacobianMatrix & jMatrix);
-
-    /*!Fills a HessianMatrix with the second derivative components values stored into the JetMatrix
-     * Second derivative components values accessor
-     *
-     *@param[out] hMatrix The HessianMatrix to be filled
-     */
-
-    void hessian(HessianMatrix & hMatrix);
-
-    /*! Changes the function components values stored into the JetMatrix
-     * Function components values mutator
-     *@param [in] fValues New function components values
-     */
-
-    void setF(const RealVector & fValues);
-
-    /*! Changes the first derivative values stored into the JetMatrix
-     *First derivative components mutator
-     *@param [in] jMatrix New first derivative components values
-     */
-
-    void setJacobian(const JacobianMatrix & jMatrix);
-
-    /*! Changes the second derivative values stored into the JetMatrix
-     *Second derivative components mutator
-     *@param [in] hMatrix New second derivative components values
-     */
-
-    void setHessian(const HessianMatrix & hMatrix);
-
-
-    /*! Returns the JetMatrix dimension
-     */
-    int n_comps(void) const;
-
-    /*! Returns the array size
-     */
-    int size(void) const;
-
-    /*! Changes the JetMatrix dimension
-     */
-
-    void resize(int n_comps);
-
-    void range_check(int comp) const;
-    
-    
-  
-    /*! Sets all components to zero
-     */
-
-    JetMatrix &zero(void);
-
-    /*! Returns a pointer component array
-     */
-
-    double * operator()(void);
-
-    /*! Returns a function component value
-     *@param i The function component index
-     */
-    double operator()(int i)const;
-
-    /*! Returns a first derivative component value
-     *@param i The first derivative component row
-     *@param j The first derivative component  column
-     */
-
-    double operator()(const int i, const int j)const;
-
-    /*! Returns a second derivative component value
-     *
-     *@param i The second derivative component row
-     *@param j The second derivative component  column
-     *@param k The second derivative component  deep
-     */
-
-    double operator()(int i, int j, int k)const;
-
-    /*!Changes a function component value
-     *@param i The function component index
-     *@param value The new component value
-     */
-
-    void operator()(int i, double value);
-
-    /*! Changes a first derivative component value
-     *@param i The first derivative component row
-     *@param j The first derivative component column
-     *@param value The new first derivative component value
-     */
-
-    void operator()(int i, int j, double value);
-
-    /*! Changes a second derivative component value
-     *@param i The second derivative component row
-     *@param j The second derivative component column
-     *@param k The second derivative component deep
-     *@param value The new second derivative component value
-     */
-
-    void operator()(int i, int j, int k, double value);
-
-    friend std::ostream & operator<<(std::ostream &out, const JetMatrix &r);
-
-
+        friend std::ostream & operator<<(std::ostream &out, const JetMatrix &r);
 };
 
-inline void JetMatrix::range_check(int comp) const {
-    if (comp < 0 || comp >= n_comps())
-        throw (JetMatrix::RangeViolation());
+inline void JetMatrix::resize(){
+    if (vec != 0) delete [] vec;
+
+    vec_size = Ceqs + Ceqs*vars + Ceqs*vars*vars;
+    vec = new double[vec_size];
+
+    return;
 }
 
-inline JetMatrix & JetMatrix::zero(void) {
-    //    v_.zero();
+inline void JetMatrix::copy(const JetMatrix &o){
+    Ceqs = o.Ceqs;
+    vars = o.vars;
 
-    for (int i = 0; i < v_.size(); i++) {
-        v_(i) = 0;
-    }
+    resize();
+
+    for (int i = 0; i < vec_size; i++) vec[i] = o.vec[i];
+
+    return;
+}
+
+inline JetMatrix JetMatrix::operator=(const JetMatrix &original){
+    if (this != &original) copy(original);
 
     return *this;
 }
 
-inline double * JetMatrix::operator()(void) {
-    return v_.components();
+inline void JetMatrix::resize(int n){
+    resize(n, n);
+
+    return;
 }
 
-inline double JetMatrix::operator()(int i) const{
-    range_check(i);
-    if (!c0_)
-        throw (JetMatrix::RangeViolation());
-    return v_.component(i);
+inline void JetMatrix::resize(int v, int e){
+    vars = v;
+    Ceqs = e;
+
+    resize();
+
+    return;
 }
 
-inline double JetMatrix::operator()(const int i, const int j)const {
-    range_check(i);
-    range_check(j);
-    if (!c1_)
-        throw (JetMatrix::RangeViolation());
-    return v_.component((n_comps_) + (i * n_comps_ + j));
+inline int JetMatrix::number_of_conservation_equations() const {
+    return Ceqs;
 }
 
-inline double JetMatrix::operator()(int i, int j, int k) const{
-    range_check(i);
-    range_check(j);
-    range_check(k);
-    if (!c2_)
-        throw (JetMatrix::RangeViolation());
-    return v_.component((n_comps_ * (1 + n_comps_)) + (i * n_comps_ * n_comps_ + j * n_comps_ + k));
+inline int JetMatrix::number_of_variables() const {
+    return vars;
 }
 
-inline void JetMatrix::operator()(int i, double value) {
-    range_check(i);
-    c0_ = true;
-    double * value_ = &v_.component(i);
-    *value_ = value;
+inline int JetMatrix::size() const {
+    return vec_size;
 }
 
-inline void JetMatrix::operator()(int i, int j, double value) {
-    range_check(i);
-    range_check(j);
-    c1_ = true;
-    double * value_ = &v_.component((n_comps_) + (i * n_comps_ + j));
-    *value_ = value;
+inline RealVector JetMatrix::function() const {
+    RealVector f(Ceqs);
+    for (int i = 0; i < Ceqs; i++) f(i) = vec[i];
+
+    return f;
 }
 
-inline void JetMatrix::operator()(int i, int j, int k, double value) {
-    range_check(i);
-    range_check(j);
-    range_check(k);
-    c2_ = true;
-    double * value_ = &v_.component((n_comps_ * (1 + n_comps_)) + (i * n_comps_ * n_comps_ + j * n_comps_ + k));
-    *value_ = value;
+inline DoubleMatrix JetMatrix::Jacobian() const {
+    DoubleMatrix J(Ceqs, vars);
+    for (int i = 0; i < Ceqs*vars; i++) J(i) = vec[Ceqs + i];
+
+    return J;
 }
 
-inline void JetMatrix::setHessian(const HessianMatrix & input) {
-    int i, j, k;
-    for (i = 0; i < n_comps(); i++) {
-        for (j = 0; j < n_comps(); j++) {
-            for (k = 0; k < n_comps(); k++) {
-
-                operator()(i, j, k, input(i, j, k));
-
-            }
+inline std::vector<DoubleMatrix> JetMatrix::Hessian() const {
+    std::vector<DoubleMatrix> H(Ceqs);
+    
+    for (int i = 0; i < Ceqs; i++){
+        H[i].resize(vars, vars);
+        for (int j = 0; j < vars; j++){
+            for (int k = 0; k < vars; k++) H[i](j, k) = vec[Ceqs + Ceqs*vars + i*(vars*vars) + j*vars + k];
         }
     }
+
+    return H;
 }
 
-inline void JetMatrix::hessian(HessianMatrix & hMatrix) {
-    if (!c2_)
-        throw (JetMatrix::RangeViolation());
+// Extract a matrix from the Hessian, associated to the the i-th component of the mapping's domain.
+// The matrix has components (j, k) of the form:
+//
+//     d^2 F_j / d u_i d u_k
+//
+// where F_j are the functions that form the mapping.
+//
+inline DoubleMatrix JetMatrix::extract_matrix_from_Hessian(int i) const {
+    DoubleMatrix R(Ceqs, vars);
 
-    int i, j, k;
-    for (i = 0; i < n_comps(); i++) {
-        for (j = 0; j < n_comps(); j++) {
-            for (k = 0; k < n_comps(); k++) {
-                double value =  v_.component((n_comps_ * (1 + n_comps_)) + (i * n_comps_ * n_comps_ + j * n_comps_ + k));
-                hMatrix(i, j, k, value);
-            }
-        }
-    }
-}
-
-inline void JetMatrix::setF(const RealVector &input) {
-    int i;
-    for (i = 0; i < n_comps(); i++) {
-        operator()(i, input.component(i));
+    for (int j = 0; j < Ceqs; j++){
+        for (int k = 0; k < vars; k++) R(j, k) = get(j, i, k);
     }
 
+    return R;
 }
 
-inline void JetMatrix::f(RealVector & vector) {
-    if (!c0_)
-        throw (JetMatrix::RangeViolation());
-    int i;
+// Set/get the values of the function.
+//
+inline void JetMatrix::set(int i, double x){
+    vec[i] = x;
 
-    for (i = 0; i < n_comps(); i++) {
-        vector.component(i) = operator()(i);
-    }
+    return;
 }
 
-inline void JetMatrix::setJacobian(const JacobianMatrix & input) {
-    int i, j;
-    for (i = 0; i < n_comps(); i++) {
-        for (j = 0; j < n_comps(); j++) {
-            operator()(i, j, input(i, j));
-        }
-    }
+inline double JetMatrix::get(int i) const {
+    return vec[i];
 }
 
-inline void JetMatrix::jacobian(JacobianMatrix &jMatrix) {
-    int i, j;
+// Set/get the values of the Jacobian.
+//
+inline void JetMatrix::set(int i, int j, double x){
+    vec[Ceqs + i*vars + j] = x;
 
-    if (!c1_)
-        throw (JetMatrix::RangeViolation());
-    for (i = 0; i < n_comps(); i++) {
-        for (j = 0; j < n_comps(); j++) {
-            double value = v_.component((n_comps_) + (i * n_comps_ + j));
-            jMatrix(i, j, value);
-        }
-    }
+    return;
 }
 
+inline double JetMatrix::get(int i, int j) const {
+    return vec[Ceqs + i*vars + j];
+}
 
-#endif //! _JetMatrix_H
+// Set/get the values of the Hessian.
+//
+inline void JetMatrix::set(int i, int j, int k, double x){
+    vec[Ceqs + Ceqs*vars + i*(vars*vars) + j*vars + k] = x;
+
+    return;
+}
+
+inline double JetMatrix::get(int i, int j, int k) const {
+    return vec[Ceqs + Ceqs*vars + i*(vars*vars) + j*vars + k];
+}
+
+inline double * JetMatrix::data(){
+    return vec;
+}
+
+inline const double * JetMatrix::data() const {
+    return vec;
+}
+
+#endif // _JETMATRIX_
+

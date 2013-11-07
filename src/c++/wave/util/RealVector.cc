@@ -265,7 +265,7 @@ int solve(const DoubleMatrix &A, const RealVector &b, RealVector &x){
     else           return REALVECTOR_SOLVE_LINEAR_SYSTEM_ERROR;
 }
 
-// Multiplication of a DoubleMatrix by a RealVector
+// Multiplication of a DoubleMatrix by a column RealVector
 RealVector operator*(const DoubleMatrix &A, const RealVector &x){
     int m = A.rows(), n = A.cols();
 
@@ -274,6 +274,20 @@ RealVector operator*(const DoubleMatrix &A, const RealVector &x){
     for (int i = 0; i < m; i++){
         b(i) = 0.0;
         for (int j = 0; j < n; j++) b(i) += A(i, j)*x(j);
+    }
+
+    return b;
+}
+
+// Multiplication of a row RealVector by a DoubleMatrix
+RealVector operator*(const RealVector &x, const DoubleMatrix &A){
+    int m = A.rows(), n = A.cols();
+
+    RealVector b(n);
+
+    for (int i = 0; i < n; i++){
+        b(i) = 0.0;
+        for (int j = 0; j < m; j++) b(i) += x(j)*A(j, i);
     }
 
     return b;
@@ -295,5 +309,78 @@ RealVector matrix_column(const DoubleMatrix &m, int c){
     for (int i = 0; i < r; i++) v(i) = m(i, c);
 
     return v;
+}
+
+double vector_product_2D(const RealVector &c, const RealVector &p, const RealVector &q){
+    return (p(0) - c(0))*(q(1) - c(1)) - (p(1) - c(1))*(q(0) - c(0));
+}
+
+// http://bbs.dartmouth.edu/~fangq/MATH/download/source/Determining%20if%20a%20point%20lies%20on%20the%20interior%20of%20a%20polygon.htm
+//
+double evaluate_line_equation(const RealVector &p0, const RealVector &p1, const RealVector &p){
+    double x = p(0);
+    double y = p(1);
+
+    double x0 = p0(0);
+    double y0 = p0(1);
+
+    double x1 = p1(0);
+    double y1 = p1(1);
+
+    // val = (y - y0)*(x1 - x0) - (x - x0)*(y1 - y0)
+    return (y - y0)*(x1 - x0) - (x - x0)*(y1 - y0);
+}
+
+// 
+bool inside_convex_polygon(const std::vector<RealVector> &polygon, const RealVector &point){
+    int n = polygon.size();
+
+    if (n < 3) return false;
+
+    // Obtain a first value for the equation of the line between p0 and p1 evaluated in the given point.
+    //
+    double val = evaluate_line_equation(polygon[0], polygon[1], point);
+
+    bool is_inside = true;
+    int pos = 1;
+
+    // The point is inside the polygon if the line segments that form the polygon,
+    // when evaluated in the given point, are all positive or negative.
+    //  
+    while (is_inside && pos < n){
+        if (val*evaluate_line_equation(polygon[pos], polygon[(pos + 1) % n], point) < 0.0) is_inside = false;
+        pos++;
+    }
+
+    return is_inside;
+}
+
+// Returns a list of points on the convex hull in counter-clockwise order.
+// Note: the last point in the returned list is the same as the first one.
+//
+// http://en.wikibooks.org/wiki/Algorithm_Implementation/Geometry/Convex_hull/Monotone_chain
+//
+void convex_hull(std::vector<RealVector> &polygon, std::vector<RealVector> &ch){
+    int n = polygon.size(), k = 0;
+    ch.resize(2*n);
+ 
+    // Sort points lexicographically
+    sort(polygon.begin(), polygon.end());
+ 
+    // Build lower hull
+    for (int i = 0; i < n; i++) {
+        while (k >= 2 && vector_product_2D(ch[k - 2], ch[k - 1], polygon[i]) <= 0) k--;
+        ch[k++] = polygon[i];
+    }
+ 
+    // Build upper hull
+    for (int i = n - 2, t = k + 1; i >= 0; i--) {
+        while (k >= t && vector_product_2D(ch[k - 2], ch[k - 1], polygon[i]) <= 0) k--;
+        ch[k++] = polygon[i];
+    }
+ 
+    ch.resize(k);
+
+    return;
 }
 

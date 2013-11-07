@@ -71,13 +71,13 @@ void Shock::fill_with_jet(RpFunction * flux_object, int n, double *in, int degre
     flux_object->jet(state_c, c_jet, degree);
 
     // Fill F
-    if (F != 0) for (int i = 0; i < n; i++) F[i] = c_jet(i);
+    if (F != 0) for (int i = 0; i < n; i++) F[i] = c_jet.get(i);
 
     // Fill J
     if (J != 0) {
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
-                J[i * n + j] = c_jet(i, j);
+                J[i * n + j] = c_jet.get(i, j);
             }
         }
     }
@@ -87,7 +87,7 @@ void Shock::fill_with_jet(RpFunction * flux_object, int n, double *in, int degre
         for (int k = 0; k < n; k++) {
             for (int i = 0; i < n; i++) {
                 for (int j = 0; j < n; j++) {
-                    H[k*n*n + (i * n + j)] = c_jet(k, i, j); // Check this!!!!!!!!
+                    H[k*n*n + (i * n + j)] = c_jet.get(k, i, j); // Check this!!!!!!!!
                 }
             }
         }
@@ -446,7 +446,7 @@ double Shock::hugoniot(const RealVector &U, const RealVector &Uref, FluxFunction
     G->jet(U_in, Gm, 1);
 
 //    double RH = (Fm(0) - Fm0(0)) - (Gm(0)- Gm0(0)) * ((Fm(0) - Fm0(0))+(Fm(1) - Fm0(1)))/ ((Gm(0) - Gm0(0))+(Gm(1) - Gm0(1)));
-    double RH = (Fm(0) - Fm0(0))*(Gm(1) - Gm0(1)) - (Fm(1) - Fm0(1))*(Gm(0) - Gm0(0));
+    double RH = (Fm.get(0) - Fm0.get(0))*(Gm.get(1) - Gm0.get(1)) - (Fm.get(1) - Fm0.get(1))*(Gm.get(0) - Gm0.get(0));
 
     return RH;
 }
@@ -480,9 +480,9 @@ void Shock::hugoniot_der(const RealVector &U, const RealVector &Uref, FluxFuncti
 //                 (Gm(0)-Gm0(0))*((Fm(0,j)+Fm(1,j))*(Gm(0)-Gm0(0)+Gm(1)-Gm0(1)) - 
 //                 (Gm(0,j)+Gm(1,j))*(Fm(0)-Fm0(0)+Fm(1)-Fm0(1))/(Gm(0)-Gm0(0)+Gm(1)-Gm0(1))*(Gm(0)-Gm0(0)+Gm(1)-Gm0(1))) - 
 //                 Gm(0,j)*(Fm(0)-Fm0(0)+Fm(1)-Fm0(1))/(Gm(0)-Gm0(0)+Gm(1)-Gm0(1));
-        dRH[j] = Gm(0, j)*(Fm(1) - Fm0(1)) + (Gm(0) - Gm0(0))*Fm(1, j) - Fm(0, j)*(Gm(1) - Gm0(1)) - Gm(1, j)*(Fm(0) - Fm0(0));
+        dRH[j] = Gm.get(0, j)*(Fm.get(1) - Fm0.get(1)) + (Gm.get(0) - Gm0.get(0))*Fm.get(1, j) - Fm.get(0, j)*(Gm.get(1) - Gm0.get(1)) - Gm.get(1, j)*(Fm.get(0) - Fm0.get(0));
         if ( Debug::get_debug_level() == 5 ) {
-            printf("Fm(1) - Fm0(1) = %f\n", Fm(1) - Fm0(1));
+            printf("Fm(1) - Fm0(1) = %f\n", Fm.get(1) - Fm0.get(1));
         }
    }
 
@@ -516,16 +516,16 @@ void Shock::hugoniot_der2(const RealVector &U, const RealVector &Uref, FluxFunct
     double dRH[n];
 
     for (int j = 0; j < n; j++){
-        dRH[j] = Gm(0, j)*(Fm(1) - Fm0(1)) + (Gm(0) - Gm0(0))*Fm(1, j) - 
-                 Fm(0, j)*(Gm(1) - Gm0(1)) - Gm(1, j)*(Fm(0) - Fm0(0));
+        dRH[j] = Gm.get(0, j)*(Fm.get(1) - Fm0.get(1)) + (Gm.get(0) - Gm0.get(0))*Fm.get(1, j) - 
+                 Fm.get(0, j)*(Gm.get(1) - Gm0.get(1)) - Gm.get(1, j)*(Fm.get(0) - Fm0.get(0));
     }
 
     for (int i = 0; i < n; i++){
         for (int j = 0; j < n; j++){
-            dRH2[i*n + j] = Gm(0, i, j)*(Fm(1) - Fm0(1)) + Gm(0, i)*Fm(1, j) + 
-                            Gm(0, j)*Fm(1, i) + (Gm(0) - Gm0(0))*Fm(1, i, j) - 
-                            Fm(0, i, j)*(Gm(1) - Gm0(1)) - Fm(0, i)*Gm(1, j) - 
-                            Fm(0, j)*Gm(1, i) - (Fm(0) - Fm0(0))*Gm(1, i, j);
+            dRH2[i*n + j] = Gm.get(0, i, j)*(Fm.get(1) - Fm0.get(1)) + Gm.get(0, i)*Fm.get(1, j) + 
+                            Gm.get(0, j)*Fm.get(1, i) + (Gm.get(0) - Gm0.get(0))*Fm.get(1, i, j) - 
+                            Fm.get(0, i, j)*(Gm.get(1) - Gm0.get(1)) - Fm.get(0, i)*Gm.get(1, j) - 
+                            Fm.get(0, j)*Gm.get(1, i) - (Fm.get(0) - Fm0.get(0))*Gm.get(1, i, j);
         }
     }
 

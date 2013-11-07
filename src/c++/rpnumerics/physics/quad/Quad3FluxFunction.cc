@@ -107,9 +107,9 @@ int Quad3FluxFunction::jet(const WaveState & x, JetMatrix & y, int degree = 2) c
         printf("Quad3 @ (%f, %f, %f) = (%f, %f, %f)\n", u, v, w, out0, out1, out2);
     }
 
-    y(0, out0);
-    y(1, out1);
-    y(2, out2);
+    y.set(0, out0);
+    y.set(1, out1);
+    y.set(2, out2);
 
     if (degree > 0) {
         // Calculate DF
@@ -129,59 +129,59 @@ int Quad3FluxFunction::jet(const WaveState & x, JetMatrix & y, int degree = 2) c
         out21 = b2*u + c2*v + e2 + h2*w;
         out22 = f2*w + g2*u + h2*v + i2;
 
-        y(0, 0, out00);
-        y(0, 1, out01);
-        y(0, 2, out02);
+        y.set(0, 0, out00);
+        y.set(0, 1, out01);
+        y.set(0, 2, out02);
 
-        y(1, 0, out10);
-        y(1, 1, out11);
-        y(1, 2, out12);
+        y.set(1, 0, out10);
+        y.set(1, 1, out11);
+        y.set(1, 2, out12);
 
-        y(2, 0, out20);
-        y(2, 1, out21);
-        y(2, 2, out22);
+        y.set(2, 0, out20);
+        y.set(2, 1, out21);
+        y.set(2, 2, out22);
 
         if (degree > 1) {
             // Calculate D2F
-            y(0, 0, 0, a0);
-            y(0, 0, 1, b0);
-            y(0, 0, 2, g0);
+            y.set(0, 0, 0, a0);
+            y.set(0, 0, 1, b0);
+            y.set(0, 0, 2, g0);
 
-            y(0, 1, 0, b0);
-            y(0, 1, 1, c0);
-            y(0, 1, 2, h0);
+            y.set(0, 1, 0, b0);
+            y.set(0, 1, 1, c0);
+            y.set(0, 1, 2, h0);
 
-            y(0, 2, 0, g0);
-            y(0, 2, 1, h0);
-            y(0, 2, 2, f0);
-
-            /**/
-
-            y(1, 0, 0, a1);
-            y(1, 0, 1, b1);
-            y(1, 0, 2, g1);
-
-            y(1, 1, 0, b1);
-            y(1, 1, 1, c1);
-            y(1, 1, 2, h1);
-
-            y(1, 2, 0, g1);
-            y(1, 2, 1, h1);
-            y(1, 2, 2, f1);
+            y.set(0, 2, 0, g0);
+            y.set(0, 2, 1, h0);
+            y.set(0, 2, 2, f0);
 
             /**/
 
-            y(2, 0, 0, a1);
-            y(2, 0, 1, b1);
-            y(2, 0, 2, g1);
+            y.set(1, 0, 0, a1);
+            y.set(1, 0, 1, b1);
+            y.set(1, 0, 2, g1);
 
-            y(2, 1, 0, b1);
-            y(2, 1, 1, c1);
-            y(2, 1, 2, h1);
+            y.set(1, 1, 0, b1);
+            y.set(1, 1, 1, c1);
+            y.set(1, 1, 2, h1);
 
-            y(2, 2, 0, g1);
-            y(2, 2, 1, h1);
-            y(2, 2, 2, f1);
+            y.set(1, 2, 0, g1);
+            y.set(1, 2, 1, h1);
+            y.set(1, 2, 2, f1);
+
+            /**/
+
+            y.set(2, 0, 0, a1);
+            y.set(2, 0, 1, b1);
+            y.set(2, 0, 2, g1);
+
+            y.set(2, 1, 0, b1);
+            y.set(2, 1, 1, c1);
+            y.set(2, 1, 2, h1);
+
+            y.set(2, 2, 0, g1);
+            y.set(2, 2, 1, h1);
+            y.set(2, 2, 2, f1);
 
             if (degree > 2) {
                 return 0; //UNSUCCESSFUL_PROCEDURE;

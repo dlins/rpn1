@@ -26,7 +26,7 @@ void SubinflectionTPCW::subinflection_function(double & reduced_lambdae, double 
     const Flux2Comp2PhasesAdimensionalized & fluxFunction = (const Flux2Comp2PhasesAdimensionalized &) getFluxFunction();
     fluxFunction.getHorizontalFlux()-> Diff_FracFlow2PhasesHorizontalAdimensionalized(sw, Theta, 0, m);
 
-    double f = m(0);
+    double f = m.get(0);
     double s = u.component(0);
 
 

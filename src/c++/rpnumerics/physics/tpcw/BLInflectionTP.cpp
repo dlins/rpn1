@@ -12,7 +12,7 @@ int BLInflectionTP::function_on_square(double *foncub, int i, int j) {
 
             fh->Diff_FracFlow2PhasesHorizontalAdimensionalized(sw, Theta, 2, m);
 
-            f_aux[l * 2 + k] = m(0, 0, 0);
+            f_aux[l * 2 + k] = m.get(0, 0, 0);
         }
     }
 

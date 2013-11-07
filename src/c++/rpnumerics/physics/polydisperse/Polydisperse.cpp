@@ -69,27 +69,27 @@ int Polydisperse::Hindered_jet(double phi1, double phi2, JetMatrix &Vj, int degr
         double V1 = ( (phi <= phimax) ? pow(1.0 - phi, n1 - 2.0) : 0.0 );
         double V2 = ( (phi <= phimax) ? pow(1.0 - phi, n2 - 2.0) : 0.0 );
 
-        Vj(0, V1);
-        Vj(1, V2);
+        Vj.set(0, V1);
+        Vj.set(1, V2);
 
         if (degree >= 1){
             double dV1_dphi = ( (phi <= phimax) ? - (n1 - 2.0) * pow(1.0 - phi, n1 - 3.0) : 0.0 );
             double dV2_dphi = ( (phi <= phimax) ? - (n2 - 2.0) * pow(1.0 - phi, n2 - 3.0) : 0.0 );
 
-            Vj(0, 0, dV1_dphi);
-//            Vj(0, 1, dV1_dphi);
-            Vj(1, 0, dV2_dphi);
+            Vj.set(0, 0, dV1_dphi);
+//            Vj.set(0, 1, dV1_dphi);
+            Vj.set(1, 0, dV2_dphi);
 //            Vj(1, 1, dV2_dphi);
 
             if (degree >= 2){
                 double d2V1_dphi2 = ( (phi <= phimax) ? (n1 - 2.0) * (n1 - 3.0) * pow(1.0 - phi, n1 - 4.0) : 0.0 );
                 double d2V2_dphi2 = ( (phi <= phimax) ? (n2 - 2.0) * (n2 - 3.0) * pow(1.0 - phi, n2 - 4.0) : 0.0 );
 
-                Vj(0, 0, 0, d2V1_dphi2);
+                Vj.set(0, 0, 0, d2V1_dphi2);
 //                Vj(0, 0, 1, d2V1_dphi2);
 //                Vj(0, 1, 0, d2V1_dphi2);
 //                Vj(0, 1, 1, d2V1_dphi2);
-                Vj(1, 0, 0, d2V2_dphi2);
+                Vj.set(1, 0, 0, d2V2_dphi2);
 //                Vj(1, 0, 1, d2V2_dphi2);
 //                Vj(1, 1, 0, d2V2_dphi2);
 //                Vj(1, 1, 1, d2V2_dphi2);
@@ -112,8 +112,8 @@ int Polydisperse::Relative_jet(double phi1, double phi2, JetMatrix &uj, int degr
     Hindered_jet(phi1, phi2, hinderedj, degree);
 
     if (degree >= 0){
-        double V1 = hinderedj(0);
-        double V2 = hinderedj(1);
+        double V1 = hinderedj.get(0);
+        double V2 = hinderedj.get(1);
 
         // The TOTAL DENSITY is used along, recall that it is the normalized form
         double RHO = rho1*phi1 + rho2*phi2 + (1.0 - phi);
@@ -121,28 +121,28 @@ int Polydisperse::Relative_jet(double phi1, double phi2, JetMatrix &uj, int degr
         double u1 = D1 * (rho1 - RHO) * V1;
         double u2 = D2 * (rho2 - RHO) * V2;
 
-        uj(0, u1);
-        uj(1, u2);
+        uj.set(0, u1);
+        uj.set(1, u2);
 
         if (degree >= 1){
             double dRHO_dphi1 = rho1 - 1.0;
             double dRHO_dphi2 = rho2 - 1.0;
-            double dV1_dphi = hinderedj(0, 0);
-            double dV2_dphi = hinderedj(1, 0);
+            double dV1_dphi = hinderedj.get(0, 0);
+            double dV2_dphi = hinderedj.get(1, 0);
 
             double du1_dphi1 = D1 * ( (rho1 - RHO) * dV1_dphi - dRHO_dphi1 * V1 );
             double du1_dphi2 = D1 * ( (rho1 - RHO) * dV1_dphi - dRHO_dphi2 * V1 );
             double du2_dphi1 = D2 * ( (rho2 - RHO) * dV2_dphi - dRHO_dphi1 * V2 );
             double du2_dphi2 = D2 * ( (rho2 - RHO) * dV2_dphi - dRHO_dphi2 * V2 );
 
-            uj(0, 0, du1_dphi1);
-            uj(0, 1, du1_dphi2);
-            uj(1, 0, du2_dphi1);
-            uj(1, 1, du2_dphi2);
+            uj.set(0, 0, du1_dphi1);
+            uj.set(0, 1, du1_dphi2);
+            uj.set(1, 0, du2_dphi1);
+            uj.set(1, 1, du2_dphi2);
 
             if (degree >= 2){
-                double d2V1_dphi2 = hinderedj(0, 0, 0);
-                double d2V2_dphi2 = hinderedj(1, 0, 0);
+                double d2V1_dphi2 = hinderedj.get(0, 0, 0);
+                double d2V2_dphi2 = hinderedj.get(1, 0, 0);
 
                 double d2u1_dphi12 = D1 * ( (rho1 - RHO) * d2V1_dphi2 - 2.0 * dRHO_dphi1 * dV1_dphi );
                 double d2u1_dphi22 = D1 * ( (rho1 - RHO) * d2V1_dphi2 - 2.0 * dRHO_dphi2 * dV1_dphi );
@@ -153,14 +153,14 @@ int Polydisperse::Relative_jet(double phi1, double phi2, JetMatrix &uj, int degr
                 double d2u1_dphi1phi2 = D1 * ( (rho1 - RHO) * d2V1_dphi2 + (2.0 - rho1 - rho2) * dV1_dphi );
                 double d2u2_dphi1phi2 = D2 * ( (rho2 - RHO) * d2V2_dphi2 + (2.0 - rho1 - rho2) * dV2_dphi );
 
-                uj(0, 0, 0, d2u1_dphi12   );
-                uj(0, 1, 0, d2u1_dphi1phi2);
-                uj(0, 0, 1, d2u1_dphi1phi2);
-                uj(0, 1, 1, d2u1_dphi22   );
-                uj(1, 0, 0, d2u2_dphi12   );
-                uj(1, 1, 0, d2u2_dphi1phi2);
-                uj(1, 0, 1, d2u2_dphi1phi2);
-                uj(1, 1, 1, d2u2_dphi22   );
+                uj.set(0, 0, 0, d2u1_dphi12   );
+                uj.set(0, 1, 0, d2u1_dphi1phi2);
+                uj.set(0, 0, 1, d2u1_dphi1phi2);
+                uj.set(0, 1, 1, d2u1_dphi22   );
+                uj.set(1, 0, 0, d2u2_dphi12   );
+                uj.set(1, 1, 0, d2u2_dphi1phi2);
+                uj.set(1, 0, 1, d2u2_dphi1phi2);
+                uj.set(1, 1, 1, d2u2_dphi22   );
             }
             else return -1; // ABORTED_PROCEDURE
         }
@@ -173,20 +173,20 @@ int Polydisperse::Absolute_jet(double phi1, double phi2, JetMatrix &vj, int degr
     Relative_jet(phi1, phi2, relativej, degree);
 
     if (degree >= 0){
-        double u1 = relativej(0);
-        double u2 = relativej(1);
+        double u1 = relativej.get(0);
+        double u2 = relativej.get(1);
 
         double v1 = (1.0 - phi1) * u1 - phi2 * u2;
         double v2 = (1.0 - phi2) * u2 - phi1 * u1;
 
-        vj(0, v1);
-        vj(1, v2);
+        vj.set(0, v1);
+        vj.set(1, v2);
 
         if (degree >= 1){
-            double du1_dphi1 = relativej(0, 0);
-            double du1_dphi2 = relativej(0, 1);
-            double du2_dphi1 = relativej(1, 0);
-            double du2_dphi2 = relativej(1, 1);
+            double du1_dphi1 = relativej.get(0, 0);
+            double du1_dphi2 = relativej.get(0, 1);
+            double du2_dphi1 = relativej.get(1, 0);
+            double du2_dphi2 = relativej.get(1, 1);
 
             double dv1_dphi1 = (1.0 - phi1) * du1_dphi1 - phi2 * du2_dphi1 - u1;
             double dv1_dphi2 = (1.0 - phi1) * du1_dphi2 - phi2 * du2_dphi2 - u2;
@@ -194,19 +194,19 @@ int Polydisperse::Absolute_jet(double phi1, double phi2, JetMatrix &vj, int degr
             double dv2_dphi1 = (1.0 - phi2) * du2_dphi1 - phi1 * du1_dphi1 - u1;
             double dv2_dphi2 = (1.0 - phi2) * du2_dphi2 - phi1 * du1_dphi2 - u2;
 
-            vj(0, 0, dv1_dphi1);
-            vj(0, 1, dv1_dphi2);
+            vj.set(0, 0, dv1_dphi1);
+            vj.set(0, 1, dv1_dphi2);
 
-            vj(1, 0, dv2_dphi1);
-            vj(1, 1, dv2_dphi2);
+            vj.set(1, 0, dv2_dphi1);
+            vj.set(1, 1, dv2_dphi2);
 
             if (degree >= 2){
-                double d2u1_dphi12    = relativej(0, 0, 0);
-                double d2u1_dphi1phi2 = relativej(0, 0, 1);
-                double d2u1_dphi22    = relativej(0, 1, 1);
-                double d2u2_dphi12    = relativej(1, 0, 0);
-                double d2u2_dphi1phi2 = relativej(1, 0, 1);
-                double d2u2_dphi22    = relativej(1, 1, 1);
+                double d2u1_dphi12    = relativej.get(0, 0, 0);
+                double d2u1_dphi1phi2 = relativej.get(0, 0, 1);
+                double d2u1_dphi22    = relativej.get(0, 1, 1);
+                double d2u2_dphi12    = relativej.get(1, 0, 0);
+                double d2u2_dphi1phi2 = relativej.get(1, 0, 1);
+                double d2u2_dphi22    = relativej.get(1, 1, 1);
 
                 double d2v1_dphi12    = (1.0 - phi1) * d2u1_dphi12 - phi2 * d2u2_dphi12 - 2.0 * du1_dphi1;
                 double d2v1_dphi1phi2 = (1.0 - phi1) * d2u1_dphi1phi2 - phi2 * d2u2_dphi1phi2 - du1_dphi2 - du2_dphi1;
@@ -216,15 +216,15 @@ int Polydisperse::Absolute_jet(double phi1, double phi2, JetMatrix &vj, int degr
                 double d2v2_dphi1phi2 = (1.0 - phi2) * d2u2_dphi1phi2 - phi1 * d2u1_dphi1phi2 - du1_dphi2 - du2_dphi1;
                 double d2v2_dphi22    = (1.0 - phi2) * d2u2_dphi22 - phi1 * d2u1_dphi22 - 2.0 * du2_dphi2;
 
-                vj(0, 0, 0, d2v1_dphi12   );
-                vj(0, 0, 1, d2v1_dphi1phi2);
-                vj(0, 1, 0, d2v1_dphi1phi2);
-                vj(0, 1, 1, d2v1_dphi22   );
+                vj.set(0, 0, 0, d2v1_dphi12   );
+                vj.set(0, 0, 1, d2v1_dphi1phi2);
+                vj.set(0, 1, 0, d2v1_dphi1phi2);
+                vj.set(0, 1, 1, d2v1_dphi22   );
 
-                vj(1, 0, 0, d2v2_dphi12   );
-                vj(1, 0, 1, d2v2_dphi1phi2);
-                vj(1, 1, 0, d2v2_dphi1phi2);
-                vj(1, 1, 1, d2v2_dphi22   );
+                vj.set(1, 0, 0, d2v2_dphi12   );
+                vj.set(1, 0, 1, d2v2_dphi1phi2);
+                vj.set(1, 1, 0, d2v2_dphi1phi2);
+                vj.set(1, 1, 1, d2v2_dphi22   );
             }
             else return -1; // ABORTED_PROCEDURE
         }
@@ -240,19 +240,19 @@ int Polydisperse::jet(const WaveState &Phi, JetMatrix &flux, int degree) const{
     Absolute_jet(phi1, phi2, absolutej, degree);
 
     if (degree >= 0){
-        double v1 = absolutej(0);
-        double v2 = absolutej(1);
+        double v1 = absolutej.get(0);
+        double v2 = absolutej.get(1);
         double f1 = phi1 * v1;
         double f2 = phi2 * v2;
 
-        flux(0, f1);
-        flux(1, f2);
+        flux.set(0, f1);
+        flux.set(1, f2);
 
         if (degree >= 1){
-            double dv1_dphi1 = absolutej(0, 0);
-            double dv1_dphi2 = absolutej(0, 1);
-            double dv2_dphi1 = absolutej(1, 0);
-            double dv2_dphi2 = absolutej(1, 1);
+            double dv1_dphi1 = absolutej.get(0, 0);
+            double dv1_dphi2 = absolutej.get(0, 1);
+            double dv2_dphi1 = absolutej.get(1, 0);
+            double dv2_dphi2 = absolutej.get(1, 1);
 
             double df1_dphi1 = v1 + phi1 * dv1_dphi1;
             double df1_dphi2 = phi1 * dv1_dphi2;
@@ -260,18 +260,18 @@ int Polydisperse::jet(const WaveState &Phi, JetMatrix &flux, int degree) const{
             double df2_dphi1 = phi2 * dv2_dphi1;
             double df2_dphi2 = v2 + phi2 * dv2_dphi2;
 
-            flux(0, 0, df1_dphi1);
-            flux(0, 1, df1_dphi2);
-            flux(1, 0, df2_dphi1);
-            flux(1, 1, df2_dphi2);
+            flux.set(0, 0, df1_dphi1);
+            flux.set(0, 1, df1_dphi2);
+            flux.set(1, 0, df2_dphi1);
+            flux.set(1, 1, df2_dphi2);
 
             if (degree >= 2){
-                double d2v1_dphi12    = absolutej(0, 0, 0);
-                double d2v1_dphi1phi2 = absolutej(0, 0, 1);
-                double d2v1_dphi22    = absolutej(0, 1, 1);
-                double d2v2_dphi12    = absolutej(1, 0, 0);
-                double d2v2_dphi1phi2 = absolutej(1, 0, 1);
-                double d2v2_dphi22    = absolutej(1, 1, 1);
+                double d2v1_dphi12    = absolutej.get(0, 0, 0);
+                double d2v1_dphi1phi2 = absolutej.get(0, 0, 1);
+                double d2v1_dphi22    = absolutej.get(0, 1, 1);
+                double d2v2_dphi12    = absolutej.get(1, 0, 0);
+                double d2v2_dphi1phi2 = absolutej.get(1, 0, 1);
+                double d2v2_dphi22    = absolutej.get(1, 1, 1);
 
                 double d2f1_dphi12    = 2.0 * dv1_dphi1 + phi1 * d2v1_dphi12;
                 double d2f1_dphi1phi2 = dv1_dphi2 + phi1 * d2v1_dphi1phi2;
@@ -281,14 +281,14 @@ int Polydisperse::jet(const WaveState &Phi, JetMatrix &flux, int degree) const{
                 double d2f2_dphi1phi2 = dv2_dphi1 + phi2 * d2v2_dphi1phi2;
                 double d2f2_dphi22    = 2.0 * dv2_dphi2 + phi2 * d2v2_dphi22;
 
-                flux(0, 0, 0, d2f1_dphi12   );
-                flux(0, 0, 1, d2f1_dphi1phi2);
-                flux(0, 1, 0, d2f1_dphi1phi2);
-                flux(0, 1, 1, d2f1_dphi22   );
-                flux(1, 0, 0, d2f2_dphi12   );
-                flux(1, 0, 1, d2f2_dphi1phi2);
-                flux(1, 1, 0, d2f2_dphi1phi2);
-                flux(1, 1, 1, d2f2_dphi22   );
+                flux.set(0, 0, 0, d2f1_dphi12   );
+                flux.set(0, 0, 1, d2f1_dphi1phi2);
+                flux.set(0, 1, 0, d2f1_dphi1phi2);
+                flux.set(0, 1, 1, d2f1_dphi22   );
+                flux.set(1, 0, 0, d2f2_dphi12   );
+                flux.set(1, 0, 1, d2f2_dphi1phi2);
+                flux.set(1, 1, 0, d2f2_dphi1phi2);
+                flux.set(1, 1, 1, d2f2_dphi22   );
             }
             else return -1; // ABORTED_PROCEDURE
         }

@@ -20,7 +20,7 @@ void SubinflectionTP::subinflection_function(double & reduced_lambdae, double & 
     fluxFunction_-> Diff_FracFlow2PhasesHorizontalAdimensionalized(sw, Theta, 0, m);
 
 
-    double f = m(0);
+    double f = m.get(0);
     double s = u.component(0);
 
 

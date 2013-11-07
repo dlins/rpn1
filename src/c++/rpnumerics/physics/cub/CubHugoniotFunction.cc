@@ -16,7 +16,7 @@ CubHugoniotFunction::CubHugoniotFunction(const RealVector &U, const Cub2FluxFunc
     double A[n][n];
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
-            A[i][j] = UrefJetMatrix(i, j);
+            A[i][j] = UrefJetMatrix.get(i, j);
         }
     }
     Eigen::eig(n, &A[0][0], ve_uref);
@@ -44,7 +44,7 @@ void CubHugoniotFunction::setReferenceVector(const RealVector & refVec) {
     double A[n][n];
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
-            A[i][j] = UrefJetMatrix(i, j);
+            A[i][j] = UrefJetMatrix.get(i, j);
         }
     }
     Eigen::eig(n, &A[0][0], ve_uref);
@@ -89,15 +89,15 @@ double CubHugoniotFunction::HugoniotFunction(const RealVector & U) {
 
         dh1 = du;
         dh2 = dv;
-        df1 = UJetMatrix(0) - UrefJetMatrix(0);
-        df2 = UJetMatrix(1) - UrefJetMatrix(1);
+        df1 = UJetMatrix.get(0) - UrefJetMatrix.get(0);
+        df2 = UJetMatrix.get(1) - UrefJetMatrix.get(1);
     } else {
         fluxFunction.jet(wu, UJetMatrix, 1);
 
         dh1 = du;
         dh2 = dv;
-        df1 = UrefJetMatrix(0, 0) * du + UrefJetMatrix(0, 1) * dv;
-        df2 = UrefJetMatrix(1, 0) * du + UrefJetMatrix(1, 1) * dv;
+        df1 = UrefJetMatrix.get(0, 0) * du + UrefJetMatrix.get(0, 1) * dv;
+        df2 = UrefJetMatrix.get(1, 0) * du + UrefJetMatrix.get(1, 1) * dv;
     }
 
     double hugoniot = dh2 * df1 - dh1*df2;

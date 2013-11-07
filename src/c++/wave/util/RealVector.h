@@ -4,6 +4,8 @@
 #include <iostream>
 #include <fstream>
 #include <math.h>
+#include <vector>
+#include <algorithm>
 
 #include "DoubleMatrix.h"
 
@@ -12,7 +14,7 @@
 #endif
 
 #ifndef REALVECTOR_SOLVE_LINEAR_SYSTEM_ERROR
-#define REALVECTOR_SOLVE_LINEAR_SYSTEM_ERROR 1
+#define REALVECTOR_SOLVE_LINEAR_SYSTEM_ERROR (-1)
 #endif
 
 class RealVector {
@@ -100,8 +102,11 @@ public:
     // Solve the system of linear equations A*x = b
     friend int solve(const DoubleMatrix &A, const RealVector &b, RealVector &x);
 
-    // Multiplication of a DoubleMatrix by a RealVector
+    // Multiplication of a DoubleMatrix by a column RealVector
     friend RealVector operator*(const DoubleMatrix &A, const RealVector &x);
+
+    // Multiplication of a row RealVector by a DoubleMatrix
+    friend RealVector operator*(const RealVector &x, const DoubleMatrix &A);
 
     RealVector& operator+=(const RealVector &v){
         for (int i = 0; i < size(); i++) component(i) += v(i);
@@ -126,6 +131,32 @@ public:
 
         return *this;
     }
+
+    // The following methods are used when computing a convex hull in 2D and if
+    // a point is inside a convex hull. The extension will use them.
+
+    // To sort lexicographically
+    bool operator<(const RealVector &p) const {
+        return std::lexicographical_compare(data, data + size_, p.data, p.data + p.size_);
+    }
+
+    // Vector product in 2D of cp and cq.
+    //
+    friend double vector_product_2D(const RealVector &c, const RealVector &p, const RealVector &q);
+
+    // http://bbs.dartmouth.edu/~fangq/MATH/download/source/Determining%20if%20a%20point%20lies%20on%20the%20interior%20of%20a%20polygon.htm
+    //
+    friend double evaluate_line_equation(const RealVector &p0, const RealVector &p1, const RealVector &p);
+
+    // 
+    friend bool inside_convex_polygon(const std::vector<RealVector> &polygon, const RealVector &point);
+
+    // Returns a list of points on the convex hull in counter-clockwise order.
+    // Note: the last point in the returned list is the same as the first one.
+    //
+    // http://en.wikibooks.org/wiki/Algorithm_Implementation/Geometry/Convex_hull/Monotone_chain
+    //
+    friend void convex_hull(std::vector<RealVector> &polygon, std::vector<RealVector> &ch);
 };
 
 // Extract rows and columns of a DoubleMatrix and return them as RealVectors.

@@ -228,13 +228,13 @@ void Bifurcation_CurveTPCW::fill_with_jet(RpFunction *flux_object, int n, double
     flux_object->jet(state_c, c_jet, degree);
 
     // Fill F
-    if (F != 0) for (int i = 0; i < n; i++) F[i] = c_jet(i);
+    if (F != 0) for (int i = 0; i < n; i++) F[i] = c_jet.get(i);
 
     // Fill J
     if (J != 0) {
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
-                J[i * n + j] = c_jet((int)i, (int)j);
+                J[i * n + j] = c_jet.get((int)i, (int)j);
             }
         }
     }
@@ -244,7 +244,7 @@ void Bifurcation_CurveTPCW::fill_with_jet(RpFunction *flux_object, int n, double
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
                 for (int k = 0; k < n; k++) {
-                    H[(i * n + j) * n + k] = c_jet(i, j, k); // Check this!!!!!!!!
+                    H[(i * n + j) * n + k] = c_jet.get(i, j, k); // Check this!!!!!!!!
                 }
             }
         }

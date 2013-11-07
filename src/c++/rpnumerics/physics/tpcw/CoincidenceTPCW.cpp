@@ -13,7 +13,7 @@ double CoincidenceTPCW::lambdas_function(const RealVector &u) {
     const Flux2Comp2PhasesAdimensionalized & fluxFunction = (const Flux2Comp2PhasesAdimensionalized &) getFluxFunction();
     fluxFunction.getHorizontalFlux()->Diff_FracFlow2PhasesHorizontalAdimensionalized(sw, Theta, 1, m);
 
-    return m(0, 0);
+    return m.get(0, 0);
 }
 
 double CoincidenceTPCW::lambdae_function(const RealVector &u) {
@@ -27,7 +27,7 @@ double CoincidenceTPCW::lambdae_function(const RealVector &u) {
     fluxFunction.getHorizontalFlux()-> Diff_FracFlow2PhasesHorizontalAdimensionalized(sw, Theta, 0, m);
 
 
-    double f = m(0);
+    double f = m.get(0);
     double s = u.component(0);
 
 
