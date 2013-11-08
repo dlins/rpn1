@@ -16,6 +16,7 @@ import rpnumerics.WaveCurve;
 import rpnumerics.WaveCurveBranch;
 import rpnumerics.WaveCurveCalc;
 import rpnumerics.FundamentalCurve;
+import rpnumerics.WaveCurveOrbitCalc;
 import wave.multid.view.ViewingAttr;
 import wave.util.RealSegment;
 
@@ -30,7 +31,7 @@ public class WaveCurveGeomFactory extends WaveCurveOrbitGeomFactory {
     // Constructors/Initializers
     //
 
-    public WaveCurveGeomFactory(WaveCurveCalc calc) {
+    public WaveCurveGeomFactory(WaveCurveOrbitCalc calc) {
         super(calc);
     }
 

@@ -10,6 +10,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import rpnumerics.OrbitPoint;
 import rpnumerics.WaveCurveCalc;
+import rpnumerics.WaveCurveOrbitCalc;
 import wave.multid.CoordsArray;
 import wave.multid.model.MultiGeometryImpl;
 import wave.multid.view.ViewingTransform;
@@ -65,7 +66,7 @@ public class WaveCurveView extends WaveCurveOrbitGeomView {
 
         RpCalcBasedGeomFactory wCurveFactory = (WaveCurveGeomFactory) waveCurveGeom.geomFactory();
 
-        WaveCurveCalc calc = (WaveCurveCalc) wCurveFactory.rpCalc();
+        WaveCurveOrbitCalc calc = (WaveCurveOrbitCalc) wCurveFactory.rpCalc();
 
         OrbitPoint initialPoint = calc.getStart();
 

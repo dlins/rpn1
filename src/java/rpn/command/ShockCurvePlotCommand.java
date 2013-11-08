@@ -33,11 +33,14 @@ public class ShockCurvePlotCommand extends RpModelPlotCommand {
     public RpGeometry createRpGeometry(RealVector[] input) {
         OrbitPoint oPoint = new OrbitPoint(input[input.length - 1]);
         ShockCurveCalc shockCalc = RPNUMERICS.createShockCurveCalc(oPoint);
-        ShockCurveGeomFactory factory = new ShockCurveGeomFactory(shockCalc);
+//        ShockCurveGeomFactory factory = new ShockCurveGeomFactory(shockCalc);
+        
+        
+        WaveCurveGeomFactory fac = new WaveCurveGeomFactory(shockCalc);
         
         
         
-        return factory.geom();
+        return fac.geom();
     }
 
     static public ShockCurvePlotCommand instance() {
