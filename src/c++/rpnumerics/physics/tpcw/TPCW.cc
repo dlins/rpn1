@@ -78,7 +78,7 @@ SubPhysics(*defaultBoundary(), *new Space("R3", 3), "TPCW", _GENERAL_ACCUMULATIO
 
     setHugoniotFunction(new Hugoniot_TP());
     setDoubleContactFunction(new Double_Contact_TP());
-    setShockMethod(new HugoniotContinuation3D2D(fluxFunction_,accumulationFunction_,&getBoundary()));
+//    setShockMethod(new HugoniotContinuation3D2D(fluxFunction_,accumulationFunction_,&getBoundary()));
 
 
     RealVector min(getBoundary().minimums());
@@ -94,6 +94,7 @@ SubPhysics(*defaultBoundary(), *new Space("R3", 3), "TPCW", _GENERAL_ACCUMULATIO
 
     preProcessedBoundary_ = new RectBoundary(min, max);
 
+    setShockMethod(new HugoniotContinuation3D2D(fluxFunction_,accumulationFunction_,preProcessedBoundary_));
 
 
 }
@@ -141,9 +142,6 @@ void TPCW::setParams(vector<string> params) {
 
 
 
-
-
-
 }
 
 vector<double> * TPCW::getParams() {
@@ -179,7 +177,7 @@ TD(new Thermodynamics_SuperCO2_WaterAdimensionalized(*copy.TD)) {
 
     setHugoniotFunction(new Hugoniot_TP());
     setDoubleContactFunction(new Double_Contact_TP());
-    setShockMethod(new HugoniotContinuation3D2D(fluxFunction_,accumulationFunction_,&getBoundary()));
+//    setShockMethod(new HugoniotContinuation3D2D(fluxFunction_,accumulationFunction_,&getBoundary()));
 
     
     setViscosityMatrix(new Viscosity_Matrix());
@@ -190,6 +188,8 @@ TD(new Thermodynamics_SuperCO2_WaterAdimensionalized(*copy.TD)) {
 
     preProcessedBoundary_ = new RectBoundary(min, max);
 
+    
+    setShockMethod(new HugoniotContinuation3D2D(fluxFunction_,accumulationFunction_,copy.getPreProcessedBoundary()));
 
 }
 

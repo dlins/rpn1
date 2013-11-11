@@ -140,6 +140,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc(JNIEnv * env, jobj
         for (int j = 0; j < allCoords[i].size(); j++) {
 
             RealVector tempVector = allCoords[i].at(j);
+            
+             RpNumerics::getPhysics().getSubPhysics(0).postProcess(tempVector);
 
             double lambda = tempVector.component(tempVector.size() - 1);
 
