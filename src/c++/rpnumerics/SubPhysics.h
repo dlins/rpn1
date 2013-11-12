@@ -40,7 +40,8 @@ private:
 
     Hugoniot_Locus * hugoniotFunction_;
     Double_Contact_Function * doubleContactFunction_;
-    HugoniotContinuation * shock_method_;
+    HugoniotContinuation * hugoniot_Continuation_method_;
+    ShockMethod * shock_method_;
     Boundary * boundary_;
     Space * space_;
     const char * ID_;
@@ -87,9 +88,13 @@ public:
     
     Double_Contact_Function * getDoubleContactFunction();
     
-    void setShockMethod(HugoniotContinuation *);
+    void setHugoniotContinuationMethod(HugoniotContinuation *);
     
-    HugoniotContinuation * getShockMethod();
+    void setShockMethod(ShockMethod *);
+    
+    ShockMethod * getShockMethod();
+    
+    HugoniotContinuation * getHugoniotContinuationMethod();
 
     const Space & domain() const;
 
