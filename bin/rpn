@@ -10,6 +10,13 @@
 RPNSERVER="rpn.fluid.impa.br"
 RPNURL="http://$RPNSERVER/repo"
 
+HOSTSYS=`uname -s | tr '[:upper:]' '[:lower:]'`
+HOSTMACH=`uname -m`
+HOSTTYPE=$HOSTSYS"_"$HOSTMACH
+
+# 
+# Have to deal with macos readlink issue
+#
 
 CURRDIR=`pwd`
 PROGDIR=$(dirname $(readlink -f $0))
@@ -20,9 +27,6 @@ SRCDIR=$RPNDIR/src
 LIBDIR=$RPNDIR/lib
 BINDIR=$RPNDIR/bin
 DISTDIR=$BASEDIR"/rpn_dist"
-HOSTSYS=`uname -s | tr '[:upper:]' '[:lower:]'`
-HOSTMACH=`uname -m`
-HOSTTYPE=$HOSTSYS"_"$HOSTMACH
 
 
 #######################################################################
@@ -367,8 +371,17 @@ function set_rpn_dir() {
 	if [ ! -d $BASEDIR ]; then
 		echo_color red -n "'$BASEDIR' is not a directory!"
 		echo "Run this script again."
+		echo
 		exit 1
 	fi
+
+	if [ -d $BASEDIR/rpn ]; then
+		echo_color red "'rpn' already exists on $BASEDIR"
+		echo "Run this script again."
+		echo
+		exit 1
+	fi
+		
 
 	RPNDIR="$BASEDIR/rpn"
 }
@@ -447,8 +460,6 @@ function install_developer_code() {
 		exit 1
 	fi
 
-	echo
-
 	check_maintainer
 	if [ $? -eq 0 ]; then
 		GITURL="git@gitorious.impa.br:rpn/rpn.git"
@@ -456,6 +467,7 @@ function install_developer_code() {
 		GITURL="git://gitorious.impa.br/rpn/rpn.git"
 	fi
 
+	echo
 	git clone $GITURL $RPNDIR
 	echo
 	cat << EOF >> $RPNDIR/.git/info/exclude
@@ -489,12 +501,14 @@ EOF
 function install_executable_code() {
 	check_software wget
 
+	check_latest_version
 	set_rpn_dir
-	if [ -d "rpn-v$latest_version" ]; then
-		echo; echo -n "You already have the latest version "
-		echo_color red -n "'$latest_version'"; echo "installed!"; echo
+
+	if [ -d $BASEDIR/rpn-v$latest_version ]; then
+		echo_color red "Version '$latest_version' already installed!"
 		exit 1
 	fi
+
 	wget -P . $RPNURL/$rpn_tar > /dev/null 2>&1
 	tar zxf ./$rpn_tar -C $BASEDIR
 	rm -f ./$rpn_tar
@@ -590,6 +604,34 @@ function read_sshpass() {
 
 
 #
+# get latest version numebr on repository
+#
+function get_latest_version_from_repo() {
+	wget $RPNURL -O /dev/stdout 2> /dev/null |tee |grep RPn-$HOSTTYPE | \
+		grep -o '<a href=['"'"'"][^"'"'"']*['"'"'"]' | \
+		sed -e 's/^<a href=["'"'"']//' -e 's/["'"'"']$//' | \
+		tail -1 | cut -d"-" -f3 | cut -d"." -f1,2,3
+}
+
+
+#
+# check if user already have latest version or if theres is any version available on repository
+#
+function check_latest_version() {
+	if [ -z $latest_version ]; then
+		echo; echo_color red "Sorry, there is no available version for your achitecture!"; echo
+		exit 1
+	fi
+
+	if [ -d "rpn-v$latest_version" ]; then
+		echo; echo -n "You already have the latest version "
+		echo_color red -n "'$latest_version'"; echo "installed!"; echo
+		exit 1
+	fi
+}
+
+
+#
 # set mimetype if linux machine
 #
 function set_linux_mimetype() {
@@ -599,7 +641,7 @@ function set_linux_mimetype() {
 		mkdir -p $MIMEDIR
 		cd $MIMEDIR
 
-		echo "[Default Applications]" > default.list
+		echo "[Default Applications]" > defaults.list
 		cat << EOF > mimeapps.list
 
 [Added Associations]
@@ -618,9 +660,9 @@ application/x-rpn=rpn.desktop;' mimeapps.list
 application/x-rpn=rpn.desktop' mimeapps.list
 	fi
 
-	if [ -z "`grep rpn default.list`" ]; then
+	if [ -z "`grep rpn defaults.list`" ]; then
 		sed -i '/Default Applications/a \
-application/x-rpn=rpn.desktop' default.list
+application/x-rpn=rpn.desktop' defaults.list
 	fi
 
 	cat << EOF > rpn.desktop
@@ -635,6 +677,61 @@ Icon=$RPNDIR/share/icons/rpn.ico
 EOF
 }
 
+
+#
+# MacOS readlink equivalent
+#
+function readlink_macos() {
+#
+# other possibilities:
+#
+# scriptDir="$(cd "$(dirname "$0")" && pwd -P)"
+# 
+#  or
+#
+# dirname=`perl -e 'use Cwd "abs_path";print abs_path(shift)' $0`
+# echo $dirname
+#
+#
+	THIS_DIR=`pwd`
+	TARGET_FILE=$1
+
+	cd `dirname $TARGET_FILE`
+	TARGET_FILE=`basename $TARGET_FILE`
+
+	# Iterate down a (possible) chain of symlinks
+	while [ -L "$TARGET_FILE" ]; do
+    		TARGET_FILE=`readlink $TARGET_FILE`
+    		cd `dirname $TARGET_FILE`
+    		TARGET_FILE=`basename $TARGET_FILE`
+	done
+
+
+	# Compute the canonicalized name by finding the physical path 
+	# for the directory we're in and appending the target file.
+	PHYS_DIR=`pwd -P`
+	RESULT=$PHYS_DIR/$TARGET_FILE
+	cd $THIS_DIR
+
+	echo $RESULT
+}
+
+#
+# set required packages for MacOS
+#
+function set_requirements_macos() {
+	echo export PATH="/usr/local/bin:$PATH" >> ~/.bash_profile
+	echo export PATH="/usr/local/sbin:$PATH" >> ~/.bash_profile
+	ruby -e "$(curl -fsSL https://raw.github.com/mxcl/homebrew/go)"
+	brew install git
+	brew prune
+	brew doctor
+	echo "Solve all errors and warning until 'brew doctor' command return"
+	echo "you the message 'Your system is ready to brew'."
+
+	#brew wget
+
+}
 
 
 #######################################################################
@@ -730,9 +827,9 @@ function reconfigure() {
 	# 
 	# Setup environment file 
 	#
-	if [ $SHELL == "/bin/csh" ]; then
+	if [ $SHELL == "/bin/csh" ] || [ $SHELL == "/bin/tcsh" ]; then
 		rcFile="$HOME/.cshrc"
-		sed -i -e '/RPn path/,+3 d' $rcFile
+		sed -i -e '/RPn/,/^PATH/d' $rcFile
 		make_path_csh >> $rcFile
 
 	else
@@ -745,7 +842,7 @@ function reconfigure() {
 		else
 			rcFile="$HOME/.profile"
 		fi
-		sed -i -e '/RPn path/,+3 d' $rcFile
+		sed -i -e '/RPn/,/^PATH/d' $rcFile
 		make_path_sh >> $rcFile
 	fi
 
@@ -910,7 +1007,10 @@ function deploy_version() {
 	check_git_status
 	check_software sshpass
 	check_maintainer
-	[ $? -eq 1 ] && ( print_maintainer_error; exit 1)
+	if [ $? -eq 1 ]; then 
+		print_maintainer_error
+		exit 1
+	fi
 
 	echo_rpn_msg green "> Deploying new RPn version... "
 	new_version="0.0.0"
@@ -968,7 +1068,7 @@ function deploy_version() {
 function install() {
 	echo_rpn_msg green "> Installing the latest RPn version... "
 
-	latest_version=`wget $RPNURL -O /dev/stdout 2> /dev/null |tee |grep RPn-linux |cut -d'"' -f8 |tail -1 | cut -d"-" -f3 |cut -d"." -f1,2,3`
+	latest_version=$(get_latest_version_from_repo)
 	rpn_tar="RPn-$HOSTTYPE-$latest_version.tar.gz"
 	silent=true
 
@@ -1002,7 +1102,7 @@ function install() {
 # Upgrade
 #
 function upgrade() {
-	latest_version=`wget $RPNURL -O /dev/stdout 2> /dev/null |tee |grep RPn-linux |cut -d'"' -f8 |tail -1 | cut -d"-" -f3 |cut -d"." -f1,2,3`
+	latest_version=$(get_latest_version_from_repo)
 	rpn_tar="RPn-$HOSTTYPE-$latest_version.tar.gz"
 	curr_version=`cat $RPNDIR/etc/version | cut -c2-20`
 
