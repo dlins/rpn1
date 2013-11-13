@@ -14,7 +14,6 @@ import rpnumerics.RarefactionCurve;
 import rpnumerics.ShockCurve;
 import rpnumerics.WaveCurve;
 import rpnumerics.WaveCurveBranch;
-import rpnumerics.WaveCurveCalc;
 import rpnumerics.FundamentalCurve;
 import rpnumerics.WaveCurveOrbitCalc;
 import wave.multid.view.ViewingAttr;
@@ -46,18 +45,25 @@ public class WaveCurveGeomFactory extends WaveCurveOrbitGeomFactory {
 
         WaveCurve waveCurve = (WaveCurve) geomSource();
         List<RealSegment> list = waveCurve.segments();
+        
+        System.out.println("Tamanho da lista de branches: "+ waveCurve.getBranchsList().size());
 
         WaveCurveGeom wcGeom = new WaveCurveGeom(MultidAdapter.converseRealSegmentsToCoordsArray(list), this);
 
         for (WaveCurveBranch branch : waveCurve.getBranchsList()) {
 
             List<RealSegment> segList = new ArrayList<RealSegment>();
+           
 
 
             for (WaveCurveBranch leaf : branch.getBranchsList()) {
                 segList.addAll(((RPnCurve) leaf).segments());
 
             }
+            
+            
+             
+          
 
             WaveCurveGeom wcGeomComposite = new WaveCurveGeom(MultidAdapter.converseRealSegmentsToCoordsArray(segList), this);
 
@@ -87,6 +93,10 @@ public class WaveCurveGeomFactory extends WaveCurveOrbitGeomFactory {
         if (branch instanceof ShockCurve) {
 
 //            System.out.println("Dentro do createOrbits de WaveCurveGeomFactory : Shock --- " +branch.getPoints().length);
+
+                
+            System.out.println("Em factory: " +branch.toXML());
+                
 
             return new ShockCurveGeom(MultidAdapter.converseOrbitPointsToCoordsArray(branch.getPoints()), this, (ShockCurve) branch);
 

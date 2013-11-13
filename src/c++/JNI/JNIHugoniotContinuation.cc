@@ -124,6 +124,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotContinuationCurveCalc_calc
             RealVector tempVector = allCoords[i].at(j);
             
             RpNumerics::getPhysics().getSubPhysics(0).postProcess(tempVector);
+            
+            
+            cout<<tempVector<<endl;
 
             double lambda = tempVector.component(tempVector.size() - 1);
 

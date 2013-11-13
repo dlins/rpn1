@@ -39,17 +39,6 @@ public class WaveCurveCalc extends WaveCurveOrbitCalc {
         }
 
 
-
-//        System.out.println(result);
-
-
-
-
-
-
-
-
-
         return result;
     }
 

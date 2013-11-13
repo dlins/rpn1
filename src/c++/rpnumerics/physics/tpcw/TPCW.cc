@@ -68,7 +68,7 @@ SubPhysics(*defaultBoundary(), *new Space("R3", 3), "TPCW", _GENERAL_ACCUMULATIO
 
     preProcessedBoundary_ = new RectBoundary(min, max);
 
-    setHugoniotContinuationMethod(new HugoniotContinuation3D2D(fluxFunction_,accumulationFunction_,preProcessedBoundary_));
+    setHugoniotContinuationMethod(new HugoniotContinuation3D2D(fluxFunction_,accumulationFunction_,&getBoundary()));
 
 
 }

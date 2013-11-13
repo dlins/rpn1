@@ -39,7 +39,9 @@ public class ShockCurveGeomView extends WaveCurveOrbitGeomView {
 
         composite.append(dash(), false);
 
-        return composite;
+        
+        
+        return super.createShape();//composite;
 
     }
 
