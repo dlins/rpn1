@@ -405,8 +405,6 @@ public class RPnCurvesList extends Observable implements ActionListener, ListSel
                             if (index == i) {
                                 phaseSpace_.highlightGeometry(index);
                                 selectedGeometries.add(geometry);
-                                
-                                System.out.println("Curva que está selecionada : " + index);
                                 indexGeometries.add(index);
                                 
                             }

@@ -45,25 +45,17 @@ public class WaveCurveGeomFactory extends WaveCurveOrbitGeomFactory {
 
         WaveCurve waveCurve = (WaveCurve) geomSource();
         List<RealSegment> list = waveCurve.segments();
-        
-        System.out.println("Tamanho da lista de branches: "+ waveCurve.getBranchsList().size());
 
         WaveCurveGeom wcGeom = new WaveCurveGeom(MultidAdapter.converseRealSegmentsToCoordsArray(list), this);
 
         for (WaveCurveBranch branch : waveCurve.getBranchsList()) {
 
             List<RealSegment> segList = new ArrayList<RealSegment>();
-           
-
 
             for (WaveCurveBranch leaf : branch.getBranchsList()) {
                 segList.addAll(((RPnCurve) leaf).segments());
 
             }
-            
-            
-             
-          
 
             WaveCurveGeom wcGeomComposite = new WaveCurveGeom(MultidAdapter.converseRealSegmentsToCoordsArray(segList), this);
 
@@ -84,29 +76,15 @@ public class WaveCurveGeomFactory extends WaveCurveOrbitGeomFactory {
         System.out.println(branch.getClass().getCanonicalName());
 
         if (branch instanceof RarefactionCurve) {
-
-//            System.out.println("Dentro do createOrbits de WaveCurveGeomFactory : Rarefaction --- " +branch.getPoints().length);
             return new RarefactionCurveGeom(MultidAdapter.converseOrbitPointsToCoordsArray(branch.getPoints()), this, (RarefactionCurve) branch);
-
         }
 
         if (branch instanceof ShockCurve) {
-
-//            System.out.println("Dentro do createOrbits de WaveCurveGeomFactory : Shock --- " +branch.getPoints().length);
-
-                
-            System.out.println("Em factory: " +branch.toXML());
-                
-
             return new ShockCurveGeom(MultidAdapter.converseOrbitPointsToCoordsArray(branch.getPoints()), this, (ShockCurve) branch);
-
         }
 
         if (branch instanceof CompositeCurve) {
-
-//            System.out.println("Dentro do createOrbits de WaveCurveGeomFactory : Composite --- " +branch.getPoints().length);
             return new CompositeGeom(MultidAdapter.converseOrbitPointsToCoordsArray(branch.getPoints()), this, (CompositeCurve) branch);
-
         }
 
 

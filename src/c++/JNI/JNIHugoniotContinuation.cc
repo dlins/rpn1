@@ -35,13 +35,13 @@ using std::vector;
  */
 
 JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotContinuationCurveCalc_calc
-  (JNIEnv * env , jobject obj, jobject initialPoint, jint increase){
-    
+(JNIEnv * env, jobject obj, jobject initialPoint, jint increase) {
 
 
 
 
-//JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc(JNIEnv * env, jobject obj, jobject initialPoint, jint subPhysicsIndex, jint familyIndex, jint increase) {
+
+    //JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc(JNIEnv * env, jobject obj, jobject initialPoint, jint subPhysicsIndex, jint familyIndex, jint increase) {
 
 
     unsigned int i;
@@ -77,14 +77,14 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotContinuationCurveCalc_calc
         realVectorInput.component(i) = input[i];
 
     }
-    
-    string physicsID (RpNumerics::getPhysics().getSubPhysics(0).ID());
 
-    if (physicsID.compare("TPCW") == 0) {
-        realVectorInput.resize(3);
-        realVectorInput.component(2) = 1.0;
-    }
+    string physicsID(RpNumerics::getPhysics().getSubPhysics(0).ID());
 
+    //    if (physicsID.compare("TPCW") == 0) {
+    //        realVectorInput.resize(3);
+    //        realVectorInput.component(2) = 1.0;
+    //    }
+    RpNumerics::getPhysics().getSubPhysics(0).preProcess(realVectorInput);
     env->DeleteLocalRef(inputPhasePointArray);
 
 
@@ -122,11 +122,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotContinuationCurveCalc_calc
         for (int j = 0; j < allCoords[i].size(); j++) {
 
             RealVector tempVector = allCoords[i].at(j);
-            
+
             RpNumerics::getPhysics().getSubPhysics(0).postProcess(tempVector);
-            
-            
-            cout<<tempVector<<endl;
 
             double lambda = tempVector.component(tempVector.size() - 1);
 
