@@ -126,9 +126,9 @@ public class RPnCommandModule {
                     curveId_ = new Integer(att.getValue("value"));
                 }
 
-                if (att.getValue("name").equals("note_frame_title")) {
+                if (att.getValue("name").equals("activated_frame_title")) {
 
-                    RPnNetworkStatus.instance().NOTE_FRAME_TITLE = att.getValue("value");
+                    RPnNetworkStatus.instance().ACTIVATED_FRAME_TITLE = att.getValue("value");
 
 
                     JFrame[] frames = RPnUIFrame.getPhaseSpaceFrames();
@@ -157,26 +157,54 @@ public class RPnCommandModule {
                     }
                    
                     if (currentCommand_.equalsIgnoreCase("TOGGLE_NOTEBOARD_MODE")) {
-                        for (int i = 0; i < allFrames.length; i++) {
-                            if (allFrames[i].getTitle().compareTo(RPnNetworkStatus.instance().NOTE_FRAME_TITLE) == 0) {
 
-                                System.out.println("Toggling Frame : " + allFrames[i].getTitle());
+                        boolean padmodeOff = false;
+
+                        for (int i = 0; i < allFrames.length; i++) {
+                            
+                            if (allFrames[i].getTitle().compareTo(RPnNetworkStatus.instance().ACTIVATED_FRAME_TITLE) == 0) {
+
+
+                                padmodeOff = allFrames[i].getGlassPane().isVisible();
                                 allFrames[i].getGlassPane().setVisible(!allFrames[i].getGlassPane().isVisible());
 
                             } else {
+
+
                                 allFrames[i].getGlassPane().setVisible(false);
-                            }
+                            }                           
                         }
+
+                        if (padmodeOff) {
+
+                            RPnHttpPoller.POLLING_MODE = RPnHttpPoller.TEXT_POLLER;
+
+                        } else RPnHttpPoller.POLLING_MODE = RPnHttpPoller.OBJ_POLLER;
+
 
                     } else if (currentCommand_.equalsIgnoreCase("TOGGLE_NOTEBOARD_CLEAR")) {
+
                         for (int i = 0; i < allFrames.length; i++) {
-                            if (allFrames[i].getTitle().compareTo(RPnNetworkStatus.instance().NOTE_FRAME_TITLE) == 0)
+                            if (allFrames[i].getTitle().compareTo(RPnNetworkStatus.instance().ACTIVATED_FRAME_TITLE) == 0)
                                 ((RPnGlassPane) allFrames[i].getGlassPane()).clear();
-
-                            
-
                         }
+
+                    } else if (currentCommand_.equalsIgnoreCase("FOCUS_GAINED")) {
+
+                        for (int i = 0; i < allFrames.length; i++) {
+                            if (allFrames[i].getTitle().compareTo(RPnNetworkStatus.instance().ACTIVATED_FRAME_TITLE) == 0) {
+
+                                allFrames[i].setAlwaysOnTop(true);
+
+                                // there was a refresh issue going ... NOT A FIX !
+                                allFrames[i].repaint();
+
+                            } else allFrames[i].setAlwaysOnTop(false);
+                        }
+
+
                     }
+
                 }
 
             }
@@ -238,15 +266,8 @@ public class RPnCommandModule {
                     UIController.instance().setState(new FILE_ACTION_SELECTED(SecondaryBifurcationCurveCommand.instance()));
                     SecondaryBifurcationCurveCommand.instance().execute();
 
-                // MAY BE THIS SHOULD BE A CONFIG PARAM change ... mvera.
-                } else if (currentCommand_.equalsIgnoreCase("TOGGLE_NOTEBOARD_MODE")) {
 
-                    System.out.println("Will now parse the TOGGLE_NOTEBOARD_MODE");
-                    
-                    if (RPnHttpPoller.POLLING_MODE == RPnHttpPoller.TEXT_POLLER)
-                        RPnHttpPoller.POLLING_MODE = RPnHttpPoller.OBJ_POLLER;
-                    else RPnHttpPoller.POLLING_MODE = RPnHttpPoller.TEXT_POLLER;
-                }              
+                }
             }
 
             if (currentElement_.equals("REALVECTOR")) {

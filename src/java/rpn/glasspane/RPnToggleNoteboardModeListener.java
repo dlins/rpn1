@@ -60,8 +60,12 @@ public class RPnToggleNoteboardModeListener implements ActionListener {
         // the TOGGLE !
         for (int i = 0; i < allFrames.length; i++)
             
-            if (allFrames[i].getTitle().compareTo(noteFrameTitle) == 0)
+            if (allFrames[i].getTitle().compareTo(noteFrameTitle) == 0) {
+
+                
                 allFrames[i].getGlassPane().setVisible(!allFrames[i].getGlassPane().isVisible());
+                
+            }
             else
                 allFrames[i].getGlassPane().setVisible(false);
         
@@ -72,7 +76,7 @@ public class RPnToggleNoteboardModeListener implements ActionListener {
 
             buffer.append("<COMMAND name=\"TOGGLE_NOTEBOARD_MODE\" ");
             buffer.append("phasespace=\"").append(UIController.instance().getActivePhaseSpace().getName()).append("\">");
-            buffer.append("<COMMANDPARAM name=\"note_frame_title\" value=\"" + noteFrameTitle.toString() + "\"/>");
+            buffer.append("<COMMANDPARAM name=\"activated_frame_title\" value=\"" + noteFrameTitle.toString() + "\"/>");
             buffer.append("</COMMAND>");
 
 

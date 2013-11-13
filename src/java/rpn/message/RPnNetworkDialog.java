@@ -114,6 +114,9 @@ public class RPnNetworkDialog extends JDialog implements PropertyChangeListener 
 
     private void init() throws Exception {
 
+
+        setAlwaysOnTop(true);
+
         onlineButton.setText("Connect");
 
         getContentPane().add(mainPanel);

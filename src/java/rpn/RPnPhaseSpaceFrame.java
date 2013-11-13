@@ -179,30 +179,21 @@ public class RPnPhaseSpaceFrame extends JFrame {
 
         public void windowGainedFocus(WindowEvent e) {
 
-            UIController.instance().setFocusPanel(phaseSpacePanel);
-            
-            // TODO : get the Pane Index from PhaseSpace
-            /* this might be the right way ...
+            UIController.instance().setFocusPanel(phaseSpacePanel);                        
 
-             if ((RPnNetworkStatus.instance().isOnline() && RPnNetworkStatus.instance().isMaster())
-                    || (!RPnNetworkStatus.instance().isOnline())) {
-                RPnNetworkStatus.instance().NOTEBOARD_PANE_INDEX = frameIndex_;
-                RPnNetworkStatus.instance().NOTEBOARD_PANE_FRAME_CHAR = frameChar_;
+            if (RPnNetworkStatus.instance().isOnline() && RPnNetworkStatus.instance().isMaster()) {
+
+                StringBuilder buffer = new StringBuilder();
+
+                buffer.append("<COMMAND name=\"FOCUS_GAINED\" ");
+                buffer.append("phasespace=\"").append(UIController.instance().getActivePhaseSpace().getName()).append("\">");
+                buffer.append("<COMMANDPARAM name=\"activated_frame_title\" value=\"" + getTitle() + "\"/>");
+                buffer.append("</COMMAND>");
 
 
+                RPnNetworkStatus.instance().sendCommand(buffer.toString());
+            }
 
-                if (RPnNetworkStatus.instance().isOnline() && RPnNetworkStatus.instance().isMaster()) {
-
-                    StringBuilder buffer = new StringBuilder();
-
-                    buffer.append("<COMMAND name=\"TOGGLE_NOTEBOARD_FRAME\">");
-                    buffer.append("<COMMANDPARAM name=\"pane_index\" value=\"" + RPnNetworkStatus.instance().NOTEBOARD_PANE_INDEX + "\"/>");
-                    buffer.append("<COMMANDPARAM name=\"pane_frame_char\" value=\"" + RPnNetworkStatus.instance().NOTEBOARD_PANE_FRAME_CHAR + "\"/>");
-                    buffer.append("</COMMAND>");
-
-                    RPnNetworkStatus.instance().sendCommand(buffer.toString());
-                }
-            }*/
 
         }
 

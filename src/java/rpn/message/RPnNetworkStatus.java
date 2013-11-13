@@ -107,7 +107,7 @@ public class RPnNetworkStatus {
     //public static String RPN_MEDIATORPROXY_URL="http://" + SERVERNAME + ":8080/rpnmediatorproxy/rpnmediatorproxy?REQ_ID=";
     public static String RPN_MEDIATORPROXY_URL="http://" + SERVERNAME + ":8080/rpnmediatorproxy/";    
 
-    public static String NOTE_FRAME_TITLE = "NO_TITLE";
+    public static String ACTIVATED_FRAME_TITLE = "NO_TITLE";
 
     //
     // Constructors/Initializers

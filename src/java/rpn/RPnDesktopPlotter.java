@@ -86,7 +86,20 @@ public class RPnDesktopPlotter implements RPnMenuCommand {
     public static void setUIFrame(RPnUIFrame rpnUIFrame){
         rpnUIFrame_=rpnUIFrame;
     }
-    public static void main(String[] args) {
+    
+    public static void main(final String[] args) {
+
+
+        javax.swing.SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                createAndShowGUI(args);
+            }
+        });
+
+    }
+
+    public static void createAndShowGUI(String[] args) {
+
 
         RPnDesktopPlotter plotter = null;
         try {
@@ -110,11 +123,16 @@ public class RPnDesktopPlotter implements RPnMenuCommand {
 
 
             configFrame.setVisible(true);
+            
+
+            // the control frame should be up front...
+            rpnUIFrame_.toFront();
 
 
             RPnDesktopPlotter.configReader_.exec(configStream_); //Reading input file
-
-
+            
+            
+            
         } catch (FileNotFoundException ex) {
             JOptionPane.showMessageDialog(rpnUIFrame_, "No input file !", "RPn", JOptionPane.ERROR_MESSAGE);
 
