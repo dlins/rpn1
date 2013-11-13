@@ -10,7 +10,7 @@
  * ---------------------------------------------------------------
  * Includes:
  */
-#include "rpnumerics_ShockCurveCalc.h"
+#include "rpnumerics_HugoniotContinuationCurveCalc.h"
 
 
 
@@ -34,8 +34,14 @@ using std::vector;
  * Definitions:
  */
 
+JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotContinuationCurveCalc_calc
+  (JNIEnv * env , jobject obj, jobject initialPoint, jint increase){
+    
 
-JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc(JNIEnv * env, jobject obj, jobject initialPoint, jint subPhysicsIndex, jint familyIndex, jint increase) {
+
+
+
+//JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc(JNIEnv * env, jobject obj, jobject initialPoint, jint subPhysicsIndex, jint familyIndex, jint increase) {
 
 
     unsigned int i;
@@ -71,8 +77,10 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc(JNIEnv * env, jobj
         realVectorInput.component(i) = input[i];
 
     }
+    
+    string physicsID (RpNumerics::getPhysics().getSubPhysics(0).ID());
 
-    if (realVectorInput.size() == 2) {
+    if (physicsID.compare("TPCW") == 0) {
         realVectorInput.resize(3);
         realVectorInput.component(2) = 1.0;
     }
@@ -90,8 +98,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc(JNIEnv * env, jobj
     if (increase == RAREFACTION_SPEED_DECREASE)
         increase = WAVE_BACKWARD;
 
-    int activePhysics = subPhysicsIndex; //RpNumerics::getPhysics()->getActiveSubPhysicsIndex();
-
     const FluxFunction * fluxFunction = &RpNumerics::getPhysics().fluxFunction();
     const AccumulationFunction * accumulationFunction = &RpNumerics::getPhysics().accumulation();
 
@@ -107,7 +113,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc(JNIEnv * env, jobj
 
     if (allCoords.size() == 0) return NULL;
 
-    jobject waveCurveBranchForward = env->NewObject(classWaveCurve, waveCurveConstructor, familyIndex, increase);
+    jobject waveCurveBranchForward = env->NewObject(classWaveCurve, waveCurveConstructor, 0, increase);
 
     for (i = 0; i < allCoords.size(); i++) {
 
@@ -116,14 +122,16 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc(JNIEnv * env, jobj
         for (int j = 0; j < allCoords[i].size(); j++) {
 
             RealVector tempVector = allCoords[i].at(j);
+            
+            RpNumerics::getPhysics().getSubPhysics(0).postProcess(tempVector);
 
             double lambda = tempVector.component(tempVector.size() - 1);
 
             double * dataCoords = tempVector;
 
-            jdoubleArray jTempArray = (env)->NewDoubleArray(tempVector.size() - 1);
+            jdoubleArray jTempArray = (env)->NewDoubleArray(tempVector.size());
 
-            (env)->SetDoubleArrayRegion(jTempArray, 0, tempVector.size() - 1, dataCoords);
+            (env)->SetDoubleArrayRegion(jTempArray, 0, tempVector.size(), dataCoords);
 
 
             jobject orbitPoint = (env)->NewObject(classOrbitPoint, orbitPointConstructor, jTempArray, lambda);
@@ -136,7 +144,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc(JNIEnv * env, jobj
 
         }
 
-        jobject shockCurve = (env)->NewObject(shockCurveClass, shockCurveConstructor, orbitPointArray, familyIndex, increase);
+        jobject shockCurve = (env)->NewObject(shockCurveClass, shockCurveConstructor, orbitPointArray, 0, increase);
 
         env->CallVoidMethod(waveCurveBranchForward, waveCurveAddBranch, shockCurve);
 

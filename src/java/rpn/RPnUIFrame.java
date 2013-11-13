@@ -174,6 +174,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 toolBar_.add(LevelCurvePlotCommand.instance().getContainer());
                 toolBar_.add(CompositePlotCommand.instance().getContainer());
                 toolBar_.add(WaveCurvePlotCommand.instance().getContainer());
+                toolBar_.add(HugoniotContinuationPlotCommand.instance().getContainer());
 
                 toolBar_.add(PhysicalBoundaryPlotCommand.instance().getContainer());
                 toolBar_.add(TrackPointCommand.instance().getContainer());

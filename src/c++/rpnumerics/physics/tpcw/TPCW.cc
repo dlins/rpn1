@@ -25,30 +25,6 @@ TPCW::TPCW(const RealVector & paramsVector, const string & rpnHomePath) :
 SubPhysics(*defaultBoundary(), *new Space("R3", 3), "TPCW", _GENERAL_ACCUMULATION_) {
 
 
-    //       <PHYSICSPARAM name="abs perm" position="0" value="2e-12"/>
-    //                <PHYSICSPARAM name="sin beta" position="1" value="0.0"/>
-    //                <PHYSICSPARAM name="has gravity" position="2" value="0.0"/>
-    //                <PHYSICSPARAM name="has horizontal" position="3" value="1.0"/>
-    //                <PHYSICSPARAM name="cnw" position="4" value="0.3"/>
-    //                <PHYSICSPARAM name="cng" position="5" value="0.0"/>
-    //                <PHYSICSPARAM name="expw" position="6" value="2.0"/>
-    //                <PHYSICSPARAM name="expg" position="7" value="2.0"/>
-    //
-    //
-    //               <PHYSICSPARAM name="phi" position="8" value="0.38"/>
-    //
-    //
-    //
-    //                <PHYSICSPARAM name="T_typical" position ="9" value="304.63"/>
-    //                <PHYSICSPARAM name="U_typical" position="10" value="998.2"/>
-    //                <PHYSICSPARAM name="Rho_typical" position="11" value="4.22e-3"/>
-
-
-
-
-
-
-
     RealVector fluxVector(8);
 
 
@@ -78,8 +54,6 @@ SubPhysics(*defaultBoundary(), *new Space("R3", 3), "TPCW", _GENERAL_ACCUMULATIO
 
     setHugoniotFunction(new Hugoniot_TP());
     setDoubleContactFunction(new Double_Contact_TP());
-//    setShockMethod(new HugoniotContinuation3D2D(fluxFunction_,accumulationFunction_,&getBoundary()));
-
 
     RealVector min(getBoundary().minimums());
 
@@ -94,7 +68,7 @@ SubPhysics(*defaultBoundary(), *new Space("R3", 3), "TPCW", _GENERAL_ACCUMULATIO
 
     preProcessedBoundary_ = new RectBoundary(min, max);
 
-    setShockMethod(new HugoniotContinuation3D2D(fluxFunction_,accumulationFunction_,preProcessedBoundary_));
+    setHugoniotContinuationMethod(new HugoniotContinuation3D2D(fluxFunction_,accumulationFunction_,preProcessedBoundary_));
 
 
 }
@@ -177,7 +151,7 @@ TD(new Thermodynamics_SuperCO2_WaterAdimensionalized(*copy.TD)) {
 
     setHugoniotFunction(new Hugoniot_TP());
     setDoubleContactFunction(new Double_Contact_TP());
-//    setShockMethod(new HugoniotContinuation3D2D(fluxFunction_,accumulationFunction_,&getBoundary()));
+    setShockMethod(new ShockContinuationMethod3D2D());
 
     
     setViscosityMatrix(new Viscosity_Matrix());
@@ -188,54 +162,11 @@ TD(new Thermodynamics_SuperCO2_WaterAdimensionalized(*copy.TD)) {
 
     preProcessedBoundary_ = new RectBoundary(min, max);
 
-    
-    setShockMethod(new HugoniotContinuation3D2D(fluxFunction_,accumulationFunction_,copy.getPreProcessedBoundary()));
+    setShockMethod (new ShockContinuationMethod3D2D());
+    setHugoniotContinuationMethod(new HugoniotContinuation3D2D(fluxFunction_,accumulationFunction_,copy.getPreProcessedBoundary()));
 
 }
 
-//void TPCW::setParams(vector<string> params) {
-//
-//    for (int i = 0; i < params.size(); i++) {
-//        if ( Debug::get_debug_level() == 5 ) {
-//            cout << "i: "<<i<<" " <<params.at(i) << endl;
-//        }
-//
-//
-//    }
-//
-//    RealVector fluxParamVector(8);
-//
-//    //Flux params
-//    for (int i = 0; i < fluxParamVector.size(); i++) {
-//
-//        fluxParamVector.component(i) = atof(params[i].c_str());
-//
-//    }
-//
-//    if ( Debug::get_debug_level() == 5 ) {
-//        cout << "Parametros em setParams:" << fluxParamVector << endl;
-//    }
-//
-//
-//    fluxFunction_->fluxParams(fluxParamVector); // = new Flux2Comp2PhasesAdimensionalized(Flux2Comp2PhasesAdimensionalized_Params(fluxVector, TD));
-//
-//
-//
-//    //    delete TD;
-//    TD = new Thermodynamics_SuperCO2_WaterAdimensionalized(params.at(11),
-//            atof(params[8].c_str()),
-//            atof(params[9].c_str()),
-//            atof(params[10].c_str()));
-//
-//
-//
-//    double phi = atof(params[12].c_str());
-//
-//    accumulationFunction_ ->accumulationParams(Accum2Comp2PhasesAdimensionalized_Params(TD, phi));
-//
-//
-//
-//}
 
 SubPhysics * TPCW::clone() const {
 
