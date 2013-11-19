@@ -89,7 +89,7 @@ public class RPnCommandModule {
             if (isChangePhysicsParamsCommand_) {
 
                 if (currentElement_.equals("PHYSICSCONFIG")) {
-                    System.out.println("Current configuration: " + currentConfiguration_.getName());
+                    //System.out.println("Current configuration: " + currentConfiguration_.getName());
 
                     currentConfiguration_ = currentConfiguration_.getConfiguration(att.getValue("name"));
                 }
@@ -114,7 +114,7 @@ public class RPnCommandModule {
 
                 for (int i = 0; i < att.getLength(); i++) {
 
-                    System.out.println(att.getValue(i));
+                    //System.out.println(att.getValue(i));
                 }
 
                 if (att.getValue("name").equals("phasespace")) {
@@ -217,7 +217,7 @@ public class RPnCommandModule {
                 }
                 currentCommand_ = att.getValue("name");
 
-                System.out.println("Current command :" + currentCommand_);
+                //System.out.println("Current command :" + currentCommand_);
 
                 UIController.instance().setActivePhaseSpace(RPnDataModule.getPhaseSpace(att.getValue("phasespace")));
 
@@ -290,7 +290,7 @@ public class RPnCommandModule {
                     FILE_ACTION_SELECTED fileAction = (FILE_ACTION_SELECTED)UIController.instance().getState();
                 
                     if (fileAction.getAction() instanceof RpModelPlotCommand){
-                        System.out.println("ID Setting : " + curveId_);
+                        //System.out.println("ID Setting : " + curveId_);
                         
                         RpGeometry geometry = UIController.instance().getActivePhaseSpace().getLastGeometry();
                         RPnCurve curve = (RPnCurve) geometry.geomFactory().geomSource();
