@@ -1004,7 +1004,7 @@ bye
 #
 function deploy_version() {
 	cd $RPNDIR
-	check_git_status
+#	check_git_status
 	check_software sshpass
 	check_maintainer
 	if [ $? -eq 1 ]; then 
@@ -1176,7 +1176,7 @@ function run() {
 
 #######################################################################
 #
-# Main program - Execute scritp
+# Main program - Execute script
 #
 
 rpn_banner
