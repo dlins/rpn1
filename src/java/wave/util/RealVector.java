@@ -80,15 +80,16 @@ public class RealVector extends GVector {
 	
           try {		
 		
-		Number element = NumberFormat.getInstance(usLocale).parse(components[j]);
+		//Number element = NumberFormat.getInstance(usLocale).parse(components[j]);
 		
 		//Number element = parseFormatter.parse(components[j],new ParsePosition(0));
-            	doubleList[j] = element.doubleValue();
+            	//doubleList[j] = element.doubleValue();
+                doubleList[j] = new Double(components[j]);
 
 
           }
-
-          catch (java.text.ParseException ex) {
+          catch(NumberFormatException ex) {
+          //catch (java.text.ParseException ex) {
                	System.out.println("Error parsing the Double string" + "\n" + ex);
           }
 
