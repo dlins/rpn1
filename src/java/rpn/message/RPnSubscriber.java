@@ -175,7 +175,7 @@ public class RPnSubscriber implements MessageListener,RPnMessageListener {
 
             try {
 
-                ((RPnGlassPane) RPnUIFrame.getPhaseSpaceFrame(RPnNetworkStatus.instance().ACTIVATED_FRAME_TITLE).getGlassPane()).updatePath(it);
+                ((RPnGlassPane) RPnUIFrame.getFrame(RPnNetworkStatus.instance().ACTIVATED_FRAME_TITLE).getGlassPane()).updatePath(it);
 
             } catch (Exception e) {
 

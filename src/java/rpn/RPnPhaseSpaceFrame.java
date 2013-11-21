@@ -105,7 +105,7 @@ public class RPnPhaseSpaceFrame extends JFrame {
                 if (RPnNetworkStatus.instance().isOnline() && RPnNetworkStatus.instance().isMaster()) {
                   StringBuilder buffer = new StringBuilder();
 
-                    buffer.append("<COMMAND name=\"TOGGLE_NOTEBOARD_CLEAR\">");
+                    buffer.append("<COMMAND name=\"NOTEBOARD_CLEAR\">");
                     buffer.append("</COMMAND>");
 
                     RPnNetworkStatus.instance().sendCommand(buffer.toString());

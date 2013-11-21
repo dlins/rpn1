@@ -253,7 +253,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     //Help | About action performed
     public void jMenuHelpAbout_actionPerformed(ActionEvent e) {
 
-        RPnAboutDialog dialog = new RPnAboutDialog(this,"About RPn",true);
+        RPnAboutDialog dialog = new RPnAboutDialog(this,"About RPn...",true);
                 
         dialog.setVisible(true);
 
@@ -262,7 +262,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
     public void jMenuHelpUpdate_actionPerformed(ActionEvent e) {
 
-        JOptionPane.showMessageDialog(this, "Feature not implemented...","RPn Update", JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(this, "Feature not implemented...","RPn Update...", JOptionPane.ERROR_MESSAGE);
 
     }
 
@@ -1203,34 +1203,48 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         return frames_;
     }
 
-    public static RPnPhaseSpaceFrame getPhaseSpaceFrame(String frameTitle) throws Exception {
+    public static JFrame[] getAllFrames() {
 
-        RPnPhaseSpaceFrame[] allFrames = null;
-        if (riemannFrames_ != null)
-            allFrames = new RPnPhaseSpaceFrame[frames_.length + auxFrames_.length + riemannFrames_.length];
-        else
-            allFrames = new RPnPhaseSpaceFrame[frames_.length + auxFrames_.length];
+        JFrame[] frames = RPnUIFrame.getPhaseSpaceFrames();
+        JFrame[] aux_frames = RPnUIFrame.getAuxFrames();
+        JFrame[] riemann_frames = RPnUIFrame.getRiemannFrames();
 
+        JFrame[] allFrames = null;
+
+        if (riemann_frames != null) {
+            allFrames = new RPnPhaseSpaceFrame[frames.length + aux_frames.length + riemann_frames.length];
+        } else {
+            allFrames = new RPnPhaseSpaceFrame[frames.length + aux_frames.length];
+        }
 
         // FILL UP the allFrames strucutre
         int count = 0;
-        for (int i = 0; i < frames_.length; i++) {
-            allFrames[count++] = frames_[i];
+        for (int i = 0; i < frames.length; i++) {
+            allFrames[count++] = frames[i];
         }
-        for (int i = 0; i < auxFrames_.length; i++) {
-            allFrames[count++] = auxFrames_[i];
+        for (int i = 0; i < aux_frames.length; i++) {
+            allFrames[count++] = aux_frames[i];
         }
-        if (riemannFrames_ != null) {
-            for (int i = 0; i < riemannFrames_.length; i++) {
-                allFrames[count++] = riemannFrames_[i];
+        if (riemann_frames != null) {
+            for (int i = 0; i < riemann_frames.length; i++) {
+                allFrames[count++] = riemann_frames[i];
             }
         }
+
+        return allFrames;
+    }
+
+    public static JFrame getFrame(String frameTitle) throws IllegalArgumentException {
+
+        JFrame[] allFrames = getAllFrames();
+
         for (int i = 0; i < allFrames.length; i++)
 
             if (allFrames[i].getTitle().compareTo(frameTitle) == 0)
+
                 return allFrames[i];
 
-        throw new Exception("Frame Title not found...");
+        throw new IllegalArgumentException("No Frame with the specified title...");
 
     }
 
@@ -1248,6 +1262,60 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
             RPnPhaseSpaceFrame frame = RPnUIFrame.getPhaseSpaceFrames()[i];
             frame.getSlider().setEnabled(true);
         }
+    }
+
+    public static boolean toggleNoteboardMode(String frameTitle) {
+
+        boolean padmodeOff = false;
+
+        JFrame[] allFrames = RPnUIFrame.getAllFrames();
+
+        for (int i = 0; i < allFrames.length; i++) {
+            if (allFrames[i].getTitle().compareTo(frameTitle) == 0) {
+
+                padmodeOff = allFrames[i].getGlassPane().isVisible();
+                allFrames[i].getGlassPane().setVisible(!allFrames[i].getGlassPane().isVisible());
+
+            } else {
+
+
+                allFrames[i].getGlassPane().setVisible(false);
+            }
+        }
+
+
+        return padmodeOff;
+    }
+
+    public static void noteboardClear() {
+
+        JFrame[] allFrames = RPnUIFrame.getAllFrames();
+        for (int i = 0; i < allFrames.length; i++) {
+            if (allFrames[i].getTitle().compareTo(RPnNetworkStatus.instance().ACTIVATED_FRAME_TITLE) == 0) {
+                ((RPnGlassPane) allFrames[i].getGlassPane()).clear();
+                allFrames[i].repaint();
+            }
+        }
+    }
+
+    public static void toggleFocusGained() {
+
+        JFrame[] allFrames = RPnUIFrame.getAllFrames();
+
+
+        for (int i = 0; i < allFrames.length; i++) {
+            if (allFrames[i].getTitle().compareTo(RPnNetworkStatus.instance().ACTIVATED_FRAME_TITLE) == 0) {
+
+                allFrames[i].setAlwaysOnTop(true);
+
+                // there was a refresh issue going ... NOT A FIX !
+                allFrames[i].repaint();
+
+            } else {
+                allFrames[i].setAlwaysOnTop(false);
+            }
+        }
+
     }
 
     public void enableNoteboard() {
@@ -1383,4 +1451,5 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
         }
     }
+
 }

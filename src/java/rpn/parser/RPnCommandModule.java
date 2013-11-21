@@ -131,49 +131,10 @@ public class RPnCommandModule {
                     RPnNetworkStatus.instance().ACTIVATED_FRAME_TITLE = att.getValue("value");
 
 
-                    JFrame[] frames = RPnUIFrame.getPhaseSpaceFrames();
-                    JFrame[] aux_frames = RPnUIFrame.getAuxFrames();
-                    JFrame[] riemann_frames = RPnUIFrame.getRiemannFrames();
 
-                    JFrame[] allFrames = null;
-                    if (riemann_frames != null) {
-                        allFrames = new JFrame[frames.length + aux_frames.length + riemann_frames.length];
-                    } else {
-                        allFrames = new JFrame[frames.length + aux_frames.length];
-                    }
-
-                    // FILL UP the allFrames strucutre
-                    int count = 0;
-                    for (int i = 0; i < frames.length; i++) {
-                        allFrames[count++] = frames[i];
-                    }
-                    for (int i = 0; i < aux_frames.length; i++) {
-                        allFrames[count++] = aux_frames[i];
-                    }
-                    if (riemann_frames != null) {
-                        for (int i = 0; i < riemann_frames.length; i++) {
-                            allFrames[count++] = riemann_frames[i];
-                        }
-                    }
-                   
                     if (currentCommand_.equalsIgnoreCase("TOGGLE_NOTEBOARD_MODE")) {
 
-                        boolean padmodeOff = false;
-
-                        for (int i = 0; i < allFrames.length; i++) {
-                            
-                            if (allFrames[i].getTitle().compareTo(RPnNetworkStatus.instance().ACTIVATED_FRAME_TITLE) == 0) {
-
-
-                                padmodeOff = allFrames[i].getGlassPane().isVisible();
-                                allFrames[i].getGlassPane().setVisible(!allFrames[i].getGlassPane().isVisible());
-
-                            } else {
-
-
-                                allFrames[i].getGlassPane().setVisible(false);
-                            }                           
-                        }
+                        boolean padmodeOff = RPnUIFrame.toggleNoteboardMode(RPnNetworkStatus.ACTIVATED_FRAME_TITLE);
 
                         if (padmodeOff) {
 
@@ -182,25 +143,14 @@ public class RPnCommandModule {
                         } else RPnHttpPoller.POLLING_MODE = RPnHttpPoller.OBJ_POLLER;
 
 
-                    } else if (currentCommand_.equalsIgnoreCase("TOGGLE_NOTEBOARD_CLEAR")) {
+                    } else if (currentCommand_.equalsIgnoreCase("NOTEBOARD_CLEAR")) {
 
-                        for (int i = 0; i < allFrames.length; i++) {
-                            if (allFrames[i].getTitle().compareTo(RPnNetworkStatus.instance().ACTIVATED_FRAME_TITLE) == 0)
-                                ((RPnGlassPane) allFrames[i].getGlassPane()).clear();
-                        }
-
+                        RPnUIFrame.noteboardClear();
+                        
                     } else if (currentCommand_.equalsIgnoreCase("FOCUS_GAINED")) {
 
-                        for (int i = 0; i < allFrames.length; i++) {
-                            if (allFrames[i].getTitle().compareTo(RPnNetworkStatus.instance().ACTIVATED_FRAME_TITLE) == 0) {
 
-                                allFrames[i].setAlwaysOnTop(true);
-
-                                // there was a refresh issue going ... NOT A FIX !
-                                allFrames[i].repaint();
-
-                            } else allFrames[i].setAlwaysOnTop(false);
-                        }
+                        RPnUIFrame.toggleFocusGained();
 
 
                     }
