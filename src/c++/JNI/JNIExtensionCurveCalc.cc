@@ -31,7 +31,7 @@ using std::vector;
  */
 
 
-JNIEXPORT jobject JNICALL Java_rpnumerics_ExtensionCurveCalc_nativeCalc(JNIEnv * env, jobject obj, jobject segmentList, jint family, jint characteristicWhere, jboolean singular) {
+JNIEXPORT jobject JNICALL Java_rpnumerics_ExtensionCurveCalc_nativeCalc(JNIEnv * env, jobject obj, jobject segmentList, jobject areaPoints,jint family, jint characteristicWhere, jboolean singular,jboolean inSideArea) {
 
 
     jclass realVectorClass = env->FindClass(REALVECTOR_LOCATION);

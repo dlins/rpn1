@@ -5,6 +5,8 @@
  */
 package rpn.component.util;
 
+import java.awt.Color;
+import java.awt.Graphics2D;
 import java.awt.Polygon;
 import java.awt.Shape;
 import java.awt.geom.Path2D;
@@ -37,7 +39,7 @@ public class AreaSelected extends GraphicsUtil {
 
                 Coords2D dcSelectionPoint = new Coords2D(0, 0);
                 CoordsArray wcSelectionPoint = new CoordsArray(segmentArray);
-                
+
                 getViewingTransform().viewPlaneTransform(wcSelectionPoint, dcSelectionPoint);
 
                 selectedPolygon.addPoint((int) dcSelectionPoint.getX(), (int) dcSelectionPoint.getY());   // --- original
@@ -54,6 +56,17 @@ public class AreaSelected extends GraphicsUtil {
     public Path2D.Double getWCObject() {
         Path2D.Double wcPath = (Path2D.Double) wcObjects_.get(0);
         return wcPath;
+
+    }
+
+    @Override
+    protected void drawSelected(Graphics2D g) {
+
+        Color previous = getViewingAttr().getColor();
+
+        Color fillColor = new Color(previous.getRed(), previous.getGreen(), previous.getBlue(), 60);
+        g.setColor(fillColor);
+        g.fill(getShape());
 
     }
 }

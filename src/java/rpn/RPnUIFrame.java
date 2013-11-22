@@ -15,7 +15,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 import java.awt.event.*;
-import java.awt.geom.AffineTransform;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeEvent;
 import java.io.File;
@@ -29,9 +28,6 @@ import rpn.command.ClassifierCommand;
 import rpn.command.VelocityCommand;
 import rpn.controller.ui.*;
 import rpn.controller.ui.UI_ACTION_SELECTED;
-import rpn.glasspane.RPnGlassPane;
-import rpn.message.RPnNetworkStatus;
-import salvo.jesus.graph.java.awt.geom.SerializablePathIterator;
 import wave.multid.Space;
 import wave.util.RealVector;
 import wave.util.RectBoundary;
@@ -186,6 +182,8 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 toolBar_.add(AdjustedSelectionPlotCommand.instance());
                 toolBar_.add(ClassifierCommand.instance().getContainer());      //** Leandro
                 toolBar_.add(VelocityCommand.instance().getContainer());        //** Leandro
+                
+                toolBar_.add(ChooseAreaCommand.instance().getContainer()); 
 
 
                 toolBar_.add(AreaSelectionToExtensionCurveCommand.instance().getContainer());

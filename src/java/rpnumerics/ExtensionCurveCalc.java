@@ -21,21 +21,25 @@ public class ExtensionCurveCalc extends ContourCurveCalc {
     private int increase_;
     int domainFamily_;
     int characteristicDomain_;
-    List<RealSegment> list_;
+    private    List<RealSegment> list_;
     boolean singular_;
+    private List<RealVector> areaSelected_; 
 
     //
     // Constructors/Initializers
     //
+    private  boolean inSideArea_;
    
     
 
-    public ExtensionCurveCalc(ContourParams contourParams, List<RealSegment> list, int extensionFamily, int characteristicDomain, boolean singular) {
+    public ExtensionCurveCalc(ContourParams contourParams, List<RealSegment> list, List<RealVector> areaSelected,int extensionFamily, int characteristicDomain, boolean singular,boolean inSideArea) {
         super(contourParams);
         list_ = list;
         domainFamily_=extensionFamily;
         singular_ = singular;
         characteristicDomain_ = characteristicDomain;
+        areaSelected_=areaSelected;
+        inSideArea_=inSideArea;
         
     }
 
@@ -55,7 +59,7 @@ public class ExtensionCurveCalc extends ContourCurveCalc {
         RpSolution result = null;
 
 
-        result = (BifurcationCurve) nativeCalc(list_, domainFamily_, characteristicDomain_, singular_);
+        result = (BifurcationCurve) nativeCalc(list_, areaSelected_,domainFamily_, characteristicDomain_, singular_,inSideArea_);
         if (result == null) {
             throw new RpException("Error in native layer");
         }
@@ -80,7 +84,7 @@ public class ExtensionCurveCalc extends ContourCurveCalc {
 
 
 
-    private native RpSolution nativeCalc(List<RealSegment> list, int family, int characteristicDomain, boolean singular) throws RpException;
+    private native RpSolution nativeCalc(List<RealSegment> list, List<RealVector> areaSelected,int family, int characteristicDomain, boolean singular,boolean inSideArea) throws RpException;
 
     public RpSolution recalc(Area area) throws RpException {
         return null;

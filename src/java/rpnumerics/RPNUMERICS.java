@@ -395,13 +395,13 @@ public class RPNUMERICS {
         return new CoincidenceExtensionCurveCalc(params, leftFamily, rightFamily, characteristicDomain);
     }
 
-    public static ExtensionCurveCalc createExtensionCurveCalc(List<RealSegment> segments) {
+    public static ExtensionCurveCalc createExtensionCurveCalc(List<RealSegment> segments,List<RealVector> areaSelected) {
 
         int[] resolution = RPnDataModule.processResolution(getParamValue("extensioncurve", "resolution"));
         int family = new Integer(getParamValue("extensioncurve", "family"));
         int characteristic = new Integer(getParamValue("extensioncurve", "characteristic"));
 
-        return new ExtensionCurveCalc(new ContourParams(resolution), segments, family, characteristic, false);
+        return new ExtensionCurveCalc(new ContourParams(resolution), segments, areaSelected,family, characteristic, false,false);
 
     }
 

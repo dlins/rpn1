@@ -1,7 +1,10 @@
 
 package rpn.component.util;
 
+import java.awt.BasicStroke;
+import java.awt.Graphics2D;
 import java.awt.Shape;
+import java.awt.Stroke;
 import java.awt.geom.Line2D;
 import java.awt.geom.Path2D.Double;
 import java.util.List;
@@ -65,6 +68,12 @@ public class LinePlotted extends GraphicsUtil {
     @Override
     public Double getWCObject() {
         return null;
+    }
+
+    @Override
+    protected void drawSelected(Graphics2D g) {
+        g.setStroke(new BasicStroke(10f));
+        
     }
 
 }

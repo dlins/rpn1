@@ -9,6 +9,7 @@ import rpn.command.AreaSelectionCommand;
 import rpn.command.ChangeFluxParamsCommand;
 import rpn.command.ChangeDirectionCommand;
 import rpn.command.ChangeOrbitLevelCommand;
+import rpn.command.ChooseAreaCommand;
 import rpn.command.CompositePlotCommand;
 import rpn.command.CurveRefineCommand;
 import rpn.command.EllipticBoundaryCommand;
@@ -49,6 +50,7 @@ public class RAREFACTION_CONFIG extends UI_ACTION_SELECTED {
         RiemannProfileCommand.instance().setEnabled(false);
         WaveCurvePlotCommand.instance().setEnabled(true);
         CurveRefineCommand.instance().setEnabled(false);
+        ChooseAreaCommand.instance().setEnabled(true);
 
        
 
