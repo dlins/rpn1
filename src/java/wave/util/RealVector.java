@@ -43,8 +43,8 @@ public class RealVector extends GVector {
         for (int i = 0; i < this.getSize(); i++) {
 
             //buffer.append(String.format("%3.6E",getElement(i)));
-            buffer.append(String.format("%.4f",getElement(i)));
-            //buffer.append(getElement(i));
+            //buffer.append(String.format("%.4f",getElement(i)));
+            buffer.append(getElement(i));
             buffer.append(" ");
 
         }
@@ -80,16 +80,18 @@ public class RealVector extends GVector {
 	
           try {		
 		
-		//Number element = NumberFormat.getInstance(usLocale).parse(components[j]);
+		//System.out.println("the coords read were : " + components[j]);
+		Number element = NumberFormat.getInstance(usLocale).parse(components[j]);
 		
 		//Number element = parseFormatter.parse(components[j],new ParsePosition(0));
-            	//doubleList[j] = element.doubleValue();
-                doubleList[j] = new Double(components[j]);
+            	doubleList[j] = element.doubleValue();
+                //doubleList[j] = new Double(components[j]);
 
+		//System.out.println("the coords doubled were : " + doubleList[j]);
 
           }
-          catch(NumberFormatException ex) {
-          //catch (java.text.ParseException ex) {
+          //catch(NumberFormatException ex) {
+          catch (java.text.ParseException ex) {
                	System.out.println("Error parsing the Double string" + "\n" + ex);
           }
 
