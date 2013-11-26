@@ -50,7 +50,7 @@ public  class RPnPhaseSpaceAbstraction extends AbstractScene {
         super(id, domain);
         changeState(state);
         selectedGeom_ = null;
-        userInputTable_=new UserInputTable(domain.getDim());
+        userInputTable_= new UserInputTable(domain.getDim());
         curvesListFrames_ = new ArrayList<RPnCurvesList>();
     }
 

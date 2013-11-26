@@ -132,35 +132,7 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
         setBackground(DEFAULT_BOUNDARY_COLOR);
         setPreferredSize(new java.awt.Dimension(myW, myH));
         graphicsUtilList_ = new ArrayList();
-        this.setName("");
-
-       /* this.addMouseListener(new MouseListener() {
-
-            public void mousePressed(MouseEvent ev) {
-
-
-                if ((RPnNetworkStatus.instance().isOnline() && RPnNetworkStatus.instance().isMaster())
-                        || (!RPnNetworkStatus.instance().isOnline())) {
-                    RPnNetworkStatus.instance().NOTEBOARD_PANE_INDEX = ((RPnPhaseSpaceFrame)ev.getSource().getParent()).getFrameIndex();
-                    RPnNetworkStatus.instance().NOTEBOARD_PANE_FRAME_CHAR = ((RPnPhaseSpaceFrame)ev.getSource().getParent()).getFrameChar();
-
-
-
-                    if (RPnNetworkStatus.instance().isOnline() && RPnNetworkStatus.instance().isMaster()) {
-
-                        StringBuilder buffer = new StringBuilder();
-
-                        buffer.append("<COMMAND name=\"TOGGLE_NOTEBOARD_FRAME\">");
-                        buffer.append("<COMMANDPARAM name=\"pane_index\" value=\"" + RPnNetworkStatus.instance().NOTEBOARD_PANE_INDEX + "\"/>");
-                        buffer.append("<COMMANDPARAM name=\"pane_frame_char\" value=\"" + RPnNetworkStatus.instance().NOTEBOARD_PANE_FRAME_CHAR + "\"/>");
-                        buffer.append("</COMMAND>");
-
-                        RPnNetworkStatus.instance().sendCommand(buffer.toString());
-                    }
-                }
-
-            }*/
-
+        this.setName("");      
 
     }
 
@@ -208,7 +180,8 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
             
             UI_ACTION_SELECTED  actionSelected = (UI_ACTION_SELECTED)uiState;
             
-            System.out.println(actionSelected.getAction().toString());
+            // use the Logger instead...
+            //System.out.println(actionSelected.getAction().toString());
             
             
         }

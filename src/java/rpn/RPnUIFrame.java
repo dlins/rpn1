@@ -477,7 +477,6 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 wave.multid.view.Scene scene = RPnDataModule.PHASESPACE.createScene(viewingTransf,
                         new wave.multid.view.ViewingAttr(Color.black));
 
-
                 frames_[i] = new RPnPhaseSpaceFrame(scene, commandMenu_);
                 frames_[i].setTitle(((RPnProjDescriptor) RPnVisualizationModule.DESCRIPTORS.get(i)).label());
 
@@ -1292,6 +1291,11 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         JFrame[] allFrames = RPnUIFrame.getAllFrames();
         for (int i = 0; i < allFrames.length; i++) {
             if (allFrames[i].getTitle().compareTo(RPnNetworkStatus.instance().ACTIVATED_FRAME_TITLE) == 0) {
+
+
+                UIController.instance().setActivePhaseSpace(
+                        ((RPnPhaseSpaceAbstraction) ((RPnPhaseSpaceFrame) allFrames[i]).phaseSpacePanel().scene().getAbstractGeom()));
+
                 ((RPnGlassPane) allFrames[i].getGlassPane()).clear();
                 allFrames[i].repaint();
             }
@@ -1306,13 +1310,22 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         for (int i = 0; i < allFrames.length; i++) {
             if (allFrames[i].getTitle().compareTo(RPnNetworkStatus.instance().ACTIVATED_FRAME_TITLE) == 0) {
 
+
+                if (allFrames[i] instanceof RPnPhaseSpaceFrame) {
+                    UIController.instance().setActivePhaseSpace(
+                            ((RPnPhaseSpaceAbstraction) ((RPnPhaseSpaceFrame) allFrames[i]).phaseSpacePanel().scene().getAbstractGeom()));
+                }
+
                 allFrames[i].setAlwaysOnTop(true);
+
+
 
                 // there was a refresh issue going ... NOT A FIX !
                 allFrames[i].repaint();
 
             } else {
                 allFrames[i].setAlwaysOnTop(false);
+                
             }
         }
 

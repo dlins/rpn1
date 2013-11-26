@@ -7,6 +7,8 @@ package rpn.message;
 
 import java.net.*;
 import java.io.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import rpn.RPnDesktopPlotter;
 
 /**
@@ -550,13 +552,15 @@ public class RPnNetworkStatus {
         
         commandPublisher_.publish(trimURL(commandDesc));
         
-        System.out.println(commandDesc);
+        Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.INFO, "Command successfully published was : " + commandDesc);
     }
 
     public void sendCommand(Object obj) {
 
 
-        commandPublisher_.publish(obj);       
+        commandPublisher_.publish(obj);
+
+        Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.INFO, "Object successfully published ! ");
     }
 
     public static RPnNetworkStatus instance() {

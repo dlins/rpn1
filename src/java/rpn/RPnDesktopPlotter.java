@@ -12,6 +12,7 @@ import org.xml.sax.SAXException;
 import rpn.message.*;
 import rpnumerics.RpException;
 import java.io.*;
+import java.util.logging.*;
 import javax.swing.JOptionPane;
 import org.iso_relax.verifier.Verifier;
 import org.iso_relax.verifier.VerifierFactory;
@@ -89,6 +90,8 @@ public class RPnDesktopPlotter implements RPnMenuCommand {
     
     public static void main(final String[] args) {
 
+
+        Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).setLevel(Level.INFO);
 
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             public void run() {

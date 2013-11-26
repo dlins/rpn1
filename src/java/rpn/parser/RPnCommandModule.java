@@ -26,6 +26,8 @@ import org.xml.sax.XMLReader;
 
 import java.io.*;
 import java.util.Iterator;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
 import rpn.RPnUIFrame;
 
@@ -142,16 +144,18 @@ public class RPnCommandModule {
 
                         } else RPnHttpPoller.POLLING_MODE = RPnHttpPoller.OBJ_POLLER;
 
+                        Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.INFO, "Noteboard mode toggled successfuly...");
 
                     } else if (currentCommand_.equalsIgnoreCase("NOTEBOARD_CLEAR")) {
 
                         RPnUIFrame.noteboardClear();
+                        Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.INFO, "Noteboard cleared successfuly...");
                         
                     } else if (currentCommand_.equalsIgnoreCase("FOCUS_GAINED")) {
 
 
                         RPnUIFrame.toggleFocusGained();
-
+                        Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.INFO, "Window Focus changed successfuly...");
 
                     }
 
@@ -167,7 +171,7 @@ public class RPnCommandModule {
                 }
                 currentCommand_ = att.getValue("name");
 
-                //System.out.println("Current command :" + currentCommand_);
+                Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.INFO, "Current command is :" + currentCommand_);
 
                 UIController.instance().setActivePhaseSpace(RPnDataModule.getPhaseSpace(att.getValue("phasespace")));
 

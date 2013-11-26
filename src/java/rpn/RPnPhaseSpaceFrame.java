@@ -49,7 +49,7 @@ public class RPnPhaseSpaceFrame extends JFrame {
         //	enableEvents(AWTEvent.FOCUS_EVENT_MASK);
         commandMenu_ = command;
        
-        setGlassPane(new rpn.glasspane.RPnGlassPane());
+        setGlassPane(new rpn.glasspane.RPnGlassPane(this));
         getGlassPane().setVisible(false);
 
         try {
