@@ -270,6 +270,7 @@ public class RPnNetworkStatus {
 
             log("All Connections closed for SLAVE session ...");
             RPnDesktopPlotter.getUIFrame().enableNoteboard();
+            RPnDesktopPlotter.getUIFrame().enableAllCommands();            
 
         }
 
@@ -517,11 +518,7 @@ public class RPnNetworkStatus {
 
             // TODO > disable ALL interface
             RPnDesktopPlotter.getUIFrame().disableNoteboard();
-
-
-
-
-
+            RPnDesktopPlotter.getUIFrame().disableAllCommands();            
         }
 
     }

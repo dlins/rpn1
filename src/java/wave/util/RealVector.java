@@ -80,7 +80,6 @@ public class RealVector extends GVector {
 	
           try {		
 		
-		//System.out.println("the coords read were : " + components[j]);
 		Number element = NumberFormat.getInstance(usLocale).parse(components[j]);
 		
 		//Number element = parseFormatter.parse(components[j],new ParsePosition(0));

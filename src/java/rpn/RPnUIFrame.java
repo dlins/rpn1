@@ -5,6 +5,8 @@
  */
 package rpn;
 
+import java.util.logging.*;
+import java.io.IOException;
 import rpn.command.*;
 import rpn.parser.*;
 import rpnumerics.RPNUMERICS;
@@ -18,8 +20,10 @@ import java.awt.event.*;
 import java.awt.geom.AffineTransform;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeEvent;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileWriter;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
@@ -185,16 +189,12 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 toolBar_.add(AdjustedSelectionPlotCommand.instance());
                 toolBar_.add(ClassifierCommand.instance().getContainer());      //** Leandro
                 toolBar_.add(VelocityCommand.instance().getContainer());        //** Leandro
-
-
+                
                 toolBar_.add(AreaSelectionToExtensionCurveCommand.instance().getContainer());
-
                 toolBar_.add(RarefactionExtensionCurvePlotCommand.instance().getContainer());
                 toolBar_.add(RiemannProfileCommand.instance().getContainer());
 
-
-                toolBar_.revalidate();
-
+                toolBar_.revalidate();                                
             }
 
             if (evt.getNewValue() instanceof BIFURCATION_CONFIG) {
@@ -260,10 +260,25 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     }
 
 
-    public void jMenuHelpUpdate_actionPerformed(ActionEvent e) {
+    public void jMenuHelpUpdate_actionPerformed(ActionEvent e) throws IOException, InterruptedException {
 
-        JOptionPane.showMessageDialog(this, "Feature not implemented...","RPn Update...", JOptionPane.ERROR_MESSAGE);
+        
+        JOptionPane.showMessageDialog(this, "RPn should be restarted when finished...", "RPn Update...", JOptionPane.INFORMATION_MESSAGE);
 
+        Process pr = Runtime.getRuntime().exec("rpn -u");
+
+        BufferedReader in = new BufferedReader(new InputStreamReader(pr.getInputStream()));
+        String line;
+        while ((line = in.readLine()) != null) {
+            System.out.println(line);
+        }
+        pr.waitFor();
+        System.out.println("ok!");
+
+        in.close();
+        System.exit(0);
+
+        
     }
 
 
@@ -364,6 +379,27 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
     }
 
+    
+    public void enableAllCommands() {
+
+        Component[] allCmds = toolBar_.getComponents();
+
+        for (int i = 0; i < allCmds.length; i++) {
+            allCmds[i].setEnabled(true);
+        }
+
+    }
+    
+    
+    public void disableAllCommands() {
+        
+        Component[] allCmds = toolBar_.getComponents();
+                
+                for (int i = 0;i < allCmds.length;i++)
+                    allCmds[i].setEnabled(false);
+    
+    }
+    
     public void updateCharacteristicsFrames(int charPhaseSpaceIndex, RealVector profileMin, RealVector profileMax) {
 
         RectBoundary boundary = new RectBoundary(profileMin, profileMax);
@@ -905,7 +941,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
 
         helpMenu.setText("Help");
-        jMenuHelpAbout.setText("About");
+        jMenuHelpAbout.setText("About...");
         jMenuHelpAbout.addActionListener(
                 new ActionListener() {
 
@@ -915,12 +951,28 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 });
 
 
-        jMenuHelpUpdate.setText("Update");
+        jMenuHelpUpdate.setText("Upgrade...");
         jMenuHelpUpdate.addActionListener(
                 new ActionListener() {
 
                     public void actionPerformed(ActionEvent e) {
-                        jMenuHelpUpdate_actionPerformed(e);
+                        
+                        try {
+                            
+                            jMenuHelpUpdate_actionPerformed(e);
+    
+                            
+                            
+                            
+                        } catch (IOException ex1) {
+                           
+                            Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.SEVERE, "Error in updating RPn...");
+                            
+                        } catch (InterruptedException ex2) {
+
+                            Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.SEVERE, "Error in updating RPn...");
+                        }
+                        
                     }
                 });
 
