@@ -23,7 +23,7 @@ public class RPnFileWriter extends FileWriter {
 
 
             write(RPnConfigReader.XML_HEADER);
-            write("<RPNSESSION>\n");
+            write("<RPNSESSION id=\"" + RPnCommandModule.SESSION_ID_ + "\">\n");
             write(" <PHASESPACE name=\"Phase Space\">\n");
             write("  <RPNCONFIGURATION>\n");
 

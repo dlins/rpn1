@@ -54,7 +54,9 @@ public class PluginInfoParser {
                 XMLReader xmlReader = XMLReaderFactory.createXMLReader();
                 xmlReader.setContentHandler(new PluginInfoHandler());
                 InputStream inputStream = new FileInputStream(filesArray[i]);
-                xmlReader.parse(new InputSource(inputStream));
+
+                // RPNHOME is not being found.
+                //xmlReader.parse(new InputSource(inputStream));
             }
 
         } catch (SAXException ex) {

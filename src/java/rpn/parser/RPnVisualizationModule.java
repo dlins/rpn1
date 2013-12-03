@@ -120,12 +120,11 @@ public class RPnVisualizationModule {
             DESCRIPTORS = new ArrayList<RPnProjDescriptor>();
             AUXDESCRIPTORS = new ArrayList<RPnProjDescriptor>();
             parser.setContentHandler(new RPnVisualizationParser());
-            System.out.println("Visualization Module");
+            System.out.println("Visualization Module parsing started...");
 
-            System.out.println("Will parse !");
             parser.parse(new InputSource(configFileStream));
 
-            System.out.println("parsed !");
+            System.out.println("Visualization Module parsing finished sucessfully !");
 
 
         } catch (Exception saxex) {
@@ -215,7 +214,7 @@ public class RPnVisualizationModule {
         RPnProjDescriptor auxDescriptorLeft = new RPnProjDescriptor(space, "Left " + projIndices[0] + " " + projIndices[1], w, h, projIndices, isIso2Equi);
         AUXDESCRIPTORS.add(auxDescriptorLeft);
         
-        System.out.println("auxDescriptorLeft: " + auxDescriptorLeft.label());
+        //System.out.println("auxDescriptorLeft: " + auxDescriptorLeft.label());
 //
         int[] auxProj = new int[2];
         auxProj[0] = projIndices[0];// + space.getDim() ;
@@ -224,7 +223,7 @@ public class RPnVisualizationModule {
         RPnProjDescriptor auxDescriptorRight = new RPnProjDescriptor(space, "Right " + auxProj[0] + " " + auxProj[1], w, h, auxProj, isIso2Equi);
         AUXDESCRIPTORS.add(auxDescriptorRight);
         
-        System.out.println("auxDescriptorRight: "+auxDescriptorRight.label());
+        //System.out.println("auxDescriptorRight: "+auxDescriptorRight.label());
 
     }
 

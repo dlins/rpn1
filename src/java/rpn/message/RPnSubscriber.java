@@ -136,7 +136,7 @@ public class RPnSubscriber implements MessageListener,RPnMessageListener {
             if (message instanceof TextMessage) {
 
                 if (!isLocal_)
-                    System.out.println("Message recieved from rpn command topic..." + '\n');
+                    System.out.println("Message received from rpn command topic..." + '\n');
 
                 String text = ((TextMessage) message).getText();
                 
@@ -163,8 +163,12 @@ public class RPnSubscriber implements MessageListener,RPnMessageListener {
 
     public void parseMessageObject(Object obj) {
 
+
+        Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.INFO, "Object message received !");
+
         // TODO > NOTEBOARD NULL OBJECT
         if (obj instanceof String) {
+
             try {
                 // COMMAND MESSAGES PARSING
                 RPnCommandModule.init(XMLReaderFactory.createXMLReader(), new StringBufferInputStream((String) obj));
@@ -177,15 +181,17 @@ public class RPnSubscriber implements MessageListener,RPnMessageListener {
 
             SerializablePathIterator it = (SerializablePathIterator) obj;
 
-            if (RPnNetworkStatus.instance().NOTEBOARD_PANE_FRAME_CHAR == 'f') {
-                ((RPnGlassPane) RPnUIFrame.getPhaseSpaceFrames()[RPnNetworkStatus.instance().NOTEBOARD_PANE_INDEX].getGlassPane()).updatePath(it);
-            } else if (RPnNetworkStatus.instance().NOTEBOARD_PANE_FRAME_CHAR == 'a') {
-                ((RPnGlassPane) RPnUIFrame.getAuxFrames()[RPnNetworkStatus.instance().NOTEBOARD_PANE_INDEX].getGlassPane()).updatePath(it);
-            } else if (RPnNetworkStatus.instance().NOTEBOARD_PANE_FRAME_CHAR == 'r') {
-                ((RPnGlassPane) RPnUIFrame.getRiemannFrames()[RPnNetworkStatus.instance().NOTEBOARD_PANE_INDEX].getGlassPane()).updatePath(it);
+            try {
+               
+                ((RPnGlassPane) RPnUIFrame.getFrame(RPnNetworkStatus.instance().ACTIVATED_FRAME_TITLE).getGlassPane()).updatePath(it);
+
+            } catch (Exception e) {
+
+                e.printStackTrace();
+
             }
 
-
+            
             
         }
     }
@@ -198,7 +204,7 @@ public class RPnSubscriber implements MessageListener,RPnMessageListener {
             /*
              * checks if CONTROL MSG or COMMAND MSG
              */
-            System.out.println("Will now parse the message received... " + '\n');
+            Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.INFO, "Text message received !");
             
             // CONTROL MESSAGES PARSING
             if (text.startsWith(RPnNetworkStatus.SLAVE_ACK_LOG_MSG))
@@ -230,9 +236,9 @@ public class RPnSubscriber implements MessageListener,RPnMessageListener {
 
                     commandName = text.substring(14, text.indexOf("phasespace")) + '\0';
 
-                } else // TOGGLE NOTEBOARD MODE (USE DOM please...)
+                } else // TOGGLE NOTEBOARD MODE or CLEAR (USE DOM please...)
 
-                    commandName = text.substring(14, text.indexOf("/>")) + '\0';
+                    commandName = text.substring(14, text.indexOf(">")) + '\0';
 
                 logString = logString.concat(commandName);
 

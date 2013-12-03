@@ -5,6 +5,8 @@
  */
 package rpn;
 
+import java.util.logging.*;
+import java.io.IOException;
 import rpn.command.*;
 import rpn.parser.*;
 import rpnumerics.RPNUMERICS;
@@ -18,8 +20,10 @@ import java.awt.event.*;
 import java.awt.geom.AffineTransform;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeEvent;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileWriter;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
@@ -185,16 +189,12 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 toolBar_.add(AdjustedSelectionPlotCommand.instance());
                 toolBar_.add(ClassifierCommand.instance().getContainer());      //** Leandro
                 toolBar_.add(VelocityCommand.instance().getContainer());        //** Leandro
-
-
+                
                 toolBar_.add(AreaSelectionToExtensionCurveCommand.instance().getContainer());
-
                 toolBar_.add(RarefactionExtensionCurvePlotCommand.instance().getContainer());
                 toolBar_.add(RiemannProfileCommand.instance().getContainer());
 
-
-                toolBar_.revalidate();
-
+                toolBar_.revalidate();                                
             }
 
             if (evt.getNewValue() instanceof BIFURCATION_CONFIG) {
@@ -253,17 +253,35 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     //Help | About action performed
     public void jMenuHelpAbout_actionPerformed(ActionEvent e) {
 
-        RPnAboutDialog dialog = new RPnAboutDialog(this,"About RPn",true);
+        RPnAboutDialog dialog = new RPnAboutDialog(this,"About RPn...",true);
                 
         dialog.setVisible(true);
 
     }
 
 
-    public void jMenuHelpUpdate_actionPerformed(ActionEvent e) {
+    public void jMenuHelpUpdate_actionPerformed(ActionEvent e) throws IOException, InterruptedException {
 
-        JOptionPane.showMessageDialog(this, "Feature not implemented...","RPn Update", JOptionPane.ERROR_MESSAGE);
+        
+        JOptionPane.showMessageDialog(this, "RPn is being upgraded...", "RPn Upgrade...", JOptionPane.INFORMATION_MESSAGE);
 
+        Process pr = Runtime.getRuntime().exec("rpn -u");
+
+        BufferedReader in = new BufferedReader(new InputStreamReader(pr.getInputStream()));
+        String line;
+        while ((line = in.readLine()) != null) {
+            System.out.println(line);
+        }
+ 
+        pr.waitFor();
+               
+        in.close();
+        
+        JOptionPane.showMessageDialog(this, "RPn must be restarted for complete upgrade...", "RPn Upgrade...", JOptionPane.INFORMATION_MESSAGE);      
+        
+        System.exit(0);
+
+        
     }
 
 
@@ -364,6 +382,27 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
     }
 
+    
+    public void enableAllCommands() {
+
+        Component[] allCmds = toolBar_.getComponents();
+
+        for (int i = 0; i < allCmds.length; i++) {
+            allCmds[i].setEnabled(true);
+        }
+
+    }
+    
+    
+    public void disableAllCommands() {
+        
+        Component[] allCmds = toolBar_.getComponents();
+                
+                for (int i = 0;i < allCmds.length;i++)
+                    allCmds[i].setEnabled(false);
+    
+    }
+    
     public void updateCharacteristicsFrames(int charPhaseSpaceIndex, RealVector profileMin, RealVector profileMax) {
 
         RectBoundary boundary = new RectBoundary(profileMin, profileMax);
@@ -412,7 +451,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
             try {
                 wave.multid.view.Scene riemannScene = RPnDataModule.RIEMANNPHASESPACE.createScene(riemanTesteTransform, new wave.multid.view.ViewingAttr(Color.black));
-                riemannFrames_[i] = new RPnRiemannFrame(i,'r',riemannScene, commandMenu_);
+                riemannFrames_[i] = new RPnRiemannFrame(riemannScene, commandMenu_);
 
             } catch (DimMismatchEx ex) {
                 ex.printStackTrace();
@@ -444,14 +483,15 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 wave.multid.view.Scene rightScene = RPnDataModule.RIGHTPHASESPACE.createScene(auxViewingTransf,
                         new wave.multid.view.ViewingAttr(Color.black));
 
-                auxFrames_[2 * i] = new RPnPhaseSpaceFrame(2*i,'a',leftScene, commandMenu_);
-                auxFrames_[2 * i + 1] = new RPnPhaseSpaceFrame(2*i + 1,'a',rightScene, commandMenu_);
+                auxFrames_[2 * i] = new RPnPhaseSpaceFrame(leftScene, commandMenu_);
+                auxFrames_[2 * i + 1] = new RPnPhaseSpaceFrame(rightScene, commandMenu_);
 
                 auxFrames_[2 * i].setTitle(((RPnProjDescriptor) RPnVisualizationModule.AUXDESCRIPTORS.get(i)).label());
                 auxFrames_[2 * i + 1].setTitle(((RPnProjDescriptor) RPnVisualizationModule.AUXDESCRIPTORS.get(i + 1)).label());
 
-                System.out.println("auxFrames_[i].getTitle() ::::::: " + auxFrames_[i].getTitle());
-                System.out.println("auxFrames_[i+1].getTitle() ::::: " + auxFrames_[i + 1].getTitle());
+                auxFrames_[2 * i].setTitle("Aux " + auxFrames_[2 * i].getTitle());
+
+
 
                 UIController.instance().install(auxFrames_[2 * i].phaseSpacePanel());
                 UIController.instance().install(auxFrames_[2 * i + 1].phaseSpacePanel());
@@ -476,8 +516,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 wave.multid.view.Scene scene = RPnDataModule.PHASESPACE.createScene(viewingTransf,
                         new wave.multid.view.ViewingAttr(Color.black));
 
-
-                frames_[i] = new RPnPhaseSpaceFrame(i,'f',scene, commandMenu_);
+                frames_[i] = new RPnPhaseSpaceFrame(scene, commandMenu_);
                 frames_[i].setTitle(((RPnProjDescriptor) RPnVisualizationModule.DESCRIPTORS.get(i)).label());
 
                  /*
@@ -905,7 +944,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
 
         helpMenu.setText("Help");
-        jMenuHelpAbout.setText("About");
+        jMenuHelpAbout.setText("About...");
         jMenuHelpAbout.addActionListener(
                 new ActionListener() {
 
@@ -915,12 +954,28 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 });
 
 
-        jMenuHelpUpdate.setText("Update");
+        jMenuHelpUpdate.setText("Upgrade...");
         jMenuHelpUpdate.addActionListener(
                 new ActionListener() {
 
                     public void actionPerformed(ActionEvent e) {
-                        jMenuHelpUpdate_actionPerformed(e);
+                        
+                        try {
+                            
+                            jMenuHelpUpdate_actionPerformed(e);
+    
+                            
+                            
+                            
+                        } catch (IOException ex1) {
+                           
+                            Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.SEVERE, "Error in updating RPn...");
+                            
+                        } catch (InterruptedException ex2) {
+
+                            Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.SEVERE, "Error in updating RPn...");
+                        }
+                        
                     }
                 });
 
@@ -1202,6 +1257,51 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         return frames_;
     }
 
+    public static JFrame[] getAllFrames() {
+
+        JFrame[] frames = RPnUIFrame.getPhaseSpaceFrames();
+        JFrame[] aux_frames = RPnUIFrame.getAuxFrames();
+        JFrame[] riemann_frames = RPnUIFrame.getRiemannFrames();
+
+        JFrame[] allFrames = null;
+
+        if (riemann_frames != null) {
+            allFrames = new RPnPhaseSpaceFrame[frames.length + aux_frames.length + riemann_frames.length];
+        } else {
+            allFrames = new RPnPhaseSpaceFrame[frames.length + aux_frames.length];
+        }
+
+        // FILL UP the allFrames strucutre
+        int count = 0;
+        for (int i = 0; i < frames.length; i++) {
+            allFrames[count++] = frames[i];
+        }
+        for (int i = 0; i < aux_frames.length; i++) {
+            allFrames[count++] = aux_frames[i];
+        }
+        if (riemann_frames != null) {
+            for (int i = 0; i < riemann_frames.length; i++) {
+                allFrames[count++] = riemann_frames[i];
+            }
+        }
+
+        return allFrames;
+    }
+
+    public static JFrame getFrame(String frameTitle) throws IllegalArgumentException {
+
+        JFrame[] allFrames = getAllFrames();
+
+        for (int i = 0; i < allFrames.length; i++)
+
+            if (allFrames[i].getTitle().compareTo(frameTitle) == 0)
+
+                return allFrames[i];
+
+        throw new IllegalArgumentException("No Frame with the specified title...");
+
+    }
+
     public static void disableSliders() {
         for (int i = 0; i < RPnUIFrame.getPhaseSpaceFrames().length; i++) {
 
@@ -1216,6 +1316,74 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
             RPnPhaseSpaceFrame frame = RPnUIFrame.getPhaseSpaceFrames()[i];
             frame.getSlider().setEnabled(true);
         }
+    }
+
+    public static boolean toggleNoteboardMode(String frameTitle) {
+
+        boolean padmodeOff = false;
+
+        JFrame[] allFrames = RPnUIFrame.getAllFrames();
+
+        for (int i = 0; i < allFrames.length; i++) {
+            if (allFrames[i].getTitle().compareTo(frameTitle) == 0) {
+
+                padmodeOff = allFrames[i].getGlassPane().isVisible();
+                allFrames[i].getGlassPane().setVisible(!allFrames[i].getGlassPane().isVisible());
+
+            } else {
+
+
+                allFrames[i].getGlassPane().setVisible(false);
+            }
+        }
+
+
+        return padmodeOff;
+    }
+
+    public static void noteboardClear() {
+
+        JFrame[] allFrames = RPnUIFrame.getAllFrames();
+        for (int i = 0; i < allFrames.length; i++) {
+            if (allFrames[i].getTitle().compareTo(RPnNetworkStatus.instance().ACTIVATED_FRAME_TITLE) == 0) {
+
+
+                UIController.instance().setActivePhaseSpace(
+                        ((RPnPhaseSpaceAbstraction) ((RPnPhaseSpaceFrame) allFrames[i]).phaseSpacePanel().scene().getAbstractGeom()));
+
+                ((RPnGlassPane) allFrames[i].getGlassPane()).clear();
+                allFrames[i].repaint();
+            }
+        }
+    }
+
+    public static void toggleFocusGained() {
+
+        JFrame[] allFrames = RPnUIFrame.getAllFrames();
+
+
+        for (int i = 0; i < allFrames.length; i++) {
+            if (allFrames[i].getTitle().compareTo(RPnNetworkStatus.instance().ACTIVATED_FRAME_TITLE) == 0) {
+
+
+                if (allFrames[i] instanceof RPnPhaseSpaceFrame) {
+                    UIController.instance().setActivePhaseSpace(
+                            ((RPnPhaseSpaceAbstraction) ((RPnPhaseSpaceFrame) allFrames[i]).phaseSpacePanel().scene().getAbstractGeom()));
+                }
+
+                allFrames[i].setAlwaysOnTop(true);
+
+
+
+                // there was a refresh issue going ... NOT A FIX !
+                allFrames[i].repaint();
+
+            } else {
+                allFrames[i].setAlwaysOnTop(false);
+                
+            }
+        }
+
     }
 
     public void enableNoteboard() {
@@ -1351,4 +1519,5 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
         }
     }
+
 }

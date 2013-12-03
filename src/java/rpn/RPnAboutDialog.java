@@ -23,14 +23,14 @@ import java.io.FileInputStream;
  */
 public class RPnAboutDialog extends JDialog {
     
-    public static String VERSION_FILE="proj/dist.ver";
+    public static String VERSION_FILE="etc/version";
             
     protected JPanel buttonsPanel_ = new JPanel();
     protected JPanel versionPanel_ = new JPanel();
     protected JButton closeButton_ = new JButton();
     protected JTextArea infoText_ = new JTextArea();
 
-    private String prodVersion_ = "0.0.0";
+    private String prodVersion_ = "UNKNOWN";
     private FileInputStream versionFileInputStream_;
     private ByteArrayInputStream buff_;
 

@@ -9,6 +9,8 @@ package rpn.message;
 
 import java.io.*;
 import java.net.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -19,7 +21,7 @@ public class RPnHttpPoller implements RPnResetableListener {
 
     public static int  TEXT_POLLER = 0;
     public static int OBJ_POLLER = 1;
-    public static int POLLING_MODE = TEXT_POLLER;
+    public static volatile int POLLING_MODE = TEXT_POLLER;
 
 
     private RPnMessageListener messageParser_ = null;
@@ -130,14 +132,16 @@ public class RPnHttpPoller implements RPnResetableListener {
                         URLConnection rpnMediatorConn = rpnMediatorURL.openConnection();
 
                         
-                        System.out.println("Will now check command proxy objects...");
+                        //Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.INFO,"Will now check command proxy objects...");
 
                         try {
+
                             ObjectInputStream in = new ObjectInputStream(rpnMediatorConn.getInputStream());
                             messageParser_.parseMessageObject(in.readObject());
+
                         } catch (java.io.EOFException ex) {
 
-                            System.out.println("No objects to be returned yet...");
+                            //Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.INFO,"No objects to be returned yet...");
 
                         }
 
@@ -147,7 +151,7 @@ public class RPnHttpPoller implements RPnResetableListener {
                 }
 
                 // this is for not bringing JBoss down !!!
-                Thread.sleep((long)500);
+                //Thread.sleep((long)500);
             }
 
         } catch (Exception exc) {

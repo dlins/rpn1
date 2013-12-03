@@ -132,7 +132,8 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
         setBackground(DEFAULT_BOUNDARY_COLOR);
         setPreferredSize(new java.awt.Dimension(myW, myH));
         graphicsUtilList_ = new ArrayList();
-        this.setName("");
+        this.setName("");      
+
     }
 
     //
@@ -179,7 +180,8 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
             
             UI_ACTION_SELECTED  actionSelected = (UI_ACTION_SELECTED)uiState;
             
-            System.out.println(actionSelected.getAction().toString());
+            // use the Logger instead...
+            //System.out.println(actionSelected.getAction().toString());
             
             
         }
