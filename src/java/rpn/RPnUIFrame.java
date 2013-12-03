@@ -263,7 +263,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     public void jMenuHelpUpdate_actionPerformed(ActionEvent e) throws IOException, InterruptedException {
 
         
-        JOptionPane.showMessageDialog(this, "RPn should be restarted when finished...", "RPn Update...", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(this, "RPn is being upgraded...", "RPn Upgrade...", JOptionPane.INFORMATION_MESSAGE);
 
         Process pr = Runtime.getRuntime().exec("rpn -u");
 
@@ -272,10 +272,13 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         while ((line = in.readLine()) != null) {
             System.out.println(line);
         }
+ 
         pr.waitFor();
-        System.out.println("ok!");
-
+               
         in.close();
+        
+        JOptionPane.showMessageDialog(this, "RPn must be restarted for complete upgrade...", "RPn Upgrade...", JOptionPane.INFORMATION_MESSAGE);      
+        
         System.exit(0);
 
         
