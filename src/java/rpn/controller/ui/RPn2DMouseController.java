@@ -11,6 +11,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.geom.Path2D;
+import java.util.Observable;
 import rpn.RPnPhaseSpacePanel;
 import wave.multid.Coords2D;
 import wave.multid.CoordsArray;
@@ -18,7 +19,7 @@ import wave.multid.Space;
 import wave.multid.view.ViewingTransform;
 import rpnumerics.RPNUMERICS;
 
-public abstract class RPn2DMouseController implements  MouseMotionListener, MouseListener{
+public abstract class RPn2DMouseController extends Observable implements  MouseMotionListener, MouseListener{
 
 
     // ------ implementacao inicial

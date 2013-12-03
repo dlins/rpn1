@@ -9,10 +9,13 @@ import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.Stroke;
 import java.awt.geom.Path2D;
+import java.awt.geom.PathIterator;
+import java.util.ArrayList;
 import java.util.List;
 import rpn.RPnPhaseSpacePanel;
 import wave.multid.view.ViewingAttr;
 import wave.multid.view.ViewingTransform;
+import wave.util.RealVector;
 
 /**
  *
@@ -24,6 +27,9 @@ public abstract class GraphicsUtil {
     private ViewingTransform viewingTransform_;
     private ViewingAttr viewAttr_;
     private Shape shape_;
+
+    public GraphicsUtil() {
+    }
 
 
     public GraphicsUtil(List<Object> wcObjects, ViewingTransform viewingTransform, ViewingAttr viewAttr) {
@@ -84,6 +90,33 @@ public abstract class GraphicsUtil {
     }
     // ---------------
 
+    
+    
+     public List<RealVector> getWCVertices() {
+
+        List<RealVector> areaPointsList = new ArrayList<RealVector>();
+        Path2D.Double wcObject = getWCObject();
+        PathIterator pathIterator = wcObject.getPathIterator(null);
+
+        double[] segmentArray = new double[2];
+
+        while (!pathIterator.isDone()) {
+
+            int segment = pathIterator.currentSegment(segmentArray);
+            if (segment != PathIterator.SEG_CLOSE) {
+                RealVector testeSegment = new RealVector(segmentArray);
+                areaPointsList.add(testeSegment);
+            }
+
+            pathIterator.next();
+
+        }
+
+        return areaPointsList;
+
+    }
+    
+    
     
 
     public abstract Shape createShape();

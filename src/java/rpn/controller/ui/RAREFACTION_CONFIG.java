@@ -13,6 +13,7 @@ import rpn.command.ChooseAreaCommand;
 import rpn.command.CompositePlotCommand;
 import rpn.command.CurveRefineCommand;
 import rpn.command.EllipticBoundaryCommand;
+import rpn.command.GenericAreaCommand;
 import rpn.command.HugoniotContinuationPlotCommand;
 import rpn.command.HugoniotPlotCommand;
 import rpn.command.IntegralCurvePlotCommand;
@@ -51,6 +52,7 @@ public class RAREFACTION_CONFIG extends UI_ACTION_SELECTED {
         WaveCurvePlotCommand.instance().setEnabled(true);
         CurveRefineCommand.instance().setEnabled(false);
         ChooseAreaCommand.instance().setEnabled(true);
+        GenericAreaCommand.instance().setEnabled(true);
 
        
 

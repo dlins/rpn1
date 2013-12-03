@@ -9,9 +9,11 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Polygon;
 import java.awt.Shape;
+import java.awt.Stroke;
 import java.awt.geom.Path2D;
 import java.awt.geom.PathIterator;
 import java.util.List;
+import rpn.RPnPhaseSpacePanel;
 import wave.multid.Coords2D;
 import wave.multid.CoordsArray;
 import wave.multid.view.ViewingAttr;
@@ -58,6 +60,26 @@ public class AreaSelected extends GraphicsUtil {
         return wcPath;
 
     }
+    
+    
+     public void draw(Graphics2D g) {
+
+        Color previousColor = g.getColor();
+        g.setColor(getViewingAttr().getColor());
+        g.draw(getShape());
+        Stroke previousStroke = g.getStroke();
+
+        if (getViewingAttr().isSelected()) {
+            drawSelected(g);
+        }
+        
+       
+
+        g.setColor(previousColor);
+        g.setStroke(previousStroke);
+    }
+
+   
 
     @Override
     protected void drawSelected(Graphics2D g) {

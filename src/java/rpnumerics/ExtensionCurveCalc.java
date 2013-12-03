@@ -28,11 +28,11 @@ public class ExtensionCurveCalc extends ContourCurveCalc {
     //
     // Constructors/Initializers
     //
-    private  boolean inSideArea_;
+    private  int inSideArea_;
    
     
 
-    public ExtensionCurveCalc(ContourParams contourParams, List<RealSegment> list, List<RealVector> areaSelected,int extensionFamily, int characteristicDomain, boolean singular,boolean inSideArea) {
+    public ExtensionCurveCalc(ContourParams contourParams, List<RealSegment> list, List<RealVector> areaSelected,int extensionFamily, int characteristicDomain, boolean singular,int inSideArea) {
         super(contourParams);
         list_ = list;
         domainFamily_=extensionFamily;
@@ -84,7 +84,7 @@ public class ExtensionCurveCalc extends ContourCurveCalc {
 
 
 
-    private native RpSolution nativeCalc(List<RealSegment> list, List<RealVector> areaSelected,int family, int characteristicDomain, boolean singular,boolean inSideArea) throws RpException;
+    private native RpSolution nativeCalc(List<RealSegment> list, List<RealVector> areaSelected,int family, int characteristicDomain, boolean singular,int inSideArea) throws RpException;
 
     public RpSolution recalc(Area area) throws RpException {
         return null;

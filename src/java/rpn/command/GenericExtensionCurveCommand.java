@@ -6,8 +6,6 @@ package rpn.command;
 
 import java.awt.Polygon;
 import java.awt.event.ActionEvent;
-import java.awt.geom.Path2D;
-import java.awt.geom.PathIterator;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -17,13 +15,12 @@ import rpn.component.BifurcationCurveGeomFactory;
 import rpn.component.RpGeomFactory;
 import rpn.component.RpGeometry;
 import rpn.component.util.AreaSelected;
-import rpn.component.util.GraphicsUtil;
 import rpn.controller.ui.UIController;
 import rpnumerics.ExtensionCurveCalc;
-import rpnumerics.RPNUMERICS;
 import rpnumerics.RPnCurve;
 import wave.multid.Coords2D;
 import wave.multid.CoordsArray;
+import wave.multid.model.MultiPolygon;
 import wave.multid.view.GeomObjView;
 import wave.multid.view.ViewingTransform;
 import wave.util.RealSegment;
@@ -42,12 +39,14 @@ public class GenericExtensionCurveCommand extends RpModelConfigChangeCommand {
     private static GenericExtensionCurveCommand instance_ = null;
     private RpGeometry curveToProcess_ = null;
     private RPnPhaseSpacePanel panelToProcess_ = null;
+    private List<MultiPolygon> areaSelected_;//TODO To use a list of areas ?
 
     //
     // Constructors
     //
     protected GenericExtensionCurveCommand() {
         super(DESC_TEXT);
+        areaSelected_=new ArrayList<MultiPolygon>();
     }
 
     public void execute() {
@@ -56,7 +55,7 @@ public class GenericExtensionCurveCommand extends RpModelConfigChangeCommand {
             UIController.instance().getActivePhaseSpace().join(processGeometry(curveToProcess_, panelToProcess_));
             RPnPhaseSpaceAbstraction phaseSpace = (RPnPhaseSpaceAbstraction) panelToProcess_.scene().getAbstractGeom();
             phaseSpace.update();
-            panelToProcess_.clearAreaSelection();
+//            panelToProcess_.clearAreaSelection();
         } else {
             System.out.println("Entrou no execute() de GenericExtensionCurveAgent com membros nulos");
         }
@@ -102,45 +101,26 @@ public class GenericExtensionCurveCommand extends RpModelConfigChangeCommand {
 
         System.out.println("indexToRemove.size() ::::::::::::: " + indexToRemove.size());
 
-
-
         List<RealSegment> segments = segmentsIntoArea(selectedGeometry, indexToRemove);
 
+        CoordsArray [] areaPointsList =null ;
 
-        List<GraphicsUtil> graphicsUtil = phaseSpacePanel.getGraphicsUtil();
+        if (!areaSelected_.isEmpty()) {
 
-
-        List<RealVector> areaPointsList = new ArrayList<RealVector>();
-        for (GraphicsUtil graphicsUtil1 : graphicsUtil) {
-
-            if (graphicsUtil1 instanceof AreaSelected && graphicsUtil1.getViewingAttr().isSelected()) {
-
-                Path2D.Double wcObject = graphicsUtil1.getWCObject();
-                PathIterator pathIterator = wcObject.getPathIterator(null);
-
-                double[] segmentArray = new double[2];      //
-
-                while (!pathIterator.isDone()) {
-
-                    int segment = pathIterator.currentSegment(segmentArray);
-                    if (segment != PathIterator.SEG_CLOSE) {
-                        RealVector testeSegment = new RealVector(segmentArray);
-                        areaPointsList.add(testeSegment);
-                    }
-
-                    pathIterator.next();
-
-                }
-
-
-            }
-
+            areaPointsList = areaSelected_.get(0).extractVertices();
         }
 
-        ExtensionCurveCalc calc = rpnumerics.RPNUMERICS.createExtensionCurveCalc(segments,areaPointsList);
+
+        ExtensionCurveCalc calc = rpnumerics.RPNUMERICS.createExtensionCurveCalc(segments, areaPointsList);
         BifurcationCurveGeomFactory bifurcationFactory = new BifurcationCurveGeomFactory(calc);
 
+        
+//        phaseSpacePanel.clearAreaSelection();
+//        areaSelected_.clear();
+        
         return bifurcationFactory.geom();
+        
+        
 
     }
 
@@ -196,5 +176,11 @@ public class GenericExtensionCurveCommand extends RpModelConfigChangeCommand {
         }
 
         return indexList;
+    }
+
+    void setSelectedArea(MultiPolygon areaSelected) {
+        areaSelected_.clear();
+        areaSelected_.add(areaSelected);
+        
     }
 }

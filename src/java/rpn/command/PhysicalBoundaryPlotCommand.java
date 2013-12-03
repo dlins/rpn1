@@ -43,7 +43,7 @@ public class PhysicalBoundaryPlotCommand extends RpModelPlotCommand {
 
     public RpGeometry createRpGeometry(RealVector[] input) {
 
-        DoubleContactGeomFactory factory = new DoubleContactGeomFactory(RPNUMERICS.createDoubleContactCurveCalc());
+        PhysicalBoundaryFactory factory = new PhysicalBoundaryFactory(new PhysicalBoundaryCalc());
         return factory.geom();
 
     }

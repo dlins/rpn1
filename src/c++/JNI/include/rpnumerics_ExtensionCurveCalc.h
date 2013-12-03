@@ -10,10 +10,10 @@ extern "C" {
 /*
  * Class:     rpnumerics_ExtensionCurveCalc
  * Method:    nativeCalc
- * Signature: (Ljava/util/List;Ljava/util/List;IIZZ)Lrpnumerics/RpSolution;
+ * Signature: (Ljava/util/List;Ljava/util/List;IIZI)Lrpnumerics/RpSolution;
  */
 JNIEXPORT jobject JNICALL Java_rpnumerics_ExtensionCurveCalc_nativeCalc
-  (JNIEnv *, jobject, jobject, jobject, jint, jint, jboolean, jboolean);
+  (JNIEnv *, jobject, jobject, jobject, jint, jint, jboolean, jint);
 
 #ifdef __cplusplus
 }

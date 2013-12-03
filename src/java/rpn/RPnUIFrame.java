@@ -183,7 +183,8 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 toolBar_.add(ClassifierCommand.instance().getContainer());      //** Leandro
                 toolBar_.add(VelocityCommand.instance().getContainer());        //** Leandro
                 
-                toolBar_.add(ChooseAreaCommand.instance().getContainer()); 
+//                toolBar_.add(ChooseAreaCommand.instance().getContainer()); 
+                toolBar_.add(GenericAreaCommand.instance().getContainer());
 
 
                 toolBar_.add(AreaSelectionToExtensionCurveCommand.instance().getContainer());

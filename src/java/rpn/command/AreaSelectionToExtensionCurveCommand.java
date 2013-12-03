@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 import javax.swing.JButton;
+import javax.swing.JToggleButton;
 import rpn.RPnPhaseSpaceAbstraction;
 import rpn.RPnPhaseSpacePanel;
 import rpn.component.RpGeometry;
@@ -19,10 +20,7 @@ import rpn.controller.ui.RPnSelectionPlotter;
 import rpn.controller.ui.UIController;
 import wave.util.RealVector;
 
-/**
- *
- * @author moreira
- */
+
 public class AreaSelectionToExtensionCurveCommand extends RpModelPlotCommand implements Observer {
 
     static public final String DESC_TEXT = "AreaToExtensionCurve";
@@ -30,13 +28,13 @@ public class AreaSelectionToExtensionCurveCommand extends RpModelPlotCommand imp
 
 
     private AreaSelectionToExtensionCurveCommand() {
-        super(DESC_TEXT, null, new JButton());
+        super(DESC_TEXT, null, new JToggleButton());
     }
 
     @Override
     public void actionPerformed(ActionEvent event) {
 
-        UIController.instance().setState(new AREASELECTION_CONFIG());
+        UIController.instance().setState(new AREASELECTION_CONFIG(this));
         Iterator<RPnPhaseSpacePanel> iterator = UIController.instance().getInstalledPanelsIterator();
 
         while (iterator.hasNext()) {

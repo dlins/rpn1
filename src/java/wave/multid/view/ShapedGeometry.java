@@ -88,9 +88,9 @@ public abstract class ShapedGeometry extends GeomObjView {
         Color previous = g.getColor();
         g.setColor(getViewingAttr().getColor());
         g.draw(getShape());
-//        if (getViewingAttr().isSelected()) {
-//            getBoundaryBox().draw(g);
-//        }
+        //        if (getViewingAttr().isSelected()) {
+        //            getBoundaryBox().draw(g);
+        //        }
         g.setColor(previous);
     }
 

@@ -11,50 +11,55 @@ import java.util.Observable;
 import java.util.Observer;
 import javax.swing.JToggleButton;
 import rpn.RPnPhaseSpacePanel;
+import rpn.RPnUIFrame;
 import rpn.component.RpGeometry;
-import rpn.component.util.AreaSelected;
-import rpn.controller.ui.RPnSelectionPlotter;
 import rpn.controller.ui.AREASELECTION_CONFIG;
 import rpn.controller.ui.RPnAreaChooser;
+import rpn.controller.ui.RPnGenericSelectionPlotter;
 import rpn.controller.ui.UIController;
+import wave.multid.model.MultiPolygon;
 import wave.util.RealVector;
 
-public class ChooseAreaCommand extends RpModelPlotCommand implements Observer {
+public class GenericAreaCommand extends RpModelPlotCommand implements Observer {
 
-    static public final String DESC_TEXT = "Choose Area";
-    static private ChooseAreaCommand instance_ = null;
+    static public final String DESC_TEXT = "Generic Area";
+    static private GenericAreaCommand instance_ = null;
 
-    private ChooseAreaCommand() {
+    private GenericAreaCommand() {
         super(DESC_TEXT, null, new JToggleButton());
     }
 
-    @Override
+//    @Override
     public void actionPerformed(ActionEvent event) {
-
-
+        RPnGenericSelectionPlotter boxPlotter = new RPnGenericSelectionPlotter();
 
         UIController.instance().setState(new AREASELECTION_CONFIG(this));
 
         Iterator<RPnPhaseSpacePanel> iterator = UIController.instance().getInstalledPanelsIterator();
 
         while (iterator.hasNext()) {
+
             RPnPhaseSpacePanel panel = iterator.next();
-            RPnAreaChooser boxPlotter = new RPnAreaChooser();
+            panel.setPhysicalBoundarySelected(false);
+
             if (button_.isSelected()) {
 
                 boxPlotter.addObserver(this);
                 panel.addMouseListener(boxPlotter);
                 panel.addMouseMotionListener(boxPlotter);
-            }
 
+
+            }
+            
 
         }
 
+
     }
 
-    public static ChooseAreaCommand instance() {
+    public static GenericAreaCommand instance() {
         if (instance_ == null) {
-            instance_ = new ChooseAreaCommand();
+            instance_ = new GenericAreaCommand();
         }
         return instance_;
     }
@@ -66,6 +71,6 @@ public class ChooseAreaCommand extends RpModelPlotCommand implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
-
+       GenericExtensionCurveCommand.instance().setSelectedArea((MultiPolygon)arg);
     }
 }

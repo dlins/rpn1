@@ -1,3 +1,5 @@
+#include <vector>
+
 #include "Extension_Curve.h"
 
 int Extension_Curve::species_physic(Extension_Curve *ec, double *foncub, int domain_i, int domain_j, int kl){
@@ -293,7 +295,15 @@ void Extension_Curve::curve_out_of_subdomain(const FluxFunction *df, const Accum
 
     //  Find the convex hull of the polygon.
     //
+    
+
     std::vector<RealVector> convex_hull_points;
+    
+    for (int i = 0; i < polygon.size(); i++) {
+        cout<<polygon[i]<<endl;
+    }
+
+    
     convex_hull(polygon, convex_hull_points);
 
     // Copy of the cells, later it will be used to restore it.
@@ -383,6 +393,14 @@ void Extension_Curve::curve_in_subdomain(const FluxFunction *df, const Accumulat
     //  Find the convex hull of the polygon.
     //
     std::vector<RealVector> convex_hull_points;
+    
+
+    
+    for (int i = 0; i < polygon.size(); i++) {
+        cout<<polygon[i]<<endl;
+    }
+    
+    
     convex_hull(polygon, convex_hull_points);
 
     // Copy of the cells, later it will be used to restore it.

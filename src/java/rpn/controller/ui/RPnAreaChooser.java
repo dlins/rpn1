@@ -6,41 +6,67 @@
 package rpn.controller.ui;
 
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
+import java.util.Iterator;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import rpn.RPnPhaseSpacePanel;
-import rpn.component.util.AreaSelected;
-import rpn.component.util.GraphicsUtil;
+import wave.multid.DimMismatchEx;
+import wave.multid.model.MultiGeometryImpl;
+import wave.multid.view.GeomObjView;
+import wave.multid.view.PolyLine;
 
 public class RPnAreaChooser extends RPn2DMouseController {
 
+    public RPnAreaChooser() {
+    }
+
     @Override
     public void mouseMoved(MouseEvent me) {
-  
     }
 
     @Override
     public void mousePressed(MouseEvent me) {
-        
-         RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) me.getSource();
 
-        for (GraphicsUtil object : panel.getGraphicsUtil()) {
+        RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) me.getSource();
 
-            if (object instanceof AreaSelected) {
 
-                AreaSelected area = (AreaSelected) object;
+        for (MultiGeometryImpl object : panel.getConvexSelection()) {
 
-                if (area.getShape().contains(me.getPoint())){
-                    
-                    if (!area.getViewingAttr().isSelected()){
-                        area.getViewingAttr().setSelected(true);                        
-                    }
-                    else{
-                        area.getViewingAttr().setSelected(false);
-                    }
-                }
+            GeomObjView view = null;
+            try {
+                view = object.createView(panel.scene().getViewingTransform());
+            } catch (DimMismatchEx ex) {
+                Logger.getLogger(RPnAreaChooser.class.getName()).log(Level.SEVERE, null, ex);
             }
 
+            PolyLine area = (PolyLine) view;
+
+
+            if (area.getShape().contains(me.getPoint())) {
+               
+
+                if (!area.getViewingAttr().isSelected()) {
+                    area.getViewingAttr().setSelected(true);
+                    panel.setPhysicalBoundarySelected(false);
+
+                } else {
+                    area.getViewingAttr().setSelected(false);
+                    panel.setPhysicalBoundarySelected(true);
+
+
+                }
+
+            }
+
+            
+
+                    
         }
+
         panel.updateGraphicsUtil();
+        panel.scene().update();
 
     }
 
