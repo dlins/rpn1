@@ -48,10 +48,7 @@ import rpn.component.util.GeometryGraphND;
 import rpn.component.util.GraphicsUtil;
 import rpn.controller.ui.AREASELECTION_CONFIG;
 import rpn.controller.ui.CLASSIFIERAGENT_CONFIG;
-import rpn.controller.ui.RPnAreaChooser;
 import rpn.controller.ui.UIController;
-import rpn.controller.ui.UI_ACTION_SELECTED;
-import rpn.controller.ui.UserInputHandler;
 import rpn.controller.ui.VELOCITYAGENT_CONFIG;
 import wave.multid.DimMismatchEx;
 import wave.multid.model.MultiGeometryImpl;
@@ -143,7 +140,8 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
         setBackground(DEFAULT_BOUNDARY_COLOR);
         setPreferredSize(new java.awt.Dimension(myW, myH));
         graphicsUtilList_ = new ArrayList();
-        this.setName("");
+        this.setName("");      
+
     }
 
     //
@@ -180,22 +178,6 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
     }
 
     public void addGraphicUtil(GraphicsUtil gu) {
-
-
-        UserInputHandler uiState = UIController.instance().getState();
-
-
-
-        if (uiState instanceof UI_ACTION_SELECTED) {
-
-            UI_ACTION_SELECTED actionSelected = (UI_ACTION_SELECTED) uiState;
-
-            System.out.println(actionSelected.getAction().toString());
-
-
-        }
-
-
 
         graphicsUtilList_.add(gu);
     }

@@ -37,9 +37,8 @@ public class RpCommand extends AbstractAction implements UndoableAction, Seriali
 
         StringBuilder buffer = new StringBuilder();
 
-        buffer.append("<COMMAND name=\"").append(name).append("\">\n");
-
-        buffer.append("</COMMAND>\n");
+        buffer.append("<COMMAND name=\"").append(name).append("\">");
+        buffer.append("</COMMAND>");
 
         xmlString_ = buffer.toString();
 
@@ -55,9 +54,9 @@ public class RpCommand extends AbstractAction implements UndoableAction, Seriali
         StringBuilder buffer = new StringBuilder();
         Configuration configuration = (Configuration) event_.getNewValue();
 
-        buffer.append("<COMMAND name=\"").append(event_.getSource()).append("\">\n");
+        buffer.append("<COMMAND name=\"").append(event_.getSource()).append("\">");
         buffer.append(configuration.toXML());
-        buffer.append("</COMMAND>\n");
+        buffer.append("</COMMAND>");
 
         xmlString_ = buffer.toString();
 
@@ -90,7 +89,7 @@ public class RpCommand extends AbstractAction implements UndoableAction, Seriali
             buffer.append("curveid=\"").append(curve.getId());
             
 
-            buffer.append("\">\n");
+            buffer.append("\">");
 
             if (calc.getConfiguration() != null) {
                 String configurationXML = calc.getConfiguration().toXML();
@@ -101,7 +100,7 @@ public class RpCommand extends AbstractAction implements UndoableAction, Seriali
 
             buffer.append("<COMMAND name=\"").append(curveName).append("\" ");
             buffer.append("phasespace=\"").append(UIController.instance().getActivePhaseSpace().getName());
-            buffer.append("\">\n");
+            buffer.append("\">");
 
         }
 
@@ -110,7 +109,7 @@ public class RpCommand extends AbstractAction implements UndoableAction, Seriali
             buffer.append(realVector.toXML());
         }
 
-        buffer.append("</COMMAND>\n");
+        buffer.append("</COMMAND>");
 
         xmlString_ = buffer.toString();
 

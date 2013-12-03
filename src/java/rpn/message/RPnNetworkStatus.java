@@ -7,6 +7,8 @@ package rpn.message;
 
 import java.net.*;
 import java.io.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import rpn.RPnDesktopPlotter;
 
 /**
@@ -19,9 +21,6 @@ public class RPnNetworkStatus {
 
 
     private static RPnNetworkStatus instance_= null;
-
-    public static int NOTEBOARD_PANE_INDEX = -1;
-    public static char NOTEBOARD_PANE_FRAME_CHAR = ' ';
 
     private String clientID_;
     private boolean isMaster_;
@@ -110,13 +109,15 @@ public class RPnNetworkStatus {
     //public static String RPN_MEDIATORPROXY_URL="http://" + SERVERNAME + ":8080/rpnmediatorproxy/rpnmediatorproxy?REQ_ID=";
     public static String RPN_MEDIATORPROXY_URL="http://" + SERVERNAME + ":8080/rpnmediatorproxy/";    
 
+    public static String ACTIVATED_FRAME_TITLE = "NO_TITLE";
+
     //
     // Constructors/Initializers
     //
     private RPnNetworkStatus() {
 
         isOnline_ = false;
-        isFirewalled_ = false;
+        isFirewalled_ = true;
     }
 
     //
@@ -156,8 +157,10 @@ public class RPnNetworkStatus {
     public void connect(String clientID,boolean isMaster,boolean isFirewalled) {
 
         clientID_ = clientID;
-        isMaster_ = isMaster;        
-        isFirewalled_ = isFirewalled;
+        isMaster_ = isMaster;
+        
+        //isFirewalled_ = isFirewalled;
+        isFirewalled_ = true;
 
 
 
@@ -267,6 +270,7 @@ public class RPnNetworkStatus {
 
             log("All Connections closed for SLAVE session ...");
             RPnDesktopPlotter.getUIFrame().enableNoteboard();
+            RPnDesktopPlotter.getUIFrame().enableAllCommands();            
 
         }
 
@@ -514,11 +518,7 @@ public class RPnNetworkStatus {
 
             // TODO > disable ALL interface
             RPnDesktopPlotter.getUIFrame().disableNoteboard();
-
-
-
-
-
+            RPnDesktopPlotter.getUIFrame().disableAllCommands();            
         }
 
     }
@@ -549,13 +549,15 @@ public class RPnNetworkStatus {
         
         commandPublisher_.publish(trimURL(commandDesc));
         
-        System.out.println(commandDesc);
+        Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.INFO, "Command successfully published was : " + commandDesc);
     }
 
     public void sendCommand(Object obj) {
 
 
-        commandPublisher_.publish(obj);       
+        commandPublisher_.publish(obj);
+
+        Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.INFO, "Object successfully published ! ");
     }
 
     public static RPnNetworkStatus instance() {

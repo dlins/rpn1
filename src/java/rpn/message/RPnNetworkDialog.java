@@ -114,6 +114,9 @@ public class RPnNetworkDialog extends JDialog implements PropertyChangeListener 
 
     private void init() throws Exception {
 
+
+        //setAlwaysOnTop(true);
+
         onlineButton.setText("Connect");
 
         getContentPane().add(mainPanel);
@@ -125,9 +128,13 @@ public class RPnNetworkDialog extends JDialog implements PropertyChangeListener 
 
 
         inputPanel.setLayout(new FlowLayout());
-        inputPanel.add(serverTextBox);
+
+        // the SERVER property will be hardcoded for now...
+       // inputPanel.add(serverTextBox);
         inputPanel.add(masterCheckBox);
-        inputPanel.add(firewallCheckBox);
+
+        // by default we will always use HTTP for now...
+        //inputPanel.add(firewallCheckBox);
 
 
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);

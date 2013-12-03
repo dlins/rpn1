@@ -296,7 +296,10 @@ public class UIController extends ComponentUI {
      * This points are taked by mouse clicks in all panels .*/
     public rpn.controller.ui.UserInputTable globalInputTable() {
 
+        if (activePhaseSpace_ == null) return RPnDataModule.PHASESPACE.getUserInputTable();
+        
         return activePhaseSpace_.getUserInputTable();
+
     }
 
     //

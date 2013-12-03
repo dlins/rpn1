@@ -276,12 +276,11 @@ public class RPnNumericsModule {
         try {
 
             parser.setContentHandler(new RPnNumericsParser());
-            System.out.println("Numerics Module");
+            System.out.println("Numerics Module parsing started...");
 
-            System.out.println("Will parse !");
             parser.parse(new InputSource(configFileStream));
 
-            System.out.println("parsed !");
+            System.out.println("Numerics Module parsing finished successfully !");
 
         } catch (Exception saxex) {
 

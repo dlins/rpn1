@@ -29,17 +29,9 @@ public class RPnRiemannFrame extends RPnPhaseSpaceFrame {
     private Dimension frameSize_ = null;
 
     //    int sliderValue_;
-
     public RPnRiemannFrame(Scene scene, RPnMenuCommand command) {
 
-        this (-1,' ',scene,command);
-
-    }
-
-
-    public RPnRiemannFrame(int frameIndex,char frameChar,Scene scene, RPnMenuCommand command) {
-
-        super(frameIndex,frameChar,scene,command);
+        super(scene,command);
         enableEvents(AWTEvent.WINDOW_EVENT_MASK);
         enableEvents(AWTEvent.COMPONENT_EVENT_MASK);
         //	enableEvents(AWTEvent.FOCUS_EVENT_MASK);
@@ -66,7 +58,7 @@ public class RPnRiemannFrame extends RPnPhaseSpaceFrame {
         jPanel3.setBackground(Color.gray);
         jPanel4.setBackground(Color.gray);
         contentPane.setBackground(Color.gray);
-        setTitle(" RPn - "
+        setTitle(" Riemann Phase Space Frame - "
                 + new Integer(((PhaseSpacePanelController) phaseSpacePanel.getCastedUI()).getAbsIndex()).intValue() + ','
                 + new Integer(((PhaseSpacePanelController) phaseSpacePanel.getCastedUI()).getOrdIndex()).intValue());
         phaseSpacePanel.addMouseMotionListener(coordsField.getMouseMotionController());

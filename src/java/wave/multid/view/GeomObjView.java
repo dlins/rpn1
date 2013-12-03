@@ -11,7 +11,10 @@ import java.awt.Polygon;
 import java.util.ArrayList;
 import java.util.List;
 
-/** The main class of the view package. This class declares the basic methods to create a visual form of a multidimensional object. A GeomObjView object contains the attributes and the transformation associated with a visual form of a multidimensional object. */
+/** The main class of the view package. This class declares the basic methods to create
+ * a visual form of a multidimensional object. A GeomObjView object contains the attributes
+ * and the transformation associated with a visual form of a multidimensional object.
+ */
 public abstract class GeomObjView {
 
     protected List viewList_;

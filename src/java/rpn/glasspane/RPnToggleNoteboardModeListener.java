@@ -5,10 +5,13 @@
 
 package rpn.glasspane;
 
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JFrame;
+import rpn.RPnPhaseSpaceFrame;
 import rpn.RPnUIFrame;
+import rpn.controller.ui.UIController;
 import rpn.message.*;
 
 
@@ -26,30 +29,54 @@ public class RPnToggleNoteboardModeListener implements ActionListener {
     public void actionPerformed(ActionEvent e) {
 
 
+        // TODO create class RPnToggleButton(JFrame parentFrame)...
+        RPnPhaseSpaceFrame parentFrame = ((RPnNoteModeToggleButton)e.getSource()).getParentContainer();
+        String noteFrameTitle = parentFrame.getTitle();
+
+        System.out.println("PARENT FRAME TOGGLE is : " + noteFrameTitle);
+
         JFrame[] frames = RPnUIFrame.getPhaseSpaceFrames();
         JFrame[] aux_frames = RPnUIFrame.getAuxFrames();
         JFrame[] riemann_frames = RPnUIFrame.getRiemannFrames();
 
-        for (int i = 0; i < frames.length; i++) {
-            frames[i].getGlassPane().setVisible(!frames[i].getGlassPane().isVisible());
-        }
-
-        for (int i = 0; i < aux_frames.length; i++) {
-            aux_frames[i].getGlassPane().setVisible(!aux_frames[i].getGlassPane().isVisible());
-        }
-
+        JFrame[] allFrames = null;
         if (riemann_frames != null)
-        for (int i = 0; i < riemann_frames.length; i++) {
-            riemann_frames[i].getGlassPane().setVisible(!riemann_frames[i].getGlassPane().isVisible());
-        }
+            allFrames = new JFrame[frames.length + aux_frames.length + riemann_frames.length];
+        else
+            allFrames = new JFrame[frames.length + aux_frames.length];
+
+        // FILL UP the allFrames strucutre
+        int count = 0;
+        for (int i = 0; i < frames.length; i++)
+            allFrames[count++] = frames[i];
+        for (int i = 0; i < aux_frames.length; i++)
+            allFrames[count++] = aux_frames[i];
+        if (riemann_frames != null)
+        for (int i = 0; i < riemann_frames.length; i++)
+            allFrames[count++] = riemann_frames[i];
+
+
+
+        // the TOGGLE !
+        for (int i = 0; i < allFrames.length; i++)
+            
+            if (allFrames[i].getTitle().compareTo(noteFrameTitle) == 0) {
+
+                
+                allFrames[i].getGlassPane().setVisible(!allFrames[i].getGlassPane().isVisible());
+                
+            }
+            else
+                allFrames[i].getGlassPane().setVisible(false);
+        
 
         if (RPnNetworkStatus.instance().isOnline() && RPnNetworkStatus.instance().isMaster()) {
 
             StringBuilder buffer = new StringBuilder();
 
-            buffer.append("<COMMAND name=\"TOGGLE_NOTEBOARD_MODE\" >");
-            buffer.append("<COMMANDPARAM name=\"pane_index\" value=\"" + RPnNetworkStatus.instance().NOTEBOARD_PANE_INDEX + "\" />");
-            buffer.append("<COMMANDPARAM name=\"pane_frame_char\" value=\"" + RPnNetworkStatus.instance().NOTEBOARD_PANE_FRAME_CHAR + "\" />");
+            buffer.append("<COMMAND name=\"TOGGLE_NOTEBOARD_MODE\" ");
+            buffer.append("phasespace=\"").append(UIController.instance().getActivePhaseSpace().getName()).append("\">");
+            buffer.append("<COMMANDPARAM name=\"activated_frame_title\" value=\"" + noteFrameTitle.toString() + "\"/>");
             buffer.append("</COMMAND>");
 
 

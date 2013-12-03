@@ -26,6 +26,8 @@ import org.xml.sax.XMLReader;
 
 import java.io.*;
 import java.util.Iterator;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
 import rpn.RPnUIFrame;
 
@@ -89,7 +91,7 @@ public class RPnCommandModule {
             if (isChangePhysicsParamsCommand_) {
 
                 if (currentElement_.equals("PHYSICSCONFIG")) {
-                    System.out.println("Current configuration: " + currentConfiguration_.getName());
+                    //System.out.println("Current configuration: " + currentConfiguration_.getName());
 
                     currentConfiguration_ = currentConfiguration_.getConfiguration(att.getValue("name"));
                 }
@@ -114,7 +116,7 @@ public class RPnCommandModule {
 
                 for (int i = 0; i < att.getLength(); i++) {
 
-                    System.out.println(att.getValue(i));
+                    //System.out.println(att.getValue(i));
                 }
 
                 if (att.getValue("name").equals("phasespace")) {
@@ -126,18 +128,38 @@ public class RPnCommandModule {
                     curveId_ = new Integer(att.getValue("value"));
                 }
 
-                if (att.getValue("name").equals("pane_index")) {
+                if (att.getValue("name").equals("activated_frame_title")) {
 
-                    RPnNetworkStatus.instance().NOTEBOARD_PANE_INDEX = new Integer(att.getValue("value")).intValue();
+                    RPnNetworkStatus.instance().ACTIVATED_FRAME_TITLE = att.getValue("value");
+
+
+
+                    if (currentCommand_.equalsIgnoreCase("TOGGLE_NOTEBOARD_MODE")) {
+
+                        boolean padmodeOff = RPnUIFrame.toggleNoteboardMode(RPnNetworkStatus.ACTIVATED_FRAME_TITLE);
+
+                        if (padmodeOff) {
+
+                            RPnHttpPoller.POLLING_MODE = RPnHttpPoller.TEXT_POLLER;
+
+                        } else RPnHttpPoller.POLLING_MODE = RPnHttpPoller.OBJ_POLLER;
+
+                        Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.INFO, "Noteboard mode toggled successfuly...");
+
+                    } else if (currentCommand_.equalsIgnoreCase("NOTEBOARD_CLEAR")) {
+
+                        RPnUIFrame.noteboardClear();
+                        Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.INFO, "Noteboard cleared successfuly...");
+                        
+                    } else if (currentCommand_.equalsIgnoreCase("FOCUS_GAINED")) {
+
+
+                        RPnUIFrame.toggleFocusGained();
+                        Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.INFO, "Window Focus changed successfuly...");
+
+                    }
+
                 }
-
-
-                if (att.getValue("name").equals("pane_frame_char")) {
-
-                    RPnNetworkStatus.instance().NOTEBOARD_PANE_FRAME_CHAR = att.getValue("value").charAt(0);
-                }
-
-
 
             }
 
@@ -149,10 +171,9 @@ public class RPnCommandModule {
                 }
                 currentCommand_ = att.getValue("name");
 
-                System.out.println("Current command :" + currentCommand_);
+                Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.INFO, "Current command is :" + currentCommand_);
 
-                if (att.getValue("phasespace") != null)
-                    UIController.instance().setActivePhaseSpace(RPnDataModule.getPhaseSpace(att.getValue("phasespace")));
+                UIController.instance().setActivePhaseSpace(RPnDataModule.getPhaseSpace(att.getValue("phasespace")));
 
 
                 if (currentCommand_.equalsIgnoreCase("Change Flux Parameters")) {
@@ -199,60 +220,8 @@ public class RPnCommandModule {
                     UIController.instance().setState(new FILE_ACTION_SELECTED(SecondaryBifurcationCurveCommand.instance()));
                     SecondaryBifurcationCurveCommand.instance().execute();
 
-                // MAY BE THIS SHOULD BE A CONFIG PARAM change ... mvera.
-                } else if (currentCommand_.equalsIgnoreCase("TOGGLE_NOTEBOARD_MODE")) {
 
-                    System.out.println("Will now parse the TOGGLE_NOTEBOARD_MODE");
-                    JFrame[] frames = RPnUIFrame.getPhaseSpaceFrames();
-                    JFrame[] aux_frames = RPnUIFrame.getAuxFrames();
-                    JFrame[] riemann_frames = RPnUIFrame.getRiemannFrames();
-
-                    for (int i = 0; i < frames.length; i++) {
-                        frames[i].getGlassPane().setVisible(!frames[i].getGlassPane().isVisible());
-                    }
-
-                    for (int i = 0; i < aux_frames.length; i++) {
-                        aux_frames[i].getGlassPane().setVisible(!aux_frames[i].getGlassPane().isVisible());
-                    }
-
-                    if (riemann_frames != null)
-                    for (int i = 0; i < riemann_frames.length; i++) {
-                        riemann_frames[i].getGlassPane().setVisible(!riemann_frames[i].getGlassPane().isVisible());
-                    }
-
-
-
-                    if (RPnHttpPoller.POLLING_MODE == RPnHttpPoller.TEXT_POLLER)
-                        RPnHttpPoller.POLLING_MODE = RPnHttpPoller.OBJ_POLLER;
-                    else RPnHttpPoller.POLLING_MODE = RPnHttpPoller.TEXT_POLLER;
                 }
-
-                else if (currentCommand_.equalsIgnoreCase("TOGGLE_NOTEBOARD_CLEAR")) {
-
-                    System.out.println("Will now parse the TOGGLE_NOTEBOARD_CLEAR");
-                    JFrame[] frames = RPnUIFrame.getPhaseSpaceFrames();
-                    JFrame[] aux_frames = RPnUIFrame.getAuxFrames();
-                    JFrame[] riemann_frames = RPnUIFrame.getRiemannFrames();
-
-                    for (int i = 0; i < frames.length; i++) {
-                        ((RPnGlassPane) frames[i].getGlassPane()).clear();
-                    }
-
-                    for (int i = 0; i < aux_frames.length; i++) {
-                        ((RPnGlassPane) aux_frames[i].getGlassPane()).clear();
-                    }
-
-                    if (riemann_frames != null) {
-                        for (int i = 0; i < riemann_frames.length; i++) {
-                            ((RPnGlassPane) riemann_frames[i].getGlassPane()).clear();
-                        }
-                    }
-                }
-
-
-
-
-
             }
 
             if (currentElement_.equals("REALVECTOR")) {
@@ -275,7 +244,7 @@ public class RPnCommandModule {
                     FILE_ACTION_SELECTED fileAction = (FILE_ACTION_SELECTED)UIController.instance().getState();
                 
                     if (fileAction.getAction() instanceof RpModelPlotCommand){
-                        System.out.println("ID Setting : " + curveId_);
+                        //System.out.println("ID Setting : " + curveId_);
                         
                         RpGeometry geometry = UIController.instance().getActivePhaseSpace().getLastGeometry();
                         RPnCurve curve = (RPnCurve) geometry.geomFactory().geomSource();

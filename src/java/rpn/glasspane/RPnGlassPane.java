@@ -20,26 +20,32 @@ import java.awt.event.MouseMotionAdapter;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
 import javax.swing.JComponent;
+import java.util.logging.*;
+import rpn.RPnPhaseSpaceFrame;
 import rpn.message.*;
 import wave.util.RealVector;
 
 // this is in order to make PathIterator serializable
 import salvo.jesus.graph.java.awt.geom.*;
+import wave.multid.Coords2D;
 
 
 public class RPnGlassPane extends JComponent {
 
    
-    GeneralPath path_;
+    private GeneralPath path_;
+    private GeneralPath wpath_;
+    private RPnPhaseSpaceFrame parentFrame_;
   
     
 
 
-    public RPnGlassPane() {
+    public RPnGlassPane(RPnPhaseSpaceFrame parentFrame) {
 
        
         path_ = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
-
+        wpath_ = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
+        parentFrame_ = parentFrame;
 
 
         setDoubleBuffered(false);
@@ -50,27 +56,40 @@ public class RPnGlassPane extends JComponent {
 
                     path_.moveTo(new Double(e.getPoint().getX()),new Double(e.getPoint().getY()));
 
-                    
-                    // this is to guarantee the mousePressed sent
-                    try {
-
-                        Thread.sleep(100);
-
-                    } catch (Exception ex) {
-
-                        ex.printStackTrace();
-
-                    }
-                        
+                    Coords2D dcPoint = new Coords2D(new Double(e.getPoint().getX()),new Double(e.getPoint().getY()));
+                    Coords2D wcPoint = new Coords2D();
+                    parentFrame_.phaseSpacePanel().scene().getViewingTransform().dcInverseTransform(dcPoint,wcPoint);
+                    wpath_.moveTo(wcPoint.getX(),wcPoint.getY());
                 }
 
                 public void mouseReleased(MouseEvent event) {
 
-                  
+                    PathIterator it = wpath_.getPathIterator(new AffineTransform());
+
+                    /*
+                         // this is the famous WC to DC transform...
+                    while (!it.isDone()) {
+
+                        int domainDim = parentFrame_.phaseSpacePanel().scene().getViewingTransform().coordSysTransform().getDomain().getDim();
+                        double[] wc_coords = new double[domainDim];
+                        it.currentSegment(wc_coords);
+
+                        for (int i=0;i < wc_coords.length;i++)
+                            //Logger.getLogger(this.getClass()).debug("wc coords are : " + wc_coords[i]);
+                            System.out.println("wc coords are : " + wc_coords[i]);
+
+
+
+                        it.next();
+
+                    }*/
 
                     // TODO add coords
                     if (RPnNetworkStatus.instance().isOnline() && RPnNetworkStatus.instance().isMaster()) {
-                        RPnNetworkStatus.instance().sendCommand(new SerializablePathIterator(path_.getPathIterator(new AffineTransform())));
+
+                        SerializablePathIterator wPath = new SerializablePathIterator(wpath_.getPathIterator(new AffineTransform()));
+                        RPnNetworkStatus.instance().sendCommand(wPath);                       
+
                     }
 
                     
@@ -84,8 +103,21 @@ public class RPnGlassPane extends JComponent {
                 public void mouseDragged(MouseEvent e){
 
                     path_.lineTo(new Double(e.getPoint().getX()), new Double(e.getPoint().getY()));
+
+                    Coords2D dcPoint = new Coords2D(new Double(e.getPoint().getX()),new Double(e.getPoint().getY()));
+                    Coords2D wcPoint = new Coords2D();
+                    parentFrame_.phaseSpacePanel().scene().getViewingTransform().dcInverseTransform(dcPoint,wcPoint);
+                    wpath_.lineTo(wcPoint.getX(),wcPoint.getY());
+
                     repaint();
+                    
                     path_.moveTo(new Double(e.getPoint().getX()), new Double(e.getPoint().getY()));
+
+                    dcPoint = new Coords2D(new Double(e.getPoint().getX()),new Double(e.getPoint().getY()));
+                    wcPoint = new Coords2D();
+                    parentFrame_.phaseSpacePanel().scene().getViewingTransform().dcInverseTransform(dcPoint,wcPoint);
+                    wpath_.moveTo(wcPoint.getX(),wcPoint.getY());
+
                 }
         });
     }
@@ -94,17 +126,47 @@ public class RPnGlassPane extends JComponent {
     // Accessors/Mutators
     //
     public GeneralPath path() {return path_;}
-    public void updatePath(PathIterator it) {
+    public void updatePath(PathIterator it) {      
+        
+        // a done Iterator means CLEAR for now...
+        if (it.isDone()) {
 
-        // a done it means a CLEAR for now...
-        if (it.isDone())
+            Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.INFO, "a done Iterator means CLEAR...");
             clear();
-        else {
+
+        } else {
 
 
             path_.reset();
-            path_.append(it, false);
+
+
+            // this is the famous WC to DC transform...
+            while (!it.isDone()) {
+
+                int domainDim = parentFrame_.phaseSpacePanel().scene().getViewingTransform().coordSysTransform().getDomain().getDim();
+                double[] wc_coords = new double[domainDim];
+                int drawMode = it.currentSegment(wc_coords);
+                Coords2D wcPoint = new Coords2D(wc_coords[0],wc_coords[1]);
+                Coords2D dcPoint = new Coords2D();
+
+                parentFrame_.phaseSpacePanel().scene().getViewingTransform().viewPlaneTransform(wcPoint, dcPoint);
+
+                if (drawMode == PathIterator.SEG_LINETO) {
+
+                    path_.lineTo(dcPoint.getX(), dcPoint.getY());
+                    repaint();
+                }
+
+                if (drawMode == PathIterator.SEG_MOVETO)
+                    path_.moveTo(dcPoint.getX(), dcPoint.getY());
+
+                it.next();
+
+            }
+
+            invalidate();
             repaint();
+
         }
     }
 
@@ -112,19 +174,6 @@ public class RPnGlassPane extends JComponent {
     //
     // Methods
     //
-    public void updatePath(int drawMode,RealVector refPoint) {
-
-        if (drawMode == PathIterator.SEG_LINETO) {
-
-            path_.lineTo(refPoint.getElement(0),refPoint.getElement(1));
-            repaint();
-            path_.moveTo(refPoint.getElement(0),refPoint.getElement(1));
-        }
-
-        if (drawMode == PathIterator.SEG_MOVETO)
-            path_.moveTo(refPoint.getElement(0),refPoint.getElement(1));
-    }
-
     @Override
     protected void paintComponent(Graphics g) {
                
@@ -135,10 +184,10 @@ public class RPnGlassPane extends JComponent {
     public void clear() {
         
         path_.reset();
+        wpath_.reset();
+        invalidate();
         repaint();
 
    
     }
-
-
 }
