@@ -136,17 +136,6 @@ public class GenericExtensionCurveCommand extends RpModelConfigChangeCommand {
         ExtensionCurveCalc calc = rpnumerics.RPNUMERICS.createExtensionCurveCalc(segments, areaPointsList);
         BifurcationCurveGeomFactory bifurcationFactory = new BifurcationCurveGeomFactory(calc);
 
-
-
-//        RpCommand command = new RpCommand(((MultiPolygon) convexPolygon).toXML());
-//
-//        System.out.println("Enviando area: " + command);
-//
-//        GenericExtensionCurveCommand.instance().logCommand(command);
-
-
-
-
         return bifurcationFactory.geom();
 
     }

@@ -32,6 +32,8 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
+import rpn.RPnLeftPhaseSpaceAbstraction;
+import rpn.RPnPhaseSpaceAbstraction;
 import rpn.RPnPhaseSpaceFrame;
 import rpn.RPnPhaseSpacePanel;
 import rpn.RPnUIFrame;
@@ -72,6 +74,8 @@ public class RPnCommandModule {
         private RealVector pointVals_;
         private int glassDrawMode_;
         private boolean creatingSelection_;
+        private RPnPhaseSpacePanel curvesPanel_;
+        private RpGeometry selectedGeometry_;
 
         public RPnCommandParser() {
 
@@ -246,7 +250,15 @@ public class RPnCommandModule {
                     SecondaryBifurcationCurveCommand.instance().execute();
 
 
+                } else if (currentCommand_.equalsIgnoreCase("extensioncurve")) {
+                    UIController.instance().setState(new FILE_ACTION_SELECTED(GenericExtensionCurveCommand.instance()));
+                    GenericExtensionCurveCommand.instance().execute();
+
                 }
+
+
+
+
             }
 
             if (currentElement_.equals("REALVECTOR")) {
@@ -273,6 +285,8 @@ public class RPnCommandModule {
                 RPnPhaseSpaceFrame frame = (RPnPhaseSpaceFrame) RPnUIFrame.getFrame(RPnNetworkStatus.ACTIVATED_FRAME_TITLE);
 
                 RPnPhaseSpacePanel panel = frame.phaseSpacePanel();
+
+
 
                 AreaSelected curveSelection = new AreaSelected(coords, panel.scene().getViewingTransform(), new ViewingAttr(Color.red));
 
@@ -406,6 +420,36 @@ public class RPnCommandModule {
 
             }
         }
+    }
+
+    private RpGeometry selectCurve(int curveID) {
+
+        RPnPhaseSpaceAbstraction phaseSpace = UIController.instance().getActivePhaseSpace();
+
+
+
+        Iterator geomObjIterator = phaseSpace.getGeomObjIterator();
+
+
+
+        while (geomObjIterator.hasNext()) {
+            RpGeometry geometry = (RpGeometry) geomObjIterator.next();
+            
+            RpGeomFactory factory = geometry.geomFactory();
+            
+            
+            RPnCurve curve  = (RPnCurve) factory.geomSource();
+            
+            if (curve.getId()==curveID)
+                return geometry;
+            
+            
+
+        }
+
+        return null;
+
+
     }
 
     //
