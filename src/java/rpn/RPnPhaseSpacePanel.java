@@ -58,7 +58,6 @@ import wave.multid.DimMismatchEx;
 import wave.multid.model.MultiGeometryImpl;
 import wave.multid.model.MultiPolygon;
 
-
 public class RPnPhaseSpacePanel extends JPanel implements Printable {
     //
     // Constants
@@ -73,7 +72,6 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
     public static int myW_;                                          //** declarei isso    (Leandro)
     protected List<GraphicsUtil> graphicsUtilList_;
     protected List<MultiGeometryImpl> testeList_;//TODO Will replace List<GraphicsUtil> graphicsUtilList_
-
 
     public List<MultiGeometryImpl> getConvexSelection() {
         return testeList_;
@@ -112,7 +110,7 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
     //
     public RPnPhaseSpacePanel(Scene scene) {
         scene_ = scene;
-        testeList_= new ArrayList<MultiGeometryImpl>();
+        testeList_ = new ArrayList<MultiGeometryImpl>();
 
         if (scene_.getViewingTransform() instanceof Viewing3DTransform) {
             ui_ = new PhaseSpacePanel3DController(scene_.getViewingTransform().
@@ -145,7 +143,7 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
         setBackground(DEFAULT_BOUNDARY_COLOR);
         setPreferredSize(new java.awt.Dimension(myW, myH));
         graphicsUtilList_ = new ArrayList();
-        this.setName("");      
+        this.setName("");
 
     }
 
@@ -183,22 +181,7 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
     }
 
     public void addGraphicUtil(GraphicsUtil gu) {
-        
-          RpCommand command = new RpCommand(((AreaSelected)gu).toXML());
-          
-          System.out.println("Enviando area: "+ command.toXML());
-        
-        GenericExtensionCurveCommand.instance().logCommand(command);
 
-
-        if (RPnNetworkStatus.instance().isOnline() && RPnNetworkStatus.instance().isMaster())
-            RPnNetworkStatus.instance().sendCommand(rpn.controller.ui.UndoActionController.instance().getLastCommand().toXML());
-
-        
-        
-        
-
-        
 
         graphicsUtilList_.add(gu);
     }
@@ -210,16 +193,14 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
     public void setPhysicalBoundarySelected(boolean physicalBoundarySelected) {
         physicalBoundarySelected_ = physicalBoundarySelected;
     }
-    
-    
 
     public void clearGraphicsList() {
         graphicsUtilList_.clear();
     }
 
-    public Polygon getPhysicalBoundaryPolygon(){
+    public Polygon getPhysicalBoundaryPolygon() {
 
-            Polygon dcView = scene_.getViewingTransform().viewPlane().getWindow().dcView(scene_.getViewingTransform());
+        Polygon dcView = scene_.getViewingTransform().viewPlane().getWindow().dcView(scene_.getViewingTransform());
 //            PathIterator pathIterator = dcView.getPathIterator(null);
 
 //            while (!pathIterator.isDone()) {
@@ -238,7 +219,7 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
 //
 //            }
 
-            return dcView;
+        return dcView;
 
 
     }
@@ -258,10 +239,20 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
         testeList_.clear();
         graphicsUtilList_.removeAll(toRemove);
         setPhysicalBoundarySelected(false);
-        
+
     }
 
     public void setLastGraphicsUtil(GraphicsUtil lastGraphicsUtil) {
+        RpCommand command = new RpCommand(lastGraphicsUtil.toXML());
+
+        System.out.println("Enviando area: " + command.toXML());
+
+        GenericExtensionCurveCommand.instance().logCommand(command);
+
+
+        if (RPnNetworkStatus.instance().isOnline() && RPnNetworkStatus.instance().isMaster()) {
+            RPnNetworkStatus.instance().sendCommand(rpn.controller.ui.UndoActionController.instance().getLastCommand().toXML());
+        }
 
         if (graphicsUtilList_.isEmpty()) {
             graphicsUtilList_.add(lastGraphicsUtil);
@@ -381,14 +372,14 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
         g.setColor(DEFAULT_BACKGROUND_COLOR);
         Shape s = scene_.getViewingTransform().viewPlane().getWindow().dcView(scene_.getViewingTransform());
         ((Graphics2D) g).fill(s);
-        
 
-        if(isPhysicalBoundarySelected()){
-            Color selectedColor = new Color(255,0,0,60);
+
+        if (isPhysicalBoundarySelected()) {
+            Color selectedColor = new Color(255, 0, 0, 60);
             g.setColor(selectedColor);
             g.fillPolygon(getPhysicalBoundaryPolygon());
         }
-       
+
 
         /*
          * POINT MARKS
@@ -497,11 +488,11 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
             g.setColor(prev);
             ((Graphics2D) g).setStroke(stroke);
         }
-        
-        
-      
-        
-        
+
+
+
+
+
         for (MultiGeometryImpl multiPolyLine : testeList_) {
             try {
 
@@ -510,20 +501,20 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
             } catch (DimMismatchEx ex) {
                 Logger.getLogger(RPnPhaseSpacePanel.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
+
         }
-        
-          
-         /*
+
+
+        /*
          * SCENE
          */
 
-        
-         if (scene_ != null) {
+
+        if (scene_ != null) {
             scene_.draw((Graphics2D) g);
         }
-        
-        
+
+
 
 
     }
@@ -534,11 +525,11 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
             graphicsUtil.update(scene().getViewingTransform());
 
         }
-        
-        
-        
-        
-        
+
+
+
+
+
     }
 
     public BufferedImage createOffSetImageBuffer() {
@@ -693,42 +684,33 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
 
 
     }
-    
-    
-    
-     
-    
 
     public void addGenericSelection(MultiGeometryImpl multiPolyLine) {
 
-        RpCommand command = new RpCommand(((MultiPolygon)multiPolyLine).toXML());
-        
-        
-        System.out.println("Enviando area: "+ command);
-        
+        RpCommand command = new RpCommand(((MultiPolygon) multiPolyLine).toXML());
+
+
+        System.out.println("Enviando area: " + command);
+
         GenericExtensionCurveCommand.instance().logCommand(command);
 
 
-        if (RPnNetworkStatus.instance().isOnline() && RPnNetworkStatus.instance().isMaster())
+        if (RPnNetworkStatus.instance().isOnline() && RPnNetworkStatus.instance().isMaster()) {
             RPnNetworkStatus.instance().sendCommand(rpn.controller.ui.UndoActionController.instance().getLastCommand().toXML());
+        }
 
-        
-        
-        
+
+
+
         testeList_.add(multiPolyLine);
     }
-    
-    
-    
-     public void setLastGenericSelection(MultiGeometryImpl lastGraphicsUtil) {
-         
+
+    public void setLastGenericSelection(MultiGeometryImpl lastGraphicsUtil) {
+
         if (testeList_.isEmpty()) {
             testeList_.add(lastGraphicsUtil);
         } else {
             testeList_.set(testeList_.size() - 1, lastGraphicsUtil);
         }
     }
-    
-    
-    
 }
