@@ -56,7 +56,7 @@ public abstract class GraphicsUtil {
         g.setColor(previousColor);
         g.setStroke(previousStroke);
     }
-
+   
     public void setShape(Shape createShape) {
         shape_ = createShape;
 

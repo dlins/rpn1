@@ -39,6 +39,7 @@ import rpn.RPnUIFrame;
 
 import rpn.component.RpGeomFactory;
 import rpn.component.RpGeometry;
+import rpn.component.util.AreaSelected;
 import rpn.configuration.Configuration;
 import rpn.controller.ui.FILE_ACTION_SELECTED;
 import rpn.controller.ui.UndoActionController;
@@ -142,7 +143,7 @@ public class RPnCommandModule {
 
             if (currentElement_.equals("COMMANDPARAM")) {
 
-                
+
                 if (att.getValue("name").equals("phasespace")) {
 
                     UIController.instance().setActivePhaseSpace(RPnDataModule.getPhaseSpace(att.getValue("value")));
@@ -260,6 +261,24 @@ public class RPnCommandModule {
 
 
             if (name.equals("CURVESELECTION")) {
+
+
+                RealVector[] coords = new RealVector[realVectorList_.size()];
+
+                for (int i = 0; i < coords.length; i++) {
+                    coords[i] = realVectorList_.get(i);
+
+                }
+
+                RPnPhaseSpaceFrame frame = (RPnPhaseSpaceFrame) RPnUIFrame.getFrame(RPnNetworkStatus.ACTIVATED_FRAME_TITLE);
+
+                RPnPhaseSpacePanel panel = frame.phaseSpacePanel();
+
+                AreaSelected curveSelection = new AreaSelected(coords, panel.scene().getViewingTransform(), new ViewingAttr(Color.red));
+
+                panel.addGraphicUtil(curveSelection);
+                panel.updateGraphicsUtil();
+                panel.repaint();
 
                 creatingSelection_ = false;
 

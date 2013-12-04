@@ -12,8 +12,8 @@ import java.awt.Shape;
 import java.awt.Stroke;
 import java.awt.geom.Path2D;
 import java.awt.geom.PathIterator;
+import java.util.ArrayList;
 import java.util.List;
-import rpn.RPnPhaseSpacePanel;
 import wave.multid.Coords2D;
 import wave.multid.CoordsArray;
 import wave.multid.view.ViewingAttr;
@@ -25,6 +25,45 @@ public class AreaSelected extends GraphicsUtil {
 
     public AreaSelected(List<Object> wcObjects, ViewingTransform viewingTransform, ViewingAttr viewAttr) {
         super(wcObjects, viewingTransform, viewAttr);
+
+    }
+
+    public AreaSelected(RealVector[] vertices, ViewingTransform viewingTransform, ViewingAttr viewingAttr) {
+
+        super(createPath2D(vertices), viewingTransform, viewingAttr);
+
+
+
+
+    }
+
+    private static List<Object> createPath2D(RealVector[] vertices) {
+
+        Path2D.Double selectionPath = new Path2D.Double();
+
+        ArrayList<Object> wcList = new ArrayList<Object>();
+
+
+        selectionPath.moveTo(vertices[0].getElement(0), vertices[0].getElement(1));
+
+        selectionPath.lineTo(vertices[1].getElement(0), vertices[1].getElement(1));
+
+        selectionPath.lineTo(vertices[2].getElement(0), vertices[2].getElement(1));
+
+        selectionPath.lineTo(vertices[3].getElement(0), vertices[3].getElement(1));
+
+        selectionPath.closePath();
+
+        wcList.add(selectionPath);
+
+        return wcList;
+
+
+
+
+
+
+
     }
 
     @Override
@@ -61,9 +100,8 @@ public class AreaSelected extends GraphicsUtil {
         return wcPath;
 
     }
-    
-    
-     public void draw(Graphics2D g) {
+
+    public void draw(Graphics2D g) {
 
         Color previousColor = g.getColor();
         g.setColor(getViewingAttr().getColor());
@@ -73,14 +111,12 @@ public class AreaSelected extends GraphicsUtil {
         if (getViewingAttr().isSelected()) {
             drawSelected(g);
         }
-        
-       
+
+
 
         g.setColor(previousColor);
         g.setStroke(previousStroke);
     }
-
-   
 
     @Override
     protected void drawSelected(Graphics2D g) {
@@ -92,27 +128,25 @@ public class AreaSelected extends GraphicsUtil {
         g.fill(getShape());
 
     }
-    
-    
+
     @Override
-    public String toXML(){
-          
+    public String toXML() {
+
         StringBuilder buffer = new StringBuilder();
 
         buffer.append("<CURVESELECTION>\n");
-        
+
 
         List<RealVector> vertices = getWCVertices();
-        
+
         for (int i = 0; i < vertices.size(); i++) {
             buffer.append(vertices.get(i).toXML());
         }
-       
+
         buffer.append("\n</CURVESELECTION>\n");
 
         return buffer.toString();
-        
-        
+
+
     }
-    
 }
