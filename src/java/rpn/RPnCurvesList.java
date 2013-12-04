@@ -431,6 +431,8 @@ public class RPnCurvesList extends Observable implements ActionListener, ListSel
                 RPnCurve curve = (RPnCurve) factory.geomSource();
 
                 RpCommand command = new RpCommand(curve.getId());
+                
+                System.out.println("Enviando comando"+ command.toXML());
 
                 if (RPnNetworkStatus.instance().isOnline() && RPnNetworkStatus.instance().isMaster()) {
                     RPnNetworkStatus.instance().sendCommand(command);
