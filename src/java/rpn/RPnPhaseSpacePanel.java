@@ -243,16 +243,7 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
     }
 
     public void setLastGraphicsUtil(GraphicsUtil lastGraphicsUtil) {
-        RpCommand command = new RpCommand(lastGraphicsUtil.toXML());
-
-        System.out.println("Enviando area: " + command.toXML());
-
-        GenericExtensionCurveCommand.instance().logCommand(command);
-
-
-        if (RPnNetworkStatus.instance().isOnline() && RPnNetworkStatus.instance().isMaster()) {
-            RPnNetworkStatus.instance().sendCommand(rpn.controller.ui.UndoActionController.instance().getLastCommand().toXML());
-        }
+       
 
         if (graphicsUtilList_.isEmpty()) {
             graphicsUtilList_.add(lastGraphicsUtil);

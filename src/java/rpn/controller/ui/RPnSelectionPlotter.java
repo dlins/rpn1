@@ -13,8 +13,11 @@ import java.awt.geom.Path2D;
 import java.util.ArrayList;
 import java.util.List;
 import rpn.RPnPhaseSpacePanel;
+import rpn.command.GenericExtensionCurveCommand;
+import rpn.command.RpCommand;
 import rpn.component.util.AreaSelected;
 import rpn.component.util.GraphicsUtil;
+import rpn.message.RPnNetworkStatus;
 import wave.multid.Coords2D;
 import wave.multid.CoordsArray;
 import wave.multid.Space;
@@ -39,7 +42,7 @@ public class RPnSelectionPlotter extends RPn2DMouseController {
             ViewingAttr viewingAttr = new ViewingAttr(Color.red);
             GraphicsUtil graphicsUtil = new AreaSelected(wcObjList, panel.scene().getViewingTransform(), viewingAttr);
             panel.setLastGraphicsUtil(graphicsUtil);
-            
+
             panel.repaint();
 
         }
@@ -69,6 +72,18 @@ public class RPnSelectionPlotter extends RPn2DMouseController {
 
             addRectangle_ = true;
         } else {
+            GraphicsUtil graphicsUtil = panel.getGraphicsUtil().get(panel.getGraphicsUtil().size() - 1);
+            RpCommand command = new RpCommand(graphicsUtil.toXML());
+
+            System.out.println("Enviando area: " + command.toXML());
+
+            GenericExtensionCurveCommand.instance().logCommand(command);
+
+
+            if (RPnNetworkStatus.instance().isOnline() && RPnNetworkStatus.instance().isMaster()) {
+                RPnNetworkStatus.instance().sendCommand(rpn.controller.ui.UndoActionController.instance().getLastCommand().toXML());
+            }
+
             addRectangle_ = false;
         }
 

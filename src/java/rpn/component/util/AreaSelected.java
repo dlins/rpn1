@@ -108,7 +108,7 @@ public class AreaSelected extends GraphicsUtil {
             buffer.append(vertices.get(i).toXML());
         }
        
-        buffer.append("\n</CURVESELECTION>");
+        buffer.append("\n</CURVESELECTION>\n");
 
         return buffer.toString();
         

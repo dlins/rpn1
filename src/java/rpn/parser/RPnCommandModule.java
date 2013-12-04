@@ -142,10 +142,7 @@ public class RPnCommandModule {
 
             if (currentElement_.equals("COMMANDPARAM")) {
 
-                for (int i = 0; i < att.getLength(); i++) {
-                    //System.out.println(att.getValue(i));
-                }
-
+                
                 if (att.getValue("name").equals("phasespace")) {
 
                     UIController.instance().setActivePhaseSpace(RPnDataModule.getPhaseSpace(att.getValue("value")));
@@ -158,8 +155,6 @@ public class RPnCommandModule {
                 if (att.getValue("name").equals("activated_frame_title")) {
 
                     RPnNetworkStatus.instance().ACTIVATED_FRAME_TITLE = att.getValue("value");
-
-
 
                     if (currentCommand_.equalsIgnoreCase("TOGGLE_NOTEBOARD_MODE")) {
 
