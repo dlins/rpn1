@@ -49,13 +49,15 @@ public class RpCommand extends AbstractAction implements UndoableAction, Seriali
     public RpCommand(int curveID) {
         
         StringBuilder buffer = new StringBuilder();
-        buffer.append("<COMMAND name=\"").append("curveselection");
+        buffer.append("<COMMAND name=\"").append("curveselection\" ");
         
         buffer.append("curveid=\"").append(curveID);
         
         buffer.append("\">");
 
         buffer.append("</COMMAND>");
+        
+        xmlString_ = buffer.toString();
 
     }
 

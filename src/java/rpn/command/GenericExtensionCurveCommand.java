@@ -140,7 +140,7 @@ public class GenericExtensionCurveCommand extends RpModelConfigChangeCommand {
 
     }
 
-    void setGeometryAndPanel(RpGeometry phasSpaceGeometry, RPnPhaseSpacePanel panel) {
+    public void setGeometryAndPanel(RpGeometry phasSpaceGeometry, RPnPhaseSpacePanel panel) {
         curveToProcess_ = phasSpaceGeometry;
         panelToProcess_ = panel;
 
