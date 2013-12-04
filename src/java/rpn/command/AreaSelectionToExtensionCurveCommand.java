@@ -10,14 +10,16 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
-import javax.swing.JButton;
 import javax.swing.JToggleButton;
 import rpn.RPnPhaseSpaceAbstraction;
 import rpn.RPnPhaseSpacePanel;
+import rpn.component.RpGeomFactory;
 import rpn.component.RpGeometry;
 import rpn.controller.ui.AREASELECTION_CONFIG;
 import rpn.controller.ui.RPnSelectionPlotter;
 import rpn.controller.ui.UIController;
+import rpn.message.RPnNetworkStatus;
+import rpnumerics.RPnCurve;
 import wave.util.RealVector;
 
 
@@ -82,6 +84,25 @@ public class AreaSelectionToExtensionCurveCommand extends RpModelPlotCommand imp
         } else {
             setEnabled(true);
             GenericExtensionCurveCommand.instance().setEnabled(true);
+                RpGeomFactory factory = geometryList.get(0).geomFactory();
+
+
+                RPnCurve curve = (RPnCurve) factory.geomSource();
+
+                RpCommand command = new RpCommand(curve.getId());
+                
+                System.out.println("Enviando comando"+ command.toXML());
+
+                if (RPnNetworkStatus.instance().isOnline() && RPnNetworkStatus.instance().isMaster()) {
+                    RPnNetworkStatus.instance().sendCommand(command);
+                }
+
+            
+            
+            
+            
+            
+            
         }
 
     }

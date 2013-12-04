@@ -422,37 +422,8 @@ public class RPnCurvesList extends Observable implements ActionListener, ListSel
             notifyObservers(selectedGeometries);
             selectedGeometries_ = selectedGeometries;
 
-//            for (RpGeometry rpGeometry : selectedGeometries) {
-//
-//
-//                RpGeomFactory factory = rpGeometry.geomFactory();
-//
-//
-//                RPnCurve curve = (RPnCurve) factory.geomSource();
-//
-//                RpCommand command = new RpCommand(curve.getId());
-//                
-//                System.out.println("Enviando comando"+ command.toXML());
-//
-//                if (RPnNetworkStatus.instance().isOnline() && RPnNetworkStatus.instance().isMaster()) {
-//                    RPnNetworkStatus.instance().sendCommand(command);
-//                }
-//
-//            }
 
         }
-
-        // ----- Talvez assim ...
-//        Iterator<RPnPhaseSpacePanel> phaseSpacePanelIterator = UIController.instance().getInstalledPanelsIterator();
-//        while (phaseSpacePanelIterator.hasNext()) {
-//            RPnPhaseSpacePanel panel = phaseSpacePanelIterator.next();
-//            boolean visible = false;
-//            if (selectedGeometries_.size() == 0) visible = true; else visible = false;
-//            panel.setStringVisible(visible);
-//            panel.repaint();
-//        }
-        // -----
-
 
     }
 
