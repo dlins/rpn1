@@ -40,6 +40,7 @@ public class ExtensionCurveCalc extends ContourCurveCalc {
         characteristicDomain_ = characteristicDomain;
         areaSelected_=areaSelected;
         inSideArea_=inSideArea;
+        configuration_=RPNUMERICS.getConfiguration("extensioncurve");
         
     }
 

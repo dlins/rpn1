@@ -6,16 +6,21 @@ package rpn.command;
 
 import java.awt.Polygon;
 import java.awt.event.ActionEvent;
+import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import rpn.RPnPhaseSpaceAbstraction;
 import rpn.RPnPhaseSpacePanel;
+import static rpn.command.RpModelPlotCommand.curveID_;
 import rpn.component.BifurcationCurveGeomFactory;
+import rpn.component.RpCalcBasedGeomFactory;
 import rpn.component.RpGeomFactory;
 import rpn.component.RpGeometry;
 import rpn.component.util.AreaSelected;
 import rpn.controller.ui.UIController;
+import rpn.message.RPnNetworkStatus;
 import rpnumerics.ExtensionCurveCalc;
 import rpnumerics.RPnCurve;
 import wave.multid.Coords2D;
@@ -46,14 +51,31 @@ public class GenericExtensionCurveCommand extends RpModelConfigChangeCommand {
     //
     protected GenericExtensionCurveCommand() {
         super(DESC_TEXT);
-        areaSelected_=new ArrayList<MultiPolygon>();
+        areaSelected_ = new ArrayList<MultiPolygon>();
     }
 
     public void execute() {
         if (curveToProcess_ != null && panelToProcess_ != null) {
-            //processGeometry(curveToProcess_, panelToProcess_);
-            UIController.instance().getActivePhaseSpace().join(processGeometry(curveToProcess_, panelToProcess_));
+            RpGeometry geometry = processGeometry(curveToProcess_, panelToProcess_);
+            UIController.instance().getActivePhaseSpace().join(geometry);
             RPnPhaseSpaceAbstraction phaseSpace = (RPnPhaseSpaceAbstraction) panelToProcess_.scene().getAbstractGeom();
+            RpCalcBasedGeomFactory factory = (RpCalcBasedGeomFactory) geometry.geomFactory();
+            RPnCurve curve = (RPnCurve) factory.geomSource();
+            curve.setId(curveID_);
+            curveID_++;
+
+
+            Iterator oldValue = UIController.instance().getActivePhaseSpace().getGeomObjIterator();
+            PropertyChangeEvent event_ = new PropertyChangeEvent(this, UIController.instance().getActivePhaseSpace().getName(), oldValue, geometry);
+
+            ArrayList<RealVector> inputArray = new ArrayList<RealVector>();
+            logCommand(new RpCommand(event_,inputArray));
+
+            if (RPnNetworkStatus.instance().isOnline() && RPnNetworkStatus.instance().isMaster()) {
+                RPnNetworkStatus.instance().sendCommand(rpn.controller.ui.UndoActionController.instance().getLastCommand().toXML());
+            }
+
+
             phaseSpace.update();
 //            panelToProcess_.clearAreaSelection();
         } else {
@@ -104,7 +126,7 @@ public class GenericExtensionCurveCommand extends RpModelConfigChangeCommand {
 
         List<RealSegment> segments = segmentsIntoArea(selectedGeometry, indexToRemove);
 
-        CoordsArray [] areaPointsList =null ;
+        CoordsArray[] areaPointsList = null;
 
         if (!areaSelected_.isEmpty()) {
 
@@ -113,7 +135,18 @@ public class GenericExtensionCurveCommand extends RpModelConfigChangeCommand {
 
         ExtensionCurveCalc calc = rpnumerics.RPNUMERICS.createExtensionCurveCalc(segments, areaPointsList);
         BifurcationCurveGeomFactory bifurcationFactory = new BifurcationCurveGeomFactory(calc);
-        
+
+
+
+//        RpCommand command = new RpCommand(((MultiPolygon) convexPolygon).toXML());
+//
+//        System.out.println("Enviando area: " + command);
+//
+//        GenericExtensionCurveCommand.instance().logCommand(command);
+
+
+
+
         return bifurcationFactory.geom();
 
     }
@@ -175,6 +208,6 @@ public class GenericExtensionCurveCommand extends RpModelConfigChangeCommand {
     void setSelectedArea(MultiPolygon areaSelected) {
         areaSelected_.clear();
         areaSelected_.add(areaSelected);
-        
+
     }
 }
