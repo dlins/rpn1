@@ -185,6 +185,8 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
     public void addGraphicUtil(GraphicsUtil gu) {
         
           RpCommand command = new RpCommand(((AreaSelected)gu).toXML());
+          
+          System.out.println("Enviando area: "+ command.toXML());
         
         GenericExtensionCurveCommand.instance().logCommand(command);
 
@@ -701,6 +703,9 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
 
         RpCommand command = new RpCommand(((MultiPolygon)multiPolyLine).toXML());
         
+        
+        System.out.println("Enviando area: "+ command);
+        
         GenericExtensionCurveCommand.instance().logCommand(command);
 
 
@@ -716,7 +721,7 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
     
     
      public void setLastGenericSelection(MultiGeometryImpl lastGraphicsUtil) {
-
+         
         if (testeList_.isEmpty()) {
             testeList_.add(lastGraphicsUtil);
         } else {

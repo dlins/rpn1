@@ -142,7 +142,7 @@ public class MultiPolygon extends MultiGeometryImpl {
 
         }
        
-        buffer.append("<\\DOMAINSELECTION>");
+        buffer.append("\n</DOMAINSELECTION>");
 
 
         return buffer.toString();

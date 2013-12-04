@@ -266,12 +266,6 @@ public class RPnCommandModule {
 
             if (name.equals("CURVESELECTION")) {
 
-
-
-
-
-
-
                 creatingSelection_ = false;
 
             }
@@ -293,7 +287,7 @@ public class RPnCommandModule {
 
                 RPnPhaseSpacePanel panel = frame.phaseSpacePanel();
 
-                panel.addGenericSelection(polygon);
+                panel.setLastGenericSelection(polygon);
 
                 panel.updateGraphicsUtil();
                 panel.repaint();

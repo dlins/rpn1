@@ -58,6 +58,7 @@ public class RpCommand extends AbstractAction implements UndoableAction, Seriali
         StringBuilder buffer = new StringBuilder();
 
         buffer.append("<COMMAND name=\"").append("selection").append("\">");
+        buffer.append("\n");
         buffer.append(commandText);
         buffer.append("</COMMAND>");
 

@@ -13,6 +13,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 import rpn.RPnPhaseSpacePanel;
+import rpn.command.GenericExtensionCurveCommand;
+import rpn.command.RpCommand;
+import rpn.message.RPnNetworkStatus;
 import wave.multid.Coords2D;
 import wave.multid.CoordsArray;
 import wave.multid.Space;
@@ -31,9 +34,6 @@ public class RPnGenericSelectionPlotter extends RPn2DMouseController {
     public RPnGenericSelectionPlotter() {
         lineCoordsList_ = new ArrayList<CoordsArray>();
     }
-    
-    
-    
 
     @Override
     public void mouseMoved(MouseEvent me) {
@@ -115,12 +115,24 @@ public class RPnGenericSelectionPlotter extends RPn2DMouseController {
             }
 
             MultiPolygon convexPolygon = multiPolygon.convexPolygon();
-            
+
             setChanged();
             notifyObservers(convexPolygon);
 
             convexPolygon.viewingAttr().setColor(Color.green);
             panel.setLastGenericSelection(convexPolygon);
+
+            RpCommand command = new RpCommand(((MultiPolygon) convexPolygon).toXML());
+
+            System.out.println("Enviando area: " + command);
+
+            GenericExtensionCurveCommand.instance().logCommand(command);
+
+
+            if (RPnNetworkStatus.instance().isOnline() && RPnNetworkStatus.instance().isMaster()) {
+                RPnNetworkStatus.instance().sendCommand(rpn.controller.ui.UndoActionController.instance().getLastCommand().toXML());
+            }
+
 
             panel.updateGraphicsUtil();
             panel.repaint();
