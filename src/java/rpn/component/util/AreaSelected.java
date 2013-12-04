@@ -19,6 +19,7 @@ import wave.multid.CoordsArray;
 import wave.multid.view.ViewingAttr;
 import wave.multid.view.ViewingTransform;
 import rpnumerics.RPNUMERICS;
+import wave.util.RealVector;
 
 public class AreaSelected extends GraphicsUtil {
 
@@ -91,4 +92,26 @@ public class AreaSelected extends GraphicsUtil {
         g.fill(getShape());
 
     }
+    
+    
+    public String toXML(){
+          
+        StringBuffer buffer = new StringBuffer();
+
+        buffer.append("<CURVESELECTION>\n");
+        
+
+        List<RealVector> vertices = getWCVertices();
+        
+        for (int i = 0; i < vertices.size(); i++) {
+            buffer.append(vertices.get(i).toXML());
+        }
+       
+        buffer.append("<\\CURVESELECTION>");
+
+        return buffer.toString();
+        
+        
+    }
+    
 }

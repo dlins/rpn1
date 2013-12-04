@@ -91,6 +91,7 @@ public class GenericExtensionCurveCommand extends RpModelConfigChangeCommand {
                 GeomObjView geomObjView = (GeomObjView) geomIterator.next();
                 if (((RpGeometry) geomObjView.getAbstractGeom()) == selectedGeometry) {
                     System.out.println("curve.segments().size() ::: " + curve.segments().size());
+                    System.out.println(polygon.toXML());
                     List<Integer> segmentIndex = containsCurve(curve, (Polygon) polygon.getShape(), phaseSpacePanel);
                     if (!segmentIndex.isEmpty()) {
                         indexToRemove.addAll(segmentIndex);
@@ -110,17 +111,10 @@ public class GenericExtensionCurveCommand extends RpModelConfigChangeCommand {
             areaPointsList = areaSelected_.get(0).extractVertices();
         }
 
-
         ExtensionCurveCalc calc = rpnumerics.RPNUMERICS.createExtensionCurveCalc(segments, areaPointsList);
         BifurcationCurveGeomFactory bifurcationFactory = new BifurcationCurveGeomFactory(calc);
-
-        
-//        phaseSpacePanel.clearAreaSelection();
-//        areaSelected_.clear();
         
         return bifurcationFactory.geom();
-        
-        
 
     }
 

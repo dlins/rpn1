@@ -5,6 +5,7 @@
  */
 package rpn.parser;
 
+import java.awt.Color;
 import java.awt.Point;
 import java.awt.geom.PathIterator;
 import org.xml.sax.Attributes;
@@ -25,10 +26,14 @@ import org.xml.sax.ContentHandler;
 import org.xml.sax.XMLReader;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
+import rpn.RPnPhaseSpaceFrame;
+import rpn.RPnPhaseSpacePanel;
 import rpn.RPnUIFrame;
 
 
@@ -42,31 +47,38 @@ import rpn.glasspane.RPnGlassPane;
 import rpn.message.RPnHttpPoller;
 import rpn.message.RPnNetworkStatus;
 import rpnumerics.RPnCurve;
+import wave.multid.CoordsArray;
+import wave.multid.model.MultiPolygon;
+import wave.multid.view.ViewingAttr;
 
-/** With this class the calculus made in a previous session can be reloaded. A previous state can be reloaded reading a XML file that is used by this class */
+/**
+ * With this class the calculus made in a previous session can be reloaded. A
+ * previous state can be reloaded reading a XML file that is used by this class
+ */
 public class RPnCommandModule {
 
     public static String SESSION_ID_ = "";
 
     static public class RPnCommandParser implements ContentHandler {
-       
 
         private String currentElement_;
         private String currentCommand_;
         private StringBuilder stringBuffer_ = new StringBuilder();
         private Configuration currentConfiguration_;
         private boolean isChangePhysicsParamsCommand_;
+        private List<RealVector> realVectorList_;
         private Integer curveId_;
-
         private RealVector pointVals_;
         private int glassDrawMode_;
+        private boolean creatingSelection_;
 
-        
         public RPnCommandParser() {
 
 
             stringBuffer_ = new StringBuilder();
             isChangePhysicsParamsCommand_ = false;
+            realVectorList_ = new ArrayList<RealVector>();
+            creatingSelection_ = false;
 
         }
 
@@ -82,10 +94,26 @@ public class RPnCommandModule {
             // and the COMMAND tag would carry away the phasespace information with it !??
             currentElement_ = name;
 
+            if (currentElement_.equals("CURVESELECTION")) {
+
+                realVectorList_.clear();
+                creatingSelection_ = true;
+
+            }
+
+
+            if (currentElement_.equals("DOMAINSELECTION")) {
+
+                realVectorList_.clear();
+                creatingSelection_ = true;
+
+            }
+
+
 
             if (currentElement_.equals("RPNSESSION")) {
 
-                    SESSION_ID_ = att.getValue("id");
+                SESSION_ID_ = att.getValue("id");
             }
 
             if (isChangePhysicsParamsCommand_) {
@@ -115,7 +143,6 @@ public class RPnCommandModule {
             if (currentElement_.equals("COMMANDPARAM")) {
 
                 for (int i = 0; i < att.getLength(); i++) {
-
                     //System.out.println(att.getValue(i));
                 }
 
@@ -142,7 +169,9 @@ public class RPnCommandModule {
 
                             RPnHttpPoller.POLLING_MODE = RPnHttpPoller.TEXT_POLLER;
 
-                        } else RPnHttpPoller.POLLING_MODE = RPnHttpPoller.OBJ_POLLER;
+                        } else {
+                            RPnHttpPoller.POLLING_MODE = RPnHttpPoller.OBJ_POLLER;
+                        }
 
                         Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.INFO, "Noteboard mode toggled successfuly...");
 
@@ -150,7 +179,7 @@ public class RPnCommandModule {
 
                         RPnUIFrame.noteboardClear();
                         Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.INFO, "Noteboard cleared successfuly...");
-                        
+
                     } else if (currentCommand_.equalsIgnoreCase("FOCUS_GAINED")) {
 
 
@@ -166,7 +195,7 @@ public class RPnCommandModule {
             if (currentElement_.equalsIgnoreCase("COMMAND")) {
                 if (att.getValue("curveid") != null) {
                     curveId_ = new Integer(att.getValue("curveid"));
-                    RpModelPlotCommand.curveID_=curveId_;
+                    RpModelPlotCommand.curveID_ = curveId_;
 
                 }
                 currentCommand_ = att.getValue("name");
@@ -186,7 +215,7 @@ public class RPnCommandModule {
                 } else if (currentCommand_.equalsIgnoreCase("wavecurve")) {
                     UIController.instance().setState(new FILE_ACTION_SELECTED(WaveCurvePlotCommand.instance()));
                 } else if (currentCommand_.equalsIgnoreCase("levelcurve")) {
-                      UIController.instance().setState(new FILE_ACTION_SELECTED(LevelCurvePlotCommand.instance()));
+                    UIController.instance().setState(new FILE_ACTION_SELECTED(LevelCurvePlotCommand.instance()));
 
                 } else if (currentCommand_.equalsIgnoreCase("pointlevelcurve")) {
 
@@ -235,22 +264,72 @@ public class RPnCommandModule {
         public void endElement(String uri, String name, String qName) throws SAXException {
 
 
+            if (name.equals("CURVESELECTION")) {
+
+
+
+
+
+
+
+                creatingSelection_ = false;
+
+            }
+
+
+            if (name.equals("DOMAINSELECTION")) {
+
+                CoordsArray[] coords = new CoordsArray[realVectorList_.size()];
+
+                for (int i = 0; i < realVectorList_.size(); i++) {
+
+                    coords[i] = new CoordsArray(realVectorList_.get(i));
+
+                }
+
+
+                MultiPolygon polygon = new MultiPolygon(coords, new ViewingAttr(Color.green));
+                RPnPhaseSpaceFrame frame = (RPnPhaseSpaceFrame) RPnUIFrame.getFrame(RPnNetworkStatus.ACTIVATED_FRAME_TITLE);
+
+                RPnPhaseSpacePanel panel = frame.phaseSpacePanel();
+
+                panel.addGenericSelection(polygon);
+
+                panel.updateGraphicsUtil();
+                panel.repaint();
+
+                creatingSelection_ = false;
+
+            }
+
+
+
+
             if (name.equals("REALVECTOR")) {
 
-                UIController.instance().userInputComplete(new RealVector(stringBuffer_.toString()));
-                                
-                 if (UIController.instance().getState() instanceof FILE_ACTION_SELECTED){
-                    
-                    FILE_ACTION_SELECTED fileAction = (FILE_ACTION_SELECTED)UIController.instance().getState();
-                
-                    if (fileAction.getAction() instanceof RpModelPlotCommand){
-                        //System.out.println("ID Setting : " + curveId_);
-                        
-                        RpGeometry geometry = UIController.instance().getActivePhaseSpace().getLastGeometry();
-                        RPnCurve curve = (RPnCurve) geometry.geomFactory().geomSource();
-                        curve.setId(curveId_);                                               
-                    }                                        
-                }                
+                if (creatingSelection_) {
+
+                    realVectorList_.add(new RealVector(stringBuffer_.toString()));
+
+
+                } else {
+                    UIController.instance().userInputComplete(new RealVector(stringBuffer_.toString()));
+
+
+                    if (UIController.instance().getState() instanceof FILE_ACTION_SELECTED) {
+
+                        FILE_ACTION_SELECTED fileAction = (FILE_ACTION_SELECTED) UIController.instance().getState();
+
+                        if (fileAction.getAction() instanceof RpModelPlotCommand) {
+                            //System.out.println("ID Setting : " + curveId_);
+
+                            RpGeometry geometry = UIController.instance().getActivePhaseSpace().getLastGeometry();
+                            RPnCurve curve = (RPnCurve) geometry.geomFactory().geomSource();
+                            curve.setId(curveId_);
+                        }
+                    }
+                }
+
             }
 
             if (name.equals("PAUSE")) {
@@ -272,8 +351,8 @@ public class RPnCommandModule {
                     CurveRemoveCommand.instance().remove(curveId_);
                 }
 
-                
-                if (currentCommand_.equals("levelcurve")){
+
+                if (currentCommand_.equals("levelcurve")) {
                     LevelCurvePlotCommand.instance().execute();
                 }
             }
@@ -324,7 +403,9 @@ public class RPnCommandModule {
     //
     // Initializers
     //        
-    /** Initializes the XML parser to reload a previous session. */
+    /**
+     * Initializes the XML parser to reload a previous session.
+     */
     public static void init(XMLReader parser, InputStream inputStream) {
         try {
             parser.setContentHandler(new RPnCommandParser());
@@ -347,7 +428,9 @@ public class RPnCommandModule {
     //
     // Methods
     //
-    /** Writes the data of actual session into a XML file. */
+    /**
+     * Writes the data of actual session into a XML file.
+     */
     static public void export(FileWriter writer) throws java.io.IOException {
 
         System.out.println("Command module export started...");

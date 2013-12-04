@@ -41,6 +41,8 @@ import org.apache.batik.dom.GenericDOMImplementation;
 import org.apache.batik.svggen.SVGGraphics2D;
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
+import rpn.command.GenericExtensionCurveCommand;
+import rpn.command.RpCommand;
 import rpn.component.util.AreaSelected;
 import rpn.component.util.LinePlotted;
 import rpn.component.util.GeometryGraph;
@@ -50,8 +52,11 @@ import rpn.controller.ui.AREASELECTION_CONFIG;
 import rpn.controller.ui.CLASSIFIERAGENT_CONFIG;
 import rpn.controller.ui.UIController;
 import rpn.controller.ui.VELOCITYAGENT_CONFIG;
+import rpn.message.RPnNetworkStatus;
+import rpn.parser.RPnDataModule;
 import wave.multid.DimMismatchEx;
 import wave.multid.model.MultiGeometryImpl;
+import wave.multid.model.MultiPolygon;
 
 
 public class RPnPhaseSpacePanel extends JPanel implements Printable {
@@ -178,6 +183,20 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
     }
 
     public void addGraphicUtil(GraphicsUtil gu) {
+        
+          RpCommand command = new RpCommand(((AreaSelected)gu).toXML());
+        
+        GenericExtensionCurveCommand.instance().logCommand(command);
+
+
+        if (RPnNetworkStatus.instance().isOnline() && RPnNetworkStatus.instance().isMaster())
+            RPnNetworkStatus.instance().sendCommand(rpn.controller.ui.UndoActionController.instance().getLastCommand().toXML());
+
+        
+        
+        
+
+        
 
         graphicsUtilList_.add(gu);
     }
@@ -679,6 +698,17 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
     
 
     public void addGenericSelection(MultiGeometryImpl multiPolyLine) {
+
+        RpCommand command = new RpCommand(((MultiPolygon)multiPolyLine).toXML());
+        
+        GenericExtensionCurveCommand.instance().logCommand(command);
+
+
+        if (RPnNetworkStatus.instance().isOnline() && RPnNetworkStatus.instance().isMaster())
+            RPnNetworkStatus.instance().sendCommand(rpn.controller.ui.UndoActionController.instance().getLastCommand().toXML());
+
+        
+        
         
         testeList_.add(multiPolyLine);
     }

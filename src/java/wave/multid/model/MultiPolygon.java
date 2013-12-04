@@ -124,4 +124,30 @@ public class MultiPolygon extends MultiGeometryImpl {
 
 
     private native List<RealVector> convexHull(List<RealVector> coords);
+    
+    
+    public String toXML(){
+        
+        
+        StringBuffer buffer = new StringBuffer();
+
+        buffer.append("<DOMAINSELECTION>\n");
+        
+        CoordsArray [] vertices = extractVertices();
+        
+        for (int i = 0; i < vertices.length; i++) {
+            CoordsArray coordsArray = vertices[i];
+            RealVector realVector = new RealVector(coordsArray.getCoords());
+            buffer.append(realVector.toXML());
+
+        }
+       
+        buffer.append("<\\DOMAINSELECTION>");
+
+
+        return buffer.toString();
+        
+        
+        
+    }
 }

@@ -116,7 +116,26 @@ public abstract class GraphicsUtil {
 
     }
     
-    
+    public String toXML(){
+        
+         StringBuffer buffer = new StringBuffer();
+
+        buffer.append("<CURVESELECTION>\n");
+        
+
+        List<RealVector> vertices = getWCVertices();
+        
+        for (int i = 0; i < vertices.size(); i++) {
+            buffer.append(vertices.get(i).toXML());
+        }
+       
+        buffer.append("<\\CURVESELECTION>");
+
+        return buffer.toString();
+        
+        
+        
+    }
     
 
     public abstract Shape createShape();

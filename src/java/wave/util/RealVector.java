@@ -11,10 +11,10 @@ import java.text.DecimalFormat;
 import java.text.ParsePosition;
 import java.util.Locale;
 
-
-public class RealVector extends GVector implements Comparable {
+public class RealVector extends GVector {
 
     static public int XML_FORMAT_PRECISION_USED = 4;
+
 
     public RealVector(int size) {
         super(size);
@@ -38,18 +38,13 @@ public class RealVector extends GVector implements Comparable {
     @Override
     public String toString() {
 
-        StringBuilder buffer = new StringBuilder();
+        StringBuilder buffer = new StringBuilder(); 
 
         for (int i = 0; i < this.getSize(); i++) {
 
             //buffer.append(String.format("%3.6E",getElement(i)));
-<<<<<<< HEAD
-            buffer.append(String.format("%.4f", getElement(i)));
-            //buffer.append(getElement(i));
-=======
             //buffer.append(String.format("%.4f",getElement(i)));
             buffer.append(getElement(i));
->>>>>>> master
             buffer.append(" ");
 
         }
@@ -65,39 +60,22 @@ public class RealVector extends GVector implements Comparable {
 
     private static double[] fromString(String data) {
 
-<<<<<<< HEAD
-        DecimalFormat parseFormatter = new DecimalFormat();
-=======
     	DecimalFormat parseFormatter = new DecimalFormat();
 	Locale usLocale = new Locale("en", "US");
->>>>>>> master
 
-        /*try {
+	/*try {
 
-         parseFormatter.applyPattern("0.######E0#");
+		parseFormatter.applyPattern("0.######E0#");
 
-         } catch (IllegalArgumentException ex) {
+	} catch (IllegalArgumentException ex) {
 
-         System.out.println(ex);
+		System.out.println(ex);
 
-         }*/
+	}*/
 
         String[] components = data.split(" ");
         double[] doubleList = new double[components.length];
 
-<<<<<<< HEAD
-        for (int j = 0; j < components.length; j++) {
-            try {
-                Number element = NumberFormat.getInstance().parse(components[j]);
-
-                //Number element = parseFormatter.parse(components[j],new ParsePosition(0));
-                doubleList[j] = element.doubleValue();
-
-            } catch (java.text.ParseException ex) {
-                System.out.println("Error parsing the Double string" + "\n" + ex);
-            }
-        }
-=======
         for (int j = 0; j < components.length; j++) 
 	
           try {		
@@ -115,9 +93,8 @@ public class RealVector extends GVector implements Comparable {
           catch (java.text.ParseException ex) {
                	System.out.println("Error parsing the Double string" + "\n" + ex);
           }
->>>>>>> master
 
-        //}
+	//}
 
         return doubleList;
     }
@@ -249,51 +226,12 @@ public class RealVector extends GVector implements Comparable {
 
     }
 
+
     public double distance(RealVector input) {
         RealVector p1 = new RealVector(this);
         p1.sub(input);
         return (p1.norm());
     }
 
-    @Override
-    public int compareTo(Object o) {
-        RealVector realVector = (RealVector) o;
-        for (int i = 0; i < this.getSize(); i++) {
-            if (getElement(i) < realVector.getElement(i)) {
-                return -1;
-            } else if (getElement(i) > realVector.getElement(i)) {
-                return 1;
-            }
 
-        }
-
-        return 0;
-
-    }
-
-    public int compare(RealVector o1, RealVector o2) {
-
-        RealVector realVector = (RealVector) o1;
-        RealVector realVector2 = (RealVector) o2;
-
-        return realVector.compareTo(realVector2);
-
-
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-
-
-        if (compare(this, (RealVector)obj) == 0) {
-            return true;
-        }
-        return false;
-
-    }
-
-//    @Override
-//    public int compareTo(Object o) {
-//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-//    }
 }

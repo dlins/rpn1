@@ -71,6 +71,10 @@ public class GenericAreaCommand extends RpModelPlotCommand implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
+        MultiPolygon polygon = (MultiPolygon)arg;
+        System.out.println(polygon.toXML());
        GenericExtensionCurveCommand.instance().setSelectedArea((MultiPolygon)arg);
+       
+
     }
 }
