@@ -74,7 +74,7 @@ public class RPnCommandModule {
         private RealVector pointVals_;
         private int glassDrawMode_;
         private boolean creatingSelection_;
-        private RPnPhaseSpacePanel curvesPanel_;
+        private static RPnPhaseSpacePanel curvesPanel_;
         private RpGeometry selectedGeometry_;
 
         public RPnCommandParser() {
