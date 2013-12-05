@@ -55,6 +55,8 @@ public class GenericExtensionCurveCommand extends RpModelConfigChangeCommand {
     }
 
     public void execute() {
+        System.out.println("Curva para estender: "+ curveToProcess_ + " painel: "+ panelToProcess_);
+        
         if (curveToProcess_ != null && panelToProcess_ != null) {
             RpGeometry geometry = processGeometry(curveToProcess_, panelToProcess_);
             UIController.instance().getActivePhaseSpace().join(geometry);
