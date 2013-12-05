@@ -262,6 +262,13 @@ public class RPnCommandModule {
 
 
                 }
+                
+                else if (currentCommand_.equalsIgnoreCase("clear")) {
+                   ClearPhaseSpaceCommand.instance().clear();
+                           
+
+
+                }
 
 
 
