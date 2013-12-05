@@ -80,7 +80,7 @@ public class AreaSelectionToExtensionCurveCommand extends RpModelPlotCommand imp
             setEnabled(true);
             GenericExtensionCurveCommand.instance().setEnabled(true);
 
-
+            System.out.println("Tamanho da lista de curva selecionada: " + geometryList.size() + " " + geometryList);
             if (RPnNetworkStatus.instance().isOnline() && RPnNetworkStatus.instance().isMaster()) {
                 RpGeomFactory factory = geometryList.get(0).geomFactory();
 
