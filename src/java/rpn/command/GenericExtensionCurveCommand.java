@@ -77,7 +77,7 @@ public class GenericExtensionCurveCommand extends RpModelConfigChangeCommand {
 
 
             phaseSpace.update();
-//            panelToProcess_.clearAreaSelection();
+
         } else {
             System.out.println("Entrou no execute() de GenericExtensionCurveAgent com membros nulos");
         }

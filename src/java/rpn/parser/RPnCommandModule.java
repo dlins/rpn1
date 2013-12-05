@@ -431,6 +431,8 @@ public class RPnCommandModule {
 
         private RpGeometry selectCurve(int curveID) {
 
+
+            System.out.println("Curve id :"+curveID);
             RPnPhaseSpaceAbstraction phaseSpace = UIController.instance().getActivePhaseSpace();
 
 
