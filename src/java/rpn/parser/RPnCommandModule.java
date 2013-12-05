@@ -256,6 +256,7 @@ public class RPnCommandModule {
 
                 } else if (currentCommand_.equalsIgnoreCase("curveselection")) {
                     selectedGeometry_ = selectCurve(curveId_);
+                    System.out.println("Selecionando curva :"+curveId_);
 
                     GenericExtensionCurveCommand.instance().setGeometryAndPanel(selectedGeometry_, curvesPanel_);
 
@@ -453,9 +454,9 @@ public class RPnCommandModule {
                     return geometry;
                 }
 
-
-
             }
+            
+            System.out.println("Curva selecionada nao achada !");
 
             return null;
 
