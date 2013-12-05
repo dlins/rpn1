@@ -90,7 +90,7 @@ public class AreaSelectionToExtensionCurveCommand extends RpModelPlotCommand imp
                 RpCommand command = new RpCommand(curve.getId());
 
                 System.out.println("Enviando comando" + command.toXML());
-                RPnNetworkStatus.instance().sendCommand(command);
+                RPnNetworkStatus.instance().sendCommand(command.toXML());
             }
 
         }
