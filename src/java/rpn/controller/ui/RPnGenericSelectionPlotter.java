@@ -124,8 +124,6 @@ public class RPnGenericSelectionPlotter extends RPn2DMouseController {
 
             RpCommand command = new RpCommand(((MultiPolygon) convexPolygon).toXML());
 
-            System.out.println("Enviando area: " + command);
-
             GenericExtensionCurveCommand.instance().logCommand(command);
 
 

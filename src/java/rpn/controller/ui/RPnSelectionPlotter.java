@@ -75,8 +75,6 @@ public class RPnSelectionPlotter extends RPn2DMouseController {
             GraphicsUtil graphicsUtil = panel.getGraphicsUtil().get(panel.getGraphicsUtil().size() - 1);
             RpCommand command = new RpCommand(graphicsUtil.toXML());
 
-            System.out.println("Enviando area: " + command.toXML());
-
             GenericExtensionCurveCommand.instance().logCommand(command);
 
 

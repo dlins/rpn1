@@ -680,9 +680,6 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
 
         RpCommand command = new RpCommand(((MultiPolygon) multiPolyLine).toXML());
 
-
-        System.out.println("Enviando area: " + command);
-
         GenericExtensionCurveCommand.instance().logCommand(command);
 
 

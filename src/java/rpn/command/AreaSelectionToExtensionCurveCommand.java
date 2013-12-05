@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package rpn.command;
 
 import java.awt.event.ActionEvent;
@@ -22,12 +21,10 @@ import rpn.message.RPnNetworkStatus;
 import rpnumerics.RPnCurve;
 import wave.util.RealVector;
 
-
 public class AreaSelectionToExtensionCurveCommand extends RpModelPlotCommand implements Observer {
 
     static public final String DESC_TEXT = "AreaToExtensionCurve";
     static private AreaSelectionToExtensionCurveCommand instance_ = null;
-
 
     private AreaSelectionToExtensionCurveCommand() {
         super(DESC_TEXT, null, new JToggleButton());
@@ -61,14 +58,12 @@ public class AreaSelectionToExtensionCurveCommand extends RpModelPlotCommand imp
 
     }
 
-
     public static AreaSelectionToExtensionCurveCommand instance() {
         if (instance_ == null) {
             instance_ = new AreaSelectionToExtensionCurveCommand();
         }
         return instance_;
     }
-
 
     @Override
     public RpGeometry createRpGeometry(RealVector[] coords) {
@@ -84,27 +79,21 @@ public class AreaSelectionToExtensionCurveCommand extends RpModelPlotCommand imp
         } else {
             setEnabled(true);
             GenericExtensionCurveCommand.instance().setEnabled(true);
+
+
+            if (RPnNetworkStatus.instance().isOnline() && RPnNetworkStatus.instance().isMaster()) {
                 RpGeomFactory factory = geometryList.get(0).geomFactory();
 
 
                 RPnCurve curve = (RPnCurve) factory.geomSource();
 
                 RpCommand command = new RpCommand(curve.getId());
-                
-                System.out.println("Enviando comando"+ command.toXML());
 
-                if (RPnNetworkStatus.instance().isOnline() && RPnNetworkStatus.instance().isMaster()) {
-                    RPnNetworkStatus.instance().sendCommand(command);
-                }
+                System.out.println("Enviando comando" + command.toXML());
+                RPnNetworkStatus.instance().sendCommand(command);
+            }
 
-            
-            
-            
-            
-            
-            
         }
 
     }
-
 }
