@@ -53,9 +53,9 @@ public class RpCommand extends AbstractAction implements UndoableAction, Seriali
         
         buffer.append("curveid=\"").append(curveID);
         
-        buffer.append("\">");
+        buffer.append("\"/>");
 
-        buffer.append("</COMMAND>");
+//        buffer.append("</COMMAND>");
         
         xmlString_ = buffer.toString();
 
@@ -90,9 +90,9 @@ public class RpCommand extends AbstractAction implements UndoableAction, Seriali
         StringBuilder buffer = new StringBuilder();
         Configuration configuration = (Configuration) event_.getNewValue();
 
-        buffer.append("<COMMAND name=\"").append(event_.getSource()).append("\"/>");
+        buffer.append("<COMMAND name=\"").append(event_.getSource()).append("\">");
         buffer.append(configuration.toXML());
-//        buffer.append("</COMMAND>");
+        buffer.append("</COMMAND>");
 
         xmlString_ = buffer.toString();
 
