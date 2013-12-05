@@ -70,7 +70,10 @@ public class ClearPhaseSpaceCommand extends javax.swing.AbstractAction {
         while (phaseSpacePanelIterator.hasNext()) {
             RPnPhaseSpacePanel panel = phaseSpacePanelIterator.next();
             panel.clearAllStrings();
+            panel.clearAreaSelection();
+            panel.clearGraphicsList();
             panel.repaint();
+            
         }
 
                
