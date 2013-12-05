@@ -47,16 +47,16 @@ public class RpCommand extends AbstractAction implements UndoableAction, Seriali
     }
 
     public RpCommand(int curveID) {
-        
+
         StringBuilder buffer = new StringBuilder();
         buffer.append("<COMMAND name=\"").append("curveselection\" ");
         buffer.append("phasespace=\"").append(UIController.instance().getActivePhaseSpace().getName()).append("\" ");
         buffer.append("curveid=\"").append(curveID);
-        
+
         buffer.append("\"/>");
 
 //        buffer.append("</COMMAND>");
-        
+
         xmlString_ = buffer.toString();
 
     }
@@ -68,12 +68,13 @@ public class RpCommand extends AbstractAction implements UndoableAction, Seriali
 
         StringBuilder buffer = new StringBuilder();
 
-        
-            buffer.append("<COMMAND name=\"").append("selection").append("\">");
-            buffer.append("\n");
-            buffer.append(commandText);
-            buffer.append("</COMMAND>");
-        
+
+        buffer.append("<COMMAND name=\"").append("selection");
+        buffer.append("phasespace=\"").append(UIController.instance().getActivePhaseSpace().getName()).append("\" ");
+        buffer.append("\">");
+        buffer.append(commandText);
+        buffer.append("</COMMAND>");
+
 
 
 
