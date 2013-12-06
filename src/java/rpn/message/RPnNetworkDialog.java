@@ -142,7 +142,7 @@ public class RPnNetworkDialog extends JDialog implements PropertyChangeListener 
 
 
         infoText.setColumns(40);
-        infoText.setRows(5);
+        infoText.setRows(15);
         infoText.setLineWrap(false);
 
 

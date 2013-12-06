@@ -394,13 +394,10 @@ public class UIController extends ComponentUI {
 
     /** Do a specific action when all user inputs has been made. */
     public void userInputComplete(RealVector userInput) {
+
         // state dependent
-
         handler_.userInputComplete(this, userInput);
-
-        //if (RPnNetworkStatus.instance().isOnline() && RPnNetworkStatus.instance().isMaster()) {
-          //  RPnNetworkStatus.instance().sendCommand(rpn.controller.ui.UndoActionController.instance().getLastCommand().toXML());
-       // }
+        
 
     }
 

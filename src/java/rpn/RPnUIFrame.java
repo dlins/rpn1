@@ -42,6 +42,11 @@ import wave.util.RectBoundary;
 
 public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
+    public static String dir = "";
+    public static String RPN_SESSION_FILENAME = "RPNSESSION.XML";
+    public static String RPN_LOG_FILENAME = "out/RPN_LAST_SESSION.XML";
+    
+       
     //
     // Members
     //
@@ -85,8 +90,9 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     private JMenuItem editMenuItem4 = new JMenuItem("Clears Classifiers");
     private JMenuItem editMenuItem5 = new JMenuItem("Starts with Black Background");
     private JMenuItem editMenuItem6 = new JMenuItem("Starts with White Background");
-   
-    public static String dir = "";
+
+    private static FileWriter logWriter_;
+    
     private RPnPhaseSpaceFrame frameZoom = null;
     private ArrayList<RPnPhaseSpaceFrame> listFrameZoom = new ArrayList();
     private static RPnPhaseSpaceFrame[] riemannFrames_;
@@ -98,6 +104,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     public RPnUIFrame(RPnMenuCommand command) {
 
         enableEvents(AWTEvent.WINDOW_EVENT_MASK);
+        
         try {
 
             // TODO may be UIController should control PHASESPACE as well
@@ -129,6 +136,8 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
             exportMenuItem_.setEnabled(true);
 
             matlabExportMenuItem_.setEnabled(true);
+            
+            openLogFile();
 
 
         } catch (Exception e) {
@@ -243,11 +252,16 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     }
     //File | Exit action performed
     public void jMenuFileExit_actionPerformed(ActionEvent e) {
-        commandMenu_.finalizeApplication();
+        
         
         // TODO : a RPnNetworkModule out of parser (all others as well)
         if (rpn.message.RPnNetworkStatus.instance() != null)
             rpn.message.RPnNetworkStatus.instance().disconnect();
+        
+        closeLogFile();
+        
+        commandMenu_.finalizeApplication();
+        
     }
 
     //Help | About action performed
@@ -748,23 +762,14 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     // saves the whole user commands session...
     void saveSession_actionPerformed(ActionEvent e) {
         try {
+            
             JFileChooser chooser = new JFileChooser();
-            chooser.setSelectedFile(new File("RPNSESSION.XML"));
+            chooser.setSelectedFile(new File(RPN_SESSION_FILENAME));
             chooser.setFileFilter(new FileNameExtensionFilter("XML File", "xml", "XML"));
             if (chooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
-                FileWriter writer = new FileWriter(chooser.getSelectedFile().
-                        getAbsolutePath());
-                writer.write(RPnConfigReader.XML_HEADER);
-                writer.write("<RPNSESSION id=" + '\"' + RPnCommandModule.SESSION_ID_ + '\"' + ">\n");
-                writer.write(" <PHASESPACE name=\"Phase Space\">\n");
-                writer.write("  <RPNCONFIGURATION>\n");
-                RPnNumericsModule.export(writer);
-                RPnVisualizationModule.export(writer);
-                writer.write("  </RPNCONFIGURATION>\n");
-                writer.write(" </PHASESPACE>\n");
-                RPnCommandModule.export(writer);
-                writer.write("</RPNSESSION>");
-                writer.close();
+    
+                saveRPnSession(chooser.getSelectedFile().getAbsolutePath());
+                
             }
 
         } catch (java.io.IOException ioex) {
@@ -1428,6 +1433,71 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 frame.getNoteboardToggleButton().setEnabled(false);
             }
         }
+    }
+
+    protected void saveRPnSession(String absolutePath) throws IOException {
+    
+        FileWriter writer = new FileWriter(absolutePath);
+        writer.write(RPnConfigReader.XML_HEADER);
+        writer.write("<RPNSESSION id=" + '\"' + RPnCommandModule.SESSION_ID_ + '\"' + ">\n");
+        writer.write(" <PHASESPACE name=\"Phase Space\">\n");
+        writer.write("  <RPNCONFIGURATION>\n");
+        RPnNumericsModule.export(writer);
+        RPnVisualizationModule.export(writer);
+        writer.write("  </RPNCONFIGURATION>\n");
+        writer.write(" </PHASESPACE>\n");
+        RPnCommandModule.export(writer);
+        writer.write("</RPNSESSION>");
+        writer.close();
+
+    }
+
+    protected static void openLogFile() {
+        
+        try {
+            
+            logWriter_ = new FileWriter(RPN_LOG_FILENAME);
+            logWriter_.write(RPnConfigReader.XML_HEADER);
+            logWriter_.write("<RPNSESSION id=" + '\"' + RPnCommandModule.SESSION_ID_ + '\"' + ">\n");
+            logWriter_.write(" <PHASESPACE name=\"Phase Space\">\n");
+            logWriter_.write("  <RPNCONFIGURATION>\n");
+            
+            RPnNumericsModule.export(logWriter_);
+            RPnVisualizationModule.export(logWriter_);
+            
+            logWriter_.write("  </RPNCONFIGURATION>\n");
+            logWriter_.write(" </PHASESPACE>\n");                       
+            
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        
+        
+    }
+    
+    public static void commandLogAppend(String msg) {        
+
+        try {
+            
+            logWriter_.write(msg + "\n");
+            
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        
+        
+    }
+    
+    public static void closeLogFile() {
+
+        try {
+                                    
+            logWriter_.write("</RPNSESSION>");
+            logWriter_.close();           
+            
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }                                
     }
 
 

@@ -550,6 +550,8 @@ public class RPnNetworkStatus {
         commandPublisher_.publish(trimURL(commandDesc));
         
         Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.INFO, "Command successfully published was : " + commandDesc);
+        log ("COMMAND EXECUTED : = " + extractCommandName(commandDesc));
+        
     }
 
     public void sendCommand(Object obj) {
@@ -558,6 +560,7 @@ public class RPnNetworkStatus {
         commandPublisher_.publish(obj);
 
         Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.INFO, "Object successfully published ! ");
+        
     }
 
     public static RPnNetworkStatus instance() {
@@ -592,5 +595,15 @@ public class RPnNetworkStatus {
         }
 
         return null;
+    }
+
+    protected String extractCommandName(String commandDesc) {
+        
+        // we shoud start using DOM
+        String commandName = commandDesc.substring(15,commandDesc.indexOf("phasespace") - 2);
+        if (commandName.startsWith("FOCUS"))
+            return " ";
+        
+        return commandDesc.substring(15,commandDesc.indexOf("phasespace") - 2);                
     }
 }

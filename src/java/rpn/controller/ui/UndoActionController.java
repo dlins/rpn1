@@ -10,6 +10,7 @@ import javax.swing.AbstractAction;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.Iterator;
+import rpn.RPnUIFrame;
 import rpn.command.RpCommand;
 
 public class UndoActionController extends AbstractAction {
@@ -40,6 +41,8 @@ public class UndoActionController extends AbstractAction {
         lastCommand_ = action;
         commandArray_.add(action);
         setEnabled(true);
+        
+        RPnUIFrame.commandLogAppend(action.toXML());
     }
 
     public void actionPerformed(ActionEvent action) {
@@ -67,6 +70,7 @@ public class UndoActionController extends AbstractAction {
     
     public void removeLastCommand(){
         
+        // TODO : update the log file... UNDOCOMMAND ??
         if(lastCommand_!=null)
         commandArray_.remove(lastCommand_);
     }
