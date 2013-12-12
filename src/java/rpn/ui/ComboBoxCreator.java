@@ -57,7 +57,11 @@ public class ComboBoxCreator extends UIComponentCreator {
 
         panel_.setLayout(gridBayLayout);
 
-        HashMap<String, String> paramsValues = configuration_.getParams();
+        HashMap<String, String> paramsValues = new HashMap<String,String>();
+        
+        
+        paramsValues.put("on curve", "1");
+        paramsValues.put("on domain", "0");
 
         JComboBox comboBox = new JComboBox(paramsValues.keySet().toArray());
 
@@ -97,36 +101,10 @@ public class ComboBoxCreator extends UIComponentCreator {
 
 
             String selectedItem = (String) combo.getSelectedItem();
-
-
-            HashMap<String, String> paramsValues = configuration_.getParams();
-
-            Set<Entry<String, String>> paramsSet = paramsValues.entrySet();
-
-            int i=0;
-
-            String[] newValue = new String[configuration_.getParamsSize()];
             
-            for (Entry<String, String> value : paramsSet) {
-                
-                
-                if (value.getKey().equals(selectedItem)){
-                    
-                    newValue[i]="1";
-                    
-                    configuration_.setParamValue(selectedItem, "1");
-                    
-                    RPNUMERICS.setMethod(configuration_.getName(), selectedItem);
-                    
-                }
-                else{
-                    newValue[i]="0";
-                    configuration_.setParamValue(selectedItem, "0");                    
-                }
+            
+            RPNUMERICS.setParamValue(configuration_.getName(), configurationParameter_, selectedItem);
 
-                i++;
-                
-            }
            
         }
     }

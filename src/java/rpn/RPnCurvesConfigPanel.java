@@ -75,7 +75,7 @@ public class RPnCurvesConfigPanel extends Observable implements PropertyChangeLi
 
                 Set<Entry<String, String>> paramSet = configParams.entrySet();
 
-                JPanel paramsPanel = new JPanel();
+                JPanel paramsPanel = new JPanel(new GridLayout(1,paramSet.size()));
                 int i = 0;
                 for (Entry<String, String> paramEntry : paramSet) {
                     if (!paramEntry.getKey().contains("resolution")) {
@@ -92,16 +92,6 @@ public class RPnCurvesConfigPanel extends Observable implements PropertyChangeLi
                     curvesTabbedPanel_.addTab(config.getName(), paramsPanel);
                 }
 
-
-            } else {
-
-
-                if (configurationType.equalsIgnoreCase("METHOD")) {
-                    Configuration config = entry.getValue();
-                    ComboBoxCreator comboCreator = new ComboBoxCreator(config, config.getName());
-                    methodsPanel_.add(comboCreator.createUIComponent());
-
-                }
             }
 
 
