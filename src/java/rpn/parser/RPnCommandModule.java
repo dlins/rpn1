@@ -117,7 +117,6 @@ public class RPnCommandModule {
             if (isChangePhysicsParamsCommand_) {
 
                 if (currentElement_.equals("PHYSICSCONFIG")) {
-                    //System.out.println("Current configuration: " + currentConfiguration_.getName());
 
                     currentConfiguration_ = currentConfiguration_.getConfiguration(att.getValue("name"));
                 }
@@ -209,7 +208,6 @@ public class RPnCommandModule {
                     UIController.instance().setState(new FILE_ACTION_SELECTED(WaveCurvePlotCommand.instance()));
                 } else if (currentCommand_.equalsIgnoreCase("levelcurve")) {
                     UIController.instance().setState(new FILE_ACTION_SELECTED(LevelCurvePlotCommand.instance()));
-//                    LevelCurvePlotCommand.instance().execute();
                     
                 } else if (currentCommand_.equalsIgnoreCase("pointlevelcurve")) {
 

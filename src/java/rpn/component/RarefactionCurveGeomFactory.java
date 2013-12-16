@@ -44,38 +44,5 @@ public class RarefactionCurveGeomFactory extends WaveCurveOrbitGeomFactory {
 
     }
 
-    public String toXML() {
-
-
-        StringBuilder buffer = new StringBuilder();
-
-        Orbit geomSource = (Orbit) geomSource();
-
-        String curve_name = '\"' + geomSource.getClass().getSimpleName() + '\"';
-        String dimension = '\"' + Integer.toString(RPNUMERICS.domainDim())  + '\"';
-
-        //
-        // PRINTS OUT THE CURVE ATTS
-        //
-        buffer.append("<" + Orbit.XML_TAG +
-                        " curve_name=" + ' ' + curve_name + ' ' +
-                        " dimension=" + ' ' +  dimension + ' ' +
-                        " startpoint=\"" + geomSource.getPoints()[0].getCoords() + '\"' +
-                        " format_desc=\"1 segment per row\">" + "\n");
-
-        //
-        // PRINTS OUT THE CONFIGURATION INFORMATION
-        //
-        buffer.append(rpCalc().getConfiguration().toXML());
-
-        //
-        // PRINTS OUT THE SEGMENTS COORDS
-        //
-        buffer.append(geomSource.toXML());
-
-        buffer.append("</" + Orbit.XML_TAG + ">" + "\n");
-
-        return buffer.toString();
-
-    }
+   
 }

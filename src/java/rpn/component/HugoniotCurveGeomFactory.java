@@ -66,5 +66,46 @@ public class HugoniotCurveGeomFactory extends RpCalcBasedGeomFactory {
 
 
     }
+    
+    @Override
+     public String toXML() {
+
+
+        StringBuilder buffer = new StringBuilder();
+        
+
+        HugoniotCurve  geomSource = (HugoniotCurve) geomSource();
+        PhasePoint  referencePoint = geomSource.getXZero();
+
+        String curve_name = '\"' + geomSource.getClass().getSimpleName() + '\"';
+        String dimension = '\"' + Integer.toString(RPNUMERICS.domainDim())  + '\"';
+        
+        HugoniotCurveCalc hugoniotCalc = (HugoniotCurveCalc) rpCalc();
+
+        //
+        // PRINTS OUT THE CURVE ATTS
+        //
+        buffer.append("<").append(Orbit.XML_TAG).append(" curve_name=" + ' ').append(curve_name).append(' ' + " dimension=" + ' ').append(dimension).append(' ' + " startpoint=\"").append(referencePoint.getCoords()).append('\"' +
+                        " format_desc=\"1 segment per row\">" + "\n");
+
+        //
+        // PRINTS OUT THE CONFIGURATION INFORMATION
+        //
+        buffer.append(hugoniotCalc.getConfiguration().toXML());
+
+        //
+        // PRINTS OUT THE SEGMENTS COORDS
+        //
+        buffer.append(geomSource.toXML());
+
+        buffer.append("</" + Orbit.XML_TAG + ">" + "\n");
+
+        return buffer.toString();
+
+    }
+    
+    
+    
+    
 
 }

@@ -23,7 +23,7 @@ public class FundamentalCurve extends Orbit implements WaveCurveBranch, RpSoluti
     private int curveType_;
     private int curveIndex_;
     private boolean initialSubCurve_;
-
+    private OrbitPoint referencePoint_;
     public FundamentalCurve(OrbitPoint[] points, int family, int increase) {
         super(points, increase);
         familyIndex_ = family;
@@ -151,6 +151,16 @@ public class FundamentalCurve extends Orbit implements WaveCurveBranch, RpSoluti
 
     }
     // -------------------------------------------------------------------------
+
+    @Override
+    public OrbitPoint getReferencePoint() {
+        return referencePoint_;
+    }
+
+    @Override
+    public void setReferencePoint(OrbitPoint referencePoint) {
+        referencePoint_=referencePoint;
+    }
 
 
 

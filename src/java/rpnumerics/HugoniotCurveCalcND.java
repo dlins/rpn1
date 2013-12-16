@@ -34,11 +34,6 @@ public class HugoniotCurveCalcND extends ContourCurveCalc implements HugoniotCur
         String [] parameterToKeep  = {"direction"};
         
         configuration_.keepParameters(parameterToKeep);
-        
-        System.out.println("Curve Config: "+config);
-        
-        System.out.println("Hugoniot Config: "+configuration_);
-
 
     }
     //

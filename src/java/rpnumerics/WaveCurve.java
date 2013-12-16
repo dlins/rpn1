@@ -21,6 +21,7 @@ public class WaveCurve extends RPnCurve implements WaveCurveBranch, RpSolution {
     private int family_;
     private int direction_;
     private List<WaveCurveBranch> branchList_;
+    private OrbitPoint referencePoint_;
     private double ALFA;
 
     public WaveCurve(int family, int increase) {
@@ -179,6 +180,16 @@ public class WaveCurve extends RPnCurve implements WaveCurveBranch, RpSolution {
 
     }
     // -------------------------------------------------------------------------
+
+    @Override
+    public OrbitPoint getReferencePoint() {
+        return referencePoint_;
+    }
+
+    @Override
+    public void setReferencePoint(OrbitPoint referencePoint) {
+        referencePoint_=referencePoint;
+    }
 
 
 }

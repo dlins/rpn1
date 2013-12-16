@@ -9,6 +9,7 @@ import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import java.util.Iterator;
 import javax.swing.JToggleButton;
+import static rpn.command.RpModelPlotCommand.curveID_;
 import rpn.component.*;
 import rpn.configuration.Configuration;
 import rpn.controller.ui.UIController;
@@ -51,7 +52,6 @@ public class LevelCurvePlotCommand extends RpModelPlotCommand {
     @Override
     public void execute() {
 
-        System.out.println("Chamando execute de level curve");
         Double level = new Double(RPNUMERICS.getParamValue("levelcurve", "level"));
         LevelCurveGeomFactory factory = new LevelCurveGeomFactory(RPNUMERICS.createLevelCurveCalc(level));
         logLevelCurvePlotCommand(factory, level);
@@ -107,7 +107,8 @@ public class LevelCurvePlotCommand extends RpModelPlotCommand {
         configuration.setParamValue("level", String.valueOf(level));
 
         RPnCurve curve = (RPnCurve) factory.geomSource();
-        curve.setId(curveID_);
+        if(curve!=null){
+            curve.setId(curveID_);
         curveID_++;
 
         Iterator oldValue = UIController.instance().getActivePhaseSpace().getGeomObjIterator();
@@ -115,12 +116,13 @@ public class LevelCurvePlotCommand extends RpModelPlotCommand {
 
         ArrayList<RealVector> emptyInput = new ArrayList<RealVector>();
         RpCommand rpCommand = new RpCommand(event, emptyInput);
-        System.out.println("Logando comando de nivel: " + rpCommand.toXML());
         logCommand(rpCommand);
 
         if (RPnNetworkStatus.instance().isOnline() && RPnNetworkStatus.instance().isMaster()) {
             RPnNetworkStatus.instance().sendCommand(rpn.controller.ui.UndoActionController.instance().getLastCommand().toXML());
         }
+        }
+        
 
 
     }

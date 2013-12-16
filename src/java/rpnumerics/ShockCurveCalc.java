@@ -37,12 +37,14 @@ public class ShockCurveCalc extends WaveCurveOrbitCalc implements RpCalculation 
 
     public RpSolution calc() throws RpException {
 
-        RpSolution result = calc("methodName_", newtonTolerance_, getStart(), getFamilyIndex(), getDirection());
-
+        ShockCurve result = (ShockCurve)calc("methodName_", newtonTolerance_, getStart(), getFamilyIndex(), getDirection());
+        
         if (result == null) {
             throw new RpException("Error in native layer");
         }
-
+        
+        result.setReferencePoint(getStart());
+        
         return result;
     }
 

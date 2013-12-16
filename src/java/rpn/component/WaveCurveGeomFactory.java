@@ -15,6 +15,10 @@ import rpnumerics.ShockCurve;
 import rpnumerics.WaveCurve;
 import rpnumerics.WaveCurveBranch;
 import rpnumerics.FundamentalCurve;
+import rpnumerics.Orbit;
+import rpnumerics.OrbitPoint;
+import rpnumerics.RPNUMERICS;
+import rpnumerics.RpSolution;
 import rpnumerics.WaveCurveOrbitCalc;
 import wave.multid.view.ViewingAttr;
 import wave.util.RealSegment;
@@ -103,5 +107,46 @@ public class WaveCurveGeomFactory extends WaveCurveOrbitGeomFactory {
             return new ViewingAttr(Color.blue);
         }
         return null;
+    }
+
+    @Override
+    public String toXML() {
+
+
+        StringBuilder buffer = new StringBuilder();
+
+        WaveCurve geomSource = (WaveCurve) geomSource();
+        OrbitPoint referencePoint = geomSource.getReferencePoint();
+
+        String curve_name = '\"' + geomSource.getClass().getSimpleName() + '\"';
+        String dimension = '\"' + Integer.toString(RPNUMERICS.domainDim()) + '\"';
+
+        WaveCurveOrbitCalc orbitCalc = (WaveCurveOrbitCalc) rpCalc();
+
+        //
+        // PRINTS OUT THE CURVE ATTS
+        //
+        buffer.append("<").append(Orbit.XML_TAG).append(" curve_name=" + ' ').append(curve_name).append(' ' + " dimension=" + ' ').append(dimension).append(' ' + " startpoint=\"").append(referencePoint.getCoords()).append('\"'
+                + " format_desc=\"1 segment per row\">" + "\n");
+
+        //
+        // PRINTS OUT THE CONFIGURATION INFORMATION
+        //
+        buffer.append(orbitCalc.getConfiguration().toXML());
+        //
+        // PRINTS OUT THE SEGMENTS COORDS
+        //
+        List<WaveCurveBranch> branchsList = geomSource.getBranchsList();
+        
+        for (WaveCurveBranch waveCurveBranch : branchsList) {
+            FundamentalCurve fundamentalCurve = (FundamentalCurve)waveCurveBranch;
+            buffer.append(fundamentalCurve.toXML());
+        }
+
+
+        buffer.append("</" + Orbit.XML_TAG + ">" + "\n");
+
+        return buffer.toString();
+
     }
 }
