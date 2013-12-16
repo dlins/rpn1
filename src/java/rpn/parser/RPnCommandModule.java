@@ -209,7 +209,7 @@ public class RPnCommandModule {
                     UIController.instance().setState(new FILE_ACTION_SELECTED(WaveCurvePlotCommand.instance()));
                 } else if (currentCommand_.equalsIgnoreCase("levelcurve")) {
                     UIController.instance().setState(new FILE_ACTION_SELECTED(LevelCurvePlotCommand.instance()));
-                    LevelCurvePlotCommand.instance().execute();
+//                    LevelCurvePlotCommand.instance().execute();
                     
                 } else if (currentCommand_.equalsIgnoreCase("pointlevelcurve")) {
 
@@ -382,9 +382,9 @@ public class RPnCommandModule {
                 }
 
 
-//                if (currentCommand_.equals("levelcurve")) {
-//                    LevelCurvePlotCommand.instance().execute();
-//                }
+                if (currentCommand_.equals("levelcurve")) {
+                    LevelCurvePlotCommand.instance().execute();
+                }
             }
 
 

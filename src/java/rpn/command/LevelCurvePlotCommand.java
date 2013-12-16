@@ -124,29 +124,5 @@ public class LevelCurvePlotCommand extends RpModelPlotCommand {
 
 
     }
-
-    /**
-     * @deprecated Trocar
-     * @param resolution
-     * @return
-     */
-    private static ArrayList<Double> processLevels(String resolution) {
-
-        String[] splitedResolution = resolution.split(" ");
-
-        ArrayList<Double> result = new ArrayList<Double>();
-
-        try {
-            for (int i = 0; i < splitedResolution.length; i++) {
-                String string = splitedResolution[i];
-
-                result.add(new Double(string));
-            }
-        } catch (NumberFormatException ex) {
-            System.out.println("Error in resolution format !");
-            ex.printStackTrace();
-        }
-        return result;
-
-    }
+   
 }
