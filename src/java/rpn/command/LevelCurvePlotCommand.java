@@ -58,27 +58,20 @@ public class LevelCurvePlotCommand extends RpModelPlotCommand {
         UIController.instance().getActivePhaseSpace().plot(factory.geom());
 
 
-
-
     }
 
     @Override
     public void execute(int curveId) {
-
-
-        ArrayList<Double> levelValues = processLevels(RPNUMERICS.getParamValue("levelcurve", "levels"));
-
-        Double levelValue = levelValues.get(0);
-
-        RpCalcBasedGeomFactory factory = factory = new LevelCurveGeomFactory(RPNUMERICS.createLevelCurveCalc(levelValue));
-
+        
+        Double level = new Double(RPNUMERICS.getParamValue("levelcurve", "level"));
+        LevelCurveGeomFactory factory = new LevelCurveGeomFactory(RPNUMERICS.createLevelCurveCalc(level));
         RpGeometry geometry = factory.geom();
 
         if (geometry == null) {
             return;
         }
 
-        logLevelCurvePlotCommand(factory, levelValue, curveId);
+        logLevelCurvePlotCommand(factory, level, curveId);
 
         UIController.instance().getActivePhaseSpace().plot(geometry);
 
@@ -124,8 +117,8 @@ public class LevelCurvePlotCommand extends RpModelPlotCommand {
         RpCommand rpCommand = new RpCommand(event, emptyInput);
         System.out.println("Logando comando de nivel: " + rpCommand.toXML());
         logCommand(rpCommand);
-        
-          if (RPnNetworkStatus.instance().isOnline() && RPnNetworkStatus.instance().isMaster()) {
+
+        if (RPnNetworkStatus.instance().isOnline() && RPnNetworkStatus.instance().isMaster()) {
             RPnNetworkStatus.instance().sendCommand(rpn.controller.ui.UndoActionController.instance().getLastCommand().toXML());
         }
 
