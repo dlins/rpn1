@@ -124,6 +124,11 @@ public class LevelCurvePlotCommand extends RpModelPlotCommand {
         RpCommand rpCommand = new RpCommand(event, emptyInput);
         System.out.println("Logando comando de nivel: " + rpCommand.toXML());
         logCommand(rpCommand);
+        
+          if (RPnNetworkStatus.instance().isOnline() && RPnNetworkStatus.instance().isMaster()) {
+            RPnNetworkStatus.instance().sendCommand(rpn.controller.ui.UndoActionController.instance().getLastCommand().toXML());
+        }
+
 
     }
 
