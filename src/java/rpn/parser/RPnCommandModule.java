@@ -382,9 +382,9 @@ public class RPnCommandModule {
                 }
 
 
-                if (currentCommand_.equals("levelcurve")) {
-                    LevelCurvePlotCommand.instance().execute();
-                }
+//                if (currentCommand_.equals("levelcurve")) {
+//                    LevelCurvePlotCommand.instance().execute();
+//                }
             }
 
 
