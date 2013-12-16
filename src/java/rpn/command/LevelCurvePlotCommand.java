@@ -51,15 +51,13 @@ public class LevelCurvePlotCommand extends RpModelPlotCommand {
     @Override
     public void execute() {
 
+        System.out.println("Chamando execute de level curve");
+        Double level = new Double(RPNUMERICS.getParamValue("levelcurve", "level"));
+        LevelCurveGeomFactory factory = new LevelCurveGeomFactory(RPNUMERICS.createLevelCurveCalc(level));
+        logLevelCurvePlotCommand(factory, level);
+        UIController.instance().getActivePhaseSpace().plot(factory.geom());
 
-        ArrayList<Double> levelValues = processLevels(RPNUMERICS.getParamValue("levelcurve", "levels"));
-        LevelCurveGeomFactory factory = null;
-        for (Double levelValue : levelValues) {
-            factory = new LevelCurveGeomFactory(RPNUMERICS.createLevelCurveCalc(levelValue));
-            logLevelCurvePlotCommand(factory, levelValue);
-            UIController.instance().getActivePhaseSpace().plot(factory.geom());
 
-        }
 
 
     }
@@ -90,7 +88,7 @@ public class LevelCurvePlotCommand extends RpModelPlotCommand {
     private void logLevelCurvePlotCommand(RpCalcBasedGeomFactory factory, double level, int curveId) {
         RpCalculation calc = (RpCalculation) factory.rpCalc();
         Configuration configuration = calc.getConfiguration();
-        configuration.setParamValue("levels", String.valueOf(level));
+        configuration.setParamValue("level", String.valueOf(level));
 
         RPnCurve curve = (RPnCurve) factory.geomSource();
         curve.setId(curveId);
@@ -100,19 +98,20 @@ public class LevelCurvePlotCommand extends RpModelPlotCommand {
 
         ArrayList<RealVector> emptyInput = new ArrayList<RealVector>();
         logCommand(new RpCommand(event, emptyInput));
-        
-        if (RPnNetworkStatus.instance().isOnline() && RPnNetworkStatus.instance().isMaster())
+
+        if (RPnNetworkStatus.instance().isOnline() && RPnNetworkStatus.instance().isMaster()) {
             RPnNetworkStatus.instance().sendCommand(rpn.controller.ui.UndoActionController.instance().getLastCommand().toXML());
-        
-        
-        
+        }
+
+
+
     }
 
     private void logLevelCurvePlotCommand(RpCalcBasedGeomFactory factory, double level) {
 
         RpCalculation calc = (RpCalculation) factory.rpCalc();
         Configuration configuration = calc.getConfiguration();
-        configuration.setParamValue("levels", String.valueOf(level));
+        configuration.setParamValue("level", String.valueOf(level));
 
         RPnCurve curve = (RPnCurve) factory.geomSource();
         curve.setId(curveID_);
@@ -123,13 +122,13 @@ public class LevelCurvePlotCommand extends RpModelPlotCommand {
 
         ArrayList<RealVector> emptyInput = new ArrayList<RealVector>();
         RpCommand rpCommand = new RpCommand(event, emptyInput);
-        System.out.println("Logando comando de nivel: "+rpCommand.toXML());
+        System.out.println("Logando comando de nivel: " + rpCommand.toXML());
         logCommand(rpCommand);
 
     }
 
     /**
-     * @deprecated  Trocar
+     * @deprecated Trocar
      * @param resolution
      * @return
      */
