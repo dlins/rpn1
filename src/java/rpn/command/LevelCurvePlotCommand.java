@@ -12,6 +12,7 @@ import javax.swing.JToggleButton;
 import rpn.component.*;
 import rpn.configuration.Configuration;
 import rpn.controller.ui.UIController;
+import rpn.message.RPnNetworkStatus;
 import rpnumerics.RPNUMERICS;
 import rpnumerics.RPnCurve;
 import rpnumerics.RpCalculation;
@@ -99,6 +100,12 @@ public class LevelCurvePlotCommand extends RpModelPlotCommand {
 
         ArrayList<RealVector> emptyInput = new ArrayList<RealVector>();
         logCommand(new RpCommand(event, emptyInput));
+        
+        if (RPnNetworkStatus.instance().isOnline() && RPnNetworkStatus.instance().isMaster())
+            RPnNetworkStatus.instance().sendCommand(rpn.controller.ui.UndoActionController.instance().getLastCommand().toXML());
+        
+        
+        
     }
 
     private void logLevelCurvePlotCommand(RpCalcBasedGeomFactory factory, double level) {
