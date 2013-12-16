@@ -6,14 +6,11 @@
 package rpn.parser;
 
 import java.awt.Color;
-import java.awt.Point;
-import java.awt.geom.PathIterator;
 import org.xml.sax.Attributes;
 import org.xml.sax.Locator;
 
 import rpn.command.*;
 import rpn.controller.ui.UIController;
-import rpn.controller.ui.UI_ACTION_SELECTED;
 
 import rpnumerics.RPNUMERICS;
 
@@ -31,8 +28,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JFrame;
-import rpn.RPnLeftPhaseSpaceAbstraction;
 import rpn.RPnPhaseSpaceAbstraction;
 import rpn.RPnPhaseSpaceFrame;
 import rpn.RPnPhaseSpacePanel;
@@ -45,8 +40,6 @@ import rpn.component.util.AreaSelected;
 import rpn.configuration.Configuration;
 import rpn.controller.ui.FILE_ACTION_SELECTED;
 import rpn.controller.ui.UndoActionController;
-import rpn.controller.ui.UserInputHandler;
-import rpn.glasspane.RPnGlassPane;
 import rpn.message.RPnHttpPoller;
 import rpn.message.RPnNetworkStatus;
 import rpnumerics.RPnCurve;
@@ -216,7 +209,8 @@ public class RPnCommandModule {
                     UIController.instance().setState(new FILE_ACTION_SELECTED(WaveCurvePlotCommand.instance()));
                 } else if (currentCommand_.equalsIgnoreCase("levelcurve")) {
                     UIController.instance().setState(new FILE_ACTION_SELECTED(LevelCurvePlotCommand.instance()));
-
+                    LevelCurvePlotCommand.instance().execute();
+                    
                 } else if (currentCommand_.equalsIgnoreCase("pointlevelcurve")) {
 
                     UIController.instance().setState(new FILE_ACTION_SELECTED(PointLevelCurvePlotCommand.instance()));

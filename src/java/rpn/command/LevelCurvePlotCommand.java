@@ -115,7 +115,9 @@ public class LevelCurvePlotCommand extends RpModelPlotCommand {
         PropertyChangeEvent event = new PropertyChangeEvent(this, UIController.instance().getActivePhaseSpace().getName(), oldValue, factory.geom());
 
         ArrayList<RealVector> emptyInput = new ArrayList<RealVector>();
-        logCommand(new RpCommand(event, emptyInput));
+        RpCommand rpCommand = new RpCommand(event, emptyInput);
+        System.out.println("Logando comando de nivel: "+rpCommand.toXML());
+        logCommand(rpCommand);
 
     }
 
