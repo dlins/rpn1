@@ -21,7 +21,7 @@ ifeq ($(RPHOSTTYPE),darwin_i386)
 else # ifeq ($(RPHOSTTYPE),linux_*)
     LIBEXT   = so
     CPPFLAGS = $(INCLUDE) -g -pg -I $(JAVA_INC) -I $(JAVA_INC)/linux
-    LDFLAG   = -Wl,-soname,$(LIBNAME).$(LIBEXT) -fPIC -pg 
+    LDFLAG   = -Wl,-soname,$(LIBNAME).$(LIBEXT) -fPIC
     LDLIB    = -L/usr/lib -lblas -ldl -llapack 
 endif
 

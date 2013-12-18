@@ -185,7 +185,7 @@ public class Orbit extends RPnCurve implements RpSolution {
 
     @Override
     public String toString() {
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         buf.append("\n points = ");
         for (int i = 0; i < points_.length; i++) {
             buf.append("[" + i + "] = " + points_[i] + "  ");
@@ -196,7 +196,7 @@ public class Orbit extends RPnCurve implements RpSolution {
 
     public String toXML() {
 
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
 
 
         for (int i = 0; i < points_.length; i++) 

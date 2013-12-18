@@ -22,6 +22,10 @@ public class ShockCurveGeomFactory extends WaveCurveOrbitGeomFactory {
     public ShockCurveGeomFactory(ShockCurveCalc calc) {
         super(calc);
     }
+    
+    public ShockCurveGeomFactory(ShockCurveCalc calc,ShockCurve curve) {
+        super(calc,curve);
+    }
 
     //
     // Accessors/Mutators

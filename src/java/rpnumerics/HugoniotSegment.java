@@ -36,11 +36,9 @@ public class HugoniotSegment extends RealSegment {
     //
     // Constructors
     //
-    
-    
     //TODO  Usar array de lambda . A quantidade de lambda varia de acordo com a fisica
     public HugoniotSegment(RealVector leftPoint, double leftSigma, RealVector rightPoint, double rightSigma, double leftLambda1, double leftLambda2, double rightLambda1, double rightLambda2,
-            int type,String signature) {
+            int type, String signature) {
         super(leftPoint, rightPoint);
         leftPoint_ = leftPoint;
         leftSigma_ = leftSigma;
@@ -59,10 +57,10 @@ public class HugoniotSegment extends RealSegment {
         rightLambdaArray_[1] = rightLambda2;
 
         intType_ = type;
-        
-        signature_=signature;
-        
-        
+
+        signature_ = signature;
+
+
     }
 
     public void setIntType(int type_) {
@@ -110,17 +108,16 @@ public class HugoniotSegment extends RealSegment {
         return signature_;
     }
 
-    
-    
-    
     @Override
     public String toXML() {
 
-        StringBuffer buffer = new StringBuffer();
+        StringBuilder buffer = new StringBuilder();
+
 
         PhasePoint leftPoint = new PhasePoint(leftPoint_);
         PhasePoint rightPoint = new PhasePoint(rightPoint_);
-
+        buffer.append("<HUGONIOTSEG coords_1=\"").append(leftPoint.getCoords()).
+                append('\"' + " coords_2=\"").append(rightPoint.getCoords()).append("\" ");
         StringBuilder leftLambda = new StringBuilder();
 
         for (int i = 0; i < leftLambdaArray_.length; i++) {
@@ -139,26 +136,69 @@ public class HugoniotSegment extends RealSegment {
             rightLambda.append(" ");
         }
 
-        buffer.append("<HUGONIOTSEGMENT ");
-
         buffer.append("leftsigma=\"" + leftSigma() + "\"" + " ");
         buffer.append("rightsigma=\"" + rightSigma() + "\"" + " ");
         buffer.append("leftlambda=\"" + leftLambda.toString().trim() + "\"" + " ");
         buffer.append("rightlambda=\"" + rightLambda.toString().trim() + "\"" + " ");
-        buffer.append("type=\"" + intType_ + "\"");
+        buffer.append("type=\"" + intType_ + "\" ");
+        buffer.append("signature=\"" + signature_ + "\"");
 
-        buffer.append(">\n");
 
-        buffer.append(leftPoint.toXML());
-        buffer.append(rightPoint.toXML());
 
-        buffer.append("</HUGONIOTSEGMENT>\n");
+
+        buffer.append("/>\n");
+
+
 
         return buffer.toString();
-
-
     }
 
+//    
+//    @Override
+//    public String toXML() {
+//
+//        StringBuffer buffer = new StringBuffer();
+//
+//        PhasePoint leftPoint = new PhasePoint(leftPoint_);
+//        PhasePoint rightPoint = new PhasePoint(rightPoint_);
+//
+//        StringBuilder leftLambda = new StringBuilder();
+//
+//        for (int i = 0; i < leftLambdaArray_.length; i++) {
+//            double d = leftLambdaArray_[i];
+//
+//            leftLambda.append(d);
+//            leftLambda.append(" ");
+//
+//        }
+//
+//        StringBuilder rightLambda = new StringBuilder();
+//
+//        for (int i = 0; i < rightLambdaArray_.length; i++) {
+//            double d = rightLambdaArray_[i];
+//            rightLambda.append(d);
+//            rightLambda.append(" ");
+//        }
+//
+//        buffer.append("<HUGONIOTSEG ");
+//
+//        buffer.append("leftsigma=\"" + leftSigma() + "\"" + " ");
+//        buffer.append("rightsigma=\"" + rightSigma() + "\"" + " ");
+//        buffer.append("leftlambda=\"" + leftLambda.toString().trim() + "\"" + " ");
+//        buffer.append("rightlambda=\"" + rightLambda.toString().trim() + "\"" + " ");
+//        buffer.append("type=\"" + intType_ + "\"");
+//
+//        buffer.append(">\n");
+//
+//        buffer.append(leftPoint.toXML());
+//        buffer.append(rightPoint.toXML());
+//
+//        buffer.append("</HUGONIOTSEG>\n");
+//
+//        return buffer.toString();
+//
+//
+//    }
     //
     // Accessors/Mutators
     //

@@ -578,7 +578,18 @@ public class HugoniotCurve extends SegmentedCurve {
             buffer.append(hSegment.toXML());
 
         }
+        
+        buffer.append("<TRANSITIONPOINTS>\n");
+        for (RealVector realVector : getTransitionList()) {
+            
+            OrbitPoint orbitPoint = new OrbitPoint(realVector);
+            
+            buffer.append(orbitPoint.toXML());
+        }
 
+        buffer.append("</TRANSITIONPOINTS>\n");
+        
+        
         return buffer.toString();
 
     }

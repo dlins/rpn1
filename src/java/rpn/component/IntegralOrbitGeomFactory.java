@@ -20,6 +20,10 @@ public class IntegralOrbitGeomFactory extends WaveCurveOrbitGeomFactory {
     public IntegralOrbitGeomFactory(IntegralCurveCalc calc) {
         super(calc);
     }
+    
+    public IntegralOrbitGeomFactory(IntegralCurveCalc calc,IntegralCurve curve) {
+        super(calc,curve);
+    }
 
     //
     // Accessors/Mutators

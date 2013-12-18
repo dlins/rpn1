@@ -38,4 +38,31 @@ public class IntegralCurve extends FundamentalCurve implements RpSolution {
     }
 
   
+    @Override
+    public String toXML() {
+
+        StringBuilder buf = new StringBuilder(super.toXML());
+
+        buf.append("<INFLECTIONPOINTS>\n");
+        
+        for (RealVector realVector : getInflectionPoints()) {
+            
+            OrbitPoint orbitPoint = new OrbitPoint(realVector);
+            buf.append(orbitPoint.toXML());
+            
+        }
+        
+        buf.append("</INFLECTIONPOINTS>\n");
+        
+        
+        return buf.toString();
+
+    }
+    
+    
+    
+    
+    
+    
+    
 }

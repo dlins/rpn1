@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import rpn.RPnUIFrame;
-import rpn.component.MultidAdapter;
 import wave.util.RealSegment;
 import wave.util.RealVector;
 

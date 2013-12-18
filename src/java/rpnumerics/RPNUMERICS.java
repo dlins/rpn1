@@ -445,7 +445,7 @@ public class RPNUMERICS {
     public static EnvelopeCurveCalc createEnvelopeCurveCalc() {
 
         int[] resolution = RPnDataModule.processResolution(getParamValue("envelopecurve", "resolution"));
-        int whereIsConstant = new Integer(getParamValue("envelopecurve", "whereisconstant"));
+        int whereIsConstant = new Integer(getParamValue("envelopecurve", "edge"));
         int numberOfSteps = new Integer(getParamValue("envelopecurve", "numberofsteps"));
 
         return new EnvelopeCurveCalc(new ContourParams(resolution), whereIsConstant, numberOfSteps);
@@ -639,6 +639,15 @@ public class RPNUMERICS {
 
 
     }
+    
+    
+    public static CompositeCalc createCompositeCalc(OrbitPoint initialPoint,Configuration configuration) {
+        Integer direction = new Integer(configuration.getParam("direction"));
+        return new CompositeCalc(initialPoint, new Integer(configuration.getParam("family")), direction);
+
+
+    }
+
 
     public static BoundaryExtensionCurveCalc createBoundaryExtensionCurveCalc() {
 
@@ -681,6 +690,19 @@ public class RPNUMERICS {
 
 
     }
+    
+    
+     public static ShockCurveCalc createShockCurveCalc(OrbitPoint orbitPoint,Configuration shockConfiguration) {
+
+        Integer family = new Integer(shockConfiguration.getParam("family"));
+        Double tolerance = 0.001;//TODO : Esperar a nova inteface do choque com tolerancia ???
+
+        Integer direction = new Integer(shockConfiguration.getParam("direction"));
+        return new ShockCurveCalc(orbitPoint, family, direction, tolerance);
+
+
+    }
+
 
     public static ShockCurveCalc createShockCurveCalc(OrbitPoint orbitPoint) {
 
@@ -729,7 +751,7 @@ public class RPNUMERICS {
 
         int extensionFamily = new Integer(getParamValue("rarefactionextension", "extensionfamily"));
 
-        Integer direction = new Integer(getParamValue("fundamentalcurve", "direction"));
+        Integer direction = new Integer(getParamValue("rarefactionextension", "direction"));
 
         return new RarefactionExtensionCalc(new ContourParams(resolution), orbitPoint, direction, curveFamily, extensionFamily, characteristicDomain);
 

@@ -25,8 +25,8 @@ public class RealSegment {
     @Override
     public String toString() {
 
-        StringBuffer buffer = new StringBuffer();
-        buffer.append(p1_.toString() + " " + p2_.toString());
+        StringBuilder buffer = new StringBuilder();
+        buffer.append(p1_.toString()).append(" ").append(p2_.toString());
         return buffer.toString();
 
 
@@ -36,8 +36,10 @@ public class RealSegment {
     public String toXML() {
 
 
-        StringBuffer buffer = new StringBuffer();
-        buffer.append("<REALSEG coords_1=\"" + p1_.toString() + "\"" + ' ' + "coords_2=\"" + p2_.toString() + "\"" + "/>");
+        StringBuilder buffer = new StringBuilder();
+        buffer.append("<REALSEG coords_1=\"").append(p1_.toString()).
+                append("\"" + ' ' + "coords_2=\"").append(p2_.toString()).
+                append("\"" + "/>\n");
 
         return buffer.toString();
 

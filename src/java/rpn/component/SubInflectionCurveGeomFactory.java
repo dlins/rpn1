@@ -6,6 +6,7 @@
 package rpn.component;
 
 import rpnumerics.*;
+import wave.util.RealSegment;
 
 public class SubInflectionCurveGeomFactory extends BifurcationCurveGeomFactory {
 
@@ -13,10 +14,17 @@ public class SubInflectionCurveGeomFactory extends BifurcationCurveGeomFactory {
         super(calc);
 
     }
+    
+    
+    public SubInflectionCurveGeomFactory(SubInflectionCurveCalc calc, SubInflectionCurve curve) {
+        super(calc,curve);
+
+    }
 
     //
     // Methods
     //
+    @Override
     public RpGeometry createGeomFromSource() {
 
         SubInflectionCurve curve = (SubInflectionCurve) geomSource();
@@ -25,7 +33,7 @@ public class SubInflectionCurveGeomFactory extends BifurcationCurveGeomFactory {
         int resultSize = curve.segments().size();
         RealSegGeom[] hugoniotArray = new RealSegGeom[resultSize];
         for (int i = 0; i < resultSize; i++) {
-            hugoniotArray[i] = new RealSegGeom((HugoniotSegment) curve.segments().get(i));
+            hugoniotArray[i] = new RealSegGeom((RealSegment) curve.segments().get(i));
         }
         return new SubInflectionCurveGeom(hugoniotArray, this);
 

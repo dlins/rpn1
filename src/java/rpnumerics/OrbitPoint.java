@@ -107,7 +107,7 @@ public final class OrbitPoint extends PhasePoint {
     public String toXML() {
 
         StringBuilder buffer = new StringBuilder();
-        buffer.append("<ORBITPOINT lambda=\"" + getLambda() + '\"' + " coords=\"" + getCoords().toString() + "\"/>\n");
+        buffer.append("<ORBITPOINT lambda=\"").append(getLambda()).append('\"' + " coords=\"").append(getCoords().toString()).append("\"/>\n");
         
 
 

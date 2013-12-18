@@ -33,13 +33,17 @@ using namespace std;
 
 JNIEXPORT jobject JNICALL Java_rpnumerics_SubInflectionCurveCalc_nativeCalc(JNIEnv * env, jobject obj) {
 
-    if ( Debug::get_debug_level() == 5 ) {
+    if (Debug::get_debug_level() == 5) {
         cout << "Em subinflection nativo: " << endl;
     }
 
     jclass classPhasePoint = (env)->FindClass(PHASEPOINT_LOCATION);
 
     jclass hugoniotSegmentClass = (env)->FindClass(HUGONIOTSEGMENTCLASS_LOCATION);
+
+    jclass coincidenceCurveClass = env->FindClass(COINCIDENCECURVE_LOCATION);
+    
+    jclass realSegmentClass = env->FindClass(REALSEGMENT_LOCATION);
 
     jclass realVectorClass = env->FindClass(REALVECTOR_LOCATION);
 
@@ -54,7 +58,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_SubInflectionCurveCalc_nativeCalc(JNIE
     jmethodID arrayListAddMethod = env->GetMethodID(arrayListClass, "add", "(Ljava/lang/Object;)Z");
 
     jmethodID subinflectionCurveConstructor = env->GetMethodID(subinflectionCurveClass, "<init>", "(Ljava/util/List;)V");
-
+    jmethodID realSegmentConstructor = (env)->GetMethodID(realSegmentClass, "<init>", "(Lwave/util/RealVector;Lwave/util/RealVector;)V");
 
 
     jobject segmentsArray = env->NewObject(arrayListClass, arrayListConstructor, NULL);
@@ -63,7 +67,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_SubInflectionCurveCalc_nativeCalc(JNIE
     //    Test testFunction;
     int dimension = 3;
     //-------------------------------------------------------------------
- 
+
     TPCW & tpcw = (TPCW &) RpNumerics::getPhysics().getSubPhysics(0);
 
 
@@ -79,8 +83,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_SubInflectionCurveCalc_nativeCalc(JNIE
 
     GridValues * gv = RpNumerics::getGridFactory().getGrid("bifurcation");
 
-    if ( Debug::get_debug_level() == 5 ) {
-        cout<<gv<<endl;
+    if (Debug::get_debug_level() == 5) {
+        cout << gv << endl;
     }
 
     std::vector< RealVector> outputVector;
@@ -112,9 +116,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_SubInflectionCurveCalc_nativeCalc(JNIE
         double leftSigma = 0;
         double rightSigma = 0;
 
-
-        jobject hugoniotSegment = env->NewObject(hugoniotSegmentClass, hugoniotSegmentConstructor, realVectorLeftPoint, leftSigma, realVectorRightPoint, rightSigma, 17);
-        env->CallObjectMethod(segmentsArray, arrayListAddMethod, hugoniotSegment);
+        jobject realSegment = env->NewObject(realSegmentClass, realSegmentConstructor, realVectorLeftPoint, realVectorRightPoint);
+        //        jobject hugoniotSegment = env->NewObject(hugoniotSegmentClass, hugoniotSegmentConstructor, realVectorLeftPoint, leftSigma, realVectorRightPoint, rightSigma, 17);
+        env->CallObjectMethod(segmentsArray, arrayListAddMethod, realSegment);
 
     }
 

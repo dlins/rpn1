@@ -36,7 +36,7 @@ public class RarefactionExtensionCurve extends BifurcationCurve {
 
     public String toXML() {
 
-        StringBuffer buffer = new StringBuffer();
+        StringBuilder buffer = new StringBuilder();
 
         for (int i = 0; i < segments().size(); i++) {
 
@@ -45,6 +45,25 @@ public class RarefactionExtensionCurve extends BifurcationCurve {
         }
         return buffer.toString();
     }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     /*
 
      @Override
@@ -89,4 +108,6 @@ public class RarefactionExtensionCurve extends BifurcationCurve {
     public String toMatlab(int curveIndex) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
+
+   
 }

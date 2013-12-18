@@ -18,7 +18,6 @@ import rpnumerics.FundamentalCurve;
 import rpnumerics.Orbit;
 import rpnumerics.OrbitPoint;
 import rpnumerics.RPNUMERICS;
-import rpnumerics.RpSolution;
 import rpnumerics.WaveCurveOrbitCalc;
 import wave.multid.view.ViewingAttr;
 import wave.util.RealSegment;
@@ -140,7 +139,14 @@ public class WaveCurveGeomFactory extends WaveCurveOrbitGeomFactory {
         
         for (WaveCurveBranch waveCurveBranch : branchsList) {
             FundamentalCurve fundamentalCurve = (FundamentalCurve)waveCurveBranch;
+            String branch_name = fundamentalCurve.getClass().getSimpleName();
+            
+            buffer.append("<SUBCURVE name=\"").append(branch_name).append("\">\n");
             buffer.append(fundamentalCurve.toXML());
+            buffer.append("</SUBCURVE>\n");
+                
+            
+
         }
 
 

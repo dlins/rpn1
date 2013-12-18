@@ -5,13 +5,19 @@
  */
 package rpn.component;
 
+import java.util.List;
 import rpn.controller.RarefactionExtensionController;
 import rpn.controller.RpController;
+import rpnumerics.FundamentalCurve;
 import rpnumerics.Orbit;
+import rpnumerics.OrbitPoint;
+import rpnumerics.PhasePoint;
+import rpnumerics.RPNUMERICS;
 import rpnumerics.RarefactionExtensionCalc;
 import rpnumerics.RarefactionExtensionCurve;
+import rpnumerics.WaveCurveBranch;
+import rpnumerics.WaveCurveOrbitCalc;
 import wave.util.RealSegment;
-import wave.util.RealVector;
 
 public class RarefactionExtensionGeomFactory extends RpCalcBasedGeomFactory {
     //
@@ -26,6 +32,11 @@ public class RarefactionExtensionGeomFactory extends RpCalcBasedGeomFactory {
 
     public RarefactionExtensionGeomFactory(RarefactionExtensionCalc calc) {
         super(calc);
+    }
+    
+    
+     public RarefactionExtensionGeomFactory(RarefactionExtensionCalc calc, RarefactionExtensionCurve curve) {
+        super(calc,curve);
     }
     //
     // Accessors/Mutators
@@ -58,6 +69,61 @@ public class RarefactionExtensionGeomFactory extends RpCalcBasedGeomFactory {
      protected RpController createUI() {
         return new RarefactionExtensionController();
     }
+    
+    
+    
+    
+    
+     @Override
+    public String toXML() {
+
+
+        StringBuilder buffer = new StringBuilder();
+
+        RarefactionExtensionCurve geomSource = (RarefactionExtensionCurve) geomSource();
+
+
+        String curve_name = '\"' + geomSource.getClass().getSimpleName() + '\"';
+        String dimension = '\"' + Integer.toString(RPNUMERICS.domainDim()) + '\"';
+
+        RarefactionExtensionCalc orbitCalc = (RarefactionExtensionCalc) rpCalc();
+        PhasePoint referencePoint = orbitCalc.getStart();
+        //
+        // PRINTS OUT THE CURVE ATTS
+        //
+        buffer.append("<").append(Orbit.XML_TAG).append(" curve_name=" + ' ').append(curve_name).append(' ' + " dimension=" + ' ').append(dimension).append(' ' + " startpoint=\"").append(referencePoint.getCoords()).append('\"'
+                + " format_desc=\"1 segment per row\">" + "\n");
+
+        //
+        // PRINTS OUT THE CONFIGURATION INFORMATION
+        //
+        buffer.append(orbitCalc.getConfiguration().toXML());
+        //
+        // PRINTS OUT THE SEGMENTS COORDS
+        //
+       buffer.append(geomSource.toXML());
+
+
+        buffer.append("</" + Orbit.XML_TAG + ">" + "\n");
+
+        return buffer.toString();
+
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
    
 }

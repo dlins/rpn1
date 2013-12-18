@@ -35,11 +35,13 @@ public class HugoniotContinuationCurveCalc extends WaveCurveOrbitCalc implements
 
     public RpSolution calc() throws RpException {
 
-        RpSolution result = calc(getStart(), getDirection());
+        WaveCurve result = (WaveCurve) calc(getStart(), getDirection());//TODO Wave Curve sera um container para curvas desse tipo
 
         if (result == null) {
             throw new RpException("Error in native layer");
         }
+        
+         result.setReferencePoint(getStart());
 
         return result;
     }

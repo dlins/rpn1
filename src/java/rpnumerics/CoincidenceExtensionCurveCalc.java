@@ -26,6 +26,7 @@ public class CoincidenceExtensionCurveCalc extends ContourCurveCalc {
         this.curveFamily_ = leftFamily;
         this.domainFamily_ = rightFamily;
         characteristicDomain_=characteristicDomain;
+        configuration_=RPNUMERICS.getConfiguration("coincidencecurve");
 
     }
     
