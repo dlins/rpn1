@@ -16,7 +16,6 @@ public class RPnFluxConvexCombination extends RPnFluxParamsSubject {
     //*** Leandro teste
     public RPnFluxConvexCombination(String[] paramsValues, String[] paramsNames) {
         super(new String[RPNUMERICS.getFluxParams().getParams().getSize()], "Combination", paramsNames, paramsValues);
-        System.out.println("Tamanho do fluxo: " + RPNUMERICS.getFluxParams().getParams().getSize());
     }
 
     //*** Leandro teste

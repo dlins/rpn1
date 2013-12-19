@@ -370,6 +370,7 @@ public class RPnCurvesList extends Observable implements ActionListener, ListSel
         while (iterator.hasNext()) {
             addGeometry((RpGeometry) iterator.next());
         }
+
     }
 
     public RPnPhaseSpaceAbstraction getPhaseSpace() {

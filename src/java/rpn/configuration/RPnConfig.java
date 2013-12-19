@@ -314,16 +314,7 @@ public class RPnConfig {
 
         HashMap<String, Configuration> configurationMap = new HashMap<String, Configuration>();
 
-        
-        if(profile.getType().equals(ConfigurationProfile.VISUALIZATION)){
-            
-            System.out.println("Quantidade de profiles dentro do visual:" +profile.getProfiles().values().size());
-        }
-        
-
         Set<Entry<String, ConfigurationProfile>> configurationProfileSet = profile.getProfiles().entrySet();
-        
-
 
         for (Entry<String, ConfigurationProfile> entry : configurationProfileSet) {
 

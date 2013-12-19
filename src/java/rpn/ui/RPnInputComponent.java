@@ -476,12 +476,7 @@ public class RPnInputComponent extends Observable implements Observer {//TODO Re
     public void update(Observable o, Object arg) {
 
         String[] newParamsValues = (String[]) arg;
-
-        for (String string : newParamsValues) {
-
-            System.out.println(string);
-
-        }
+       
         System.arraycopy(newParamsValues, 0, stringValues_, 0, newParamsValues.length);
 
         applyConfigurationChange();

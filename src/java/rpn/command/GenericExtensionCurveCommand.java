@@ -80,7 +80,7 @@ public class GenericExtensionCurveCommand extends RpModelConfigChangeCommand {
             phaseSpace.update();
 
         } else {
-            System.out.println("Entrou no execute() de GenericExtensionCurveAgent com membros nulos");
+            System.out.println("Error in extension curve calculation");
         }
 
     }
@@ -113,8 +113,6 @@ public class GenericExtensionCurveCommand extends RpModelConfigChangeCommand {
             while (geomIterator.hasNext()) {
                 GeomObjView geomObjView = (GeomObjView) geomIterator.next();
                 if (((RpGeometry) geomObjView.getAbstractGeom()) == selectedGeometry) {
-                    System.out.println("curve.segments().size() ::: " + curve.segments().size());
-                    System.out.println(polygon.toXML());
                     List<Integer> segmentIndex = containsCurve(curve, (Polygon) polygon.getShape(), phaseSpacePanel);
                     if (!segmentIndex.isEmpty()) {
                         indexToRemove.addAll(segmentIndex);
@@ -123,7 +121,6 @@ public class GenericExtensionCurveCommand extends RpModelConfigChangeCommand {
             }
         }
 
-        System.out.println("indexToRemove.size() ::::::::::::: " + indexToRemove.size());
 
         List<RealSegment> segments = segmentsIntoArea(selectedGeometry, indexToRemove);
 
@@ -136,6 +133,7 @@ public class GenericExtensionCurveCommand extends RpModelConfigChangeCommand {
 
         ExtensionCurveCalc calc = rpnumerics.RPNUMERICS.createExtensionCurveCalc(segments, areaPointsList);
         BifurcationCurveGeomFactory bifurcationFactory = new BifurcationCurveGeomFactory(calc);
+        
 
         return bifurcationFactory.geom();
 
@@ -156,8 +154,6 @@ public class GenericExtensionCurveCommand extends RpModelConfigChangeCommand {
             int ind = Integer.parseInt((indexToRemove.get(i)).toString());
             listSeg.add(curve.segments().get(ind));
         }
-
-        System.out.println("listSeg.size() ::::::::::::::::::: " + listSeg.size());
 
         return listSeg;
     }

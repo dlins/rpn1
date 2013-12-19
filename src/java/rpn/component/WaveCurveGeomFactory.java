@@ -76,8 +76,6 @@ public class WaveCurveGeomFactory extends WaveCurveOrbitGeomFactory {
 
     private WaveCurveOrbitGeom createOrbits(FundamentalCurve branch) {
 
-        System.out.println(branch.getClass().getCanonicalName());
-
         if (branch instanceof RarefactionCurve) {
             return new RarefactionCurveGeom(MultidAdapter.converseOrbitPointsToCoordsArray(branch.getPoints()), this, (RarefactionCurve) branch);
         }

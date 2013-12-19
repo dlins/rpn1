@@ -111,7 +111,6 @@ public  class RPnPhaseSpaceAbstraction extends AbstractScene {
 
     @Override
     public void join(MultiGeometry geom) {
-
         if (geom == null) {
             return;
         }

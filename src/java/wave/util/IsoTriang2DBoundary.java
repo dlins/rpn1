@@ -65,9 +65,7 @@ public class IsoTriang2DBoundary implements Boundary {
     public IsoTriang2DBoundary(String limits) {
 
         String[] limitsNumbers = limits.split(" ");
-
-        System.out.println("Lim size: " + limitsNumbers.length);
-
+       
         RealVector A = new RealVector(2);
 
         int vectorIndex = 0;

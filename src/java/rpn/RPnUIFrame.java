@@ -135,7 +135,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
             matlabExportMenuItem_.setEnabled(true);
             
-            openLogFile();
+//            openLogFile();
 
 
         } catch (Exception e) {
@@ -615,6 +615,10 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         curvesList.addObserver(AreaSelectionToExtensionCurveCommand.instance());
         leftCurvesList.addObserver(AreaSelectionToExtensionCurveCommand.instance());
         rightCurvesList.addObserver(AreaSelectionToExtensionCurveCommand.instance());
+        
+        curvesList.update();
+        leftCurvesList.update();
+        rightCurvesList.update();
   
 
     }
@@ -1478,27 +1482,27 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     
     public static void commandLogAppend(String msg) {        
 
-        try {
-            
-            logWriter_.write(msg + "\n");
-            
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
+//        try {
+//            
+//            logWriter_.write(msg + "\n");
+//            
+//        } catch (IOException ex) {
+//            ex.printStackTrace();
+//        }
         
         
     }
     
     public static void closeLogFile() {
 
-        try {
-                                    
-            logWriter_.write("</RPNSESSION>");
-            logWriter_.close();           
-            
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }                                
+//        try {
+//                                    
+//            logWriter_.write("</RPNSESSION>");
+//            logWriter_.close();           
+//            
+//        } catch (IOException ex) {
+//            ex.printStackTrace();
+//        }                                
     }
 
 

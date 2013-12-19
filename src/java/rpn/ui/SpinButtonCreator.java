@@ -277,7 +277,7 @@ public class SpinButtonCreator extends UIComponentCreator {
 
 
             String textString = textField.getText();
-            System.out.println(textField);
+
 
             if (textString.isEmpty()) {
                 return false;
