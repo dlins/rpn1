@@ -5,26 +5,21 @@
  */
 package rpn;
 
-import rpn.ui.RPnInputComponent;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Set;
-import rpn.parser.RPnDataModule;
 import rpn.configuration.Configuration;
 import rpn.ui.SpinButtonCreator;
-import rpn.ui.TextFieldCreator;
 import rpnumerics.RPNUMERICS;
-import wave.util.Boundary;
-import wave.util.RealVector;
 
-public class RPnConfigurationDialog extends RPnDialog {
+public class RPnResolutionDialog extends RPnDialog {
 
     private JTabbedPane extensionPanel_;
 
-    public RPnConfigurationDialog() {
+    public RPnResolutionDialog() {
         super(false, false);
         try {
             jbInit();
@@ -51,18 +46,14 @@ public class RPnConfigurationDialog extends RPnDialog {
         for (Entry<String, Configuration> entry : configSet) {
             SpinButtonCreator input = new SpinButtonCreator(entry.getValue(),"resolution");
             if (entry.getValue().getName().equals("inflectioncurve")) {
-
                 extensionPanel_.addTab("Bifurcation Curves", input.createUIComponent());
             }
 
             if (entry.getValue().getName().equals("doublecontactcurve")) {
-//                TextFieldCreator input = new TextFieldCreator(entry.getValue(), "resolution");
                 extensionPanel_.addTab("DoubleContact and SecondaryBifurcation", input.createUIComponent());
             }
 
             if (entry.getValue().getName().equals("hugoniotcurve")) {
-
-//                TextFieldCreator input = new TextFieldCreator(entry.getValue(), "resolution");
                 extensionPanel_.addTab(entry.getKey(), input.createUIComponent());
 
             }
@@ -94,38 +85,6 @@ public class RPnConfigurationDialog extends RPnDialog {
         
         dispose();
 
-//        int[] doubleContactResolution = RPnDataModule.processResolution(RPNUMERICS.getParamValue("doublecontactcurve", "resolution"));
-//
-//        int[] hugoniotResolution = RPnDataModule.processResolution(RPNUMERICS.getParamValue("hugoniotcurve", "resolution"));
-//
-//        int[] bifurcationCurvesResolution = RPnDataModule.processResolution(RPNUMERICS.getParamValue("inflectioncurve", "resolution"));
-//
-//        Boundary boundary = RPNUMERICS.boundary();
-//
-//        RealVector min = boundary.getMinimums();
-//        RealVector max = boundary.getMaximums();
-//
-//        RPNUMERICS.setResolution(min, max, "doublecontactcurve", doubleContactResolution);
-//
-//        RPNUMERICS.setResolution(min, max, "hugoniotcurve", hugoniotResolution);
-//
-//        RPNUMERICS.setResolution(min, max, "bifurcation", bifurcationCurvesResolution);
-//
-//        HashMap<String, Configuration> configMap = RPNUMERICS.getConfigurations();
-//
-//        Set<Entry<String, Configuration>> configSet = configMap.entrySet();
-//
-//
-//        for (Entry<String, Configuration> entry : configSet) {
-//
-//            String configurationType = entry.getValue().getType();
-//
-//            if (configurationType.equalsIgnoreCase("CURVE") && !entry.getValue().getName().equals("hugoniotcurve") && !entry.getValue().getName().equals("doublecontactcurve")) {
-//                entry.getValue().setParamValue("resolution", RPNUMERICS.getParamValue("inflectioncurve", "resolution"));
-//            }
-//        }
-//
-//        dispose();
 
     }
 

@@ -109,7 +109,7 @@ public class LevelCurvePlotCommand extends RpModelPlotCommand {
         RPnCurve curve = (RPnCurve) factory.geomSource();
         if(curve!=null){
             curve.setId(curveID_);
-        curveID_++;
+            curveID_++;
 
         Iterator oldValue = UIController.instance().getActivePhaseSpace().getGeomObjIterator();
         PropertyChangeEvent event = new PropertyChangeEvent(this, UIController.instance().getActivePhaseSpace().getName(), oldValue, factory.geom());

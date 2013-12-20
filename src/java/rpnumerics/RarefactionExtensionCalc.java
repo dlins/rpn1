@@ -36,7 +36,7 @@ public class RarefactionExtensionCalc extends ContourCurveCalc {
         
         configuration_= RPNUMERICS.getConfiguration("rarefactionextension");
         
-        
+        configuration_.setParamValue("resolution", RPNUMERICS.getParamValue("rarefactionextension", "resolution"));
         
         
     }

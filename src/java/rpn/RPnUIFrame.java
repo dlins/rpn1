@@ -1535,7 +1535,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
         public void actionPerformed(ActionEvent e) {
 
-            RPnConfigurationDialog extensionCurve = new RPnConfigurationDialog();
+            RPnResolutionDialog extensionCurve = new RPnResolutionDialog();
             extensionCurve.setVisible(true);
 
         }

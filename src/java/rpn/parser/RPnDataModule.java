@@ -269,10 +269,10 @@ public class RPnDataModule {
                 }
 
             }
-            
-            if (currentElement_.equals("SUBCURVE")){
 
-                subCurveType_=att.getValue("name");
+            if (currentElement_.equals("SUBCURVE")) {
+
+                subCurveType_ = att.getValue("name");
             }
             if (currentElement_.equals("ORBITPOINT")) {
 
@@ -394,10 +394,14 @@ public class RPnDataModule {
 
                 if (curve_name_.equals(rpnumerics.CoincidenceCurve.class.getSimpleName())) {
 
+                     int resolution[] = processResolution(currentConfiguration_.getParam("resolution"));
+                    ContourParams params = new ContourParams(resolution);
+                    
+                    
                     CoincidenceCurve curve = new CoincidenceCurve(leftSegmentsCoords_);
 
 
-                    CoincidenceCurveCalc calc = new CoincidenceCurveCalc();
+                    CoincidenceCurveCalc calc = new CoincidenceCurveCalc(params);
 
                     CoincidenceCurveGeomFactory factory =
                             new CoincidenceCurveGeomFactory(calc, curve);
@@ -447,9 +451,10 @@ public class RPnDataModule {
 
                 if (curve_name_.equals(rpnumerics.BuckleyLeverettInflectionCurve.class.getSimpleName())) {
 
-
+                    int resolution[] = processResolution(currentConfiguration_.getParam("resolution"));
+                    ContourParams params = new ContourParams(resolution);
                     BuckleyLeverettInflectionCurve curve = new BuckleyLeverettInflectionCurve(leftSegmentsCoords_);
-                    BuckleyLeverettinCurveGeomFactory factory = new BuckleyLeverettinCurveGeomFactory(new BuckleyLeverettinInflectionCurveCalc(), curve);
+                    BuckleyLeverettinCurveGeomFactory factory = new BuckleyLeverettinCurveGeomFactory(new BuckleyLeverettinInflectionCurveCalc(params), curve);
                     BuckleyLeverettiInflectionCommand.instance().execute(factory);
 
                 }
@@ -461,8 +466,10 @@ public class RPnDataModule {
 
 
                     SubInflectionCurve curve = new SubInflectionCurve(leftSegmentsCoords_);
+                    int resolution[] = processResolution(currentConfiguration_.getParam("resolution"));
+                    ContourParams params = new ContourParams(resolution);
                     SubInflectionCurveGeomFactory factory =
-                            new SubInflectionCurveGeomFactory(new SubInflectionCurveCalc(), curve);
+                            new SubInflectionCurveGeomFactory(new SubInflectionCurveCalc(params), curve);
                     SubInflectionPlotCommand.instance().execute(factory);
 
                 }
@@ -525,7 +532,7 @@ public class RPnDataModule {
                     HugoniotCurve curve = new HugoniotCurve(startPoint_, hugoniotSegments_, transitionPoint_);
                     int direction = Integer.parseInt(currentConfiguration_.getParam("direction"));
 
-                    int[] resolution = null;
+                    int[] resolution = processResolution(currentConfiguration_.getParam("resolution"));
                     HugoniotParams params = new HugoniotParams(startPoint_, direction, resolution);
 
                     HugoniotCurveCalcND calc = new HugoniotCurveCalcND(params);
@@ -540,7 +547,8 @@ public class RPnDataModule {
 
                     int family = Integer.parseInt(currentConfiguration_.getParam("family"));
                     double level = Double.parseDouble(currentConfiguration_.getParam("level"));
-                    ContourParams params = new ContourParams();
+                    int[] resolution = processResolution(currentConfiguration_.getParam("resolution"));
+                    ContourParams params = new ContourParams(resolution);
                     LevelCurve curve = new LevelCurve(family, realSegments_, level);
                     LevelCurveCalc calc = null;
                     if (startPoint_ != null) {
@@ -579,23 +587,23 @@ public class RPnDataModule {
 
                 }
 
-                
-                
+
+
                 if (curve_name_.equals(rpnumerics.RarefactionExtensionCurve.class.getSimpleName())) {
 
-                    
-                    ContourParams params = new ContourParams();
-                    
-                    
-                    RarefactionExtensionCalc calc = new RarefactionExtensionCalc(params,startPoint_,
+                    int[] resolution = processResolution(currentConfiguration_.getParam("resolution"));
+                    ContourParams params = new ContourParams(resolution);
+
+
+                    RarefactionExtensionCalc calc = new RarefactionExtensionCalc(params, startPoint_,
                             Integer.parseInt(currentConfiguration_.getParam("direction")),
                             Integer.parseInt(currentConfiguration_.getParam("curvefamily")),
                             Integer.parseInt(currentConfiguration_.getParam("extensionfamily")),
                             Integer.parseInt(currentConfiguration_.getParam("characteristic")));
 
                     RarefactionExtensionCurve curve = new RarefactionExtensionCurve(realSegments_, realSegments_);
-                    RarefactionExtensionGeomFactory factory = new RarefactionExtensionGeomFactory(calc,curve);
-                    
+                    RarefactionExtensionGeomFactory factory = new RarefactionExtensionGeomFactory(calc, curve);
+
                     RarefactionExtensionCurvePlotCommand.instance().execute(factory);
 
                 }

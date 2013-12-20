@@ -34,6 +34,7 @@ public class HugoniotCurveCalcND extends ContourCurveCalc implements HugoniotCur
         String [] parameterToKeep  = {"direction"};
         
         configuration_.keepParameters(parameterToKeep);
+        configuration_.setParamValue("resolution", RPNUMERICS.getParamValue("hugoniotcurve", "resolution"));
 
     }
     //
@@ -124,6 +125,6 @@ public class HugoniotCurveCalcND extends ContourCurveCalc implements HugoniotCur
 
     private native RpSolution calc(PhasePoint initialpoint) throws RpException;
     
-
+    //TODO : How to find the correct number of transition points after curve refinement??
     private native RpSolution calc(PhasePoint initialpoint, int xRes_, int yRes_, RealVector topR, RealVector dwnL) throws RpException;
 }

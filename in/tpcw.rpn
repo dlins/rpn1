@@ -1,183 +1,151 @@
 <?xml version="1.0"?>
 <!DOCTYPE rpnconfiguration >
 <RPNSESSION id="1234">
- <PHASESPACE name="Phase Space">
-<RPNCONFIGURATION>
-    <PHYSICS name="TPCW">
-        <PHYSICSCONFIG name="fluxfunction">
+    <PHASESPACE name="Phase Space">
+        <RPNCONFIGURATION>
+            <PHYSICS name="TPCW">
+                <PHYSICSCONFIG name="fluxfunction">
 
-            <PHYSICSPARAM name="abs perm" position="0" value="3e-12"/>
-            <PHYSICSPARAM name="sin beta" position="1" value="0.0"/>
-            <PHYSICSPARAM name="has gravity" position="2" value="0.0"/>
-            <PHYSICSPARAM name="has horizontal" position="3" value="1.0"/>
-            <PHYSICSPARAM name="cnw" position="4" value="0.0"/>
-            <PHYSICSPARAM name="cng" position="5" value="0.0"/>
-            <PHYSICSPARAM name="expw" position="6" value="2.0"/>
-            <PHYSICSPARAM name="expg" position="7" value="2.0"/>
-
-
-            <PHYSICSPARAM name="phi" position="8" value="0.38"/>
+                    <PHYSICSPARAM name="abs perm" position="0" value="3e-12"/>
+                    <PHYSICSPARAM name="sin beta" position="1" value="0.0"/>
+                    <PHYSICSPARAM name="has gravity" position="2" value="0.0"/>
+                    <PHYSICSPARAM name="has horizontal" position="3" value="1.0"/>
+                    <PHYSICSPARAM name="cnw" position="4" value="0.0"/>
+                    <PHYSICSPARAM name="cng" position="5" value="0.0"/>
+                    <PHYSICSPARAM name="expw" position="6" value="2.0"/>
+                    <PHYSICSPARAM name="expg" position="7" value="2.0"/>
 
 
-
-            <PHYSICSPARAM name="T_typical" position ="9" value="304.63"/>
-            <PHYSICSPARAM name="U_typical" position="10" value="998.2"/>
-            <PHYSICSPARAM name="Rho_typical" position="11" value="4.22e-3"/>
+                    <PHYSICSPARAM name="phi" position="8" value="0.38"/>
 
 
 
-        </PHYSICSCONFIG>
+                    <PHYSICSPARAM name="T_typical" position ="9" value="304.63"/>
+                    <PHYSICSPARAM name="U_typical" position="10" value="998.2"/>
+                    <PHYSICSPARAM name="Rho_typical" position="11" value="4.22e-3"/>
+
+
+
+                </PHYSICSCONFIG>
        
 
 
-    </PHYSICS>
+            </PHYSICS>
 
 
 
-    <METHOD name="Contour">
-        <METHODPARAM  name="x-resolution" value="30" />
-        <METHODPARAM  name="y-resolution" value="30" />
+            <METHOD name="Contour">
+                <METHODPARAM  name="x-resolution" value="30" />
+                <METHODPARAM  name="y-resolution" value="30" />
 
-    </METHOD>
-
-
-    <METHOD name="Newton">
-        <METHODPARAM  name="tolerance" value="0.001" />
-    </METHOD>
+            </METHOD>
 
 
-    <CURVECONFIGURATION name="hugoniotcurve">
-        <CURVEPARAM name="resolution" value="20 20"/>
-        
-        
+            <METHOD name="Newton">
+                <METHODPARAM  name="tolerance" value="0.001" />
+            </METHOD>
 
-    </CURVECONFIGURATION>
+
+            <CURVECONFIGURATION name="hugoniotcurve">
+                <CURVEPARAM name="resolution" value="20 20"/>
+            </CURVECONFIGURATION>
     
     
-    
-    
-    <CURVECONFIGURATION name="rarefactionextension">
-        <CURVEPARAM name="curvefamily" value="0"/>
-        
-         <CURVEPARAM name="resolution" value="128 128"/>
-       
-        <CURVEPARAM name="extensionfamily" value="1"/>
-        <CURVEPARAM name="characteristic" value="1"/>
-    </CURVECONFIGURATION>
+            <CURVECONFIGURATION name="rarefactionextension">
+                <CURVEPARAM name="curvefamily" value="0"/>
+                <CURVEPARAM name="resolution" value="128 128"/>
+                <CURVEPARAM name="extensionfamily" value="1"/>
+                <CURVEPARAM name="characteristic" value="1"/>
+            </CURVECONFIGURATION>
     
     
     
 
-    <CURVECONFIGURATION name="inflectioncurve">
-        <CURVEPARAM name="resolution" value="128 128"/>
-        <CURVEPARAM name="family" value="0"/>
-
-    </CURVECONFIGURATION>
-
+            <CURVECONFIGURATION name="inflectioncurve">
+                <CURVEPARAM name="resolution" value="128 128"/>
+                <CURVEPARAM name="family" value="0"/>
+            </CURVECONFIGURATION>
 
 
-    <CURVECONFIGURATION name="boundaryextensioncurve">
 
-        <CURVEPARAM name="family" value="1"/>
-        <CURVEPARAM name="edge" value="0"/>
-        <CURVEPARAM name="edgeresolution" value="32"/>
-        <CURVEPARAM name="resolution" value="32 32"/>
-        <CURVEPARAM name="characteristicwhere" value="1"/>
+            <CURVECONFIGURATION name="boundaryextensioncurve">
 
-
-    </CURVECONFIGURATION>
+                <CURVEPARAM name="family" value="1"/>
+                <CURVEPARAM name="edge" value="0"/>
+                <CURVEPARAM name="edgeresolution" value="32"/>
+                <CURVEPARAM name="resolution" value="32 32"/>
+                <CURVEPARAM name="characteristicwhere" value="1"/>
 
 
-    <CURVECONFIGURATION name="bifurcationcurve">
-        <CURVEPARAM name="curvefamily" value="1"/>
-        <CURVEPARAM name="domainfamily" value="1"/>
-        <CURVEPARAM name="characteristicwhere" value="0"/>
-        <CURVEPARAM name="singular" value="1"/>
-    </CURVECONFIGURATION>
+            </CURVECONFIGURATION>
+    
 
-    <CURVECONFIGURATION name="extensioncurve">
-        <CURVEPARAM name="curvefamily" value="1"/>
-        <CURVEPARAM name="domainfamily" value="1"/>
-        <CURVEPARAM name="characteristicwhere" value="1"/>
+            <CURVECONFIGURATION name="extensioncurve">
+                <CURVEPARAM name="curvefamily" value="1"/>
+                <CURVEPARAM name="domainfamily" value="1"/>
+                <CURVEPARAM name="characteristicwhere" value="1"/>
 
-        <CURVEPARAM name="edge" value="0"/>
-        <CURVEPARAM name="numberofsteps" value="128"/>
-    </CURVECONFIGURATION>
+                <CURVEPARAM name="edge" value="0"/>
+                <CURVEPARAM name="numberofsteps" value="128"/>
+            </CURVECONFIGURATION>
 
 
-    <CURVECONFIGURATION name="levelcurve">
-        <CURVEPARAM name="family" value="0"/>
-        <CURVEPARAM name="resolution" value="128 128"/>
-        <CURVEPARAM name="level" value="0.1"/>
+            <CURVECONFIGURATION name="levelcurve">
+                <CURVEPARAM name="family" value="0"/>
+                <CURVEPARAM name="resolution" value="128 128"/>
+                <CURVEPARAM name="level" value="0.1"/>
 
-    </CURVECONFIGURATION>
-
-
-    <CURVECONFIGURATION name="bifurcationcurve">
-        <CURVEPARAM name="curvefamily" value="1"/>
-        <CURVEPARAM name="domainfamily" value="1"/>
-        <CURVEPARAM name="characteristicwhere" value="0"/>
-        <CURVEPARAM name="singular" value="1"/>
-
-    </CURVECONFIGURATION>
+            </CURVECONFIGURATION>
 
 
-    <CURVECONFIGURATION name="doublecontactcurve">
-        <CURVEPARAM name="curvefamily" value="0"/>
-        <CURVEPARAM name="domainfamily" value="1"/>
-        <CURVEPARAM name="resolution" value="10 10"/>
-    </CURVECONFIGURATION>
+            <CURVECONFIGURATION name="doublecontactcurve">
+                <CURVEPARAM name="curvefamily" value="0"/>
+                <CURVEPARAM name="domainfamily" value="1"/>
+                <CURVEPARAM name="resolution" value="10 10"/>
+            </CURVECONFIGURATION>
 
     
-    <CURVECONFIGURATION name="fundamentalcurve">
-        <CURVEPARAM name="direction" value="20"/>
-        <CURVEPARAM name="family" value="0"/>
-        <CURVEPARAM name="level" value="0.5"/>
-    </CURVECONFIGURATION>
+            <CURVECONFIGURATION name="fundamentalcurve">
+                <CURVEPARAM name="direction" value="20"/>
+                <CURVEPARAM name="family" value="0"/>
+                <CURVEPARAM name="level" value="0.5"/>
+            </CURVECONFIGURATION>
     
     
-    <CURVECONFIGURATION name="extensioncurve">
-        <CURVEPARAM name="curvefamily" value="1"/>
-        <CURVEPARAM name="domainfamily" value="1"/>
-        <CURVEPARAM name="characteristicwhere" value="1"/>
-        <CURVEPARAM name="edge" value="0"/>
-        <CURVEPARAM name="edgeresolution" value="30"/>
+    
+            <CURVECONFIGURATION name="extensioncurve">
+                <CURVEPARAM name="family" value="0"/>
+                <CURVEPARAM name="resolution" value="128 128"/>
+                <CURVEPARAM name="singular" value="true"/>
+                <CURVEPARAM name="characteristic" value="1"/>
+                <CURVEPARAM name="domain" value="1"/>
 
-
-    </CURVECONFIGURATION>
+            </CURVECONFIGURATION>
+    
   
 
+            <VIEWCONFIGURATION modeldomain="3">
 
-    <CURVECONFIGURATION name="orbit">
-        <CURVEPARAM name="family" value="0"/>
-        <CURVEPARAM name="level" value="0.0005"/>
+                <PROJDESC name="Axis1 Axis0">
+                    <VIEWPARAM name="axis" value="1 0"/>
+                    <VIEWPARAM name="vpwidth" value="400"/>
+                    <VIEWPARAM name="vpheight" value="400"/>
+                    <VIEWPARAM name="iso2equi" value="false"/>
 
-    </CURVECONFIGURATION>
-
-
-
-    <VIEWCONFIGURATION modeldomain="3">
-
-        <PROJDESC name="Axis1 Axis0">
-            <VIEWPARAM name="axis" value="1 0"/>
-            <VIEWPARAM name="vpwidth" value="400"/>
-            <VIEWPARAM name="vpheight" value="400"/>
-            <VIEWPARAM name="iso2equi" value="false"/>
-
-        </PROJDESC>
+                </PROJDESC>
 
 
-        <PROJDESC name="Axis2 Axis0">
-            <VIEWPARAM name="axis" value="2 0"/>
-            <VIEWPARAM name="vpwidth" value="400"/>
-            <VIEWPARAM name="vpheight" value="400"/>
-            <VIEWPARAM name="iso2equi" value="false"/>
+                <PROJDESC name="Axis2 Axis0">
+                    <VIEWPARAM name="axis" value="2 0"/>
+                    <VIEWPARAM name="vpwidth" value="400"/>
+                    <VIEWPARAM name="vpheight" value="400"/>
+                    <VIEWPARAM name="iso2equi" value="false"/>
 
-        </PROJDESC>
+                </PROJDESC>
 
-    </VIEWCONFIGURATION>
+            </VIEWCONFIGURATION>
 
 
-</RPNCONFIGURATION>
-</PHASESPACE>
+        </RPNCONFIGURATION>
+    </PHASESPACE>
 </RPNSESSION>

@@ -5,11 +5,9 @@
  */
 package rpnumerics;
 
-
 import java.util.List;
 
 import rpn.configuration.Configuration;
-
 
 public abstract class ContourCurveCalc implements RpCalculation {
 
@@ -21,8 +19,8 @@ public abstract class ContourCurveCalc implements RpCalculation {
     //
     public ContourCurveCalc(ContourParams params) {
         params_ = params;
-        
-        
+
+    
 
     }
 
@@ -30,19 +28,18 @@ public abstract class ContourCurveCalc implements RpCalculation {
         return calc();
     }
 
-      //
+    //
     // Accessors/Mutators
     //
     public RpSolution recalc(List<Area> area) throws RpException {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-
     public ContourParams getParams() {
         return params_;
     }
-    
-    
-    public Configuration getConfiguration(){return configuration_;}
-    
+
+    public Configuration getConfiguration() {
+        return configuration_;
+    }
 }
