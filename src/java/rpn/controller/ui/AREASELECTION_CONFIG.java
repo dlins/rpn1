@@ -10,9 +10,7 @@ import java.awt.event.MouseMotionListener;
 import java.util.Iterator;
 import rpn.RPnPhaseSpacePanel;
 import rpn.command.AreaSelectionCommand;
-import rpn.command.ChooseAreaCommand;
 import rpn.command.RpModelActionCommand;
-import rpn.command.RpModelPlotCommand;
 
 
 

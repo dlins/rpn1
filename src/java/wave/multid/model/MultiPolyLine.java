@@ -45,7 +45,7 @@ public class MultiPolyLine extends MultiGeometryImpl {
             wex.printStackTrace();
         }
     }
-
+    
     public MultiPolyLine(AbstractSegment[] segments, ViewingAttr viewAttr) {
         super(segments[0].getSpace(), viewAttr);
         int i = 0;
@@ -67,18 +67,33 @@ public class MultiPolyLine extends MultiGeometryImpl {
     public GeomObjView createView(ViewingTransform transf) throws DimMismatchEx {
         return new PolyLine(this, transf, viewingAttr());
     }
-
+    
     public void lowLight() {
         Color newColor = new Color(viewingAttr().getColor().getRed(), viewingAttr().getColor().getGreen(), viewingAttr().getColor().getBlue(), ALFA_DOWN);
         viewingAttr().setColor(newColor);
-
+        
     }
-
+    
     public void highLight() {
-
+        
         Color newColor = new Color(viewingAttr().getColor().getRed(), viewingAttr().getColor().getGreen(), viewingAttr().getColor().getBlue(), ALFA_UP);
         viewingAttr().setColor(newColor);
+        
+        
+    }
+    
+    @Override
+    public void setVisible(boolean visible) {
+        viewingAttr().setVisible(visible);
+    }
 
+    @Override
+    public boolean isVisible() {
+        return viewingAttr().isVisible();
+    }
 
+    @Override
+    public boolean isSelected() {
+      return viewingAttr().isSelected();
     }
 }

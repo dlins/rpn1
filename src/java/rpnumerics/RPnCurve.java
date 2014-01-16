@@ -238,11 +238,11 @@ public abstract class RPnCurve implements RpSolution {
 
     public RealVector findClosestPoint(RealVector targetPoint) {
 
-        RPnPhaseSpaceAbstraction phaseSpace = RPnDataModule.PHASESPACE;
-
-        RpGeometry geom = phaseSpace.findClosestGeometry(targetPoint);
-        RPnCurve curve = (RPnCurve) (geom.geomFactory().geomSource());
-        ArrayList segments = (ArrayList) curve.segments();
+//        RPnPhaseSpaceAbstraction phaseSpace = RPnDataModule.PHASESPACE;
+//
+//        RpGeometry geom = phaseSpace.findClosestGeometry(targetPoint);
+//        RPnCurve curve = (RPnCurve) (geom.geomFactory().geomSource());
+        ArrayList segments = (ArrayList) segments();
 
         if (this instanceof BifurcationCurve) {
 

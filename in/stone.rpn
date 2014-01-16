@@ -59,7 +59,7 @@
     </CURVECONFIGURATION>
 
     <CURVECONFIGURATION name="hugoniotcurve">
-        <CURVEPARAM name="resolution" value="20 20"/>
+        <CURVEPARAM name="resolution" value="12 12"/>
     </CURVECONFIGURATION>
 
     <CURVECONFIGURATION name="ellipticboundary">

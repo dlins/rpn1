@@ -95,19 +95,21 @@ public class AdjustedSelectionPlotCommand extends RpModelPlotCommand implements 
 
     @Override
     public void update(Observable o, Object arg) {
-        List<RpGeometry> geometryList = ((List<RpGeometry>) arg);
-        if (geometryList.isEmpty() || geometryList.size() != 1) {
-            setEnabled(false);
-            CurveRefineCommand.instance().setEnabled(false);
-        } else {
-
-            if (geometryList.get(0) instanceof SegmentedCurveGeom  ||  geometryList.get(0) instanceof BifurcationCurveGeom) {    // -----
-                setEnabled(true);
-            } else {
+        if (arg != null) {
+            List<RpGeometry> geometryList = ((List<RpGeometry>) arg);
+            if (geometryList.isEmpty() || geometryList.size() != 1) {
                 setEnabled(false);
                 CurveRefineCommand.instance().setEnabled(false);
-            }
-        }
+            } else {
 
+                if (geometryList.get(0) instanceof SegmentedCurveGeom || geometryList.get(0) instanceof BifurcationCurveGeom) {    // -----
+                    setEnabled(true);
+                } else {
+                    setEnabled(false);
+                    CurveRefineCommand.instance().setEnabled(false);
+                }
+            }
+
+        }
     }
 }

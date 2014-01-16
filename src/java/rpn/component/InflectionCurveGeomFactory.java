@@ -18,7 +18,7 @@ import wave.util.RealSegment;
 
 public class InflectionCurveGeomFactory extends BifurcationCurveGeomFactory {
 
-    private static ViewingAttr viewAtt_ = new ViewingAttr(Color.ORANGE);
+    private static ViewingAttr viewAtt_ = new ViewingAttr(Color.GREEN);
 
 
 

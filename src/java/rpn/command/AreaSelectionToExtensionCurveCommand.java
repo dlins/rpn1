@@ -72,27 +72,29 @@ public class AreaSelectionToExtensionCurveCommand extends RpModelPlotCommand imp
 
     public void update(Observable o, Object arg) {
 
-        List<RpGeometry> geometryList = ((List<RpGeometry>) arg);
-        if (geometryList.isEmpty() || geometryList.size() != 1) {
-            setEnabled(false);
-            GenericExtensionCurveCommand.instance().setEnabled(false);
-        } else {
-            setEnabled(true);
-            GenericExtensionCurveCommand.instance().setEnabled(true);
+        if (arg != null) {
+            List<RpGeometry> geometryList = ((List<RpGeometry>) arg);
+            if (geometryList.isEmpty() || geometryList.size() != 1) {
+                setEnabled(false);
+                GenericExtensionCurveCommand.instance().setEnabled(false);
+            } else {
+                setEnabled(true);
+                GenericExtensionCurveCommand.instance().setEnabled(true);
 
-            if (RPnNetworkStatus.instance().isOnline() && RPnNetworkStatus.instance().isMaster()) {
-                RpGeomFactory factory = geometryList.get(0).geomFactory();
+                if (RPnNetworkStatus.instance().isOnline() && RPnNetworkStatus.instance().isMaster()) {
+                    RpGeomFactory factory = geometryList.get(0).geomFactory();
 
 
-                RPnCurve curve = (RPnCurve) factory.geomSource();
+                    RPnCurve curve = (RPnCurve) factory.geomSource();
 
-                RpCommand command = new RpCommand(curve.getId());
+                    RpCommand command = new RpCommand(curve.getId());
 
-                System.out.println("Enviando comando" + command.toXML());
-                RPnNetworkStatus.instance().sendCommand(command.toXML());
+                    System.out.println("Enviando comando" + command.toXML());
+                    RPnNetworkStatus.instance().sendCommand(command.toXML());
+                }
+
             }
 
         }
-
     }
 }

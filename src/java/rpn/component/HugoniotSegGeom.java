@@ -33,13 +33,7 @@ public class HugoniotSegGeom extends MultiPolyLine {
         HugoniotSegColor [] segColorArray = HugoniotSegColor.values();
         HugoniotSegColor segColor = segColorArray[segment.getType()];
         attr= new ViewingAttr(segColor.getColor());
-//        if (DIRECTION == Orbit.FORWARD_DIR) {
-//            
-//          
-//            
-// 
-//
-//        }
+
         if (DIRECTION == Orbit.BACKWARD_DIR) {
 
 //            if (segment.getType() == 0) {

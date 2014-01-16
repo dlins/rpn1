@@ -238,8 +238,6 @@ public class UIController extends ComponentUI {
 
                 if (RPnNetworkStatus.instance().isMaster() || !(RPnNetworkStatus.instance().isOnline())) {
 
-
-
                     int sceneDim = panel.scene().getViewingTransform().projectionMap().getDomain().getDim();
                     if (sceneDim == globalInputTable_.flags().length) {
 
@@ -371,6 +369,7 @@ public class UIController extends ComponentUI {
             RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) installedPanels_.get(i);
             panel.invalidate();
             panel.repaint();
+
         }
     }
 

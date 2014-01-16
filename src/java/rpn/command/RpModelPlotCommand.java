@@ -6,6 +6,8 @@
 package rpn.command;
 
 import java.awt.Font;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.awt.geom.AffineTransform;
 import java.util.Arrays;
 import javax.swing.event.ChangeEvent;
@@ -17,18 +19,25 @@ import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import javax.swing.ImageIcon;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 import javax.swing.AbstractButton;
+import rpn.RPnPhaseSpacePanel;
 import rpn.component.RpCalcBasedGeomFactory;
 import rpn.component.RpGeomFactory;
 import rpn.controller.ui.*;
 import rpnumerics.RPnCurve;
 import rpn.message.RPnNetworkStatus;
+import wave.util.Boundary;
+import wave.util.BoxND;
+import wave.util.HyperOctree;
+import wave.util.RealSegment;
 
-public abstract class RpModelPlotCommand extends RpModelActionCommand {
+public abstract class RpModelPlotCommand extends RpModelActionCommand implements Observer {
 
     protected AbstractButton button_;
     public static int curveID_;
-
 
     public RpModelPlotCommand(String shortDesc, ImageIcon icon, AbstractButton button) {
 
@@ -60,18 +69,27 @@ public abstract class RpModelPlotCommand extends RpModelActionCommand {
 
         RpGeometry geometry = createRpGeometry(userInputList);
 
-        
+
 
         if (geometry == null) {
             return;
         }
-        
+
         RpCalcBasedGeomFactory factory = (RpCalcBasedGeomFactory) geometry.geomFactory();
 
         RPnCurve curve = (RPnCurve) factory.geomSource();
+       
+
+        
+        
+        
+        
+        
+        
+        
 
         curve.setId(curveID_);
-        curveID_++;                 
+        curveID_++;
 
         PropertyChangeEvent event_ = new PropertyChangeEvent(this, UIController.instance().getActivePhaseSpace().getName(), oldValue, geometry);
 
@@ -81,15 +99,16 @@ public abstract class RpModelPlotCommand extends RpModelActionCommand {
         setInput(inputArray);
 
         logCommand(new RpCommand(event_, inputArray));
-        
+
         RPnDataModule.PHASESPACE.join(geometry);
 
-        if (RPnNetworkStatus.instance().isOnline() && RPnNetworkStatus.instance().isMaster())
+        if (RPnNetworkStatus.instance().isOnline() && RPnNetworkStatus.instance().isMaster()) {
             RPnNetworkStatus.instance().sendCommand(rpn.controller.ui.UndoActionController.instance().getLastCommand().toXML());
+        }
 
     }
 
-    public void execute (RpGeomFactory factory) {
+    public void execute(RpGeomFactory factory) {
 
         RPnCurve curve = (RPnCurve) factory.geomSource();
 
@@ -108,8 +127,9 @@ public abstract class RpModelPlotCommand extends RpModelActionCommand {
 
         RPnDataModule.PHASESPACE.join(factory.geom());
 
-        if (RPnNetworkStatus.instance().isOnline() && RPnNetworkStatus.instance().isMaster())            
-            RPnNetworkStatus.instance().sendCommand(rpn.controller.ui.UndoActionController.instance().getLastCommand().toXML());       
+        if (RPnNetworkStatus.instance().isOnline() && RPnNetworkStatus.instance().isMaster()) {
+            RPnNetworkStatus.instance().sendCommand(rpn.controller.ui.UndoActionController.instance().getLastCommand().toXML());
+        }
     }
 
     public void unexecute() {
@@ -132,4 +152,57 @@ public abstract class RpModelPlotCommand extends RpModelActionCommand {
     protected void unselectedButton(ChangeEvent changeEvent) {
     }
 
+    @Override
+    public void update(Observable o, Object arg) {
+
+        List<RpGeometry> selectedGeometries = (List<RpGeometry>) arg;
+
+
+        Iterator<RPnPhaseSpacePanel> iterator = UIController.instance().getInstalledPanelsIterator();
+        while (iterator.hasNext()) {
+            RPnPhaseSpacePanel panel = iterator.next();
+
+
+            MouseMotionListener[] mouseMotionArray = (MouseMotionListener[]) panel.getListeners(MouseMotionListener.class);
+            MouseListener[] mouseListenerArray = (MouseListener[]) panel.getListeners(MouseListener.class);
+
+            for (MouseListener mouseListener : mouseListenerArray) {
+
+                if (mouseListener instanceof RPn2DMouseController) {
+                    panel.removeMouseListener(mouseListener);
+
+                }
+            }
+
+            for (MouseMotionListener mouseMotionListener : mouseMotionArray) {
+
+                if (mouseMotionListener instanceof RPn2DMouseController) {
+                    panel.removeMouseMotionListener(mouseMotionListener);
+                }
+
+            }
+
+
+            if (selectedGeometries != null) {
+                if (selectedGeometries.size() == 1) {
+
+                    Iterator<RPnPhaseSpacePanel> closestIterator = UIController.instance().getInstalledPanelsIterator();
+                    while (closestIterator.hasNext()) {
+                        RPnPhaseSpacePanel panelToAdd = closestIterator.next();
+                        ClosestPointPlotter closestPlotter = new ClosestPointPlotter(selectedGeometries.get(0));
+                        panelToAdd.addMouseListener(closestPlotter);
+                        panelToAdd.addMouseMotionListener(closestPlotter);
+                    }
+
+                }
+            }
+
+
+
+        }
+
+
+
+
+    }
 }

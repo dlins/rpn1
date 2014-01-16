@@ -24,7 +24,16 @@ public class HugoniotCurveView extends GeomObjView {
     //
     // Accessors/Mutators
     //
-   
+    /** Set a view a attribute to multidimensional object. */
+    @Override
+    public void setViewingAttr(ViewingAttr viewAttr) {
+      Iterator geomListIterator = ((HugoniotCurveGeom) getAbstractGeom()).getRealSegIterator();
+        while (geomListIterator.hasNext()) {
+            HugoniotSegGeom geomObj = (HugoniotSegGeom) geomListIterator.next();
+            geomObj.viewingAttr().setVisible(viewAttr.isVisible());
+            geomObj.viewingAttr().setSelected(viewAttr.isSelected());
+        }
+    }
     
 
     //Original update method

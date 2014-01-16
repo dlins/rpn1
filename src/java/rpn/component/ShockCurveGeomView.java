@@ -25,8 +25,8 @@ public class ShockCurveGeomView extends WaveCurveOrbitGeomView {
 
     @Override
     public void draw(Graphics2D g) {
-
-        g.setColor(getViewingAttr().getColor());
+        Color color = getViewingAttr().getColor();
+        g.setColor(color);
         super.draw(g);
         
     }

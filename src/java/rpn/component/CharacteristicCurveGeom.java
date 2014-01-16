@@ -5,7 +5,6 @@
  */
 package rpn.component;
 
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -91,6 +90,16 @@ private    RpGeomFactory factory_;
 
     public RpGeomFactory geomFactory() {
         return factory_;
+    }
+
+    @Override
+    public boolean isVisible() {
+        return viewingAttr().isVisible();
+    }
+
+    @Override
+    public boolean isSelected() {
+        return viewingAttr().isSelected();
     }
 
     

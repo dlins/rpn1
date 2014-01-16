@@ -94,6 +94,21 @@ public abstract class SegmentedCurveGeom implements MultiGeometry, RpGeometry {
         }
 
     }
+    
+    
+    @Override
+    public void setVisible(boolean visible){
+        for (MultiPolyLine object : segmentsList_) {
+            object.setVisible(visible);
+        }
+    }
+    
+    @Override
+    public void setSelected (boolean selected){
+        for (MultiPolyLine object : segmentsList_) {
+            object.setSelected(selected);
+        }
+    }
 
     public RpGeomFactory geomFactory() {
         return factory_;
@@ -104,4 +119,17 @@ public abstract class SegmentedCurveGeom implements MultiGeometry, RpGeometry {
     
     public void applyMap(wave.multid.map.Map map) throws DimMismatchEx {
     }
+    
+    
+    @Override
+    public boolean isVisible (){
+        return viewingAttr().isVisible();
+    }
+    
+    @Override
+    public boolean isSelected(){
+        return viewingAttr().isSelected();
+    }
+    
+    
 }

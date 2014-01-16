@@ -140,5 +140,27 @@ public class BifurcationCurveGeom implements MultiGeometry, RpGeometry {
     public void load(FileReader cin) {
     }
 
+    @Override
+    public void setVisible(boolean visible) {
+       for (MultiPolyLine object : segList_) {
+            object.setVisible(visible);
+        }
+    }
+
+    @Override
+    public void setSelected(boolean selected) {
+       viewingAttr_.setSelected(selected);
+    }
+
+    @Override
+    public boolean isVisible() {
+        return viewingAttr_.isVisible();
+    }
+
+    @Override
+    public boolean isSelected() {
+       return viewingAttr_.isSelected();
+    }
+
    
 }

@@ -42,5 +42,15 @@ public class OrbitGeom extends MultiPolyLine implements RpGeometry {
         return factory_;
     }
 
+    @Override
+    public void setVisible(boolean visible) {
+        viewingAttr().setVisible(visible);
+    }
+
+    @Override
+    public void setSelected(boolean selected) {
+        viewingAttr().setSelected(selected);
+    }
+
    
 }

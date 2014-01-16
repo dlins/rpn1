@@ -53,7 +53,6 @@ import rpn.controller.ui.CLASSIFIERAGENT_CONFIG;
 import rpn.controller.ui.UIController;
 import rpn.controller.ui.VELOCITYAGENT_CONFIG;
 import rpn.message.RPnNetworkStatus;
-import rpn.parser.RPnDataModule;
 import wave.multid.DimMismatchEx;
 import wave.multid.model.MultiGeometryImpl;
 import wave.multid.model.MultiPolygon;
@@ -184,6 +183,8 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
 
 
         graphicsUtilList_.add(gu);
+
+
     }
 
     public boolean isPhysicalBoundarySelected() {
@@ -243,7 +244,7 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
     }
 
     public void setLastGraphicsUtil(GraphicsUtil lastGraphicsUtil) {
-       
+
 
         if (graphicsUtilList_.isEmpty()) {
             graphicsUtilList_.add(lastGraphicsUtil);

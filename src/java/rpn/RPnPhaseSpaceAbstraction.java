@@ -11,8 +11,12 @@ import wave.multid.Space;
 import rpnumerics.*;
 import rpn.component.*;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Iterator;
+import java.util.Observable;
+import java.util.Observer;
+import java.util.Timer;
 import rpn.component.util.GeometryGraphND;
 import rpn.controller.ui.UIController;
 import rpn.controller.ui.UserInputTable;
@@ -21,8 +25,7 @@ import wave.multid.model.MultiPolyLine;
 import wave.util.RealVector;
 import rpn.parser.RPnDataModule;
 
-
-public  class RPnPhaseSpaceAbstraction extends AbstractScene {
+public class RPnPhaseSpaceAbstraction extends AbstractScene implements Observer {
     //
     // Constants
     //
@@ -33,25 +36,27 @@ public  class RPnPhaseSpaceAbstraction extends AbstractScene {
     private PhaseSpaceState state_;
     private RpGeometry selectedGeom_;
     private List<RPnCurvesList> curvesListFrames_;
-
     private UserInputTable userInputTable_;
-
     // TODO remove this please ! MVERA
     static public String namePhaseSpace = "";
     static public List listResolution = new ArrayList();
     static public int closestCurve;             //indice da curva mais proxima
-
     private List stringsToRemove = new ArrayList();
-    
+    private Timer timer_;
+    private CurveFlasher flasher_;
     //
     // Constructors
     //
+
     public RPnPhaseSpaceAbstraction(String id, Space domain, PhaseSpaceState state) {
         super(id, domain);
         changeState(state);
         selectedGeom_ = null;
-        userInputTable_= new UserInputTable(domain.getDim());
+        userInputTable_ = new UserInputTable(domain.getDim());
         curvesListFrames_ = new ArrayList<RPnCurvesList>();
+       timer_ = new Timer();
+//        flasher_ = new CurveFlasher();
+
     }
 
     //
@@ -85,7 +90,7 @@ public  class RPnPhaseSpaceAbstraction extends AbstractScene {
     }
 
     /**
-     *@todo fix this... shouldn't have access to state_
+     * @todo fix this... shouldn't have access to state_
      *
      */
     public PhaseSpaceState state() {
@@ -199,11 +204,9 @@ public  class RPnPhaseSpaceAbstraction extends AbstractScene {
         UIController.instance().panelsUpdate();
     }
 
-
     public UserInputTable getUserInputTable() {
         return userInputTable_;
     }
-
 
     public RpGeometry findClosestGeometry(RealVector targetPoint) {             //*** Fazer alteracoes !!!!!
 
@@ -214,13 +217,19 @@ public  class RPnPhaseSpaceAbstraction extends AbstractScene {
         double distminCurve = 1000000.;
         double distancia = 0.;
         int k = 0;
-        Iterator<RpGeometry> geomList = null ;
+        Iterator<RpGeometry> geomList = null;
 
         //--------------------------
         // **** Usar direto o objeto, sem testar
-        if (namePhaseSpace.equals(RPnDataModule.PHASESPACE.getName()))      geomList = RPnDataModule.PHASESPACE.getGeomObjIterator();
-        if (namePhaseSpace.equals(RPnDataModule.RIGHTPHASESPACE.getName())) geomList = RPnDataModule.RIGHTPHASESPACE.getGeomObjIterator();
-        if (namePhaseSpace.equals(RPnDataModule.LEFTPHASESPACE.getName()))  geomList = RPnDataModule.LEFTPHASESPACE.getGeomObjIterator();
+        if (namePhaseSpace.equals(RPnDataModule.PHASESPACE.getName())) {
+            geomList = RPnDataModule.PHASESPACE.getGeomObjIterator();
+        }
+        if (namePhaseSpace.equals(RPnDataModule.RIGHTPHASESPACE.getName())) {
+            geomList = RPnDataModule.RIGHTPHASESPACE.getGeomObjIterator();
+        }
+        if (namePhaseSpace.equals(RPnDataModule.LEFTPHASESPACE.getName())) {
+            geomList = RPnDataModule.LEFTPHASESPACE.getGeomObjIterator();
+        }
 
         while (geomList.hasNext()) {
             RpGeometry geom = (RpGeometry) geomList.next();
@@ -250,7 +259,7 @@ public  class RPnPhaseSpaceAbstraction extends AbstractScene {
             }
 
             if (GeometryGraphND.onCurve == 0) {
-                if (geom.viewingAttr().hasHighLight()  &&  !(geom instanceof StationaryPointGeom)  &&  !(geom instanceof PoincareSectionGeom)) {
+                if (geom.viewingAttr().hasHighLight() && !(geom instanceof StationaryPointGeom) && !(geom instanceof PoincareSectionGeom)) {
 
                     RpGeomFactory factory = geom.geomFactory();
                     RPnCurve curve = (RPnCurve) factory.geomSource();
@@ -292,7 +301,6 @@ public  class RPnPhaseSpaceAbstraction extends AbstractScene {
 
         return closestGeometry_;
     }
-
 
     public void lowlightGeometry(int index) {
 
@@ -451,5 +459,40 @@ public  class RPnPhaseSpaceAbstraction extends AbstractScene {
             curvesFrame.update();
         }
 
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+
+        List<RpGeometry> selectedGeometries = (List<RpGeometry>) arg;
+
+        if (selectedGeometries != null) {
+            if(!selectedGeometries.isEmpty()){
+                System.out.println(selectedGeometries.size());
+                flasher_=new CurveFlasher(timer_);
+                flasher_.setList(selectedGeometries);
+                timer_.schedule(flasher_, 0, 1000);
+                
+            }
+            else{
+                timer_.cancel();
+                timer_=new Timer();
+                UIController.instance().panelsUpdate();
+            }
+
+
+//                timer_.cancel();
+//                timer_.purge();
+//                for (Object object : geomList_) {
+//                    RpGeometry geometry = (RpGeometry) object;
+//                    geometry.setVisible(true);
+//                }
+//
+//                UIController.instance().panelsUpdate();
+//
+
+        } else {
+            UIController.instance().panelsUpdate();
+        }
     }
 }

@@ -32,6 +32,23 @@ public class RealSegment {
 
 
     }
+    
+    private boolean point_inside_box( RealVector p,  BoxND box){
+            boolean test = true;
+
+            int pos = 0;
+            while (test && pos < 2){
+                test = p.getElement(pos) >= box.pmin.getElement(pos) && p.getElement(pos) <= box.pmax.getElement(pos);
+                pos++;
+            }
+
+            return test;
+        }
+    
+    public boolean intersect(BoxND box){
+            return point_inside_box(p1_, box) || point_inside_box(p2_, box);
+        }
+    
 
     public String toXML() {
 

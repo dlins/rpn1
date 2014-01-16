@@ -27,6 +27,8 @@ public abstract class MultiGeometryImpl implements MultiGeometry {
         path_ = new AbstractPath(space);
         viewAttr_ = new ViewingAttr(viewAttr);
     }
+    
+    
 
     //
     // Accessors/Mutators
@@ -87,5 +89,13 @@ public abstract class MultiGeometryImpl implements MultiGeometry {
 
     protected AbstractPath getPath() {
         return this.path_;
+    }
+    
+    public void setVisible (boolean visible){
+        viewAttr_.setVisible(visible);
+    }
+    
+    public void setSelected (boolean selected){
+        viewAttr_.setSelected(selected);
     }
 }
