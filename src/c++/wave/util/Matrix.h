@@ -2,7 +2,7 @@
 #define _MATRIX_
 
 #include <stdlib.h>
-#include <math.h>
+#include <cmath>
 #include <iostream>
 
 /*    SIMPLE USE EXAMPLE:
@@ -159,8 +159,8 @@ template <typename T> void Matrix<T>::resize(int newn, int newm){
         T *temp = new T[newn * newm];
 
         #pragma omp parallel for schedule(dynamic)
-        for (int i = 0; i < min(rows_, newn); i++){
-            for (int j = 0; j < min(cols_, newm); j++){
+        for (int i = 0; i < std::min(rows_, newn); i++){
+            for (int j = 0; j < std::min(cols_, newm); j++){
                 temp[i*newm + j] = vec[i*cols_ + j];
             }
         }

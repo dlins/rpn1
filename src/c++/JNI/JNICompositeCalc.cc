@@ -18,10 +18,12 @@
 #include "StoneAccumulation.h"
 #include "RectBoundary.h"
 #include <vector>
-#include "Rarefaction.h"
+#include "RarefactionCurve.h"
 
 #include "CompositeCurve.h"
-#include "Shock.h"
+#include "LSODE.h"
+
+
 #include "Debug.h"
 
 using std::vector;
@@ -34,7 +36,7 @@ using std::vector;
 
 JNIEXPORT jobject JNICALL Java_rpnumerics_CompositeCalc_nativeCalc(JNIEnv * env, jobject obj, jobject initialPoint, jint increase, jint familyIndex) {
 
-    if ( Debug::get_debug_level() == 5 ) {
+    if (Debug::get_debug_level() == 5) {
         cout << "chamando JNI composite calc" << endl;
     }
 
@@ -44,7 +46,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CompositeCalc_nativeCalc(JNIEnv * env,
     jclass classRarefactionOrbit = (env)->FindClass(COMPOSITECURVE_LOCATION);
 
     jmethodID rarefactionOrbitConstructor = (env)->GetMethodID(classRarefactionOrbit, "<init>", "([Lrpnumerics/OrbitPoint;II)V");
-    jmethodID orbitPointConstructor = (env)->GetMethodID(classOrbitPoint, "<init>", "([D)V");
+    jmethodID orbitPointConstructor = (env)->GetMethodID(classOrbitPoint, "<init>", "([DD)V");
     jmethodID toDoubleMethodID = (env)->GetMethodID(classOrbitPoint, "toDouble", "()[D");
 
     //Input processing
@@ -70,94 +72,155 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CompositeCalc_nativeCalc(JNIEnv * env,
     std::vector<RealVector> rarefactionCurve;
     std::vector<RealVector> compositeCurve;
 
-    if ( Debug::get_debug_level() == 5 ) {
+    if (Debug::get_debug_level() == 5) {
         cout << "Chamando com stone" << endl;
     }
 
-    FluxFunction * stoneflux = (FluxFunction *) RpNumerics::getPhysics().fluxFunction().clone();
+    FluxFunction * flux = (FluxFunction *) RpNumerics::getPhysics().fluxFunction().clone();
 
-    AccumulationFunction * stoneaccum = (AccumulationFunction *) RpNumerics::getPhysics().accumulation().clone();
+    AccumulationFunction * accum = (AccumulationFunction *) RpNumerics::getPhysics().accumulation().clone();
 
-    Boundary * tempBoundary = RpNumerics::getPhysics().boundary().clone();
+    Boundary * boundary = RpNumerics::getPhysics().boundary().clone();
 
-    if ( Debug::get_debug_level() == 5 ) {
+    if (Debug::get_debug_level() == 5) {
         cout << "Increase: " << increase << endl;
     }
 
-    //        double deltaxi = 1e-3;
-    double deltaxi = 1e-2;
-
     //Compute rarefaction
 
-    if ( Debug::get_debug_level() == 5 ) {
+    if (Debug::get_debug_level() == 5) {
         cout << "Increase da rarefacao: " << increase << endl;
     }
+
+
+
+    if (increase == 20)
+
+        increase = RAREFACTION_SPEED_SHOULD_INCREASE;
+
+    if (increase == 22)
+
+        increase = RAREFACTION_SPEED_SHOULD_DECREASE;
+
+
+
+
     vector<RealVector> inflectionPoints;
 
-    Rarefaction::curve(realVectorInput,
-            RAREFACTION_INITIALIZE_YES,
-            0,
+
+    RarefactionCurve rc(accum, flux, boundary);
+
+
+    double deltaxi = 1e-3;
+    std::vector<RealVector> inflection_point;
+    Curve rarcurve;
+
+    int rar_stopped_because;
+    int edge;
+    RealVector final_direction;
+
+    LSODE lsode;
+    ODE_Solver *odesolver;
+
+    odesolver = &lsode;
+
+    int info_rar = rc.curve(realVectorInput,
             familyIndex,
             increase,
             RAREFACTION_FOR_ITSELF,
+            RAREFACTION_INITIALIZE,
+            0,
+            odesolver,
             deltaxi,
-            stoneflux, stoneaccum,
-            RAREFACTION_GENERAL_ACCUMULATION,
-            tempBoundary,
-            rarefactionCurve,inflectionPoints);
+            rarcurve,
+            inflection_point,
+            final_direction,
+            rar_stopped_because,
+            edge);
 
 
-    if (increase == RAREFACTION_SPEED_INCREASE)
 
-        increase = WAVE_FORWARD;
+    //    WaveCurve hwc;
+    //
+    //    hwc.wavecurve.push_back(rarcurve);
 
-    if (increase == RAREFACTION_SPEED_DECREASE)
-
-        increase = WAVE_BACKWARD;
-
-    if ( Debug::get_debug_level() == 5 ) {
-        cout << "Rarefaction curve" << rarefactionCurve.size() << endl;
-    }
-
-    CompositeCurve::curve(rarefactionCurve, COMPOSITE_FROM_NORMAL_RAREFACTION, familyIndex,
-            increase, 0,stoneflux, stoneaccum, tempBoundary, compositeCurve);
-
-    delete stoneflux;
-    delete stoneaccum;
-    delete tempBoundary;
-
-    if (compositeCurve.size() == 0)
-        return NULL;
+    //
+    //    future_curve_initial_point = rarcurve.last_point;
+    //    future_curve_initial_direction = rarcurve.final_direction;
 
 
-    if ( Debug::get_debug_level() == 5 ) {
-        cout << "Tamanho da curva: " << compositeCurve.size() << endl;
-    }
+    HugoniotContinuation_nDnD hug(flux, accum, boundary);
+    ShockCurve sc(&hug);
 
+    CompositeCurve cmp(accum, flux, boundary, &sc);
+
+    //    LSODE lsode;
+    //    //   EulerSolver eulersolver(boundary, 1);
+    //
+    //    ODE_Solver *odesolver;
+    //
+    //    odesolver = &lsode;
+    //   odesolver = &eulersolver;
+
+
+
+    Curve cmpcurve, new_rarcurve;
+    //    RealVector final_direction;
+
+    int composite_stopped_because;
+
+    //    int edge;
+
+    int info_cmp = cmp.curve(accum, flux, boundary,
+            rarcurve,
+            rarcurve.curve.size() - 1, rarcurve.curve.size() - 1,
+            odesolver, deltaxi,
+            COMPOSITE_BEGINS_AT_INFLECTION, // COMPOSITE_BEGINS_AT_INFLECTION or COMPOSITE_AFTER_COMPOSITE.
+            familyIndex,
+            new_rarcurve,
+            cmpcurve,
+            final_direction,
+            composite_stopped_because,
+            edge);
+
+
+
+    //    CompositeCurve::curve(rarefactionCurve, COMPOSITE_FROM_NORMAL_RAREFACTION, familyIndex,
+    //            increase, 0, stoneflux, stoneaccum, tempBoundary, compositeCurve);
+    //
+    //    delete stoneflux;
+    //    delete stoneaccum;
+    //    delete tempBoundary;
+
+//    if (cmpcurve.curve.size() == 0)
+//        return NULL;
+
+    cout<<"Tamanho da curva composta: "<<cmpcurve.curve.size()<<endl;
+    cout <<cmpcurve.curve[0]<<endl;
 
     //Orbit members creation
+    
+    
 
-    jobjectArray orbitPointArray = (jobjectArray) (env)->NewObjectArray(compositeCurve.size(), classOrbitPoint, NULL);
+    jobjectArray orbitPointArray = (jobjectArray) (env)->NewObjectArray(cmpcurve.curve.size()-1, classOrbitPoint, NULL);
 
-    for (i = 0; i < compositeCurve.size(); i++) {
+    for (int i = 1; i < cmpcurve.curve.size(); i++) {
 
-        RealVector tempVector = compositeCurve.at(i);
+        RealVector tempVector = cmpcurve.curve[i];
+        cout<<tempVector<<endl;
 
-        RealVector newVector(3);
 
-        newVector.component(0) = tempVector(0);
-        newVector.component(1) = tempVector(1);
-        newVector.component(2) = 0; //TODO Substituir pelo indice do ponto correspondente na rarefacao ??
+        double * dataCoords = tempVector;
 
-        double * dataCoords = newVector;
+        jdoubleArray jTempArray = (env)->NewDoubleArray(tempVector.size());
 
-        jdoubleArray jTempArray = (env)->NewDoubleArray(newVector.size());
+        (env)->SetDoubleArrayRegion(jTempArray, 0, tempVector.size(), dataCoords);
+        
+        double lambda =0;
 
-        (env)->SetDoubleArrayRegion(jTempArray, 0, newVector.size(), dataCoords);
+        jobject orbitPoint = (env)->NewObject(classOrbitPoint, orbitPointConstructor, jTempArray,lambda);
 
-        jobject orbitPoint = (env)->NewObject(classOrbitPoint, orbitPointConstructor, jTempArray);
-
-        (env)->SetObjectArrayElement(orbitPointArray, i, orbitPoint);
+        (env)->SetObjectArrayElement(orbitPointArray, i-1, orbitPoint);
 
         env->DeleteLocalRef(jTempArray);
 
@@ -172,7 +235,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CompositeCalc_nativeCalc(JNIEnv * env,
 
     //Cleaning up
 
-    compositeCurve.clear();
+
 
     env->DeleteLocalRef(orbitPointArray);
     env->DeleteLocalRef(classOrbitPoint);

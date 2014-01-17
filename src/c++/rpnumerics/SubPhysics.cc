@@ -27,7 +27,7 @@ space_(new Space(space)),
 ID_(id),
 type_(type) {
     setHugoniotContinuationMethod(new HugoniotContinuation2D2D(fluxFunction_, accumulationFunction_, &getBoundary()));
-    setShockMethod(new Shock());
+//    setShockMethod(new Shock());
 }
 
 SubPhysics::SubPhysics(const Boundary & boundary, const Space & space, const char * name, int type) : boundary_(boundary.clone()),
@@ -35,7 +35,7 @@ space_(new Space(space)),
 ID_(name),
 type_(type) {
     setHugoniotContinuationMethod(new HugoniotContinuation2D2D(fluxFunction_, accumulationFunction_, &getBoundary()));
-    setShockMethod(new Shock());
+//    setShockMethod(new Shock());
 }
 
 const Space &SubPhysics::domain() const {

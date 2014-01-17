@@ -22,8 +22,8 @@ public class Orbit extends RPnCurve implements RpSolution {
     //
     public static String XML_TAG = "CURVE";
 
-    public static final int FORWARD_DIR = 20;
-    public static final int BACKWARD_DIR = 22;
+    public static final int FORWARD_DIR = 10;
+    public static final int BACKWARD_DIR = 11;
     public static final int BOTH_DIR = 0;
     
     public static final int WAVECURVE_FORWARD = 10;

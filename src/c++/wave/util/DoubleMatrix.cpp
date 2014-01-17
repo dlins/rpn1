@@ -324,6 +324,8 @@ double det(const DoubleMatrix &A){
                A(0, 2)*(A(1, 0)*A(2, 1) - A(2, 0)*A(1, 1));
     }
     else {
+        // TODO: THIS IS WRONG. Use a handrolled LU for this one.
+
         DoubleMatrix B(transpose(A));
 
         // LU factorization
