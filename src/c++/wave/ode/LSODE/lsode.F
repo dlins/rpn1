@@ -1,3 +1,4 @@
+#include "ODE_Solver_Return_Codes.h"
 
 #
       subroutine lsode (f, neq, y, t, tout, itol, rtol, atol, itask,
@@ -14,6 +15,8 @@ c The following lines were added by R. Morante
       
       integer neq(*)
       integer itol, itask, istate, iopt, lrw, liw, iwork(liw), mf
+c This return value was added by R. Morante:
+      integer infofun
       double precision y(*), t, tout, rtol(*), atol(*), rwork(lrw)
 cold  dimension neq(1), y(1), rtol(1), atol(1), rwork(lrw), iwork(liw)
 c-----------------------------------------------------------------------
@@ -1147,8 +1150,12 @@ c initial call to f.  (lf0 points to yh(*,2).) -------------------------
 C The following line was modified by R. Morante
 C f is called and if flagf == -7, lsode aborts      
 C      call f (neq, t, y, rwork(lf0))
-      if (f (neq, t, y, rwork(lf0), nparam, param) .eq. -7) then
-          istate = -7
+      infofun = f (neq, t, y, rwork(lf0), nparam, param)
+      if ( infofun .eq. FIELD_ERROR) then
+          istate = ODE_SOLVER_ERROR
+          return
+      else if ( infofun .eq. FIELD_POINT_OUTSIDE_DOMAIN) then
+          istate = ODE_SOLVER_POINT_OUTSIDE_DOMAIN
           return
       endif
       
@@ -1289,8 +1296,11 @@ C    The following line was modified by R. Morante
      1   rwork(lsavf), rwork(lacor), rwork(lwm), iwork(liwm),
      2   f, jac, prepj, solsy, nparam, param)
 C The following if-block was added by R. Morante.
-      if (kflag .eq. -7) then
-          istate = -7
+      if (kflag .eq. ODE_SOLVER_ERROR) then
+          istate = ODE_SOLVER_ERROR
+          return
+      else if (kflag .eq. ODE_SOLVER_POINT_OUTSIDE_DOMAIN) then
+          istate = ODE_SOLVER_POINT_OUTSIDE_DOMAIN
           return
       endif
 

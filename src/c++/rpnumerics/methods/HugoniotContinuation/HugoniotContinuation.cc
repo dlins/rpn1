@@ -143,6 +143,15 @@ double HugoniotContinuation::sigma(const RealVector &F, const RealVector &G) con
     return (diff_F*diff_G)*inv_diff_G_norm_squared;
 }
 
+double HugoniotContinuation::sigma(const RealVector &Fp, const RealVector &Gp, const RealVector &Fm, const RealVector &Gm) const {
+    RealVector diff_F = Fp - Fm;
+    RealVector diff_G = Gp - Gm;
+
+    double inv_diff_G_norm_squared = 1.0/(diff_G*diff_G);
+    
+    return (diff_F*diff_G)*inv_diff_G_norm_squared;
+}
+
 int HugoniotContinuation::fill_hyperplane(const RealVector &origin, DoubleMatrix &hyperplane){
     RealVector H;
 
@@ -470,11 +479,16 @@ int HugoniotContinuation::curve_engine(const RealVector &in, const RealVector &i
 //
 //     step_size_increased, step_size, number_of_steps_with_unchanged_size.
 //
-int HugoniotContinuation::curve_point(const RealVector &previous_point, const RealVector &direction, 
+// TODO: Pass also F, G, that they need not be computed again here.
+//
+int HugoniotContinuation::curve_point(const RealVector &previous_point, double previous_sigma_between_points, 
+                                      const RealVector &direction, 
                                       int &step_size_increased,
                                       double &step_size, int &number_of_steps_with_unchanged_size, 
-                                      RealVector &Hugoniot_intersection,
+                                      RealVector &Hugoniot_intersection, double &sigma_between_points,
                                       RealVector &Hugoniot_direction){
+                                      
+//    std::cout << "HugoniotContinuation. Entering curve_point, direction = " << direction << std::endl;
 
 //    // TODO: These parameters must belong to the object, and SHOULD be made public. THEY ENTER, CANT STAY HERE
 //    // This is the distance between two consecutive hyperplanes.
@@ -484,24 +498,32 @@ int HugoniotContinuation::curve_point(const RealVector &previous_point, const Re
 
     int info_Newton_step = Newton_step(previous_point, step_size, number_of_steps_with_unchanged_size, direction, Hugoniot_intersection);
 
-    // Check if size_steps remains the same after a few steps.
-    // If so, increase step_size;
-    //
-    if (number_of_steps_with_unchanged_size == 5){
-        number_of_steps_with_unchanged_size = 0;
-            
-        // TODO: See if something is missing here.
-        step_size_increased++;
+    sigma_between_points = shockspeed(f, g, previous_point, f, g, Hugoniot_intersection);
+    if (std::abs(sigma_between_points - previous_sigma_between_points) < .1*(std::abs(sigma_between_points) + std::abs(previous_sigma_between_points))){
 
-        if (step_size_increased < 16){ // Was: 8
-            step_size = min(step_size*SQRT_TWO, max_default_step_size_);
+        // Check if size_steps remains the same after a few steps.
+        // If so, increase step_size;
+        //
+        if (number_of_steps_with_unchanged_size == 5){
+            number_of_steps_with_unchanged_size = 0;
+            
+            // TODO: See if something is missing here.
+            step_size_increased++;
+
+            if (step_size_increased < 16){ // Was: 8
+                step_size = min(step_size*SQRT_TWO, max_default_step_size_);
+            }
         }
     }
+    else {
+        // TODO: The step_size should be decreased here!
+    }
+
         
     if (info_Newton_step != HUGONIOTCONTINUATION_NEWTON_STEP_OK){
         return info_Newton_step;
     } 
-        
+
     // Find the hyperplane.
     //
     DoubleMatrix hyperplane;
@@ -551,7 +573,7 @@ int HugoniotContinuation::set_bifurcation_space_coordinate(int Theta_index){
         // Not used right now:
 
 //        int n = ref.point.size();
-//        bifurcation_space_basis.resize(n, n - 1);morante.homelinux.net
+//        bifurcation_space_basis.resize(n, n - 1);
 //        bifurcation_space_basis(0, 0) = 1.0;
 //        bifurcation_space_basis(1, 0) = 0.0;
 //        bifurcation_space_basis(2, 0) = 0.0;
@@ -578,7 +600,7 @@ HugoniotContinuation::HugoniotContinuation(const FluxFunction *ff, const Accumul
 
 //    there_is_a_bifurcation_space = false;
 
-    default_step_size_ = 0.00005;
+    default_step_size_ = 5.0e-4 /*0.00005*/;
     max_default_step_size_ = 100.0*default_step_size_;
 }
 

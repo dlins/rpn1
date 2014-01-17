@@ -97,6 +97,8 @@ c The following lines were added by R. Morante
       
       external jac, f, pjac, slvs
       integer neq(*), nyh, iwm(*)
+c The following line were added by R. Morante
+      integer infofun
       integer iownd, ialth, ipup, lmax, meo, nqnyh, nslp,
      1   icf, ierpj, iersl, jcur, jstart, kflag, l, meth, miter,
      2   maxord, maxcor, msbp, mxncf, n, nq, nst, nfe, nje, nqu
@@ -326,8 +328,17 @@ c-----------------------------------------------------------------------
 C The following line was modified by R. Morante
 C f is called and if flagf == -7, lsode aborts      
 C      call f (neq, tn, y, savf)
-      if (f (neq, t, y, savf, nparam, param) .eq. -7) then
-          kflag = -7
+C      if (f (neq, t, y, savf, nparam, param) .eq. FIELD_ERROR) then
+C          kflag = ODE_SOLVER_ERROR
+C          return
+C      endif
+
+      infofun = f (neq, t, y, savf, nparam, param)
+      if ( infofun .eq. FIELD_ERROR) then
+          kflag = ODE_SOLVER_ERROR
+          return
+      else if ( infofun .eq. FIELD_POINT_OUTSIDE_DOMAIN) then
+          kflag = ODE_SOLVER_POINT_OUTSIDE_DOMAIN
           return
       endif
       
@@ -390,11 +401,21 @@ c-----------------------------------------------------------------------
 C The following line was modified by R. Morante
 C f is called and if flagf == -7, lsode aborts      
 C      call f (neq, tn, y, savf)
-      if (f (neq, t, y, savf, nparam, param) .eq. -7) then
-          kflag = -7
+C      if (f (neq, t, y, savf, nparam, param) .eq. FIELD_ERROR) then
+C          kflag = ODE_SOLVER_ERROR
+C          return
+C      endif            
+
+      infofun = f (neq, t, y, savf, nparam, param)
+      if ( infofun .eq. FIELD_ERROR) then
+          kflag = ODE_SOLVER_ERROR
           return
-      endif            
-      
+      else if ( infofun .eq. FIELD_POINT_OUTSIDE_DOMAIN) then
+          kflag = ODE_SOLVER_POINT_OUTSIDE_DOMAIN
+          return
+      endif      
+
+
       nfe = nfe + 1
       go to 270
 c-----------------------------------------------------------------------
@@ -554,10 +575,20 @@ c-----------------------------------------------------------------------
 c The following line was modified by R. Morante
 c f is called and if flagf == -7, lsode aborts      
 c      call f (neq, tn, y, savf)
-      if (f (neq, t, y, savf, nparam, param) .eq. -7) then
-          kflag = -7
+C      if (f (neq, t, y, savf, nparam, param) .eq. FIELD_ERROR) then
+C          kflag = ODE_SOLVER_ERROR
+C          return
+C      endif    
+
+      infofun = f (neq, t, y, savf, nparam, param)
+      if ( infofun .eq. FIELD_ERROR) then
+          kflag = ODE_SOLVER_ERROR
           return
-      endif            
+      else if ( infofun .eq. FIELD_POINT_OUTSIDE_DOMAIN) then
+          kflag = ODE_SOLVER_POINT_OUTSIDE_DOMAIN
+          return
+      endif
+        
 
       nfe = nfe + 1
       do 650 i = 1,n
@@ -715,6 +746,8 @@ C     The following lines added by R. Morante
       
       
       integer neq(*), nyh, iwm(*)
+C     The following line added by R. Morante
+      integer infofun, infojac
       integer iownd, iowns,
      1   icf, ierpj, iersl, jcur, jstart, kflag, l, meth, miter,
      2   maxord, maxcor, msbp, mxncf, n, nq, nst, nfe, nje, nqu
@@ -777,10 +810,22 @@ c if miter = 1, call jac and multiply by scalar. -----------------------
  110    wm(i+2) = 0.0d0
 C The following line was substituted by an if-block by R. Morante:
 C      call jac (neq, tn, y, 0, 0, wm(3), n)
-      if (jac (neq, tn, y, 0, 0, wm(3), n, nparam, param) .eq. -7) then
-          kflag = -7
+      infojac = jac (neq, tn, y, 0, 0, wm(3), n, nparam, param)
+
+C      if (jac (neq, tn, y, 0, 0, wm(3), n, nparam, param) 
+C     1    .eq. JACOBIAN_FIELD_ERROR) then
+C          kflag = ODE_SOLVER_ERROR
+C          return
+C      endif
+
+      if (infojac .eq. JACOBIAN_FIELD_ERROR) then
+          kflag = ODE_SOLVER_ERROR
+          return
+      else if (infojac .eq. JACOBIAN_FIELD_POINT_OUTSIDE_DOMAIN) then
+          kflag = ODE_SOLVER_POINT_OUTSIDE_DOMAIN
           return
       endif
+
 
       con = -hl0
       do 120 i = 1,lenp
@@ -800,11 +845,21 @@ c if miter = 2, make n calls to f to approximate j. --------------------
 C The following line was modified by R. Morante
 C f is called and if flagf == -7, lsode aborts      
 C      call f (neq, tn, y, ftem)
-      if (f (neq, t, y, ftem, nparam, param) .eq. -7) then
-          kflag = -7
+      infofun = f (neq, t, y, ftem, nparam, param)
+
+C      if (f (neq, t, y, ftem, nparam, param) .eq. FIELD_ERROR) then
+C          kflag = ODE_SOLVER_ERROR
+C          return
+C      endif            
+        
+      if (infofun .eq. FIELD_ERROR) then
+          kflag = ODE_SOLVER_ERROR
+          return
+      else if (infofun .eq. FIELD_POINT_OUTSIDE_DOMAIN) then
+          kflag = ODE_SOLVER_POINT_OUTSIDE_DOMAIN
           return
       endif            
-        
+
         
         do 220 i = 1,n
  220      wm(i+j1) = (ftem(i) - savf(i))*fac
@@ -829,11 +884,22 @@ c if miter = 3, construct a diagonal approximation to j and p. ---------
 C The following line was modified by R. Morante
 C f is called and if flagf == -7, lsode aborts      
 C      call f (neq, tn, y, wm(3))
-      if (f (neq, t, y, wm(3), nparam, param) .eq. -7) then
-          kflag = -7
+
+      infofun = f (neq, t, y, wm(3), nparam, param)
+
+C      if (f (neq, t, y, wm(3), nparam, param) .eq. FIELD_ERROR) then
+C          kflag = ODE_SOLVER_ERROR
+C          return
+C      endif 
+ 
+      if (infofun .eq. FIELD_ERROR) then
+          kflag = ODE_SOLVER_ERROR
+          return
+      else if (infofun .eq. FIELD_POINT_OUTSIDE_DOMAIN) then
+          kflag = ODE_POINT_OUTSIDE_DOMAIN
           return
       endif 
-      
+     
       nfe = nfe + 1
       do 320 i = 1,n
         r0 = h*savf(i) - yh(i,2)
@@ -857,12 +923,23 @@ c if miter = 4, call jac and multiply by scalar. -----------------------
  410    wm(i+2) = 0.0d0
 C The following line was substituted by an if-block by R. Morante
 C      call jac (neq, tn, y, ml, mu, wm(ml3), meband)
-      if (jac (neq, tn, y, ml, mu, wm(ml3), meband, nparam, param) 
-     1      .eq. -7) then
-          kflag = -7
+
+      infojac = jac (neq, tn, y, ml, mu, wm(ml3), meband, nparam, param)
+
+C      if (infojac .eq. JACOBIAN_FIELD_ERROR) then
+C          kflag = ODE_SOLVER_ERROR
+C          return
+C      endif
+ 
+      if (infojac .eq. JACOBIAN_FIELD_ERROR) then
+          kflag = ODE_SOLVER_ERROR
+          return
+      else if (infojac .eq. JACOBIAN_FIELD_POINT_OUTSIDE_DOMAIN) then
+          kflag = ODE_SOLVER_POINT_OUTSIDE_DOMAIN
           return
       endif
-      
+
+     
       con = -hl0
       do 420 i = 1,lenp
  420    wm(i+2) = wm(i+2)*con
@@ -886,8 +963,18 @@ c if miter = 5, make mband calls to f to approximate j. ----------------
 c The following line was modified by R. Morante
 c f is called and if flagf == -7, lsode aborts      
 c      call f (neq, tn, y, ftem)
-      if (f (neq, t, y, ftem, nparam, param) .eq. -7) then
-          kflag = -7
+      infofun = f (neq, t, y, ftem, nparam, param)
+
+C      if (f (neq, t, y, ftem, nparam, param) .eq. FIELD_ERROR) then
+C          kflag = ODE_SOLVER_ERROR
+C          return
+C      endif 
+
+      if (infofun .eq. FIELD_ERROR) then
+          kflag = ODE_SOLVER_ERROR
+          return
+      else if (infofun .eq. FIELD_POINT_OUTSIDE_DOMAIN) then
+          kflag = ODE_SOLVER_POINT_OUTSIDE_DOMAIN
           return
       endif 
 

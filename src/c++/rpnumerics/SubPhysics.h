@@ -25,7 +25,7 @@
 #include "ThreeImplicitFunctions.h"
 #include "Double_Contact_Function.h"
 #include "methods/ShockMethod.h"
-#include "Shock.h"
+//#include "Shock.h"
 #include "HugoniotContinuation2D2D.h"
 #include <sstream>
 

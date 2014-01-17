@@ -19,7 +19,8 @@
 #include <vector>
 
 #include "TPCW.h"
-#include "Rarefaction.h"
+#include "RarefactionCurve.h"
+#include "LSODE.h"
 
 
 using std::vector;
@@ -69,71 +70,78 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionCurveCalc_calc(JNIEnv * env
     //    double deltaxi = 1e-3; // This is the original value (Rodrigo/ Panters)
 
 
-    double deltaxi = 1e-3;
+ 
 
-    const FluxFunction * fluxFunction = &RpNumerics::getPhysics().fluxFunction();
-    const AccumulationFunction * accumulationFunction = &RpNumerics::getPhysics().accumulation();
-
-
-        
-    if ( Debug::get_debug_level() == 5 ) {
-        cout << "Flux params " << fluxFunction->fluxParams().params()<<endl;
-        cout << "Accum params " << accumulationFunction->accumulationParams().params() << endl;
-    }
+    const FluxFunction * flux = &RpNumerics::getPhysics().fluxFunction();
+    const AccumulationFunction * accum = &RpNumerics::getPhysics().accumulation();
 
 
     vector<RealVector> inflectionPoints;
 
     RpNumerics::getPhysics().getSubPhysics(0).preProcess(realVectorInput);
 
+    RarefactionCurve rc(accum, flux, tempBoundary);
 
-    int info = Rarefaction::curve(realVectorInput,
-            RAREFACTION_INITIALIZE_YES,
-            (const RealVector *) 0,
+
+    double deltaxi = 1e-3;
+    std::vector<RealVector> inflection_point;
+    Curve rarcurve;
+
+    int rar_stopped_because;
+    int edge;
+    RealVector final_direction;
+
+    LSODE lsode;
+    ODE_Solver *odesolver;
+
+    odesolver = &lsode;
+
+    int info_rar = rc.curve(realVectorInput,
             familyIndex,
             timeDirection,
             RAREFACTION_FOR_ITSELF,
+            RAREFACTION_INITIALIZE,
+            0,
+            odesolver,
             deltaxi,
-            fluxFunction,
-            accumulationFunction,
-            RAREFACTION_GENERAL_ACCUMULATION,
-            tempBoundary,
-            coords, inflectionPoints);
+            rarcurve,
+            inflection_point,
+            final_direction,
+            rar_stopped_because,
+            edge);
+
+  
 
 
-    if ( Debug::get_debug_level() == 5 ) {
-        cout << "Tamanho da rarefacao: " << coords.size() << endl;
-    }
+   
+
+
     
-
-    if (coords.size() == 0) {
-        return NULL;
-    }
 
     RpNumerics::getPhysics().getSubPhysics(0).postProcess(coords);
     //----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
     //Orbit members creation
 
-    jobjectArray orbitPointArray = (jobjectArray) (env)->NewObjectArray(coords.size(), classOrbitPoint, NULL);
+    jobjectArray orbitPointArray = (jobjectArray) (env)->NewObjectArray(rarcurve.curve.size(), classOrbitPoint, NULL);
 
-    for (i = 0; i < coords.size(); i++) {
+    for (i = 0; i < rarcurve.curve.size(); i++) {
 
-        RealVector tempVector = coords.at(i);
+        RealVector tempVector = rarcurve.curve.at(i);
 
-        double lambda = tempVector.component(tempVector.size() - 1);
+        double lambda = rarcurve.speed[i];
 
 
-        if ( Debug::get_debug_level() == 5 ) {
+        if (Debug::get_debug_level() == 5) {
             cout << tempVector << endl;
         }
 
         double * dataCoords = tempVector;
 
         //Reading only coodinates
-        jdoubleArray jTempArray = (env)->NewDoubleArray(tempVector.size()-1);
+        jdoubleArray jTempArray = (env)->NewDoubleArray(tempVector.size());
 
-        (env)->SetDoubleArrayRegion(jTempArray, 0, tempVector.size()-1, dataCoords);
+        (env)->SetDoubleArrayRegion(jTempArray, 0, tempVector.size(), dataCoords);
 
         //Lambda is the last component.
         jobject orbitPoint = (env)->NewObject(classOrbitPoint, orbitPointConstructor, jTempArray, lambda);

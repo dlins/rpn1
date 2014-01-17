@@ -23,8 +23,8 @@
 #include "RealVector.h"
 #include "JNIDefs.h"
 #include <vector>
-#include "Shock.h"
-#include "Rarefaction.h"
+#include "ShockCurve.h"
+#include "RarefactionCurve.h"
 #include "ShockContinuationMethod3D2D.h"
 
 
@@ -69,56 +69,117 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc(JNIEnv * env, jobj
     //    dimension;
     //
 
-    vector <RealVector> coords, shock_alt;
+//    vector <RealVector> coords, shock_alt;
 
-//    RealVector * originalDirection = new RealVector(realVectorInput.size());
-//
-//    originalDirection->component(0) = 0;
-//    originalDirection->component(1) = 0;
+    //    RealVector * originalDirection = new RealVector(realVectorInput.size());
+    //
+    //    originalDirection->component(0) = 0;
+    //    originalDirection->component(1) = 0;
 
 
-    if (increase == RAREFACTION_SPEED_INCREASE)
-        increase = WAVE_FORWARD;
+    if (increase == 20)
+        increase = RAREFACTION_SPEED_SHOULD_INCREASE;
 
-    if (increase == RAREFACTION_SPEED_DECREASE)
-        increase = WAVE_BACKWARD;
+    if (increase == 22)
+        increase = RAREFACTION_SPEED_SHOULD_DECREASE;
 
     FluxFunction * fluxFunction = (FluxFunction *) & RpNumerics::getPhysics().getSubPhysics(0).fluxFunction();
     AccumulationFunction * accumulationFunction = (AccumulationFunction *) & RpNumerics::getPhysics().getSubPhysics(0).accumulation();
 
     Boundary * tempBoundary = (Boundary *) RpNumerics::getPhysics().getSubPhysics(0).getPreProcessedBoundary();
 
-    int info_shock_curve, info_shock_curve_alt;
 
-    int dim = realVectorInput.size();
+    HugoniotContinuation2D2D hc(fluxFunction, accumulationFunction, tempBoundary);
 
-    RealVector original_direction(dim);
+    ShockCurve shock(&hc);
 
-    RpNumerics::getPhysics().getSubPhysics(0).preProcess(realVectorInput);
 
-    ShockMethod * shock = RpNumerics::getPhysics().getSubPhysics(0).getShockMethod();
+    ReferencePoint ref(realVectorInput, fluxFunction, accumulationFunction, 0);
 
-    shock->curveCalc(realVectorInput, true, realVectorInput, increase, familyIndex, SHOCK_FOR_ITSELF,
-            &original_direction, 0,
-            fluxFunction, accumulationFunction, tempBoundary,
-            coords, info_shock_curve,
-            shock_alt,
-            info_shock_curve_alt, newtonTolerance);
+    int n = realVectorInput.size();
+    RealVector r(n);
+    for (int i = 0; i < n; i++) r(i) = ref.e[familyIndex].vrr[i];
+
+
+
+    Curve shkcurve;
+
+    std::vector<int> stop_current_index;
+    std::vector<int> stop_current_family;
+    std::vector<int> stop_reference_index;
+    std::vector<int> stop_reference_family;
+
+    int shock_stopped_because;
+
+
+    int edge;
+    
+    RealVector candidate = realVectorInput + 1e-3 * r;
+
+    JetMatrix F_j(n), G_j(n);
+    fluxFunction->jet(candidate, F_j, 0);
+    accumulationFunction->jet(candidate, G_j, 0);
+
+    double sigma = hc.sigma(F_j.function(), G_j.function(), ref.F, ref.G);
+    RealVector direction;
+
+    double lambda = ref.e[familyIndex].r;
+    
+    if ((sigma >= lambda && (increase == RAREFACTION_SPEED_SHOULD_INCREASE)) ||
+            (sigma < lambda && (increase == RAREFACTION_SPEED_SHOULD_DECREASE))
+            ) direction = r;
+    else direction = -r;
+
+
+
+    int shck_info = shock.curve_engine(ref, realVectorInput, direction, familyIndex,
+            SHOCKCURVE_SHOCK_CURVE,
+            DONT_CHECK_EQUALITY_AT_LEFT,
+            SHOCK_SIGMA_EQUALS_LAMBDA_OF_FAMILY_AT_RIGHT,
+            USE_CURRENT_FAMILY /*int what_family_to_use*/,
+            STOP_AFTER_TRANSITION /*int after_transition*/,
+            shkcurve,
+            stop_current_index,
+            stop_current_family,
+            stop_reference_index,
+            stop_reference_family,
+            shock_stopped_because,
+            edge);
+
+
+
+//
+//    int info_shock_curve, info_shock_curve_alt;
+//
+//    int dim = realVectorInput.size();
+//
+//    RealVector original_direction(dim);
+//
+//    RpNumerics::getPhysics().getSubPhysics(0).preProcess(realVectorInput);
+//
+//    ShockMethod * shock = RpNumerics::getPhysics().getSubPhysics(0).getShockMethod();
+
+    //    shock->curveCalc(realVectorInput, true, realVectorInput, increase, familyIndex, SHOCK_FOR_ITSELF,
+    //            &original_direction, 0,
+    //            fluxFunction, accumulationFunction, tempBoundary,
+    //            coords, info_shock_curve,
+    //            shock_alt,
+    //            info_shock_curve_alt, newtonTolerance);
 
     //Orbit members creation
 
-    if (coords.size() == 0) return NULL;
+    if (shkcurve.curve.size() == 0) return NULL;
 
-    jobjectArray orbitPointArray = (jobjectArray) (env)->NewObjectArray(coords.size(), classOrbitPoint, NULL);
+    jobjectArray orbitPointArray = (jobjectArray) (env)->NewObjectArray(shkcurve.curve.size(), classOrbitPoint, NULL);
 
 
-    for (i = 0; i < coords.size(); i++) {
+    for (i = 0; i < shkcurve.curve.size(); i++) {
 
-        RealVector tempVector = coords.at(i);
+        RealVector tempVector = shkcurve.curve.at(i);
 
         RpNumerics::getPhysics().getSubPhysics(0).postProcess(tempVector);
 
-        double lambda = tempVector.component(tempVector.size() - 1);
+        double lambda = shkcurve.speed[i];
 
         double * dataCoords = tempVector;
 
@@ -143,7 +204,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc(JNIEnv * env, jobj
 
     //Cleaning up
 
-    coords.clear();
+
 
     env->DeleteLocalRef(orbitPointArray);
     env->DeleteLocalRef(classOrbitPoint);

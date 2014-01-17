@@ -1,82 +1,176 @@
 #ifndef _COMPOSITECURVE_
 #define _COMPOSITECURVE_
 
-#include <vector>
-#include <stdio.h>
+#include <cmath> // For std::abs.
 
-//#include "RealVector.h"
 #include "FluxFunction.h"
 #include "AccumulationFunction.h"
-#include "Shock.h"
 #include "Boundary.h"
-//#include "eigen.h"
-//#include "ShockMethod.h"
+#include "ShockCurve.h"
+#include "ReferencePoint.h"
 
+#include "ODE_Solver.h"
+#include "Bisection.h"
+#include "Curve.h"
 
-//extern "C" void dgesv_(int*, int*, double*, int*, int*, double*, int*, int*);
+// Forward declaration.
+//
+class WaveCurve;
 
 #ifndef COMPOSITE_OK
-#define COMPOSITE_OK 0
+#define COMPOSITE_OK    0
 #endif
 
 #ifndef COMPOSITE_ERROR
 #define COMPOSITE_ERROR 1
 #endif
 
-#ifndef COMPOSITE_FROM_NORMAL_RAREFACTION
-#define COMPOSITE_FROM_NORMAL_RAREFACTION 2
+// Reasons of error.
+//
+#ifndef COMPOSITE_ERROR_AT_BEGINNING_OUT_OF_BOUNDARY
+#define COMPOSITE_ERROR_AT_BEGINNING_OUT_OF_BOUNDARY 2
 #endif
 
-#ifndef COMPOSITE_FROM_STACK_RAREFACTION
-#define COMPOSITE_FROM_STACK_RAREFACTION 3
+#ifndef COMPOSITE_ERROR_AT_BEGINNING_DETERMINANT
+#define COMPOSITE_ERROR_AT_BEGINNING_DETERMINANT 3
 #endif
 
-#ifndef COMPOSITE_FROM_NORMAL_RAREFACTION_START
-#define COMPOSITE_FROM_NORMAL_RAREFACTION_START 3
+#ifndef COMPOSITE_ERROR_AT_DETERMINANT
+#define COMPOSITE_ERROR_AT_DETERMINANT 4
 #endif
 
+#ifndef COMPOSITE_ERROR_AT_RAREFACTION_BEGINNING
+#define COMPOSITE_ERROR_AT_RAREFACTION_BEGINNING 5
+#endif
+
+#ifndef COMPOSITE_LAST_POINT_ERROR
+#define COMPOSITE_LAST_POINT_ERROR 6
+#endif
+
+// Options.
+//
+#ifndef COMPOSITE_BEGINS_AT_INFLECTION
+#define COMPOSITE_BEGINS_AT_INFLECTION 10
+#endif
+
+#ifndef COMPOSITE_AFTER_COMPOSITE
+#define COMPOSITE_AFTER_COMPOSITE      11
+#endif
+
+// Reasons of success
 #ifndef COMPOSITE_REACHED_BOUNDARY
-#define COMPOSITE_REACHED_BOUNDARY 10
-#endif
-
-#ifndef COMPOSITE_EXHAUSTED_RAREFACTION
-#define COMPOSITE_EXHAUSTED_RAREFACTION 20
-#endif
-
-#ifndef COMPOSITE_DID_NOT_EXHAUST_RAREFACTION
-#define COMPOSITE_DID_NOT_EXHAUST_RAREFACTION 30
+#define COMPOSITE_REACHED_BOUNDARY       100
 #endif
 
 #ifndef COMPOSITE_REACHED_DOUBLE_CONTACT
-#define COMPOSITE_REACHED_DOUBLE_CONTACT 40
+#define COMPOSITE_REACHED_DOUBLE_CONTACT 101
 #endif
 
-#ifndef COMPOSITE_EXHAUSTED_RAREFACTION_AND_REACHED_DOUBLE_CONTACT
-#define COMPOSITE_EXHAUSTED_RAREFACTION_AND_REACHED_DOUBLE_CONTACT 50
-#endif
-
-#ifndef COMPOSITE_ERROR
-#define COMPOSITE_ERROR 60
+// Equivalent to "Rarefaction depleted."
+//
+#ifndef COMPOSITE_COMPLETED    
+#define COMPOSITE_COMPLETED              102
 #endif
 
 class CompositeCurve {
     private:
-//        FluxFunction         *F;
-//        AccumulationFunction *G;
-//        Boundary *boundary;
-
-//        double zero_level_function(const RealVector &rarpoint, RealVector &Un, int &info);
-//        int cdgesv(int n, double *A, double *b, double *x);
-//        
     protected:
-    public:
-        static int curve(const std::vector<RealVector> &rarcurve, int origin, int family, int increase, int number_ignore_doub_contact,
-                          FluxFunction *ff, AccumulationFunction *aa, 
-                          Boundary *boundary, std::vector<RealVector> &compcurve);
+        const FluxFunction *flux;
+        const AccumulationFunction *accum;
+        const Boundary *boundary;
+        ShockCurve *shock;
 
-//        static int curve(const std::vector<RealVector> &rarcurve, int origin, int family, int increase, int number_ignore_doub_contact,
-//                          FluxFunction *ff, AccumulationFunction *aa, 
-//                          Boundary *boundary, std::vector<RealVector> &compcurve, std::vector<RealVector> &shock_curve_temp);
+        int retreat;
+
+        // For integrating as a ODE.
+        int family;        
+        double tolerance;
+        RealVector reference_vector;
+        double referencedeterminant; // If referencedeterminant
+        
+        // TODO: This should be replaced by a pointer to the rarefaction curve as a whole. A class RarefactionCurvePoints should be created
+        //       that holds lots of information: points, lambdas, family, etc.
+        double lambda_init_base_rarefaction;
+
+        const FluxFunction         *rarflux;
+        const AccumulationFunction *raraccum;
+        const Boundary             *rarboundary;
+
+        RealVector composite_field(const RealVector &final_point_pair);
+
+        void add_point_to_curve(const RealVector &p, int back, Curve &curve);
+
+        // To be used by the correction of the last point.
+        //                #include "Hugoniot_Curve.h"
+        double lambda_at_double_contact;
+        RealVector rar_F_at_double_contact, rar_G_at_double_contact;
+
+        // If this composite is not the first one and a previous composite 
+        // reached a double contact, it may happen that this one will exhaust its
+        // companion rarefaction. To compute the last point of such a composite
+        // a different signal event will be used. Find the corresponding 
+        // signal event method in the public interface (below).
+        //
+        double maxsigma;
+        bool use_maxsigma;
+        
+        // TESTING.
+        bool compute_first_determinant;
+        double first_determinant;
+        int (*field)(int *two_n, double *xi, double *pointpair, double *field, int *obj, double *data);
+        double cmp_deltaxi;
+        bool use_field_near_double_contact;
+    public:
+        CompositeCurve(const AccumulationFunction *a, const FluxFunction *f, const Boundary *b, ShockCurve *s);
+        virtual ~CompositeCurve();
+
+        static int composite_field(int *two_n, double *xi, double *pointpair, double *field, int *obj, double *data);
+        static int composite_field_near_double_contact(int *two_n, double *xi, double *pointpair, double *field, int *obj, double *data);
+
+        static int composite_field_near_double_contact3D2D(int *two_n, double *xi, double *pointpair, double *field, int *obj, double* /* Not used */);
+
+//        int curve(const FluxFunction *RarFlux, const AccumulationFunction *RarAccum, 
+//                  const Boundary *RarBoundary, std::vector<RealVector> &rarcurve, std::vector<double> &lambda,
+//                  const RealVector &composite_initial_point,
+//                  const ODE_Solver *odesolver,
+//                  double deltaxi,
+//                  int where_composite_begins, int fam, 
+//                  std::vector<RealVector> &newrarcurve,
+//                  std::vector<RealVector> &compositecurve,
+//                  RealVector &final_direction,
+//                  std::vector<double> &dets,
+//                  int &reason_why,
+//                  int &edge);
+
+        int curve(const AccumulationFunction *RarAccum, const FluxFunction *RarFlux,
+                  const Boundary *RarBoundary, 
+                  const Curve &rarcurve,
+//                  std::vector<RealVector> &rarcurve, std::vector<double> &lambda,
+                  const RealVector &composite_initial_point,
+                  int last_point_in_rarefaction,
+                  const ODE_Solver *odesolver,
+                  double deltaxi,
+                  int where_composite_begins, int fam, 
+//                  std::vector<RealVector> &newrarcurve,
+//                  std::vector<RealVector> &compositecurve,
+                  Curve &new_rarcurve,
+                  Curve &compositecurve,
+                  RealVector &final_direction,
+                  int &reason_why,
+                  int &edge);
+
+        int correct_last_point(const ODE_Solver *odesolver, double deltaxi, WaveCurve &wavecurve);
+                          
+        static int double_contact_signal_event(const RealVector & where, double & determinant, int *obj, int * /*not used*/);
+        static int rarefaction_of_composite_signal_event(const RealVector &where, double & current_diff_lambda, int *obj, int * /*not used*/);
+        static int sigma_minus_lambda_signal_event(const RealVector &where, double &sigma_minus_lambda, int *obj, int * /*not used*/);
+
+        // To be used only if use_maxsigma (above) is TRUE.
+        //
+        static int sigma_minus_maxsigma_signal_event(const RealVector &where, double &sigma_minus_maxsigma, int *obj, int * /*not used*/);
+
+//        static int characteristic_shock_signal_event(const RealVector &where, double &diff_lambda, int *obj, int * /*not used*/);
+
 };
 
 #endif // _COMPOSITECURVE_
