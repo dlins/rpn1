@@ -65,7 +65,7 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
     //*** alterei aqui  (Leandro)
     static public Color DEFAULT_BOUNDARY_COLOR = Color.gray;
     static public Color DEFAULT_BACKGROUND_COLOR = Color.black;
-    static public Color DEFAULT_POINTMARK_COLOR = Color.white;
+    static public Color DEFAULT_POINTMARK_COLOR = Color.red;
     //***
     public static int myH_;                                          //** declarei isso    (Leandro)
     public static int myW_;                                          //** declarei isso    (Leandro)
@@ -380,7 +380,7 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
         g.setColor(DEFAULT_POINTMARK_COLOR);
         for (int i = 0; i < getCastedUI().pointMarkBuffer().size(); i++) {
             g.fillRect(((Point) getCastedUI().pointMarkBuffer().get(i)).x,
-                    ((Point) getCastedUI().pointMarkBuffer().get(i)).y, 5, 5);
+                    ((Point) getCastedUI().pointMarkBuffer().get(i)).y, 20, 20);
         }
 
 

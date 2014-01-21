@@ -111,14 +111,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc(JNIEnv * env,
     const FluxFunction * flux = &RpNumerics::getPhysics().fluxFunction();
     const AccumulationFunction * accum = &RpNumerics::getPhysics().accumulation();
 
-
-
-
-
-
     RarefactionCurve rc(accum, flux, boundary);
-
-    std::cout << "Main, flux = " << flux << ", accum = " << accum << std::endl;
 
     HugoniotContinuation_nDnD hug(flux, accum, boundary);
     ShockCurve sc(&hug);
@@ -148,7 +141,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc(JNIEnv * env,
         timeDirection = RAREFACTION_SPEED_SHOULD_DECREASE; //WAVE_BACKWARD;
 
 
-    cout << "Ponto inicial: " << realVectorInput << " Familia: " << familyIndex << " Direcao: " << timeDirection << endl;
+
     wavecurvefactory.wavecurve(realVectorInput, familyIndex, timeDirection, &hug, hwc, reason_why, edge);
 
 
@@ -165,51 +158,35 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc(JNIEnv * env,
         //
         Curve wc = hwc.wavecurve[i];
         std::vector<RealVector> coords = wc.curve;
-        cout << "Tamanho de coords: " << coords.size() << endl;
         int relatedCurvesIndexVector = wc.back_curve_index;
         std::vector<int> correspondingPointIndexVector = wc.back_pointer;
-        cout << "Tamanho de cooresponding: " << correspondingPointIndexVector.size() << endl;
         if (coords.size() > 0) {
-
 
             jobjectArray orbitPointArray = (jobjectArray) (env)->NewObjectArray(coords.size(), classOrbitPoint, NULL);
             for (int j = 0; j < coords.size(); j++) {
 
-
                 RealVector tempVector = coords.at(j);
-                
-                cout<<"Tipo: "<<wc.type<<" "<<tempVector<<endl;
-
-
-
                 double * dataCoords = tempVector;
-                cout<<"Aqui "<<endl;
-
                 //Reading only coodinates
                 jdoubleArray jTempArray = (env)->NewDoubleArray(tempVector.size());
 
                 (env)->SetDoubleArrayRegion(jTempArray, 0, tempVector.size(), dataCoords);
 
                 //Lambda is the last component.
-                double lambda = 0;//wc.speed[j]; //tempVector.component(tempVector.size() - 1);
+                double lambda = 0;
                 jobject orbitPoint = (env)->NewObject(classOrbitPoint, orbitPointConstructor, jTempArray, lambda);
-                cout<<"Valor de lambda: "<<lambda<<endl;
-                //                env->CallVoidMethod(orbitPoint,setLambdaID,tempVector(tempVector.size()-1));
 
                 env->CallObjectMethod(orbitPoint, setCorrespondingCurveIndexID, relatedCurvesIndexVector);
                 env->CallObjectMethod(orbitPoint, setCorrespondingPointIndexID, correspondingPointIndexVector[j]);
-
                 (env)->SetObjectArrayElement(orbitPointArray, j, orbitPoint);
 
 
             }
 
-            cout << "Tipo: " << wc.type << endl;
 
             switch (wc.type) {
                 case 1:
                 {
-                    cout<<"Na rarefacao"<<endl;
                     jobject rarefactionOrbit = (env)->NewObject(classRarefactionOrbit, rarefactionOrbitConstructor, orbitPointArray, familyIndex, timeDirection);
                     env->CallVoidMethod(rarefactionOrbit, setCurveTypeID, 1);
                     env->CallVoidMethod(waveCurveBranchForward, waveCurveAddBranch, rarefactionOrbit);
@@ -221,7 +198,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc(JNIEnv * env,
 
                 case 2:
                 {
-                    cout<<"Na composta"<<endl;
                     jobject compositeCurve = (env)->NewObject(classComposite, compositeConstructor, orbitPointArray, timeDirection, familyIndex);
                     env->CallVoidMethod(compositeCurve, setCurveTypeID, 2);
                     env->CallVoidMethod(waveCurveBranchForward, waveCurveAddBranch, compositeCurve);

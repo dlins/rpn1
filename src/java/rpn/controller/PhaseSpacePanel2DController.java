@@ -24,8 +24,13 @@ import java.awt.geom.Line2D;
 import rpn.controller.ui.TRACKPOINT_CONFIG;
 import rpn.controller.ui.UIController;
 import rpn.command.TrackPointCommand;
+import rpn.component.RpGeomFactory;
+import rpnumerics.RPnCurve;
 import wave.multid.Coords2D;
 import wave.multid.CoordsArray;
+import wave.multid.Space;
+import wave.multid.view.ViewingTransform;
+import wave.util.RealVector;
 
 public class PhaseSpacePanel2DController extends ComponentUI implements PhaseSpacePanelController {
     //
@@ -48,8 +53,6 @@ public class PhaseSpacePanel2DController extends ComponentUI implements PhaseSpa
     private List<Line2D.Double> velocityArrows_;
     private List<String> velocityStrings_;
 
-
-
     //
     // Constructors/Initializers
     //
@@ -69,40 +72,25 @@ public class PhaseSpacePanel2DController extends ComponentUI implements PhaseSpa
 
     }
 
-    
-    
-    
-    
-
-    
-
     //
     // Inner Classes
     //
     class MouseMotionController extends MouseMotionAdapter {
 
-         @Override
+        @Override
         public void mouseMoved(MouseEvent event) {
             if (event.getComponent() instanceof RPnPhaseSpacePanel) {
                 RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) event.getComponent();
                 int xCursorPos = event.getPoint().x;
                 int yCursorPos = event.getPoint().y;
-//<<<<<<< HEAD
-//                if (UIController.instance().getState() instanceof TRACKPOINT_CONFIG) {
-//=======
-                if ((UIController.instance().getState() instanceof TRACKPOINT_CONFIG )&&
-                        (panel.scene().getViewingTransform().projectionMap().getDomain().getDim()==rpnumerics.RPNUMERICS.domainDim())){
-
+                if ((UIController.instance().getState() instanceof TRACKPOINT_CONFIG)
+                        && (panel.scene().getViewingTransform().projectionMap().getDomain().getDim() == rpnumerics.RPNUMERICS.domainDim())) {
                     Coords2D dcCoords = new Coords2D(xCursorPos, yCursorPos);
                     CoordsArray wcCoords = new Coords2D();
                     panel.scene().getViewingTransform().dcInverseTransform(dcCoords, wcCoords);
-                    
-
-                    
                     TrackPointCommand.instance().trackPoint(wcCoords);
 
                 }
-
 
                 if (absComplete_) {
                     xCursorPos = new Double(dcCompletePoint_.getX()).intValue();
@@ -111,22 +99,41 @@ public class PhaseSpacePanel2DController extends ComponentUI implements PhaseSpa
                     yCursorPos = new Double(dcCompletePoint_.getY()).intValue();
                 }
 
-            
-
                 panel.setCursorPos(new Point(xCursorPos, yCursorPos));
+
+                //1 curva selecionada. Usar o ponto mais proximo como entrada (Apenas 2D)
+                if (UIController.instance().getSelectedGeometriesList().size() == 1) {
+                    Coords2D dcCoords = new Coords2D(xCursorPos, yCursorPos);
+                    CoordsArray coordsWC = new CoordsArray(new Space("", rpnumerics.RPNUMERICS.domainDim()));
+                    panel.scene().getViewingTransform().dcInverseTransform(dcCoords, coordsWC);
+
+                    RealVector wcCoordsVector = new RealVector(coordsWC.getCoords());
+                    RpGeomFactory geomFactory = UIController.instance().getSelectedGeometriesList().get(0).geomFactory();
+                    RPnCurve curve = (RPnCurve) geomFactory.geomSource();
+                    RealVector closestPoint = curve.findClosestPoint(wcCoordsVector);
+                    for (int i = 0; i < closestPoint.getSize(); i++) {
+                        UIController.instance().globalInputTable().setElement(i, closestPoint.getElement(i));
+                    }
+                    
+                    System.out.println("Ponto mais proximo: "+closestPoint);
+                    ViewingTransform viewingTransform = panel.scene().getViewingTransform();
+                    Coords2D wcCoords = new Coords2D(closestPoint.getElement(0), closestPoint.getElement(1));
+                    Coords2D painelCoords = new Coords2D();
+                    viewingTransform.viewPlaneTransform(wcCoords, painelCoords);
+                   
+                    Point point = new Point((int) painelCoords.getX(), (int) painelCoords.getY());
+                    List pointMarkBuffer = panel.getCastedUI().pointMarkBuffer();
+                    if (pointMarkBuffer.isEmpty()) {
+                        pointMarkBuffer.add(point);
+                    } else {
+                        pointMarkBuffer.set(pointMarkBuffer.size() - 1, point);
+                    }
+
+                }
                 panel.repaint();
             }
         }
-
-
-        
-
-
     }
-
-
-
-    
 
     class PanelSizeController extends ComponentAdapter {
 
@@ -201,7 +208,7 @@ public class PhaseSpacePanel2DController extends ComponentUI implements PhaseSpa
         return typeStrings_;
     }
 
-    public List <String> getVelocityString() {
+    public List<String> getVelocityString() {
         return velocityStrings_;
     }
 
@@ -235,7 +242,7 @@ public class PhaseSpacePanel2DController extends ComponentUI implements PhaseSpa
     public void install(RPnPhaseSpacePanel panel) {
         panel.addMouseMotionListener(mouseMotionController_);
         panel.addComponentListener(new PanelSizeController());
-  
+
     }
 
     public void uninstall(RPnPhaseSpacePanel panel) {

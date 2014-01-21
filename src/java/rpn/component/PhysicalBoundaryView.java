@@ -5,13 +5,12 @@
  */
 package rpn.component;
 
-import wave.multid.model.*;
+import java.awt.BasicStroke;
+import java.awt.Graphics2D;
+import java.awt.Stroke;
 import wave.multid.view.*;
 import wave.multid.DimMismatchEx;
-import java.awt.Graphics2D;
 import java.util.Iterator;
-import java.util.ArrayList;
-import java.util.List;
 
 public class PhysicalBoundaryView extends  GeomObjView {
     //
@@ -44,4 +43,23 @@ public class PhysicalBoundaryView extends  GeomObjView {
             }
         }
     }
+
+
+ /** Draws a  multidimensional object */
+    public void draw(Graphics2D g) {
+        Stroke previousStroke = g.getStroke();
+        
+        g.setStroke(new BasicStroke(3));
+        
+        for (int i = 0; i < viewList_.size(); i++) {
+            ((GeomObjView) viewList_.get(i)).draw(g);
+        }
+        
+        g.setStroke(previousStroke);
+    }
+
+
+
+
+
 }

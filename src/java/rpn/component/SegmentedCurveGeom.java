@@ -98,6 +98,7 @@ public abstract class SegmentedCurveGeom implements MultiGeometry, RpGeometry {
     
     @Override
     public void setVisible(boolean visible){
+        viewingAttr().setVisible(visible);
         for (MultiPolyLine object : segmentsList_) {
             object.setVisible(visible);
         }
@@ -105,6 +106,7 @@ public abstract class SegmentedCurveGeom implements MultiGeometry, RpGeometry {
     
     @Override
     public void setSelected (boolean selected){
+        viewingAttr().setSelected(selected);
         for (MultiPolyLine object : segmentsList_) {
             object.setSelected(selected);
         }

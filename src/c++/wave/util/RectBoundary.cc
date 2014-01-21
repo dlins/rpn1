@@ -166,7 +166,24 @@ int RectBoundary::edge_segments(int where_constant, int number_of_steps, const R
 //
 //}
 
-void RectBoundary::physical_boundary(std::vector<RealVector> &) {
+void RectBoundary::physical_boundary(std::vector<RealVector> & side) {
+    
+     RealVector p(2);
+
+   p(0) = minimums_->component(0); p(1) = minimums_->component(1);
+   side.push_back(p);
+
+   p(0) = minimums_->component(0); p(1) = maximums_->component(1);
+   side.push_back(p);    
+
+   p(0) = maximums_->component(0); p(1) = maximums_->component(1);
+   side.push_back(p);    
+
+   p(0) = maximums_->component(0); p(1) = minimums_->component(1);
+   side.push_back(p);        
+
+   return;
+    
 
 }
 

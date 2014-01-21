@@ -446,9 +446,6 @@ public class RPnCurvesList extends Observable implements ActionListener, ListSel
 
                     Boolean visible = (Boolean) data;
                     geometry.setVisible(visible);
-
-                    System.out.println("Geometria: " + row + " visivel: " + data);
-                    
                     setChanged();
                     notifyObservers();
 
@@ -463,14 +460,11 @@ public class RPnCurvesList extends Observable implements ActionListener, ListSel
                     for (RpGeometry rpGeometry : geometryList_) {
                         if (rpGeometry.isSelected())
                             selectedGeometries_.add(rpGeometry);
-                        
                     }
-                    
-                    
                     setChanged();
                     notifyObservers(selectedGeometries_);
-                    
-                    System.out.println("Geometria: " + row + " selecionada: " + data);
+                    UIController.instance().setSelectedGeometry(selectedGeometries_);
+
                     break;
                 default:
 

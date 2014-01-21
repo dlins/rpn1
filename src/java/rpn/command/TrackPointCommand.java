@@ -84,7 +84,6 @@ public class TrackPointCommand extends RpModelActionCommand {
 
 
         if (button_.isSelected()) {
-//            if (UIController.instance().globalInputTable().values().getSize() == rpnumerics.RPNUMERICS.domainDim()) {
                 
                 if (UIController.instance().getActivePhaseSpace().getSpace().getDim() == rpnumerics.RPNUMERICS.domainDim()) {
                 StateInformation stateInformation = new StateInformation();

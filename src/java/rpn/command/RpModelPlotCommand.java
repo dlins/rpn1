@@ -155,7 +155,6 @@ public abstract class RpModelPlotCommand extends RpModelActionCommand implements
     @Override
     public void update(Observable o, Object arg) {
 
-        List<RpGeometry> selectedGeometries = (List<RpGeometry>) arg;
 
 
         Iterator<RPnPhaseSpacePanel> iterator = UIController.instance().getInstalledPanelsIterator();
@@ -182,27 +181,7 @@ public abstract class RpModelPlotCommand extends RpModelActionCommand implements
 
             }
 
-
-            if (selectedGeometries != null) {
-                if (selectedGeometries.size() == 1) {
-
-                    Iterator<RPnPhaseSpacePanel> closestIterator = UIController.instance().getInstalledPanelsIterator();
-                    while (closestIterator.hasNext()) {
-                        RPnPhaseSpacePanel panelToAdd = closestIterator.next();
-                        ClosestPointPlotter closestPlotter = new ClosestPointPlotter(selectedGeometries.get(0));
-                        panelToAdd.addMouseListener(closestPlotter);
-                        panelToAdd.addMouseMotionListener(closestPlotter);
-                    }
-
-                }
-            }
-
-
-
         }
-
-
-
 
     }
 }
