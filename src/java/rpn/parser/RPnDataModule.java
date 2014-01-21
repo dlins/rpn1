@@ -5,6 +5,9 @@
  */
 package rpn.parser;
 
+import java.net.MalformedURLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.xml.sax.Attributes;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
@@ -22,6 +25,8 @@ import wave.util.RealVector;
 import wave.util.RealSegment;
 
 import java.io.*;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Vector;
 import java.util.HashMap;
@@ -30,15 +35,18 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 
-import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.XMLReader;
+import org.xml.sax.helpers.XMLReaderFactory;
 import rpn.component.RpGeomFactory;
+import rpn.message.RPnNetworkStatus;
 
 /** With this class the calculus made in a previous session can be reloaded. A previous state can be reloaded reading a XML file that is used by this class */
 public class RPnDataModule {
 
     static public String XML_TAG = "RPNDATA";
+    static public String BATCHDATA_XML_TAG = "BATCH_DATA";
+    
     static public RPnPhaseSpaceAbstraction PHASESPACE = null;
     static public RPnPhaseSpaceAbstraction LEFTPHASESPACE = null;
     static public RPnPhaseSpaceAbstraction RIGHTPHASESPACE = null;
@@ -165,7 +173,40 @@ public class RPnDataModule {
 
                 RPnCommandModule.RPnCommandParser.selectPhaseSpace(att.getValue("phasespace"));
 
+            } else if (currentElement_.equals(BATCHDATA_XML_TAG)) {
+
+                String batch_id = att.getValue("batchid");
+                String fullURL = new String(RPnNetworkStatus.SERVERNAME + "/data/rpnbatch_" + batch_id);
+
+                URL rpnMediatorURL;
+
+                try {
+
+                    rpnMediatorURL = new URL(fullURL);
+
+                    URLConnection rpnMediatorConn;
+
+                    rpnMediatorConn = rpnMediatorURL.openConnection();
+                    BufferedReader buffReader = new BufferedReader(new InputStreamReader(rpnMediatorConn.getInputStream()));
+
+                    XMLReader parser = XMLReaderFactory.createXMLReader();
+
+                    parser.setContentHandler(this);
+
+                    Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.INFO, "Batch data parsing started... ");
+                    parser.parse(new InputSource(buffReader));
+                    Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.INFO, "Batch data parsing finished successfully... ");
+
+                } catch (MalformedURLException ex) {
+                    Logger.getLogger(RPnDataModule.class.getName()).log(Level.SEVERE, null, ex);
+
+
+                } catch (IOException ex) {
+                    Logger.getLogger(RPnDataModule.class.getName()).log(Level.SEVERE, null, ex);
+                }
+       
             } else if (currentElement_.equals(BifurcationCurve.XML_TAG)) {
+                
                 leftSegmentsCoords_ = new ArrayList<RealSegment>();
                 rightSegmentsCoords_ = new ArrayList<RealSegment>();
                 dimension_ = att.getValue("dimension");
