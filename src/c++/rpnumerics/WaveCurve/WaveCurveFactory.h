@@ -44,6 +44,9 @@ class WaveCurveFactory {
         WaveCurveFactory(const AccumulationFunction *gg, const FluxFunction *ff, const Boundary *bb, const ODE_Solver *o, RarefactionCurve *r, ShockCurve *s, CompositeCurve *c);
         ~WaveCurveFactory();
 
+        // This half-wavecurve is meaningless along the boundary's side.
+        // If necessary, create a new one which does not use initial_direction.
+        //
         int Liu_half_wavecurve(const ReferencePoint &ref, 
                                const RealVector &initial_point, 
                                int initial_family, int increase, 
@@ -53,7 +56,10 @@ class WaveCurveFactory {
                                int &wavecurve_stopped_because, 
                                int &edge);
 
-        int wavecurve(const RealVector &initial_point, int family, int increase, HugoniotContinuation *h, WaveCurve &hwc, int &reason_why, int &edge);
+        int wavecurve(const RealVector &initial_point, int family, int increase, HugoniotContinuation *h, WaveCurve &hwc, int &wavecurve_stopped_because, int &edge);
+
+        // s = side.
+        int wavecurve_from_boundary(const RealVector &initial_point, int s, int family, int increase, HugoniotContinuation *h, WaveCurve &hwc, int &wavecurve_stopped_because, int &edge);
 };
 
 #endif // _WAVECURVEFACTORY_

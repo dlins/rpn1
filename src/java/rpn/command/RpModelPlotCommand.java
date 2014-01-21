@@ -19,7 +19,6 @@ import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import javax.swing.ImageIcon;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 import javax.swing.AbstractButton;
@@ -29,10 +28,6 @@ import rpn.component.RpGeomFactory;
 import rpn.controller.ui.*;
 import rpnumerics.RPnCurve;
 import rpn.message.RPnNetworkStatus;
-import wave.util.Boundary;
-import wave.util.BoxND;
-import wave.util.HyperOctree;
-import wave.util.RealSegment;
 
 public abstract class RpModelPlotCommand extends RpModelActionCommand implements Observer {
 

@@ -317,6 +317,11 @@ public class RPNUMERICS {
 
 
     }
+    
+    public static WaveCurveCalc createBoundaryWaveCurve (OrbitPoint orbitPoint,int edge){
+        Integer direction = new Integer(getParamValue("fundamentalcurve", "direction"));
+        return new WaveCurveCalc(orbitPoint, Integer.parseInt(getParamValue("fundamentalcurve", "family")), direction,edge);
+    }
 
     public static RarefactionCurveCalc createRarefactionCalc(OrbitPoint orbitPoint) {
         Integer direction = new Integer(getParamValue("fundamentalcurve", "direction"));

@@ -65,7 +65,7 @@ public:
     const RealVector& maximums(void) const;
 
     RealVector intersect(RealVector &p1, RealVector &p2) const;
-    int intersection(const RealVector &p, const RealVector &q, RealVector &r, int &w) const;
+//    int intersection(const RealVector &p, const RealVector &q, RealVector &r, int &w) const;
 
 
 
@@ -95,6 +95,8 @@ public:
     const RealVector & getA()const;
     const RealVector & getB()const;
     const RealVector & getC()const;
+
+    RealVector side_transverse_interior(const RealVector &p, int s) const;
 
 };
 

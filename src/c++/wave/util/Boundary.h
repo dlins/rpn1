@@ -86,6 +86,15 @@ public:
             int where_constant, int number_of_steps, bool singular,
             std::vector<RealVector> &c, std::vector<RealVector> &d){return;}
 
+    // Return a vector originating in p that points to the interior of the domain from 
+    // the Boundary side with index s.
+    //
+//    virtual RealVector side_transverse_interior(const RealVector &p, int s) const {
+//        return RealVector(2);
+//    }
+
+    virtual RealVector side_transverse_interior(const RealVector &p, int s) const = 0;
+
 protected:
     double epsilon;
 };

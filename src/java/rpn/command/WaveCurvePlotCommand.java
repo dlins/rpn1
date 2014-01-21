@@ -1,11 +1,15 @@
 package rpn.command;
 
 import javax.swing.JToggleButton;
+import rpn.component.RpGeomFactory;
 import rpn.component.RpGeometry;
 import rpn.component.WaveCurveGeomFactory;
+import rpn.controller.ui.UIController;
 import rpnumerics.OrbitPoint;
+import rpnumerics.PhysicalBoundary;
 import wave.util.RealVector;
 import rpnumerics.RPNUMERICS;
+import rpnumerics.RPnCurve;
 import rpnumerics.WaveCurveCalc;
 
 public class WaveCurvePlotCommand extends RpModelPlotCommand {
@@ -15,18 +19,42 @@ public class WaveCurvePlotCommand extends RpModelPlotCommand {
 
     public WaveCurvePlotCommand() {
 
-        super(DESC_TEXT, rpn.configuration.RPnConfig.ORBIT_FWD,new JToggleButton());
+        super(DESC_TEXT, rpn.configuration.RPnConfig.ORBIT_FWD, new JToggleButton());
     }
 
+    @Override
     public RpGeometry createRpGeometry(RealVector[] input) {
 
         OrbitPoint oPoint = new OrbitPoint(input[input.length - 1]);
+
+
+        if (UIController.instance().getSelectedGeometriesList().size() == 1) {
+
+            RpGeomFactory geomFactory = UIController.instance().getSelectedGeometriesList().get(0).geomFactory();
+            RPnCurve curve = (RPnCurve) geomFactory.geomSource();
+            if (curve instanceof PhysicalBoundary) {
+
+                PhysicalBoundary physicalBoundary = (PhysicalBoundary) curve;
+
+                int edge = physicalBoundary.edgeSelection(oPoint);
+
+
+                WaveCurveCalc waveCurveCalc = RPNUMERICS.createBoundaryWaveCurve(oPoint, edge);
+                WaveCurveGeomFactory factory = new WaveCurveGeomFactory(waveCurveCalc);
+
+                return factory.geom();
+
+            }
+
+
+        }
         WaveCurveCalc waveCurveCalc = RPNUMERICS.createWaveCurveCalc(oPoint);
         WaveCurveGeomFactory factory = new WaveCurveGeomFactory(waveCurveCalc);
 
         return factory.geom();
 
-     }
+
+    }
 
     static public WaveCurvePlotCommand instance() {
         if (instance_ == null) {

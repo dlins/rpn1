@@ -11,7 +11,6 @@
  * Includes:
  */
 #include "IsoTriang2DBoundary.h"
-#include "Debug.h"
 using namespace std;
 
 /*
@@ -162,67 +161,65 @@ RealVector Three_Phase_Boundary::intersect(RealVector &p1, RealVector &p2) const
     return RealVector(2);
 }
 
-int Three_Phase_Boundary::intersection(const RealVector &p, const RealVector &q, RealVector &r, int &w) const {
+//int Three_Phase_Boundary::intersection(const RealVector &p, const RealVector &q, RealVector &r, int &w) const {
 
-    w = -1;
-    r.resize(2);
-//    return Boundary::intersection(p, q, r, w);
-    if (inside(p) && inside(q)) return 1;
-    if (!inside(p) && !inside(q)) {
-        if ( Debug::get_debug_level() == 5 ) {
-            cout << "Both outside, should abort" << endl;
-        }
-        return -1;
-    } else {
-        RealVector pin(2), pout(2);
+//    w = -1;
+//    r.resize(2);
+////    return Boundary::intersection(p, q, r, w);
+//    if (inside(p) && inside(q)) return 1;
+//    if (!inside(p) && !inside(q)) {
+//        cout << "Both outside, should abort" << endl;
+//        return -1;
+//    } else {
+//        RealVector pin(2), pout(2);
 
-        if (inside(p)) {
-            pin = p;
-            pout = q;
-        } else {
-            pin = q;
-            pout = p;
-        }
+//        if (inside(p)) {
+//            pin = p;
+//            pout = q;
+//        } else {
+//            pin = q;
+//            pout = p;
+//        }
 
-        // This is an auxiliary variable, setted as 1.0 do the work to be replaced.
-        double a = 1.0;
+//        // This is an auxiliary variable, setted as 1.0 do the work to be replaced.
+//        double a = 1.0;
 
-        if (pout.component(0) < pmin->component(0)) {
-            a = (pmin->component(0) - pin.component(0)) / (pout.component(0) - pin.component(0));
-            r.component(0) = pmin->component(0);
-            r.component(1) = pin.component(1) + a * (pout.component(1) - pin.component(1));
-            w = THREE_PHASE_EXTENDED_BOUNDARY_SW;
-        }
+//        if (pout.component(0) < pmin->component(0)) {
+//            a = (pmin->component(0) - pin.component(0)) / (pout.component(0) - pin.component(0));
+//            r.component(0) = pmin->component(0);
+//            r.component(1) = pin.component(1) + a * (pout.component(1) - pin.component(1));
+//            w = THREE_PHASE_EXTENDED_BOUNDARY_SW;
+//        }
 
-        if (pout.component(1) < pmin->component(1)) {
-            double atemp = (pmin->component(1) - pin.component(1)) / (pout.component(1) - pin.component(1));
+//        if (pout.component(1) < pmin->component(1)) {
+//            double atemp = (pmin->component(1) - pin.component(1)) / (pout.component(1) - pin.component(1));
 
-            if (fabs(atemp) < fabs(a)) {
-                a = atemp;
-                r.component(0) = pin.component(0) + a * (pout.component(0) - pin.component(0));
-                r.component(1) = pmin->component(1);
-                w = THREE_PHASE_EXTENDED_BOUNDARY_SO;
-            }
-        }
+//            if (fabs(atemp) < fabs(a)) {
+//                a = atemp;
+//                r.component(0) = pin.component(0) + a * (pout.component(0) - pin.component(0));
+//                r.component(1) = pmin->component(1);
+//                w = THREE_PHASE_EXTENDED_BOUNDARY_SO;
+//            }
+//        }
 
-        double pout_sum = pout.component(0) + pout.component(1);
-        double end_sum = (pmax->component(0) + pmax->component(1) +pmin->component(0) + pmin->component(1))  / 2.0;
+//        double pout_sum = pout.component(0) + pout.component(1);
+//        double end_sum = (pmax->component(0) + pmax->component(1) +pmin->component(0) + pmin->component(1))  / 2.0;
 
-        if (pout_sum > end_sum) {
-            double pin_sum = pin.component(0) + pin.component(1);
-            double atemp = (end_sum - pin_sum) / (pout_sum - pin_sum);
+//        if (pout_sum > end_sum) {
+//            double pin_sum = pin.component(0) + pin.component(1);
+//            double atemp = (end_sum - pin_sum) / (pout_sum - pin_sum);
 
-            if (fabs(atemp) < fabs(a)) {
-                a = atemp;
-                for (int i = 0; i < 2; i++)
-                    r.component(i) = pin.component(i) + a * (pout.component(i) - pin.component(i));
-                w = THREE_PHASE_EXTENDED_BOUNDARY_SG;
-            }
-        }
+//            if (fabs(atemp) < fabs(a)) {
+//                a = atemp;
+//                for (int i = 0; i < 2; i++)
+//                    r.component(i) = pin.component(i) + a * (pout.component(i) - pin.component(i));
+//                w = THREE_PHASE_EXTENDED_BOUNDARY_SG;
+//            }
+//        }
 
-        return 0;
-    }
-}
+//        return 0;
+//    }
+//}
 
 const char * Three_Phase_Boundary::boundaryType() const {
     return "Three_Phase_Boundary";
@@ -230,29 +227,28 @@ const char * Three_Phase_Boundary::boundaryType() const {
 
 void Three_Phase_Boundary::physical_boundary(std::vector<RealVector> &seg){
 
-//    std::vector<RealVector> tempSeg;
-//
-//    for (int i = 0; i < 3; i++) {
-//        edge_segments(i,3,tempSeg);
-//
-//        for (int j=0; j < tempSeg.size();j++) {
-//            seg.push_back(tempSeg[j]);
-//        }
-//
-//    }
+    std::vector<RealVector> tempSeg;
 
-    seg.clear();
-    
-    
-    seg.push_back(*A_);
-    seg.push_back(*B_);
-    seg.push_back(*B_);
-    seg.push_back(*C_);
-    seg.push_back(*C_);
-    seg.push_back(*A_);
+    for (int i = 0; i < 3; i++) {
+        edge_segments(i,3,tempSeg);
+
+        for (int j=0; j < tempSeg.size();j++) {
+            seg.push_back(tempSeg[j]);
+        }
+
+    }
 
 
-    return ;
+
+
+
+
+
+
+
+
+
+
 
 }
 
@@ -319,7 +315,28 @@ int Three_Phase_Boundary::edge_segments(int where_constant, int number_of_steps,
     return 1;
 }
 
+// THREE_PHASE_BOUNDARY_SW_ZERO 0
+// THREE_PHASE_BOUNDARY_SO_ZERO 1
+// THREE_PHASE_BOUNDARY_SG_ZERO 2
+//
+RealVector Three_Phase_Boundary::side_transverse_interior(const RealVector &p, int s) const {
+    RealVector v(2);
 
+    if (s == THREE_PHASE_BOUNDARY_SW_ZERO){
+        v(0) = 0.0;
+        v(1) = 1.0;
+    }
+    else if (s == THREE_PHASE_BOUNDARY_SO_ZERO){
+        v(0) = 1.0;
+        v(1) = 0.0;
+    }
+    else {
+        v(0) = -0.707106781;
+        v(1) = -0.707106781;
+    }
+
+    return v;
+}
 
 
 
@@ -421,14 +438,10 @@ int Three_Phase_Boundary::edge_segments(int where_constant, int number_of_steps,
 //
 //
 //     if ((x >= minimums().component(0)) && (y >= minimums().component(1)) && (x + y <=  maximums().component(0)+minimums().component(1)+0.00000001)) {
-//    if ( Debug::get_debug_level() == 5 ) {
 ////        cout << "(" << x << ", " << y << ") is INSIDE" << endl;
-//    }
 //        return true;
 //    } else {
-//    if ( Debug::get_debug_level() == 5 ) {
 ////       cout << "(" << x << ", " << y << ") is OUTSIDE" << endl;
-//    }
 //        return false;
 //    }
 //
@@ -437,14 +450,10 @@ int Three_Phase_Boundary::edge_segments(int where_constant, int number_of_steps,
 ////
 ////
 ////    if ((x >= 0.) && (y >= 0.) && (x + y <= 1.)) {
-//    if ( Debug::get_debug_level() == 5 ) {
 //////        cout << "(" << x << ", " << y << ") is INSIDE" << endl;
-//    }
 ////        return true;
 ////    } else {
-//    if ( Debug::get_debug_level() == 5 ) {
 //////        cout << "(" << x << ", " << y << ") is OUTSIDE" << endl;
-//    }
 ////        return false;
 //
 //// 1.0000000001 is a kludge, in an ideal world it should be 1.0.
@@ -455,14 +464,10 @@ int Three_Phase_Boundary::edge_segments(int where_constant, int number_of_steps,
 //
 //
 //     if ((x >= minimums().component(0)) && (y >= minimums().component(1)) && (x + y <=  maximums().component(0)+minimums().component(1)+0.00000001)) {
-//    if ( Debug::get_debug_level() == 5 ) {
 ////        cout << "(" << x << ", " << y << ") is INSIDE" << endl;
-//    }
 //        return true;
 //    } else {
-//    if ( Debug::get_debug_level() == 5 ) {
 ////       cout << "(" << x << ", " << y << ") is OUTSIDE" << endl;
-//    }
 //        return false;
 //    }
 //
@@ -471,14 +476,10 @@ int Three_Phase_Boundary::edge_segments(int where_constant, int number_of_steps,
 //
 ////
 ////    if ((x >= 0.) && (y >= 0.) && (x + y <= 1.)) {
-//    if ( Debug::get_debug_level() == 5 ) {
 //////        cout << "(" << x << ", " << y << ") is INSIDE" << endl;
-//    }
 ////        return true;
 ////    } else {
-//    if ( Debug::get_debug_level() == 5 ) {
 //////        cout << "(" << x << ", " << y << ") is OUTSIDE" << endl;
-//    }
 ////        return false;
 ////    }
 //

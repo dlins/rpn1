@@ -369,10 +369,45 @@ int WaveCurveFactory::wavecurve(const RealVector &initial_point, int family, int
 
     Liu_half_wavecurve(ref, initial_point, family, increase, RAREFACTION_CURVE,  initial_direction, hwc, wavecurve_stopped_because, edge);
     Liu_half_wavecurve(ref, initial_point, family, increase, SHOCK_CURVE,       -initial_direction, hwc, wavecurve_stopped_because, edge);
-    for (int i = 0; i < hwc.wavecurve.size(); i++) {
-        cout<<"Saida: "<<hwc.wavecurve[i].type<<endl;
 
+    for (int i = 0; i < hwc.wavecurve.size(); i++) std::cout << "Curve\'s size = " << hwc.wavecurve[i].curve.size() << std::endl;
 
+    return WAVECURVE_OK;
+}
+
+int WaveCurveFactory::wavecurve_from_boundary(const RealVector &initial_point, int s, int family, int increase, HugoniotContinuation *h, WaveCurve &hwc, int &wavecurve_stopped_because, int &edge){
+    // Points to the interior of the domain from side s.
+    //
+    RealVector to_interior = b->side_transverse_interior(initial_point, s);
+
+    // Initialize.
+    //
+    RealVector initial_direction;
+    double dd;
+
+    int info_initialize = rarefactioncurve->initialize(initial_point, family, increase, initial_direction, dd);
+
+    if (info_initialize == RAREFACTION_INIT_ERROR) return WAVECURVEFACTORY_INIT_ERROR;
+
+    ReferencePoint ref(initial_point, f, g, 0);
+
+    hwc.family          = family;
+    hwc.increase        = increase;
+    hwc.reference_point = ref;
+
+    // Proceed.
+    //
+    hugoniot = h;
+
+    // PLEASE NOTE:
+    // The case when initial_direction*to_interior == 0 is treated here by default. We do not know how to proceed correctly
+    // in this case.
+    //
+    if (initial_direction*to_interior > 0){
+        Liu_half_wavecurve(ref, initial_point, family, increase, RAREFACTION_CURVE,  initial_direction, hwc, wavecurve_stopped_because, edge);
+    }
+    else {
+        Liu_half_wavecurve(ref, initial_point, family, increase, SHOCK_CURVE,       -initial_direction, hwc, wavecurve_stopped_because, edge);    
     }
 
     return WAVECURVE_OK;
