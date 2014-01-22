@@ -56,13 +56,14 @@ public class RPnCurvesList extends Observable implements ActionListener, ListSel
     private JToolBar toolBar_;
     private JTable curvesTable_;
     private JButton selectNoneButton_, selectAllButton_, removeButton_,
-            removeAreasButton_,setVisibleButton_;
+            removeAreasButton_, setVisibleButton_;
     private DefaultTableModel tableModel_;
     private RPnPhaseSpaceAbstraction phaseSpace_;
     private JFrame frame_;
     private List<RpGeometry> selectedGeometries_;
     private List indexGeometries;
     private List<RpGeometry> geometryList_;
+    private ArrayList<RpGeometry> geometriesToRemove_;
 
     public RPnCurvesList(String title, RPnPhaseSpaceAbstraction phaseSpace) {
 
@@ -111,14 +112,14 @@ public class RPnCurvesList extends Observable implements ActionListener, ListSel
 
         removeAreasButton_ = new JButton("Remove All Areas");
         removeAreasButton_.setName("RemoveAreas");
-        
-        
+
+
         setVisibleButton_ = new JButton("Visible");
         setVisibleButton_.setName("Visible");
-        
+
         setVisibleButton_.addActionListener(this);
-        
-        
+
+
         selectNoneButton_.addActionListener(this);
         selectAllButton_.addActionListener(this);
 
@@ -316,21 +317,21 @@ public class RPnCurvesList extends Observable implements ActionListener, ListSel
             if (button.getName().equals("RemoveAreas")) {
                 UIController.instance().clearAllAreas();
             }
-            
+
             if (button.getName().equals("Visible")) {
-                
+
                 for (Object selectedIndex : indexGeometries) {
-                    Integer index = (Integer)selectedIndex;
+                    Integer index = (Integer) selectedIndex;
                     curvesTable_.getModel().setValueAt(true, index, 2);
                 }
-                
-                
+
+
             }
-            
-            
-            
-            
-            
+
+
+
+
+
 
             if (button.getName().equals("Remove")) {
 
@@ -346,9 +347,12 @@ public class RPnCurvesList extends Observable implements ActionListener, ListSel
                 }
                 // ---------------------------------------------------------------------------------                
 
-                for (MultiGeometry multiGeometry : selectedGeometries_) {
-                    RPnPhaseSpaceManager.instance().remove(phaseSpace_, multiGeometry);
+                for (RpGeometry geometry : geometriesToRemove_) {
+
+                    RPnPhaseSpaceManager.instance().remove(phaseSpace_, geometry);
+
                 }
+
             }
 
         }
@@ -392,7 +396,7 @@ public class RPnCurvesList extends Observable implements ActionListener, ListSel
     @Override
     public void valueChanged(ListSelectionEvent e) {
 
-        List<RpGeometry> selectedGeometries = new ArrayList();
+        geometriesToRemove_ = new ArrayList();
         indexGeometries = new ArrayList();
 
         ListSelectionModel listSelectionModel = (ListSelectionModel) e.getSource();
@@ -409,7 +413,7 @@ public class RPnCurvesList extends Observable implements ActionListener, ListSel
                     while (it.hasNext()) {
                         RpGeometry geometry = (RpGeometry) it.next();
                         if (index == i) {
-                            selectedGeometries.add(geometry);
+                            geometriesToRemove_.add(geometry);
                             indexGeometries.add(index);
                         }
                         index++;
@@ -419,9 +423,6 @@ public class RPnCurvesList extends Observable implements ActionListener, ListSel
 
             }
 
-//            setChanged();
-//            notifyObservers(selectedGeometries);
-            selectedGeometries_ = selectedGeometries;
 
         }
 
@@ -440,7 +441,7 @@ public class RPnCurvesList extends Observable implements ActionListener, ListSel
         if (e.getType() == TableModelEvent.UPDATE) {
             Object data = model.getValueAt(row, column);
             RpGeometry geometry = geometryList_.get(row);
-            
+
             switch (column) {
                 case 2:
 
@@ -449,17 +450,18 @@ public class RPnCurvesList extends Observable implements ActionListener, ListSel
                     setChanged();
                     notifyObservers();
 
-       
+
                     break;
                 case 3:
-                    Boolean selected = (Boolean)data;
+                    Boolean selected = (Boolean) data;
                     geometry.setSelected(selected);
-                    
+
                     selectedGeometries_.clear();
-                    
+
                     for (RpGeometry rpGeometry : geometryList_) {
-                        if (rpGeometry.isSelected())
+                        if (rpGeometry.isSelected()) {
                             selectedGeometries_.add(rpGeometry);
+                        }
                     }
                     setChanged();
                     notifyObservers(selectedGeometries_);
@@ -480,7 +482,7 @@ public class RPnCurvesList extends Observable implements ActionListener, ListSel
 
 
 
-       
+
 
 
     }

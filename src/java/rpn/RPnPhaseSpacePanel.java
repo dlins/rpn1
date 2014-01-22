@@ -380,7 +380,7 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
         g.setColor(DEFAULT_POINTMARK_COLOR);
         for (int i = 0; i < getCastedUI().pointMarkBuffer().size(); i++) {
             g.fillRect(((Point) getCastedUI().pointMarkBuffer().get(i)).x,
-                    ((Point) getCastedUI().pointMarkBuffer().get(i)).y, 20, 20);
+                    ((Point) getCastedUI().pointMarkBuffer().get(i)).y, 5, 5);
         }
 
 

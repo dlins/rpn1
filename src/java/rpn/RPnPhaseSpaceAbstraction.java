@@ -11,7 +11,6 @@ import wave.multid.Space;
 import rpnumerics.*;
 import rpn.component.*;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Iterator;
 import java.util.Observable;
@@ -54,7 +53,7 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene implements Observer 
         selectedGeom_ = null;
         userInputTable_ = new UserInputTable(domain.getDim());
         curvesListFrames_ = new ArrayList<RPnCurvesList>();
-       timer_ = new Timer();
+        timer_ = new Timer();
 //        flasher_ = new CurveFlasher();
 
     }
@@ -144,8 +143,9 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene implements Observer 
 
     @Override
     public void remove(MultiGeometry geom) {
-
+        timer_.cancel();
         ((RpGeometry) geom).geomFactory().getUI().uninstall(((RpGeometry) geom).geomFactory());
+        
 
         super.remove(geom);
         notifyState();
@@ -465,33 +465,37 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene implements Observer 
     public void update(Observable o, Object arg) {
 
         List<RpGeometry> selectedGeometries = (List<RpGeometry>) arg;
+//        System.out.println(selectedGeometries.size());
+        if (selectedGeometries != null) {//Selected curves
+            if (!selectedGeometries.isEmpty()) {
 
-        if (selectedGeometries != null) {
-            if(!selectedGeometries.isEmpty()){
-                System.out.println(selectedGeometries.size());
-                flasher_=new CurveFlasher(timer_);
+                flasher_ = new CurveFlasher(timer_);
                 flasher_.setList(selectedGeometries);
                 timer_.schedule(flasher_, 0, 1000);
-                
-            }
-            else{
+
+            } else {
+
                 timer_.cancel();
-                timer_=new Timer();
-                UIController.instance().panelsUpdate();
+
+                timer_ = new Timer();
+                
+                for (Object object : geomList_) {
+
+                    RpGeometry geometry = (RpGeometry) object;
+                    geometry.setVisible(true);
+                    UIController.instance().panelsUpdate();
+                    notifyState();
+                }
+
+
+
+
             }
 
 
-//                timer_.cancel();
-//                timer_.purge();
-//                for (Object object : geomList_) {
-//                    RpGeometry geometry = (RpGeometry) object;
-//                    geometry.setVisible(true);
-//                }
-//
-//                UIController.instance().panelsUpdate();
-//
-
-        } else {
+        } else {//Visible or not
+            timer_.cancel();
+            timer_=new Timer();
             UIController.instance().panelsUpdate();
         }
     }
