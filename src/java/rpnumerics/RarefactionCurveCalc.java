@@ -7,18 +7,30 @@
 package rpnumerics;
 
 public class RarefactionCurveCalc extends WaveCurveOrbitCalc implements RpCalculation {
+    private int edge_;
     //
     // Constants
     //
     //
     // Members
     //
+    private final boolean fromBoundary_;
 
     // Constructors/Initializers
     //
     public RarefactionCurveCalc(PhasePoint point, int familyIndex,int timeDirection) {
 
         super(new OrbitPoint(point), familyIndex,timeDirection);
+        fromBoundary_=false;
+    }
+    
+    
+    public RarefactionCurveCalc(PhasePoint point, int familyIndex, int timeDirection, int edge) {
+
+        super(new OrbitPoint(point), familyIndex, timeDirection);
+        edge_=edge;
+        fromBoundary_=true;
+
     }
 
     //
@@ -34,17 +46,12 @@ public class RarefactionCurveCalc extends WaveCurveOrbitCalc implements RpCalcul
 
     }
 
-
-    // ----- 30JAN : Dan pediu para fazer rarefação em ambas as direções
-    // ----- Incluí o método concat(...)
     @Override
     public RpSolution calc() throws RpException {
         RarefactionCurve result;
 
-        if(getDirection()== Orbit.BOTH_DIR) {
-            RarefactionCurve forward  = (RarefactionCurve) calc("methodName_", "flowName_", getStart(), getFamilyIndex(), Orbit.FORWARD_DIR);
-            RarefactionCurve backward = (RarefactionCurve) calc("methodName_", "flowName_", getStart(), getFamilyIndex(), Orbit.BACKWARD_DIR);
-            result =  concat(backward, forward);
+        if(fromBoundary_) {
+            result=(RarefactionCurve)  boundaryNativeCalc(getStart(), getFamilyIndex(), getDirection(), edge_);
         }
         else {
             result = (RarefactionCurve) calc("methodName_", "flowName_", getStart(), getFamilyIndex(), getDirection());
@@ -78,30 +85,9 @@ public class RarefactionCurveCalc extends WaveCurveOrbitCalc implements RpCalcul
         return new RarefactionCurve(swap, getFamilyIndex(), Orbit.BOTH_DIR);
 
     }
-    // -----
+ 
 
-
-    // --- Método calc() original
-//    @Override
-//    public RpSolution calc() throws RpException {
-//
-//        RarefactionCurve result;
-//
-//        result = (RarefactionCurve) calc("methodName_", "flowName_", getStart(), getFamilyIndex(), getDirection());
-//
-//
-//        if (result == null) {
-//            throw new RpException("Error in native layer");
-//        }
-//
-//
-//        return result;
-//
-//    }
-
-
-
-
+    private native RpSolution boundaryNativeCalc(OrbitPoint initialPoint, int family, int timeDirection, int edge) throws RpException; 
 
     private native RpSolution calc(String methodName, String flowName, PhasePoint initialpoint, int familyIndex, int timeDirection) throws RpException;
 

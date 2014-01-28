@@ -43,6 +43,7 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene implements Observer 
     private List stringsToRemove = new ArrayList();
     private Timer timer_;
     private CurveFlasher flasher_;
+    private List<RpGeometry> selectedGeometries_;
     //
     // Constructors
     //
@@ -53,7 +54,8 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene implements Observer 
         selectedGeom_ = null;
         userInputTable_ = new UserInputTable(domain.getDim());
         curvesListFrames_ = new ArrayList<RPnCurvesList>();
-        timer_ = new Timer();
+        selectedGeometries_ = new ArrayList<RpGeometry>();
+
 //        flasher_ = new CurveFlasher();
 
     }
@@ -109,7 +111,7 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene implements Observer 
     }
 
     public RpGeometry getLastGeometry() {
-
+        if(geomList_.isEmpty())return null;
         return (RpGeometry) super.geomList_.get(super.geomList_.size() - 1);
     }
 
@@ -119,6 +121,16 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene implements Observer 
             return;
         }
         super.join(geom);
+       
+        for (Iterator<RpGeometry> it = selectedGeometries_.iterator(); it.hasNext();) {
+            Object obj = it.next();
+            
+            RpGeometry geometry =(RpGeometry)obj;
+            geometry.setVisible(true);
+        }
+        
+        
+        
         notifyState();
 
     }
@@ -143,11 +155,22 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene implements Observer 
 
     @Override
     public void remove(MultiGeometry geom) {
-        timer_.cancel();
+
         ((RpGeometry) geom).geomFactory().getUI().uninstall(((RpGeometry) geom).geomFactory());
+        selectedGeometries_.remove((RpGeometry) geom);
+        
         
 
         super.remove(geom);
+        for (Iterator<RpGeometry> it = selectedGeometries_.iterator(); it.hasNext();) {
+            Object obj = it.next();
+            
+            RpGeometry geometry =(RpGeometry)obj;
+            geometry.setVisible(true);
+        }
+                
+        
+        
         notifyState();
 
     }
@@ -460,43 +483,35 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene implements Observer 
         }
 
     }
+    
+    public void updateCurveSelection(){
+
+        for (Object object : geomList_) {
+            RpGeometry rpGeometry = (RpGeometry) object;
+            if (!selectedGeometries_.contains(rpGeometry)) {
+                if (rpGeometry.isSelected()) {
+                    selectedGeometries_.add(rpGeometry);
+                    Timer timer = new Timer();
+                    CurveFlasher flasher = new CurveFlasher(rpGeometry);
+                    timer.schedule(flasher, 0, 1000);
+
+                } 
+            }else {
+                if (!rpGeometry.isSelected()){
+                    selectedGeometries_.remove(rpGeometry);
+                    
+                }
+                
+            }
+
+        }
+    }
 
     @Override
     public void update(Observable o, Object arg) {
 
-        List<RpGeometry> selectedGeometries = (List<RpGeometry>) arg;
-//        System.out.println(selectedGeometries.size());
-        if (selectedGeometries != null) {//Selected curves
-            if (!selectedGeometries.isEmpty()) {
-
-                flasher_ = new CurveFlasher(timer_);
-                flasher_.setList(selectedGeometries);
-                timer_.schedule(flasher_, 0, 1000);
-
-            } else {
-
-                timer_.cancel();
-
-                timer_ = new Timer();
-                
-                for (Object object : geomList_) {
-
-                    RpGeometry geometry = (RpGeometry) object;
-                    geometry.setVisible(true);
-                    UIController.instance().panelsUpdate();
-                    notifyState();
-                }
-
-
-
-
-            }
-
-
-        } else {//Visible or not
-            timer_.cancel();
-            timer_=new Timer();
-            UIController.instance().panelsUpdate();
-        }
+       
+        updateCurveSelection();
+        UIController.instance().panelsUpdate();
     }
 }

@@ -1,6 +1,7 @@
 #ifndef _SHOCKCURVE_
 #define _SHOCKCURVE_
 
+#include "RarefactionCurve.h"
 #include "HugoniotContinuation.h"
 #include "Curve.h"
 #include <vector>
@@ -10,16 +11,20 @@
 #define SHOCKCURVE_OK 0
 #endif
 
+#ifndef SHOCKCURVE_ERROR
+#define SHOCKCURVE_ERROR 1
+#endif
+
 #ifndef SHOCKCURVE_NEWTON_CONVERGED
-#define SHOCKCURVE_NEWTON_CONVERGED 1
+#define SHOCKCURVE_NEWTON_CONVERGED 2
 #endif
 
 #ifndef SHOCKCURVE_NEWTON_DID_NOT_CONVERGE
-#define SHOCKCURVE_NEWTON_DID_NOT_CONVERGE 2
+#define SHOCKCURVE_NEWTON_DID_NOT_CONVERGE 3
 #endif
 
 #ifndef SHOCKCURVE_NEWTON_OUTSIDE_DOMAIN
-#define SHOCKCURVE_NEWTON_OUTSIDE_DOMAIN 3
+#define SHOCKCURVE_NEWTON_OUTSIDE_DOMAIN 4
 #endif
 
 // Types of curves.
@@ -52,6 +57,16 @@
 
 #define SHOCK_COMPLEX_EIGENVALUE_AT_FAMILY                               305
 #define SHOCK_REACHED_BOUNDARY                                           306
+
+// For test purposes only. DELETE LATER
+//#define USECANVAS
+//
+//#ifdef USECANVAS
+//#include "canvas.h"
+//#include "canvasmenuscroll.h"
+//#include "curve2d.h"
+//#endif
+// For test purposes only. DELETE LATER
 
 #define DONT_USE_INTERRUPTION_FUNCTIONS            1
 #define USE_INTERRUPTION_FUNCTIONS_SPECIFIC_FAMILY 2
@@ -156,6 +171,10 @@ class ShockCurve {
         virtual void find_system(const RealVector &in, const ReferencePoint &reference_point, double lambda_ref, DoubleMatrix &nablaH, RealVector &H);
         //virtual void find_system(const RealVector &in, double lambda_ref, DoubleMatrix &nablaH, RealVector &H);
 
+        #ifdef USECANVAS
+        Canvas *canvas;
+        CanvasMenuScroll *scroll;
+        #endif
 
         // Use (or don't) interruption functions.
         // If no one is used, the shock is allowed to reach the boundary.
@@ -236,6 +255,18 @@ class ShockCurve {
                                  int &shock_stopped_because,
                                  int &edge);
 
+        int curve_engine_from_boundary(RarefactionCurve *rarefactioncurve, int side, int increase, const ReferencePoint &r, const RealVector &in, int family, 
+                                 int type, int left_subtype, int right_subtype,
+                                 int what_family_to_use,
+                                 int after_transition,
+                                 Curve &shockcurve, 
+                                 std::vector<int> &transition_current_index,
+                                 std::vector<int> &transition_current_family,
+                                 std::vector<int> &transition_reference_index,
+                                 std::vector<int> &transition_reference_family, 
+                                 int &shock_stopped_because,
+                                 int &edge);
+
 //        virtual int curve(const ReferencePoint &ref, int type, int subtype, std::vector< std::vector<RealVector> > &curve, 
 //                          std::vector< std::vector<RealVector> > &transition_current, 
 //                          std::vector< std::vector<RealVector> > &transition_reference);
@@ -249,6 +280,10 @@ class ShockCurve {
         virtual int find_point_for_sigma_equal_reference_lambda(const RealVector &in, double lambda_ref, RealVector &out);
 
         HugoniotContinuation * get_HugoniotContinuation(){return hc;}
+
+        #ifdef USECANVAS
+        void set_graphics(Canvas *c, CanvasMenuScroll *s){canvas = c; scroll = s; return;}
+        #endif
 };
 
 #endif // _SHOCKCURVE_

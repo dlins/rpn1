@@ -232,12 +232,6 @@ public class HyperOctree<T extends RealSegment> {
                             T t = it.next();
                             if (t.intersect(b)){
                                 list.add(t);
-                                if (t==null){
-                                    System.out.println("Adicionando nulo");
-                                }
-                                else {
-                                    System.out.println("Adicionou :"+ t);
-                                }
                             }
 
                         }

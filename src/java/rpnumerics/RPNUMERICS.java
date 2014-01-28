@@ -328,6 +328,13 @@ public class RPNUMERICS {
         return new RarefactionCurveCalc(orbitPoint, Integer.parseInt(getParamValue("fundamentalcurve", "family")), direction);
 
     }
+    
+     public static RarefactionCurveCalc createRarefactionCalc(OrbitPoint orbitPoint,int edge) {
+        Integer direction = new Integer(getParamValue("fundamentalcurve", "direction"));
+        return new RarefactionCurveCalc(orbitPoint, Integer.parseInt(getParamValue("fundamentalcurve", "family")), direction,edge);
+
+    }
+    
 
     public static DoubleContactCurveCalc createDoubleContactCurveCalc(Configuration configuration) {
 
@@ -691,6 +698,18 @@ public class RPNUMERICS {
 
         return new SubInflectionExtensionCurveCalc(params, new Integer(getParamValue("extensioncurve", "curvefamily")), new Integer(getParamValue("extensioncurve", "domainfamily")), characteristicWhere);
 
+
+
+    }
+    
+    
+   public static ShockCurveCalc createShockCurveCalc(OrbitPoint orbitPoint,int edge) {
+
+        Integer family = new Integer(getParamValue("fundamentalcurve", "family"));
+        Double tolerance = new Double(getParamValue("Newton", "tolerance"));
+
+        Integer direction = new Integer(getParamValue("fundamentalcurve", "direction"));
+        return new ShockCurveCalc(orbitPoint, family, direction, tolerance);
 
 
     }

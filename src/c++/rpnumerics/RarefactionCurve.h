@@ -17,8 +17,8 @@
 #define RAREFACTION_SPEED_SHOULD_INCREASE 10
 #define RAREFACTION_SPEED_SHOULD_DECREASE 11
 
-#define RAREFACTION_FOR_ITSELF                   40
-#define RAREFACTION_AS_ENGINE_FOR_INTEGRAL_CURVE 41
+#define RAREFACTION    40
+#define INTEGRAL_CURVE 41
 
 #define RAREFACTION_INITIALIZE                   50
 #define RAREFACTION_DONT_INITIALIZE              51
@@ -58,6 +58,11 @@ class RarefactionCurve {
         void all_eigenvalues(const RealVector &p, int fam, RealVector &lambda);
 
         void add_point_to_curve(const RealVector &p, Curve &curve);
+
+        #ifdef TEST
+            Canvas *canvas;
+            CanvasMenuScroll *scroll;
+        #endif
     public:
         RarefactionCurve(const AccumulationFunction *gg, const FluxFunction *ff, const Boundary *bb);
         ~RarefactionCurve();
@@ -76,6 +81,18 @@ class RarefactionCurve {
                   int &reason_why, // Similar to Composite.
                   int &edge);
 
+        int curve_from_boundary(const RealVector &initial_point, int side, 
+                  int curve_family,
+                  int increase,
+                  int type_of_rarefaction, // For itself or as engine for integral curve.
+                  const ODE_Solver *odesolver, // Should it be another one for the Bisection? Can it really be const? If so, how to use initialize()?
+                  double deltaxi,
+                  Curve &rarcurve,
+                  std::vector<RealVector> &inflection_points, // Will these survive/be added to the Curve class?
+                  RealVector &final_direction,
+                  int &reason_why, // Similar to Composite.
+                  int &edge);
+
         static int field(int *neq, double *xi, double *in, double *out, int *obj, double* /* Not used */);
         static int Jacobian_field();
 
@@ -85,6 +102,11 @@ class RarefactionCurve {
         static int elliptic_region_signal_event_3D2D(const RealVector & where, double &discriminant, int *signal_object, int * /* reference_direction */);
 
         friend class WaveCurveFactory;
+        friend class ShockCurve;
+
+        #ifdef TEST
+        void set_canvas(Canvas *c, CanvasMenuScroll *s){canvas = c; scroll = s; return;}
+        #endif
 };
 
 #endif // _RAREFACTIONCURVE_

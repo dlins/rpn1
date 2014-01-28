@@ -18,6 +18,7 @@ public abstract class MultiGeometryImpl implements MultiGeometry {
 
     private AbstractPath path_;
     private ViewingAttr viewAttr_;
+
    
     //
     // Constructors
@@ -26,6 +27,7 @@ public abstract class MultiGeometryImpl implements MultiGeometry {
     public MultiGeometryImpl(Space space, ViewingAttr viewAttr) {
         path_ = new AbstractPath(space);
         viewAttr_ = new ViewingAttr(viewAttr);
+
     }
     
     
@@ -96,6 +98,7 @@ public abstract class MultiGeometryImpl implements MultiGeometry {
     }
     
     public void setSelected (boolean selected){
+      
         viewAttr_.setSelected(selected);
     }
 }

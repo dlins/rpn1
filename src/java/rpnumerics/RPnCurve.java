@@ -7,58 +7,64 @@
 package rpnumerics;
 
 import java.awt.Shape;
-import wave.multid.*;
-import wave.multid.model.AbstractSegment;
-import wave.multid.model.AbstractSegmentAtt;
-import wave.multid.model.MultiPolyLine;
 import wave.multid.model.RelaxedChainedPolylineSet;
-import wave.multid.model.SegmentAlreadyInList;
-import wave.multid.model.SegmentCiclesPolyline;
-import wave.multid.model.SegmentDegradesPolyline;
-import wave.multid.model.WrongNumberOfDefPointsEx;
 import wave.multid.view.*;
 import wave.util.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 import rpn.RPnPhaseSpaceAbstraction;
-import rpn.component.RpGeometry;
-import rpn.controller.ui.UIController;
 import rpn.parser.RPnDataModule;
 
 //public abstract class RpCurve extends MultiPolyLine {
 public abstract class RPnCurve implements RpSolution {
 
-    
     public static String XML_TAG = "CURVE";
-
     private RelaxedChainedPolylineSet polyLinesSetList_ = null;
-    
-    private List<? extends RealSegment>  segments_;
+    private List<? extends RealSegment> segments_;
     private ViewingAttr viewAttr = null;
     private double ALFA;
     //** declarei isso (Leandro)
     public double distancia = 0.;
-
     public List claToRemove = new ArrayList();
     public List velToRemove = new ArrayList();
     public List claStringToRemove = new ArrayList();
     public List velStringToRemove = new ArrayList();
     private int id_;
-
+    private HyperOctree<RealSegment> octree_;
 
     public RPnCurve() {//TODO REMOVE !!
     }
 
-    
+    public RPnCurve(List<? extends RealSegment> segments) {
 
-    public RPnCurve(List<? extends RealSegment> segments, ViewingAttr viewAttr) {
-        
-        segments_=segments;
-        this.viewAttr = viewAttr;
+        segments_ = segments;
 
+        Boundary boundary = rpnumerics.RPNUMERICS.boundary();
+
+        BoxND box = new BoxND(boundary.getMinimums(), boundary.getMaximums());
+
+        octree_ = new HyperOctree(box, 3, 100);
+
+        for (int i = 0; i < segments.size(); i++) {
+            RealSegment realSegment = segments.get(i);
+
+            octree_.add(realSegment);
+
+        }
 
     }
-    
+
+    public boolean intersect(BoxND box) {
+        Vector<RealSegment> realSegmentsInside = new Vector();
+        octree_.within_box(box, realSegmentsInside);
+        if (realSegmentsInside.isEmpty()) {
+            return false;
+        }
+        return true;
+
+    }
+
     //******** Era usado no refinamento local
     public static void remove(SegmentedCurve curve, List indexList, Shape square, double zmin, double zmax, Scene scene) {    // tentar colocar isso na classe SegmentedCurve.java
 
@@ -137,11 +143,6 @@ public abstract class RPnCurve implements RpSolution {
 //        return null;
 //    }
 //    --------------------------------------------------------------------------
-
-    
-
-
-
     public double getALFA() {
         return ALFA;
     }
@@ -156,14 +157,16 @@ public abstract class RPnCurve implements RpSolution {
 
 
         ArrayList segments = (ArrayList) segments();
-        
+
         if (this instanceof BifurcationCurve) {
 
-            if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals(RPnDataModule.RIGHTPHASESPACE.getName()))
-                segments = (ArrayList) ((BifurcationCurve)this).rightSegments();
+            if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals(RPnDataModule.RIGHTPHASESPACE.getName())) {
+                segments = (ArrayList) ((BifurcationCurve) this).rightSegments();
+            }
 
-            if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals(RPnDataModule.LEFTPHASESPACE.getName()))
-                segments = (ArrayList) ((BifurcationCurve)this).leftSegments();
+            if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals(RPnDataModule.LEFTPHASESPACE.getName())) {
+                segments = (ArrayList) ((BifurcationCurve) this).leftSegments();
+            }
         }
 
         RealVector target = new RealVector(targetPoint);
@@ -192,11 +195,12 @@ public abstract class RPnCurve implements RpSolution {
 
             closest.sub(segment.p2());
 
-            if (segmentVector.norm() != 0.)
+            if (segmentVector.norm() != 0.) {
                 alpha = closest.dot(segmentVector)
                         / segmentVector.dot(segmentVector);
-            else
+            } else {
                 alpha = 0.;
+            }
 
             if (alpha <= 0) {
                 alpha = 0.;
@@ -246,11 +250,13 @@ public abstract class RPnCurve implements RpSolution {
 
         if (this instanceof BifurcationCurve) {
 
-            if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals(RPnDataModule.RIGHTPHASESPACE.getName()))
-                segments = (ArrayList) ((BifurcationCurve)this).rightSegments();
+            if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals(RPnDataModule.RIGHTPHASESPACE.getName())) {
+                segments = (ArrayList) ((BifurcationCurve) this).rightSegments();
+            }
 
-            if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals(RPnDataModule.LEFTPHASESPACE.getName()))
-                segments = (ArrayList) ((BifurcationCurve)this).leftSegments();
+            if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals(RPnDataModule.LEFTPHASESPACE.getName())) {
+                segments = (ArrayList) ((BifurcationCurve) this).leftSegments();
+            }
         }
 
         RealSegment closestSegment = (RealSegment) segments.get(findClosestSegment(targetPoint));
@@ -294,22 +300,15 @@ public abstract class RPnCurve implements RpSolution {
 
     }
 
-
-    
-
     public PointNDimension[][] getPolylines() {
         return polyLinesSetList_.getPolylines();
     }
-    
 
     public List<RealSegment> segments() {
         return (List<RealSegment>) segments_;
     }
-    
-    public ViewingAttr getViewAttr() {
-        return this.viewAttr;
-    }
 
+    
     public String toXML() {
         throw new UnsupportedOperationException("Not supported yet.");
     }

@@ -50,6 +50,7 @@ public class AreaSelectionToExtensionCurveCommand extends RpModelPlotCommand imp
                 if (phaseSpaceGeometry.viewingAttr().isSelected()) {
                     GenericExtensionCurveCommand.instance().setGeometryAndPanel(phaseSpaceGeometry, panel);
                     GenericExtensionCurveCommand.instance().setEnabled(true);
+                    GenericAreaCommand.instance().setEnabled(true);
                 }
             }
             // ---
@@ -70,31 +71,34 @@ public class AreaSelectionToExtensionCurveCommand extends RpModelPlotCommand imp
         return null;
     }
 
+    @Override
     public void update(Observable o, Object arg) {
-
-        if (arg != null) {
-            List<RpGeometry> geometryList = ((List<RpGeometry>) arg);
-            if (geometryList.isEmpty() || geometryList.size() != 1) {
+        if (!UIController.instance().getSelectedGeometriesList().isEmpty()) {
+            List<RpGeometry> geometryList = UIController.instance().getSelectedGeometriesList();//List<RpGeometry>) arg);
+            if (geometryList.size() != 1) {
                 setEnabled(false);
+                getContainer().setSelected(false);
                 GenericExtensionCurveCommand.instance().setEnabled(false);
+
             } else {
                 setEnabled(true);
                 GenericExtensionCurveCommand.instance().setEnabled(true);
 
                 if (RPnNetworkStatus.instance().isOnline() && RPnNetworkStatus.instance().isMaster()) {
                     RpGeomFactory factory = geometryList.get(0).geomFactory();
-
-
                     RPnCurve curve = (RPnCurve) factory.geomSource();
-
                     RpCommand command = new RpCommand(curve.getId());
-
-                    System.out.println("Enviando comando" + command.toXML());
                     RPnNetworkStatus.instance().sendCommand(command.toXML());
                 }
 
             }
 
+        } else {
+            setEnabled(false);
+            getContainer().setSelected(false);
+            GenericExtensionCurveCommand.instance().setEnabled(false);
+            GenericAreaCommand.instance().getContainer().setSelected(false);
+            GenericAreaCommand.instance().setEnabled(false);
         }
     }
 }

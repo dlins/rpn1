@@ -11,10 +11,8 @@ import java.util.Observable;
 import java.util.Observer;
 import javax.swing.JToggleButton;
 import rpn.RPnPhaseSpacePanel;
-import rpn.RPnUIFrame;
 import rpn.component.RpGeometry;
 import rpn.controller.ui.AREASELECTION_CONFIG;
-import rpn.controller.ui.RPnAreaChooser;
 import rpn.controller.ui.RPnGenericSelectionPlotter;
 import rpn.controller.ui.UIController;
 import wave.multid.model.MultiPolygon;
@@ -22,7 +20,7 @@ import wave.util.RealVector;
 
 public class GenericAreaCommand extends RpModelPlotCommand implements Observer {
 
-    static public final String DESC_TEXT = "Generic Area";
+    static public final String DESC_TEXT = "Domain Selection";
     static private GenericAreaCommand instance_ = null;
 
     private GenericAreaCommand() {

@@ -10,7 +10,7 @@ import rpn.command.ChangeFluxParamsCommand;
 import rpn.command.ChangeDirectionCommand;
 import rpn.command.ChangeOrbitLevelCommand;
 import rpn.command.ChooseAreaCommand;
-import rpn.command.ClosestPointPlotterTesteCommand;
+import rpn.command.CurveSelectionCommand;
 import rpn.command.CompositePlotCommand;
 import rpn.command.CurveRefineCommand;
 import rpn.command.EllipticBoundaryCommand;
@@ -19,7 +19,6 @@ import rpn.command.HugoniotContinuationPlotCommand;
 import rpn.command.HugoniotPlotCommand;
 import rpn.command.IntegralCurvePlotCommand;
 import rpn.command.LevelCurvePlotCommand;
-import rpn.command.OctreeTesteCommand;
 import rpn.command.PhysicalBoundaryPlotCommand;
 import rpn.command.PointLevelCurvePlotCommand;
 import rpn.command.RarefactionExtensionCurvePlotCommand;
@@ -55,8 +54,7 @@ public class RAREFACTION_CONFIG extends UI_ACTION_SELECTED {
         CurveRefineCommand.instance().setEnabled(false);
         ChooseAreaCommand.instance().setEnabled(true);
         GenericAreaCommand.instance().setEnabled(true);
-        OctreeTesteCommand.instance().setEnabled(true);
-        ClosestPointPlotterTesteCommand.instance().setEnabled(true);
+        CurveSelectionCommand.instance().setEnabled(true);
        
 
 

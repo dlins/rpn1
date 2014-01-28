@@ -35,9 +35,11 @@ public class RPnCurvesTableModel extends DefaultTableModel {
 
     @Override
     public boolean isCellEditable(int row, int col) {
-        if ((col == 0) || (col==2) || (col==3)) {
+        if ((col==2) || (col==3)) {
             return true;
+            
         }
+       
         return false;
     }
 

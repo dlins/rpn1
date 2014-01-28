@@ -203,8 +203,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 toolBar_.add(AreaSelectionToExtensionCurveCommand.instance().getContainer());
                 toolBar_.add(RarefactionExtensionCurvePlotCommand.instance().getContainer());
                 toolBar_.add(RiemannProfileCommand.instance().getContainer());
-                toolBar_.add(OctreeTesteCommand.instance().getContainer());
-                toolBar_.add(ClosestPointPlotterTesteCommand.instance().getContainer());
+                toolBar_.add(CurveSelectionCommand.instance().getContainer());
 
                 toolBar_.revalidate();                                
             }
@@ -604,7 +603,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         
         
         curvesList.addObserver(RarefactionCurvePlotCommand.instance());
-        curvesList.addObserver(ClosestPointPlotterTesteCommand.instance());
+        curvesList.addObserver(CurveSelectionCommand.instance());
 
         
 

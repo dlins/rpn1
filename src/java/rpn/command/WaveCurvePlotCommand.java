@@ -26,7 +26,7 @@ public class WaveCurvePlotCommand extends RpModelPlotCommand {
     public RpGeometry createRpGeometry(RealVector[] input) {
 
         OrbitPoint oPoint = new OrbitPoint(input[input.length - 1]);
-
+        WaveCurveGeomFactory factory ;
 
         if (UIController.instance().getSelectedGeometriesList().size() == 1) {
 
@@ -40,16 +40,19 @@ public class WaveCurvePlotCommand extends RpModelPlotCommand {
 
 
                 WaveCurveCalc waveCurveCalc = RPNUMERICS.createBoundaryWaveCurve(oPoint, edge);
-                WaveCurveGeomFactory factory = new WaveCurveGeomFactory(waveCurveCalc);
+                factory = new WaveCurveGeomFactory(waveCurveCalc);
 
-                return factory.geom();
 
+
+            } else {
+                factory = new WaveCurveGeomFactory(RPNUMERICS.createWaveCurveCalc(oPoint));
             }
 
 
+        } else {
+            factory = new WaveCurveGeomFactory(RPNUMERICS.createWaveCurveCalc(oPoint));
         }
-        WaveCurveCalc waveCurveCalc = RPNUMERICS.createWaveCurveCalc(oPoint);
-        WaveCurveGeomFactory factory = new WaveCurveGeomFactory(waveCurveCalc);
+
 
         return factory.geom();
 

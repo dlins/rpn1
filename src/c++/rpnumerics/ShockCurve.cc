@@ -12,6 +12,11 @@ ShockCurve::ShockCurve(HugoniotContinuation *h){
 
     f = hc->flux();
     g = hc->accumulation();
+
+    #ifdef USECANVAS
+    canvas = 0;
+    scroll = 0;
+    #endif
 }
 
 ShockCurve::~ShockCurve(){
@@ -325,6 +330,33 @@ int ShockCurve::find_point_for_sigma_equal_reference_lambda(const RealVector &in
         if (norm(deviation) < 1e-8) found_point = true;
 
         iterations++;
+
+            #ifdef USECANVAS
+                if (canvas != 0 && scroll != 0){
+                    std::vector<RealVector> temp_vec;
+                    temp_vec.push_back(iteration_point);
+                    
+                    std::vector<std::string> sigma;
+
+                    int n = iteration_point.size();
+
+                    JetMatrix JM_F(n), JM_G(n);
+                    f->jet(WaveState(iteration_point), JM_F, 0);
+                    g->jet(WaveState(iteration_point), JM_G, 0);
+
+                    std::stringstream ss;
+                    ss << hc->sigma(JM_F.function(), JM_G.function());
+
+                    sigma.push_back(ss.str());
+
+                    Curve2D *test = new Curve2D(temp_vec, 0.0/255.0, 0.0/255.0, 255.0/255.0, sigma, CURVE2D_MARKERS | CURVE2D_SOLID_LINE | CURVE2D_INDICES);
+                    canvas->add(test);
+
+                    std::stringstream buf;
+                    buf << "Shock, Newton. Iteration = " << iterations << ", p = " << iteration_point << ". Sigma = " << sigma[0];
+                    scroll->add(buf.str().c_str(), canvas, test);
+                }
+            #endif
     }
 
     std::cout << "*** Found_point = " << found_point << std::endl << std::endl << std::endl;
@@ -858,6 +890,54 @@ int ShockCurve::curve_engine(const ReferencePoint &r, const RealVector &in, cons
         previous_direction = Hugoniot_direction;
     }
 }
+
+int ShockCurve::curve_engine_from_boundary(RarefactionCurve *rarefactioncurve, int side, int increase, const ReferencePoint &r, const RealVector &in, int family, 
+                                 int type, int left_subtype, int right_subtype,
+                                 int what_family_to_use,
+                                 int after_transition,
+                                 Curve &shockcurve, 
+                                 std::vector<int> &transition_current_index,
+                                 std::vector<int> &transition_current_family,
+                                 std::vector<int> &transition_reference_index,
+                                 std::vector<int> &transition_reference_family, 
+                                 int &shock_stopped_because,
+                                 int &edge){
+
+    // Points to the interior of the domain from side s.
+    //
+    RealVector to_interior = boundary->side_transverse_interior(in, side);
+
+    // Initialize.
+    //
+    RealVector initial_direction;
+    double dd;
+
+    int info_initialize = rarefactioncurve->initialize(in, family, increase, initial_direction, dd);
+
+    if (info_initialize == RAREFACTION_INIT_ERROR) return SHOCKCURVE_ERROR;
+
+    // Follow the direction opposite to the rarefaction's.
+    //
+    if (initial_direction*to_interior < 0.0){
+        int info = curve_engine(r, in, initial_direction, family, 
+                                type, left_subtype, right_subtype,
+                                what_family_to_use,
+                                after_transition,
+                                shockcurve, 
+                                transition_current_index,
+                                transition_current_family,
+                                transition_reference_index,
+                                transition_reference_family, 
+                                shock_stopped_because,
+                                edge);
+
+        return info;
+    }
+    else {
+        return SHOCKCURVE_ERROR;
+    }
+}
+
 
 int ShockCurve::curve(const ReferencePoint &ref, 
                       int type, int left_subtype, int right_subtype,

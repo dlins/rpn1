@@ -17,7 +17,11 @@ int RarefactionCurve::field(int *neq, double *xi, double *in, double *out, int *
     // Verify that the point given by the ODE solver is valid.
     //
     RealVector point(*neq, in);
-    if (!rar->b->inside(point)) return FIELD_ERROR;
+    if (!rar->b->inside(point)){
+        std::cout << "Field. point = " << point << " is OUTSIDE!" << std::endl;
+
+        return FIELD_POINT_OUTSIDE_DOMAIN;
+    }
 
     // Proceed. Find the eigenpairs.
     //
@@ -116,6 +120,8 @@ int RarefactionCurve::initialize(const RealVector &p, int fam, int increase, Rea
     for (int i = 0; i < F_H.size(); i++) h(i) = rm*((F_H[i] - lambda*G_H[i])*rm);
     
     dd = (lm*h)/(lm*(G_J*rm));
+    
+
 
     if (((increase == RAREFACTION_SPEED_SHOULD_INCREASE) && (dd > 0.0)) ||
         ((increase == RAREFACTION_SPEED_SHOULD_DECREASE) && (dd < 0.0))){
@@ -126,6 +132,7 @@ int RarefactionCurve::initialize(const RealVector &p, int fam, int increase, Rea
         dd  = -dd;
     }
 
+    
     return RAREFACTION_INIT_OK;
 }
 
@@ -299,7 +306,13 @@ int RarefactionCurve::curve(const RealVector &initial_point,
                                                       next_xi, next_point);
 
         if (info_odesolver == ODE_SOLVER_ERROR){
-            std::cout << "RarefactionCurve: The solver failed to find the next point. Aborting..." << std::endl; 
+            std::cout << "RarefactionCurve: The solver failed to find the next point (Error = " << info_odesolver << "). Aborting..." << std::endl; 
+
+            return RAREFACTION_ERROR;
+        }
+
+        if (info_odesolver == ODE_SOLVER_POINT_OUTSIDE_DOMAIN){
+            std::cout << "RarefactionCurve: The solver passed a point outside the domain to the field (Error = " << info_odesolver << "). Aborting..." << std::endl; 
 
             return RAREFACTION_ERROR;
         }
@@ -332,6 +345,37 @@ int RarefactionCurve::curve(const RealVector &initial_point,
         // Update the directional derivative first.
         //
         dirdrv = directional_derivative(next_point, family, reference_vector);
+
+        #ifdef TEST
+        {
+            std::vector<RealVector> v;
+            v.push_back(next_point);
+
+            std::vector<std::string> s;
+            std::stringstream ss;
+//            ss << dirdrv;
+            ss << rarcurve.curve.size() - 1;
+            s.push_back(ss.str());
+
+//            Curve2D *rar_point_for_canvas = new Curve2D(v, 1.0, 0.0, 0.0, s, CURVE2D_MARKERS | CURVE2D_INDICES);
+
+//            canvas->add(rar_point_for_canvas);
+//            scroll->add(ss.str().c_str(), canvas, rar_point_for_canvas);
+
+            std::cout << "Index = " << rarcurve.curve.size() - 1 << std::endl;
+
+            std::vector<eigenpair> e;
+            Eigen::eig(next_point, f, g, e);
+
+            int n = next_point.size();
+
+            std::cout << "    dirdrv   = " << dirdrv << std::endl;
+            std::cout << "    lambda 0 = " << e[0].r << std::endl;
+            std::cout << "    lambda 1 = " << e[1].r << std::endl;
+            std::cout << "    eigenvector 0 = " << RealVector(n, e[0].vrr.data()) << std::endl;
+            std::cout << "    eigenvector 1 = " << RealVector(n, e[1].vrr.data()) << std::endl;
+        }
+        #endif
 
         if (dirdrv*previous_dirdrv < 0.0){
             double bisection_epsilon = 1e-10; // Must be relative to the flux.
@@ -368,11 +412,11 @@ int RarefactionCurve::curve(const RealVector &initial_point,
                 return RAREFACTION_ERROR;
             }
             else {
-                std::cout << "Bisection converged when computing the inflection. Leaving..." << std::endl;
+                std::cout << "Bisection converged when computing the inflection." << std::endl;
 
                 add_point_to_curve(p_c, rarcurve);
 
-                if (type_of_rarefaction == RAREFACTION_FOR_ITSELF){
+                if (type_of_rarefaction == RAREFACTION){
                     reason_why = RAREFACTION_REACHED_INFLECTION;
                     rarcurve.reason_to_stop = RAREFACTION_REACHED_INFLECTION;
 
@@ -384,7 +428,7 @@ int RarefactionCurve::curve(const RealVector &initial_point,
 
                     return RAREFACTION_OK;
                 }
-                else if (type_of_rarefaction == RAREFACTION_AS_ENGINE_FOR_INTEGRAL_CURVE){
+                else if (type_of_rarefaction == INTEGRAL_CURVE){
                     inflection_points.push_back(p_c);
                     next_point = p_c;
                     dirdrv = 0.0;
@@ -431,5 +475,47 @@ int RarefactionCurve::curve(const RealVector &initial_point,
         //
         add_point_to_curve(point, rarcurve);
     }
+}
+
+int RarefactionCurve::curve_from_boundary(const RealVector &initial_point, int side, 
+                  int curve_family,
+                  int increase,
+                  int type_of_rarefaction, // For itself or as engine for integral curve.
+                  const ODE_Solver *odesolver, // Should it be another one for the Bisection? Can it really be const? If so, how to use initialize()?
+                  double deltaxi,
+                  Curve &rarcurve,
+                  std::vector<RealVector> &inflection_points, // Will these survive/be added to the Curve class?
+                  RealVector &final_direction,
+                  int &reason_why, // Similar to Composite.
+                  int &edge){
+
+    // Points to the interior of the domain from side s.
+    //
+    RealVector to_interior = b->side_transverse_interior(initial_point, side);
+
+    // Initialize.
+    //
+    RealVector initial_direction;
+    double dd;
+
+    int info_initialize = initialize(initial_point, curve_family, increase, initial_direction, dd);
+    
+    
+    cout<<"initial_direction: "<<initial_direction<<endl;
+    cout <<"dd: "<<dd<<endl;
+    if (info_initialize == RAREFACTION_INIT_ERROR) return RAREFACTION_ERROR;
+
+    // The rarefaction will be computed only if it can be computed from the boundary towards the interior
+    // of the domain (according to the requested value of increase).
+    // 
+    if (initial_direction*to_interior < 0.0) return RAREFACTION_ERROR;
+
+    int info = curve(initial_point, curve_family, increase, 
+                     type_of_rarefaction, RAREFACTION_DONT_INITIALIZE, 
+                     &initial_direction, odesolver, deltaxi,
+                     rarcurve, inflection_points, final_direction, 
+                     reason_why, edge);
+
+    return info;
 }
 
