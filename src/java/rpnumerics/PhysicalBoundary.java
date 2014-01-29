@@ -28,10 +28,10 @@ public class PhysicalBoundary extends SegmentedCurve {
         if (RPNUMERICS.boundary() instanceof IsoTriang2DBoundary) {
 
             if (point.getElement(0) == 0) {
-                return 1;
+                return 0;
             }
             if (point.getElement(1) == 0) {
-                return 0;
+                return 1;
             }
             return 2;
         }

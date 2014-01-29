@@ -212,7 +212,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionCurveCalc_boundaryNativeCal
     const FluxFunction * flux = &RpNumerics::getPhysics().fluxFunction();
     const AccumulationFunction * accum = &RpNumerics::getPhysics().accumulation();
 
-    vector<RealVector> inflectionPoints;
+
 
     RpNumerics::getPhysics().getSubPhysics(0).preProcess(realVectorInput);
 
@@ -231,6 +231,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionCurveCalc_boundaryNativeCal
     ODE_Solver *odesolver;
 
     odesolver = &lsode;
+    
+//    realVectorInput(0)=0.0;
+//    realVectorInput(1)=0.432188;
 
     cout << "Ponto de entrada: " << realVectorInput << " edge " << edge << " familyIndex " << familyIndex << " timedirection " << timeDirection << endl;
     cout << " rar for itself " << RAREFACTION << " odesolver " << odesolver << " deltaxi " << deltaxi << endl;

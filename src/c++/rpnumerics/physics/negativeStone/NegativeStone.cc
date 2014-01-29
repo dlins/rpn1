@@ -3,14 +3,14 @@
  *
  * RPn Project
  *
- * @(#) Stone.cc
+ * @(#) StoneNegative.cc
  */
 
 /*
  * ---------------------------------------------------------------
  * Includes:
  */
-#include "Stone.h"
+#include "NegativeStone.h"
 
 /*
  * ---------------------------------------------------------------
@@ -18,7 +18,7 @@
  */
 
 
-Boundary * Stone::defaultBoundary() const {
+Boundary * NegativeStone::defaultBoundary() const {
 
 
     return new Three_Phase_Boundary();
@@ -70,9 +70,9 @@ Boundary * Stone::defaultBoundary() const {
 
 }
 
-void Stone::setParams(vector<string> params) {
+void NegativeStone::setParams(vector<string> params) {
 
-    cout<<"Vetor de parametros: "<<params.size()<<endl;
+
     RealVector fluxParamVector(7);
     double paramValue;
     //Flux params
@@ -86,12 +86,12 @@ void Stone::setParams(vector<string> params) {
 
     }
 
-    StoneFluxFunction & stoneFlux = (StoneFluxFunction&) fluxFunction();
+    StoneNegativeFluxFunction & stoneFlux = (StoneNegativeFluxFunction&) fluxFunction();
 
     stoneFlux.fluxParams(StoneParams(fluxParamVector));
 
     //Perm params
-    RealVector permVector(14);
+    RealVector permVector(20);
 
     for (int i = 7; i < params.size(); i++) {
         std::stringstream stream(params[i]);
@@ -103,13 +103,13 @@ void Stone::setParams(vector<string> params) {
 
 
     }
-    StonePermParams permParams(permVector);
+    StoneNegativePermParams permParams(permVector);
 
     stoneFlux.setPermParams(permParams);
 
 }
 
-vector<double> * Stone::getParams() {
+vector<double> * NegativeStone::getParams() {
 
 
 
@@ -122,7 +122,7 @@ vector<double> * Stone::getParams() {
 
 
     }
-    StoneFluxFunction & stoneFluxFunction = (StoneFluxFunction &) fluxFunction();
+    StoneNegativeFluxFunction & stoneFluxFunction = (StoneNegativeFluxFunction &) fluxFunction();
 
 
 
@@ -135,7 +135,7 @@ vector<double> * Stone::getParams() {
 
 }
 
-Stone::Stone() : SubPhysics(StoneFluxFunction(StoneParams(), StonePermParams()), StoneAccumulation(), *defaultBoundary(), Multid::PLANE, "Stone", _SIMPLE_ACCUMULATION_) {
+NegativeStone::NegativeStone() : SubPhysics(StoneNegativeFluxFunction(StoneParams(), StoneNegativePermParams()), StoneAccumulation(), *defaultBoundary(), Multid::PLANE, "StoneNegative", _SIMPLE_ACCUMULATION_) {
     setHugoniotFunction(new Hugoniot_Curve());
     setDoubleContactFunction(new Double_Contact());
     setViscosityMatrix(new Viscosity_Matrix());
@@ -143,7 +143,7 @@ Stone::Stone() : SubPhysics(StoneFluxFunction(StoneParams(), StonePermParams()),
 
 }
 
-Stone::Stone(const Stone & copy) : SubPhysics(copy.fluxFunction(), copy.accumulation(), copy.getBoundary(), Multid::PLANE, "Stone", _SIMPLE_ACCUMULATION_) {
+NegativeStone::NegativeStone(const NegativeStone & copy) : SubPhysics(copy.fluxFunction(), copy.accumulation(), copy.getBoundary(), Multid::PLANE, "StoneNegative", _SIMPLE_ACCUMULATION_) {
     setHugoniotFunction(new Hugoniot_Curve());
     setDoubleContactFunction(new Double_Contact());
     setViscosityMatrix(copy.getViscosityMatrix());
@@ -151,10 +151,10 @@ Stone::Stone(const Stone & copy) : SubPhysics(copy.fluxFunction(), copy.accumula
 
 }
 
-SubPhysics * Stone::clone()const {
-    return new Stone(*this);
+SubPhysics * NegativeStone::clone()const {
+    return new NegativeStone(*this);
 }
 
-Stone::~Stone() {
+NegativeStone::~NegativeStone() {
 }
 

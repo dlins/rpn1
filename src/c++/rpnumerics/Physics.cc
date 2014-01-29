@@ -46,6 +46,11 @@ Physics::Physics(const string & physicsID) : physicsVector_(new vector<SubPhysic
         physicsVector_->push_back(new Stone());
     }
 
+    
+    if (physicsID.compare("StoneNegative") == 0) {
+        physicsVector_->push_back(new NegativeStone());
+    }
+    
 
     if (physicsID.compare("Polydisperse") == 0) {
 

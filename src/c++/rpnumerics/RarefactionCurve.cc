@@ -107,6 +107,27 @@ int RarefactionCurve::initialize(const RealVector &p, int fam, int increase, Rea
 
     std::vector<DoubleMatrix> F_H = F_jet.Hessian();
     std::vector<DoubleMatrix> G_H = G_jet.Hessian();
+    
+    
+    for (int i = 0; i < F_H.size(); i++) {
+
+        
+        cout<<F_H[i]<<endl;
+
+
+    }
+    
+    
+     for (int i = 0; i < G_H.size(); i++) {
+
+        
+        cout<<G_H[i]<<endl;
+
+
+    }
+
+    
+
 
     std::vector<eigenpair> e;
     Eigen::eig(n, F_J.data(), G_J.data(), e);
@@ -120,7 +141,8 @@ int RarefactionCurve::initialize(const RealVector &p, int fam, int increase, Rea
     for (int i = 0; i < F_H.size(); i++) h(i) = rm*((F_H[i] - lambda*G_H[i])*rm);
     
     dd = (lm*h)/(lm*(G_J*rm));
-    
+    cout <<"dd em init: "<<dd<<endl;
+    cout<<"lm: "<<lm<<" h: "<<h<<endl;
 
 
     if (((increase == RAREFACTION_SPEED_SHOULD_INCREASE) && (dd > 0.0)) ||
@@ -492,11 +514,15 @@ int RarefactionCurve::curve_from_boundary(const RealVector &initial_point, int s
     // Points to the interior of the domain from side s.
     //
     RealVector to_interior = b->side_transverse_interior(initial_point, side);
+    
+    cout<<"To interior"<<to_interior<<endl;
 
     // Initialize.
     //
     RealVector initial_direction;
     double dd;
+    
+    cout<<"Increase antes de init: "<<increase<<endl;
 
     int info_initialize = initialize(initial_point, curve_family, increase, initial_direction, dd);
     

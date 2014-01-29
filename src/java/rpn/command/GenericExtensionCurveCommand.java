@@ -62,7 +62,7 @@ public class GenericExtensionCurveCommand extends RpModelConfigChangeCommand {
         }
         else {
             
-            geometry = extendsWholeCurve(curveToProcess_);
+            geometry = extendsWholeCurve(UIController.instance().getSelectedGeometriesList().get(0));
         }
         
         

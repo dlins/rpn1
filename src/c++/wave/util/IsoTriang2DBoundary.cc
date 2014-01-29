@@ -323,12 +323,12 @@ RealVector Three_Phase_Boundary::side_transverse_interior(const RealVector &p, i
     RealVector v(2);
 
     if (s == THREE_PHASE_BOUNDARY_SW_ZERO){
-        v(0) = 0.0;
-        v(1) = 1.0;
-    }
-    else if (s == THREE_PHASE_BOUNDARY_SO_ZERO){
         v(0) = 1.0;
         v(1) = 0.0;
+    }
+    else if (s == THREE_PHASE_BOUNDARY_SO_ZERO){
+        v(0) = 0.0;
+        v(1) = 1.0;
     }
     else {
         v(0) = -0.707106781;

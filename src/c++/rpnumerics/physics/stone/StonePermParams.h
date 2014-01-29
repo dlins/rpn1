@@ -29,14 +29,13 @@ private:
 public:
 
     StonePermParams(double expw, double expg, double expo,
-            double expow, double expog,  double krw_p,  double krg_p, double kro_p,
+            double expow, double expog,
             double cnw, double cng, double cno,
-            double lw, double lg,double lo,
+            double lw, double lg,
             double low, double log,
-            double epsl,  double negWS,  double negGS,  double negOS);
-
+            double epsl);
+    StonePermParams(const RealVector &);
     StonePermParams();
-    StonePermParams (const RealVector &);
     StonePermParams(const StonePermParams &);
     virtual ~StonePermParams();
 

@@ -3,7 +3,7 @@
 <RPNSESSION id="1234">
  <PHASESPACE name="Phase Space">
   <RPNCONFIGURATION>
-    <PHYSICS name="Stone">
+    <PHYSICS name="StoneNegative">
 
     <PHYSICSCONFIG name="fluxfunction">
             <PHYSICSPARAM name="grw" position="0" value ="1.0" />
@@ -21,15 +21,25 @@
             <PHYSICSPARAM name="expow" position="10" value ="2.0" />
             <PHYSICSPARAM name="expog" position="11" value ="2.0" />
 
-            <PHYSICSPARAM name="cnw" position="12" value ="0.0" />
-            <PHYSICSPARAM name="cng" position="13" value ="0.0" />
-            <PHYSICSPARAM name="cno" position="14" value ="0.0" />
-            <PHYSICSPARAM name="lw" position="15" value ="0.0" />
-            <PHYSICSPARAM name="lg" position="16" value ="0.0" />
-            <PHYSICSPARAM name="lo" position="17" value ="0.0" />
-            <PHYSICSPARAM name="low" position="18" value ="0.0" />
-            <PHYSICSPARAM name="log" position="19" value ="0.0" />
-            <PHYSICSPARAM name="epsl" position="20" value ="0.0" />
+            <PHYSICSPARAM name="krw_p" position="12" value ="1.0" />
+            <PHYSICSPARAM name="krg_p" position="13" value ="1.0" />
+            <PHYSICSPARAM name="kro_p" position="14" value ="1.0" />
+
+
+            <PHYSICSPARAM name="cnw" position="15" value ="0.0" />
+            <PHYSICSPARAM name="cng" position="16" value ="0.0" />
+            <PHYSICSPARAM name="cno" position="17" value ="0.0" />
+            <PHYSICSPARAM name="lw" position="18" value ="0.0" />
+            <PHYSICSPARAM name="lg" position="19" value ="0.0" />
+            <PHYSICSPARAM name="lo" position="20" value ="0.0" />
+            <PHYSICSPARAM name="low" position="21" value ="0.0" />
+            <PHYSICSPARAM name="log" position="22" value ="0.0" />
+            <PHYSICSPARAM name="epsl" position="23" value ="0.0" />
+
+
+            <PHYSICSPARAM name="negWS" position="24" value ="1.0" />
+            <PHYSICSPARAM name="negGS" position="25" value ="1.0" />
+            <PHYSICSPARAM name="negOS" position="26" value ="1.0" />
 
 
         </PHYSICSCONFIG>
