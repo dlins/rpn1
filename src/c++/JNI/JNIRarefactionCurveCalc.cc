@@ -232,8 +232,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionCurveCalc_boundaryNativeCal
 
     odesolver = &lsode;
     
-//    realVectorInput(0)=0.0;
-//    realVectorInput(1)=0.432188;
+//    realVectorInput(0)=0.538996;
+//    realVectorInput(1)=0.461004;
 
     cout << "Ponto de entrada: " << realVectorInput << " edge " << edge << " familyIndex " << familyIndex << " timedirection " << timeDirection << endl;
     cout << " rar for itself " << RAREFACTION << " odesolver " << odesolver << " deltaxi " << deltaxi << endl;
