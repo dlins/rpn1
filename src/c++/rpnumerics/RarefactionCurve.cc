@@ -18,7 +18,7 @@ int RarefactionCurve::field(int *neq, double *xi, double *in, double *out, int *
     //
     RealVector point(*neq, in);
     if (!rar->b->inside(point)){
-        std::cout << "Field. point = " << point << " is OUTSIDE!" << std::endl;
+        //std::cout << "Field. point = " << point << " is OUTSIDE!" << std::endl;
 
         return FIELD_POINT_OUTSIDE_DOMAIN;
     }
@@ -47,6 +47,41 @@ int RarefactionCurve::field(int *neq, double *xi, double *in, double *out, int *
 }
 
 int RarefactionCurve::Jacobian_field(){
+
+//subroutine jac (neq, t, y, ml, mu, pd, nrowpd)
+//c   dimension y(neq), pd(nrowpd,neq)
+//c which supplies df/dy by loading pd as follows..
+//c for a full jacobian (mf = 21), load pd(i,j) with df(i)/dy(j),
+//c the partial derivative of f(i) with respect to y(j).  (ignore the
+//c ml and mu arguments in this case.)
+
+//int RarefactionCurve::field_Jacobian(, int *object){
+//    // Recover the object.
+//    //
+//    RarefactionCurve *rar = (RarefactionCurve*)obj;
+
+//    // Verify that the point given by the ODE solver is valid.
+//    //
+//    RealVector point(*neq, in);
+//    if (!rar->b->inside(point)){
+//        std::cout << "RarefactionCurve\'s field\'s Jacobian. point = " << point << " is OUTSIDE!" << std::endl;
+
+//        return JACOBIAN_FIELD_POINT_OUTSIDE_DOMAIN;
+//    }
+
+//    
+
+//    // Output.
+//    //
+//    for (int i = 0; i < *neq; i++){
+//        for (int j = 0; j < *nrowpd; j++){
+//            pd[i*] = J(j, i);
+//        }
+//    }
+
+//    return JACOBIAN_FIELD_OK;
+//}
+
 }
 
 // TODO: Remember this method will ultimately be moved to another class.
@@ -107,27 +142,6 @@ int RarefactionCurve::initialize(const RealVector &p, int fam, int increase, Rea
 
     std::vector<DoubleMatrix> F_H = F_jet.Hessian();
     std::vector<DoubleMatrix> G_H = G_jet.Hessian();
-    
-    
-    for (int i = 0; i < F_H.size(); i++) {
-
-        
-        cout<<F_H[i]<<endl;
-
-
-    }
-    
-    
-     for (int i = 0; i < G_H.size(); i++) {
-
-        
-        cout<<G_H[i]<<endl;
-
-
-    }
-
-    
-
 
     std::vector<eigenpair> e;
     Eigen::eig(n, F_J.data(), G_J.data(), e);
@@ -141,9 +155,6 @@ int RarefactionCurve::initialize(const RealVector &p, int fam, int increase, Rea
     for (int i = 0; i < F_H.size(); i++) h(i) = rm*((F_H[i] - lambda*G_H[i])*rm);
     
     dd = (lm*h)/(lm*(G_J*rm));
-    cout <<"dd em init: "<<dd<<endl;
-    cout<<"lm: "<<lm<<" h: "<<h<<endl;
-
 
     if (((increase == RAREFACTION_SPEED_SHOULD_INCREASE) && (dd > 0.0)) ||
         ((increase == RAREFACTION_SPEED_SHOULD_DECREASE) && (dd < 0.0))){
@@ -154,7 +165,6 @@ int RarefactionCurve::initialize(const RealVector &p, int fam, int increase, Rea
         dd  = -dd;
     }
 
-    
     return RAREFACTION_INIT_OK;
 }
 
@@ -499,6 +509,52 @@ int RarefactionCurve::curve(const RealVector &initial_point,
     }
 }
 
+//int RarefactionCurve::curve_from_boundary(const RealVector &initial_point, int side, 
+//                  int curve_family,
+//                  int increase,
+//                  int type_of_rarefaction, // For itself or as engine for integral curve.
+//                  const ODE_Solver *odesolver, // Should it be another one for the Bisection? Can it really be const? If so, how to use initialize()?
+//                  double deltaxi,
+//                  Curve &rarcurve,
+//                  std::vector<RealVector> &inflection_points, // Will these survive/be added to the Curve class?
+//                  RealVector &final_direction,
+//                  int &reason_why, // Similar to Composite.
+//                  int &edge){
+
+//    // Points to the interior of the domain from side s.
+//    //
+//    RealVector to_interior = b->side_transverse_interior(initial_point, side);
+
+//    std::cout << "to_interior = " << to_interior << std::endl;
+
+//    // Initialize.
+//    //
+//    RealVector initial_direction;
+//    double dd;
+
+//    int info_initialize = initialize(initial_point, curve_family, increase, initial_direction, dd);
+
+//    std::cout << "info_initialize = " << info_initialize << std::endl;
+//    std::cout << "dd = " << dd << ", initial_direction = " << initial_direction << std::endl;
+
+//    if (info_initialize == RAREFACTION_INIT_ERROR) return RAREFACTION_ERROR;
+
+//    std::cout << "initial_direction*to_interior = " << initial_direction*to_interior << std::endl;
+
+//    // The rarefaction will be computed only if it can be computed from the boundary towards the interior
+//    // of the domain (according to the requested value of increase).
+//    // 
+//    if (initial_direction*to_interior < 0.0) return RAREFACTION_ERROR;
+
+//    int info = curve(initial_point, curve_family, increase, 
+//                     type_of_rarefaction, RAREFACTION_DONT_INITIALIZE, 
+//                     &initial_direction, odesolver, deltaxi,
+//                     rarcurve, inflection_points, final_direction, 
+//                     reason_why, edge);
+
+//    return info;
+//}
+
 int RarefactionCurve::curve_from_boundary(const RealVector &initial_point, int side, 
                   int curve_family,
                   int increase,
@@ -514,29 +570,50 @@ int RarefactionCurve::curve_from_boundary(const RealVector &initial_point, int s
     // Points to the interior of the domain from side s.
     //
     RealVector to_interior = b->side_transverse_interior(initial_point, side);
-    
-    cout<<"To interior"<<to_interior<<endl;
 
-    // Initialize.
+    std::cout << "to_interior = " << to_interior << std::endl;
+
+    // Find a point inside the domain, close to the initial point.
     //
-    RealVector initial_direction;
-    double dd;
-    
-    cout<<"Increase antes de init: "<<increase<<endl;
+    RealVector inner_point = initial_point + deltaxi*to_interior;
 
-    int info_initialize = initialize(initial_point, curve_family, increase, initial_direction, dd);
-    
-    
-    cout<<"initial_direction: "<<initial_direction<<endl;
-    cout <<"dd: "<<dd<<endl;
-    if (info_initialize == RAREFACTION_INIT_ERROR) return RAREFACTION_ERROR;
+    // Find the lambdas.
+    //
+    std::vector<eigenpair> inner_e, initial_e;
+
+    Eigen::fill_eigenpairs(f, g, inner_point, inner_e);
+    Eigen::fill_eigenpairs(f, g, initial_point, initial_e);
+
+    // Compare the lambdas.
+    //
+    double inner_lambda   = inner_e[curve_family].r;
+    double initial_lambda = initial_e[curve_family].r;
+
+    int n = initial_point.size();
 
     // The rarefaction will be computed only if it can be computed from the boundary towards the interior
     // of the domain (according to the requested value of increase).
     // 
-    if (initial_direction*to_interior < 0.0) return RAREFACTION_ERROR;
+    RealVector initial_direction;
 
-    int info = curve(initial_point, curve_family, increase, 
+    if ((inner_lambda > initial_lambda && increase == RAREFACTION_SPEED_SHOULD_INCREASE) ||
+        (inner_lambda < initial_lambda && increase == RAREFACTION_SPEED_SHOULD_DECREASE)){
+
+        RealVector rm = RealVector(n, initial_e[curve_family].vrr.data());
+
+        initial_direction = (rm*to_interior > 0.0) ? rm : -rm; 
+
+        RealVector temp;
+        double dd;
+
+        initialize(inner_point, curve_family, increase, temp, dd);
+        std::cout << "dd = " << dd << ", temp = " << temp << std::endl;
+
+        std::cout << "initial_direction = " << initial_direction << std::endl;
+    }
+    else return RAREFACTION_ERROR;
+
+    int info = curve(inner_point, curve_family, increase, 
                      type_of_rarefaction, RAREFACTION_DONT_INITIALIZE, 
                      &initial_direction, odesolver, deltaxi,
                      rarcurve, inflection_points, final_direction, 
