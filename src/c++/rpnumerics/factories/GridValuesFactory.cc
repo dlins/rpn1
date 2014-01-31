@@ -107,7 +107,7 @@ vector<int> GridValuesFactory::getDefaultGridResolution(const string & gridName)
         noc[1] = 30;
     }
 
-    if (gridName.compare("bifurcation") == 0) {
+    if (gridName.compare("bifurcationcurve") == 0) {
         noc[0] = 128;
         noc[1] = 128;
     }

@@ -172,14 +172,14 @@ public class RPnNumericsModule {
 
             int[] hugoniotResolution = RPnDataModule.processResolution(RPNUMERICS.getParamValue("hugoniotcurve", "resolution"));
 
-            int[] bifurcationCurvesResolution = RPnDataModule.processResolution(RPNUMERICS.getParamValue("inflectioncurve", "resolution"));
+            int[] bifurcationCurvesResolution = RPnDataModule.processResolution(RPNUMERICS.getParamValue("bifurcationcurve", "resolution"));
 
 
             RPNUMERICS.setResolution(min, max, "doublecontactcurve", doubleContactResolution);
 
             RPNUMERICS.setResolution(min, max, "hugoniotcurve", hugoniotResolution);
 
-            RPNUMERICS.setResolution(min, max, "bifurcation", bifurcationCurvesResolution);
+            RPNUMERICS.setResolution(min, max, "bifurcationcurve", bifurcationCurvesResolution);
 
 
             for (String methodName : METHODNAMES) {

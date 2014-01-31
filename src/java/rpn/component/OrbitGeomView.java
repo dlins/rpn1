@@ -6,6 +6,8 @@ package rpn.component;
 
 import java.awt.*;
 import java.awt.geom.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import rpnumerics.*;
 import wave.multid.*;
@@ -107,6 +109,24 @@ public class OrbitGeomView extends PolyLine {
         Color previous = g.getColor();
         g.setColor(getViewingAttr().getColor());
         g.draw(getShape());
+        
+         
+          OrbitGeom orbitGeom = (OrbitGeom)getAbstractGeom();
+          
+          MultiPoint referencePoint = orbitGeom.getStarPoint();
+//        try {
+//            ViewingAttr viewAtrAttr = referencePoint.viewingAttr();
+//            viewAtrAttr.setVisible(getViewingAttr().isVisible());
+//            PointMark startPoint = new PointMark(referencePoint, getViewingTransform(), viewAtrAttr);
+//            g.setColor(viewAtrAttr.getColor());
+//            g.draw(startPoint.getShape());
+//
+//        } catch (DimMismatchEx ex) {
+//            Logger.getLogger(OrbitGeomView.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+        
+        
+        
         g.setColor(previous);
 
 

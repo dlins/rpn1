@@ -40,6 +40,21 @@
         <METHODPARAM  name="tolerance" value="0.001" />
     </METHOD>
 
+   <CURVECONFIGURATION name="hugoniotcurve">
+        <CURVEPARAM name="resolution" value="128 128"/>
+    </CURVECONFIGURATION>
+    
+    <CURVECONFIGURATION name="bifurcationcurve">
+
+        <CURVEPARAM name="resolution" value="60 60"/>
+    </CURVECONFIGURATION>
+    
+    
+    <CURVECONFIGURATION name="doublecontactcurve">
+        <CURVEPARAM name="curvefamily" value="1"/>
+        <CURVEPARAM name="domainfamily" value="1"/>
+        <CURVEPARAM name="resolution" value="30 30"/>
+    </CURVECONFIGURATION>
   
 
     <CURVECONFIGURATION name="fundamentalcurve">
@@ -48,9 +63,7 @@
         <CURVEPARAM name="level" value="0.5"/>
     </CURVECONFIGURATION>
 
-    <CURVECONFIGURATION name="hugoniotcurve">
-        <CURVEPARAM name="resolution" value="128 128"/>
-    </CURVECONFIGURATION>
+   
 
     <CURVECONFIGURATION name="ellipticboundary">
         <CURVEPARAM name="resolution" value="128 128"/>
@@ -58,23 +71,20 @@
 
 
     <CURVECONFIGURATION name="envelopecurve">
-        <CURVEPARAM name="resolution" value="128 128"/>
         <CURVEPARAM name="edge" value="0"/>
         <CURVEPARAM name="numberofsteps" value="128"/>
     </CURVECONFIGURATION>
 
 
     <CURVECONFIGURATION name="ellipticextension">
-        <CURVEPARAM name="resolution" value="128 128"/>
         <CURVEPARAM name="family" value="0"/>
         <CURVEPARAM name="characteristicwhere" value="0"/>
     </CURVECONFIGURATION>
 
     <CURVECONFIGURATION name="inflectioncurve">
         <CURVEPARAM name="family" value="0"/>
-        <CURVEPARAM name="resolution" value="60 60"/>
     </CURVECONFIGURATION>
-
+    
 
     <CURVECONFIGURATION name="levelcurve">
         <CURVEPARAM name="family" value="0"/>
@@ -83,17 +93,17 @@
     </CURVECONFIGURATION>
 
 
-    <CURVECONFIGURATION name="doublecontactcurve">
-        <CURVEPARAM name="curvefamily" value="1"/>
-        <CURVEPARAM name="domainfamily" value="1"/>
-        <CURVEPARAM name="resolution" value="30 30"/>
-    </CURVECONFIGURATION>
-
-
     <CURVECONFIGURATION name="hysteresiscurve">
         <CURVEPARAM name="family" value="0"/>
         <CURVEPARAM name="resolution" value="128 128"/>
     </CURVECONFIGURATION>
+    
+    
+    <CURVECONFIGURATION name="explicitsecondarybifurcation">
+        <CURVEPARAM name="edge" value="0"/>
+        <CURVEPARAM name="numberofsteps" value="128"/>
+    </CURVECONFIGURATION>
+    
 
     <CURVECONFIGURATION name="boundaryextensioncurve">
 

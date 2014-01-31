@@ -17,10 +17,24 @@ public class SecondaryBifurcationCurve extends BifurcationCurve {
     //
 
 
+   private RealVector umbilicPoint_;
+    
     public SecondaryBifurcationCurve(List<RealSegment> hSegments) {
         super(hSegments);
         System.out.println("Usou o CTOR apenas com hSegments ...");
     }
+    
+    
+    
+    
+    
+     public SecondaryBifurcationCurve(List<RealSegment> hSegments, List<RealSegment> rightSegments,RealVector umbilicPoint) {
+        super(hSegments, rightSegments);
+        System.out.println("Usou o CTOR com hSegments e rightSegments ...");
+        umbilicPoint_=umbilicPoint;
+
+    }
+     
 
 
     public SecondaryBifurcationCurve(List<RealSegment> hSegments, List<RealSegment> rightSegments) {
@@ -40,6 +54,13 @@ public class SecondaryBifurcationCurve extends BifurcationCurve {
 
         return correspondent;
     }
+
     // ---
+    public RealVector getUmbilicPoint() {
+        return umbilicPoint_;
+    }
+    
+    
+    
 
 }

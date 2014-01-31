@@ -59,7 +59,10 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_InflectionCurveCalc_nativeCalc__I
 
     int dimension = RpNumerics::getPhysics().domain().dim();
 
-    GridValues * gv = RpNumerics::getGridFactory().getGrid("bifurcation");
+    GridValues * gv = RpNumerics::getGridFactory().getGrid("bifurcationcurve");
+
+    RealVector res = gv->grid_resolution;
+    cout << "Resolucao: " << res << endl;
 
     Inflection_Curve inflectionCurve;
 
@@ -99,7 +102,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_InflectionCurveCalc_nativeCalc__I
     jobject result = env->NewObject(inflectionCurveClass, inflectionCurveConstructor, segmentsArray);
 
 
-    if ( Debug::get_debug_level() == 5 ) {
+    if (Debug::get_debug_level() == 5) {
         if (result == NULL) cout << "Eh nulo" << endl;
     }
 
@@ -115,7 +118,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_InflectionCurveCalc_nativeCalc__I
 }
 
 JNIEXPORT jobject JNICALL Java_rpnumerics_InflectionCurveCalc_nativeCalc__IIILwave_util_RealVector_2Lwave_util_RealVector_2
-  (JNIEnv *env, jobject obj, jint family,jint xRes, jint yRes, jobject topR, jobject dwnL){
+(JNIEnv *env, jobject obj, jint family, jint xRes, jint yRes, jobject topR, jobject dwnL) {
 
     jclass realVectorClass = env->FindClass(REALVECTOR_LOCATION);
 
@@ -124,8 +127,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_InflectionCurveCalc_nativeCalc__IIILwa
     jclass arrayListClass = env->FindClass("java/util/ArrayList");
 
     jclass inflectionCurveClass = env->FindClass(INFLECTIONCURVE_LOCATION);
-    
-    
+
+
     jmethodID toDoubleMethodID = (env)->GetMethodID(realVectorClass, "toDouble", "()[D");
 
     jmethodID realVectorConstructorDoubleArray = env->GetMethodID(realVectorClass, "<init>", "([D)V");
@@ -141,9 +144,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_InflectionCurveCalc_nativeCalc__IIILwa
 
     int dimension = RpNumerics::getPhysics().domain().dim();
 
-//Area processing
-    
-    
+    //Area processing
+
+
 
     jdoubleArray topArray = (jdoubleArray) (env)->CallObjectMethod(topR, toDoubleMethodID);
 

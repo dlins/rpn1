@@ -331,9 +331,9 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setResolution
 
 
 
-    if ( Debug::get_debug_level() == 5 ) {
+
         cout << "Chamando set Grid" << gridNameNative << endl;
-    }
+
 
     grid->set_grid(boundary, boundary->minimums(), boundary->maximums(), newResolutionVector);
 

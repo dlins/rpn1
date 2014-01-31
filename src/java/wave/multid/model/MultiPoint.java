@@ -75,4 +75,7 @@ public class MultiPoint extends MultiGeometryImpl {
     public boolean isSelected() {
         return viewingAttr().isSelected();
     }
+    
+    
+   
 }

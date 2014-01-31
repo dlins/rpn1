@@ -221,7 +221,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 toolBar_.add(EllipticBoundaryExtensionCommand.instance().getContainer());
                 toolBar_.add(EllipticBoundaryCommand.instance().getContainer());
                 toolBar_.add(EnvelopeCurveCommand.instance().getContainer());
-
+                toolBar_.add(StoneSecondaryBifurcationCurveCommand.instance().getContainer());
 
 
                 toolBar_.add(BuckleyLeverettiInflectionCommand.instance().getContainer());

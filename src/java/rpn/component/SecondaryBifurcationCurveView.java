@@ -5,9 +5,13 @@
  */
 package rpn.component;
 
+import java.awt.Graphics2D;
 import wave.multid.view.*;
 import wave.multid.DimMismatchEx;
 import java.util.Iterator;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import wave.multid.model.MultiPoint;
 
 public class SecondaryBifurcationCurveView extends GeomObjView {
     //
@@ -24,15 +28,33 @@ public class SecondaryBifurcationCurveView extends GeomObjView {
 
     }
 
+    @Override
+    public void draw(Graphics2D g) {
+
+        g.setColor(getViewingAttr().getColor());
+
+        super.draw(g);
+        SecondaryBifurcationCurveGeom doubleContactGeom = (SecondaryBifurcationCurveGeom) getAbstractGeom();
+        MultiPoint umbilicPoint = doubleContactGeom.getUmbilicPoint();
+        if (umbilicPoint != null) {
+            PointMark pointMark;
+            try {
+                pointMark = new PointMark(umbilicPoint, getViewingTransform(), umbilicPoint.viewingAttr());
+                pointMark.getViewingAttr().setVisible(getViewingAttr().isVisible());
+                pointMark.draw(g);
+
+            } catch (DimMismatchEx ex) {
+                Logger.getLogger(SecondaryBifurcationCurveView.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+    }
 
     //Original update method
     public void update() {
         viewList_.clear();
-
-        SecondaryBifurcationCurveGeom doubleContactGeom = (SecondaryBifurcationCurveGeom) getAbstractGeom();
-        Iterator geomListIterator = doubleContactGeom.getBifurcationSegmentsIterator();
-
-
+        SecondaryBifurcationCurveGeom secondaryBifurcationGeom = (SecondaryBifurcationCurveGeom) getAbstractGeom();
+        Iterator geomListIterator = secondaryBifurcationGeom.getBifurcationSegmentsIterator();
         while (geomListIterator.hasNext()) {
             RealSegGeom geomObj = (RealSegGeom) geomListIterator.next();
             try {
@@ -41,5 +63,6 @@ public class SecondaryBifurcationCurveView extends GeomObjView {
                 dex.printStackTrace();
             }
         }
+
     }
 }

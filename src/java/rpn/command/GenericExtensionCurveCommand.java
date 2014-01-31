@@ -54,6 +54,8 @@ public class GenericExtensionCurveCommand extends RpModelConfigChangeCommand {
     }
 
     public void execute() {
+        
+        curveToProcess_ = UIController.instance().getSelectedGeometriesList().get(0);
 
         RpGeometry geometry;
         if (curveToProcess_ != null && panelToProcess_ != null) {
@@ -86,10 +88,6 @@ public class GenericExtensionCurveCommand extends RpModelConfigChangeCommand {
 
 
             phaseSpace.update();
-
-
-            System.out.println("Error in extension curve calculation");
-
 
     }
 

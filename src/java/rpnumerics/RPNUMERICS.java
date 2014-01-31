@@ -588,6 +588,24 @@ public class RPNUMERICS {
         return new DoubleContactCurveCalc(params, curveFamily, domainFamily);
 
     }
+    
+    
+    
+    
+     public static SecondaryBifurcationCurveCalc createStoneSecondaryBifurcationCurveCalc() {
+
+        int[] resolution = RPnDataModule.processResolution(getParamValue("bifurcationcurve", "resolution"));
+
+        int edgeresolution = new Integer (getParamValue("explicitsecondarybifurcation", "numberofsteps"));
+        int edge =  new Integer (getParamValue("explicitsecondarybifurcation", "edge"));
+
+        ContourParams params = new ContourParams(resolution);
+
+        return new StoneExplicitSecondaryBifurcationCurveCalc(params, edge, edgeresolution);
+
+    }
+    
+    
 
     public static SecondaryBifurcationCurveCalc createSecondaryBifurcationCurveCalc() {
 
@@ -748,7 +766,7 @@ public class RPNUMERICS {
 
     public static InflectionCurveCalc createInflectionCurveCalc() {
 
-        int[] resolution = RPnDataModule.processResolution(RPNUMERICS.getParamValue("inflectioncurve", "resolution"));
+        int[] resolution = RPnDataModule.processResolution(RPNUMERICS.getParamValue("bifurcationcurve", "resolution"));
 
         ContourParams params = new ContourParams(resolution);
 
