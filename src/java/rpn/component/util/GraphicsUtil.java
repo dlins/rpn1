@@ -12,7 +12,6 @@ import java.awt.geom.Path2D;
 import java.awt.geom.PathIterator;
 import java.util.ArrayList;
 import java.util.List;
-import rpn.RPnPhaseSpacePanel;
 import wave.multid.view.ViewingAttr;
 import wave.multid.view.ViewingTransform;
 import wave.util.RealVector;

@@ -9,6 +9,8 @@ import wave.multid.model.MultiPolygon;
 import wave.multid.view.ViewingAttr;
 import wave.multid.CoordsArray;
 import java.awt.Color;
+import java.util.Iterator;
+import rpn.component.util.GraphicsUtil;
 
 public class PoincareSectionGeom extends MultiPolygon implements RpGeometry {
     //
@@ -36,6 +38,28 @@ public class PoincareSectionGeom extends MultiPolygon implements RpGeometry {
     public RpGeomFactory geomFactory() {
         return factory_;
     }
+
+    @Override
+    public void addAnnotation(GraphicsUtil annotation) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Iterator<GraphicsUtil> getAnnotationIterator() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void clearAnnotations() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void setLastAnnotation(GraphicsUtil plotted) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+   
 
     
 }

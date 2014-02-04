@@ -6,8 +6,6 @@ package rpn.component;
 
 import java.awt.*;
 import java.awt.geom.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import rpnumerics.*;
 import wave.multid.*;
@@ -34,12 +32,20 @@ public class OrbitGeomView extends PolyLine {
         GeneralPath composite = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
 
         //***
-        if (getClass().getSimpleName().equals("OrbitGeomView"))
+        if (getClass().getSimpleName().equals("OrbitGeomView")) {
             composite.append(shapeCalculations(), false);
+        }
         //***
+
+
+
 
         try {
             composite.append(super.createShape(), false);
+
+          
+            
+            
         } catch (DimMismatchEx ex) {
             ex.printStackTrace();
         }
@@ -58,7 +64,9 @@ public class OrbitGeomView extends PolyLine {
         OrbitPoint[] points = source.getPoints();
 
         int dir = 1;
-        if(source.getDirection() == -1) dir = -1;
+        if (source.getDirection() == -1) {
+            dir = -1;
+        }
 
         for (int i = 0; i < points.length - 1; i += ARROWS_STEP) {
             Coords2D startPoint = new Coords2D();
@@ -109,24 +117,6 @@ public class OrbitGeomView extends PolyLine {
         Color previous = g.getColor();
         g.setColor(getViewingAttr().getColor());
         g.draw(getShape());
-        
-         
-          OrbitGeom orbitGeom = (OrbitGeom)getAbstractGeom();
-          
-          MultiPoint referencePoint = orbitGeom.getStarPoint();
-//        try {
-//            ViewingAttr viewAtrAttr = referencePoint.viewingAttr();
-//            viewAtrAttr.setVisible(getViewingAttr().isVisible());
-//            PointMark startPoint = new PointMark(referencePoint, getViewingTransform(), viewAtrAttr);
-//            g.setColor(viewAtrAttr.getColor());
-//            g.draw(startPoint.getShape());
-//
-//        } catch (DimMismatchEx ex) {
-//            Logger.getLogger(OrbitGeomView.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-        
-        
-        
         g.setColor(previous);
 
 

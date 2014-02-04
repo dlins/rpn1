@@ -10,6 +10,8 @@ import wave.multid.view.*;
 import wave.multid.CoordsArray;
 import wave.multid.DimMismatchEx;
 import java.awt.Color;
+import java.util.Iterator;
+import rpn.component.util.GraphicsUtil;
 
 public class StationaryPointGeom extends MultiPoint implements RpGeometry {
     //
@@ -64,6 +66,28 @@ public class StationaryPointGeom extends MultiPoint implements RpGeometry {
         viewingAttr().setColor(newColor);
     }
     // -------------------------------------
+
+    @Override
+    public void addAnnotation(GraphicsUtil annotation) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Iterator<GraphicsUtil> getAnnotationIterator() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void clearAnnotations() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void setLastAnnotation(GraphicsUtil plotted) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+   
 
    
 }

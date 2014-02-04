@@ -10,6 +10,10 @@ import wave.multid.*;
 import wave.multid.map.Map;
 import java.io.FileWriter;
 import java.io.FileReader;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import rpn.component.util.GraphicsUtil;
 
 public abstract class MultiGeometryImpl implements MultiGeometry {
     //
@@ -19,18 +23,16 @@ public abstract class MultiGeometryImpl implements MultiGeometry {
     private AbstractPath path_;
     private ViewingAttr viewAttr_;
 
-   
+
     //
     // Constructors
     //
-
     public MultiGeometryImpl(Space space, ViewingAttr viewAttr) {
         path_ = new AbstractPath(space);
         viewAttr_ = new ViewingAttr(viewAttr);
 
+
     }
-    
-    
 
     //
     // Accessors/Mutators
@@ -82,8 +84,6 @@ public abstract class MultiGeometryImpl implements MultiGeometry {
         path_.closePath();
     }
 
-   
-
     @Override
     public String toString() {
         return path_.toString();
@@ -92,13 +92,15 @@ public abstract class MultiGeometryImpl implements MultiGeometry {
     protected AbstractPath getPath() {
         return this.path_;
     }
-    
-    public void setVisible (boolean visible){
+
+    public void setVisible(boolean visible) {
         viewAttr_.setVisible(visible);
     }
-    
-    public void setSelected (boolean selected){
-      
+
+    public void setSelected(boolean selected) {
+
         viewAttr_.setSelected(selected);
     }
+
+    
 }

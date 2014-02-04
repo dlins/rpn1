@@ -1,10 +1,11 @@
-
 package rpn.component.util;
 
 import java.awt.BasicStroke;
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.Stroke;
+import java.awt.font.GlyphVector;
 import java.awt.geom.Line2D;
 import java.awt.geom.Path2D.Double;
 import java.util.List;
@@ -20,7 +21,6 @@ import wave.util.RealVector;
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 /**
  *
  * @author moreira
@@ -28,7 +28,6 @@ import wave.util.RealVector;
 public class LinePlotted extends GraphicsUtil {
 
     public static RPnPhaseSpacePanel panel_;
-
 
     public LinePlotted(List<Object> wcObjects, ViewingTransform viewingTransform, ViewingAttr viewAttr) {
         super(wcObjects, viewingTransform, viewAttr);
@@ -49,7 +48,7 @@ public class LinePlotted extends GraphicsUtil {
 
         RealVector point1 = new RealVector(dim);
         RealVector point2 = new RealVector(dim);
-        
+
         point1.setElement(smallestIndex, line.getX1());
         point1.setElement(biggestIndex, line.getY1());
 
@@ -61,9 +60,10 @@ public class LinePlotted extends GraphicsUtil {
         getViewingTransform().viewPlaneTransform(wcPoint1, dcPoint1);
         getViewingTransform().viewPlaneTransform(wcPoint2, dcPoint2);
 
-        return new Line2D.Double(dcPoint1.getX(), dcPoint1.getY(), dcPoint2.getX(), dcPoint2.getY());
-    }
+        Line2D.Double result = new Line2D.Double(dcPoint1.getX(), dcPoint1.getY(), dcPoint2.getX(), dcPoint2.getY());
 
+        return result;
+    }
 
     @Override
     public Double getWCObject() {
@@ -73,7 +73,22 @@ public class LinePlotted extends GraphicsUtil {
     @Override
     protected void drawSelected(Graphics2D g) {
         g.setStroke(new BasicStroke(10f));
+
+    }
+
+    @Override
+    public void draw(Graphics2D g) {
+
+        Font f = new Font("Arial", Font.BOLD, 15);
+
+        GlyphVector v = f.createGlyphVector(g.getFontRenderContext(), (String)wcObjects_.get(1));
         
+        Line2D line  = (Line2D.Double)getShape();
+        
+
+        g.draw(getShape());
+        
+        g.drawGlyphVector(v,(float) line.getX2(),(float) line.getY2());
     }
 
 }

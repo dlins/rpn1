@@ -123,8 +123,22 @@ public class Viewing2DTransform implements ViewingTransform {
 
         coordSysTransform_ = new IdentityMap(Multid.PLANE, Multid.PLANE);
         double XScaleFactor = viewPlane_.getViewport().getWidth() / viewPlane_.getWindow().getWidth();
+//        // not to be upside down...
+//        double YScaleFactor = -viewPlane_.getViewport().getHeight() / viewPlane_.getWindow().getHeight();
+//        
+        
+         double minViewPortSide = Math.min(viewPlane_.getViewport().getWidth() , viewPlane_.getViewport().getHeight());
+         
+         
+//          double XScaleFactor = minViewPortSide / viewPlane_.getWindow().getWidth();
+         
         // not to be upside down...
-        double YScaleFactor = -viewPlane_.getViewport().getHeight() / viewPlane_.getWindow().getHeight();
+        double YScaleFactor = -minViewPortSide / viewPlane_.getWindow().getHeight();
+        
+        
+        
+        
+        
         double XTranslateFactor = -viewPlane_.getWindow().getOriginPosition().x * XScaleFactor;
         // we are working with RASTER
         double YTranslateFactor = -viewPlane_.getWindow().getOriginPosition().y * YScaleFactor

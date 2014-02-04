@@ -48,7 +48,9 @@ public class OrbitGeomFactory extends RpCalcBasedGeomFactory {
         return new OrbitController();
     }
 
+    @Override
     public RpGeometry createGeomFromSource() {
+        System.out.println("create geom from source");
         Orbit orbit = (Orbit) geomSource();
 
         OrbitPoint firstPoint = orbit.firstPoint();

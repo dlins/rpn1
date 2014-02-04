@@ -5,12 +5,14 @@
  */
 package rpn.component;
 
+import java.awt.Graphics2D;
 import wave.multid.view.*;
 import wave.multid.DimMismatchEx;
 import java.util.Iterator;
+import rpn.component.util.GraphicsUtil;
 
 public class HugoniotCurveView extends GeomObjView {
-   
+
     //
     // Constructor
     //
@@ -24,17 +26,35 @@ public class HugoniotCurveView extends GeomObjView {
     //
     // Accessors/Mutators
     //
-    /** Set a view a attribute to multidimensional object. */
+    /**
+     * Set a view a attribute to multidimensional object.
+     */
     @Override
     public void setViewingAttr(ViewingAttr viewAttr) {
-      Iterator geomListIterator = ((HugoniotCurveGeom) getAbstractGeom()).getRealSegIterator();
+        Iterator geomListIterator = ((HugoniotCurveGeom) getAbstractGeom()).getRealSegIterator();
         while (geomListIterator.hasNext()) {
             HugoniotSegGeom geomObj = (HugoniotSegGeom) geomListIterator.next();
             geomObj.viewingAttr().setVisible(viewAttr.isVisible());
             geomObj.viewingAttr().setSelected(viewAttr.isSelected());
         }
     }
-    
+
+    @Override
+    public void draw(Graphics2D g) {
+        super.draw(g);
+
+        HugoniotCurveGeom shockGeom = (HugoniotCurveGeom) getAbstractGeom();
+        Iterator<GraphicsUtil> annotationIterator = shockGeom.getAnnotationIterator();
+
+        while (annotationIterator.hasNext()) {
+            GraphicsUtil graphicsUtil = annotationIterator.next();
+            graphicsUtil.getViewingAttr().setVisible(shockGeom.viewingAttr().isVisible());
+            g.setColor(graphicsUtil.getViewingAttr().getColor());
+            graphicsUtil.draw(g);
+
+        }
+
+    }
 
     //Original update method
     public void update() {

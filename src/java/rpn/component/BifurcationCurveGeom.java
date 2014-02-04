@@ -13,6 +13,7 @@ import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import rpn.component.util.GraphicsUtil;
 import wave.multid.*;
 import wave.multid.map.Map;
 import wave.multid.model.AbstractPath;
@@ -30,6 +31,7 @@ public class BifurcationCurveGeom implements MultiGeometry, RpGeometry {
     private Space space_;
     private BoundingBox boundary_;
     private RpGeometry otherSide_;
+    private List<GraphicsUtil> annotationsList_;
     
 
 
@@ -161,6 +163,36 @@ public class BifurcationCurveGeom implements MultiGeometry, RpGeometry {
     public boolean isSelected() {
        return viewingAttr_.isSelected();
     }
+    
+    
+     @Override
+    public void addAnnotation(GraphicsUtil annotation) {
 
+        if (annotationsList_.isEmpty()) {
+            annotationsList_.add(annotation);
+        } else {
+            annotationsList_.set(annotationsList_.size() - 1, annotation);
+        }
+    }
+
+    public void clearAnnotations() {
+        annotationsList_.clear();
+    }
+
+    @Override
+    public Iterator<GraphicsUtil> getAnnotationIterator() {
+        return annotationsList_.iterator();
+    }
+
+    @Override
+    public void setLastAnnotation(GraphicsUtil plotted) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    
+    
+    
+   
+   
    
 }

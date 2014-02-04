@@ -6,9 +6,11 @@
 package rpn.component;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import rpn.component.util.GraphicsUtil;
 import rpnumerics.PhasePoint;
 import wave.multid.CoordsArray;
 import wave.multid.DimMismatchEx;
@@ -25,8 +27,7 @@ public class CharacteristicCurveGeom extends MultiGeometryImpl implements RpGeom
 
     //
     // Constructors
-   
-private    RpGeomFactory factory_;
+    private RpGeomFactory factory_;
 
     public CharacteristicCurveGeom(List<PhasePoint[]> charPoints, CharacteristicsCurveGeomFactory factory, ViewingAttr viewAttr) {
         super(new Space("CharacteristicsSpace", 2), viewAttr);
@@ -35,8 +36,7 @@ private    RpGeomFactory factory_;
 
         for (int i = 0; i < charPoints.size(); i++) {
             PhasePoint[] line = charPoints.get(i);
-            
-            
+
             List<AbstractSegment> lineSegmentsList = createAbstractSegments(line);
             for (int j = 0; j < lineSegmentsList.size(); j++) {
                 AbstractSegment abstractSegment = lineSegmentsList.get(j);
@@ -102,5 +102,24 @@ private    RpGeomFactory factory_;
         return viewingAttr().isSelected();
     }
 
-    
+    @Override
+    public void addAnnotation(GraphicsUtil annotation) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Iterator<GraphicsUtil> getAnnotationIterator() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void clearAnnotations() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void setLastAnnotation(GraphicsUtil plotted) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 }

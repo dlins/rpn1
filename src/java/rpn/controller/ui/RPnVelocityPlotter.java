@@ -43,6 +43,8 @@ public class RPnVelocityPlotter extends RPn2DMouseController {
     private boolean addLine_ = false;
     public static List<RealVector> listaEquil = new ArrayList();
     private static RPnVelocityPlotter instance_;
+    private RpGeometry testeGeomerty_;
+    private String string_;
     
 
     public void mouseMoved(MouseEvent me) {
@@ -108,10 +110,16 @@ public class RPnVelocityPlotter extends RPn2DMouseController {
 
             List<Object> wcObject = new ArrayList();
             wcObject.add(new Line2D.Double(cursorWC.getElement(0), cursorWC.getElement(1), meWC.getElement(0), meWC.getElement(1)));
-
+            wcObject.add(string_);
             ViewingAttr attr = new ViewingAttr(Color.white);
             GraphicsUtil plotted = new LinePlotted(wcObject, viewingTransform, attr);
-            panel.setLastGraphicsUtil(plotted);
+            
+
+            RpGeometry geom = (RpGeometry)testeGeomerty_;
+            geom.setLastAnnotation(plotted);
+            
+            
+//            panel.setLastGraphicsUtil(plotted);
             panel.repaint();
 
         }
@@ -142,6 +150,7 @@ public class RPnVelocityPlotter extends RPn2DMouseController {
             }
 
             RpGeometry geom = RPnDataModule.PHASESPACE.findClosestGeometry(newValue);
+            testeGeomerty_=geom;
             RPnCurve curve = (RPnCurve) (geom.geomFactory().geomSource());
             RealVector closestPoint = curve.findClosestPoint(newValue);
             GeometryGraphND.pMarca = closestPoint;
@@ -178,7 +187,8 @@ public class RPnVelocityPlotter extends RPn2DMouseController {
                 velStr = String.valueOf(0.0);
             }
 
-
+            string_=velStr;
+            
             CoordsArray wcCoords = new CoordsArray(closestPoint);
             Coords2D dcCoords = new Coords2D();
             panel.scene().getViewingTransform().viewPlaneTransform(wcCoords, dcCoords);
@@ -190,9 +200,12 @@ public class RPnVelocityPlotter extends RPn2DMouseController {
             List<Object> wcObjectsList = new ArrayList();
             ViewingAttr viewingAttr = new ViewingAttr(Color.white);
             wcObjectsList.add(new Line2D.Double());
+            wcObjectsList.add(string_);
             GraphicsUtil empty = new LinePlotted(wcObjectsList, panel.scene().getViewingTransform(), viewingAttr);
 
-            panel.addGraphicUtil(empty);
+//            panel.addGraphicUtil(empty);
+            
+            testeGeomerty_.addAnnotation(empty);
             
             addLine_ = true;
 

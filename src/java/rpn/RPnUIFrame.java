@@ -204,6 +204,8 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 toolBar_.add(RarefactionExtensionCurvePlotCommand.instance().getContainer());
                 toolBar_.add(RiemannProfileCommand.instance().getContainer());
                 toolBar_.add(CurveSelectionCommand.instance().getContainer());
+                toolBar_.add(ZoomPlotCommand.instance().getContainer());
+                toolBar_.add(ZoomingAreaCommand.instance().getContainer());
 
                 toolBar_.revalidate();                                
             }

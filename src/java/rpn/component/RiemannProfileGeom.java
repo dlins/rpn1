@@ -6,6 +6,8 @@
 
 package rpn.component;
 
+import java.util.Iterator;
+import rpn.component.util.GraphicsUtil;
 import wave.multid.model.MultiPolyLine;
 import wave.multid.CoordsArray;
 import wave.multid.view.GeomObjView;
@@ -41,6 +43,28 @@ public class RiemannProfileGeom extends MultiPolyLine implements RpGeometry {
     public RpGeomFactory geomFactory() {
         return factory_;
     }
+
+    @Override
+    public void addAnnotation(GraphicsUtil annotation) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Iterator<GraphicsUtil> getAnnotationIterator() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void clearAnnotations() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void setLastAnnotation(GraphicsUtil plotted) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+   
 
    
 }

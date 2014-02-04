@@ -43,6 +43,8 @@ public class RPnStringPlotter extends RPn2DMouseController {
     private boolean addLine_ = false;
     public static List<RealVector> correspondentList = new ArrayList();
     private static RPnStringPlotter instance_;
+    
+    private    RpGeometry geometryTeste_;
 
 
     private String permuteString(String string, int flag) {
@@ -124,9 +126,11 @@ public class RPnStringPlotter extends RPn2DMouseController {
             List<Object> wcObject = new ArrayList();
             wcObject.add(new Line2D.Double(cursorWC.getElement(0), cursorWC.getElement(1), meWC.getElement(0), meWC.getElement(1)));
             ViewingAttr attr = new ViewingAttr(Color.white);
-            
+            wcObject.add(typeStr);
             GraphicsUtil plotted = new LinePlotted(wcObject, viewingTransform, attr);
-            panel.setLastGraphicsUtil(plotted);
+            
+            geometryTeste_.setLastAnnotation(plotted);
+//            panel.setLastGraphicsUtil(plotted);
             panel.repaint();
 
 
@@ -160,6 +164,7 @@ public class RPnStringPlotter extends RPn2DMouseController {
             }
 
             RpGeometry geom = RPnDataModule.PHASESPACE.findClosestGeometry(newValue);
+            geometryTeste_=geom;
             RPnCurve curve = (RPnCurve) (geom.geomFactory().geomSource());
             RealVector closestPoint = curve.findClosestPoint(newValue);
             GeometryGraphND.pMarca = closestPoint;
@@ -180,9 +185,13 @@ public class RPnStringPlotter extends RPn2DMouseController {
                 List<Object> wcObjectsList = new ArrayList();
                 ViewingAttr viewingAttr = new ViewingAttr(Color.white);
                 wcObjectsList.add(new Line2D.Double());
+                wcObjectsList.add(typeStr);
                 GraphicsUtil empty = new LinePlotted(wcObjectsList, panel.scene().getViewingTransform(), viewingAttr);
 
-                panel.addGraphicUtil(empty);
+                geometryTeste_.addAnnotation(empty);
+                
+                
+//                panel.addGraphicUtil(empty);
                 
                 addLine_ = true;
             }

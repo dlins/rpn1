@@ -26,6 +26,8 @@ import rpn.command.RarefactionCurvePlotCommand;
 import rpn.command.RiemannProfileCommand;
 import rpn.command.ShockCurvePlotCommand;
 import rpn.command.WaveCurvePlotCommand;
+import rpn.command.ZoomPlotCommand;
+import rpn.command.ZoomingAreaCommand;
 import wave.util.RealVector;
 
 public class RAREFACTION_CONFIG extends UI_ACTION_SELECTED {
@@ -56,7 +58,8 @@ public class RAREFACTION_CONFIG extends UI_ACTION_SELECTED {
         GenericAreaCommand.instance().setEnabled(true);
         CurveSelectionCommand.instance().setEnabled(true);
        
-
+        ZoomPlotCommand.instance().setEnabled(true);
+        ZoomingAreaCommand.instance().setEnabled(true);
 
 
     }
