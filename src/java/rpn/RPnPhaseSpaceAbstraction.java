@@ -288,7 +288,7 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene implements Observer 
                     RPnCurve curve = (RPnCurve) factory.geomSource();
 
                     // -----------------------------------
-                    if (curve instanceof SegmentedCurve) {
+                    if (curve instanceof SegmentedCurve && !(curve instanceof PhysicalBoundary)) {
                         RpCalcBasedGeomFactory geomFactory = (RpCalcBasedGeomFactory) factory;
                         RpCalculation calc = geomFactory.rpCalc();
                         ContourCurveCalc curveCalc = (ContourCurveCalc) calc;

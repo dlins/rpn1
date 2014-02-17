@@ -51,7 +51,7 @@
             </METHOD>
 
             <CURVECONFIGURATION name="hugoniotcurve">
-                <CURVEPARAM name="resolution" value="128 128"/>
+                <CURVEPARAM name="resolution" value="120 120"/>
             </CURVECONFIGURATION>
     
             <CURVECONFIGURATION name="bifurcationcurve">
@@ -63,7 +63,7 @@
             <CURVECONFIGURATION name="doublecontactcurve">
                 <CURVEPARAM name="curvefamily" value="1"/>
                 <CURVEPARAM name="domainfamily" value="1"/>
-                <CURVEPARAM name="resolution" value="30 30"/>
+                <CURVEPARAM name="resolution" value="50 50"/>
             </CURVECONFIGURATION>
   
 

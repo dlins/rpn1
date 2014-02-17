@@ -54,6 +54,14 @@ public abstract class RPnCurve implements RpSolution {
         }
 
     }
+    
+    
+    public List<RealSegment> segmentsInside(BoxND box){
+        Vector<RealSegment> realSegmentsInside = new Vector();
+            octree_.within_box(box, realSegmentsInside);
+            
+            return realSegmentsInside;
+    }
 
     public boolean intersect(BoxND box) {
         Vector<RealSegment> realSegmentsInside = new Vector();
@@ -307,6 +315,9 @@ public abstract class RPnCurve implements RpSolution {
     public List<RealSegment> segments() {
         return (List<RealSegment>) segments_;
     }
+    
+    
+    public abstract String getInfo();
 
     
     public String toXML() {

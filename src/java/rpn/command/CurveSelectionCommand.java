@@ -31,7 +31,7 @@ public class CurveSelectionCommand extends RpModelPlotCommand {
     // Constructors/Initializers
     //
     protected CurveSelectionCommand() {
-        super(DESC_TEXT, rpn.configuration.RPnConfig.HUGONIOT, new JToggleButton());
+        super(DESC_TEXT,null, new JToggleButton());
     }
 
     @Override

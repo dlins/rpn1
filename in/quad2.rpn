@@ -157,8 +157,8 @@
 
                 <PROJDESC name="Axis0 Axis1">
                     <VIEWPARAM name="axis" value="0 1"/>
-                    <VIEWPARAM name="vpwidth" value="450"/>
-                    <VIEWPARAM name="vpheight" value="450"/>
+                    <VIEWPARAM name="vpwidth" value="700"/>
+                    <VIEWPARAM name="vpheight" value="700"/>
                     <VIEWPARAM name="iso2equi" value="false"/>
                 </PROJDESC>
 

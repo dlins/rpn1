@@ -5,13 +5,11 @@
  */
 package rpn.component;
 
-import wave.multid.model.*;
+import java.awt.Graphics2D;
 import wave.multid.view.*;
 import wave.multid.DimMismatchEx;
-import java.awt.Graphics2D;
 import java.util.Iterator;
-import java.util.ArrayList;
-import java.util.List;
+import rpn.component.util.GraphicsUtil;
 
 public class DoubleContactCurveView extends  GeomObjView {
     //
@@ -29,6 +27,10 @@ public class DoubleContactCurveView extends  GeomObjView {
         super(abstractGeom, transf, viewAttr);
      
     }
+    
+    
+    
+   
 
  
 

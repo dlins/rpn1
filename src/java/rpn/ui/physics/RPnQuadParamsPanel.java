@@ -4,7 +4,7 @@
  *
  */
 
-package rpn;
+package rpn.ui.physics;
 
 import java.awt.*;
 import javax.swing.*;

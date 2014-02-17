@@ -83,7 +83,22 @@ public class StationaryPointGeom extends MultiPoint implements RpGeometry {
     }
 
     @Override
-    public void setLastAnnotation(GraphicsUtil plotted) {
+    public void removeLastAnnotation() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void removeAnnotation(GraphicsUtil selectedAnnotation) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void showSpeed(CoordsArray curvePoint, CoordsArray wcPoint, ViewingTransform transform) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void showClassification(CoordsArray curvePoint, CoordsArray wcPoint, ViewingTransform transform) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

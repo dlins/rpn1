@@ -173,7 +173,13 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc(JNIEnv * env,
                 (env)->SetDoubleArrayRegion(jTempArray, 0, tempVector.size(), dataCoords);
 
                 //Lambda is the last component.
-                double lambda = 0;
+                double lambda;
+                if(wc.speed.size()==0){//A velocidade da composta esta vazia
+                    lambda=0;
+                }                                                                              
+                else {
+                    lambda=wc.speed[j];
+                }
                 jobject orbitPoint = (env)->NewObject(classOrbitPoint, orbitPointConstructor, jTempArray, lambda);
 
                 env->CallObjectMethod(orbitPoint, setCorrespondingCurveIndexID, relatedCurvesIndexVector);

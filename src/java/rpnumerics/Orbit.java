@@ -383,6 +383,11 @@ public class Orbit extends RPnCurve implements RpSolution {
         return segments_;
     }
 
+    @Override
+    public String getInfo() {
+        return "";
+    }
+
 
     
 }

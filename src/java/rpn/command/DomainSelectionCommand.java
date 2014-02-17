@@ -21,12 +21,12 @@ import rpn.message.RPnNetworkStatus;
 import rpnumerics.RPnCurve;
 import wave.util.RealVector;
 
-public class AreaSelectionToExtensionCurveCommand extends RpModelPlotCommand implements Observer {
+public class DomainSelectionCommand extends RpModelPlotCommand implements Observer {
 
-    static public final String DESC_TEXT = "AreaToExtensionCurve";
-    static private AreaSelectionToExtensionCurveCommand instance_ = null;
+    static public final String DESC_TEXT = "Extension Domain Selection";
+    static private DomainSelectionCommand instance_ = null;
 
-    private AreaSelectionToExtensionCurveCommand() {
+    private DomainSelectionCommand() {
         super(DESC_TEXT, null, new JToggleButton());
     }
 
@@ -50,7 +50,7 @@ public class AreaSelectionToExtensionCurveCommand extends RpModelPlotCommand imp
                 if (phaseSpaceGeometry.viewingAttr().isSelected()) {
                     GenericExtensionCurveCommand.instance().setGeometryAndPanel(phaseSpaceGeometry, panel);
                     GenericExtensionCurveCommand.instance().setEnabled(true);
-                    GenericAreaCommand.instance().setEnabled(true);
+                    ImageSelectionCommand.instance().setEnabled(true);
                 }
             }
             // ---
@@ -59,9 +59,9 @@ public class AreaSelectionToExtensionCurveCommand extends RpModelPlotCommand imp
 
     }
 
-    public static AreaSelectionToExtensionCurveCommand instance() {
+    public static DomainSelectionCommand instance() {
         if (instance_ == null) {
-            instance_ = new AreaSelectionToExtensionCurveCommand();
+            instance_ = new DomainSelectionCommand();
         }
         return instance_;
     }
@@ -97,8 +97,8 @@ public class AreaSelectionToExtensionCurveCommand extends RpModelPlotCommand imp
             setEnabled(false);
             getContainer().setSelected(false);
             GenericExtensionCurveCommand.instance().setEnabled(false);
-            GenericAreaCommand.instance().getContainer().setSelected(false);
-            GenericAreaCommand.instance().setEnabled(false);
+            ImageSelectionCommand.instance().getContainer().setSelected(false);
+            ImageSelectionCommand.instance().setEnabled(false);
         }
     }
 }

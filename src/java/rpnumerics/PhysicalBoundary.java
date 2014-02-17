@@ -2,7 +2,6 @@ package rpnumerics;
 
 import wave.util.RealSegment;
 import java.util.List;
-import wave.util.Boundary;
 import wave.util.IsoTriang2DBoundary;
 import wave.util.RealVector;
 import wave.util.RectBoundary;
@@ -19,7 +18,6 @@ public class PhysicalBoundary extends SegmentedCurve {
     }
 
     public int edgeSelection(RealVector point) {
-        Boundary boundary = RPNUMERICS.boundary();
 
         // THREE_PHASE_BOUNDARY_SW_ZERO 0
        // THREE_PHASE_BOUNDARY_SO_ZERO 1

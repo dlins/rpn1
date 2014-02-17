@@ -3,8 +3,9 @@
  * and open the template in the editor.
  */
 
-package rpn;
+package rpn.ui.physics;
 
+import rpn.ui.physics.RPnObserver;
 import java.util.ArrayList;
 import java.util.List;
 

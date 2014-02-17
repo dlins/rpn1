@@ -77,7 +77,7 @@ public class UIController extends ComponentUI {
         globalInputTable_ = new UserInputTable(rpnumerics.RPNUMERICS.domainDim());
 
 
-        handler_ = new RAREFACTION_CONFIG();
+        handler_ = new CurvesConfig();
         auxPanelsEnabled_ = true;
 
         activePhaseSpace_ = RPnDataModule.PHASESPACE;       //***

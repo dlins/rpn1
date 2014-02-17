@@ -3,8 +3,9 @@
  * and open the template in the editor.
  */
 
-package rpn;
+package rpn.ui.physics;
 
+import rpn.RPnFluxParamsSubject;
 import rpn.configuration.Configuration;
 import rpnumerics.RPNUMERICS;
 import wave.util.RealVector;

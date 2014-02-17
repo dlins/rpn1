@@ -10,10 +10,6 @@ import wave.multid.*;
 import wave.multid.map.Map;
 import java.io.FileWriter;
 import java.io.FileReader;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import rpn.component.util.GraphicsUtil;
 
 public abstract class MultiGeometryImpl implements MultiGeometry {
     //

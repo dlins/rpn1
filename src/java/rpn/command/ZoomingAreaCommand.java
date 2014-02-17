@@ -11,23 +11,18 @@ import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 import javax.swing.JToggleButton;
-import rpn.RPnPhaseSpaceAbstraction;
 import rpn.RPnPhaseSpacePanel;
 import rpn.component.BifurcationCurveGeom;
-import rpn.component.RpCalcBasedGeomFactory;
 import rpn.component.RpGeometry;
 import rpn.component.SegmentedCurveGeom;
-import rpn.controller.ui.RPnAdjustedSelectionPlotter;
 import rpn.controller.ui.AREASELECTION_CONFIG;
-import rpn.controller.ui.RPnSelectionPlotter;
 import rpn.controller.ui.UIController;
 import rpn.controller.ui.ZoomingSquare;
-import rpnumerics.ContourCurveCalc;
 import wave.util.RealVector;
 
 public class ZoomingAreaCommand extends RpModelPlotCommand implements Observer {
 
-    static public final String DESC_TEXT = "Zoom Area";
+    static public final String DESC_TEXT = "Zoom";
     static private ZoomingAreaCommand instance_ = null;
 
     private ZoomingAreaCommand() {

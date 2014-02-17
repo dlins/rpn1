@@ -15,16 +15,17 @@ import rpn.component.RpGeometry;
 import rpn.controller.ui.UIController;
 import wave.util.RealVector;
 import rpn.controller.ui.CLASSIFIERAGENT_CONFIG;
+import rpn.controller.ui.RPnCorrespondencePlotter;
 import rpn.controller.ui.RPnStringPlotter;
 
 /**
  *
  * @author moreira
  */
-public class ClassifierCommand extends RpModelPlotCommand {
+public class BifurcationCorrespondenceCommand extends RpModelPlotCommand {
 
-    static public final String DESC_TEXT = "Classify";
-    static private ClassifierCommand instance_ = null;
+    static public final String DESC_TEXT = "Bifurcation Correspondence";
+    static private BifurcationCorrespondenceCommand instance_ = null;
 
 
     //** para classificar os segmentos (Leandro)
@@ -37,7 +38,7 @@ public class ClassifierCommand extends RpModelPlotCommand {
     static public List ySeta = new ArrayList();
 
 
-    private ClassifierCommand() {
+    private BifurcationCorrespondenceCommand() {
         super(DESC_TEXT, null ,new JToggleButton());
 
        
@@ -53,16 +54,16 @@ public class ClassifierCommand extends RpModelPlotCommand {
 
         while (iterator.hasNext()) {
             RPnPhaseSpacePanel panel = iterator.next();
-            RPnStringPlotter stringPlotter = new RPnStringPlotter();
+            RPnCorrespondencePlotter stringPlotter = new RPnCorrespondencePlotter();
             panel.addMouseListener(stringPlotter);
             panel.addMouseMotionListener(stringPlotter);
         }
 
     }
 
-    public static ClassifierCommand instance() {
+    public static BifurcationCorrespondenceCommand instance() {
         if (instance_ == null) {
-            instance_ = new ClassifierCommand();
+            instance_ = new BifurcationCorrespondenceCommand();
         }
         return instance_;
     }

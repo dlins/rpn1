@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import rpn.component.util.GraphicsUtil;
+import rpnumerics.FundamentalCurve;
 import wave.multid.model.MultiPolyLine;
 import wave.multid.CoordsArray;
 import wave.multid.view.GeomObjView;
@@ -78,12 +79,10 @@ public class OrbitGeom extends MultiPolyLine implements RpGeometry {
 
     }
 
-    public void setLastAnnotation(GraphicsUtil annotation) {
-        if (annotationsList_.isEmpty()) {
-            annotationsList_.add(annotation);
-        } else {
-            annotationsList_.set(annotationsList_.size() - 1, annotation);
-        }
+    public void removeLastAnnotation() {
+        if (!annotationsList_.isEmpty()) 
+            annotationsList_.remove(annotationsList_.size()-1);
+       
 
     }
 
@@ -94,6 +93,21 @@ public class OrbitGeom extends MultiPolyLine implements RpGeometry {
     @Override
     public Iterator<GraphicsUtil> getAnnotationIterator() {
         return annotationsList_.iterator();
+    }
+
+    @Override
+    public void removeAnnotation(GraphicsUtil selectedAnnotation) {
+       annotationsList_.remove(selectedAnnotation);
+    }
+
+    @Override
+    public void showSpeed(CoordsArray curvePoint, CoordsArray wcPoint,ViewingTransform transform) {
+
+    }
+
+    @Override
+    public void showClassification(CoordsArray curvePoint, CoordsArray wcPoint, ViewingTransform transform) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

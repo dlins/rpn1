@@ -6,10 +6,12 @@
 package rpn.component.util;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Polygon;
 import java.awt.Shape;
 import java.awt.Stroke;
+import java.awt.font.GlyphVector;
 import java.awt.geom.Path2D;
 import java.awt.geom.PathIterator;
 import java.util.ArrayList;
@@ -23,46 +25,18 @@ import wave.util.RealVector;
 
 public class AreaSelected extends GraphicsUtil {
 
+    
+
     public AreaSelected(List<Object> wcObjects, ViewingTransform viewingTransform, ViewingAttr viewAttr) {
         super(wcObjects, viewingTransform, viewAttr);
+    
 
     }
 
     public AreaSelected(RealVector[] vertices, ViewingTransform viewingTransform, ViewingAttr viewingAttr) {
 
         super(createPath2D(vertices), viewingTransform, viewingAttr);
-
-
-
-
-    }
-
-    private static List<Object> createPath2D(RealVector[] vertices) {
-
-        Path2D.Double selectionPath = new Path2D.Double();
-
-        ArrayList<Object> wcList = new ArrayList<Object>();
-
-
-        selectionPath.moveTo(vertices[0].getElement(0), vertices[0].getElement(1));
-
-        selectionPath.lineTo(vertices[1].getElement(0), vertices[1].getElement(1));
-
-        selectionPath.lineTo(vertices[2].getElement(0), vertices[2].getElement(1));
-
-        selectionPath.lineTo(vertices[3].getElement(0), vertices[3].getElement(1));
-
-        selectionPath.closePath();
-
-        wcList.add(selectionPath);
-
-        return wcList;
-
-
-
-
-
-
+        
 
     }
 
@@ -106,13 +80,30 @@ public class AreaSelected extends GraphicsUtil {
         Color previousColor = g.getColor();
         g.setColor(getViewingAttr().getColor());
         g.draw(getShape());
+
+        if (!id_.isEmpty()) {
+        
+            RealVector upperLeftVertice = getWCVertices().get(3);
+            Coords2D dcSelectionPoint = new Coords2D(0, 0);
+            CoordsArray wcSelectionPoint = new CoordsArray(upperLeftVertice);
+
+            getViewingTransform().viewPlaneTransform(wcSelectionPoint, dcSelectionPoint);
+                        
+            dcSelectionPoint.setElement(0, dcSelectionPoint.getX()+20);
+            dcSelectionPoint.setElement(1, dcSelectionPoint.getY()+20);
+            
+            Font f = new Font("Arial", Font.BOLD, 15);
+
+            GlyphVector v = f.createGlyphVector(g.getFontRenderContext(), id_);
+
+            g.drawGlyphVector(v,(float) dcSelectionPoint.getX(), (float) dcSelectionPoint.getY());
+        }
+
         Stroke previousStroke = g.getStroke();
 
         if (getViewingAttr().isSelected()) {
             drawSelected(g);
         }
-
-
 
         g.setColor(previousColor);
         g.setStroke(previousStroke);
@@ -129,13 +120,14 @@ public class AreaSelected extends GraphicsUtil {
 
     }
 
+   
+
     @Override
     public String toXML() {
 
         StringBuilder buffer = new StringBuilder();
 
         buffer.append("<CURVESELECTION>\n");
-
 
         List<RealVector> vertices = getWCVertices();
 
@@ -147,6 +139,28 @@ public class AreaSelected extends GraphicsUtil {
 
         return buffer.toString();
 
+    }
+
+    private static List<Object> createPath2D(RealVector[] vertices) {
+
+        Path2D.Double selectionPath = new Path2D.Double();
+
+        ArrayList<Object> wcList = new ArrayList<Object>();
+
+        selectionPath.moveTo(vertices[0].getElement(0), vertices[0].getElement(1));
+
+        selectionPath.lineTo(vertices[1].getElement(0), vertices[1].getElement(1));
+
+        selectionPath.lineTo(vertices[2].getElement(0), vertices[2].getElement(1));
+
+        selectionPath.lineTo(vertices[3].getElement(0), vertices[3].getElement(1));
+
+        selectionPath.closePath();
+
+        wcList.add(selectionPath);
+
+        return wcList;
 
     }
+
 }

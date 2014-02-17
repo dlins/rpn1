@@ -75,7 +75,7 @@ public class RiemannProfileCommand extends RpModelPlotCommand implements Observe
             boolean enable = checkCurvesForRiemmanProfile((List<RpGeometry>) arg);
 
             setEnabled(enable);
-            AreaSelectionCommand.instance().setEnabled(enable);
+            DomainSelectionCommand.instance().setEnabled(enable);
 
             if (enable) {
                 instance_.selectedCurves = (List<RpGeometry>) arg;

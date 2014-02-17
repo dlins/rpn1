@@ -39,13 +39,32 @@ public abstract class RpModelPlotCommand extends RpModelActionCommand implements
         super(shortDesc, icon);
         button_ = button;
         button_.setAction(this);
-        button_.setFont(rpn.RPnConfigReader.MODELPLOT_BUTTON_FONT);
-
-        AffineTransform fontTransform = new AffineTransform();
-
-        fontTransform.scale(1.2, 1.2);
-        Font newFont = button_.getFont().deriveFont(fontTransform);
-        button_.setFont(newFont);
+        
+        String [] descriptionArray = shortDesc.split(" ");
+        
+        
+        StringBuilder buttonCaption = new StringBuilder();
+        
+        buttonCaption.append("<html>");
+        
+        for (String string : descriptionArray) {
+            buttonCaption.append(string);
+            buttonCaption.append("<br>");
+            
+        }
+        buttonCaption.append("</html>");
+        
+        button_.setText(buttonCaption.toString());
+        
+        
+        
+//        button_.setFont(rpn.RPnConfigReader.MODELPLOT_BUTTON_FONT);
+//
+//        AffineTransform fontTransform = new AffineTransform();
+//
+//        fontTransform.scale(1.5, 1.5);
+//        Font newFont = button_.getFont().deriveFont(fontTransform);
+//        button_.setFont(newFont);
 
         button_.setToolTipText(shortDesc);
 
@@ -54,6 +73,17 @@ public abstract class RpModelPlotCommand extends RpModelActionCommand implements
 
 
     }
+    
+    public RpModelPlotCommand(String shortDesc, ImageIcon icon) {
+
+        super(shortDesc, icon);
+
+        putValue(Action.SHORT_DESCRIPTION, shortDesc);
+        setEnabled(false);
+
+
+    }
+    
 
     public void execute() {
 

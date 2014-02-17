@@ -7,11 +7,12 @@ package rpn.command;
 
 import java.awt.Color;
 import java.awt.event.ActionEvent;
-import java.awt.geom.Path2D;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Observable;
-import java.util.Observer;
 import javax.swing.JButton;
 import rpn.RPnMenuCommand;
 import rpn.RPnPhaseSpaceAbstraction;
@@ -20,98 +21,70 @@ import rpn.RPnPhaseSpacePanel;
 import rpn.RPnProjDescriptor;
 import rpn.component.RpGeometry;
 import rpn.component.util.AreaSelected;
+import rpn.component.util.Label;
 import rpn.controller.ui.UIController;
-import rpn.parser.RPnDataModule;
 import rpnumerics.RPNUMERICS;
 import wave.multid.Space;
 import wave.multid.view.Scene;
-import wave.multid.view.Viewing2DTransform;
 import wave.util.Boundary;
 import wave.util.RealVector;
 import wave.util.RectBoundary;
 
-public class ZoomPlotCommand extends RpModelPlotCommand implements Observer, RPnMenuCommand {
+public class ZoomPlotCommand extends RpModelPlotCommand implements RPnMenuCommand, WindowListener {
 
     static public final String DESC_TEXT = "Zoom";
     static private ZoomPlotCommand instance_ = null;
+    private final HashMap<RPnPhaseSpaceFrame, AreaSelected> areaZoomFrameMap_;
+    private AreaSelected selectedArea_;
+    private RPnPhaseSpacePanel originalPanel_;
 
     private ZoomPlotCommand() {
-        super(DESC_TEXT, null, new JButton());
+
+        super(DESC_TEXT, null);
+        areaZoomFrameMap_ = new HashMap<RPnPhaseSpaceFrame, AreaSelected>();
+    }
+
+    @Override
+    public void execute() {
+
+        List<RealVector> wcVertices = selectedArea_.getWCVertices();
+
+        RealVector min = wcVertices.get(0);
+        RealVector max = wcVertices.get(2);
+        Boundary boundary = new RectBoundary(min, max);
+
+        Scene scene = phaseSpaceFrameZoom(boundary);
+
+        RPnPhaseSpaceFrame zoomFrame = new RPnPhaseSpaceFrame(scene, this);
+
+        String areaID = selectedArea_.getID();
+
+        zoomFrame.addWindowListener(this);
+        UIController.instance().install(zoomFrame.phaseSpacePanel());
+        zoomFrame.setTitle(areaID);
+        zoomFrame.pack();
+        zoomFrame.setVisible(true);
+
+        
+        RealVector labelPosition = calculateLabelPosition(min, max);
+        List<Object> wcObject = new ArrayList<Object>();
+        wcObject.add(labelPosition);
+        wcObject.add(areaID);
+
+        zoomFrame.phaseSpacePanel().addGraphicUtil(new Label(wcObject, scene.getViewingTransform(), selectedArea_.getViewingAttr()));
+
+        areaZoomFrameMap_.put(zoomFrame, selectedArea_);
+
+    }
+
+    public void setAreaAndPanel(AreaSelected area, RPnPhaseSpacePanel panel) {
+        selectedArea_ = area;
+        originalPanel_ = panel;
+
     }
 
     @Override
     public void actionPerformed(ActionEvent event) {
-
-        Iterator<RPnPhaseSpacePanel> installedPanelsIterator = UIController.instance().getInstalledPanelsIterator();
-        RPnPhaseSpacePanel tempPanel = null;
-        while (installedPanelsIterator.hasNext()) {
-            RPnPhaseSpacePanel panel = installedPanelsIterator.next();
-
-            if (!panel.getSelectedAreas().isEmpty()) {
-                tempPanel = panel;
-
-            }
-
-        }
-        List<AreaSelected> selectedAreas = tempPanel.getSelectedAreas();
-
-        for (AreaSelected areaSelected : selectedAreas) {
-
-            List<RealVector> wcVertices = areaSelected.getWCVertices();
-            
-            RealVector min = wcVertices.get(0);
-            RealVector max =  wcVertices.get(2);
-//            
-            Boundary teste = RPNUMERICS.boundary();
-            
-            
-            System.out.println(teste.getMinimums());
-            System.out.println(teste.getMaximums());
-            
-//            
-//            
-//            double xMin = min.getElement(0)- (min.getElement(1)/Math.sqrt(3.0));
-//            double yMin = (2/Math.sqrt(3.0))*min.getElement(1);
-//            
-//            
-//            double xMax = max.getElement(0)- (max.getElement(1)/Math.sqrt(3.0));
-//            double yMax = (2/Math.sqrt(3.0))*max.getElement(1);
-//            
-//            
-//            
-//            RealVector newMin = new RealVector(2);
-//            
-//            newMin.setElement(0,xMin);
-//            newMin.setElement(1,yMin);
-//            
-//            RealVector newMax = new RealVector(2);
-//            
-//            newMax.setElement(0,xMax);
-//            newMax.setElement(1,yMax);
-//            
-////            
-//            
-            
-
-            
-            for (int i = 0; i < 4; i++) {
-                
-                System.out.println(wcVertices.get(i));
-                
-            }
-            
-            
-            Boundary boundary = new RectBoundary(min,max);
-
-            Scene scene = phaseSpaceFrameZoom(boundary);
-
-            rpn.RPnPhaseSpaceFrame frame = new RPnPhaseSpaceFrame(scene, this);
-            UIController.instance().install(frame.phaseSpacePanel());
-            frame.pack();
-            frame.setVisible(true);
-        }
-
-
 
     }
 
@@ -119,27 +92,32 @@ public class ZoomPlotCommand extends RpModelPlotCommand implements Observer, RPn
 
         wave.multid.graphs.ClippedShape clipping = new wave.multid.graphs.ClippedShape(boundary);
 
-        System.out.println("Retangular: "+clipping.isRectangular());
+        int width = originalPanel_.scene().getViewingTransform().viewPlane().getViewport().width;
+        int height = originalPanel_.scene().getViewingTransform().viewPlane().getViewport().height;
+
+        System.out.println("Retangular: " + clipping.isRectangular());
         Space zoomSpace = new Space("", RPNUMERICS.domainDim());
         int[] testeArrayIndex = {0, 1};
-        RPnProjDescriptor projDescriptor = new RPnProjDescriptor(zoomSpace, "", 700, 700, testeArrayIndex, true);
+
+        // tanto faz a meu ver a proporcao em DC...
+        RPnProjDescriptor projDescriptor = new RPnProjDescriptor(zoomSpace, "", width, height, testeArrayIndex, false);
+
         wave.multid.view.ViewingTransform viewingTransf = projDescriptor.createTransform(clipping);
 
-      
         try {
-            Scene scene = RPnDataModule.PHASESPACE.createScene(viewingTransf,
+
+            RPnPhaseSpaceAbstraction phaseSpace = (RPnPhaseSpaceAbstraction) originalPanel_.scene().getAbstractGeom();
+
+            Scene scene = phaseSpace.createScene(viewingTransf,
                     new wave.multid.view.ViewingAttr(Color.black));
 
             return scene;
-
 
         } catch (wave.multid.DimMismatchEx dex) {
             dex.printStackTrace();
         }
 
-
         return null;
-
 
     }
 
@@ -155,25 +133,104 @@ public class ZoomPlotCommand extends RpModelPlotCommand implements Observer, RPn
     }
 
     @Override
-    public void execute() {
-    }
-
-    @Override
     public RpGeometry createRpGeometry(RealVector[] coords) {
         return null;
     }
 
     @Override
-    public void update(Observable o, Object arg) {
-    }
-
-    @Override
     public void finalizeApplication() {
-        System.out.println("Finalize app");
+
     }
 
     @Override
     public void networkCommand() {
         System.out.println("Network command");
     }
+
+    @Override
+    public void windowOpened(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowClosing(WindowEvent e) {
+        RPnPhaseSpaceFrame frame = (RPnPhaseSpaceFrame) e.getSource();
+        AreaSelected zoomArea = areaZoomFrameMap_.get(frame);
+        Iterator<RPnPhaseSpacePanel> installedPanelsIterator = UIController.instance().getInstalledPanelsIterator();
+
+        while (installedPanelsIterator.hasNext()) {
+            RPnPhaseSpacePanel rPnPhaseSpacePanel = installedPanelsIterator.next();
+
+            rPnPhaseSpacePanel.removeGraphicsUtil(zoomArea);
+            rPnPhaseSpacePanel.repaint();
+
+        }
+
+        areaZoomFrameMap_.remove(frame);
+
+        frame.dispose();
+
+    }
+
+    @Override
+    public void windowClosed(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowIconified(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowDeiconified(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowActivated(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowDeactivated(WindowEvent e) {
+
+    }
+
+    private RealVector calculateLabelPosition(RealVector minBoundary, RealVector maxBoundary) {
+
+        RealVector lowerLeftVertice = new RealVector(minBoundary);
+        RealVector upperRightVertice = new RealVector(maxBoundary);
+
+        RealVector upperLeftVertice = new RealVector(selectedArea_.getWCVertices().get(3));
+
+        RealVector p = new RealVector(lowerLeftVertice);
+
+        RealVector q = new RealVector(upperLeftVertice);
+
+        q.scale(0.95);
+
+        p.scale(0.05);
+
+        p.add(q);
+
+        double y = p.getElement(1);
+
+        p = new RealVector(upperRightVertice);
+        q = new RealVector(upperLeftVertice);
+
+        q.scale(0.95);
+
+        p.scale(0.05);
+
+        p.add(q);
+
+        double x = p.getElement(0);
+
+        RealVector result = new RealVector(x+ " " + y);
+
+        return result;
+
+    }
+
 }

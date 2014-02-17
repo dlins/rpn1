@@ -2,8 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package rpn;
+package rpn.ui.physics;
 
+import rpn.RPnFluxParamsSubject;
 import rpn.ui.RPnInputComponent;
 import rpnumerics.RPNUMERICS;
 import wave.util.RealVector;
@@ -73,13 +74,13 @@ public class RPnCoreyToStone extends RPnFluxParamsSubject {
         newState[19] = "0";
 
 
-        newState[20] = String.valueOf(fluxParams.getElement(20));
-        newState[21] = String.valueOf(fluxParams.getElement(21));
-        newState[22] = String.valueOf(fluxParams.getElement(22));
-        newState[23] = "0";
-        newState[24] = "1";
-        newState[25] = "1";
-        newState[26] = "1";
+//        newState[20] = String.valueOf(fluxParams.getElement(20));
+//        newState[21] = String.valueOf(fluxParams.getElement(21));
+//        newState[22] = String.valueOf(fluxParams.getElement(22));
+//        newState[23] = "0";
+//        newState[24] = "1";
+//        newState[25] = "1";
+//        newState[26] = "1";
 
         setState(newState);
 

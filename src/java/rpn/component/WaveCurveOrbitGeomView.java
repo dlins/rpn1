@@ -181,6 +181,7 @@ public class WaveCurveOrbitGeomView extends OrbitGeomView {
 
         while (annotationIterator.hasNext()) {
             GraphicsUtil graphicsUtil = annotationIterator.next();
+            graphicsUtil.update(getViewingTransform());
             graphicsUtil.getViewingAttr().setVisible(getViewingAttr().isVisible());
             g.setColor(graphicsUtil.getViewingAttr().getColor());
             graphicsUtil.draw(g);

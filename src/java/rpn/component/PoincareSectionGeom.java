@@ -11,6 +11,7 @@ import wave.multid.CoordsArray;
 import java.awt.Color;
 import java.util.Iterator;
 import rpn.component.util.GraphicsUtil;
+import wave.multid.view.ViewingTransform;
 
 public class PoincareSectionGeom extends MultiPolygon implements RpGeometry {
     //
@@ -55,7 +56,22 @@ public class PoincareSectionGeom extends MultiPolygon implements RpGeometry {
     }
 
     @Override
-    public void setLastAnnotation(GraphicsUtil plotted) {
+    public void removeLastAnnotation() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void removeAnnotation(GraphicsUtil selectedAnnotation) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void showSpeed(CoordsArray curvePoint, CoordsArray wcPoint, ViewingTransform transform) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void showClassification(CoordsArray curvePoint, CoordsArray wcPoint, ViewingTransform transform) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

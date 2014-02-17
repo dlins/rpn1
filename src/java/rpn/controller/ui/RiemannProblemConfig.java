@@ -23,9 +23,9 @@ import rpn.command.SubInflectionPlotCommand;
 import rpnumerics.StoneExplicitSecondaryBifurcationCurveCalc;
 import wave.util.RealVector;
 
-public class BIFURCATION_CONFIG extends UI_ACTION_SELECTED {
+public class RiemannProblemConfig extends UI_ACTION_SELECTED {
 
-    public BIFURCATION_CONFIG() {
+    public RiemannProblemConfig() {
 
         super(BifurcationPlotCommand.instance());
         CoincidencePlotCommand.instance().setEnabled(true);

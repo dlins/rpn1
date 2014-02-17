@@ -10,12 +10,12 @@ import rpnumerics.PhasePoint;
 import rpnumerics.RPNUMERICS;
 import wave.util.RealVector;
 
-public class SHOCK_CONFIG extends UI_ACTION_SELECTED {
+public class ShockConfig extends UI_ACTION_SELECTED {
 
     //
     // Constructors
     //
-    public SHOCK_CONFIG() {
+    public ShockConfig() {
         super(HugoniotPlotCommand.instance());
 
     }
@@ -37,6 +37,6 @@ public class SHOCK_CONFIG extends UI_ACTION_SELECTED {
 
         //ChangeDirectionAgent.instance().setEnabled(true);
 
-        ui.setState(new SIGMA_CONFIG());
+        ui.setState(new SigmaConfig());
     }
 }

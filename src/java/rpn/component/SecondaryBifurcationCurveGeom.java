@@ -5,7 +5,6 @@
  */
 package rpn.component;
 
-import rpnumerics.SecondaryBifurcationCurve;
 import wave.multid.view.*;
 import wave.multid.*;
 import wave.multid.model.MultiPoint;

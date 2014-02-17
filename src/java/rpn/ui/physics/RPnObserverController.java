@@ -5,7 +5,7 @@
  *
  */
 
-package rpn;
+package rpn.ui.physics;
 
 import rpn.ui.RPnInputComponent;
 import java.beans.PropertyChangeEvent;

@@ -5,9 +5,17 @@
  */
 package rpn.component;
 
+import java.awt.Color;
+import java.util.ArrayList;
+import java.util.List;
 import rpnumerics.*;
 import rpn.controller.HugoniotController;
 import rpn.controller.RpController;
+import wave.multid.CoordsArray;
+import wave.multid.model.MultiPoint;
+import wave.multid.view.PointMark;
+import wave.multid.view.ViewingAttr;
+import wave.util.RealVector;
 
 public class HugoniotCurveGeomFactory extends RpCalcBasedGeomFactory {
 
@@ -35,6 +43,12 @@ public class HugoniotCurveGeomFactory extends RpCalcBasedGeomFactory {
     public RpGeometry createGeomFromSource() {
 
         HugoniotCurve curve = (HugoniotCurve) geomSource();
+        
+        List<MultiPoint> multiPointList = new ArrayList();
+        for (RealVector multiPoint : curve.getTransitionList()) {
+          MultiPoint  transPoint = new MultiPoint(new CoordsArray(multiPoint), new ViewingAttr(Color.yellow));
+          multiPointList.add(transPoint);
+        }
 
         HugoniotSegGeom.DIRECTION = curve.getDirection();
 
@@ -45,7 +59,12 @@ public class HugoniotCurveGeomFactory extends RpCalcBasedGeomFactory {
         for (int i = 0; i < resultSize; i++) {
             hugoniotArray[i] = new HugoniotSegGeom((HugoniotSegment) curve.segments().get(i));
         }
-        return new HugoniotCurveGeom(hugoniotArray, this);
+        HugoniotCurveGeom geom = new HugoniotCurveGeom(hugoniotArray, this);
+        
+        
+        geom.setTransitionList(multiPointList);
+        
+        return geom;
 
     }
 

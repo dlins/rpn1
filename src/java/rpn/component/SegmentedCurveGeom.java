@@ -21,6 +21,7 @@ import wave.multid.model.BoundingBox;
 import wave.multid.model.MultiGeometry;
 import wave.multid.model.MultiPolyLine;
 import wave.multid.view.ViewingAttr;
+import wave.multid.view.ViewingTransform;
 
 public abstract class SegmentedCurveGeom implements MultiGeometry, RpGeometry {
 
@@ -55,11 +56,15 @@ public abstract class SegmentedCurveGeom implements MultiGeometry, RpGeometry {
 
     }
 
-    public void setLastAnnotation(GraphicsUtil annotation) {
-        if (annotationsList_.isEmpty()) {
-            annotationsList_.add(annotation);
-        } else {
-            annotationsList_.set(annotationsList_.size() - 1, annotation);
+    @Override
+    public void removeAnnotation(GraphicsUtil annotation) {
+        annotationsList_.remove(annotation);
+    }
+
+    @Override
+    public void removeLastAnnotation() {
+        if (!annotationsList_.isEmpty()) {
+            annotationsList_.remove(annotationsList_.size() - 1);
         }
 
     }
@@ -151,6 +156,12 @@ public abstract class SegmentedCurveGeom implements MultiGeometry, RpGeometry {
     @Override
     public boolean isSelected() {
         return viewingAttr().isSelected();
+    }
+
+    @Override
+    public void showClassification(CoordsArray curvePoint, CoordsArray wcPoint, ViewingTransform transform) {
+    
+
     }
 
 }

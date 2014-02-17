@@ -2,8 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package rpn;
+package rpn.ui.physics;
 
+import rpn.RPnFluxParamsSubject;
 import rpn.ui.RPnInputComponent;
 import rpnumerics.RPNUMERICS;
 import wave.util.RealVector;

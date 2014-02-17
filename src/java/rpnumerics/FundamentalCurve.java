@@ -18,16 +18,24 @@ import wave.util.RealVector;
 public class FundamentalCurve extends Orbit implements WaveCurveBranch, RpSolution {
 
     private int familyIndex_;
-    private List<WaveCurveBranch> orbitList_;
     private int curveType_;
     private int curveIndex_;
     private boolean initialSubCurve_;
     private OrbitPoint referencePoint_;
+    private List<OrbitPoint> points_;
     public FundamentalCurve(OrbitPoint[] points, int family, int increase) {
         super(points, increase);
         familyIndex_ = family;
-        orbitList_= new ArrayList<WaveCurveBranch>();
-        orbitList_.add(this);
+
+        points_= new ArrayList<OrbitPoint>();
+        
+        for (int i = 0; i < points.length; i++) {
+            OrbitPoint orbitPoint = points[i];
+            points_.add(orbitPoint);
+            
+        }
+        
+
         
     }
 
@@ -35,11 +43,6 @@ public class FundamentalCurve extends Orbit implements WaveCurveBranch, RpSoluti
         return familyIndex_;
     }
 
-    public List<WaveCurveBranch>getCurves() {
-
-        return orbitList_;
-
-    }
 
     public int getCurveType() {
         return curveType_;
@@ -159,6 +162,24 @@ public class FundamentalCurve extends Orbit implements WaveCurveBranch, RpSoluti
     @Override
     public void setReferencePoint(OrbitPoint referencePoint) {
         referencePoint_=referencePoint;
+    }
+
+
+    public List<OrbitPoint> getBranchPoints() {
+        
+        return  points_;
+        
+    }
+
+    @Override
+    public double getSpeed(OrbitPoint point) {
+        
+        
+        int segmentIndex = findClosestSegment(new RealVector(point.getCoords()));
+
+        OrbitPoint curvePoint = points_.get(segmentIndex);
+        
+        return curvePoint.getLambda();
     }
 
 

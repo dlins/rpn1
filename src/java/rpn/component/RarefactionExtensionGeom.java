@@ -19,6 +19,11 @@ public class RarefactionExtensionGeom   extends SegmentedCurveGeom {
         
     }
 
+    @Override
+    public void showSpeed(CoordsArray curvePoint, CoordsArray wcPoint, ViewingTransform transform) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
     
     
 }

@@ -12,55 +12,56 @@ import java.util.Observer;
 import javax.swing.JToggleButton;
 import rpn.RPnPhaseSpacePanel;
 import rpn.component.RpGeometry;
+import rpn.controller.ui.RPnSelectionPlotter;
 import rpn.controller.ui.AREASELECTION_CONFIG;
-import rpn.controller.ui.RPnGenericSelectionPlotter;
+import rpn.controller.ui.AnnotationSelector;
 import rpn.controller.ui.UIController;
-import wave.multid.model.MultiPolygon;
 import wave.util.RealVector;
 
-public class GenericAreaCommand extends RpModelPlotCommand implements Observer {
+public class AnnotationSelectionCommand extends RpModelPlotCommand implements Observer {
 
-    static public final String DESC_TEXT = "Domain Selection";
-    static private GenericAreaCommand instance_ = null;
+    static public final String DESC_TEXT = "Annotation Selection";
+    static private AnnotationSelectionCommand instance_ = null;
+    
 
-    private GenericAreaCommand() {
+    private AnnotationSelectionCommand() {
         super(DESC_TEXT, null, new JToggleButton());
     }
 
-//    @Override
+    @Override
     public void actionPerformed(ActionEvent event) {
-        RPnGenericSelectionPlotter boxPlotter = new RPnGenericSelectionPlotter();
 
         UIController.instance().setState(new AREASELECTION_CONFIG(this));
 
         Iterator<RPnPhaseSpacePanel> iterator = UIController.instance().getInstalledPanelsIterator();
 
         while (iterator.hasNext()) {
-
             RPnPhaseSpacePanel panel = iterator.next();
-            panel.setPhysicalBoundarySelected(false);
-
-            if (button_.isSelected()) {
-
-                boxPlotter.addObserver(this);
-                panel.addMouseListener(boxPlotter);
-                panel.addMouseMotionListener(boxPlotter);
-
-
-            }
-            
-
+            AnnotationSelector boxPlotter = new AnnotationSelector();
+            panel.addMouseListener(boxPlotter);
+            panel.addMouseMotionListener(boxPlotter);
         }
-
 
     }
 
-    public static GenericAreaCommand instance() {
+    public static AnnotationSelectionCommand instance() {
         if (instance_ == null) {
-            instance_ = new GenericAreaCommand();
+            instance_ = new AnnotationSelectionCommand();
         }
         return instance_;
     }
+
+    @Override
+    public void unexecute() {
+    }
+
+    
+
+    @Override
+    public void execute() {
+    }
+
+    
 
     @Override
     public RpGeometry createRpGeometry(RealVector[] coords) {
@@ -69,9 +70,10 @@ public class GenericAreaCommand extends RpModelPlotCommand implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
-//        MultiPolygon polygon = (MultiPolygon)arg;
-        GenericExtensionCurveCommand.instance().setSelectedArea((MultiPolygon)arg);
+
        
 
     }
+
+  
 }

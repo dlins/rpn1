@@ -9,7 +9,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.util.Iterator;
 import rpn.RPnPhaseSpacePanel;
-import rpn.command.AreaSelectionCommand;
+import rpn.command.DomainSelectionCommand;
 import rpn.command.RpModelActionCommand;
 
 
@@ -17,7 +17,7 @@ import rpn.command.RpModelActionCommand;
 public class AREASELECTION_CONFIG extends UI_ACTION_SELECTED {
 
     public AREASELECTION_CONFIG(RpModelActionCommand command) {
-        super(AreaSelectionCommand.instance());
+        super(DomainSelectionCommand.instance());
 
             Iterator<RPnPhaseSpacePanel> iterator = UIController.instance().getInstalledPanelsIterator();
             while (iterator.hasNext()) {

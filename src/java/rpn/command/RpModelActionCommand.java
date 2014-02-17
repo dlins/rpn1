@@ -10,7 +10,6 @@ import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import javax.swing.ImageIcon;
 import rpn.controller.ui.*;
-import rpn.message.RPnNetworkStatus;
 
 
 public abstract class RpModelActionCommand extends RpCommand {

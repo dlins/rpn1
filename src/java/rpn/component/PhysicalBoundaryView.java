@@ -11,6 +11,7 @@ import java.awt.Stroke;
 import wave.multid.view.*;
 import wave.multid.DimMismatchEx;
 import java.util.Iterator;
+import rpn.component.util.GraphicsUtil;
 
 public class PhysicalBoundaryView extends  GeomObjView {
     //
@@ -55,7 +56,31 @@ public class PhysicalBoundaryView extends  GeomObjView {
             ((GeomObjView) viewList_.get(i)).draw(g);
         }
         
-        g.setStroke(previousStroke);
+         g.setStroke(previousStroke);
+        
+        PhysicalBoundaryGeom shockGeom = (PhysicalBoundaryGeom) getAbstractGeom();
+        Iterator<GraphicsUtil> annotationIterator = shockGeom.getAnnotationIterator();
+
+        while (annotationIterator.hasNext()) {
+            GraphicsUtil graphicsUtil = annotationIterator.next();
+            graphicsUtil.update(getViewingTransform());
+            graphicsUtil.getViewingAttr().setVisible(shockGeom.viewingAttr().isVisible());
+            g.setColor(graphicsUtil.getViewingAttr().getColor());
+            graphicsUtil.draw(g);
+
+        }
+
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+//        g.setStroke(previousStroke);
     }
 
 

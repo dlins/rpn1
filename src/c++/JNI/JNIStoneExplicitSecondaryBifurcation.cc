@@ -100,7 +100,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_StoneExplicitSecondaryBifurcationCurve
 
     Stone_Explicit_Bifurcation_Curves sebc((StoneFluxFunction*) leftFlux);
 
-    sebc.expl_sec_bif_crv(opositeSide, numberOfSteps, left_vrs, right_vrs);
+    sebc.sec_bif_correspondence(opositeSide, numberOfSteps, left_vrs, right_vrs);
 
 
     if (Debug::get_debug_level() == 5) {

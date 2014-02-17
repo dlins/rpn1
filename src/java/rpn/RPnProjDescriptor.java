@@ -65,6 +65,8 @@ public class RPnProjDescriptor {
     }
 
     public ViewingTransform createTransform(ClippedShape clipping) {
+        
+        
         wcWindow window = clipping.createWindow(projMap_);
         ViewPlane viewPlane = new ViewPlane(viewport_, window);
         if (projMap_.getCodomain().equals(Multid.PLANE)) {

@@ -23,7 +23,7 @@ import rpnumerics.StationaryPointCalc;
 import rpnumerics.viscousprofile.ViscousProfileData;
 import wave.util.RealVector;
 
-public class SIGMA_CONFIG extends UI_ACTION_SELECTED {
+public class SigmaConfig extends UI_ACTION_SELECTED {
 
     //
     // Members
@@ -33,7 +33,7 @@ public class SIGMA_CONFIG extends UI_ACTION_SELECTED {
     // Constructors
     //
 
-    public SIGMA_CONFIG() {
+    public SigmaConfig() {
         super(ChangeSigmaCommand.instance());
 
 

@@ -1,6 +1,8 @@
 package rpn.component;
 
+import java.awt.Graphics2D;
 import java.util.Iterator;
+import rpn.component.util.GraphicsUtil;
 
 import wave.multid.DimMismatchEx;
 import wave.multid.view.GeomObjView;
@@ -32,7 +34,25 @@ public class BifurcationCurveView extends GeomObjView {
         }
     }
     
-    
+     @Override
+    public void draw(Graphics2D g){
+        
+        super.draw(g);
+        
+        BifurcationCurveGeom doubleContactGeom = (BifurcationCurveGeom)getAbstractGeom();
+        
+         Iterator<GraphicsUtil> annotationIterator = doubleContactGeom.getAnnotationIterator();
+
+        while (annotationIterator.hasNext()) {
+            GraphicsUtil graphicsUtil = annotationIterator.next();
+            graphicsUtil.update(getViewingTransform());
+            graphicsUtil.getViewingAttr().setVisible(doubleContactGeom.viewingAttr().isVisible());
+            g.setColor(graphicsUtil.getViewingAttr().getColor());
+            graphicsUtil.draw(g);
+
+        }
+        
+    }
     
     
     
