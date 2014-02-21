@@ -45,7 +45,7 @@ import rpn.message.RPnNetworkStatus;
 public class RPnDataModule {
 
     static public String XML_TAG = "RPNDATA";
-    static public String BATCHDATA_XML_TAG = "BATCH_DATA";
+    static public String BATCHDATA_XML_TAG = "RPNBATCH_DATA";
     
     static public RPnPhaseSpaceAbstraction PHASESPACE = null;
     static public RPnPhaseSpaceAbstraction LEFTPHASESPACE = null;
@@ -176,7 +176,7 @@ public class RPnDataModule {
             } else if (currentElement_.equals(BATCHDATA_XML_TAG)) {
 
                 String batch_id = att.getValue("batchid");
-                String fullURL = new String(RPnNetworkStatus.SERVERNAME + "/data/rpnbatch_" + batch_id);
+                String fullURL = new String("http://" + RPnNetworkStatus.SERVERNAME + "/data/rpnbatch_" + batch_id + ".rpn");
 
                 URL rpnMediatorURL;
 
