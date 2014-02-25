@@ -113,7 +113,7 @@ public class RPnDesktopPlotter implements RPnMenuCommand {
             configReader_ = RPnConfigReader.getReader(args[0], false, null);
             configStream_ = configReader_.read();
             RPnDesktopPlotter.configReader_.init(configStream_); //Reading input file
-
+                                    
             rpnUIFrame_ = new RPnUIFrame(plotter);
 
             rpnUIFrame_.pack();

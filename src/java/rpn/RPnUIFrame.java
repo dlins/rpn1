@@ -504,9 +504,6 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 auxFrames_[2 * i].setTitle(((RPnProjDescriptor) RPnVisualizationModule.AUXDESCRIPTORS.get(i)).label());
                 auxFrames_[2 * i + 1].setTitle(((RPnProjDescriptor) RPnVisualizationModule.AUXDESCRIPTORS.get(i + 1)).label());
 
-                auxFrames_[2 * i].setTitle("Aux " + auxFrames_[2 * i].getTitle());
-
-
 
                 UIController.instance().install(auxFrames_[2 * i].phaseSpacePanel());
                 UIController.instance().install(auxFrames_[2 * i + 1].phaseSpacePanel());
@@ -521,12 +518,13 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 dex.printStackTrace();
             }
 
-        }
-
+        }       
+        
         for (int i = 0; i < numOfPanels; i++) {
             wave.multid.view.ViewingTransform viewingTransf =
                     ((RPnProjDescriptor) RPnVisualizationModule.DESCRIPTORS.get(
                     i)).createTransform(clipping);
+                                             
             try {
                 wave.multid.view.Scene scene = RPnDataModule.PHASESPACE.createScene(viewingTransf,
                         new wave.multid.view.ViewingAttr(Color.black));
@@ -547,9 +545,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 setFramesPosition(frames_[i]);
                 frames_[i].pack();
                 frames_[i].setVisible(true);
-
-
-
+ 
             } catch (wave.multid.DimMismatchEx dex) {
                 dex.printStackTrace();
             }
@@ -563,14 +559,11 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     private void associatesPhaseSpaces() {
 
         //Phase Spaces associations
-
         ArrayList<RPnPhaseSpaceAbstraction> leftPhaseSpaceArray = new ArrayList<RPnPhaseSpaceAbstraction>();
         ArrayList<RPnPhaseSpaceAbstraction> rightPhaseSpaceArray = new ArrayList<RPnPhaseSpaceAbstraction>();
 
-
         leftPhaseSpaceArray.add(RPnDataModule.RIGHTPHASESPACE);
         rightPhaseSpaceArray.add(RPnDataModule.LEFTPHASESPACE);
-
 
         RPnPhaseSpaceManager.instance().register(RPnDataModule.LEFTPHASESPACE, leftPhaseSpaceArray);
         RPnPhaseSpaceManager.instance().register(RPnDataModule.RIGHTPHASESPACE, rightPhaseSpaceArray);
@@ -1234,13 +1227,9 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
     private void bifurcationConfigMenu() {
 
-
-
         modelInteractionMenu.removeAll();
         modelInteractionMenu.add(ChangeFluxParamsCommand.instance());
         modelInteractionMenu.add(configurationMenuItem_);
-
-
     }
 
     private void setUIFramePosition() {

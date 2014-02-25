@@ -8,7 +8,7 @@ package rpn.controller;
 import wave.multid.graphs.ViewPlane;
 import wave.multid.view.Viewing2DTransform;
 import wave.multid.view.Viewing3DTransform;
-import wave.multid.graphs.Iso2EquiTransform;
+import wave.multid.view.Iso2EquiTransform;
 import wave.multid.graphs.dcViewport;
 import rpn.RPnPhaseSpacePanel;
 import java.util.ArrayList;
@@ -26,6 +26,7 @@ import rpn.controller.ui.UIController;
 import rpn.command.TrackPointCommand;
 import wave.multid.Coords2D;
 import wave.multid.CoordsArray;
+import wave.multid.graphs.wcWindow;
 
 public class PhaseSpacePanel2DController extends ComponentUI implements PhaseSpacePanelController {
     //
@@ -132,44 +133,19 @@ public class PhaseSpacePanel2DController extends ComponentUI implements PhaseSpa
 
         @Override
         public void componentResized(ComponentEvent event) {
+                
             if (event.getComponent() instanceof RPnPhaseSpacePanel) {
+                
                 RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) event.getComponent();
 
                 int wPanel = panel.getWidth();
                 int hPanel = panel.getHeight();
-                dcViewport vp = panel.scene().getViewingTransform().viewPlane().getViewport();
-                vp.height = hPanel;
-                vp.width = wPanel;
-                ViewPlane vPlane = new ViewPlane(vp, panel.scene().getViewingTransform().viewPlane().getWindow());
-
-
-                if (panel.scene().getViewingTransform() instanceof Viewing3DTransform) {
-                    Viewing3DTransform viewTrans = (Viewing3DTransform) panel.scene().getViewingTransform();
-                    Viewing3DTransform new3DTransform = new Viewing3DTransform(viewTrans.projectionMap(), vPlane, viewTrans.viewReferencePoint(), viewTrans.zCoord());
-                    panel.scene().setViewingTransform(new3DTransform);
-
-                }
-
-                if (panel.scene().getViewingTransform() instanceof Viewing2DTransform) {
-
-                    try {
-                        Iso2EquiTransform viewTrans = (Iso2EquiTransform) panel.scene().getViewingTransform();
-
-                        Iso2EquiTransform newIsoTransform = new Iso2EquiTransform(viewTrans.projectionMap(),
-                                vPlane);
-                        panel.scene().setViewingTransform(newIsoTransform);
-
-                    } catch (ClassCastException ex) {
-                        Viewing2DTransform vt = (Viewing2DTransform) panel.scene().getViewingTransform();
-                        Viewing2DTransform new2DTransform = new Viewing2DTransform(panel.scene().
-                                getViewingTransform().projectionMap(), vPlane);
-                        panel.scene().setViewingTransform(new2DTransform);
-
-                    }
-
-                }
-
-
+                
+                dcViewport newViewport = new dcViewport(wPanel,hPanel);
+                wcWindow currWindow = panel.scene().getViewingTransform().viewPlane().getWindow();
+                        
+                panel.scene().getViewingTransform().setViewPlane(new ViewPlane(newViewport,currWindow));
+                               
                 panel.scene().update();
                 panel.updateGraphicsUtil();
                 panel.repaint();
