@@ -33,22 +33,22 @@ public class InflectionCurveGeomFactory extends BifurcationCurveGeomFactory {
     //
     // Methods
     //
-    @Override
-    public RpGeometry createGeomFromSource() {
-
-        InflectionCurve curve = (InflectionCurve) geomSource();
-
-        // assuming a container with HugoniotSegment elements
-        int resultSize = curve.segments().size();
-
-        RealSegGeom[] bifurcationSegArray = new RealSegGeom[resultSize];
-        for (int i = 0; i < resultSize; i++) {
-            bifurcationSegArray[i] = new RealSegGeom((RealSegment) curve.segments().get(i), viewAtt_);
-        }
-
-        return new InflectionCurveGeom(bifurcationSegArray, this);
-
-    }
+//    @Override
+//    public RpGeometry createGeomFromSource() {
+//
+//        InflectionCurve curve = (InflectionCurve) geomSource();
+//
+//        // assuming a container with HugoniotSegment elements
+//        int resultSize = curve.segments().size();
+//
+//        RealSegGeom[] bifurcationSegArray = new RealSegGeom[resultSize];
+//        for (int i = 0; i < resultSize; i++) {
+//            bifurcationSegArray[i] = new RealSegGeom((RealSegment) curve.segments().get(i), viewAtt_);
+//        }
+//
+//        return new InflectionCurveGeom(bifurcationSegArray, this);
+//
+//    }
     
     @Override
     void updateGeomSource (List<Area> areaListToRefine){

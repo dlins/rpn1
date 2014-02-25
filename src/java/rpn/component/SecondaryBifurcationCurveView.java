@@ -13,7 +13,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import wave.multid.model.MultiPoint;
 
-public class SecondaryBifurcationCurveView extends GeomObjView {
+public class SecondaryBifurcationCurveView extends BifurcationCurveView {
     //
     // Members
     //
@@ -50,19 +50,19 @@ public class SecondaryBifurcationCurveView extends GeomObjView {
 
     }
 
-    //Original update method
-    public void update() {
-        viewList_.clear();
-        SecondaryBifurcationCurveGeom secondaryBifurcationGeom = (SecondaryBifurcationCurveGeom) getAbstractGeom();
-        Iterator geomListIterator = secondaryBifurcationGeom.getBifurcationSegmentsIterator();
-        while (geomListIterator.hasNext()) {
-            RealSegGeom geomObj = (RealSegGeom) geomListIterator.next();
-            try {
-                viewList_.add(geomObj.createView(getViewingTransform()));
-            } catch (DimMismatchEx dex) {
-                dex.printStackTrace();
-            }
-        }
-
-    }
+//    //Original update method
+//    public void update() {
+//        viewList_.clear();
+//        SecondaryBifurcationCurveGeom secondaryBifurcationGeom = (SecondaryBifurcationCurveGeom) getAbstractGeom();
+//        Iterator geomListIterator = secondaryBifurcationGeom.getBifurcationSegmentsIterator();
+//        while (geomListIterator.hasNext()) {
+//            RealSegGeom geomObj = (RealSegGeom) geomListIterator.next();
+//            try {
+//                viewList_.add(geomObj.createView(getViewingTransform()));
+//            } catch (DimMismatchEx dex) {
+//                dex.printStackTrace();
+//            }
+//        }
+//
+//    }
 }

@@ -180,52 +180,7 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene implements Observer 
         return getName() + " " + getSpace().toString() + " " + state_.toString();
     }
 
-    public void clearGeometrySelection() {
-        for (int i = 0; i < geomList_.size(); i++) {
-            highlightGeometry(i);
-            RpGeometry geometry = (RpGeometry) geomList_.get(i);
-            geometry.viewingAttr().setSelected(false);
-            geometry.viewingAttr().setHighLight(true);
-        }
-    }
-
-    public void highlightGeometry(int index) {
-
-        for (int i = 0; i < geomList_.size(); i++) {
-
-            if (i == index) {
-                MultiGeometry geometry = (MultiGeometry) geomList_.get(i);
-                if (geometry instanceof SegmentedCurveGeom) {
-                    SegmentedCurveGeom segGeom = (SegmentedCurveGeom) geometry;
-                    segGeom.viewingAttr().setSelected(true);
-                    segGeom.highLight();
-                }
-
-                if (geometry instanceof MultiPolyLine) {
-                    MultiPolyLine poly = (MultiPolyLine) geometry;
-                    poly.viewingAttr().setSelected(true);
-                    poly.highLight();
-                }
-
-
-                if (geometry instanceof BifurcationCurveGeom) {
-                    BifurcationCurveGeom segGeom = (BifurcationCurveGeom) geometry;
-                    segGeom.viewingAttr().setSelected(true);
-                    segGeom.highLight();
-                }
-
-
-                if (geometry instanceof StationaryPointGeom) {
-                    StationaryPointGeom pointGeom = (StationaryPointGeom) geometry;
-                    pointGeom.viewingAttr().setSelected(true);
-                    pointGeom.highLight();
-                }
-
-            }
-        }
-
-        UIController.instance().panelsUpdate();
-    }
+    
 
     public UserInputTable getUserInputTable() {
         return userInputTable_;
@@ -325,44 +280,7 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene implements Observer 
         return closestGeometry_;
     }
 
-    public void lowlightGeometry(int index) {
-
-        for (int i = 0; i < geomList_.size(); i++) {
-
-            if (i == index) {
-                MultiGeometry geometry = (MultiGeometry) geomList_.get(i);
-                if (geometry instanceof SegmentedCurveGeom) {
-                    SegmentedCurveGeom segGeom = (SegmentedCurveGeom) geometry;
-                    //segGeom.getRealSegIterator();
-                    segGeom.viewingAttr().setSelected(false);
-                    segGeom.lowLight();
-                }
-
-                if (geometry instanceof MultiPolyLine) {
-                    MultiPolyLine poly = (MultiPolyLine) geometry;
-                    poly.viewingAttr().setSelected(false);
-                    poly.lowLight();
-                }
-                if (geometry instanceof BifurcationCurveGeom) {
-                    BifurcationCurveGeom segGeom = (BifurcationCurveGeom) geometry;
-                    segGeom.viewingAttr().setSelected(false);
-                    segGeom.lowLight();
-                }
-
-
-                if (geometry instanceof StationaryPointGeom) {
-                    StationaryPointGeom pointGeom = (StationaryPointGeom) geometry;
-                    pointGeom.viewingAttr().setSelected(false);
-                    pointGeom.lowLight();
-                }
-
-
-            }
-        }
-
-        UIController.instance().panelsUpdate();
-    }
-
+   
     @Override
     public void update() {
 

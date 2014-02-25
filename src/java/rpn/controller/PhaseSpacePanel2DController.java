@@ -8,7 +8,7 @@ package rpn.controller;
 import wave.multid.graphs.ViewPlane;
 import wave.multid.view.Viewing2DTransform;
 import wave.multid.view.Viewing3DTransform;
-import wave.multid.graphs.Iso2EquiTransform;
+
 import wave.multid.graphs.dcViewport;
 import rpn.RPnPhaseSpacePanel;
 import java.util.ArrayList;
@@ -29,6 +29,8 @@ import rpnumerics.RPnCurve;
 import wave.multid.Coords2D;
 import wave.multid.CoordsArray;
 import wave.multid.Space;
+import wave.multid.graphs.Iso2EquiTransform;
+
 import wave.multid.view.ViewingTransform;
 import wave.util.RealVector;
 
@@ -164,7 +166,7 @@ public class PhaseSpacePanel2DController extends ComponentUI implements PhaseSpa
 
                         Iso2EquiTransform newIsoTransform = new Iso2EquiTransform(viewTrans.projectionMap(),
                                 vPlane);
-                        panel.scene().setViewingTransform(newIsoTransform);
+//                        panel.scene().setViewingTransform(newIsoTransform);
 
                     } catch (ClassCastException ex) {
                         Viewing2DTransform vt = (Viewing2DTransform) panel.scene().getViewingTransform();

@@ -148,7 +148,7 @@ int StoneFluxFunction::jet(const WaveState &w, JetMatrix &m, int degree) const {
                double zggoo =( ( lk * ld2ko_dso2 - lko * ld2k_dso2 ) / lk  -  2. * ldk_dso * zgodso )/ lk;
                
                
-               cout<<zgfww <<" "<<  zgfwo <<" " << zgfoo <<" " <<zggww <<" "<<zggwo <<" "<< zggoo <<endl;
+//               cout<<zgfww <<" "<<  zgfwo <<" " << zgfoo <<" " <<zggww <<" "<<zggwo <<" "<< zggoo <<endl;
           
                double dtwdww = ld2ko_dsw2*(grw - gro) + (grw - grg)*ld2kg_dsw2;
                double dtwdwo = ld2ko_dswso*(grw - gro) + (grw - grg)*ld2kg_dswso;
@@ -159,7 +159,7 @@ int StoneFluxFunction::jet(const WaveState &w, JetMatrix &m, int degree) const {
                
                
                
-               cout << dtwdww <<" "<<dtwdwo << " "<< dtwdoo <<" "<< dtodww <<" "<<dtodwo <<" "<< dtodoo<<endl;
+//               cout << dtwdww <<" "<<dtwdwo << " "<< dtwdoo <<" "<< dtodww <<" "<<dtodwo <<" "<< dtodoo<<endl;
                
                        
                        

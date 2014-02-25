@@ -6,6 +6,7 @@
 package rpn.component;
 
 import java.awt.Color;
+import java.util.List;
 import wave.multid.view.*;
 import wave.multid.*;
 
@@ -18,7 +19,7 @@ public class BoundaryExtensionCurveGeom extends BifurcationCurveGeom {//implemen
 
   public static Color COLOR = new Color(0, 153, 153);
 
-    public BoundaryExtensionCurveGeom(RealSegGeom[] segArray, BifurcationCurveGeomFactory factory) {
+    public BoundaryExtensionCurveGeom(List<BifurcationCurveBranchGeom> segArray, BifurcationCurveGeomFactory factory) {
         super(segArray, factory);
     }
 

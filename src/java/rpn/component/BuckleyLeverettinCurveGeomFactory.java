@@ -23,21 +23,21 @@ public class BuckleyLeverettinCurveGeomFactory extends BifurcationCurveGeomFacto
     //
     // Methods
     //
-    @Override
-    public RpGeometry createGeomFromSource() {
-
-        BuckleyLeverettInflectionCurve curve = (BuckleyLeverettInflectionCurve) geomSource();
-
-        // assuming a container with HugoniotSegment elements
-        int resultSize = curve.segments().size();
-
-        RealSegGeom[] hugoniotArray = new RealSegGeom[resultSize];
-        for (int i = 0; i < resultSize; i++) {
-            hugoniotArray[i] = new RealSegGeom((RealSegment) curve.segments().get(i));
-        }
-        return new BuckleyLeverettinInflectionGeom(hugoniotArray, this);
-
-    }
+//    @Override
+//    public RpGeometry createGeomFromSource() {
+//
+//        BuckleyLeverettInflectionCurve curve = (BuckleyLeverettInflectionCurve) geomSource();
+//
+//        // assuming a container with HugoniotSegment elements
+//        int resultSize = curve.segments().size();
+//
+//        RealSegGeom[] hugoniotArray = new RealSegGeom[resultSize];
+//        for (int i = 0; i < resultSize; i++) {
+//            hugoniotArray[i] = new RealSegGeom((RealSegment) curve.segments().get(i));
+//        }
+//        return new BuckleyLeverettinInflectionGeom(hugoniotArray, this);
+//
+//    }
 
     @Override
     public String toMatlab(int curveIndex) {

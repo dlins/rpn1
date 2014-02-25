@@ -5,6 +5,7 @@
  */
 package rpn.component;
 
+import java.util.List;
 import wave.multid.view.*;
 import wave.multid.*;
 import wave.multid.model.MultiPoint;
@@ -17,10 +18,10 @@ public class SecondaryBifurcationCurveGeom extends BifurcationCurveGeom {
     //
 
     public MultiPoint umbilicPoint_;
-    public SecondaryBifurcationCurveGeom(RealSegGeom[] segArray, MultiPoint umbilicPoint,BifurcationCurveGeomFactory factory) {
+    public SecondaryBifurcationCurveGeom(List<BifurcationCurveBranchGeom> segArray, MultiPoint umbilicPoint,BifurcationCurveGeomFactory factory) {
 
         super(segArray, factory);
-        System.out.println("Tamanho de segArray em SecondaryBifurcationGeom : " +segArray.length);
+
         umbilicPoint_=umbilicPoint;
         
     }

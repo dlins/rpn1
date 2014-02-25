@@ -1,16 +1,14 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ *
+ * Instituto de Matematica Pura e Aplicada - IMPA
+ * Departamento de Dinamica dos Fluidos
+ *
  */
 
 package rpn.component;
 
 import java.util.List;
 
-/**
- *
- * @author moreira
- */
 public interface WaveCurveBranchGeom {
 
     List<WaveCurveBranchGeom> getOrbitGeom();

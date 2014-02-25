@@ -627,8 +627,8 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         rightCurvesList.addObserver(DomainSelectionCommand.instance());
 
         curvesList.update();
-        leftCurvesList.update();
-        rightCurvesList.update();
+//        leftCurvesList.update();
+//        rightCurvesList.update();
 
     }
 

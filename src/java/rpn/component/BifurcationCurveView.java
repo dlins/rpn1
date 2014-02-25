@@ -11,7 +11,7 @@ import wave.multid.view.ViewingTransform;
 
 public class BifurcationCurveView extends GeomObjView {
 
-    public BifurcationCurveView(BifurcationCurveGeom abstractGeom,
+    public BifurcationCurveView(BifurcationCurveBranchGeom abstractGeom,
             ViewingTransform transf,
             ViewingAttr viewAttr) throws DimMismatchEx {
 
@@ -23,9 +23,9 @@ public class BifurcationCurveView extends GeomObjView {
     //Original update method
     public void update() {
         viewList_.clear();
-        Iterator geomListIterator = ((BifurcationCurveGeom) getAbstractGeom()).getBifurcationSegmentsIterator();
+        Iterator geomListIterator = ((BifurcationCurveBranchGeom) getAbstractGeom()).getBifurcationListGeom().iterator();
         while (geomListIterator.hasNext()) {
-            RealSegGeom geomObj = (RealSegGeom) geomListIterator.next();
+            BifurcationCurveBranchGeom geomObj = (BifurcationCurveBranchGeom) geomListIterator.next();
             try {
                 viewList_.add(geomObj.createView(getViewingTransform()));
             } catch (DimMismatchEx dex) {

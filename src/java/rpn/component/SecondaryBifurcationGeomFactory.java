@@ -21,49 +21,49 @@ public class SecondaryBifurcationGeomFactory extends BifurcationCurveGeomFactory
 
     }
 
-    @Override
-    public RpGeometry createGeomFromSource() {
-
-        SecondaryBifurcationCurve curve = (SecondaryBifurcationCurve) geomSource();
-
-        RealSegGeom[] bifurcationArray = new RealSegGeom[curve.segments().size()];
-
-        RealSegGeom[] bifurcationArrayRight = new RealSegGeom[curve.rightSegments().size()];
-        RealSegGeom[] bifurcationArrayLeft = new RealSegGeom[curve.leftSegments().size()];
-
-
-
-        int i = 0;
-        for (Object realSegment : curve.rightSegments()) {
-            bifurcationArrayRight[i] = new RealSegGeom((RealSegment) realSegment, rightViewingAttr());
-            bifurcationArray[i] = bifurcationArrayRight[i];
-
-            i++;
-        }
-
-
-        int j = 0;
-        for (Object realSegment : curve.leftSegments()) {
-            bifurcationArrayLeft[j] = new RealSegGeom((RealSegment) realSegment, leftViewingAttr());
-            bifurcationArray[i + j] = bifurcationArrayLeft[j];
-            j++;
-        }
-      
-
-
-        RealVector umbilicPointVector = curve.getUmbilicPoint();
-        MultiPoint umbilicPoint=null;
-        if (umbilicPointVector != null) {
-
-         CoordsArray   coordsArray = new CoordsArray(umbilicPointVector);
-            umbilicPoint = new MultiPoint(coordsArray, new ViewingAttr(Color.blue));
-        }
-
-
-
-        return new SecondaryBifurcationCurveGeom(bifurcationArray, umbilicPoint, this);
-
-    }
+//    @Override
+//    public RpGeometry createGeomFromSource() {
+//
+//        SecondaryBifurcationCurve curve = (SecondaryBifurcationCurve) geomSource();
+//
+//        RealSegGeom[] bifurcationArray = new RealSegGeom[curve.segments().size()];
+//
+//        RealSegGeom[] bifurcationArrayRight = new RealSegGeom[curve.rightSegments().size()];
+//        RealSegGeom[] bifurcationArrayLeft = new RealSegGeom[curve.leftSegments().size()];
+//
+//
+//
+//        int i = 0;
+//        for (Object realSegment : curve.rightSegments()) {
+//            bifurcationArrayRight[i] = new RealSegGeom((RealSegment) realSegment, rightViewingAttr());
+//            bifurcationArray[i] = bifurcationArrayRight[i];
+//
+//            i++;
+//        }
+//
+//
+//        int j = 0;
+//        for (Object realSegment : curve.leftSegments()) {
+//            bifurcationArrayLeft[j] = new RealSegGeom((RealSegment) realSegment, leftViewingAttr());
+//            bifurcationArray[i + j] = bifurcationArrayLeft[j];
+//            j++;
+//        }
+//      
+//
+//
+//        RealVector umbilicPointVector = curve.getUmbilicPoint();
+//        MultiPoint umbilicPoint=null;
+//        if (umbilicPointVector != null) {
+//
+//         CoordsArray   coordsArray = new CoordsArray(umbilicPointVector);
+//            umbilicPoint = new MultiPoint(coordsArray, new ViewingAttr(Color.blue));
+//        }
+//
+//
+//
+//        return new SecondaryBifurcationCurveGeom(bifurcationArray, umbilicPoint, this);
+//
+//    }
 
     @Override
     void updateGeomSource(List<Area> areaListToRefine) {

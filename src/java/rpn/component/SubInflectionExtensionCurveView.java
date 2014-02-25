@@ -10,7 +10,7 @@ import wave.multid.view.*;
 import wave.multid.DimMismatchEx;
 import java.util.Iterator;
 
-public class SubInflectionExtensionCurveView extends GeomObjView {
+public class SubInflectionExtensionCurveView extends BifurcationCurveView {
   //
   // Members
   //
@@ -27,25 +27,25 @@ public class SubInflectionExtensionCurveView extends GeomObjView {
   }
 
 
-  //Original update method
-
-  public void update() {
-
-
-    viewList_.clear();
-    Iterator geomListIterator = ( (SubInflectionExtensionCurveGeom) getAbstractGeom()).getBifurcationSegmentsIterator();
-    while (geomListIterator.hasNext()) {
-      RealSegGeom geomObj = (RealSegGeom) geomListIterator.next();
-      geomObj.viewingAttr().setColor(SubInflectionExtensionCurveGeom.COLOR);
-
-      try {
-        viewList_.add(geomObj.createView(getViewingTransform()));
-      }
-      catch (DimMismatchEx dex) {
-        dex.printStackTrace();
-      }
-    }
-  }
+//  //Original update method
+//
+//  public void update() {
+//
+//
+//    viewList_.clear();
+//    Iterator geomListIterator = ( (SubInflectionExtensionCurveGeom) getAbstractGeom()).getBifurcationSegmentsIterator();
+//    while (geomListIterator.hasNext()) {
+//      RealSegGeom geomObj = (RealSegGeom) geomListIterator.next();
+//      geomObj.viewingAttr().setColor(SubInflectionExtensionCurveGeom.COLOR);
+//
+//      try {
+//        viewList_.add(geomObj.createView(getViewingTransform()));
+//      }
+//      catch (DimMismatchEx dex) {
+//        dex.printStackTrace();
+//      }
+//    }
+//  }
 
 
 }

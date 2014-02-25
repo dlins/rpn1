@@ -14,32 +14,38 @@ import java.util.Iterator;
 import java.util.List;
 import rpn.component.util.CorrespondenceMark;
 import rpn.component.util.GraphicsUtil;
-import rpnumerics.BifurcationCurve;
 import wave.multid.*;
 import wave.multid.map.Map;
 import wave.multid.model.AbstractPath;
 import wave.multid.model.AbstractPathIterator;
 import wave.multid.model.BoundingBox;
 import wave.multid.model.MultiGeometry;
+import wave.multid.model.MultiPolyLine;
 import wave.multid.view.*;
 import wave.util.RealSegment;
 import wave.util.RealVector;
 
-public class BifurcationCurveGeom extends BifurcationCurveBranchGeom implements MultiGeometry{
+public class BifurcationCurveGeomSide extends  BifurcationCurveBranchGeom implements MultiGeometry{
 
-    private RpGeomFactory factory_;
+    private final RpGeomFactory factory_;
     private ViewingAttr viewingAttr_;
+    private List<MultiPolyLine> segList_;
     private Space space_;
     private BoundingBox boundary_;
-//    private RpGeometry otherSide_;
-    private List<GraphicsUtil> annotationsList_;
+    private final List<GraphicsUtil> annotationsList_;
     private final List<BifurcationCurveBranchGeom> bifurcationGeomBranches_;
+    
+    private BifurcationCurveGeomSide otherSide_;
 
-    public BifurcationCurveGeom(List<BifurcationCurveBranchGeom> branches, BifurcationCurveGeomFactory factory) {
+    public BifurcationCurveGeomSide(RealSegGeom[] segArray, BifurcationCurveGeomFactory factory) {
 
-        viewingAttr_ = new ViewingAttr(Color.white);
+        viewingAttr_ = segArray[0].viewingAttr();
         annotationsList_ = new ArrayList<GraphicsUtil>();
-        bifurcationGeomBranches_ = branches;
+        bifurcationGeomBranches_ = new ArrayList<BifurcationCurveBranchGeom>();
+        segList_ = new ArrayList();
+        for (int i = 0; i < segArray.length; i++) {
+            segList_.add(segArray[i]);
+        }
         factory_ = factory;
         space_ = new Space("Auxiliar Space", rpnumerics.RPNUMERICS.domainDim());
         try {
@@ -52,16 +58,25 @@ public class BifurcationCurveGeom extends BifurcationCurveBranchGeom implements 
 
     // ************************************************
     public Iterator getRealSegIterator() {
-        return null;
+        return segList_.iterator();
     }
+
     // ************************************************
-
-    public GeomObjView createView(ViewingTransform transf) throws DimMismatchEx {
-        return new BifurcationCurveView(this, transf, viewingAttr());
+    public BifurcationCurveGeomSide getOtherSide() {
+        return otherSide_;
     }
 
-    public void addBranch(BifurcationCurveGeom branch) {
-        bifurcationGeomBranches_.add(branch);
+    public void setOtherSide (BifurcationCurveGeomSide otherSide) {
+        otherSide_ = otherSide;
+    }
+
+    
+    public GeomObjView createView(ViewingTransform transf) throws DimMismatchEx {
+        return new BifurcationCurveSideView(this, transf, viewingAttr());
+    }
+
+    public List<MultiPolyLine> getSegList() {
+        return segList_;
     }
 
     public RpGeomFactory geomFactory() {
@@ -82,16 +97,12 @@ public class BifurcationCurveGeom extends BifurcationCurveBranchGeom implements 
         return viewingAttr_;
     }
 
-//    public RpGeometry getOtherSide() {
-//        return otherSide_;
-//    }
-//
-//    public void setOtherSide(RpGeometry otherSide) {
-//        otherSide_ = otherSide;
-//    }
-//    public Iterator getBifurcationSegmentsIterator() {
-//        return segList_.iterator();
-//    }
+  
+
+    public Iterator getBifurcationSegmentsIterator() {
+        return segList_.iterator();
+    }
+
     public BoundingBox getBoundary() {
         return boundary_;
     }
@@ -114,7 +125,7 @@ public class BifurcationCurveGeom extends BifurcationCurveBranchGeom implements 
 
     @Override
     public void setVisible(boolean visible) {
-        for (BifurcationCurveBranchGeom object : getBifurcationListGeom()) {
+        for (MultiPolyLine object : segList_) {
             object.setVisible(visible);
         }
     }
@@ -173,59 +184,55 @@ public class BifurcationCurveGeom extends BifurcationCurveBranchGeom implements 
 
     }
 
-    @Override
-    public void showCorrespondentPoint(CoordsArray curvePoint,  ViewingTransform transform) {
+    public void showCorrespondentPoint(CoordsArray curvePoint, ViewingTransform transform) {
 
-        if (getCorrespondenceDirection() != BifurcationCurveBranchGeom.NONE) {
-            RealVector pointOnCurve = new RealVector(curvePoint.getCoords());
+        RealVector pointOnDomain = new RealVector(curvePoint.getCoords());
+        
+        BifurcationCurveGeomFactory factory = (BifurcationCurveGeomFactory)factory_;
 
-            BifurcationCurve bifurcationCurve = (BifurcationCurve) factory_.geomSource();
+        List<RealSegment> thisSegments = factory.segmentsList(this);
 
-            List<RealSegment> thisSegments = null;
-            List<RealSegment> otherSegments = null;
+        ClosestDistanceCalculator closestCalculator = new ClosestDistanceCalculator(thisSegments, pointOnDomain);
 
-            if (getCorrespondenceDirection() == BifurcationCurveBranchGeom.LEFTRIGHT) {
-                thisSegments = bifurcationCurve.leftSegments();
-                otherSegments = bifurcationCurve.rightSegments();
-            }
+        int segmentIndex = closestCalculator.getSegmentIndex();
+        
+        RealSegment thisSegment = thisSegments.get(segmentIndex);
 
-            if (getCorrespondenceDirection()== BifurcationCurveBranchGeom.RIGHTLEFT) {
-                thisSegments = bifurcationCurve.rightSegments();
-                otherSegments = bifurcationCurve.leftSegments();
-            }
+        RealVector thisMark = ClosestDistanceCalculator.convexCombination(thisSegment.p1(), thisSegment.p2(), closestCalculator.getAlpha());
+        
+        RealSegment otherSideSegment = factory.segmentsList(getOtherSide()).get(segmentIndex);
+        RealVector otherSideMark = ClosestDistanceCalculator.convexCombination(otherSideSegment.p1(), otherSideSegment.p2(), closestCalculator.getAlpha());
 
-            ClosestDistanceCalculator closestCalculator = new ClosestDistanceCalculator(thisSegments, pointOnCurve);
+        List<Object> wcObjectsLeft = new ArrayList();
 
-            int segmentIndex = closestCalculator.getSegmentIndex();
+        wcObjectsLeft.add(thisMark);
 
-            RealSegment leftSegment = thisSegments.get(segmentIndex);
-            RealSegment rightSegment = otherSegments.get(segmentIndex);
+        CorrespondenceMark testeLabelLeft = new CorrespondenceMark(wcObjectsLeft, transform, new ViewingAttr(Color.white));
 
-            RealVector mark1 = ClosestDistanceCalculator.convexCombination(leftSegment.p1(), leftSegment.p2(), closestCalculator.getAlpha());
-            RealVector mark2 = ClosestDistanceCalculator.convexCombination(rightSegment.p1(), rightSegment.p2(), closestCalculator.getAlpha());
+        addAnnotation(testeLabelLeft);
 
-            List<Object> wcObjectsLeft = new ArrayList();
+        List<Object> wcObjectsRight = new ArrayList();
 
-            wcObjectsLeft.add(mark1);
+        wcObjectsRight.add(otherSideMark);
 
-            CorrespondenceMark testeLabelLeft = new CorrespondenceMark(wcObjectsLeft, transform, new ViewingAttr(Color.white));
+        CorrespondenceMark testeLabelRight = new CorrespondenceMark(wcObjectsRight, transform, new ViewingAttr(Color.white));
+        getOtherSide().removeLastAnnotation();
+        getOtherSide().addAnnotation(testeLabelRight);
 
-            addAnnotation(testeLabelLeft);
 
-            List<Object> wcObjectsRight = new ArrayList();
-
-            wcObjectsRight.add(mark2);
-
-            CorrespondenceMark testeLabelRight = new CorrespondenceMark(wcObjectsRight, transform, new ViewingAttr(Color.white));
-
-            addAnnotation(testeLabelRight);
-        }
 
     }
 
     @Override
     public List<BifurcationCurveBranchGeom> getBifurcationListGeom() {
+
+        if (!bifurcationGeomBranches_.contains(this)) {
+            bifurcationGeomBranches_.add(this);
+        }
+
         return bifurcationGeomBranches_;
     }
+
+   
 
 }

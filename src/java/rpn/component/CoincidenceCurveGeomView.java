@@ -19,7 +19,7 @@ import wave.multid.view.ViewingAttr;
 import wave.multid.view.ViewingTransform;
 
 
-class CoincidenceCurveView extends GeomObjView{
+class CoincidenceCurveView extends BifurcationCurveView{
     //
   // Members
   //
@@ -35,23 +35,23 @@ class CoincidenceCurveView extends GeomObjView{
 
 
   //Original update method
-
-  public void update() {
-
-
-    viewList_.clear();
-    Iterator geomListIterator = ( (CoincidenceCurveGeom) getAbstractGeom()).getBifurcationSegmentsIterator();
-    while (geomListIterator.hasNext()) {
-      RealSegGeom geomObj = (RealSegGeom) geomListIterator.next();
-      geomObj.viewingAttr().setColor(CoincidenceCurveGeom.COLOR);
-      try {
-        viewList_.add(geomObj.createView(getViewingTransform()));
-      }
-      catch (DimMismatchEx dex) {
-        dex.printStackTrace();
-      }
-    }
-  }
+//
+//  public void update() {
+//
+//
+//    viewList_.clear();
+//    Iterator geomListIterator = ( (CoincidenceCurveGeom) getAbstractGeom()).getBifurcationSegmentsIterator();
+//    while (geomListIterator.hasNext()) {
+//      RealSegGeom geomObj = (RealSegGeom) geomListIterator.next();
+//      geomObj.viewingAttr().setColor(CoincidenceCurveGeom.COLOR);
+//      try {
+//        viewList_.add(geomObj.createView(getViewingTransform()));
+//      }
+//      catch (DimMismatchEx dex) {
+//        dex.printStackTrace();
+//      }
+//    }
+//  }
 
 
    

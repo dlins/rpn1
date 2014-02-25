@@ -7,6 +7,7 @@ package rpn.command;
 
 
 import java.awt.event.ActionEvent;
+import java.util.List;
 import javax.swing.AbstractButton;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -66,23 +67,16 @@ public class BifurcationPlotCommand extends RpModelPlotCommand {
     public void execute(RpGeomFactory factory) {
 
         super.execute(factory);
+        
+        BifurcationCurveGeomFactory bifurcationFactory = (BifurcationCurveGeomFactory)factory;
+        
+        BifurcationCurveGeom bifurcationGeom = (BifurcationCurveGeom) bifurcationFactory.geom();
+        List<BifurcationCurveBranchGeom> bifurcationListGeom = bifurcationGeom.getBifurcationListGeom();
+        
 
-        if (factory instanceof BifurcationCurveGeomFactory) {
-
-            RPnPhaseSpaceAbstraction leftPhaseSpace = RPnDataModule.LEFTPHASESPACE;
-            RPnPhaseSpaceAbstraction rightPhaseSpace = RPnDataModule.RIGHTPHASESPACE;
-
-            RpGeometry leftGeometry = ((BifurcationCurveGeomFactory)factory).leftGeom();
-            RpGeometry rightGeometry = ((BifurcationCurveGeomFactory)factory).rightGeom();
-
-            leftPhaseSpace.join(leftGeometry);
-            rightPhaseSpace.join(rightGeometry);           
-
-        } else {
-
-            throw new RuntimeException("Error ... not a Bifurcation curve factory...");
-
-        }
+        RPnDataModule.LEFTPHASESPACE.join(bifurcationListGeom.get(0));
+        RPnDataModule.RIGHTPHASESPACE.join(bifurcationListGeom.get(1));
+ 
     }
 
     

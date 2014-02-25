@@ -607,9 +607,9 @@ int RarefactionCurve::curve_from_boundary(const RealVector &initial_point, int s
         double dd;
 
         initialize(inner_point, curve_family, increase, temp, dd);
-        std::cout << "dd = " << dd << ", temp = " << temp << std::endl;
-
-        std::cout << "initial_direction = " << initial_direction << std::endl;
+//        std::cout << "dd = " << dd << ", temp = " << temp << std::endl;
+//
+//        std::cout << "initial_direction = " << initial_direction << std::endl;
     }
     else return RAREFACTION_ERROR;
 

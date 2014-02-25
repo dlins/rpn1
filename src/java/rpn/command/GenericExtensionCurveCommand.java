@@ -10,10 +10,15 @@ import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import javax.swing.JButton;
+import javax.swing.JMenuItem;
 import rpn.RPnPhaseSpaceAbstraction;
 import rpn.RPnPhaseSpacePanel;
+import static rpn.command.BifurcationPlotCommand.DESC_TEXT;
 import static rpn.command.RpModelPlotCommand.curveID_;
+import rpn.component.BifurcationCurveBranchGeom;
 import rpn.component.BifurcationCurveGeomFactory;
+import rpn.component.BifurcationCurveGeomSide;
 import rpn.component.InflectionCurveGeom;
 import rpn.component.InflectionCurveGeomFactory;
 import rpn.component.RpCalcBasedGeomFactory;
@@ -40,7 +45,7 @@ import wave.util.RealVector;
  *
  * @author moreira
  */
-public class GenericExtensionCurveCommand extends RpModelConfigChangeCommand {
+public class GenericExtensionCurveCommand extends BifurcationPlotCommand {
     
     static public final String DESC_TEXT = "Extension Curve";
     //
@@ -55,7 +60,8 @@ public class GenericExtensionCurveCommand extends RpModelConfigChangeCommand {
     // Constructors
     //
     protected GenericExtensionCurveCommand() {
-        super(DESC_TEXT);
+
+        super(DESC_TEXT, null, new JMenuItem(DESC_TEXT));
         imageSelection_ = new ArrayList<MultiPolygon>();
     }
     
@@ -72,25 +78,10 @@ public class GenericExtensionCurveCommand extends RpModelConfigChangeCommand {
             geometry = extendsWholeCurve(UIController.instance().getSelectedGeometriesList().get(0));
         }
 
-//            UIController.instance().getActivePhaseSpace().join(geometry);
-        RPnDataModule.PHASESPACE.join(geometry);
-        RPnPhaseSpaceAbstraction phaseSpace = RPnDataModule.PHASESPACE;//(RPnPhaseSpaceAbstraction) panelToProcess_.scene().getAbstractGeom();
         RpCalcBasedGeomFactory factory = (RpCalcBasedGeomFactory) geometry.geomFactory();
-        RPnCurve curve = (RPnCurve) factory.geomSource();
-        curve.setId(curveID_);
-        curveID_++;
         
-        Iterator oldValue = UIController.instance().getActivePhaseSpace().getGeomObjIterator();
-        PropertyChangeEvent event_ = new PropertyChangeEvent(this, UIController.instance().getActivePhaseSpace().getName(), oldValue, geometry);
-        
-        ArrayList<RealVector> inputArray = new ArrayList<RealVector>();
-        logCommand(new RpCommand(event_, inputArray));
-        
-        if (RPnNetworkStatus.instance().isOnline() && RPnNetworkStatus.instance().isMaster()) {
-            RPnNetworkStatus.instance().sendCommand(rpn.controller.ui.UndoActionController.instance().getLastCommand().toXML());
-        }
-        
-        phaseSpace.update();
+        super.execute(factory);
+
         
     }
     
