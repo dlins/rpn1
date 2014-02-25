@@ -25,21 +25,21 @@ public class BoundaryExtensionCurveGeomFactory extends BifurcationCurveGeomFacto
     //
     // Methods
     //
-    @Override
-    public RpGeometry createGeomFromSource() {
-
-        BoundaryExtensionCurve curve = (BoundaryExtensionCurve) geomSource();
-
-        int resultSize = curve.segments().size();
-
-        RealSegGeom[] leftBifurcationSegArray = new RealSegGeom[resultSize];
-        for (int i = 0; i < resultSize; i++) {
-            leftBifurcationSegArray[i] = new RealSegGeom((RealSegment) curve.segments().get(i), viewAtt_);
-        }
-
-        return new BoundaryExtensionCurveGeom(leftBifurcationSegArray, this);
-
-    }
+//    @Override
+//    public RpGeometry createGeomFromSource() {
+//
+//        BoundaryExtensionCurve curve = (BoundaryExtensionCurve) geomSource();
+//
+//        int resultSize = curve.segments().size();
+//
+//        RealSegGeom[] leftBifurcationSegArray = new RealSegGeom[resultSize];
+//        for (int i = 0; i < resultSize; i++) {
+//            leftBifurcationSegArray[i] = new RealSegGeom((RealSegment) curve.segments().get(i), viewAtt_);
+//        }
+//
+//        return new BoundaryExtensionCurveGeom(leftBifurcationSegArray, this);
+//
+//    }
 
 
 }

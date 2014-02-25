@@ -6,14 +6,8 @@
 package rpn.command;
 
 import java.awt.event.ActionEvent;
-import java.beans.PropertyChangeEvent;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Vector;
 import javax.swing.JButton;
-import rpn.RPnPhaseSpaceAbstraction;
 import rpn.component.*;
-import rpn.configuration.Configuration;
 import rpn.controller.ui.UIController;
 import rpn.controller.ui.UI_ACTION_SELECTED;
 import rpn.parser.RPnDataModule;
@@ -59,7 +53,6 @@ public class InflectionPlotCommand extends BifurcationPlotCommand {
 
         InflectionCurveGeomFactory factory = new InflectionCurveGeomFactory(RPNUMERICS.createInflectionCurveCalc());
         execute(factory);
-
     }
 
     static public InflectionPlotCommand instance() {

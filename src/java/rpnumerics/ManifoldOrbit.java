@@ -37,7 +37,7 @@ public class ManifoldOrbit extends RPnCurve {
     // Constructor
     //
     public ManifoldOrbit(StationaryPoint stationaryPoint, PhasePoint firstPoint, Orbit orbit, int timeDirection) {
-        super(MultidAdapter.converseCoordsArrayToRealSegments(MultidAdapter.converseOrbitPointsToCoordsArray(orbit.getPoints())), new ViewingAttr(Color.ORANGE));
+        super(MultidAdapter.converseCoordsArrayToRealSegments(MultidAdapter.converseOrbitPointsToCoordsArray(orbit.getPoints())));
         stationaryPoint_ = new StationaryPoint(stationaryPoint);
         orbit_ = orbit;
         firstPoint_ = firstPoint;
@@ -424,6 +424,11 @@ public class ManifoldOrbit extends RPnCurve {
         return buffer.toString();
 
 
+    }
+
+    @Override
+    public String getInfo() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
   
 }

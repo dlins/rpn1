@@ -5,6 +5,7 @@
 
 package rpn;
 
+import rpn.ui.physics.RPnSubject;
 import wave.util.RealVector;
 
 /**

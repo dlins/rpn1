@@ -38,7 +38,7 @@ public class SegmentedCurve extends RPnCurve implements RpSolution {
 
     public SegmentedCurve(List<? extends RealSegment> segmentsList) {
 //        super(coordsArrayFromRealSegments(segmentsList), new ViewingAttr(Color.red));
-        super(segmentsList, new ViewingAttr(Color.red));
+        super(segmentsList);
         segments_ = segmentsList;
     }
 
@@ -517,6 +517,11 @@ public class SegmentedCurve extends RPnCurve implements RpSolution {
     //
     public List segments() {
         return segments_;
+    }
+
+    @Override
+    public String getInfo() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

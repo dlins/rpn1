@@ -101,7 +101,21 @@ public final class OrbitPoint extends PhasePoint {
     //
     // Methods
     //
-   
+    @Override
+   public boolean equals(Object obj){
+
+       if(!(obj instanceof OrbitPoint))
+           return false;
+       OrbitPoint orbitPoint = (OrbitPoint)obj;
+       return (orbitPoint.getCoords().equals(getCoords())) && orbitPoint.lambda_==lambda_;
+   }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 43 * hash + (int) (Double.doubleToLongBits(this.lambda_) ^ (Double.doubleToLongBits(this.lambda_) >>> 32));
+        return hash;
+    }
 
     @Override
     public String toXML() {

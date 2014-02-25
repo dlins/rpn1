@@ -53,7 +53,6 @@ import rpn.controller.ui.CLASSIFIERAGENT_CONFIG;
 import rpn.controller.ui.UIController;
 import rpn.controller.ui.VELOCITYAGENT_CONFIG;
 import rpn.message.RPnNetworkStatus;
-import rpn.parser.RPnDataModule;
 import wave.multid.DimMismatchEx;
 import wave.multid.model.MultiGeometryImpl;
 import wave.multid.model.MultiPolygon;
@@ -66,7 +65,7 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
     //*** alterei aqui  (Leandro)
     static public Color DEFAULT_BOUNDARY_COLOR = Color.gray;
     static public Color DEFAULT_BACKGROUND_COLOR = Color.black;
-    static public Color DEFAULT_POINTMARK_COLOR = Color.white;
+    static public Color DEFAULT_POINTMARK_COLOR = Color.red;
     //***
     public static int myH_;                                          //** declarei isso    (Leandro)
     public static int myW_;                                          //** declarei isso    (Leandro)
@@ -184,6 +183,8 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
 
 
         graphicsUtilList_.add(gu);
+
+
     }
 
     public boolean isPhysicalBoundarySelected() {
@@ -243,7 +244,7 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
     }
 
     public void setLastGraphicsUtil(GraphicsUtil lastGraphicsUtil) {
-       
+
 
         if (graphicsUtilList_.isEmpty()) {
             graphicsUtilList_.add(lastGraphicsUtil);
@@ -391,25 +392,25 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
         for (GraphicsUtil graphicUtil : graphicsUtilList_) {
 
             // ------------
-            if (graphicUtil instanceof LinePlotted) {
-                String typeStr = getCastedUI().getTypeString().get(i);
-                String velStr = getCastedUI().getVelocityString().get(i);
-                i++;
-                Line2D.Double line = (Line2D.Double) graphicUtil.createShape();
-                Rectangle2D boundsType = metrics.getStringBounds(typeStr, null);
-                Rectangle2D boundsVel = metrics.getStringBounds(velStr, null);
-                int typeWidth = (int) boundsType.getWidth();
-                int velWidth = (int) boundsVel.getWidth();
-
-                if (line.x1 < line.x2) {
-                    g.drawString(typeStr, (int) (line.x2 + 5), (int) (line.y2 + 5));
-                    g.drawString(velStr, (int) (line.x2 + 5), (int) (line.y2 + 5));
-                } else {
-                    g.drawString(typeStr, (int) (line.x2 - (typeWidth + 2)), (int) (line.y2 + 5));
-                    g.drawString(velStr, (int) (line.x2 - (velWidth + 2)), (int) (line.y2 + 5));
-                }
-
-            }
+//            if (graphicUtil instanceof LinePlotted) {
+////                String typeStr = getCastedUI().getTypeString().get(i);
+////                String velStr = getCastedUI().getVelocityString().get(i);
+//                i++;
+//                Line2D.Double line = (Line2D.Double) graphicUtil.createShape();
+//                Rectangle2D boundsType = metrics.getStringBounds(typeStr, null);
+//                Rectangle2D boundsVel = metrics.getStringBounds(velStr, null);
+//                int typeWidth = (int) boundsType.getWidth();
+//                int velWidth = (int) boundsVel.getWidth();
+//
+//                if (line.x1 < line.x2) {
+//                    g.drawString(typeStr, (int) (line.x2 + 5), (int) (line.y2 + 5));
+//                    g.drawString(velStr, (int) (line.x2 + 5), (int) (line.y2 + 5));
+//                } else {
+//                    g.drawString(typeStr, (int) (line.x2 - (typeWidth + 2)), (int) (line.y2 + 5));
+//                    g.drawString(velStr, (int) (line.x2 - (velWidth + 2)), (int) (line.y2 + 5));
+//                }
+//
+//            }
             // ------------
 
             graphicUtil.draw((Graphics2D) g);

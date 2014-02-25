@@ -23,23 +23,29 @@ public class WaveCurve extends RPnCurve implements WaveCurveBranch, RpSolution {
     private List<WaveCurveBranch> branchList_;
     private OrbitPoint referencePoint_;
     private double ALFA;
+    private List<OrbitPoint> points_;
+    
 
     public WaveCurve(int family, int increase) {
         
         family_ = family;
         direction_ = increase;
         branchList_ = new ArrayList<WaveCurveBranch>();
-
+        points_ = new ArrayList<OrbitPoint> ();
 
     }
 
     public void add(WaveCurveBranch branch) {
         branchList_.add(branch);
+        
+        points_.addAll(branch.getBranchPoints());
 
     }
 
     public void remove(WaveCurveBranch branch) {
         branchList_.remove(branch);
+        
+        points_.removeAll(branch.getBranchPoints());
     }
 
     public int[] getCurveTypes() {
@@ -59,25 +65,41 @@ public class WaveCurve extends RPnCurve implements WaveCurveBranch, RpSolution {
     }
 
     public List<WaveCurveBranch> getBranchsList() {
+        
+        return branchList_;
 
-        List<WaveCurveBranch> result = new ArrayList<WaveCurveBranch>();
-
-        for (WaveCurveBranch branch : branchList_) {
-            result.addAll(branch.getBranchsList());
-        }
-
-        return result;
+//        List<WaveCurveBranch> result = new ArrayList<WaveCurveBranch>();
+//
+//        for (WaveCurveBranch branch : branchList_) {
+//            result.addAll(branch.getBranchsList());
+//        }
+//
+//        return result;
     }
 
+    @Override
     public List<RealSegment> segments() {
 
         List temp = new ArrayList();
-
-        for (int i = 0; i < getBranchsList().size(); i++) {
-            for (int j = 0; j < ((FundamentalCurve) getBranchsList().get(i)).segments().size(); j++) {
-                temp.add(((FundamentalCurve) getBranchsList().get(i)).segments().get(j));
-            }
+        
+        for (WaveCurveBranch object : getBranchsList()) {
+            temp.addAll(object.segments());
         }
+        
+//        for (int i = 0; i < getBranchsList().size(); i++) {
+//            for (int j = 0; j < ((WaveCurveBranch) getBranchsList().get(i)).segments().size(); j++) {
+//                temp.add(((WaveCurveBranch) getBranchsList().get(i)).segments().get(j));
+//            }
+//        }
+
+        
+        
+        
+//        for (int i = 0; i < getBranchsList().size(); i++) {
+//            for (int j = 0; j < ((WaveCurveBranch) getBranchsList().get(i)).segments().size(); j++) {
+//                temp.add(((WaveCurveBranch) getBranchsList().get(i)).segments().get(j));
+//            }
+//        }
 
         return temp;
 
@@ -189,6 +211,38 @@ public class WaveCurve extends RPnCurve implements WaveCurveBranch, RpSolution {
     @Override
     public void setReferencePoint(OrbitPoint referencePoint) {
         referencePoint_=referencePoint;
+    }
+
+    @Override
+    public String getInfo() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<OrbitPoint> getBranchPoints() {
+        
+        return points_;
+
+    }
+
+    @Override
+
+
+    public double getSpeed(OrbitPoint point) {
+        
+        int segmentIndex = findClosestSegment(new RealVector(point.getCoords()));
+        
+
+        
+//        int indexOf = points_.indexOf(point);
+        OrbitPoint get = points_.get(segmentIndex);
+        
+//        System.out.println(" ")
+
+        
+        System.out.println("Indice do segmento"+ segmentIndex +" Valor de lambda: "+ get.getLambda());
+        
+        return get.getLambda();
     }
 
 

@@ -53,8 +53,11 @@ public class IntegralOrbitView extends WaveCurveOrbitGeomView {
             ((Arrow) (arrowList_.get(i))).paintComponent(g);
         }
 
+
         for (PointMark pointMark : inflectionPointsMark_) {
 
+            pointMark.getViewingAttr().setVisible(getViewingAttr().isVisible());
+            
             pointMark.draw(g);
 
         }
@@ -73,7 +76,6 @@ public class IntegralOrbitView extends WaveCurveOrbitGeomView {
         
             CoordsArray pointCoords = new CoordsArray(inflectionPoint);
             ViewingAttr viewAtt = new ViewingAttr(Color.white);
-
             MultiPoint point = new MultiPoint(pointCoords, viewAtt);
 
             PointMark pointMark = null;

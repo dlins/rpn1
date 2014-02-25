@@ -18,6 +18,8 @@ import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -40,7 +42,7 @@ import rpnumerics.SecondaryBifurcationCurve;
 import wave.multid.view.GeomObjView;
 import wave.util.RealVector;
 
-public class CurveRefineCommand extends RpModelConfigChangeCommand {
+public class CurveRefineCommand extends RpModelConfigChangeCommand implements Observer {
     //
     // Constants
     //
@@ -73,7 +75,6 @@ public class CurveRefineCommand extends RpModelConfigChangeCommand {
             processGeometry(curveToRefine_, panelToRefine_);
             RPnPhaseSpaceAbstraction phaseSpace = (RPnPhaseSpaceAbstraction) panelToRefine_.scene().getAbstractGeom();
             phaseSpace.update();
-//            panelToRefine_.clearAreaSelection();
             UIController.instance().clearAllAreas();
         }
 
@@ -228,6 +229,17 @@ public class CurveRefineCommand extends RpModelConfigChangeCommand {
         curveToRefine_ = phasSpaceGeometry;
         panelToRefine_ = panel;
 
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+        List<RpGeometry> selectedGeometriesList = UIController.instance().getSelectedGeometriesList();
+        if (selectedGeometriesList.size()==1){
+            
+            curveToRefine_=selectedGeometriesList.get(0);
+        }
+        
+        
     }
 
     private class ResolutionDialog extends RPnDialog {

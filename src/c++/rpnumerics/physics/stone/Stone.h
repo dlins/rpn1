@@ -23,7 +23,7 @@
 #include "HugoniotContinuation2D2D.h"
 #include "Hugoniot_Curve.h"
 #include "Double_Contact.h"
-#include "Shock.h"
+//#include "Shock.h"
 
 /*
  * ---------------------------------------------------------------

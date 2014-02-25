@@ -1,5 +1,7 @@
 #include "eigen.h"
-#include "Debug.h"
+
+#include "FluxFunction.h"
+#include "AccumulationFunction.h"
 
 // Initialize the value of the epsilon
 double Eigen::epsilon(1e-10);
@@ -116,9 +118,7 @@ void Eigen::fill_eigen(int n, struct eigenpair e[], double rp[], double ip[], do
                 i++;
             }
             else{              // This should never happen, but just in case...
-                if ( Debug::get_debug_level() == 5 ) {
-                    printf("Problem in fill_eigen! i = %d\n", i);
-                }
+                printf("Problem in fill_eigen! i = %d\n", i);
             }
         }
     }    
@@ -257,9 +257,7 @@ int Eigen::eig(int n, const double *A, const double *B, vector<eigenpair> &vge){
 
     // Success!
     if (info == 0) {
-        if ( Debug::get_debug_level() == 5 ) {
-            for (int i = 0; i < dim; i++) printf("alphar[%d] = %g, alphai[%d] = %g, beta[%d] = %g\n", i, alphar[i], i, alphai[i], i, beta[i]);
-        }
+//        for (int i = 0; i < dim; i++) printf("alphar[%d] = %g, alphai[%d] = %g, beta[%d] = %g\n", i, alphar[i], i, alphai[i], i, beta[i]);
 
         // Abort if some beta is smaller than sum_i(abs(alphar(i)) + abs(alphai(i))).
         double sum = 0;
@@ -354,9 +352,7 @@ int Eigen::eig(int n, const double *A, const double *B, vector<eigenpair> &vge){
                 pos++;
             }
             else {
-                if ( Debug::get_debug_level() == 5 ) {
-                    printf("Eigenvalue discarded: %d\n", pos);
-                }
+                //printf("Eigenvalue discarded: %d\n", pos);
             }
         }
 
@@ -371,7 +367,10 @@ int Eigen::eig(int n, const double *A, const double *B, int family, eigenpair &e
     std::vector<eigenpair> e;
     int info = eig(n, A, B, e);
     
-    if (info == SUCCESSFUL_PROCEDURE) ep = e[family];
+//    std::cout << "Eigen, new method. info = " << info << std::endl;
+    print_eigen(e);
+
+    if (info == 0) ep = e[family];
     
     return info;
 }
@@ -385,11 +384,23 @@ int Eigen::eig(int n, const double *A, const double *B, int family, RealVector &
     ee.push_back(e);
     print_eigen(ee);
     
-    if (info == SUCCESSFUL_PROCEDURE){
+    if (info == 0){
         r.resize(n);
         for (int i = 0; i < n; i++) r(i) = e.vrr[i];
     }
     
+    return info;
+}
+
+int Eigen::eig(const RealVector &p, const FluxFunction *f, const AccumulationFunction *g, std::vector<eigenpair> &e){
+    int n = p.size();
+
+    JetMatrix fm(n), gm(n);
+    f->jet(p, fm, 1);
+    g->jet(p, gm, 1);
+
+    int info = eig(n, fm.Jacobian().data(), gm.Jacobian().data(), e);
+
     return info;
 }
 
@@ -422,5 +433,37 @@ void Eigen::eps(double e){
 
 double Eigen::eps(void){
     return epsilon;
+}
+
+void Eigen::fill_eigenpairs(const FluxFunction *f, const AccumulationFunction *a, const RealVector &u, std::vector<eigenpair> &e){
+    // Find the eigenpairs...
+    //
+    int n = u.size();
+
+    DoubleMatrix JF(n, n);
+    DoubleMatrix JG(n, n);
+    f->fill_with_jet(n, u.components(), 1, 0, JF.data(), 0);
+    a->fill_with_jet(n, u.components(), 1, 0, JG.data(), 0);
+
+    // ...and fill the output.
+    //
+    eig(n, JF.data(), JG.data(), e);
+
+    return;
+}
+
+void Eigen::fill_eigenvalues(const FluxFunction *f, const AccumulationFunction *a, const RealVector &u, std::vector<double> &lambda){
+    // Find the eigenpairs...
+    //
+    std::vector<eigenpair> e;
+    fill_eigenpairs(f, a, u, e);
+
+    // ...and fill the output.
+    //
+    int n = e.size();
+    lambda.resize(n);
+    for (int i = 0; i < n; i++) lambda[i] = e[i].r;
+
+    return;
 }
 

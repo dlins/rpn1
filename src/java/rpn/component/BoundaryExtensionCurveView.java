@@ -7,10 +7,9 @@ package rpn.component;
 
 import wave.multid.view.*;
 import wave.multid.DimMismatchEx;
-import java.util.Iterator;
 
 public class BoundaryExtensionCurveView
-        extends GeomObjView {
+        extends BifurcationCurveView {
     //
     // Members
     //
@@ -31,22 +30,22 @@ public class BoundaryExtensionCurveView
 
   
 
-    //Original update method
-    public void update() {
-        viewList_.clear();
-
-        BoundaryExtensionCurveGeom extensionCurveGeom = (BoundaryExtensionCurveGeom)getAbstractGeom();
-       
-        Iterator geomListIterator = extensionCurveGeom.getBifurcationSegmentsIterator();
-
-        while (geomListIterator.hasNext()) {
-            RealSegGeom geomObj = (RealSegGeom) geomListIterator.next();
-            geomObj.viewingAttr().setColor(BoundaryExtensionCurveGeom.COLOR);
-            try {
-                viewList_.add(geomObj.createView(getViewingTransform()));
-            } catch (DimMismatchEx dex) {
-                dex.printStackTrace();
-            }
-        }
-    }
+//    //Original update method
+//    public void update() {
+//        viewList_.clear();
+//
+//        BoundaryExtensionCurveGeom extensionCurveGeom = (BoundaryExtensionCurveGeom)getAbstractGeom();
+//       
+//        Iterator geomListIterator = extensionCurveGeom.getBifurcationSegmentsIterator();
+//
+//        while (geomListIterator.hasNext()) {
+//            RealSegGeom geomObj = (RealSegGeom) geomListIterator.next();
+//            geomObj.viewingAttr().setColor(BoundaryExtensionCurveGeom.COLOR);
+//            try {
+//                viewList_.add(geomObj.createView(getViewingTransform()));
+//            } catch (DimMismatchEx dex) {
+//                dex.printStackTrace();
+//            }
+//        }
+//    }
 }

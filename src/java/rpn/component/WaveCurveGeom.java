@@ -5,10 +5,9 @@ import java.util.List;
 import wave.multid.*;
 import wave.multid.view.*;
 
-public class WaveCurveGeom extends OrbitGeom implements WaveCurveBranchGeom {
+public class WaveCurveGeom extends WaveCurveOrbitGeom implements WaveCurveBranchGeom {
 
     private List<WaveCurveBranchGeom> childWCBGeom;
-
 
     public WaveCurveGeom(CoordsArray[] vertices, WaveCurveGeomFactory factory) {
         super(vertices, factory);
@@ -17,11 +16,9 @@ public class WaveCurveGeom extends OrbitGeom implements WaveCurveBranchGeom {
 
     }
 
-
     public List<WaveCurveBranchGeom> getOrbitGeom() {
         return childWCBGeom;
     }
-
 
     public void add(WaveCurveBranchGeom bGeom) {
         childWCBGeom.add(bGeom);
@@ -31,18 +28,12 @@ public class WaveCurveGeom extends OrbitGeom implements WaveCurveBranchGeom {
         childWCBGeom.remove(bGeom);
     }
 
-
-
     @Override
     public GeomObjView createView(ViewingTransform transf) throws DimMismatchEx {
 
-        return new WaveCurveView(this, transf,viewingAttr());
-        
- 
+        return new WaveCurveView(this, transf, viewingAttr());
+
     }
 
 
-
-
-   
 }

@@ -8,16 +8,25 @@ package rpn;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.ItemSelectable;
+import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Observable;
 import java.util.Vector;
+import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -27,14 +36,14 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.WindowConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
-import rpn.command.RpCommand;
-import rpn.component.BifurcationCurveGeom;
+import javax.swing.table.TableModel;
+import rpn.component.BifurcationCurveBranchGeom;
 import rpn.component.RpCalcBasedGeomFactory;
-import rpn.component.RpGeomFactory;
 import rpn.component.RpGeometry;
 import rpn.controller.ui.UIController;
-import rpn.message.RPnNetworkStatus;
 import rpn.parser.RPnDataModule;
 import rpnumerics.HugoniotCurve;
 import rpnumerics.HugoniotCurveCalcND;
@@ -48,17 +57,21 @@ import rpnumerics.StationaryPointCalc;
 import wave.multid.model.MultiGeometry;
 import wave.util.RealVector;
 
-public class RPnCurvesList extends Observable implements ActionListener, ListSelectionListener {
+public class RPnCurvesList extends Observable implements ActionListener, ListSelectionListener, TableModelListener, MouseListener,ItemListener {
 
     private JScrollPane tablePanel_;
     private JToolBar toolBar_;
     private JTable curvesTable_;
-    private JButton selectNoneButton_, selectAllButton_, removeButton_, removeAreasButton_;
+    private JButton selectNoneButton_, selectAllButton_, removeButton_,
+            removeAreasButton_, setVisibleButton_;
     private DefaultTableModel tableModel_;
     private RPnPhaseSpaceAbstraction phaseSpace_;
     private JFrame frame_;
     private List<RpGeometry> selectedGeometries_;
     private List indexGeometries;
+    private List<RpGeometry> geometryList_;
+    private ArrayList<RpGeometry> geometriesToRemove_;
+    private int pressedRow;
 
     public RPnCurvesList(String title, RPnPhaseSpaceAbstraction phaseSpace) {
 
@@ -67,6 +80,7 @@ public class RPnCurvesList extends Observable implements ActionListener, ListSel
         phaseSpace_ = phaseSpace;
 
         selectedGeometries_ = new ArrayList();
+        geometryList_ = new ArrayList();
 
         frame_.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 
@@ -79,12 +93,11 @@ public class RPnCurvesList extends Observable implements ActionListener, ListSel
         frame_.setLocation((int) (width - (width * .55)), (int) (height - (height * .35)));
 
         tableModel_ = new RPnCurvesTableModel();
-
+        tableModel_.addTableModelListener(this);
 
         toolBar_ = new JToolBar();
 
         curvesTable_ = new JTable(tableModel_);
-
 
         curvesTable_.setRowSelectionAllowed(true);
         curvesTable_.setSelectionMode(javax.swing.ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
@@ -98,13 +111,16 @@ public class RPnCurvesList extends Observable implements ActionListener, ListSel
         selectAllButton_ = new JButton("Select All");
         selectAllButton_.setName("SelectAll");
 
-
-
         removeButton_ = new JButton("Remove");
         removeButton_.setName("Remove");
 
         removeAreasButton_ = new JButton("Remove All Areas");
         removeAreasButton_.setName("RemoveAreas");
+
+        setVisibleButton_ = new JButton("Visible");
+        setVisibleButton_.setName("Visible");
+
+        setVisibleButton_.addActionListener(this);
 
         selectNoneButton_.addActionListener(this);
         selectAllButton_.addActionListener(this);
@@ -117,16 +133,15 @@ public class RPnCurvesList extends Observable implements ActionListener, ListSel
 
         toolBar_.add(removeButton_);
         toolBar_.add(removeAreasButton_);
-
+        toolBar_.add(setVisibleButton_);
 
         toolBar_.setFloatable(false);
 
-
         curvesTable_.getColumnModel().getColumn(0).setPreferredWidth(20);
         curvesTable_.getColumnModel().getColumn(1).setPreferredWidth(80);
+        curvesTable_.addMouseListener(this);
 
         curvesTable_.getTableHeader().setReorderingAllowed(false);
-
 
         tablePanel_.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
@@ -134,18 +149,18 @@ public class RPnCurvesList extends Observable implements ActionListener, ListSel
         frame_.getContentPane().add(tablePanel_, BorderLayout.CENTER);
         frame_.getContentPane().add(toolBar_, BorderLayout.NORTH);
 
-
-
+        curvesTable_.getColumnModel().getColumn(2).setCellEditor(new DefaultCellEditor(new JCheckBox()));
+        curvesTable_.getColumnModel().getColumn(3).setCellEditor(new DefaultCellEditor(new JCheckBox()));
 
     }
 
     public void removeGeometrySide(MultiGeometry geometry) {
-        if (geometry instanceof BifurcationCurveGeom) {
-            BifurcationCurveGeom bifurcationGeom = (BifurcationCurveGeom) geometry;
-            phaseSpace_.remove(bifurcationGeom.getOtherSide());
-
-        }
-
+//        if (geometry instanceof BifurcationCurveGeom) {
+//            BifurcationCurveGeom bifurcationGeom = (BifurcationCurveGeom) geometry;
+//            phaseSpace_.remove(bifurcationGeom.getOtherSide());
+//            
+//        }
+//        
     }
 
     //**** alteracao do metodo original para testar (Leandro)
@@ -154,21 +169,16 @@ public class RPnCurvesList extends Observable implements ActionListener, ListSel
         RealVector userInput = new RealVector(2);
         String geometryName = "Poincare";
 
-
         if (geometry.geomFactory() instanceof RpCalcBasedGeomFactory) {
             RpCalcBasedGeomFactory factory = (RpCalcBasedGeomFactory) geometry.geomFactory();
 
             geometryName = factory.geomSource().getClass().getSimpleName();
-
-
             RpCalculation calc = factory.rpCalc();
-
 
             if (calc instanceof HugoniotCurveCalcND) {
                 HugoniotCurve curve = (HugoniotCurve) factory.geomSource();
                 userInput = curve.getXZero().getCoords();
             }
-
 
             if (calc instanceof PointLevelCalc) {
                 PointLevelCalc hCalc = (PointLevelCalc) calc;
@@ -181,23 +191,17 @@ public class RPnCurvesList extends Observable implements ActionListener, ListSel
 
             }
 
-
             if (calc instanceof RarefactionExtensionCalc) {
                 RarefactionExtensionCalc rarCalc = (RarefactionExtensionCalc) calc;
                 userInput = rarCalc.getStart();
             }
 
             if (calc instanceof StationaryPointCalc) {
-
-
                 StationaryPoint point = (StationaryPoint) factory.geomSource();
-
                 userInput = point.getCoords();
             }
 
-
         }
-
 
         Vector<Object> data = new Vector<Object>();
 
@@ -212,12 +216,25 @@ public class RPnCurvesList extends Observable implements ActionListener, ListSel
         }
 
         data.add(userInputString);
+        data.add(geometry.viewingAttr().isVisible());
+        data.add(geometry.viewingAttr().isSelected());
 
+        JComboBox comboBox = new JComboBox();
+
+
+        comboBox.addItem("Left to Right");
+        comboBox.addItem("Right to Left");
+        comboBox.addItem("None");
+        comboBox.setSelectedIndex(2);
+        data.add("None");
+        comboBox.addItemListener(this);
+        if (!(geometry instanceof BifurcationCurveBranchGeom)) {
+            comboBox.setEnabled(false);
+        }
+
+        curvesTable_.getColumnModel().getColumn(4).setCellEditor(new DefaultCellEditor(comboBox));
 
         tableModel_.addRow(data);
-
-
-
 
     }
 
@@ -289,7 +306,9 @@ public class RPnCurvesList extends Observable implements ActionListener, ListSel
     }
 
     public void actionPerformed(ActionEvent e) {
-
+        
+        
+        System.out.println("Comando: "+ e.paramString());
 
         if (e.getSource() instanceof JButton) {
             JButton button = (JButton) e.getSource();
@@ -302,23 +321,18 @@ public class RPnCurvesList extends Observable implements ActionListener, ListSel
                 curvesTable_.clearSelection();
             }
 
-
             if (button.getName().equals("RemoveAreas")) {
-
                 UIController.instance().clearAllAreas();
-
-//                Iterator<RPnPhaseSpacePanel> phaseSpacePanelIterator = UIController.instance().getInstalledPanelsIterator();
-//                
-//                while (phaseSpacePanelIterator.hasNext()) {
-//                    RPnPhaseSpacePanel rPnPhaseSpacePanel = phaseSpacePanelIterator.next();
-//                    rPnPhaseSpacePanel.clearAreaSelection();
-//                    rPnPhaseSpacePanel.repaint();
-//                    
-//                }
-
-
             }
 
+            if (button.getName().equals("Visible")) {
+
+                for (Object selectedIndex : indexGeometries) {
+                    Integer index = (Integer) selectedIndex;
+                    curvesTable_.getModel().setValueAt(true, index, 2);
+                }
+
+            }
 
             if (button.getName().equals("Remove")) {
 
@@ -334,13 +348,13 @@ public class RPnCurvesList extends Observable implements ActionListener, ListSel
                 }
                 // ---------------------------------------------------------------------------------                
 
-                for (MultiGeometry multiGeometry : selectedGeometries_) {
-                    RPnPhaseSpaceManager.instance().remove(phaseSpace_, multiGeometry);
+                for (RpGeometry geometry : geometriesToRemove_) {
+                    UIController.instance().getSelectedGeometriesList().remove(geometry);
+                    RPnPhaseSpaceManager.instance().remove(phaseSpace_, geometry);
+
                 }
 
             }
-
-
 
         }
 
@@ -366,10 +380,18 @@ public class RPnCurvesList extends Observable implements ActionListener, ListSel
     //*** metodo original
     public void update() {
         clear();
+        geometryList_.clear();
         Iterator iterator = phaseSpace_.getGeomObjIterator();
+
         while (iterator.hasNext()) {
-            addGeometry((RpGeometry) iterator.next());
+            RpGeometry geometry = (RpGeometry) iterator.next();
+            System.out.println("Geometria: " + geometry);
+            addGeometry(geometry);
+            geometryList_.add(geometry);
         }
+
+        setChanged();
+        notifyObservers();
 
     }
 
@@ -380,49 +402,32 @@ public class RPnCurvesList extends Observable implements ActionListener, ListSel
     @Override
     public void valueChanged(ListSelectionEvent e) {
 
-        List<RpGeometry> selectedGeometries = new ArrayList();
-
-        // ---
+        geometriesToRemove_ = new ArrayList();
         indexGeometries = new ArrayList();
-        // ---
 
         ListSelectionModel listSelectionModel = (ListSelectionModel) e.getSource();
 
         if (!e.getValueIsAdjusting()) {
 
-            if (listSelectionModel.isSelectionEmpty()) {
-                phaseSpace_.clearGeometrySelection();
+            int minIndex = listSelectionModel.getMinSelectionIndex();
+            int maxIndex = listSelectionModel.getMaxSelectionIndex();
 
-            } else {
-                for (int i = 0; i < curvesTable_.getRowCount(); i++) {
-                    phaseSpace_.lowlightGeometry(i);
-                }
-                int minIndex = listSelectionModel.getMinSelectionIndex();
-                int maxIndex = listSelectionModel.getMaxSelectionIndex();
-
-                for (int i = minIndex; i <= maxIndex; i++) {
-                    if (listSelectionModel.isSelectedIndex(i)) {
-                        int index = 0;
-                        Iterator it = phaseSpace_.getGeomObjIterator();
-                        while (it.hasNext()) {
-                            RpGeometry geometry = (RpGeometry) it.next();
-                            if (index == i) {
-                                phaseSpace_.highlightGeometry(index);
-                                selectedGeometries.add(geometry);
-                                indexGeometries.add(index);
-
-                            }
-                            index++;
+            for (int i = minIndex; i <= maxIndex; i++) {
+                if (listSelectionModel.isSelectedIndex(i)) {
+                    int index = 0;
+                    Iterator it = phaseSpace_.getGeomObjIterator();
+                    while (it.hasNext()) {
+                        RpGeometry geometry = (RpGeometry) it.next();
+                        if (index == i) {
+                            geometriesToRemove_.add(geometry);
+                            indexGeometries.add(index);
                         }
-
+                        index++;
                     }
 
                 }
-            }
-            setChanged();
-            notifyObservers(selectedGeometries);
-            selectedGeometries_ = selectedGeometries;
 
+            }
 
         }
 
@@ -431,4 +436,95 @@ public class RPnCurvesList extends Observable implements ActionListener, ListSel
     void setVisible(boolean show) {
         frame_.setVisible(show);
     }
+
+    @Override
+    public void tableChanged(TableModelEvent e) {
+
+        int row = e.getLastRow();
+        int column = e.getColumn();
+        TableModel model = (TableModel) e.getSource();
+        if (e.getType() == TableModelEvent.UPDATE) {
+            Object data = model.getValueAt(row, column);
+            RpGeometry geometry = geometryList_.get(row);
+
+            switch (column) {
+                case 2:
+
+                    Boolean visible = (Boolean) data;
+                    geometry.setVisible(visible);
+                    setChanged();
+                    notifyObservers();
+
+                    break;
+                case 3:
+                    Boolean selected = (Boolean) data;
+                    geometry.setSelected(selected);
+
+                    if (geometry.isSelected()) {
+                        UIController.instance().getSelectedGeometriesList().add(geometry);
+
+                    } else {
+                        UIController.instance().getSelectedGeometriesList().remove(geometry);
+                        curvesTable_.setValueAt(true, row, 2);
+
+                    }
+
+                    setChanged();
+                    notifyObservers();
+
+                    break;
+                default:
+
+            }
+
+        }
+
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+
+        Point eventPoint = e.getPoint();
+
+        pressedRow = curvesTable_.rowAtPoint(eventPoint);
+        System.out.println("Linha selecionada" + curvesTable_.rowAtPoint(eventPoint));
+
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+
+    }
+
+    @Override
+    public void itemStateChanged(ItemEvent e) {
+        
+        if (e.getSource() instanceof JComboBox) {
+            JComboBox combo = (JComboBox) e.getSource();
+
+                BifurcationCurveBranchGeom bifurcationCurveBranchGeom = (BifurcationCurveBranchGeom) geometryList_.get(pressedRow);
+                bifurcationCurveBranchGeom.setCorrespondenceDirection(combo.getSelectedIndex());
+
+            
+        }
+
+       System.out.println("Disparando item state changed"+e.getItem());
+    }
+
+   
 }

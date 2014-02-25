@@ -103,7 +103,18 @@ public class ComboBoxCreator extends UIComponentCreator {
             String selectedItem = (String) combo.getSelectedItem();
             
             
-            RPNUMERICS.setParamValue(configuration_.getName(), configurationParameter_, selectedItem);
+            if(selectedItem.equals("on curve")){
+                RPNUMERICS.setParamValue(configuration_.getName(), configurationParameter_, "0");
+            }
+            
+            else if(selectedItem.equals("on domain")){
+                RPNUMERICS.setParamValue(configuration_.getName(), configurationParameter_, "1");
+            }
+            else {
+                RPNUMERICS.setParamValue(configuration_.getName(), configurationParameter_, selectedItem);                
+            }
+            
+
 
            
         }

@@ -24,18 +24,18 @@ public class SubInflectionCurveGeomFactory extends BifurcationCurveGeomFactory {
     //
     // Methods
     //
-    @Override
-    public RpGeometry createGeomFromSource() {
-
-        SubInflectionCurve curve = (SubInflectionCurve) geomSource();
-
-        // assuming a container with HugoniotSegment elements
-        int resultSize = curve.segments().size();
-        RealSegGeom[] hugoniotArray = new RealSegGeom[resultSize];
-        for (int i = 0; i < resultSize; i++) {
-            hugoniotArray[i] = new RealSegGeom((RealSegment) curve.segments().get(i));
-        }
-        return new SubInflectionCurveGeom(hugoniotArray, this);
-
-    }
+//    @Override
+//    public RpGeometry createGeomFromSource() {
+//
+//        SubInflectionCurve curve = (SubInflectionCurve) geomSource();
+//
+//        // assuming a container with HugoniotSegment elements
+//        int resultSize = curve.segments().size();
+//        RealSegGeom[] hugoniotArray = new RealSegGeom[resultSize];
+//        for (int i = 0; i < resultSize; i++) {
+//            hugoniotArray[i] = new RealSegGeom((RealSegment) curve.segments().get(i));
+//        }
+//        return new SubInflectionCurveGeom(hugoniotArray, this);
+//
+//    }
 }

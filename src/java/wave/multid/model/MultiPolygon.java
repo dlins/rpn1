@@ -51,6 +51,8 @@ public class MultiPolygon extends MultiGeometryImpl {
     public GeomObjView createView(ViewingTransform transf) throws DimMismatchEx {
         return new PolyLine(this, transf, viewingAttr());
     }
+    
+    
 
     public boolean contains(CoordsArray point, RealMatrix2 vertices, RealMatrix2 norm) throws DimMismatchEx {
         int verticesNumCols = vertices.getNumCol();
@@ -149,5 +151,15 @@ public class MultiPolygon extends MultiGeometryImpl {
         
         
         
+    }
+
+    @Override
+    public boolean isVisible() {
+        return viewingAttr().isVisible();
+    }
+
+    @Override
+    public boolean isSelected() {
+        return viewingAttr().isSelected();
     }
 }

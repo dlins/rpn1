@@ -24,7 +24,7 @@ public class CompositePlotCommand extends RpModelPlotCommand {
     // Constructors/Initializers
     //
     protected CompositePlotCommand() {
-        super(DESC_TEXT, rpn.configuration.RPnConfig.HUGONIOT,new JToggleButton());
+        super(DESC_TEXT, rpn.configuration.RPnConfig.ORBIT_FWD,new JToggleButton());
     }
 
     public RpGeometry createRpGeometry(RealVector[] input) {

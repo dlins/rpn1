@@ -3,7 +3,7 @@
 
 #include <iostream>
 #include <fstream>
-#include <math.h>
+#include <cmath>
 #include <vector>
 #include <algorithm>
 
@@ -27,7 +27,9 @@ protected:
 public:
     RealVector(void);
     RealVector(int n);
-    RealVector(int n, double *);
+    RealVector(int n, const double *);
+    RealVector(int init, int size, double *);
+    RealVector(int init, int size, const RealVector &orig);
     RealVector(const RealVector &orig);
     RealVector(const RealVector *orig);
 
@@ -87,11 +89,17 @@ public:
     // Subtraction of two RealVectors
     friend RealVector operator-(const RealVector &x, const RealVector &y);
  
-    // Norm of a RealVector
+    // Euclidean norm of a RealVector
     friend double norm(const RealVector &x);
 
+    // Norm in L1.
+    friend double norm_L1(const RealVector &x);
+
+    // Norm in L \infty.
+    friend double norm_inf(const RealVector &x);
+
     // Normalize a RealVector
-    friend void normalize(RealVector &x);
+    friend RealVector normalize(RealVector &x);
 
     // Inner product of two RealVectors
     friend double operator*(const RealVector &x, const RealVector &y);

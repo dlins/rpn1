@@ -6,6 +6,8 @@
 package rpn.command;
 
 import java.awt.Font;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.awt.geom.AffineTransform;
 import java.util.Arrays;
 import javax.swing.event.ChangeEvent;
@@ -17,31 +19,52 @@ import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import javax.swing.ImageIcon;
 import java.util.Iterator;
+import java.util.Observable;
+import java.util.Observer;
 import javax.swing.AbstractButton;
+import rpn.RPnPhaseSpacePanel;
 import rpn.component.RpCalcBasedGeomFactory;
 import rpn.component.RpGeomFactory;
 import rpn.controller.ui.*;
 import rpnumerics.RPnCurve;
 import rpn.message.RPnNetworkStatus;
 
-public abstract class RpModelPlotCommand extends RpModelActionCommand {
+public abstract class RpModelPlotCommand extends RpModelActionCommand implements Observer {
 
     protected AbstractButton button_;
     public static int curveID_;
-
 
     public RpModelPlotCommand(String shortDesc, ImageIcon icon, AbstractButton button) {
 
         super(shortDesc, icon);
         button_ = button;
         button_.setAction(this);
-        button_.setFont(rpn.RPnConfigReader.MODELPLOT_BUTTON_FONT);
-
-        AffineTransform fontTransform = new AffineTransform();
-
-        fontTransform.scale(1.2, 1.2);
-        Font newFont = button_.getFont().deriveFont(fontTransform);
-        button_.setFont(newFont);
+        
+        String [] descriptionArray = shortDesc.split(" ");
+        
+        
+        StringBuilder buttonCaption = new StringBuilder();
+        
+        buttonCaption.append("<html>");
+        
+        for (String string : descriptionArray) {
+            buttonCaption.append(string);
+            buttonCaption.append("<br>");
+            
+        }
+        buttonCaption.append("</html>");
+        
+        button_.setText(buttonCaption.toString());
+        
+        
+        
+//        button_.setFont(rpn.RPnConfigReader.MODELPLOT_BUTTON_FONT);
+//
+//        AffineTransform fontTransform = new AffineTransform();
+//
+//        fontTransform.scale(1.5, 1.5);
+//        Font newFont = button_.getFont().deriveFont(fontTransform);
+//        button_.setFont(newFont);
 
         button_.setToolTipText(shortDesc);
 
@@ -50,6 +73,17 @@ public abstract class RpModelPlotCommand extends RpModelActionCommand {
 
 
     }
+    
+    public RpModelPlotCommand(String shortDesc, ImageIcon icon) {
+
+        super(shortDesc, icon);
+
+        putValue(Action.SHORT_DESCRIPTION, shortDesc);
+        setEnabled(false);
+
+
+    }
+    
 
     public void execute() {
 
@@ -60,18 +94,27 @@ public abstract class RpModelPlotCommand extends RpModelActionCommand {
 
         RpGeometry geometry = createRpGeometry(userInputList);
 
-        
+
 
         if (geometry == null) {
             return;
         }
-        
+
         RpCalcBasedGeomFactory factory = (RpCalcBasedGeomFactory) geometry.geomFactory();
 
         RPnCurve curve = (RPnCurve) factory.geomSource();
+       
+
+        
+        
+        
+        
+        
+        
+        
 
         curve.setId(curveID_);
-        curveID_++;                 
+        curveID_++;
 
         PropertyChangeEvent event_ = new PropertyChangeEvent(this, UIController.instance().getActivePhaseSpace().getName(), oldValue, geometry);
 
@@ -81,15 +124,16 @@ public abstract class RpModelPlotCommand extends RpModelActionCommand {
         setInput(inputArray);
 
         logCommand(new RpCommand(event_, inputArray));
-        
+
         RPnDataModule.PHASESPACE.join(geometry);
 
-        if (RPnNetworkStatus.instance().isOnline() && RPnNetworkStatus.instance().isMaster())
+        if (RPnNetworkStatus.instance().isOnline() && RPnNetworkStatus.instance().isMaster()) {
             RPnNetworkStatus.instance().sendCommand(rpn.controller.ui.UndoActionController.instance().getLastCommand().toXML());
+        }
 
     }
 
-    public void execute (RpGeomFactory factory) {
+    public void execute(RpGeomFactory factory) {
 
         RPnCurve curve = (RPnCurve) factory.geomSource();
 
@@ -108,8 +152,9 @@ public abstract class RpModelPlotCommand extends RpModelActionCommand {
 
         RPnDataModule.PHASESPACE.join(factory.geom());
 
-        if (RPnNetworkStatus.instance().isOnline() && RPnNetworkStatus.instance().isMaster())            
-            RPnNetworkStatus.instance().sendCommand(rpn.controller.ui.UndoActionController.instance().getLastCommand().toXML());       
+        if (RPnNetworkStatus.instance().isOnline() && RPnNetworkStatus.instance().isMaster()) {
+            RPnNetworkStatus.instance().sendCommand(rpn.controller.ui.UndoActionController.instance().getLastCommand().toXML());
+        }
     }
 
     public void unexecute() {
@@ -132,4 +177,36 @@ public abstract class RpModelPlotCommand extends RpModelActionCommand {
     protected void unselectedButton(ChangeEvent changeEvent) {
     }
 
+    @Override
+    public void update(Observable o, Object arg) {
+
+
+
+        Iterator<RPnPhaseSpacePanel> iterator = UIController.instance().getInstalledPanelsIterator();
+        while (iterator.hasNext()) {
+            RPnPhaseSpacePanel panel = iterator.next();
+
+
+            MouseMotionListener[] mouseMotionArray = (MouseMotionListener[]) panel.getListeners(MouseMotionListener.class);
+            MouseListener[] mouseListenerArray = (MouseListener[]) panel.getListeners(MouseListener.class);
+
+            for (MouseListener mouseListener : mouseListenerArray) {
+
+                if (mouseListener instanceof RPn2DMouseController) {
+                    panel.removeMouseListener(mouseListener);
+
+                }
+            }
+
+            for (MouseMotionListener mouseMotionListener : mouseMotionArray) {
+
+                if (mouseMotionListener instanceof RPn2DMouseController) {
+                    panel.removeMouseMotionListener(mouseMotionListener);
+                }
+
+            }
+
+        }
+
+    }
 }

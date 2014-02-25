@@ -18,14 +18,16 @@ public abstract class MultiGeometryImpl implements MultiGeometry {
 
     private AbstractPath path_;
     private ViewingAttr viewAttr_;
-   
+
+
     //
     // Constructors
     //
-
     public MultiGeometryImpl(Space space, ViewingAttr viewAttr) {
         path_ = new AbstractPath(space);
         viewAttr_ = new ViewingAttr(viewAttr);
+
+
     }
 
     //
@@ -78,8 +80,6 @@ public abstract class MultiGeometryImpl implements MultiGeometry {
         path_.closePath();
     }
 
-   
-
     @Override
     public String toString() {
         return path_.toString();
@@ -88,4 +88,15 @@ public abstract class MultiGeometryImpl implements MultiGeometry {
     protected AbstractPath getPath() {
         return this.path_;
     }
+
+    public void setVisible(boolean visible) {
+        viewAttr_.setVisible(visible);
+    }
+
+    public void setSelected(boolean selected) {
+
+        viewAttr_.setSelected(selected);
+    }
+
+    
 }

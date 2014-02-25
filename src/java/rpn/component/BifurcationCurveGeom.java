@@ -4,87 +4,65 @@
  * Departamento de Dinamica dos Fluidos
  *
  */
-
-
 package rpn.component;
 
+import java.awt.Color;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import rpn.component.util.CorrespondenceMark;
+import rpn.component.util.GraphicsUtil;
+import rpnumerics.BifurcationCurve;
 import wave.multid.*;
 import wave.multid.map.Map;
 import wave.multid.model.AbstractPath;
 import wave.multid.model.AbstractPathIterator;
 import wave.multid.model.BoundingBox;
 import wave.multid.model.MultiGeometry;
-import wave.multid.model.MultiPolyLine;
 import wave.multid.view.*;
+import wave.util.RealSegment;
+import wave.util.RealVector;
 
-public class BifurcationCurveGeom implements MultiGeometry, RpGeometry {
+public class BifurcationCurveGeom extends BifurcationCurveBranchGeom implements MultiGeometry{
 
     private RpGeomFactory factory_;
     private ViewingAttr viewingAttr_;
-    private List<MultiPolyLine> segList_;
     private Space space_;
     private BoundingBox boundary_;
-    private RpGeometry otherSide_;
-    
+//    private RpGeometry otherSide_;
+    private List<GraphicsUtil> annotationsList_;
+    private final List<BifurcationCurveBranchGeom> bifurcationGeomBranches_;
 
+    public BifurcationCurveGeom(List<BifurcationCurveBranchGeom> branches, BifurcationCurveGeomFactory factory) {
 
-    public BifurcationCurveGeom(RealSegGeom[] segArray, BifurcationCurveGeomFactory factory) {
-
-        viewingAttr_=segArray[0].viewingAttr();
-        
-//        System.out.println("Tamanho do array no construtor: "+segArray.length);
-
-        segList_ = new ArrayList();
-        for (int i = 0; i < segArray.length; i++) {
-//            System.out.println("Segmento no array: "+segArray[i]);
-            segList_.add(segArray[i]);
-        }
+        viewingAttr_ = new ViewingAttr(Color.white);
+        annotationsList_ = new ArrayList<GraphicsUtil>();
+        bifurcationGeomBranches_ = branches;
         factory_ = factory;
-        space_ = new Space("Auxiliar Space", rpnumerics.RPNUMERICS.domainDim() );
+        space_ = new Space("Auxiliar Space", rpnumerics.RPNUMERICS.domainDim());
         try {
             boundary_ = new BoundingBox(new CoordsArray(space_), new CoordsArray(space_));
         } catch (DimMismatchEx dex) {
             dex.printStackTrace();
         }
-        
-    }
 
+    }
 
     // ************************************************
     public Iterator getRealSegIterator() {
-        return segList_.iterator();
+        return null;
     }
     // ************************************************
-
-
 
     public GeomObjView createView(ViewingTransform transf) throws DimMismatchEx {
         return new BifurcationCurveView(this, transf, viewingAttr());
     }
-    
-    
-     public void lowLight() {
 
-        for (MultiPolyLine object : segList_) {
-            object.lowLight();
-        }
-
+    public void addBranch(BifurcationCurveGeom branch) {
+        bifurcationGeomBranches_.add(branch);
     }
-
-    public void highLight() {
-        for (MultiPolyLine object : segList_) {
-            object.highLight();
-        }
-
-    }
-    
-    
-    
 
     public RpGeomFactory geomFactory() {
         return factory_;
@@ -104,22 +82,16 @@ public class BifurcationCurveGeom implements MultiGeometry, RpGeometry {
         return viewingAttr_;
     }
 
-    public RpGeometry getOtherSide() {
-        return otherSide_;
-    }
-
-    public void setOtherSide(RpGeometry otherSide) {
-        otherSide_ = otherSide;
-    }
-
-
-
-
-
-    public Iterator getBifurcationSegmentsIterator() {
-        return segList_.iterator();
-    }
-
+//    public RpGeometry getOtherSide() {
+//        return otherSide_;
+//    }
+//
+//    public void setOtherSide(RpGeometry otherSide) {
+//        otherSide_ = otherSide;
+//    }
+//    public Iterator getBifurcationSegmentsIterator() {
+//        return segList_.iterator();
+//    }
     public BoundingBox getBoundary() {
         return boundary_;
     }
@@ -140,5 +112,120 @@ public class BifurcationCurveGeom implements MultiGeometry, RpGeometry {
     public void load(FileReader cin) {
     }
 
-   
+    @Override
+    public void setVisible(boolean visible) {
+        for (BifurcationCurveBranchGeom object : getBifurcationListGeom()) {
+            object.setVisible(visible);
+        }
+    }
+
+    @Override
+    public void setSelected(boolean selected) {
+        viewingAttr_.setSelected(selected);
+    }
+
+    @Override
+    public boolean isVisible() {
+        return viewingAttr_.isVisible();
+    }
+
+    @Override
+    public boolean isSelected() {
+        return viewingAttr_.isSelected();
+    }
+
+    @Override
+    public void addAnnotation(GraphicsUtil annotation) {
+
+        annotationsList_.add(annotation);
+
+    }
+
+    @Override
+    public void clearAnnotations() {
+        annotationsList_.clear();
+    }
+
+    @Override
+    public Iterator<GraphicsUtil> getAnnotationIterator() {
+        return annotationsList_.iterator();
+    }
+
+    @Override
+    public void removeLastAnnotation() {
+        if (!annotationsList_.isEmpty()) {
+            annotationsList_.remove(annotationsList_.size() - 1);
+        }
+    }
+
+    @Override
+    public void removeAnnotation(GraphicsUtil selectedAnnotation) {
+        annotationsList_.remove(selectedAnnotation);
+    }
+
+    @Override
+    public void showSpeed(CoordsArray curvePoint, CoordsArray wcPoint, ViewingTransform transform) {
+
+    }
+
+    @Override
+    public void showClassification(CoordsArray curvePoint, CoordsArray wcPoint, ViewingTransform transform) {
+
+    }
+
+    @Override
+    public void showCorrespondentPoint(CoordsArray curvePoint,  ViewingTransform transform) {
+
+        if (getCorrespondenceDirection() != BifurcationCurveBranchGeom.NONE) {
+            RealVector pointOnCurve = new RealVector(curvePoint.getCoords());
+
+            BifurcationCurve bifurcationCurve = (BifurcationCurve) factory_.geomSource();
+
+            List<RealSegment> thisSegments = null;
+            List<RealSegment> otherSegments = null;
+
+            if (getCorrespondenceDirection() == BifurcationCurveBranchGeom.LEFTRIGHT) {
+                thisSegments = bifurcationCurve.leftSegments();
+                otherSegments = bifurcationCurve.rightSegments();
+            }
+
+            if (getCorrespondenceDirection()== BifurcationCurveBranchGeom.RIGHTLEFT) {
+                thisSegments = bifurcationCurve.rightSegments();
+                otherSegments = bifurcationCurve.leftSegments();
+            }
+
+            ClosestDistanceCalculator closestCalculator = new ClosestDistanceCalculator(thisSegments, pointOnCurve);
+
+            int segmentIndex = closestCalculator.getSegmentIndex();
+
+            RealSegment leftSegment = thisSegments.get(segmentIndex);
+            RealSegment rightSegment = otherSegments.get(segmentIndex);
+
+            RealVector mark1 = ClosestDistanceCalculator.convexCombination(leftSegment.p1(), leftSegment.p2(), closestCalculator.getAlpha());
+            RealVector mark2 = ClosestDistanceCalculator.convexCombination(rightSegment.p1(), rightSegment.p2(), closestCalculator.getAlpha());
+
+            List<Object> wcObjectsLeft = new ArrayList();
+
+            wcObjectsLeft.add(mark1);
+
+            CorrespondenceMark testeLabelLeft = new CorrespondenceMark(wcObjectsLeft, transform, new ViewingAttr(Color.white));
+
+            addAnnotation(testeLabelLeft);
+
+            List<Object> wcObjectsRight = new ArrayList();
+
+            wcObjectsRight.add(mark2);
+
+            CorrespondenceMark testeLabelRight = new CorrespondenceMark(wcObjectsRight, transform, new ViewingAttr(Color.white));
+
+            addAnnotation(testeLabelRight);
+        }
+
+    }
+
+    @Override
+    public List<BifurcationCurveBranchGeom> getBifurcationListGeom() {
+        return bifurcationGeomBranches_;
+    }
+
 }

@@ -32,12 +32,20 @@ public class OrbitGeomView extends PolyLine {
         GeneralPath composite = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
 
         //***
-        if (getClass().getSimpleName().equals("OrbitGeomView"))
+        if (getClass().getSimpleName().equals("OrbitGeomView")) {
             composite.append(shapeCalculations(), false);
+        }
         //***
+
+
+
 
         try {
             composite.append(super.createShape(), false);
+
+          
+            
+            
         } catch (DimMismatchEx ex) {
             ex.printStackTrace();
         }
@@ -56,7 +64,9 @@ public class OrbitGeomView extends PolyLine {
         OrbitPoint[] points = source.getPoints();
 
         int dir = 1;
-        if(source.getDirection() == -1) dir = -1;
+        if (source.getDirection() == -1) {
+            dir = -1;
+        }
 
         for (int i = 0; i < points.length - 1; i += ARROWS_STEP) {
             Coords2D startPoint = new Coords2D();

@@ -111,6 +111,9 @@ public class Viewing2DTransform implements ViewingTransform {
         coordSysTransform().getTransfMatrix().mul(scaleTransform.getTransfMatrix(), coordSysTransform().getTransfMatrix());
         // updates the composite transformation
         makeCompositeTransform();
+        
+
+        
     }
 
     public void makeCoordSysTransform() {
@@ -123,8 +126,22 @@ public class Viewing2DTransform implements ViewingTransform {
 
         coordSysTransform_ = new IdentityMap(Multid.PLANE, Multid.PLANE);
         double XScaleFactor = viewPlane_.getViewport().getWidth() / viewPlane_.getWindow().getWidth();
-        // not to be upside down...
+//        // not to be upside down...
         double YScaleFactor = -viewPlane_.getViewport().getHeight() / viewPlane_.getWindow().getHeight();
+//        
+        
+//         double minViewPortSide = Math.min(viewPlane_.getViewport().getWidth() , viewPlane_.getViewport().getHeight());
+         
+         
+//          double XScaleFactor = minViewPortSide / viewPlane_.getWindow().getWidth();
+         
+        // not to be upside down...
+//        double YScaleFactor = -minViewPortSide / viewPlane_.getWindow().getHeight();
+        
+        
+        
+        
+        
         double XTranslateFactor = -viewPlane_.getWindow().getOriginPosition().x * XScaleFactor;
         // we are working with RASTER
         double YTranslateFactor = -viewPlane_.getWindow().getOriginPosition().y * YScaleFactor
@@ -135,7 +152,8 @@ public class Viewing2DTransform implements ViewingTransform {
         coordSysTransform_.getTransfMatrix().setElement(0, 0, XScaleFactor);
         coordSysTransform_.getTransfMatrix().setElement(1, 1, YScaleFactor);
         coordSysTransform_.getTransfMatrix().setElement(2, 0, XTranslateFactor);
-        coordSysTransform_.getTransfMatrix().setElement(2, 1, YTranslateFactor);
+        coordSysTransform_.getTransfMatrix().setElement(2, 1, YTranslateFactor);              
+        
         coordSysTransform_.setInversible(true);
     }
 

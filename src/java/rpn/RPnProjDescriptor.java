@@ -5,7 +5,6 @@
  */
 package rpn;
 
-import rpn.component.util.GeometryGraphND;
 import wave.multid.view.Viewing2DTransform;
 import wave.multid.view.Viewing3DTransform;
 import wave.multid.view.ViewingTransform;
@@ -13,10 +12,12 @@ import wave.multid.Space;
 import wave.multid.Multid;
 import wave.multid.graphs.ClippedShape;
 import wave.multid.graphs.Iso2EquiTransform;
+
 import wave.multid.graphs.ViewPlane;
 import wave.multid.graphs.dcViewport;
 import wave.multid.graphs.wcWindow;
 import wave.multid.map.ProjectionMap;
+
 
 public class RPnProjDescriptor {
     //
@@ -65,6 +66,8 @@ public class RPnProjDescriptor {
     }
 
     public ViewingTransform createTransform(ClippedShape clipping) {
+        
+        
         wcWindow window = clipping.createWindow(projMap_);
         ViewPlane viewPlane = new ViewPlane(viewport_, window);
         if (projMap_.getCodomain().equals(Multid.PLANE)) {

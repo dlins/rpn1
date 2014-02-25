@@ -331,9 +331,9 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setResolution
 
 
 
-    if ( Debug::get_debug_level() == 5 ) {
+
         cout << "Chamando set Grid" << gridNameNative << endl;
-    }
+
 
     grid->set_grid(boundary, boundary->minimums(), boundary->maximums(), newResolutionVector);
 
@@ -432,9 +432,9 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setBoundary
         RealVector maxNativeRealVector(maxSize, maxNativeArray);
 
 
-        if ( Debug::get_debug_level() == 5 ) {
+       
             cout << "O tipo eh isotriang boundary" << minNativeRealVector << " " << maxNativeRealVector << endl;
-        }
+       
 
 
         Three_Phase_Boundary triangBoundary(minNativeRealVector, maxNativeRealVector);

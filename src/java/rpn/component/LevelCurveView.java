@@ -5,14 +5,11 @@
  */
 package rpn.component;
 
-import java.awt.Color;
-import wave.multid.model.*;
+import java.awt.Graphics2D;
 import wave.multid.view.*;
 import wave.multid.DimMismatchEx;
-import java.awt.Graphics2D;
 import java.util.Iterator;
-import java.util.ArrayList;
-import java.util.List;
+import rpn.component.util.GraphicsUtil;
 
 public class LevelCurveView extends  GeomObjView {
     //
@@ -46,4 +43,30 @@ public class LevelCurveView extends  GeomObjView {
             }
         }
     }
+    
+    
+    
+     @Override
+    public void draw(Graphics2D g) {
+        super.draw(g);
+
+        LevelCurveGeom shockGeom = (LevelCurveGeom) getAbstractGeom();
+        Iterator<GraphicsUtil> annotationIterator = shockGeom.getAnnotationIterator();
+
+        while (annotationIterator.hasNext()) {
+            GraphicsUtil graphicsUtil = annotationIterator.next();
+            graphicsUtil.update(getViewingTransform());
+            graphicsUtil.getViewingAttr().setVisible(shockGeom.viewingAttr().isVisible());
+            g.setColor(graphicsUtil.getViewingAttr().getColor());
+            graphicsUtil.draw(g);
+
+        }
+
+    }
+    
+    
+    
+    
+    
+    
 }

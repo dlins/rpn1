@@ -22,8 +22,8 @@ public class Orbit extends RPnCurve implements RpSolution {
     //
     public static String XML_TAG = "CURVE";
 
-    public static final int FORWARD_DIR = 20;
-    public static final int BACKWARD_DIR = 22;
+    public static final int FORWARD_DIR = 10;
+    public static final int BACKWARD_DIR = 11;
     public static final int BOTH_DIR = 0;
     
     public static final int WAVECURVE_FORWARD = 10;
@@ -44,7 +44,7 @@ public class Orbit extends RPnCurve implements RpSolution {
     // Constructor
     //
     public Orbit(RealVector[] coords, double[] times, int increase) {
-        super(MultidAdapter.converseCoordsArrayToRealSegments(MultidAdapter.converseRealVectorsToCoordsArray(coords)), new ViewingAttr(Color.white));
+        super(MultidAdapter.converseCoordsArrayToRealSegments(MultidAdapter.converseRealVectorsToCoordsArray(coords)));
 
         increase_ = increase;
         points_ = orbitPointsFromRealVectors(coords, times);
@@ -56,7 +56,7 @@ public class Orbit extends RPnCurve implements RpSolution {
     }
 
     public Orbit(OrbitPoint[] points,  int increase) {
-        super(MultidAdapter.converseCoordsArrayToRealSegments(MultidAdapter.converseOrbitPointsToCoordsArray(points)), new ViewingAttr(Color.white));
+        super(MultidAdapter.converseCoordsArrayToRealSegments(MultidAdapter.converseOrbitPointsToCoordsArray(points)));
         increase_ = increase;
         points_ = points;
         CoordsArray [] arrayTeste = MultidAdapter.converseOrbitPointsToCoordsArray(points);
@@ -68,7 +68,7 @@ public class Orbit extends RPnCurve implements RpSolution {
 
     public Orbit(Orbit orbit) {
 
-        super(MultidAdapter.converseCoordsArrayToRealSegments(MultidAdapter.converseOrbitPointsToCoordsArray(orbit.getPoints())), new ViewingAttr(Color.white));
+        super(MultidAdapter.converseCoordsArrayToRealSegments(MultidAdapter.converseOrbitPointsToCoordsArray(orbit.getPoints())));
 
         increase_ = orbit.getDirection();
         points_ = orbit.getPoints();
@@ -381,6 +381,11 @@ public class Orbit extends RPnCurve implements RpSolution {
     @Override
     public List segments() {
         return segments_;
+    }
+
+    @Override
+    public String getInfo() {
+        return "";
     }
 
 

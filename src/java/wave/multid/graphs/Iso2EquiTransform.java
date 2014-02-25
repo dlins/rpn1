@@ -11,12 +11,17 @@ import wave.multid.view.Viewing2DTransform;
 
 public class Iso2EquiTransform extends Viewing2DTransform {
 
+    
+    public final static double  sqrt3half = Math.sqrt(3) / 2.0;
+    
     public Iso2EquiTransform(ProjectionMap projection, ViewPlane viewPlane) {
+
         super(projection, viewPlane);
-        scale(1., Math.sqrt(3) / 2.);
+
+        scale(1., sqrt3half);
         shear(.5, 0.);
-//        translate(1 / 2., 0);
-        
+
+                
     }
 
     public void setViewPlane(ViewPlane viewPlane){
@@ -25,7 +30,7 @@ public class Iso2EquiTransform extends Viewing2DTransform {
 
       scale(1., Math.sqrt(3) / 2.);
       shear(.5, 0.);
-//      translate(1/ 2., 0);
+
      }
 
 

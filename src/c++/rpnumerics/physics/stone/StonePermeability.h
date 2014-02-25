@@ -15,6 +15,7 @@
  */
 #include <math.h>
 #include "StonePermParams.h"
+#include "JetMatrix.h"
 
 /*
  * ---------------------------------------------------------------
@@ -24,42 +25,36 @@
 
 class StonePermeability{
     
-private:
-    StonePermParams * params_;
+    private:
+    protected:
+        StonePermParams * params_;
 
-    double expw_, expg_, expo_;
-    double expow_, expog_;
+        double expw_, expg_, expo_;
+        double expow_, expog_;
+        double cnw_, cng_, cno_;
+        double lw_, lg_;
+        double low_, log_;
+        double epsl_;
 
-    double krw_p_, krg_p_, kro_p_;
-    // It is akward to have a connate saturation of gas different to zero.
+        double denkw_, denkg_, denkow_, denkog_;
     
-    double cnw_, cng_, cno_;
-    double CN;
-    double lw_, lg_,lo_;
-    double low_, log_;
-    double epsl_;
-
-    double denkw_, denkg_,  denko_,denkow_, denkog_;
-
+        int kowden_jet(double sow, int degree, JetMatrix &kowj);
+        int kogden_jet(double sog, int degree, JetMatrix &kogj);
+    public:
     
-    // The following flags allow to have negative saturations.
-    bool NegativeWaterSaturation, NegativeGasSaturation, NegativeOilSaturation;
-
-
-
-
+        StonePermeability(const StonePermParams & params);
+        StonePermeability(const StonePermeability & );
+        virtual ~StonePermeability();
     
-public:
-    
-    StonePermeability(const StonePermParams & params);
-    StonePermeability(const StonePermeability & );
-    virtual ~StonePermeability();
-    
-    const StonePermParams & params() const ;
+        const StonePermParams & params() const ;
 
-    void Diff_PermabilityWater(double, double, double, double&, double&, double&, double&, double&, double&);
-    void Diff_PermabilityOil(double, double, double, double&, double&, double&, double&, double&, double&);
-    void Diff_PermabilityGas(double, double, double, double&, double&, double&, double&, double&, double&);
+        void Diff_PermabilityWater(double, double, double, double&, double&, double&, double&, double&, double&);
+        void Diff_PermabilityOil(double, double, double, double&, double&, double&, double&, double&, double&);
+        void Diff_PermabilityGas(double, double, double, double&, double&, double&, double&, double&, double&);
+
+        int PermeabilityWater_jet(const RealVector &state, int degree, JetMatrix &water);
+        int PermeabilityOil_jet(const RealVector &state, int degree, JetMatrix &oil);
+        int PermeabilityGas_jet(const RealVector &state, int degree, JetMatrix &gas);
 
 };
 

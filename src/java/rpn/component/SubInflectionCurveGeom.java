@@ -6,6 +6,7 @@
 package rpn.component;
 
 import java.awt.Color;
+import java.util.List;
 import wave.multid.view.*;
 import wave.multid.*;
 
@@ -15,7 +16,7 @@ public class SubInflectionCurveGeom extends BifurcationCurveGeom{
     //
     // Constructors
     //
-    public SubInflectionCurveGeom(RealSegGeom[] segArray, SubInflectionCurveGeomFactory factory) {
+    public SubInflectionCurveGeom(List<BifurcationCurveBranchGeom> segArray, SubInflectionCurveGeomFactory factory) {
 
         super(segArray,factory);
     }

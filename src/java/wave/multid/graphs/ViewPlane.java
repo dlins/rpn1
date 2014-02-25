@@ -22,4 +22,6 @@ public class ViewPlane {
     public dcViewport getViewport() { return viewport_; }
 
     public wcWindow getWindow() { return window_; }
+    
+    
 }

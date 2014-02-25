@@ -37,7 +37,7 @@ public class UI_ACTION_SELECTED implements UserInputHandler {
                 
                 for (MouseListener mouseListener : mouseListenerArray) {
                     
-                    if (mouseListener instanceof RPn2DMouseController) {
+                    if ( (mouseListener instanceof RPn2DMouseController)) {
                         panel.removeMouseListener(mouseListener);
                         
                     }
@@ -45,7 +45,7 @@ public class UI_ACTION_SELECTED implements UserInputHandler {
                 
                 for (MouseMotionListener mouseMotionListener : mouseMotionArray) {
                     
-                    if (mouseMotionListener instanceof RPn2DMouseController) {
+                    if ( (mouseMotionListener instanceof RPn2DMouseController)) {
                         panel.removeMouseMotionListener(mouseMotionListener);
                     }
                     

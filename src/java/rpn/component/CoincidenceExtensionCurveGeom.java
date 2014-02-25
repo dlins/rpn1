@@ -8,6 +8,7 @@ package rpn.component;
 
 
 import java.awt.Color;
+import java.util.List;
 import wave.multid.DimMismatchEx;
 import wave.multid.view.GeomObjView;
 import wave.multid.view.ViewingTransform;
@@ -23,7 +24,7 @@ public class CoincidenceExtensionCurveGeom extends BifurcationCurveGeom{//implem
     public static Color COLOR = new Color(0, 153, 153);
 
 
-    public CoincidenceExtensionCurveGeom(RealSegGeom[] segArray, CoincidenceExtensionCurveGeomFactory factory) {
+    public CoincidenceExtensionCurveGeom(List<BifurcationCurveBranchGeom> segArray, CoincidenceExtensionCurveGeomFactory factory) {
 
         super(segArray,factory);
     }
