@@ -43,9 +43,13 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CoincidenceCurveCalc_nativeCalc(JNIEnv
 
     jclass realVectorClass = env->FindClass(REALVECTOR_LOCATION);
 
+    jclass realSegmentClass = env->FindClass(REALSEGMENT_LOCATION);
+        
     jclass arrayListClass = env->FindClass("java/util/ArrayList");
 
     jclass coincidenceCurveClass = env->FindClass(COINCIDENCECURVE_LOCATION);
+    
+    
 
     jmethodID toDoubleMethodID = (env)->GetMethodID(classPhasePoint, "toDouble", "()[D");
     jmethodID realVectorConstructorDoubleArray = env->GetMethodID(realVectorClass, "<init>", "([D)V");
@@ -53,7 +57,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CoincidenceCurveCalc_nativeCalc(JNIEnv
     jmethodID arrayListConstructor = env->GetMethodID(arrayListClass, "<init>", "()V");
     jmethodID arrayListAddMethod = env->GetMethodID(arrayListClass, "add", "(Ljava/lang/Object;)Z");
     jmethodID coincidenceCurveConstructor = env->GetMethodID(coincidenceCurveClass, "<init>", "(Ljava/util/List;)V");
-
+    jmethodID realSegmentConstructor = (env)->GetMethodID(realSegmentClass, "<init>", "(Lwave/util/RealVector;Lwave/util/RealVector;)V");
+    
+    
     jobject segmentsArray = env->NewObject(arrayListClass, arrayListConstructor, NULL);
 
     int dimension = 3;
@@ -103,8 +109,10 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CoincidenceCurveCalc_nativeCalc(JNIEnv
         double leftSigma = 0;
         double rightSigma = 0;
 
-        jobject hugoniotSegment = env->NewObject(hugoniotSegmentClass, hugoniotSegmentConstructor, realVectorLeftPoint, leftSigma, realVectorRightPoint, rightSigma, 17);
-        env->CallObjectMethod(segmentsArray, arrayListAddMethod, hugoniotSegment);
+        jobject realSegment = env->NewObject(realSegmentClass, realSegmentConstructor, realVectorLeftPoint, realVectorRightPoint);
+        
+//        jobject hugoniotSegment = env->NewObject(hugoniotSegmentClass, hugoniotSegmentConstructor, realVectorLeftPoint, leftSigma, realVectorRightPoint, rightSigma, 17);
+        env->CallObjectMethod(segmentsArray, arrayListAddMethod, realSegment);
 
 
 

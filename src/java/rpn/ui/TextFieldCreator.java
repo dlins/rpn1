@@ -67,9 +67,6 @@ public class TextFieldCreator extends UIComponentCreator {
 
     private JPanel createTextField(String paramName, String paramValue) {
 
-
-        System.out.println(paramName + " " + paramValue);
-
         JFormattedTextField textField = new JFormattedTextField();
         GridBagConstraints gridConstraints = new GridBagConstraints();
         GridBagLayout gridBayLayout = new GridBagLayout();

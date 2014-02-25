@@ -35,7 +35,7 @@ public class AdjustedSelectionPlotCommand extends RpModelPlotCommand implements 
     @Override
     public void actionPerformed(ActionEvent event) {
 
-        UIController.instance().setState(new AREASELECTION_CONFIG());
+        UIController.instance().setState(new AREASELECTION_CONFIG(this));
         Iterator<RPnPhaseSpacePanel> iterator = UIController.instance().getInstalledPanelsIterator();
 
         while (iterator.hasNext()) {

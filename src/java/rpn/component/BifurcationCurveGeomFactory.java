@@ -63,6 +63,7 @@ public class BifurcationCurveGeomFactory extends RpCalcBasedGeomFactory {
         //
         // PRINTS OUT THE CONFIGURATION INFORMATION
         //
+        if(rpCalc().getConfiguration()!=null)
         buffer.append(rpCalc().getConfiguration().toXML());
         
            
@@ -74,7 +75,7 @@ public class BifurcationCurveGeomFactory extends RpCalcBasedGeomFactory {
         for (int i = 0; i < geomSource.leftSegments().size(); i++) {
 
             RealSegment realSegment =(RealSegment) geomSource.leftSegments().get(i);
-            buffer.append(realSegment.toXML() + "\n");
+            buffer.append(realSegment.toXML());
         }
         buffer.append("</" + BifurcationCurve.LEFT_TAG +">" + "\n");
 
@@ -84,7 +85,7 @@ public class BifurcationCurveGeomFactory extends RpCalcBasedGeomFactory {
         for (int i = 0; i < geomSource.rightSegments().size(); i++) {
 
             RealSegment realSegment =(RealSegment) geomSource.rightSegments().get(i);
-            buffer.append(realSegment.toXML() + "\n");
+            buffer.append(realSegment.toXML());
         }
         buffer.append("</" + BifurcationCurve.RIGHT_TAG +">" + "\n");
       buffer.append("</" + BifurcationCurve.XML_TAG +">" );

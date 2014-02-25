@@ -16,7 +16,7 @@ StoneHugoniotFunctionClass::StoneHugoniotFunctionClass(const RealVector &U, cons
     double A[n][n];
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
-            A[i][j] = UrefJetMatrix(i, j);
+            A[i][j] = UrefJetMatrix.get(i, j);
         }
     }
     Eigen::eig(n, &A[0][0], ve_uref);
@@ -46,7 +46,7 @@ void StoneHugoniotFunctionClass::setReferenceVector(const RealVector & refVec) {
     double A[n][n];
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
-            A[i][j] = UrefJetMatrix(i, j);
+            A[i][j] = UrefJetMatrix.get(i, j);
         }
     }
     Eigen::eig(n, &A[0][0], ve_uref);
@@ -91,15 +91,15 @@ double StoneHugoniotFunctionClass::HugoniotFunction(const RealVector & u) {
 
         stone.jet(wu, UJetMatrix, 0);
 
-        dfw = UJetMatrix(0) - UrefJetMatrix(0);
-        dfo = UJetMatrix(1) - UrefJetMatrix(1);
+        dfw = UJetMatrix.get(0) - UrefJetMatrix.get(0);
+        dfo = UJetMatrix.get(1) - UrefJetMatrix.get(1);
     } else {
         stone.jet(wu, UJetMatrix, 1);
 
         dhw = dsw;
         dho = dso;
-        dfw = UrefJetMatrix(0, 0) * dsw + UrefJetMatrix(0, 1) * dso;
-        dfo = UrefJetMatrix(1, 0) * dsw + UrefJetMatrix(1, 1) * dso;
+        dfw = UrefJetMatrix.get(0, 0) * dsw + UrefJetMatrix.get(0, 1) * dso;
+        dfo = UrefJetMatrix.get(1, 0) * dsw + UrefJetMatrix.get(1, 1) * dso;
     }
 
     double hugont = dho * dfw - dhw*dfo;

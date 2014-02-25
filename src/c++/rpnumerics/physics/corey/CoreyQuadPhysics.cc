@@ -13,7 +13,7 @@
 #include "CoreyQuadPhysics.h"
 #include "Hugoniot_Curve.h"
 #include "Double_Contact.h"
-#include "Shock.h"
+#include "HugoniotContinuation2D2D.h"
 
 /*
  * ---------------------------------------------------------------
@@ -25,7 +25,6 @@
 CoreyQuadPhysics::CoreyQuadPhysics() : SubPhysics(CoreyQuad(CoreyQuad_Params()), StoneAccumulation(), *defaultBoundary(), Multid::PLANE, "CoreyQuad", _SIMPLE_ACCUMULATION_) {
     
     setDoubleContactFunction(new Double_Contact());
-    setShockMethod(new Shock());
     setHugoniotFunction(new Hugoniot_Curve());
     setViscosityMatrix(new Viscosity_Matrix());
     preProcessedBoundary_ = defaultBoundary();
@@ -41,7 +40,6 @@ CoreyQuadPhysics::CoreyQuadPhysics(const CoreyQuadPhysics & copy) : SubPhysics(c
 
 
     setDoubleContactFunction(new Double_Contact());
-    setShockMethod(new Shock());
     setHugoniotFunction(new Hugoniot_Curve());
     setViscosityMatrix(copy.getViscosityMatrix());
     preProcessedBoundary_ = copy.getPreProcessedBoundary()->clone();

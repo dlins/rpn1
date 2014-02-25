@@ -25,5 +25,28 @@ public class LevelCurve extends SegmentedCurve {
     public double getLevel() {
         return level_;
     }
+    
+    
+    
+    @Override
+    public String toXML(){
+        
+        StringBuilder buffer = new StringBuilder();
+        
+        
+        for (Object object : segments()) {
+            
+            
+            RealSegment segment = (RealSegment)object;
+            
+            buffer.append(segment.toXML());
+            
+        }
+        
+        return buffer.toString();
+        
+        
+    }
+    
 
 }

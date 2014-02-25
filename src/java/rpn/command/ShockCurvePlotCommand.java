@@ -34,9 +34,6 @@ public class ShockCurvePlotCommand extends RpModelPlotCommand {
         OrbitPoint oPoint = new OrbitPoint(input[input.length - 1]);
         ShockCurveCalc shockCalc = RPNUMERICS.createShockCurveCalc(oPoint);
         ShockCurveGeomFactory factory = new ShockCurveGeomFactory(shockCalc);
-        
-        
-        
         return factory.geom();
     }
 

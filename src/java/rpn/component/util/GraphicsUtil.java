@@ -7,11 +7,15 @@ package rpn.component.util;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Shape;
+import java.awt.Stroke;
 import java.awt.geom.Path2D;
+import java.awt.geom.PathIterator;
+import java.util.ArrayList;
 import java.util.List;
 import rpn.RPnPhaseSpacePanel;
 import wave.multid.view.ViewingAttr;
 import wave.multid.view.ViewingTransform;
+import wave.util.RealVector;
 
 /**
  *
@@ -24,6 +28,10 @@ public abstract class GraphicsUtil {
     private ViewingAttr viewAttr_;
     private Shape shape_;
 
+    public GraphicsUtil() {
+    }
+
+
     public GraphicsUtil(List<Object> wcObjects, ViewingTransform viewingTransform, ViewingAttr viewAttr) {
         this.wcObjects_ = wcObjects;
         this.viewingTransform_ = viewingTransform;
@@ -33,40 +41,106 @@ public abstract class GraphicsUtil {
 
     public void draw(Graphics2D g) {
 
-        Color previous = g.getColor();
+        Color previousColor = g.getColor();
         g.setColor(viewAttr_.getColor());
         g.draw(getShape());
-        g.setColor(previous);
-    }
+        Stroke previousStroke = g.getStroke();
 
+        if (viewAttr_.isSelected()) {
+
+            drawSelected(g);
+          
+        }
+        
+
+        g.setColor(previousColor);
+        g.setStroke(previousStroke);
+    }
+   
     public void setShape(Shape createShape) {
         shape_ = createShape;
 
     }
 
+    public void setViewingAttribute(ViewingAttr viewingAttr) {
+        viewAttr_ = viewingAttr;
+    }
+
     public Shape getShape() {
         return shape_;
     }
+    
+    public ViewingAttr getViewingAttr(){
+        return viewAttr_;
+    }
 
-    protected ViewingTransform getViewingTransform(){
+    protected ViewingTransform getViewingTransform() {
         return viewingTransform_;
     }
-    
-    public void update(ViewingTransform viewingTransform){
-        viewingTransform_=viewingTransform;
+
+    public void update(ViewingTransform viewingTransform) {
+        viewingTransform_ = viewingTransform;
         setShape(createShape());
     }
 
     // ---------------
-    public void update(ViewingAttr viewAttr){
+    public void update(ViewingAttr viewAttr) {
         viewAttr_ = viewAttr;
         setShape(createShape());
     }
     // ---------------
+
     
+    
+     public List<RealVector> getWCVertices() {
+
+        List<RealVector> areaPointsList = new ArrayList<RealVector>();
+        Path2D.Double wcObject = getWCObject();
+        PathIterator pathIterator = wcObject.getPathIterator(null);
+
+        double[] segmentArray = new double[2];
+
+        while (!pathIterator.isDone()) {
+
+            int segment = pathIterator.currentSegment(segmentArray);
+            if (segment != PathIterator.SEG_CLOSE) {
+                RealVector testeSegment = new RealVector(segmentArray);
+                areaPointsList.add(testeSegment);
+            }
+
+            pathIterator.next();
+
+        }
+
+        return areaPointsList;
+
+    }
+    
+    public String toXML(){
+        
+         StringBuffer buffer = new StringBuffer();
+
+        buffer.append("<CURVESELECTION>\n");
+        
+
+        List<RealVector> vertices = getWCVertices();
+        
+        for (int i = 0; i < vertices.size(); i++) {
+            buffer.append(vertices.get(i).toXML());
+        }
+       
+        buffer.append("<\\CURVESELECTION>");
+
+        return buffer.toString();
+        
+        
+        
+    }
+    
+
     public abstract Shape createShape();
 
     public abstract Path2D.Double getWCObject();
-    
-    
+
+    protected abstract void drawSelected(Graphics2D g);
 }

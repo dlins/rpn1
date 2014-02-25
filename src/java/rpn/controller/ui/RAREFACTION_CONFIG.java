@@ -9,9 +9,12 @@ import rpn.command.AreaSelectionCommand;
 import rpn.command.ChangeFluxParamsCommand;
 import rpn.command.ChangeDirectionCommand;
 import rpn.command.ChangeOrbitLevelCommand;
+import rpn.command.ChooseAreaCommand;
 import rpn.command.CompositePlotCommand;
 import rpn.command.CurveRefineCommand;
 import rpn.command.EllipticBoundaryCommand;
+import rpn.command.GenericAreaCommand;
+import rpn.command.HugoniotContinuationPlotCommand;
 import rpn.command.HugoniotPlotCommand;
 import rpn.command.IntegralCurvePlotCommand;
 import rpn.command.LevelCurvePlotCommand;
@@ -33,6 +36,7 @@ public class RAREFACTION_CONFIG extends UI_ACTION_SELECTED {
         RarefactionCurvePlotCommand.instance().setEnabled(true);
         HugoniotPlotCommand.instance().setEnabled(true);
         ShockCurvePlotCommand.instance().setEnabled(true);
+        HugoniotContinuationPlotCommand.instance().setEnabled(true);
         ChangeDirectionCommand.instance().setEnabled(true);
         ChangeFluxParamsCommand.instance().setEnabled(true);
         RarefactionExtensionCurvePlotCommand.instance().setEnabled(true);
@@ -47,6 +51,8 @@ public class RAREFACTION_CONFIG extends UI_ACTION_SELECTED {
         RiemannProfileCommand.instance().setEnabled(false);
         WaveCurvePlotCommand.instance().setEnabled(true);
         CurveRefineCommand.instance().setEnabled(false);
+        ChooseAreaCommand.instance().setEnabled(true);
+        GenericAreaCommand.instance().setEnabled(true);
 
        
 

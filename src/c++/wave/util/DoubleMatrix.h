@@ -18,6 +18,9 @@ extern "C" {
 
     // Matrix inversion
     void dgetri_(int *N, double *A, int *LDA, int *IPIV, double *WORK, int *LWORK, int *INFO);
+
+    // QR decomposition
+    void dgeqp3_(int *M, int *N, double *A, int *LDA, int *JPVT, double *TAU, double *WORK, int *LWORK, int *INFO);
 }
 
 class DoubleMatrix : public Matrix<double> {
@@ -25,6 +28,14 @@ class DoubleMatrix : public Matrix<double> {
     protected:
         int w_; // Default width for the centered_text.
         static std::string centered_text(double x, int w);
+
+        // For Gram-Schmidt:
+        //
+        double inner_product_by_rows(int row1, int row2);
+        void proj_u_v_by_rows(int u_row, int v_row, double *w);
+
+        double inner_product_by_columns(int col1, int col2);
+        void proj_u_v_by_columns(int u_col, int v_col, double *w);
     public:
         DoubleMatrix(void);
         DoubleMatrix(int n, int m);
@@ -45,6 +56,14 @@ class DoubleMatrix : public Matrix<double> {
         // Set/get the width used for printing
         void w(int ww){w_ = ww; return;}
         int w(void) const {return w_;}
+
+        // Gram-Schmidt orthogonalization process.
+        void Gram_Schmidt_orthogonalization_by_rows();
+        void Gram_Schmidt_orthogonalization_by_columns();
+
+        // Extraction of rows and columns
+        DoubleMatrix row(int r);
+        DoubleMatrix column(int c);
 
         // Matrix sum and subtraction
         friend DoubleMatrix sum(const DoubleMatrix &A, const DoubleMatrix &B);
@@ -67,9 +86,13 @@ class DoubleMatrix : public Matrix<double> {
         friend int solve(const DoubleMatrix &A, const DoubleMatrix &b, DoubleMatrix &x);
         friend int inverse(const DoubleMatrix &A, DoubleMatrix &B);
         friend DoubleMatrix inverse(const DoubleMatrix &A);
-        friend double det(const DoubleMatrix &A);
-        friend DoubleMatrix transpose(const DoubleMatrix &A);
 
+        friend double det(const DoubleMatrix &A);
+        friend double derivative_det(const DoubleMatrix &A, const DoubleMatrix &derivative_A);
+
+        friend DoubleMatrix transpose(const DoubleMatrix &A);
+        friend int QR(const DoubleMatrix &A, DoubleMatrix &Q, DoubleMatrix &R);
+  
         // Trace
         friend double trace(const DoubleMatrix &A);
 

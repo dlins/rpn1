@@ -15,9 +15,11 @@ import rpn.component.RpCalcBasedGeomFactory;
 import rpn.component.RpGeomFactory;
 import rpn.component.RpGeometry;
 import rpn.configuration.Configuration;
+import rpn.configuration.RPnConfig;
 import rpn.controller.ui.UIController;
 import rpn.controller.ui.UI_ACTION_SELECTED;
 import rpn.controller.ui.UndoableAction;
+import rpn.parser.RPnDataModule;
 import rpnumerics.RPnCurve;
 import rpnumerics.RpCalculation;
 import wave.util.RealVector;
@@ -42,7 +44,53 @@ public class RpCommand extends AbstractAction implements UndoableAction, Seriali
 
         xmlString_ = buffer.toString();
 
+    }
 
+    public RpCommand(int curveID) {
+
+        StringBuilder buffer = new StringBuilder();
+        buffer.append("<COMMAND name=\"").append("curveselection\" ");
+        buffer.append("phasespace=\"").append(UIController.instance().getActivePhaseSpace().getName()).append("\" ");
+        buffer.append("curveid=\"").append(curveID);
+
+        buffer.append("\"/>");
+
+        xmlString_ = buffer.toString();
+
+    }
+
+    public RpCommand(String commandText) {
+        inputArray_ = new ArrayList<String>();
+        inputPointList_ = new ArrayList<RealVector>();
+
+        StringBuilder buffer = new StringBuilder();
+        if (commandText.equals("clear")) {
+
+            buffer.append("<COMMAND name=\"").append("clear\" ");
+
+            buffer.append("/>");
+
+            xmlString_ = buffer.toString();
+
+
+        } else {
+
+            buffer.append("<COMMAND name=\"").append("selection\" ");
+            buffer.append("phasespace=\"").append(UIController.instance().getActivePhaseSpace().getName()).append("\" ");
+            buffer.append(">");
+            buffer.append(commandText);
+            buffer.append("</COMMAND>");
+
+
+        }
+
+
+
+
+
+
+
+        xmlString_ = buffer.toString();
 
 
     }
@@ -76,7 +124,7 @@ public class RpCommand extends AbstractAction implements UndoableAction, Seriali
         String sourceName = event_.getSource().toString().replace(" ", "");
         String curveName = sourceName.toLowerCase();
 
-        
+
         if (factory instanceof RpCalcBasedGeomFactory) {
 
             RpCalcBasedGeomFactory calFactory = (RpCalcBasedGeomFactory) factory;
@@ -87,7 +135,7 @@ public class RpCommand extends AbstractAction implements UndoableAction, Seriali
             buffer.append("<COMMAND name=\"").append(curveName).append("\" ");
             buffer.append("phasespace=\"").append(UIController.instance().getActivePhaseSpace().getName()).append("\" ");
             buffer.append("curveid=\"").append(curve.getId());
-            
+
 
             buffer.append("\">");
 

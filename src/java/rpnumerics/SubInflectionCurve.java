@@ -6,6 +6,7 @@
 package rpnumerics;
 
 import java.util.List;
+import wave.util.RealSegment;
 
 public class SubInflectionCurve extends BifurcationCurve {
     //
@@ -13,7 +14,7 @@ public class SubInflectionCurve extends BifurcationCurve {
     //
 
 
-    public SubInflectionCurve(List<HugoniotSegment> hSegments) {
+    public SubInflectionCurve(List<RealSegment> hSegments) {
         super(hSegments);
       }
 

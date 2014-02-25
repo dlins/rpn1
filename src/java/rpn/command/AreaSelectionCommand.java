@@ -30,7 +30,7 @@ public class AreaSelectionCommand extends RpModelPlotCommand implements Observer
     @Override
     public void actionPerformed(ActionEvent event) {
 
-        UIController.instance().setState(new AREASELECTION_CONFIG());
+        UIController.instance().setState(new AREASELECTION_CONFIG(this));
 
         Iterator<RPnPhaseSpacePanel> iterator = UIController.instance().getInstalledPanelsIterator();
 

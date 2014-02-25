@@ -161,15 +161,15 @@ int Flux2Comp2PhasesAdimensionalized::ReducedFlux2Comp2PhasesAdimensionalized::j
     // Here we recover the values of the Fractional Flow Function.
 
     if (degree >= 0) {
-        f = horizontal(0);
+        f = horizontal.get(0);
         if (degree >= 1) {
-            df_ds = horizontal(0, 0);
-            df_dTheta = horizontal(0, 1);
+            df_ds = horizontal.get(0, 0);
+            df_dTheta = horizontal.get(0, 1);
             if (degree >= 2) {
-                d2f_ds2 = horizontal(0, 0, 0);
-                d2f_dsdTheta = horizontal(0, 0, 1);
-                d2f_dThetads = horizontal(0, 1, 0);
-                d2f_dTheta2 = horizontal(0, 1, 1);
+                d2f_ds2 = horizontal.get(0, 0, 0);
+                d2f_dsdTheta = horizontal.get(0, 0, 1);
+                d2f_dThetads = horizontal.get(0, 1, 0);
+                d2f_dTheta2 = horizontal.get(0, 1, 1);
             }
         }
     }
@@ -213,35 +213,35 @@ int Flux2Comp2PhasesAdimensionalized::ReducedFlux2Comp2PhasesAdimensionalized::j
     }
 
     if (degree >= 0) {
-        m(0, out0);
-        m(1, out1);
-        m(2, out2);
+        m.set(0, out0);
+        m.set(1, out1);
+        m.set(2, out2);
 
         if (degree >= 1) {
-            m(0, 0, out00);
-            m(0, 1, out01);
+            m.set(0, 0, out00);
+            m.set(0, 1, out01);
 
-            m(1, 0, out10);
-            m(1, 1, out11);
+            m.set(1, 0, out10);
+            m.set(1, 1, out11);
 
-            m(2, 0, out20);
-            m(2, 1, out21);
+            m.set(2, 0, out20);
+            m.set(2, 1, out21);
 
             if (degree >= 2) {
-                m(0, 0, 0, out000);
-                m(0, 0, 1, out001);
-                m(0, 1, 0, out010);
-                m(0, 1, 1, out011);
+                m.set(0, 0, 0, out000);
+                m.set(0, 0, 1, out001);
+                m.set(0, 1, 0, out010);
+                m.set(0, 1, 1, out011);
 
-                m(1, 0, 0, out100);
-                m(1, 0, 1, out101);
-                m(1, 1, 0, out110);
-                m(1, 1, 1, out111);
+                m.set(1, 0, 0, out100);
+                m.set(1, 0, 1, out101);
+                m.set(1, 1, 0, out110);
+                m.set(1, 1, 1, out111);
 
-                m(2, 0, 0, out200);
-                m(2, 0, 1, out201);
-                m(2, 1, 0, out210);
-                m(2, 1, 1, out211);
+                m.set(2, 0, 0, out200);
+                m.set(2, 0, 1, out201);
+                m.set(2, 1, 0, out210);
+                m.set(2, 1, 1, out211);
             }
         }
     }
@@ -337,15 +337,15 @@ int Flux2Comp2PhasesAdimensionalized::jet(const WaveState &w, JetMatrix &m, int 
         FH->Diff_FracFlow2PhasesHorizontalAdimensionalized(1. - s, Theta, degree, horizontal);
 
         if (degree >= 0) {
-            f = horizontal(0);
+            f = horizontal.get(0);
             if (degree >= 1) {
-                df_ds = horizontal(0, 0);
-                df_dTheta = horizontal(0, 1);
+                df_ds = horizontal.get(0, 0);
+                df_dTheta = horizontal.get(0, 1);
                 if (degree >= 2) {
-                    d2f_ds2 = horizontal(0, 0, 0);
-                    d2f_dsdTheta = horizontal(0, 0, 1);
-                    d2f_dThetads = horizontal(0, 1, 0);
-                    d2f_dTheta2 = horizontal(0, 1, 1);
+                    d2f_ds2 = horizontal.get(0, 0, 0);
+                    d2f_dsdTheta = horizontal.get(0, 0, 1);
+                    d2f_dThetads = horizontal.get(0, 1, 0);
+                    d2f_dTheta2 = horizontal.get(0, 1, 1);
                 }
             }
         }
@@ -413,15 +413,15 @@ int Flux2Comp2PhasesAdimensionalized::jet(const WaveState &w, JetMatrix &m, int 
         FV->Diff_FracFlow2PhasesVerticalAdimensionalized(1. - s, Theta, degree, vertical);
 
         if (degree >= 0) {
-            Z = vertical(0);
+            Z = vertical.get(0);
             if (degree >= 1) {
-                dZ_ds = vertical(0, 0);
-                dZ_dTheta = vertical(0, 1);
+                dZ_ds = vertical.get(0, 0);
+                dZ_dTheta = vertical.get(0, 1);
                 if (degree >= 2) {
-                    d2Z_ds2 = vertical(0, 0, 0);
-                    d2Z_dsdTheta = vertical(0, 0, 1);
-                    d2Z_dThetads = vertical(0, 1, 0);
-                    d2Z_dTheta2 = vertical(0, 1, 1);
+                    d2Z_ds2 = vertical.get(0, 0, 0);
+                    d2Z_dsdTheta = vertical.get(0, 0, 1);
+                    d2Z_dThetads = vertical.get(0, 1, 0);
+                    d2Z_dTheta2 = vertical.get(0, 1, 1);
                 }
             }
         }
@@ -538,61 +538,61 @@ int Flux2Comp2PhasesAdimensionalized::jet(const WaveState &w, JetMatrix &m, int 
     } // End of pure gravity
 
     if (degree >= 0) {
-        m(0, out0);
-        m(1, out1);
-        m(2, out2);
+        m.set(0, out0);
+        m.set(1, out1);
+        m.set(2, out2);
 
         if (degree >= 1) {
-            m(0, 0, out00);
-            m(0, 1, out01);
-            m(0, 2, out02);
+            m.set(0, 0, out00);
+            m.set(0, 1, out01);
+            m.set(0, 2, out02);
 
-            m(1, 0, out10);
-            m(1, 1, out11);
-            m(1, 2, out12);
+            m.set(1, 0, out10);
+            m.set(1, 1, out11);
+            m.set(1, 2, out12);
 
-            m(2, 0, out20);
-            m(2, 1, out21);
-            m(2, 2, out22);
+            m.set(2, 0, out20);
+            m.set(2, 1, out21);
+            m.set(2, 2, out22);
 
             if ( Debug::get_debug_level() == 5 ) {
                         for (int i = 0; i < 3; i++){
                             for (int j = 0; j < 3; j++){
-                                printf("ff(%d, %d) = %g\n", i, j, m(i, j));
+                                printf("ff(%d, %d) = %g\n", i, j, m.get(i, j));
                             }
                         }
 	    }
 
             if (degree >= 2) {
-                m(0, 0, 0, out000);
-                m(0, 0, 1, out001);
-                m(0, 0, 2, out002);
-                m(0, 1, 0, out010);
-                m(0, 1, 1, out011);
-                m(0, 1, 2, out012);
-                m(0, 2, 0, out020);
-                m(0, 2, 1, out021);
-                m(0, 2, 2, out022);
+                m.set(0, 0, 0, out000);
+                m.set(0, 0, 1, out001);
+                m.set(0, 0, 2, out002);
+                m.set(0, 1, 0, out010);
+                m.set(0, 1, 1, out011);
+                m.set(0, 1, 2, out012);
+                m.set(0, 2, 0, out020);
+                m.set(0, 2, 1, out021);
+                m.set(0, 2, 2, out022);
 
-                m(1, 0, 0, out100);
-                m(1, 0, 1, out101);
-                m(1, 0, 2, out102);
-                m(1, 1, 0, out110);
-                m(1, 1, 1, out111);
-                m(1, 1, 2, out112);
-                m(1, 2, 0, out120);
-                m(1, 2, 1, out121);
-                m(1, 2, 2, out122);
+                m.set(1, 0, 0, out100);
+                m.set(1, 0, 1, out101);
+                m.set(1, 0, 2, out102);
+                m.set(1, 1, 0, out110);
+                m.set(1, 1, 1, out111);
+                m.set(1, 1, 2, out112);
+                m.set(1, 2, 0, out120);
+                m.set(1, 2, 1, out121);
+                m.set(1, 2, 2, out122);
 
-                m(2, 0, 0, out200);
-                m(2, 0, 1, out201);
-                m(2, 0, 2, out202);
-                m(2, 1, 0, out210);
-                m(2, 1, 1, out211);
-                m(2, 1, 2, out212);
-                m(2, 2, 0, out220);
-                m(2, 2, 1, out221);
-                m(2, 2, 2, out222);
+                m.set(2, 0, 0, out200);
+                m.set(2, 0, 1, out201);
+                m.set(2, 0, 2, out202);
+                m.set(2, 1, 0, out210);
+                m.set(2, 1, 1, out211);
+                m.set(2, 1, 2, out212);
+                m.set(2, 2, 0, out220);
+                m.set(2, 2, 1, out221);
+                m.set(2, 2, 2, out222);
             }
         }
     }
@@ -787,7 +787,7 @@ int Flux2Comp2PhasesAdimensionalized::FracFlow2PhasesHorizontalAdimensionalized:
     // F
     if (degree >= 0) {
 
-        m(0, (1. - flw)); // We are giving the value of flg=1-flw, the fractional flow for gas, as required in Flux2Comp2PhasesAdimensionalized as
+        m.set(0, (1. - flw)); // We are giving the value of flg=1-flw, the fractional flow for gas, as required in Flux2Comp2PhasesAdimensionalized as
         // the output of the jet!!! IMPORTANT!
 
         // Jacobian
@@ -795,11 +795,11 @@ int Flux2Comp2PhasesAdimensionalized::FracFlow2PhasesHorizontalAdimensionalized:
             /* Evaluate first derivatives of fluxes relative to gas saturation */
             /* ------------------------------------------------------- */
             dflw_dsw = (la * dlaw_dsw - law * dla_dsw) / (la * la);
-            m(0, 0, dflw_dsw); /* Now observe that from the chain rule dflg_dsg=dflw_dsw HERE WE DO NOT NEED TO WORRY ABOUT THE DIMENSION */
+            m.set(0, 0, dflw_dsw); /* Now observe that from the chain rule dflg_dsg=dflw_dsw HERE WE DO NOT NEED TO WORRY ABOUT THE DIMENSION */
 
             /* Evaluate first derivatives of fluxes relative to temperature */
             dflw_dT = (la * dlaw_dT - law * dla_dT) / (la * la);
-            m(0, 1, (-dflw_dT) * fluxComplete_->TD->T_typical()); // We are giving dflg_dTheta = (  -dflw_dT( T (Theta) )  )*T_typical_
+            m.set(0, 1, (-dflw_dT) * fluxComplete_->TD->T_typical()); // We are giving dflg_dTheta = (  -dflw_dT( T (Theta) )  )*T_typical_
             // Hessian
             if (degree == 2) {
                 /* Evaluate second derivatives of fluxes */
@@ -820,10 +820,10 @@ int Flux2Comp2PhasesAdimensionalized::FracFlow2PhasesHorizontalAdimensionalized:
                 //               m(0, 1, 0, j010);
                 //               m(0, 1, 1, j011);
 
-                m(0, 0, 0, -d2flw_dsw2); // We are passing d2fg_dsg2  NO CHANGE!
-                m(0, 0, 1, (d2flw_dswdT) * fluxComplete_->TD->T_typical()); // double j001 = d2flg_dsgdTheta = d2flg_dsgdT(T(Theta))*T_typical_  = d2flg_dswdT*T_typical_ = d2flw_dswdT*T_typical_;
-                m(0, 1, 0, (d2flw_dswdT) * fluxComplete_->TD->T_typical()); // double j010 = j001;
-                m(0, 1, 1, (-d2flw_dT2) * fluxComplete_->TD->T_typical() * fluxComplete_->TD->T_typical()); // double j011 = d2flg_dTheta2 = d2flg_dT2*T_typical_^2 = -d2flw_dsw2*T_typical_^2 // CHECKED BY HELMUT 21/10/2010
+                m.set(0, 0, 0, -d2flw_dsw2); // We are passing d2fg_dsg2  NO CHANGE!
+                m.set(0, 0, 1, (d2flw_dswdT) * fluxComplete_->TD->T_typical()); // double j001 = d2flg_dsgdTheta = d2flg_dsgdT(T(Theta))*T_typical_  = d2flg_dswdT*T_typical_ = d2flw_dswdT*T_typical_;
+                m.set(0, 1, 0, (d2flw_dswdT) * fluxComplete_->TD->T_typical()); // double j010 = j001;
+                m.set(0, 1, 1, (-d2flw_dT2) * fluxComplete_->TD->T_typical() * fluxComplete_->TD->T_typical()); // double j011 = d2flg_dTheta2 = d2flg_dT2*T_typical_^2 = -d2flw_dsw2*T_typical_^2 // CHECKED BY HELMUT 21/10/2010
 
             }
         }
@@ -953,7 +953,7 @@ int Flux2Comp2PhasesAdimensionalized::FracFlow2PhasesVerticalAdimensionalized::D
     // Z
     if (degree >= 0) {
 
-        m(0, flw * lag); // double j0 = Z = flw*lag;
+        m.set(0, flw * lag); // double j0 = Z = flw*lag;
 
         // Jacobian
         if (degree >= 1) {
@@ -961,12 +961,12 @@ int Flux2Comp2PhasesAdimensionalized::FracFlow2PhasesVerticalAdimensionalized::D
             /* --------------------------------------------------------- */
 
             dflw_dsw = (la * dlaw_dsw - law * dla_dsw) / (la * la); // BE CAREFUL, WE ARE USING THE CHAIN RULE TO PASS THE CORRECT DERIVATIVE
-            m(0, 0, -(dflw_dsw * lag + flw * dlag_dsw)); // this is double j00 = dZ_dsg= -dZ_dsw = -(dflw_dsw*lag + flw*dlag_dsw); NO CHANGE FOR DIM-LESS
+            m.set(0, 0, -(dflw_dsw * lag + flw * dlag_dsw)); // this is double j00 = dZ_dsg= -dZ_dsw = -(dflw_dsw*lag + flw*dlag_dsw); NO CHANGE FOR DIM-LESS
 
             /* Evaluate first derivative of Z relative to temperature */
             dflw_dT = (la * dlaw_dT - law * dla_dT) / (la * la);
 
-            m(0, 1, (dflw_dT * lag + flw * dlag_dT) * fluxComplete_->getThermo()->T_typical()); // this is double j01 =  dZ_dTheta = dZ_dT*T_typical_  = (dflw_dT*lag + flw*dlag_dT)*T_typical_;
+            m.set(0, 1, (dflw_dT * lag + flw * dlag_dT) * fluxComplete_->getThermo()->T_typical()); // this is double j01 =  dZ_dTheta = dZ_dT*T_typical_  = (dflw_dT*lag + flw*dlag_dT)*T_typical_;
 
             // Hessian
             if (degree == 2) {
@@ -1006,10 +1006,10 @@ int Flux2Comp2PhasesAdimensionalized::FracFlow2PhasesVerticalAdimensionalized::D
                 double j011 = (d2flw_dT2 * lag + dflw_dT * dlag_dT +
                         dflw_dT * dlag_dT + flw * d2lag_dT2) * fluxComplete_->getThermo()->T_typical() * fluxComplete_->getThermo()->T_typical(); // d2Z_dTheta2 = d2Z_dT2 * T_typical_^2
 
-                m(0, 0, 0, j000);
-                m(0, 0, 1, j001);
-                m(0, 1, 0, j010);
-                m(0, 1, 1, j011);
+                m.set(0, 0, 0, j000);
+                m.set(0, 0, 1, j001);
+                m.set(0, 1, 0, j010);
+                m.set(0, 1, 1, j011);
             }
         }
     }

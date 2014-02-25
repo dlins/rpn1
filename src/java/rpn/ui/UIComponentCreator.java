@@ -4,14 +4,12 @@
  * Departamento de Dinamica dos Fluidos
  *
  */
-
 package rpn.ui;
 
 import java.util.Observable;
 import javax.swing.JComponent;
 import rpn.configuration.Configuration;
 import rpn.configuration.ConfigurationProfile;
-
 
 public class UIComponentCreator extends Observable {
 
@@ -35,14 +33,17 @@ public class UIComponentCreator extends Observable {
 
         UIComponentCreator componentCreator = null;
 
-        if (configuration_.getType().equalsIgnoreCase(ConfigurationProfile.METHOD)) {
 
-            componentCreator = new ComboBoxCreator(configuration_, configurationParameter_);
-            return componentCreator.createUIComponent();
-        } else {
-            componentCreator = new SpinButtonCreator(configuration_, configurationParameter_);
-            return componentCreator.createUIComponent();
-        }
+        componentCreator = new SpinButtonCreator(configuration_, configurationParameter_);
+        return componentCreator.createUIComponent();
+
+//        if (configuration_.getType().equalsIgnoreCase(ConfigurationProfile.METHOD)) {
+//
+//            componentCreator = new ComboBoxCreator(configuration_, configurationParameter_);
+//            return componentCreator.createUIComponent();
+//        } else {
+//            ;
+//        }
 
 
 

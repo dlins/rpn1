@@ -54,6 +54,9 @@ public class RarefactionCurveCalc extends WaveCurveOrbitCalc implements RpCalcul
             throw new RpException("Error in native layer");
         }
 
+        
+        result.setReferencePoint(getStart());
+        
         return result;
 
     }

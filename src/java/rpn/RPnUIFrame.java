@@ -17,7 +17,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 import java.awt.event.*;
-import java.awt.geom.AffineTransform;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeEvent;
 import java.io.BufferedReader;
@@ -35,7 +34,6 @@ import rpn.controller.ui.*;
 import rpn.controller.ui.UI_ACTION_SELECTED;
 import rpn.glasspane.RPnGlassPane;
 import rpn.message.RPnNetworkStatus;
-import salvo.jesus.graph.java.awt.geom.SerializablePathIterator;
 import wave.multid.Space;
 import wave.util.RealVector;
 import wave.util.RectBoundary;
@@ -137,7 +135,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
             matlabExportMenuItem_.setEnabled(true);
             
-            openLogFile();
+//            openLogFile();
 
 
         } catch (Exception e) {
@@ -187,6 +185,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 toolBar_.add(LevelCurvePlotCommand.instance().getContainer());
                 toolBar_.add(CompositePlotCommand.instance().getContainer());
                 toolBar_.add(WaveCurvePlotCommand.instance().getContainer());
+                toolBar_.add(HugoniotContinuationPlotCommand.instance().getContainer());
 
                 toolBar_.add(PhysicalBoundaryPlotCommand.instance().getContainer());
                 toolBar_.add(TrackPointCommand.instance().getContainer());
@@ -199,6 +198,8 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 toolBar_.add(ClassifierCommand.instance().getContainer());      //** Leandro
                 toolBar_.add(VelocityCommand.instance().getContainer());        //** Leandro
                 
+                toolBar_.add(GenericAreaCommand.instance().getContainer());
+
                 toolBar_.add(AreaSelectionToExtensionCurveCommand.instance().getContainer());
                 toolBar_.add(RarefactionExtensionCurvePlotCommand.instance().getContainer());
                 toolBar_.add(RiemannProfileCommand.instance().getContainer());
@@ -614,6 +615,10 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         curvesList.addObserver(AreaSelectionToExtensionCurveCommand.instance());
         leftCurvesList.addObserver(AreaSelectionToExtensionCurveCommand.instance());
         rightCurvesList.addObserver(AreaSelectionToExtensionCurveCommand.instance());
+        
+        curvesList.update();
+        leftCurvesList.update();
+        rightCurvesList.update();
   
 
     }
@@ -1477,27 +1482,27 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     
     public static void commandLogAppend(String msg) {        
 
-        try {
-            
-            logWriter_.write(msg + "\n");
-            
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
+//        try {
+//            
+//            logWriter_.write(msg + "\n");
+//            
+//        } catch (IOException ex) {
+//            ex.printStackTrace();
+//        }
         
         
     }
     
     public static void closeLogFile() {
 
-        try {
-                                    
-            logWriter_.write("</RPNSESSION>");
-            logWriter_.close();           
-            
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }                                
+//        try {
+//                                    
+//            logWriter_.write("</RPNSESSION>");
+//            logWriter_.close();           
+//            
+//        } catch (IOException ex) {
+//            ex.printStackTrace();
+//        }                                
     }
 
 
@@ -1530,7 +1535,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
         public void actionPerformed(ActionEvent e) {
 
-            RPnConfigurationDialog extensionCurve = new RPnConfigurationDialog();
+            RPnResolutionDialog extensionCurve = new RPnResolutionDialog();
             extensionCurve.setVisible(true);
 
         }

@@ -81,8 +81,8 @@ int TriPhaseFluxFunction::jet(const WaveState &U, JetMatrix &M, int degree) cons
 
     double v = triPhaseParams.vel();
 
-    M(0, (lambdaw / lambda) * (v + lambdao * Grwo + lambdag * Grwg));
-    M(1, (lambdao / lambda) * (v + lambdaw * Grow + lambdag * Grog));
+    M.set(0, (lambdaw / lambda) * (v + lambdao * Grwo + lambdag * Grwg));
+    M.set(1, (lambdao / lambda) * (v + lambdaw * Grow + lambdag * Grog));
 
 
     if (degree > 0) {
@@ -100,21 +100,21 @@ int TriPhaseFluxFunction::jet(const WaveState &U, JetMatrix &M, int degree) cons
         dlambdadso = dlambdawdso + dlambdaodso + dlambdagdso;
         lambda2 = pow(lambda, 2.);
 
-        M(0, 0, (lambdaw / lambda) * (dlambdaodsw * (Grwo) + dlambdagdsw *
+        M.set(0, 0, (lambdaw / lambda) * (dlambdaodsw * (Grwo) + dlambdagdsw *
                 (Grwg)) + ((lambda * dlambdawdsw - lambdaw * dlambdadsw) / lambda2) *
                 (v + lambdao * (Grwo) + lambdag * (Grwg)));
 
-        M(0, 1, (lambdaw / lambda) * (dlambdaodso * (Grwo) + dlambdagdso *
+        M.set(0, 1, (lambdaw / lambda) * (dlambdaodso * (Grwo) + dlambdagdso *
                 (Grwg)) + ((lambda * dlambdawdso - lambdaw * dlambdadso) / lambda2) *
                 (v + lambdao * (Grwo) + lambdag * (Grwg)));
 
 
-        M(1, 0, (lambdao / lambda) * (dlambdawdsw * (-Grwo) + dlambdagdsw *
+        M.set(1, 0, (lambdao / lambda) * (dlambdawdsw * (-Grwo) + dlambdagdsw *
                 (Grog)) + ((lambda * dlambdaodsw - lambdao * dlambdadsw) / lambda2) *
                 (v + lambdaw * (-Grwo) + lambdag * (Grog)));
 
 
-        M(1, 1, (lambdao / lambda) * (dlambdawdso * (-Grwo) + dlambdagdso *
+        M.set(1, 1, (lambdao / lambda) * (dlambdawdso * (-Grwo) + dlambdagdso *
                 (Grog)) + ((lambda * dlambdaodso - lambdao * dlambdadso) / lambda2) *
                 (v + lambdaw * (-Grwo) + lambdag * (Grog)));
 
@@ -127,19 +127,19 @@ int TriPhaseFluxFunction::jet(const WaveState &U, JetMatrix &M, int degree) cons
 
         int i, j, k;
 
-        for (i = 0; i < M.n_comps(); i++) {
+        for (i = 0; i < M.number_of_conservation_equations(); i++) {
 
-            for (j = 0; j < M.n_comps(); j++) {
+            for (j = 0; j < M.number_of_variables(); j++) {
 
-                for (k = 0; k < M.n_comps(); k++) {
+                for (k = 0; k < M.number_of_variables(); k++) {
 
                     if (i == j)
 
-                        M(i, j, k, 1);
+                        M.set(i, j, k, 1);
 
                     else
 
-                        M(i, j, k, 0);
+                        M.set(i, j, k, 0);
 
                 }
             }

@@ -10,6 +10,7 @@ import rpn.controller.LevelCurveController;
 import rpn.controller.RpController;
 import rpnumerics.*;
 import wave.util.RealSegment;
+import wave.util.RealVector;
 
 public class LevelCurveGeomFactory extends RpCalcBasedGeomFactory {
 
@@ -18,6 +19,13 @@ public class LevelCurveGeomFactory extends RpCalcBasedGeomFactory {
 
 
     }
+    
+      public LevelCurveGeomFactory(LevelCurveCalc calc,LevelCurve curve) {
+        super(calc,curve);
+
+
+    }
+
 
     //
     // Methods
@@ -34,8 +42,6 @@ public class LevelCurveGeomFactory extends RpCalcBasedGeomFactory {
         return new LevelCurveGeom(realSegArray, this);
 
     }
-
-
 
     @Override
     protected RpController createUI() {
@@ -79,6 +85,60 @@ public class LevelCurveGeomFactory extends RpCalcBasedGeomFactory {
         return buffer.toString();
 
 
+
+    }
+
+    @Override
+    public String toXML() {
+
+
+        StringBuilder buffer = new StringBuilder();
+
+
+        LevelCurve geomSource = (LevelCurve) geomSource();
+
+
+        String curve_name = '\"' + geomSource.getClass().getSimpleName() + '\"';
+        String dimension = '\"' + Integer.toString(RPNUMERICS.domainDim()) + '\"';
+
+        LevelCurveCalc levelCalc = (LevelCurveCalc) rpCalc();
+
+
+        //
+        // PRINTS OUT THE CURVE ATTS
+        //
+        buffer.append("<").append(Orbit.XML_TAG).append(" curve_name=" + ' ').append(curve_name).append(' ' + " dimension=" + ' ').append(dimension);
+
+
+        if (levelCalc instanceof PointLevelCalc) {
+
+            PointLevelCalc pointLevelCalc = (PointLevelCalc) levelCalc;
+            RealVector startPoint = pointLevelCalc.getStartPoint();
+
+            buffer.append(' ' + " startpoint=\"").append(startPoint);
+            
+            buffer.append('\"');
+
+
+        }
+
+
+
+        buffer.append(" format_desc=\"1 segment per row\">" + "\n");
+
+        //
+        // PRINTS OUT THE CONFIGURATION INFORMATION
+        //
+        buffer.append(levelCalc.getConfiguration().toXML());
+
+        //
+        // PRINTS OUT THE SEGMENTS COORDS
+        //
+        buffer.append(geomSource.toXML());
+
+        buffer.append("</" + Orbit.XML_TAG + ">" + "\n");
+
+        return buffer.toString();
 
     }
 }

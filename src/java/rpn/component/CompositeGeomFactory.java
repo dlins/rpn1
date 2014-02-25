@@ -22,6 +22,10 @@ public class CompositeGeomFactory extends WaveCurveOrbitGeomFactory {
     public CompositeGeomFactory(CompositeCalc calc) {
         super(calc);
     }
+    
+       public CompositeGeomFactory(CompositeCalc calc,CompositeCurve curve) {
+        super(calc,curve);
+    }
     //
     // Accessors/Mutators
     //

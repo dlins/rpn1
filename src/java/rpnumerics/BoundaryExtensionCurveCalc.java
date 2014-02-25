@@ -29,6 +29,7 @@ public class BoundaryExtensionCurveCalc extends ContourCurveCalc {
         edge_ = edge;
         edgeResolution_ = edgeResolution;
         characteristicDomain_ = characteristicWhere;
+        configuration_=RPNUMERICS.getConfiguration("boundaryextensioncurve");
 
     }
 

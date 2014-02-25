@@ -11,5 +11,7 @@ import java.util.List;
 public interface WaveCurveBranch {
 
     List<WaveCurveBranch> getBranchsList();
+    OrbitPoint getReferencePoint();
+    void setReferencePoint(OrbitPoint referencePoint);
 
 }

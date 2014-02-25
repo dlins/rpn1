@@ -59,7 +59,7 @@
     </CURVECONFIGURATION>
 
     <CURVECONFIGURATION name="hugoniotcurve">
-        <CURVEPARAM name="resolution" value="120 120"/>
+        <CURVEPARAM name="resolution" value="20 20"/>
     </CURVECONFIGURATION>
 
     <CURVECONFIGURATION name="ellipticboundary">
@@ -88,7 +88,7 @@
 
     <CURVECONFIGURATION name="levelcurve">
         <CURVEPARAM name="family" value="0"/>
-        <CURVEPARAM name="levels" value="0.1 0.2 0.5"/>
+        <CURVEPARAM name="level" value="0.1"/>
 
     </CURVECONFIGURATION>
 
@@ -120,6 +120,8 @@
          <CURVEPARAM name="resolution" value="128 128"/>
         <CURVEPARAM name="extensionfamily" value="1"/>
         <CURVEPARAM name="characteristic" value="1"/>
+        <CURVEPARAM name="direction" value="20"/>
+        
     </CURVECONFIGURATION>
 
 
@@ -127,11 +129,12 @@
         
       <CURVECONFIGURATION name="extensioncurve">
         <CURVEPARAM name="family" value="0"/>
-        
          <CURVEPARAM name="resolution" value="128 128"/>
-               
+         <CURVEPARAM name="singular" value="true"/>
         <CURVEPARAM name="characteristic" value="1"/>
-    </CURVECONFIGURATION>
+        <CURVEPARAM name="domain" value="1"/>
+
+      </CURVECONFIGURATION>
   
     <VIEWCONFIGURATION modeldomain="2">
 

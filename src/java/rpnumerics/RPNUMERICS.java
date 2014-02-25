@@ -14,12 +14,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
-import rpn.command.FillPhaseSpaceCommand;
 import rpn.configuration.BoundaryConfiguration;
 import rpn.configuration.RPnConfig;
 import rpn.configuration.ConfigurationProfile;
 import rpn.configuration.PhysicsConfiguration;
 import rpn.parser.RPnDataModule;
+import wave.multid.CoordsArray;
 import wave.util.*;
 import wave.ode.*;
 import wave.multid.Space;
@@ -157,8 +157,6 @@ public class RPNUMERICS {
             }
 
 
-
-
             configMap_.put(physicsID, physicsConfiguration);
             errorControl_ = new RpErrorControl(boundary());
         } catch (Exception ex) {
@@ -283,7 +281,7 @@ public class RPNUMERICS {
     }
 
     /**
-     * 
+     *
      * @deprecated
      */
     public static native void initNative(String physicsName);
@@ -395,13 +393,32 @@ public class RPNUMERICS {
         return new CoincidenceExtensionCurveCalc(params, leftFamily, rightFamily, characteristicDomain);
     }
 
-    public static ExtensionCurveCalc createExtensionCurveCalc(List<RealSegment> segments) {
+    public static ExtensionCurveCalc createExtensionCurveCalc(List<RealSegment> segments, CoordsArray[] areaSelected) {
 
         int[] resolution = RPnDataModule.processResolution(getParamValue("extensioncurve", "resolution"));
         int family = new Integer(getParamValue("extensioncurve", "family"));
         int characteristic = new Integer(getParamValue("extensioncurve", "characteristic"));
+        boolean singular = new Boolean(getParamValue("extensioncurve", "singular"));
+        
 
-        return new ExtensionCurveCalc(new ContourParams(resolution), segments, family, characteristic, false);
+        int insideArea;
+
+        ArrayList<RealVector> realVectorList = new ArrayList<RealVector>();
+
+        if (areaSelected == null) {
+            insideArea=1;
+        }
+        else {
+            insideArea = new Integer(getParamValue("extensioncurve", "domain"));
+            for (int i = 0; i < areaSelected.length; i++) {
+                realVectorList.add(new RealVector(areaSelected[i].getCoords()));
+
+            }
+
+        }
+
+
+        return new ExtensionCurveCalc(new ContourParams(resolution), segments, realVectorList, family, characteristic, singular, insideArea);
 
     }
 
@@ -427,7 +444,7 @@ public class RPNUMERICS {
     public static EnvelopeCurveCalc createEnvelopeCurveCalc() {
 
         int[] resolution = RPnDataModule.processResolution(getParamValue("envelopecurve", "resolution"));
-        int whereIsConstant = new Integer(getParamValue("envelopecurve", "whereisconstant"));
+        int whereIsConstant = new Integer(getParamValue("envelopecurve", "edge"));
         int numberOfSteps = new Integer(getParamValue("envelopecurve", "numberofsteps"));
 
         return new EnvelopeCurveCalc(new ContourParams(resolution), whereIsConstant, numberOfSteps);
@@ -621,6 +638,15 @@ public class RPNUMERICS {
 
 
     }
+    
+    
+    public static CompositeCalc createCompositeCalc(OrbitPoint initialPoint,Configuration configuration) {
+        Integer direction = new Integer(configuration.getParam("direction"));
+        return new CompositeCalc(initialPoint, new Integer(configuration.getParam("family")), direction);
+
+
+    }
+
 
     public static BoundaryExtensionCurveCalc createBoundaryExtensionCurveCalc() {
 
@@ -663,6 +689,19 @@ public class RPNUMERICS {
 
 
     }
+    
+    
+     public static ShockCurveCalc createShockCurveCalc(OrbitPoint orbitPoint,Configuration shockConfiguration) {
+
+        Integer family = new Integer(shockConfiguration.getParam("family"));
+        Double tolerance = 0.001;//TODO : Esperar a nova inteface do choque com tolerancia ???
+
+        Integer direction = new Integer(shockConfiguration.getParam("direction"));
+        return new ShockCurveCalc(orbitPoint, family, direction, tolerance);
+
+
+    }
+
 
     public static ShockCurveCalc createShockCurveCalc(OrbitPoint orbitPoint) {
 
@@ -711,7 +750,7 @@ public class RPNUMERICS {
 
         int extensionFamily = new Integer(getParamValue("rarefactionextension", "extensionfamily"));
 
-        Integer direction = new Integer(getParamValue("fundamentalcurve", "direction"));
+        Integer direction = new Integer(getParamValue("rarefactionextension", "direction"));
 
         return new RarefactionExtensionCalc(new ContourParams(resolution), orbitPoint, direction, curveFamily, extensionFamily, characteristicDomain);
 
@@ -836,9 +875,9 @@ public class RPNUMERICS {
 
     //TODO KEEP TO JAVA CALCS USE  !!
     /**
-     * 
-     * 
-     * @deprecated   ONLY TO JAVA CALCS USE  
+     *
+     *
+     * @deprecated ONLY TO JAVA CALCS USE
      */
     static public final RpErrorControl errorControl() {
         return errorControl_;
@@ -847,9 +886,9 @@ public class RPNUMERICS {
     }
 
     /**
-     * 
-     * 
-     * @deprecated   ONLY TO JAVA CALCS USE  !!
+     *
+     *
+     * @deprecated ONLY TO JAVA CALCS USE !!
      */
     static public final SimplexPoincareSection pSection() {
         return ((Rk4BPProfile) odeSolver_.getProfile()).getPoincareSection();
@@ -858,9 +897,9 @@ public class RPNUMERICS {
     }
 
     /**
-     * 
-     * 
-     * @deprecated  ONLY TO JAVA CALCS USE  !!
+     *
+     *
+     * @deprecated ONLY TO JAVA CALCS USE !!
      */
     static public final ODESolver odeSolver() {
         return odeSolver_;

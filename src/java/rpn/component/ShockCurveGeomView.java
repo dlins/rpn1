@@ -38,7 +38,7 @@ public class ShockCurveGeomView extends WaveCurveOrbitGeomView {
         GeneralPath composite = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
 
         composite.append(dash(), false);
-
+        
         return composite;
 
     }

@@ -17,7 +17,7 @@ public class CoincidenceCurve extends BifurcationCurve{// RPnCurve implements Rp
 
 //    private List hugoniotSegments_;
 
-    public CoincidenceCurve(List<HugoniotSegment> hSegments) {
+    public CoincidenceCurve(List<RealSegment> hSegments) {
         super(hSegments);//, new ViewingAttr(Color.RED));
 //        hugoniotSegments_ = hSegments;
 

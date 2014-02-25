@@ -26,20 +26,17 @@ boundary_(boundary.clone()),
 space_(new Space(space)),
 ID_(id),
 type_(type) {
-
+    setHugoniotContinuationMethod(new HugoniotContinuation2D2D(fluxFunction_, accumulationFunction_, &getBoundary()));
+    setShockMethod(new Shock());
 }
 
 SubPhysics::SubPhysics(const Boundary & boundary, const Space & space, const char * name, int type) : boundary_(boundary.clone()),
 space_(new Space(space)),
 ID_(name),
 type_(type) {
-
+    setHugoniotContinuationMethod(new HugoniotContinuation2D2D(fluxFunction_, accumulationFunction_, &getBoundary()));
+    setShockMethod(new Shock());
 }
-
-
-
-
-
 
 const Space &SubPhysics::domain() const {
     return *space_;
@@ -62,16 +59,16 @@ void SubPhysics::boundary(const Boundary & newBoundary) {
     delete boundary_;
     delete preProcessedBoundary_;
     boundary_ = newBoundary.clone();
-    preProcessedBoundary_= newBoundary.clone();
+    preProcessedBoundary_ = newBoundary.clone();
 
 }
 
 void SubPhysics::setParams(vector<string> paramsVector) {
 
     for (int i = 0; i < paramsVector.size(); i++) {
-    if ( Debug::get_debug_level() == 5 ) {
-        cout << "Param " << i << " :" << paramsVector[i] << endl;
-    }
+        if (Debug::get_debug_level() == 5) {
+            cout << "Param " << i << " :" << paramsVector[i] << endl;
+        }
 
     }
 
@@ -91,16 +88,14 @@ void SubPhysics::setHugoniotFunction(Hugoniot_Locus *hf) {
     hugoniotFunction_ = hf;
 }
 
-
-Viscosity_Matrix * SubPhysics::getViscosityMatrix() const{
+Viscosity_Matrix * SubPhysics::getViscosityMatrix() const {
     return viscosityMatrix_;
 }
-    
-void SubPhysics::setViscosityMatrix(Viscosity_Matrix * newViscosityMatrix){
 
-    viscosityMatrix_=newViscosityMatrix;
+void SubPhysics::setViscosityMatrix(Viscosity_Matrix * newViscosityMatrix) {
+
+    viscosityMatrix_ = newViscosityMatrix;
 }
-
 
 void SubPhysics::setDoubleContactFunction(Double_Contact_Function *dcf) {
     doubleContactFunction_ = dcf;
@@ -112,6 +107,16 @@ void SubPhysics::setShockMethod(ShockMethod * shockMethod) {
 
 ShockMethod * SubPhysics::getShockMethod() {
     return shock_method_;
+}
+
+HugoniotContinuation * SubPhysics::getHugoniotContinuationMethod() {
+    return hugoniot_continuation_method_;
+}
+
+void SubPhysics::setHugoniotContinuationMethod(HugoniotContinuation * hugoniotContinuation) {
+
+    hugoniot_continuation_method_ = hugoniotContinuation;
+
 }
 
 Double_Contact_Function * SubPhysics::getDoubleContactFunction() {
@@ -145,7 +150,7 @@ SubPhysics::~SubPhysics() {
     delete accumulationFunction_;
     delete boundary_;
     delete preProcessedBoundary_;
-    
+
     delete viscosityMatrix_;
 
 

@@ -23,7 +23,6 @@ public class RPnCoreyToStone extends RPnFluxParamsSubject {
     //*** Leandro teste
     @Override
     public void setValues(String[] stringArray) {      // no novo subject (radios) recebe o vetor de booleanos "como strings"
-        System.out.println("Entrei no setValues de Corey");
         String[] newState = new String[RPNUMERICS.getFluxParams().getParams().getSize()];
         
         

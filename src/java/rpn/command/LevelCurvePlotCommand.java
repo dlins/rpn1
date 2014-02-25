@@ -9,9 +9,11 @@ import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import java.util.Iterator;
 import javax.swing.JToggleButton;
+import static rpn.command.RpModelPlotCommand.curveID_;
 import rpn.component.*;
 import rpn.configuration.Configuration;
 import rpn.controller.ui.UIController;
+import rpn.message.RPnNetworkStatus;
 import rpnumerics.RPNUMERICS;
 import rpnumerics.RPnCurve;
 import rpnumerics.RpCalculation;
@@ -50,36 +52,26 @@ public class LevelCurvePlotCommand extends RpModelPlotCommand {
     @Override
     public void execute() {
 
-
-        ArrayList<Double> levelValues = processLevels(RPNUMERICS.getParamValue("levelcurve", "levels"));
-        LevelCurveGeomFactory factory = null;
-        for (Double levelValue : levelValues) {
-            factory = new LevelCurveGeomFactory(RPNUMERICS.createLevelCurveCalc(levelValue));
-            logLevelCurvePlotCommand(factory, levelValue);
-            UIController.instance().getActivePhaseSpace().plot(factory.geom());
-
-        }
+        Double level = new Double(RPNUMERICS.getParamValue("levelcurve", "level"));
+        LevelCurveGeomFactory factory = new LevelCurveGeomFactory(RPNUMERICS.createLevelCurveCalc(level));
+        logLevelCurvePlotCommand(factory, level);
+        UIController.instance().getActivePhaseSpace().plot(factory.geom());
 
 
     }
 
     @Override
     public void execute(int curveId) {
-
-
-        ArrayList<Double> levelValues = processLevels(RPNUMERICS.getParamValue("levelcurve", "levels"));
-
-        Double levelValue = levelValues.get(0);
-
-        RpCalcBasedGeomFactory factory = factory = new LevelCurveGeomFactory(RPNUMERICS.createLevelCurveCalc(levelValue));
-
+        
+        Double level = new Double(RPNUMERICS.getParamValue("levelcurve", "level"));
+        LevelCurveGeomFactory factory = new LevelCurveGeomFactory(RPNUMERICS.createLevelCurveCalc(level));
         RpGeometry geometry = factory.geom();
 
         if (geometry == null) {
             return;
         }
 
-        logLevelCurvePlotCommand(factory, levelValue, curveId);
+        logLevelCurvePlotCommand(factory, level, curveId);
 
         UIController.instance().getActivePhaseSpace().plot(geometry);
 
@@ -89,7 +81,7 @@ public class LevelCurvePlotCommand extends RpModelPlotCommand {
     private void logLevelCurvePlotCommand(RpCalcBasedGeomFactory factory, double level, int curveId) {
         RpCalculation calc = (RpCalculation) factory.rpCalc();
         Configuration configuration = calc.getConfiguration();
-        configuration.setParamValue("levels", String.valueOf(level));
+        configuration.setParamValue("level", String.valueOf(level));
 
         RPnCurve curve = (RPnCurve) factory.geomSource();
         curve.setId(curveId);
@@ -99,48 +91,40 @@ public class LevelCurvePlotCommand extends RpModelPlotCommand {
 
         ArrayList<RealVector> emptyInput = new ArrayList<RealVector>();
         logCommand(new RpCommand(event, emptyInput));
+
+        if (RPnNetworkStatus.instance().isOnline() && RPnNetworkStatus.instance().isMaster()) {
+            RPnNetworkStatus.instance().sendCommand(rpn.controller.ui.UndoActionController.instance().getLastCommand().toXML());
+        }
+
+
+
     }
 
     private void logLevelCurvePlotCommand(RpCalcBasedGeomFactory factory, double level) {
 
         RpCalculation calc = (RpCalculation) factory.rpCalc();
         Configuration configuration = calc.getConfiguration();
-        configuration.setParamValue("levels", String.valueOf(level));
+        configuration.setParamValue("level", String.valueOf(level));
 
         RPnCurve curve = (RPnCurve) factory.geomSource();
-        curve.setId(curveID_);
-        curveID_++;
+        if(curve!=null){
+            curve.setId(curveID_);
+            curveID_++;
 
         Iterator oldValue = UIController.instance().getActivePhaseSpace().getGeomObjIterator();
         PropertyChangeEvent event = new PropertyChangeEvent(this, UIController.instance().getActivePhaseSpace().getName(), oldValue, factory.geom());
 
         ArrayList<RealVector> emptyInput = new ArrayList<RealVector>();
-        logCommand(new RpCommand(event, emptyInput));
+        RpCommand rpCommand = new RpCommand(event, emptyInput);
+        logCommand(rpCommand);
 
-    }
-
-    /**
-     * @deprecated  Trocar
-     * @param resolution
-     * @return
-     */
-    private static ArrayList<Double> processLevels(String resolution) {
-
-        String[] splitedResolution = resolution.split(" ");
-
-        ArrayList<Double> result = new ArrayList<Double>();
-
-        try {
-            for (int i = 0; i < splitedResolution.length; i++) {
-                String string = splitedResolution[i];
-
-                result.add(new Double(string));
-            }
-        } catch (NumberFormatException ex) {
-            System.out.println("Error in resolution format !");
-            ex.printStackTrace();
+        if (RPnNetworkStatus.instance().isOnline() && RPnNetworkStatus.instance().isMaster()) {
+            RPnNetworkStatus.instance().sendCommand(rpn.controller.ui.UndoActionController.instance().getLastCommand().toXML());
         }
-        return result;
+        }
+        
+
 
     }
+   
 }

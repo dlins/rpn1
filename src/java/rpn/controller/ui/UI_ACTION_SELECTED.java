@@ -26,7 +26,6 @@ public class UI_ACTION_SELECTED implements UserInputHandler {
         
         actionSelected_ = action;
         userInputList_ = new ArrayList();
-        
         if (action instanceof RpModelPlotCommand) {
             Iterator<RPnPhaseSpacePanel> iterator = UIController.instance().getInstalledPanelsIterator();
             while (iterator.hasNext()) {
@@ -55,6 +54,17 @@ public class UI_ACTION_SELECTED implements UserInputHandler {
             }
             
         }
+        
+        
+        
+        
+       
+        
+        
+        
+        
+        
+        
         
         
         

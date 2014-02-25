@@ -82,7 +82,7 @@
             <CURVECONFIGURATION name="levelcurve">
                 <CURVEPARAM name="family" value="0"/>
                 <CURVEPARAM name="resolution" value="128 128"/>
-                <CURVEPARAM name="levels" value="0.1 0.2 0.5"/>
+                <CURVEPARAM name="level" value="0.1"/>
 
             </CURVECONFIGURATION>
 

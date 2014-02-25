@@ -16,7 +16,7 @@
 
 #include "FluxFunction.h"
 #include "AccumulationFunction.h"
-#include "HugoniotFunctionClass.h"
+#include "HugoniotContinuation.h"
 #include "Boundary.h"
 #include "Space.h"
 #include  "Multid.h"
@@ -25,6 +25,8 @@
 #include "ThreeImplicitFunctions.h"
 #include "Double_Contact_Function.h"
 #include "methods/ShockMethod.h"
+#include "Shock.h"
+#include "HugoniotContinuation2D2D.h"
 #include <sstream>
 
 /*
@@ -40,6 +42,7 @@ private:
 
     Hugoniot_Locus * hugoniotFunction_;
     Double_Contact_Function * doubleContactFunction_;
+    HugoniotContinuation * hugoniot_continuation_method_;
     ShockMethod * shock_method_;
     Boundary * boundary_;
     Space * space_;
@@ -87,9 +90,13 @@ public:
     
     Double_Contact_Function * getDoubleContactFunction();
     
+    void setHugoniotContinuationMethod(HugoniotContinuation *);
+    
     void setShockMethod(ShockMethod *);
     
     ShockMethod * getShockMethod();
+    
+    HugoniotContinuation * getHugoniotContinuationMethod();
 
     const Space & domain() const;
 

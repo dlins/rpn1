@@ -12,6 +12,9 @@
 #include "TwoImplicitFunctions.h"
 #include "Contour2p5_Method.h"
 
+// To compute extension curves on subdomains.
+#include "RealVector.h"
+
 class Extension_Curve : public TwoImplicitFunctions {
 private:
 protected:
@@ -20,8 +23,8 @@ protected:
     Matrix<double> segment_flux, segment_accum;
     RealVector segment_lambda;
     
-    const FluxFunction *ff;
-    const AccumulationFunction *aa;
+    const FluxFunction *domain_ff, *curve_ff;
+    const AccumulationFunction *domain_aa, *curve_aa;
 
     static int species_physic(Extension_Curve*, double*, int, int, int);
     static int compositional_physic(Extension_Curve*, double*, int, int, int);
@@ -47,13 +50,74 @@ public:
     bool valid_segment(int i);
 
     int function_on_vertices(double *foncub, int domain_i, int domain_j, int kl);
-        
+
+    // In all the domain //
+
+    // Simplified version        
     void curve(const FluxFunction *f, const AccumulationFunction *a, 
+               GridValues &g, int where_is_characteristic,
+               bool is_singular, int fam,
+               std::vector<RealVector> &original_curve,
+               std::vector<RealVector> &extension_on_curve,
+               std::vector<RealVector> &extension_on_domain);
+
+    // Generic version
+    void curve(const FluxFunction *df, const AccumulationFunction *da, // Over the domain
+               const FluxFunction *cf, const AccumulationFunction *ca, // Over the curve 
                GridValues &g, int where_is_characteristic,
                bool is_singular, int fam,  
                std::vector<RealVector> &original_curve,
                std::vector<RealVector> &extension_on_curve,
                std::vector<RealVector> &extension_on_domain);
+
+    // In all the domain //
+
+
+    // Out of a subdomain //
+
+    // Simplified version
+    void curve_out_of_subdomain(const FluxFunction *f, const AccumulationFunction *a,
+                                GridValues &g, std::vector<RealVector> &polygon,
+                                int where_is_characteristic,
+                                bool is_singular, int fam,  
+                                std::vector<RealVector> &original_curve,
+                                std::vector<RealVector> &extension_on_curve,
+                                std::vector<RealVector> &extension_on_domain);
+
+    // Generic version
+    void curve_out_of_subdomain(const FluxFunction *df, const AccumulationFunction *da, // Over the domain
+                                const FluxFunction *cf, const AccumulationFunction *ca, // Over the curve 
+                                GridValues &g, std::vector<RealVector> &polygon,
+                                int where_is_characteristic,
+                                bool is_singular, int fam,  
+                                std::vector<RealVector> &original_curve,
+                                std::vector<RealVector> &extension_on_curve,
+                                std::vector<RealVector> &extension_on_domain);
+
+    // Out of a subdomain //
+
+    // Only in a subdomain //
+
+    // Simplified version
+    void curve_in_subdomain(const FluxFunction *f, const AccumulationFunction *a,
+                                GridValues &g, std::vector<RealVector> &polygon,
+                                int where_is_characteristic,
+                                bool is_singular, int fam,  
+                                std::vector<RealVector> &original_curve,
+                                std::vector<RealVector> &extension_on_curve,
+                                std::vector<RealVector> &extension_on_domain);
+
+    // Generic version
+    void curve_in_subdomain(const FluxFunction *df, const AccumulationFunction *da, // Over the domain
+                                const FluxFunction *cf, const AccumulationFunction *ca, // Over the curve 
+                                GridValues &g, std::vector<RealVector> &polygon,
+                                int where_is_characteristic,
+                                bool is_singular, int fam,  
+                                std::vector<RealVector> &original_curve,
+                                std::vector<RealVector> &extension_on_curve,
+                                std::vector<RealVector> &extension_on_domain);
+
+    // Only in a subdomain //
 };
 
 #endif // _EXTENSION_CURVE_

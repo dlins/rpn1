@@ -19,7 +19,7 @@
 #include  "PermParams.h"
 #include "Hugoniot_Curve.h"
 #include "Double_Contact.h"
-#include "Shock.h"
+#include "HugoniotContinuation2D2D.h"
 #include "ViscosityParams.h"
 #include "TriPhaseParams.h"
 #include  "TriPhaseFluxFunction.h"

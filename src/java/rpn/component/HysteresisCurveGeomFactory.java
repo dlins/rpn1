@@ -87,22 +87,22 @@ public class HysteresisCurveGeomFactory extends BifurcationCurveGeomFactory {
 
     }
     
-    @Override
-    public String toXML() {
-
-        StringBuffer buffer = new StringBuffer();
-
-        buffer.append(super.toXML());
-
-        HysteresisCurveCalc hysteresisCurveCalc = (HysteresisCurveCalc) rpCalc();
-
-        buffer.append(" family=\"" + hysteresisCurveCalc.getFamily() + "\""+ ">\n");
-
-        buffer.append(((BifurcationCurve) geomSource()).toXML());
-
-        buffer.append("</COMMAND>\n");
-
-        return buffer.toString();
-
-    }
+//    @Override
+//    public String toXML() {
+//
+//        StringBuffer buffer = new StringBuffer();
+//
+//        buffer.append(super.toXML());
+//
+//        HysteresisCurveCalc hysteresisCurveCalc = (HysteresisCurveCalc) rpCalc();
+//
+//        buffer.append(" family=\"" + hysteresisCurveCalc.getFamily() + "\""+ ">\n");
+//
+//        buffer.append(((BifurcationCurve) geomSource()).toXML());
+//
+//        buffer.append("</COMMAND>\n");
+//
+//        return buffer.toString();
+//
+//    }
 }

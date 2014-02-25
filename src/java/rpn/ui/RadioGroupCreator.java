@@ -6,8 +6,10 @@
  */
 package rpn.ui;
 
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
@@ -22,6 +24,12 @@ public class RadioGroupCreator extends UIComponentCreator {
     private ButtonGroup buttonGroup_;
     private JRadioButton forwardCheckBox_;
     private JRadioButton backwardCheckBox_;
+    private JRadioButton insideDomainCheckBox_;
+    private JRadioButton outsideDomainCheckBox_;
+    private JRadioButton wholeDomainCheckBox_;
+        
+
+    
     private int currentOrbitDirection_;
 
 
@@ -33,18 +41,66 @@ public class RadioGroupCreator extends UIComponentCreator {
     @Override
     public JComponent createUIComponent() {
 
-
+        buttonGroup_ = new ButtonGroup();
         if (configurationParameter_.equals("direction")) {
-
-            buttonGroup_ = new ButtonGroup();
 
             return fillButtonGroup();
 
         }
-        TextFieldCreator textFieldCreator = new TextFieldCreator(configuration_, configurationParameter_);
-        return textFieldCreator.createUIComponent();
+        if (configurationParameter_.equals("domain")){
+            return fillDomainButtonGroup();
+        }
+        
+        
+        
+        
+        CheckBoxCreator checkBoxCreator = new CheckBoxCreator(configuration_, configurationParameter_);
+
+        return checkBoxCreator.createUIComponent();
 
     }
+    
+    
+     private JPanel fillDomainButtonGroup() {
+
+
+        JPanel domainPanel = new JPanel();
+        domainPanel.setLayout(new GridLayout(3,1));
+
+
+        insideDomainCheckBox_ = new JRadioButton("Inside region");
+        insideDomainCheckBox_.addActionListener(new DomainSelectionListener());
+        insideDomainCheckBox_.setEnabled(true);
+        
+        
+        outsideDomainCheckBox_ = new JRadioButton("Outside region");
+        outsideDomainCheckBox_.addActionListener(new DomainSelectionListener());
+        outsideDomainCheckBox_.setEnabled(true);
+
+        
+        wholeDomainCheckBox_ = new JRadioButton("Whole domain");
+        wholeDomainCheckBox_.addActionListener(new DomainSelectionListener());
+        wholeDomainCheckBox_.setSelected(true);//Default         
+        wholeDomainCheckBox_.setEnabled(true);
+
+
+        buttonGroup_.add(insideDomainCheckBox_);
+        buttonGroup_.add(outsideDomainCheckBox_);
+        buttonGroup_.add(wholeDomainCheckBox_);
+
+        
+        domainPanel.add(insideDomainCheckBox_);
+        domainPanel.add(outsideDomainCheckBox_);
+        domainPanel.add(wholeDomainCheckBox_);
+
+
+        return domainPanel;
+
+
+    }
+    
+    
+    
 
     private JPanel fillButtonGroup() {
 
@@ -92,4 +148,23 @@ public class RadioGroupCreator extends UIComponentCreator {
             RPNUMERICS.setParamValue("fundamentalcurve", "direction", String.valueOf(currentOrbitDirection_));
         }
     }
+    
+     private class DomainSelectionListener implements ActionListener {
+
+        public void actionPerformed(ActionEvent e) {
+
+            
+            int domain=1;
+            
+            if (insideDomainCheckBox_.isSelected()) {
+                domain =0;
+            } else if (outsideDomainCheckBox_.isSelected()){
+                domain=-1;
+            }else if (wholeDomainCheckBox_.isSelected()){
+                domain=1;
+            }
+
+            RPNUMERICS.setParamValue("extensioncurve", "domain", String.valueOf(domain));
+        }
+     }
 }

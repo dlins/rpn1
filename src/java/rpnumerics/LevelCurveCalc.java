@@ -18,6 +18,7 @@ public class LevelCurveCalc extends ContourCurveCalc {
         level_ = level;
 
         configuration_=RPNUMERICS.getConfiguration("levelcurve");
+        configuration_.setParamValue("resolution", RPNUMERICS.getParamValue("hugoniotcurve", "resolution"));
 
     }
 

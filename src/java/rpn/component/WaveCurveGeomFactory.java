@@ -14,8 +14,11 @@ import rpnumerics.RarefactionCurve;
 import rpnumerics.ShockCurve;
 import rpnumerics.WaveCurve;
 import rpnumerics.WaveCurveBranch;
-import rpnumerics.WaveCurveCalc;
 import rpnumerics.FundamentalCurve;
+import rpnumerics.Orbit;
+import rpnumerics.OrbitPoint;
+import rpnumerics.RPNUMERICS;
+import rpnumerics.WaveCurveOrbitCalc;
 import wave.multid.view.ViewingAttr;
 import wave.util.RealSegment;
 
@@ -30,7 +33,7 @@ public class WaveCurveGeomFactory extends WaveCurveOrbitGeomFactory {
     // Constructors/Initializers
     //
 
-    public WaveCurveGeomFactory(WaveCurveCalc calc) {
+    public WaveCurveGeomFactory(WaveCurveOrbitCalc calc) {
         super(calc);
     }
 
@@ -51,7 +54,6 @@ public class WaveCurveGeomFactory extends WaveCurveOrbitGeomFactory {
         for (WaveCurveBranch branch : waveCurve.getBranchsList()) {
 
             List<RealSegment> segList = new ArrayList<RealSegment>();
-
 
             for (WaveCurveBranch leaf : branch.getBranchsList()) {
                 segList.addAll(((RPnCurve) leaf).segments());
@@ -74,28 +76,16 @@ public class WaveCurveGeomFactory extends WaveCurveOrbitGeomFactory {
 
     private WaveCurveOrbitGeom createOrbits(FundamentalCurve branch) {
 
-        System.out.println(branch.getClass().getCanonicalName());
-
         if (branch instanceof RarefactionCurve) {
-
-//            System.out.println("Dentro do createOrbits de WaveCurveGeomFactory : Rarefaction --- " +branch.getPoints().length);
             return new RarefactionCurveGeom(MultidAdapter.converseOrbitPointsToCoordsArray(branch.getPoints()), this, (RarefactionCurve) branch);
-
         }
 
         if (branch instanceof ShockCurve) {
-
-//            System.out.println("Dentro do createOrbits de WaveCurveGeomFactory : Shock --- " +branch.getPoints().length);
-
             return new ShockCurveGeom(MultidAdapter.converseOrbitPointsToCoordsArray(branch.getPoints()), this, (ShockCurve) branch);
-
         }
 
         if (branch instanceof CompositeCurve) {
-
-//            System.out.println("Dentro do createOrbits de WaveCurveGeomFactory : Composite --- " +branch.getPoints().length);
             return new CompositeGeom(MultidAdapter.converseOrbitPointsToCoordsArray(branch.getPoints()), this, (CompositeCurve) branch);
-
         }
 
 
@@ -114,5 +104,53 @@ public class WaveCurveGeomFactory extends WaveCurveOrbitGeomFactory {
             return new ViewingAttr(Color.blue);
         }
         return null;
+    }
+
+    @Override
+    public String toXML() {
+
+
+        StringBuilder buffer = new StringBuilder();
+
+        WaveCurve geomSource = (WaveCurve) geomSource();
+        OrbitPoint referencePoint = geomSource.getReferencePoint();
+
+        String curve_name = '\"' + geomSource.getClass().getSimpleName() + '\"';
+        String dimension = '\"' + Integer.toString(RPNUMERICS.domainDim()) + '\"';
+
+        WaveCurveOrbitCalc orbitCalc = (WaveCurveOrbitCalc) rpCalc();
+
+        //
+        // PRINTS OUT THE CURVE ATTS
+        //
+        buffer.append("<").append(Orbit.XML_TAG).append(" curve_name=" + ' ').append(curve_name).append(' ' + " dimension=" + ' ').append(dimension).append(' ' + " startpoint=\"").append(referencePoint.getCoords()).append('\"'
+                + " format_desc=\"1 segment per row\">" + "\n");
+
+        //
+        // PRINTS OUT THE CONFIGURATION INFORMATION
+        //
+        buffer.append(orbitCalc.getConfiguration().toXML());
+        //
+        // PRINTS OUT THE SEGMENTS COORDS
+        //
+        List<WaveCurveBranch> branchsList = geomSource.getBranchsList();
+        
+        for (WaveCurveBranch waveCurveBranch : branchsList) {
+            FundamentalCurve fundamentalCurve = (FundamentalCurve)waveCurveBranch;
+            String branch_name = fundamentalCurve.getClass().getSimpleName();
+            
+            buffer.append("<SUBCURVE name=\"").append(branch_name).append("\">\n");
+            buffer.append(fundamentalCurve.toXML());
+            buffer.append("</SUBCURVE>\n");
+                
+            
+
+        }
+
+
+        buffer.append("</" + Orbit.XML_TAG + ">" + "\n");
+
+        return buffer.toString();
+
     }
 }

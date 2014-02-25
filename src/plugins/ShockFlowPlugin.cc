@@ -1,58 +1,58 @@
 #include "ShockFlowPlugin.h"
 
-int ShockFlowPlugin::flux(const RealVector & input, RealVector & output)  {
-
+//int ShockFlowPlugin::flux(const RealVector & input, RealVector & output)  {
+//
+////    WaveState tempInput(input);
+////    JetMatrix tempOutput(input.size());
+////    fluxFunction().jet(tempInput, tempOutput, 0);
+////
+////    RealVector fx(input.size());
+////
+////    tempOutput.f(fx);
+////
+////    fx -= (*fx0_);
+////
+////    RealVector xMinusX0(input);
+////    xMinusX0 -= getParams().getPhasePoint();
+////    xMinusX0 *= getParams().getSigma();
+////    fx -= xMinusX0;
+////
+////    output = fx;
+//
+//
+//    return 2;
+//
+//
+//}
+//
+//int ShockFlowPlugin::fluxDeriv(const RealVector & input, JacobianMatrix &output)  {
+//
+////    WaveState tempInput(input);
+////    JetMatrix tempOutput(input.size());
+////    fluxFunction().jet(tempInput, tempOutput, 1);
+////
+////    tempOutput.jacobian(output);
+////    JacobianMatrix identity(input.size());
+////    identity.scale(getParams().getSigma());
+////    output - identity;
+//
+//    return 2;
+//
+//
+//
+//}
+//
+//int ShockFlowPlugin::fluxDeriv2(const RealVector & input, HessianMatrix & output)  {
+//
 //    WaveState tempInput(input);
 //    JetMatrix tempOutput(input.size());
-//    fluxFunction().jet(tempInput, tempOutput, 0);
+//    fluxFunction().jet(tempInput, tempOutput, 2);
 //
-//    RealVector fx(input.size());
+//    tempOutput.hessian(output);
 //
-//    tempOutput.f(fx);
 //
-//    fx -= (*fx0_);
-//
-//    RealVector xMinusX0(input);
-//    xMinusX0 -= getParams().getPhasePoint();
-//    xMinusX0 *= getParams().getSigma();
-//    fx -= xMinusX0;
-//
-//    output = fx;
-
-
-    return 2;
-
-
-}
-
-int ShockFlowPlugin::fluxDeriv(const RealVector & input, JacobianMatrix &output)  {
-
-//    WaveState tempInput(input);
-//    JetMatrix tempOutput(input.size());
-//    fluxFunction().jet(tempInput, tempOutput, 1);
-//
-//    tempOutput.jacobian(output);
-//    JacobianMatrix identity(input.size());
-//    identity.scale(getParams().getSigma());
-//    output - identity;
-
-    return 2;
-
-
-
-}
-
-int ShockFlowPlugin::fluxDeriv2(const RealVector & input, HessianMatrix & output)  {
-
-    WaveState tempInput(input);
-    JetMatrix tempOutput(input.size());
-    fluxFunction().jet(tempInput, tempOutput, 2);
-
-    tempOutput.hessian(output);
-
-
-    return 2;
-}
+//    return 2;
+//}
 
 
 const ShockFlowParams & ShockFlowPlugin::getParams()const {
@@ -67,12 +67,12 @@ void ShockFlowPlugin::setParams(const ShockFlowParams & params) {
 
 void ShockFlowPlugin::updateZeroTerms() {
 
-    const PhasePoint & xzero = getParams().getPhasePoint();
-
-    WaveState input(xzero);
-    JetMatrix output(xzero.size());
-    fluxFunction().jet(input, output, 0);
-    output.f(*fx0_);
+//    const PhasePoint & xzero = getParams().getPhasePoint();
+//
+//    WaveState input(xzero);
+//    JetMatrix output(xzero.size());
+//    fluxFunction().jet(input, output, 0);
+//    output.f(*fx0_);
 
 
 }

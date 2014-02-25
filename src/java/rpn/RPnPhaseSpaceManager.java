@@ -54,16 +54,11 @@ public class RPnPhaseSpaceManager {
         System.out.println(eraseConfiguration.toXML());
         
         PropertyChangeEvent event = new PropertyChangeEvent(CurveRemoveCommand.instance(), null, null, eraseConfiguration);
-        System.out.println("log command antes de logar");
         UndoActionController.instance().addAction(new RpCommand(event));
-        System.out.println("log command depois de logar");
+
     }
     
     public void remove(RPnPhaseSpaceAbstraction phaseSpace, MultiGeometry bifurcationGeom) {
-        System.out.println("metodo remove de RPnPhaseSpaceManager");
-        System.out.println("phaseSpace.getName() : " + phaseSpace.getName());
-        
-        
         logRemoveCommand(phaseSpace, bifurcationGeom);
         
         
@@ -75,7 +70,6 @@ public class RPnPhaseSpaceManager {
                 Iterator iteratorList = pointedPhaseSpace.curvesListIterator();
                 
                 while (iteratorList.hasNext()) {
-                    System.out.println("iteratorList.hasNext()");
                     RPnCurvesList list = (RPnCurvesList) iteratorList.next();
                     list.removeGeometrySide(bifurcationGeom);
                     

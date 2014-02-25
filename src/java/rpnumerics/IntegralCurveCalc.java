@@ -50,6 +50,8 @@ public class IntegralCurveCalc extends WaveCurveOrbitCalc implements RpCalculati
         }
 
 
+        result.setReferencePoint(getStart());
+        
         return result;
 
 

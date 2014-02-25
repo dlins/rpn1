@@ -7,25 +7,46 @@
 package rpnumerics;
 
 import rpn.configuration.CommandConfiguration;
+import rpn.configuration.CurveConfiguration;
 
 public class SubInflectionCurveCalc extends ContourCurveCalc {
 
     //
     // Constructors/Initializers
     //
-    public SubInflectionCurveCalc(){
+    public SubInflectionCurveCalc() {
         super(new ContourParams());
+        
+        CurveConfiguration curveConfig = (CurveConfiguration) RPNUMERICS.getConfiguration("inflectioncurve");
+        
+        configuration_ = curveConfig.clone();
+        String[] resolution = {"resolution"};
+        configuration_.keepParameters(resolution);
 
-        configuration_ = RPNUMERICS.getConfiguration("subinflectioncurve");
     }
 
+    
+    public SubInflectionCurveCalc(ContourParams params) {
+        super(params);
+        
+        CurveConfiguration curveConfig = (CurveConfiguration) RPNUMERICS.getConfiguration("inflectioncurve");
+        
+        configuration_ = curveConfig.clone();
+        String[] resolution = {"resolution"};
+        configuration_.keepParameters(resolution);
+
+    }
+
+    
+    
+   
 
     public RpSolution calc() throws RpException {
 
 
         SubInflectionCurve result = (SubInflectionCurve) nativeCalc();
 
-          if (result == null) {
+        if (result == null) {
             throw new RpException("Error in native layer");
         }
 
@@ -33,6 +54,4 @@ public class SubInflectionCurveCalc extends ContourCurveCalc {
     }
 
     private native RpSolution nativeCalc() throws RpException;
-
-
 }

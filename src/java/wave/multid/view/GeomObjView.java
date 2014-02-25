@@ -80,6 +80,8 @@ public abstract class GeomObjView {
         return segmentIndex;
 
     }
+    
+    
 
     /** Returns the geometrics proprieties of a multidimensional object. */
     public AbstractGeomObj getAbstractGeom() {

@@ -6,6 +6,7 @@
 package rpnumerics;
 
 import java.util.List;
+import wave.util.RealSegment;
 
 public class BuckleyLeverettInflectionCurve extends BifurcationCurve {
     //
@@ -14,7 +15,7 @@ public class BuckleyLeverettInflectionCurve extends BifurcationCurve {
 
    
 
-    public BuckleyLeverettInflectionCurve(List<HugoniotSegment> hSegments) {
+    public BuckleyLeverettInflectionCurve(List<RealSegment> hSegments) {
         super(hSegments);
      
 

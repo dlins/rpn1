@@ -17,6 +17,8 @@
 #include "Accum2Comp2PhasesAdimensionalized.h"
 #include "Flux2Comp2PhasesAdimensionalized.h"
 #include "Hugoniot_TP.h"
+#include "HugoniotContinuation3D2D.h"
+#include "ShockContinuationMethod3D2D.h"
 #include "RectBoundary.h"
 #include "Multid.h"
 

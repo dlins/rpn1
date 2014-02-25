@@ -32,13 +32,13 @@ void RpFunction::fill_with_jet(int n, const double *in, int degree, double *F, d
     jet(WaveState(r), c_jet, degree);
 
     // Fill F
-    if (F != 0) for (int i = 0; i < n; i++) F[i] = c_jet(i);
+    if (F != 0) for (int i = 0; i < n; i++) F[i] = c_jet.get(i);
 
     // Fill J
     if (J != 0) {
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
-                J[i * n + j] = c_jet(i, j);
+                J[i * n + j] = c_jet.get(i, j);
             }
         }
     }
@@ -48,7 +48,7 @@ void RpFunction::fill_with_jet(int n, const double *in, int degree, double *F, d
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
                 for (int k = 0; k < n; k++) {
-                    H[(i * n + j) * n + k] = c_jet(i, j, k);
+                    H[(i * n + j) * n + k] = c_jet.get(i, j, k);
                 }
             }
         }

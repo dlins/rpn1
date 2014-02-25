@@ -2,25 +2,30 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package rpn.command;
 
 import java.awt.Polygon;
 import java.awt.event.ActionEvent;
+import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import rpn.RPnPhaseSpaceAbstraction;
 import rpn.RPnPhaseSpacePanel;
+import static rpn.command.RpModelPlotCommand.curveID_;
 import rpn.component.BifurcationCurveGeomFactory;
+import rpn.component.RpCalcBasedGeomFactory;
 import rpn.component.RpGeomFactory;
 import rpn.component.RpGeometry;
 import rpn.component.util.AreaSelected;
 import rpn.controller.ui.UIController;
+import rpn.message.RPnNetworkStatus;
 import rpnumerics.ExtensionCurveCalc;
 import rpnumerics.RPnCurve;
 import wave.multid.Coords2D;
 import wave.multid.CoordsArray;
+import wave.multid.model.MultiPolygon;
 import wave.multid.view.GeomObjView;
 import wave.multid.view.ViewingTransform;
 import wave.util.RealSegment;
@@ -30,7 +35,7 @@ import wave.util.RealVector;
  *
  * @author moreira
  */
-public class GenericExtensionCurveCommand extends RpModelConfigChangeCommand{
+public class GenericExtensionCurveCommand extends RpModelConfigChangeCommand {
 
     static public final String DESC_TEXT = "Extension Curve";
     //
@@ -39,30 +44,48 @@ public class GenericExtensionCurveCommand extends RpModelConfigChangeCommand{
     private static GenericExtensionCurveCommand instance_ = null;
     private RpGeometry curveToProcess_ = null;
     private RPnPhaseSpacePanel panelToProcess_ = null;
+    private List<MultiPolygon> areaSelected_;//TODO To use a list of areas ?
 
     //
     // Constructors
     //
     protected GenericExtensionCurveCommand() {
         super(DESC_TEXT);
+        areaSelected_ = new ArrayList<MultiPolygon>();
     }
 
     public void execute() {
+        
         if (curveToProcess_ != null && panelToProcess_ != null) {
-            //processGeometry(curveToProcess_, panelToProcess_);
-            UIController.instance().getActivePhaseSpace().join(processGeometry(curveToProcess_, panelToProcess_));
+            RpGeometry geometry = processGeometry(curveToProcess_, panelToProcess_);
+            UIController.instance().getActivePhaseSpace().join(geometry);
             RPnPhaseSpaceAbstraction phaseSpace = (RPnPhaseSpaceAbstraction) panelToProcess_.scene().getAbstractGeom();
+            RpCalcBasedGeomFactory factory = (RpCalcBasedGeomFactory) geometry.geomFactory();
+            RPnCurve curve = (RPnCurve) factory.geomSource();
+            curve.setId(curveID_);
+            curveID_++;
+
+
+            Iterator oldValue = UIController.instance().getActivePhaseSpace().getGeomObjIterator();
+            PropertyChangeEvent event_ = new PropertyChangeEvent(this, UIController.instance().getActivePhaseSpace().getName(), oldValue, geometry);
+
+            ArrayList<RealVector> inputArray = new ArrayList<RealVector>();
+            logCommand(new RpCommand(event_,inputArray));
+
+            if (RPnNetworkStatus.instance().isOnline() && RPnNetworkStatus.instance().isMaster()) {
+                RPnNetworkStatus.instance().sendCommand(rpn.controller.ui.UndoActionController.instance().getLastCommand().toXML());
+            }
+
+
             phaseSpace.update();
-            panelToProcess_.clearAreaSelection();
-        }
-        else {
-            System.out.println("Entrou no execute() de GenericExtensionCurveAgent com membros nulos");
+
+        } else {
+            System.out.println("Error in extension curve calculation");
         }
 
     }
 
     public void unexecute() {
-
     }
 
     static public GenericExtensionCurveCommand instance() {
@@ -71,8 +94,6 @@ public class GenericExtensionCurveCommand extends RpModelConfigChangeCommand{
         }
         return instance_;
     }
-
-
 
     @Override
     public void actionPerformed(ActionEvent event) {
@@ -92,8 +113,7 @@ public class GenericExtensionCurveCommand extends RpModelConfigChangeCommand{
             while (geomIterator.hasNext()) {
                 GeomObjView geomObjView = (GeomObjView) geomIterator.next();
                 if (((RpGeometry) geomObjView.getAbstractGeom()) == selectedGeometry) {
-                    System.out.println("curve.segments().size() ::: " +curve.segments().size());
-                    List<Integer> segmentIndex = containsCurve(curve, (Polygon)polygon.getShape(), phaseSpacePanel);
+                    List<Integer> segmentIndex = containsCurve(curve, (Polygon) polygon.getShape(), phaseSpacePanel);
                     if (!segmentIndex.isEmpty()) {
                         indexToRemove.addAll(segmentIndex);
                     }
@@ -101,24 +121,29 @@ public class GenericExtensionCurveCommand extends RpModelConfigChangeCommand{
             }
         }
 
-        System.out.println("indexToRemove.size() ::::::::::::: " +indexToRemove.size());
-
 
         List<RealSegment> segments = segmentsIntoArea(selectedGeometry, indexToRemove);
-        
-        ExtensionCurveCalc calc = rpnumerics.RPNUMERICS.createExtensionCurveCalc(segments);
+
+        CoordsArray[] areaPointsList = null;
+
+        if (!areaSelected_.isEmpty()) {
+
+            areaPointsList = areaSelected_.get(0).extractVertices();
+        }
+
+        ExtensionCurveCalc calc = rpnumerics.RPNUMERICS.createExtensionCurveCalc(segments, areaPointsList);
         BifurcationCurveGeomFactory bifurcationFactory = new BifurcationCurveGeomFactory(calc);
+        
 
         return bifurcationFactory.geom();
 
     }
 
-    void setGeometryAndPanel(RpGeometry phasSpaceGeometry, RPnPhaseSpacePanel panel) {
+    public void setGeometryAndPanel(RpGeometry phasSpaceGeometry, RPnPhaseSpacePanel panel) {
         curveToProcess_ = phasSpaceGeometry;
         panelToProcess_ = panel;
 
     }
-
 
     private List<RealSegment> segmentsIntoArea(RpGeometry selectedGeometry, List<Integer> indexToRemove) {
         List<RealSegment> listSeg = new ArrayList<RealSegment>();
@@ -130,11 +155,8 @@ public class GenericExtensionCurveCommand extends RpModelConfigChangeCommand{
             listSeg.add(curve.segments().get(ind));
         }
 
-        System.out.println("listSeg.size() ::::::::::::::::::: " +listSeg.size());
-
         return listSeg;
     }
-
 
     private List<Integer> containsCurve(RPnCurve curve, Polygon polygon, RPnPhaseSpacePanel panel) {
         List<Integer> indexList = new ArrayList<Integer>();
@@ -169,6 +191,9 @@ public class GenericExtensionCurveCommand extends RpModelConfigChangeCommand{
         return indexList;
     }
 
+    void setSelectedArea(MultiPolygon areaSelected) {
+        areaSelected_.clear();
+        areaSelected_.add(areaSelected);
 
-
+    }
 }

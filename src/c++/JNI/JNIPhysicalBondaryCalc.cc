@@ -84,10 +84,10 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_PhysicalBoundaryCalc_calcNative
         jdoubleArray eigenValRRight = env->NewDoubleArray(dimension);
 
 
-        if ( Debug::get_debug_level() == 5 ) {
-            cout << "Ponto: " << 2*i << left_vrs[2 * i] << endl;
-            cout << "Ponto: " << 2*i+1 << left_vrs[2 * i +1] << endl;
-        }
+//
+//            cout << "Ponto: " << 2*i << left_vrs[2 * i] << endl;
+//            cout << "Ponto: " << 2*i+1 << left_vrs[2 * i +1] << endl;
+
 
 
 

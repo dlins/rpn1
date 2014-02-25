@@ -1,5 +1,6 @@
+#include <vector>
+
 #include "Extension_Curve.h"
-#include "Debug.h"
 
 int Extension_Curve::species_physic(Extension_Curve *ec, double *foncub, int domain_i, int domain_j, int kl){
     double lambda;
@@ -134,17 +135,13 @@ int Extension_Curve::function_on_vertices(double *foncub, int domain_i, int doma
 //        red_shock_speed = (Y21 * X12 + Y13 * X31 + Y32 * X23) / den;
 //        }
 //        
-//        if ( Debug::get_debug_level() == 5 ) {
-////          cout<<"red : "<<red_shock_speed<<endl;
-//        }
+////        cout<<"red : "<<red_shock_speed<<endl;
 
 
 //        if (characteristic_where == CHARACTERISTIC_ON_CURVE) {
 
 //            lambda = segment_lambda[kl];
-//            if ( Debug::get_debug_level() == 5 ) {
-////              cout << "Valor do lambda: " << lambda << endl;
-//            }
+////            cout << "Valor do lambda: " << lambda << endl;
 
 //        } else {
 
@@ -175,12 +172,11 @@ bool Extension_Curve::valid_segment(int i) {
     std::vector<eigenpair> e;
 
     for (int j = 0; j < 2; j++) {
-        ff->fill_with_jet(dim, oc->at(i + j).components(), 1, F, &JF[0][0], 0);
-        aa->fill_with_jet(dim, oc->at(i + j).components(), 1, G, &JG[0][0], 0);
+        curve_ff->fill_with_jet(dim, oc->at(i + j).components(), 1, F, &JF[0][0], 0);
+        curve_aa->fill_with_jet(dim, oc->at(i + j).components(), 1, G, &JG[0][0], 0);
 
         e.clear();
         Eigen::eig(dim, &JF[0][0], &JG[0][0], e);
-
 
         if (characteristic_where == CHARACTERISTIC_ON_CURVE) {
             if (fabs(e[family].i) > epsilon) return false;
@@ -199,15 +195,36 @@ bool Extension_Curve::valid_segment(int i) {
     return true;
 }
 
+// Simplified version
+//
 void Extension_Curve::curve(const FluxFunction *f, const AccumulationFunction *a,
-        GridValues &g, int where_is_characteristic,
-        bool is_singular, int fam,
-        std::vector<RealVector> &original_curve,
-        std::vector<RealVector> &extension_on_curve,
-        std::vector<RealVector> &extension_on_domain) {
+                            GridValues &g, int where_is_characteristic,
+                            bool is_singular, int fam,
+                            std::vector<RealVector> &original_curve,
+                            std::vector<RealVector> &extension_on_curve,
+                            std::vector<RealVector> &extension_on_domain) {
 
-    ff = f;
-    aa = a;
+    curve(f, a, f, a, g, where_is_characteristic, is_singular, fam, 
+          original_curve, extension_on_curve, extension_on_domain);
+
+    return;
+}
+
+// Generic version
+//
+void Extension_Curve::curve(const FluxFunction *df, const AccumulationFunction *da, // Over the domain
+                            const FluxFunction *cf, const AccumulationFunction *ca, // Over the curve 
+                            GridValues &g, int where_is_characteristic,
+                            bool is_singular, int fam,  
+                            std::vector<RealVector> &original_curve,
+                            std::vector<RealVector> &extension_on_curve,
+                            std::vector<RealVector> &extension_on_domain){
+
+    domain_ff = df;
+    domain_aa = da;
+
+    curve_ff = cf;
+    curve_aa = ca;
 
     family = fam;
 
@@ -217,7 +234,10 @@ void Extension_Curve::curve(const FluxFunction *f, const AccumulationFunction *a
     gv = &g;
     oc = &original_curve;
 
-    gv->fill_eigenpairs_on_grid(ff, aa);
+    std::cout << "Dimension of the curve: " << oc->at(0).size() << std::endl;
+    std::cout << "Characteristic: " << characteristic_where << std::endl;
+
+    gv->fill_eigenpairs_on_grid(domain_ff, domain_aa);
 
     extension_on_curve.clear();
     extension_on_domain.clear();
@@ -225,7 +245,204 @@ void Extension_Curve::curve(const FluxFunction *f, const AccumulationFunction *a
     if (gv->grid(0, 0).size() == 2) type_of_physic = &species_physic;
     else                            type_of_physic = &compositional_physic;
 
+    //std::cout << "Inside Extension Curve: gv->grid(0, 0).size() = " << gv->grid(0, 0).size() << std::endl;
+
     Contour2p5_Method::contour2p5(this, extension_on_curve, extension_on_domain);
+
+    return;
+}
+
+// ON SUBDOMAINS //
+
+void Extension_Curve::curve_out_of_subdomain(const FluxFunction *f, const AccumulationFunction *a,
+                                             GridValues &g, std::vector<RealVector> &polygon,
+                                             int where_is_characteristic,
+                                             bool is_singular, int fam,  
+                                             std::vector<RealVector> &original_curve,
+                                             std::vector<RealVector> &extension_on_curve,
+                                             std::vector<RealVector> &extension_on_domain){
+
+    curve_out_of_subdomain(f, a, f, a, g, polygon, where_is_characteristic, is_singular, fam, 
+                           original_curve, extension_on_curve, extension_on_domain);
+    return;
+}
+
+// Generic version
+void Extension_Curve::curve_out_of_subdomain(const FluxFunction *df, const AccumulationFunction *da, // Over the domain
+                                             const FluxFunction *cf, const AccumulationFunction *ca, // Over the curve 
+                                             GridValues &g, std::vector<RealVector> &polygon,
+                                             int where_is_characteristic,
+                                             bool is_singular, int fam,  
+                                             std::vector<RealVector> &original_curve,
+                                             std::vector<RealVector> &extension_on_curve,
+                                             std::vector<RealVector> &extension_on_domain){
+
+    domain_ff = df;
+    domain_aa = da;
+
+    curve_ff = cf;
+    curve_aa = ca;
+
+    family = fam;
+
+    characteristic_where = where_is_characteristic;
+    singular = is_singular;
+
+    gv = &g;
+    oc = &original_curve;
+
+    gv->fill_eigenpairs_on_grid(domain_ff, domain_aa);
+
+    //  Find the convex hull of the polygon.
+    //
+    
+
+    std::vector<RealVector> convex_hull_points;
+    
+    for (int i = 0; i < polygon.size(); i++) {
+        cout<<polygon[i]<<endl;
+    }
+
+    
+    convex_hull(polygon, convex_hull_points);
+
+    // Copy of the cells, later it will be used to restore it.
+    Matrix<int> cell_type_copy;
+
+    if (convex_hull_points.size() > 2){
+        cell_type_copy = g.cell_type;
+
+        // Mark the cells that are not completely contained in the polygon as invalid.
+        // After the extension is computed, all the cells will be restored.
+        // TODO: Use a list of the cells to restore, instead of restoring all cells.
+        //
+        for (int i = 0; i < g.cell_type.rows(); i++){
+            for (int j = 0; j < g.cell_type.cols(); j++){
+                if (inside_convex_polygon(convex_hull_points, g.grid(i,     j)) ||
+                    inside_convex_polygon(convex_hull_points, g.grid(i + 1, j)) ||
+                    inside_convex_polygon(convex_hull_points, g.grid(i,     j + 1)) ||
+                    inside_convex_polygon(convex_hull_points, g.grid(i + 1, j + 1))
+                   ) g.cell_type(i, j) = CELL_IS_INVALID;
+            }
+        }
+    }
+
+    // Continue as usual.
+    //
+    extension_on_curve.clear();
+    extension_on_domain.clear();
+
+    if (gv->grid(0, 0).size() == 2) type_of_physic = &species_physic;
+    else                            type_of_physic = &compositional_physic;
+
+    //std::cout << "Inside Extension Curve: gv->grid(0, 0).size() = " << gv->grid(0, 0).size() << std::endl;
+
+    Contour2p5_Method::contour2p5(this, extension_on_curve, extension_on_domain);
+
+    if (convex_hull_points.size() > 2){
+        // Restore the grid.
+        g.cell_type = cell_type_copy;
+
+        // Return the convex hull
+        polygon = convex_hull_points;
+    }
+
+    return;
+}
+
+
+void Extension_Curve::curve_in_subdomain(const FluxFunction *f, const AccumulationFunction *a,
+                                         GridValues &g, std::vector<RealVector> &polygon,
+                                         int where_is_characteristic,
+                                         bool is_singular, int fam,  
+                                         std::vector<RealVector> &original_curve,
+                                         std::vector<RealVector> &extension_on_curve,
+                                         std::vector<RealVector> &extension_on_domain){
+
+    curve_in_subdomain(f, a, f, a, g, polygon, where_is_characteristic, is_singular, fam, 
+                           original_curve, extension_on_curve, extension_on_domain);
+    return;
+}
+
+// Generic version
+void Extension_Curve::curve_in_subdomain(const FluxFunction *df, const AccumulationFunction *da, // Over the domain
+                                         const FluxFunction *cf, const AccumulationFunction *ca, // Over the curve 
+                                         GridValues &g, std::vector<RealVector> &polygon,
+                                         int where_is_characteristic,
+                                         bool is_singular, int fam,  
+                                         std::vector<RealVector> &original_curve,
+                                         std::vector<RealVector> &extension_on_curve,
+                                         std::vector<RealVector> &extension_on_domain){
+
+    domain_ff = df;
+    domain_aa = da;
+
+    curve_ff = cf;
+    curve_aa = ca;
+
+    family = fam;
+
+    characteristic_where = where_is_characteristic;
+    singular = is_singular;
+
+    gv = &g;
+    oc = &original_curve;
+
+    gv->fill_eigenpairs_on_grid(domain_ff, domain_aa);
+
+    //  Find the convex hull of the polygon.
+    //
+    std::vector<RealVector> convex_hull_points;
+    
+
+    
+    for (int i = 0; i < polygon.size(); i++) {
+        cout<<polygon[i]<<endl;
+    }
+    
+    
+    convex_hull(polygon, convex_hull_points);
+
+    // Copy of the cells, later it will be used to restore it.
+    Matrix<int> cell_type_copy;
+
+    if (convex_hull_points.size() > 2){
+        cell_type_copy = g.cell_type;
+
+        // Mark the cells that are not completely contained in the polygon as invalid.
+        // After the extension is computed, all the cells will be restored.
+        // TODO: Use a list of the cells to restore, instead of restoring all cells.
+        //
+        for (int i = 0; i < g.cell_type.rows(); i++){
+            for (int j = 0; j < g.cell_type.cols(); j++){
+                if (!inside_convex_polygon(convex_hull_points, g.grid(i,     j)) ||
+                    !inside_convex_polygon(convex_hull_points, g.grid(i + 1, j)) ||
+                    !inside_convex_polygon(convex_hull_points, g.grid(i,     j + 1)) ||
+                    !inside_convex_polygon(convex_hull_points, g.grid(i + 1, j + 1))
+                   ) g.cell_type(i, j) = CELL_IS_INVALID;
+            }
+        }
+    }
+
+    // Continue as usual.
+    //
+    extension_on_curve.clear();
+    extension_on_domain.clear();
+
+    if (gv->grid(0, 0).size() == 2) type_of_physic = &species_physic;
+    else                            type_of_physic = &compositional_physic;
+
+    //std::cout << "Inside Extension Curve: gv->grid(0, 0).size() = " << gv->grid(0, 0).size() << std::endl;
+
+    Contour2p5_Method::contour2p5(this, extension_on_curve, extension_on_domain);
+
+    if (convex_hull_points.size() > 2){
+        // Restore the grid.
+        g.cell_type = cell_type_copy;
+
+        // Return the convex hull
+        polygon = convex_hull_points;
+    }
 
     return;
 }

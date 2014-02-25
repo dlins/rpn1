@@ -26,7 +26,6 @@ public class RPnCorey extends RPnFluxParamsSubject {
     @Override
     public void setValues(String[] stringArray) {
 
-        System.out.println("Entrei no setValues de Corey");
         RealVector newState = new RealVector(RPNUMERICS.getFluxParams().getParams().getSize());
 
         double a = Double.parseDouble(stringArray[0]);

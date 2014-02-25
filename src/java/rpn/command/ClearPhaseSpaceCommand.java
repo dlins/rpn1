@@ -47,8 +47,6 @@ public class ClearPhaseSpaceCommand extends javax.swing.AbstractAction {
 
         while (phaseSpaceIterator.hasNext()) {
             
-            System.out.println("Chamando clear");
-            
             RPnPhaseSpaceAbstraction phaseSpace = phaseSpaceIterator.next();
 
             Iterator<RpGeometry> geometryIterator = phaseSpace.getGeomObjIterator();
@@ -72,23 +70,33 @@ public class ClearPhaseSpaceCommand extends javax.swing.AbstractAction {
         while (phaseSpacePanelIterator.hasNext()) {
             RPnPhaseSpacePanel panel = phaseSpacePanelIterator.next();
             panel.clearAllStrings();
+            panel.clearAreaSelection();
             panel.repaint();
+            
         }
 
+               
+        
 
         // ClearScene is not undoable
         UndoActionController.instance().setEnabled(false);
         System.gc();
         //rpn.RPnUIFrame.instance().setTitle("");
         UIController.instance().resetCursor();
+        
+        if (RPnNetworkStatus.instance().isOnline() && RPnNetworkStatus.instance().isMaster()) {
+            
+            
+            RpCommand command = new RpCommand("clear");
+            
+            RPnNetworkStatus.instance().sendCommand(command.toXML());
+        }
 
     }
 
     public void actionPerformed(ActionEvent event) {
 
-        if (RPnNetworkStatus.instance().isOnline() && RPnNetworkStatus.instance().isMaster()) {
-            RPnNetworkStatus.instance().sendCommand(DESC_TEXT);
-        }
+        
 
         clear();
 

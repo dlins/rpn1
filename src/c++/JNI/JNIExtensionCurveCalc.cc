@@ -31,7 +31,7 @@ using std::vector;
  */
 
 
-JNIEXPORT jobject JNICALL Java_rpnumerics_ExtensionCurveCalc_nativeCalc(JNIEnv * env, jobject obj, jobject segmentList, jint family, jint characteristicWhere, jboolean singular) {
+JNIEXPORT jobject JNICALL Java_rpnumerics_ExtensionCurveCalc_nativeCalc(JNIEnv * env, jobject obj, jobject segmentList, jobject areaPoints, jint family, jint characteristicWhere, jboolean singular, jint inSideArea) {
 
 
     jclass realVectorClass = env->FindClass(REALVECTOR_LOCATION);
@@ -59,12 +59,12 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ExtensionCurveCalc_nativeCalc(JNIEnv *
     int segmentListSize = env->CallIntMethod(segmentList, sizeID);
     std::vector<RealVector> original_curve;
 
-    for (int i=0; i<segmentListSize; i++) {
+    for (int i = 0; i < segmentListSize; i++) {
         jobject segment = env->CallObjectMethod(segmentList, getElementID, i);
         jobject p1 = env->CallObjectMethod(segment, getPoint1ID);
         jobject p2 = env->CallObjectMethod(segment, getPoint2ID);
-        jdoubleArray p1Array = (jdoubleArray)env->CallObjectMethod(p1, toDoubleMethodID);
-        jdoubleArray p2Array = (jdoubleArray)env->CallObjectMethod(p2, toDoubleMethodID);
+        jdoubleArray p1Array = (jdoubleArray) env->CallObjectMethod(p1, toDoubleMethodID);
+        jdoubleArray p2Array = (jdoubleArray) env->CallObjectMethod(p2, toDoubleMethodID);
 
         double temp1 [dimension];
         env->GetDoubleArrayRegion(p1Array, 0, dimension, temp1);
@@ -79,7 +79,23 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ExtensionCurveCalc_nativeCalc(JNIEnv *
         original_curve.push_back(nativeRealVector2);
     }
 
+    //Getting area Vertices
+    int areaPointsSize = env->CallIntMethod(areaPoints, sizeID);
 
+    std::vector<RealVector> areaVertices;
+
+    for (int i = 0; i < areaPointsSize; i++) {
+        jobject areaVertex = env->CallObjectMethod(areaPoints, getElementID, i);
+        jdoubleArray p1Array = (jdoubleArray) env->CallObjectMethod(areaVertex, toDoubleMethodID);
+
+
+        double temp1 [dimension];
+        env->GetDoubleArrayRegion(p1Array, 0, dimension, temp1);
+
+        RealVector nativeRealVector1(dimension, temp1);
+        areaVertices.push_back(nativeRealVector1);
+
+    }
 
     jobject leftSegmentsArray = env->NewObject(arrayListClass, arrayListConstructor, NULL);
 
@@ -91,7 +107,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ExtensionCurveCalc_nativeCalc(JNIEnv *
 
     std::vector<RealVector> curve_segments;
     std::vector<RealVector> domain_segments;
-  
+
 
     const FluxFunction * fluxFunction = &RpNumerics::getPhysics().fluxFunction();
     const AccumulationFunction * accumFunction = &RpNumerics::getPhysics().accumulation();
@@ -99,10 +115,40 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ExtensionCurveCalc_nativeCalc(JNIEnv *
     GridValues * gv = RpNumerics::getGridFactory().getGrid("bifurcation");
 
 
-    Extension_Curve extension;
-    extension.curve(fluxFunction, accumFunction, *gv, characteristicWhere, singular, family,
-                    original_curve, curve_segments, domain_segments);
 
+    Extension_Curve extension;
+
+    cout<<"Inside area: "<<inSideArea<<endl;
+
+
+    if (inSideArea==0) {
+
+
+
+        extension.curve_in_subdomain(fluxFunction, accumFunction, *gv, areaVertices, characteristicWhere, singular, family,
+                original_curve, curve_segments, domain_segments);
+
+
+
+
+    } else if(inSideArea ==-1) {
+
+
+        extension.curve_out_of_subdomain(fluxFunction, accumFunction, *gv, areaVertices, characteristicWhere, singular, family,
+                original_curve, curve_segments, domain_segments);
+
+
+
+    }
+
+    else if (inSideArea==1){
+        
+          extension.curve(fluxFunction, accumFunction, *gv, characteristicWhere, singular, family,
+                original_curve, curve_segments, domain_segments);
+
+
+        
+    }
 
 
 

@@ -78,8 +78,8 @@ int StoneFluxFunction::jet(const WaveState &w, JetMatrix &m, int degree) const {
 
 
     if (degree >= 0) {
-        m(0, (lkw / lk) * (vel + lko * (grw - gro) + lkg * (grw - grg))); // fw
-        m(1, (lko / lk) * (vel + lkw * (gro - grw) + lkg * (gro - grg))); // fo
+        m.set(0, (lkw / lk) * (vel + lko * (grw - gro) + lkg * (grw - grg))); // fw
+        m.set(1, (lko / lk) * (vel + lkw * (gro - grw) + lkg * (gro - grg))); // fo
 
         if (degree >= 1) {
             double ldkw_dsw = dkw_dsw / muw;
@@ -121,10 +121,10 @@ int StoneFluxFunction::jet(const WaveState &w, JetMatrix &m, int degree) const {
             double zgodsw = (lk * ldko_dsw - lko * ldk_dsw) / (lk * lk);
             double zgodso = (lk * ldko_dso - lko * ldk_dso) / (lk * lk);
 
-            m(0, 0, zgwdsw * tw + (lkw / lk) * dtwdsw); // dfw_dsw
-            m(0, 1, zgwdso * tw + (lkw / lk) * dtwdso); // dfw_dso
-            m(1, 0, zgodsw * to + (lko / lk) * dtodsw); // dfo_dsw
-            m(1, 1, zgodso * to + (lko / lk) * dtodso); // dfo_dso
+            m.set(0, 0, zgwdsw * tw + (lkw / lk) * dtwdsw); // dfw_dsw
+            m.set(0, 1, zgwdso * tw + (lkw / lk) * dtwdso); // dfw_dso
+            m.set(1, 0, zgodsw * to + (lko / lk) * dtodsw); // dfo_dsw
+            m.set(1, 1, zgodso * to + (lko / lk) * dtodso); // dfo_dso
 
             if (degree == 2) {
                 double zgfww = ((lk * ld2kw_dsw2 - lkw * ld2k_dsw2) / lk - 2. * ldk_dsw * zgwdsw) / lk;
@@ -141,15 +141,15 @@ int StoneFluxFunction::jet(const WaveState &w, JetMatrix &m, int degree) const {
                 double dtodwo = (gro - grg) * ld2kg_dswso;
                 double dtodoo = (gro - grg) * ld2kg_dso2;
 
-                m(0, 0, 0, zgfww * tw + 2. * zgwdsw * dtwdsw + (lkw / lk) * dtwdww); // d2fw_dsw2;
-                m(0, 0, 1, zgfwo * tw + zgwdsw * dtwdso + zgwdso * dtwdsw + (lkw / lk) * dtwdwo); // d2fw_dswso;
-                m(0, 1, 0, zgfwo * tw + zgwdsw * dtwdso + zgwdso * dtwdsw + (lkw / lk) * dtwdwo); // d2fw_dsosw;
-                m(0, 1, 1, zgfoo * tw + 2. * zgwdso * dtwdso + (lkw / lk) * dtwdoo); // d2fw_dso2;
+                m.set(0, 0, 0, zgfww * tw + 2. * zgwdsw * dtwdsw + (lkw / lk) * dtwdww); // d2fw_dsw2;
+                m.set(0, 0, 1, zgfwo * tw + zgwdsw * dtwdso + zgwdso * dtwdsw + (lkw / lk) * dtwdwo); // d2fw_dswso;
+                m.set(0, 1, 0, zgfwo * tw + zgwdsw * dtwdso + zgwdso * dtwdsw + (lkw / lk) * dtwdwo); // d2fw_dsosw;
+                m.set(0, 1, 1, zgfoo * tw + 2. * zgwdso * dtwdso + (lkw / lk) * dtwdoo); // d2fw_dso2;
 
-                m(1, 0, 0, zggww * to + 2. * zgodsw * dtodsw + (lko / lk) * dtodww); // d2fo_dsw2;
-                m(1, 0, 1, zggwo * to + zgodso * dtodsw + zgodsw * dtodso + (lko / lk) * dtodwo); // d2fo_dswso;
-                m(1, 1, 0, zggwo * to + zgodso * dtodsw + zgodsw * dtodso + (lko / lk) * dtodwo); // d2fo_dsosw;
-                m(1, 1, 1, zggoo * to + 2. * zgodso * dtodso + (lko / lk) * dtodoo); // d2fo_dso2;
+                m.set(1, 0, 0, zggww * to + 2. * zgodsw * dtodsw + (lko / lk) * dtodww); // d2fo_dsw2;
+                m.set(1, 0, 1, zggwo * to + zgodso * dtodsw + zgodsw * dtodso + (lko / lk) * dtodwo); // d2fo_dswso;
+                m.set(1, 1, 0, zggwo * to + zgodso * dtodsw + zgodsw * dtodso + (lko / lk) * dtodwo); // d2fo_dsosw;
+                m.set(1, 1, 1, zggoo * to + 2. * zgodso * dtodso + (lko / lk) * dtodoo); // d2fo_dso2;
 
             }
         } else return 0;

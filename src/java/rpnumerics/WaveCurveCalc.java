@@ -31,25 +31,15 @@ public class WaveCurveCalc extends WaveCurveOrbitCalc {
     @Override
     public RpSolution calc() throws RpException {
       
-        RpSolution result = nativeCalc(getStart(), getFamilyIndex(), getDirection());
+        WaveCurve result = (WaveCurve)nativeCalc(getStart(), getFamilyIndex(), getDirection());
 
         
         if (result == null) {
             throw new RpException("Error in native layer");
         }
 
-
-
-//        System.out.println(result);
-
-
-
-
-
-
-
-
-
+        result.setReferencePoint(getStart());
+        
         return result;
     }
 

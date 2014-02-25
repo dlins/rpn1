@@ -6,10 +6,10 @@
  */
 package rpn.ui;
 
-import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.Insets;
 import javax.swing.InputVerifier;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -22,9 +22,6 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.text.AttributeSet;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.DocumentFilter;
 import rpn.configuration.Configuration;
 import rpn.parser.RPnDataModule;
 import rpnumerics.RPNUMERICS;
@@ -46,21 +43,21 @@ public class SpinButtonCreator extends UIComponentCreator {
 
         JPanel panel_ = new JPanel();
 
-        GridBagConstraints gridConstraints = new GridBagConstraints();
-
-        gridConstraints.fill = GridBagConstraints.BOTH;
-
-        gridConstraints.gridwidth = 1;
-        gridConstraints.gridheight = 1;
-        gridConstraints.ipadx = 50;
-        gridConstraints.gridy = 0;
-        gridConstraints.gridx = 0;
+//        GridBagConstraints gridConstraints = new GridBagConstraints();
+//
+//        gridConstraints.fill = GridBagConstraints.BOTH;
+//
+//        gridConstraints.gridwidth = 1;
+//        gridConstraints.gridheight = 1;
+//        gridConstraints.ipadx = 50;
+//        gridConstraints.gridy = 0;
+//        gridConstraints.gridx = 0;
 
         GridLayout gridBayLayout = new GridLayout(configuration_.getParamsSize(), 1);
 
         panel_.setLayout(gridBayLayout);
 
-        gridConstraints.gridx = 0;
+//        gridConstraints.gridx = 0;
 
         if (parameterName_.contains("family")) {
 
@@ -103,11 +100,16 @@ public class SpinButtonCreator extends UIComponentCreator {
 
         JLabel familyLabel = new JLabel(paramName);
 
+        gridConstraints.anchor= GridBagConstraints.PAGE_END;
         gridConstraints.gridx = 0;
-        gridConstraints.ipadx = 20;
+        gridConstraints.ipadx = 10;
+        
+
         familyPanel.add(familyLabel, gridConstraints);
 
+
         gridConstraints.gridx = 1;
+        
 
         familyPanel.add(familySpinner, gridConstraints);
 
@@ -275,7 +277,7 @@ public class SpinButtonCreator extends UIComponentCreator {
 
 
             String textString = textField.getText();
-            System.out.println(textField);
+
 
             if (textString.isEmpty()) {
                 return false;

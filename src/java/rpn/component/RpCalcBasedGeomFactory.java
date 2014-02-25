@@ -147,6 +147,19 @@ public abstract class RpCalcBasedGeomFactory implements RpGeomFactory {
         isGeomOutOfDate_ = true;
     }
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     public String toXML() {
 
         return "TODO: toXML()";

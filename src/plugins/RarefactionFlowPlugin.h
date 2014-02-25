@@ -35,9 +35,9 @@ public:
 //    RarefactionFlowPlugin(const int ,const int ,const FluxFunction &);
     RarefactionFlowPlugin(const RealVector & , const int, const int, const FluxFunction &);
     
-    int flux(const RealVector &, RealVector &) ;
-    int fluxDeriv(const RealVector &, JacobianMatrix &);
-    int fluxDeriv2(const RealVector &, HessianMatrix &);
+//    int flux(const RealVector &, RealVector &) ;
+//    int fluxDeriv(const RealVector &, JacobianMatrix &);
+//    int fluxDeriv2(const RealVector &, HessianMatrix &);
 
     
     virtual~RarefactionFlowPlugin();

@@ -12,7 +12,7 @@ double CoincidenceTP::lambdas_function(const RealVector &u) {
 
     fluxFunction_->getHorizontalFlux()->Diff_FracFlow2PhasesHorizontalAdimensionalized(sw, Theta, 1, m);
 
-    return m(0, 0);
+    return m.get(0, 0);
 }
 
 double CoincidenceTP::lambdae_function(const RealVector &u) {
@@ -26,7 +26,7 @@ double CoincidenceTP::lambdae_function(const RealVector &u) {
 
     fluxFunction_->getHorizontalFlux()->Diff_FracFlow2PhasesHorizontalAdimensionalized(sw, Theta, 0, m);
 
-    double f = m(0);
+    double f = m.get(0);
     double s = u.component(0);
 
 

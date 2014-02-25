@@ -22,7 +22,6 @@ public class RPnCoreyBrooks extends RPnFluxParamsSubject {
     //*** Leandro teste
     @Override
     public void setValues(String[] stringArray) {
-        System.out.println("Entrei no setValues de CoreyBrooks");
         String[] newState = new String[RPNUMERICS.getFluxParams().getParams().getSize()];
         RealVector fluxParams = RPNUMERICS.getFluxParams().getParams();
 
