@@ -426,9 +426,6 @@ public class ManifoldOrbit extends RPnCurve {
 
     }
 
-    @Override
-    public String getInfo() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+   
   
 }

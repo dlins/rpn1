@@ -385,7 +385,6 @@ public class RPnCurvesList extends Observable implements ActionListener, ListSel
 
         while (iterator.hasNext()) {
             RpGeometry geometry = (RpGeometry) iterator.next();
-            System.out.println("Geometria: " + geometry);
             addGeometry(geometry);
             geometryList_.add(geometry);
         }

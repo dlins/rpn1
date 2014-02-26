@@ -317,7 +317,7 @@ public abstract class RPnCurve implements RpSolution {
     }
     
     
-    public abstract String getInfo();
+    
 
     
     public String toXML() {

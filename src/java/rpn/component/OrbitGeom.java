@@ -107,7 +107,7 @@ public class OrbitGeom extends MultiPolyLine implements RpGeometry {
 
     @Override
     public void showClassification(CoordsArray curvePoint, CoordsArray wcPoint, ViewingTransform transform) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+     
     }
 
 }

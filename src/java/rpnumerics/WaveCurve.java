@@ -213,11 +213,7 @@ public class WaveCurve extends RPnCurve implements WaveCurveBranch, RpSolution {
         referencePoint_=referencePoint;
     }
 
-    @Override
-    public String getInfo() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
+    
     @Override
     public List<OrbitPoint> getBranchPoints() {
         
@@ -231,17 +227,7 @@ public class WaveCurve extends RPnCurve implements WaveCurveBranch, RpSolution {
     public double getSpeed(OrbitPoint point) {
         
         int segmentIndex = findClosestSegment(new RealVector(point.getCoords()));
-        
-
-        
-//        int indexOf = points_.indexOf(point);
         OrbitPoint get = points_.get(segmentIndex);
-        
-//        System.out.println(" ")
-
-        
-        System.out.println("Indice do segmento"+ segmentIndex +" Valor de lambda: "+ get.getLambda());
-        
         return get.getLambda();
     }
 

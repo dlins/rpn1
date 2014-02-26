@@ -195,29 +195,29 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene implements Observer 
         double distminCurve = 1000000.;
         double distancia = 0.;
         int k = 0;
-        Iterator<RpGeometry> geomList = null;
+        Iterator geomListIterator = geomList_.iterator();
 
-        //--------------------------
-        // **** Usar direto o objeto, sem testar
-        if (namePhaseSpace.equals(RPnDataModule.PHASESPACE.getName())) {
-            geomList = RPnDataModule.PHASESPACE.getGeomObjIterator();
-        }
-        if (namePhaseSpace.equals(RPnDataModule.RIGHTPHASESPACE.getName())) {
-            geomList = RPnDataModule.RIGHTPHASESPACE.getGeomObjIterator();
-        }
-        if (namePhaseSpace.equals(RPnDataModule.LEFTPHASESPACE.getName())) {
-            geomList = RPnDataModule.LEFTPHASESPACE.getGeomObjIterator();
-        }
+//        //--------------------------
+//        // **** Usar direto o objeto, sem testar
+//        if (namePhaseSpace.equals(RPnDataModule.PHASESPACE.getName())) {
+//            geomList = RPnDataModule.PHASESPACE.getGeomObjIterator();
+//        }
+//        if (namePhaseSpace.equals(RPnDataModule.RIGHTPHASESPACE.getName())) {
+//            geomList = RPnDataModule.RIGHTPHASESPACE.getGeomObjIterator();
+//        }
+//        if (namePhaseSpace.equals(RPnDataModule.LEFTPHASESPACE.getName())) {
+//            geomList = RPnDataModule.LEFTPHASESPACE.getGeomObjIterator();
+//        }
 
-        while (geomList.hasNext()) {
-            RpGeometry geom = (RpGeometry) geomList.next();
+        while (geomListIterator.hasNext()) {
+            RpGeometry geom = (RpGeometry) geomListIterator.next();
 
             if (GeometryGraphND.onCurve == 1) {
-                if ((namePhaseSpace.equals(RPnDataModule.PHASESPACE.getName()) && geom != RPnDataModule.PHASESPACE.getLastGeometry())
-                        || (namePhaseSpace.equals(RPnDataModule.RIGHTPHASESPACE.getName()) && geom != RPnDataModule.RIGHTPHASESPACE.getLastGeometry())
-                        || (namePhaseSpace.equals(RPnDataModule.LEFTPHASESPACE.getName()) && geom != RPnDataModule.LEFTPHASESPACE.getLastGeometry())) {
+//                if ((namePhaseSpace.equals(RPnDataModule.PHASESPACE.getName()) && geom != RPnDataModule.PHASESPACE.getLastGeometry())
+//                        || (namePhaseSpace.equals(RPnDataModule.RIGHTPHASESPACE.getName()) && geom != RPnDataModule.RIGHTPHASESPACE.getLastGeometry())
+//                        || (namePhaseSpace.equals(RPnDataModule.LEFTPHASESPACE.getName()) && geom != RPnDataModule.LEFTPHASESPACE.getLastGeometry())) {
 
-                    if (geom.viewingAttr().hasHighLight() && !(geom instanceof StationaryPointGeom)) {
+//                    if (geom.viewingAttr().hasHighLight() && !(geom instanceof StationaryPointGeom)) {
                         RpGeomFactory factory = geom.geomFactory();
 
                         RPnCurve curve = (RPnCurve) factory.geomSource();
@@ -231,13 +231,13 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene implements Observer 
                             closestGeometry_ = geom;
                         }
 
-                    }
-                }
+//                    }
+//                }
 
             }
 
             if (GeometryGraphND.onCurve == 0) {
-                if (geom.viewingAttr().hasHighLight() && !(geom instanceof StationaryPointGeom) && !(geom instanceof PoincareSectionGeom)) {
+//                if (geom.viewingAttr().hasHighLight() && !(geom instanceof StationaryPointGeom) && !(geom instanceof PoincareSectionGeom)) {
 
                     RpGeomFactory factory = geom.geomFactory();
                     RPnCurve curve = (RPnCurve) factory.geomSource();
@@ -270,7 +270,7 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene implements Observer 
                 }
                 // -----------------------------------
 
-            }
+//            }
 
             k++;
 

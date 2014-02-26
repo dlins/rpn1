@@ -140,10 +140,6 @@ public class ConnectionOrbit extends RPnCurve implements RpSolution {
         return segments_;
     }
 
-    @Override
-    public String getInfo() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
+ 
 
 }

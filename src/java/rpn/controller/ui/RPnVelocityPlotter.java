@@ -89,50 +89,25 @@ public class RPnVelocityPlotter extends RPn2DMouseController {
 
 
     public void mouseDragged(MouseEvent me) {
-//        addLine_ = false;
-//        //UserInputTable userInputList = UIController.instance().globalInputTable();
-//        //RealVector newValue = userInputList.values();
-//
-//        RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) me.getSource();
-//
-//        int dim = RPNUMERICS.domainDim();
-//        Coords2D coordsDC = new Coords2D(me.getX(), me.getY());
-//        CoordsArray coordsWC = new CoordsArray(new Space("", dim));
-//        panel.scene().getViewingTransform().dcInverseTransform(coordsDC, coordsWC);
-//
-//        RealVector newValue = new RealVector(dim);
-//        for (int i = 0; i < dim; i++) {
-//            newValue.setElement(i, coordsWC.getElement(i));
-//        }
-//
-//        RpGeometry geom = RPnDataModule.PHASESPACE.findClosestGeometry(newValue);
-//        RPnCurve curve = (RPnCurve) (geom.geomFactory().geomSource());
-//        RealVector closestPoint = curve.findClosestPoint(newValue);
-//        GeometryGraphND.pMarca = closestPoint;
-//
-//        if (curve instanceof HugoniotCurve)
-//            listaEquil = ((HugoniotCurve)(curve)).equilPoints(GeometryGraphND.pMarca);
-//
-//        UIController.instance().globalInputTable().reset();
+
     }
 
 
 
 
     public void mouseClicked(MouseEvent e) {
-        //throw new UnsupportedOperationException("Not supported yet.");
     }
 
     public void mouseReleased(MouseEvent e) {
-        //throw new UnsupportedOperationException("Not supported yet.");
+
     }
 
     public void mouseEntered(MouseEvent e) {
-        //throw new UnsupportedOperationException("Not supported yet.");
+
     }
 
     public void mouseExited(MouseEvent e) {
-        //throw new UnsupportedOperationException("Not supported yet.");
+
     }
 
 

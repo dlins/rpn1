@@ -255,22 +255,23 @@ int WaveCurveFactory::Liu_half_wavecurve(const ReferencePoint &ref,
             std::cout << "WaveCurveFactory: entering Shock. direction = " << current_curve_initial_direction << std::endl;
 
             Curve shkcurve; 
-            std::vector<int> stop_current_index;
-            std::vector<int> stop_current_family;
+            std::vector<int> stop_right_index;
+            std::vector<int> stop_right_family;
             std::vector<int> stop_reference_index;    
             std::vector<int> stop_reference_family;  
         
             int shock_stopped_because;
 
+            // 
             int shck_info = shockcurve->curve_engine(hwc.reference_point, current_curve_initial_point, current_curve_initial_direction, family, 
                                             SHOCKCURVE_SHOCK_CURVE, 
-                                            DONT_CHECK_EQUALITY_AT_LEFT,
+                                            DONT_CHECK_EQUALITY_AT_LEFT /*SHOCK_SIGMA_EQUALS_LAMBDA_OF_FAMILY_AT_LEFT*/,
                                             SHOCK_SIGMA_EQUALS_LAMBDA_OF_FAMILY_AT_RIGHT,
-                                            USE_CURRENT_FAMILY /*int what_family_to_use*/,
+                                            USE_ALL_FAMILIES, // TODO: Only for the time being! The correct one is USE_ALL_FAMILIES.
                                             STOP_AFTER_TRANSITION /*int after_transition*/,
                                             shkcurve, 
-                                            stop_current_index,
-                                            stop_current_family,
+                                            stop_right_index,
+                                            stop_right_family,
                                             stop_reference_index,
                                             stop_reference_family,  
                                             shock_stopped_because,
@@ -292,31 +293,82 @@ int WaveCurveFactory::Liu_half_wavecurve(const ReferencePoint &ref,
 
                 std::cout << "WaveCurveFactory, successfully stored what the Shock produced." << std::endl;
 
-                if (shock_stopped_because == SHOCK_RIGHT_CHARACTERISTIC_AT_FAMILY){
-                    future_curve = RAREFACTION_CURVE;
-                }
-                else if (shock_stopped_because == SHOCK_LEFT_CHARACTERISTIC_AT_FAMILY){
-                    future_curve = RAREFACTION_CURVE;
+                // The action depends whether forwards- or backwards-wavecurves are being constructed.
+
+                if (shock_stopped_because == SHOCK_LEFT_CHARACTERISTIC_AT_FAMILY){
+                    // Nothing to do in this case. The wavecurve stops.
+                    // If other segments are desired continue the construction of an inadmissible Hugoniot.
+                    // However, Panters suspects that this case does not arise if starting from a Lax shock.
+                    // TODO: The statement above may be wrong. A shock may be invalid but may be followed by a valid one.
+
+
+                    // TODO: In the future continue calculating the Hugoniot curve that represents an inadmissible shock.
+                    //       Check for transitions that make it admissible again.
 
                     return WAVECURVE_OK;
                 }
-                else if (shock_stopped_because == SHOCK_RIGHT_CHARACTERISTIC_AT_CONTIGUOUS_FAMILY){
-                    // TODO: Study this matter with Vitor. Build an auxiliary inadmissible curve.
-                    //
-                    future_curve = SHOCK_CURVE;
+                else if (shock_stopped_because == SHOCK_RIGHT_CHARACTERISTIC_AT_FAMILY){
+//                    std::vector<eigenpair> e;
+//                    int n = shkcurve.curve.back();
+//                    JetMatrix F_J(n), G_J(n);
+//                    f->jet(shkcurve.curve.back(), F_J, 1);
+//                    g->jet(shkcurve.curve.back(), G_J, 1);
 
-                    return WAVECURVE_OK;
-                }
-                else if (shock_stopped_because == SHOCK_LEFT_CHARACTERISTIC_AT_CONTIGUOUS_FAMILY){
-                    // TODO: Study this matter with Vitor. Build an auxiliary inadmissible curve.
-                    //
-                    future_curve = SHOCK_CURVE;
+//                    Eigen::eig(n, F_J.Jacobian().data(), G_J.Jacobian().data(), e);
 
-                    return WAVECURVE_OK;
+//                    for (int i = 0; i < e.size(); i++) {
+//                        std::cout << "Family: " << i << std::endl;
+//                        std::cout << "    lambda = " << e[i].r << std::endl;
+//                        std::cout << "    r = " << RealVector(n, e[i].vrr.data()) << std::endl << std::endl;
+//                    }
+
+//                    TestTools::pause("Check console.");
+
+//                    std::cout << "Transitions: " << stop_current_family.size() << std::endl;
+//                    for (int i = 0; i < stop_current_family.size(); i++) std::cout << "    " << stop_current_family[i] << std::endl;
+//                    TestTools::pause("Check console.");
+
+                    // TODO: In the future continue calculating the Hugoniot curve that represents an inadmissible shock.
+                    //       Check for transitions that make it admissible again.
+
+                    if (stop_right_family.size() > 0) {
+                        if (stop_right_family.back() == family) future_curve = RAREFACTION_CURVE;
+                        else return WAVECURVE_OK;
+                    }
+                    else {
+                        return WAVECURVE_OK;
+                    }
                 }
+//                else if (shock_stopped_because == SHOCK_LEFT_CHARACTERISTIC_AT_CONTIGUOUS_FAMILY){
+//                       
+//                }
+//                else if (shock_stopped_because == SHOCK_RIGHT_CHARACTERISTIC_AT_CONTIGUOUS_FAMILY){
+//                else if (shock_stopped_because == SHOCK_RIGHT_CHARACTERISTIC_AT_UPPER_FAMILY){
+//                    // Panters: The classical wavecurve must stop here. 
+//                    // There is not a constant state between the wavecurves of the current and the upper family.
+
+//                    return WAVECURVE_OK;                    
+//                }
+//                else if (shock_stopped_because == SHOCK_LEFT_CHARACTERISTIC_AT_LOWER_FAMILY){
+//                    // If the last curve of the lower family's wavecurve was a rarefaction 
+//                    // there is not a constant state between the wavecurves of both the current and the lower family.
+
+//                    return WAVECURVE_OK;
+//                }
+//                else if (shock_stopped_because == SHOCK_LEFT_CHARACTERISTIC_AT_CONTIGUOUS_FAMILY){
+//                    // TODO: Study this matter with Vitor. Build an auxiliary inadmissible curve.
+//                    //
+////                    future_curve = SHOCK_CURVE; // Panters: There is no certainty that the next curve is a shock.
+
+//                    return WAVECURVE_OK;
+//                }
                 else if (shock_stopped_because == SHOCK_COMPLEX_EIGENVALUE_AT_FAMILY){
                     // TODO: Study this matter with Vitor. Build an auxiliary inadmissible curve.
                     //
+
+                    // TODO: In the future continue calculating the Hugoniot curve that represents an inadmissible shock.
+                    //       Check for transitions that make it admissible again.
+
                     future_curve = SHOCK_CURVE;
 
                     return WAVECURVE_OK;
@@ -325,6 +377,11 @@ int WaveCurveFactory::Liu_half_wavecurve(const ReferencePoint &ref,
                     wavecurve_stopped_because = WAVECURVE_REACHED_BOUNDARY;
 
                     
+
+                    return WAVECURVE_OK;
+                }
+                else {
+//                    TestTools::pause("Non-classical shock. The code is not written.\nStopping.");
 
                     return WAVECURVE_OK;
                 }
@@ -403,7 +460,7 @@ int WaveCurveFactory::wavecurve_from_boundary(const RealVector &initial_point, i
     // The case when initial_direction*to_interior == 0 is treated here by default. We do not know how to proceed correctly
     // in this case.
     //
-    if (initial_direction*to_interior > 0){
+    if (initial_direction*to_interior > 0.0){
         Liu_half_wavecurve(ref, initial_point, family, increase, RAREFACTION_CURVE,  initial_direction, hwc, wavecurve_stopped_because, edge);
     }
     else {
