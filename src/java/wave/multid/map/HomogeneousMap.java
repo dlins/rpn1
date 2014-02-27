@@ -10,6 +10,7 @@ import wave.multid.CoordsArray;
 import wave.multid.HomogeneousCoords;
 import wave.multid.DimMismatchEx;
 import wave.multid.Space;
+import wave.multid.Multid;
 import wave.util.RealMatrix2;
 
 public class HomogeneousMap implements Map {
@@ -66,6 +67,10 @@ public class HomogeneousMap implements Map {
         getTransfMatrix().mul(catMap.getTransfMatrix());
     }
 
+    /*
+     * these linear transformations are post-multiplication (T=tXT)
+     */
+
     protected void transf(CoordsArray in, CoordsArray out, RealMatrix2 transfMatrix) {
         HomogeneousCoords inCoords = new HomogeneousCoords(in);
         HomogeneousCoords outCoords = new HomogeneousCoords(out);
@@ -88,4 +93,6 @@ public class HomogeneousMap implements Map {
         else
             transf(in, out, getInvTransfMatrix());
     }
+
+
 }

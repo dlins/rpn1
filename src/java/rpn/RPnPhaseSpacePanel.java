@@ -365,14 +365,14 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
         Shape s = scene_.getViewingTransform().viewPlane().getWindow().dcView(scene_.getViewingTransform());
         ((Graphics2D) g).fill(s);
 
-
+/* EDSON, TODO ??
         if (isPhysicalBoundarySelected()) {
             Color selectedColor = new Color(255, 0, 0, 60);
             g.setColor(selectedColor);
             g.fillPolygon(getPhysicalBoundaryPolygon());
         }
 
-
+*/
         /*
          * POINT MARKS
          */

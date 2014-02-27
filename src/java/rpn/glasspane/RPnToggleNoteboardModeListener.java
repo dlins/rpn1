@@ -31,9 +31,7 @@ public class RPnToggleNoteboardModeListener implements ActionListener {
 
         // TODO create class RPnToggleButton(JFrame parentFrame)...
         RPnPhaseSpaceFrame parentFrame = ((RPnNoteModeToggleButton)e.getSource()).getParentContainer();
-        String noteFrameTitle = parentFrame.getTitle();
-
-        System.out.println("PARENT FRAME TOGGLE is : " + noteFrameTitle);
+        String noteFrameTitle = parentFrame.getTitle();       
 
         JFrame[] frames = RPnUIFrame.getPhaseSpaceFrames();
         JFrame[] aux_frames = RPnUIFrame.getAuxFrames();
@@ -65,9 +63,17 @@ public class RPnToggleNoteboardModeListener implements ActionListener {
                 
                 allFrames[i].getGlassPane().setVisible(!allFrames[i].getGlassPane().isVisible());
                 
+                if (allFrames[i] instanceof RPnPhaseSpaceFrame)
+                    ((RPnPhaseSpaceFrame)allFrames[i]).getNoteboardToggleButton().setSelected(true);
+                
             }
-            else
+            else {
+                
                 allFrames[i].getGlassPane().setVisible(false);
+                if (allFrames[i] instanceof RPnPhaseSpaceFrame)
+                    ((RPnPhaseSpaceFrame)allFrames[i]).getNoteboardToggleButton().setSelected(false);
+            }
+                
         
 
         if (RPnNetworkStatus.instance().isOnline() && RPnNetworkStatus.instance().isMaster()) {

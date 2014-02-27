@@ -53,13 +53,17 @@ public class RPnGlassPane extends JComponent {
         addMouseListener(new MouseAdapter(){
 
                 public void mousePressed(MouseEvent e){
+                    
+                    if (parentFrame_.getNoteboardToggleButton().isSelected()) {
 
-                    path_.moveTo(new Double(e.getPoint().getX()),new Double(e.getPoint().getY()));
+                        path_.moveTo(new Double(e.getPoint().getX()),new Double(e.getPoint().getY()));
 
-                    Coords2D dcPoint = new Coords2D(new Double(e.getPoint().getX()),new Double(e.getPoint().getY()));
-                    Coords2D wcPoint = new Coords2D();
-                    parentFrame_.phaseSpacePanel().scene().getViewingTransform().dcInverseTransform(dcPoint,wcPoint);
-                    wpath_.moveTo(wcPoint.getX(),wcPoint.getY());
+                        Coords2D dcPoint = new Coords2D(new Double(e.getPoint().getX()),new Double(e.getPoint().getY()));
+                        Coords2D wcPoint = new Coords2D();
+                        parentFrame_.phaseSpacePanel().scene().getViewingTransform().dcInverseTransform(dcPoint,wcPoint);
+                        wpath_.moveTo(wcPoint.getX(),wcPoint.getY());
+                        
+                    }
                 }
 
                 public void mouseReleased(MouseEvent event) {
@@ -102,22 +106,23 @@ public class RPnGlassPane extends JComponent {
         addMouseMotionListener(new MouseMotionAdapter(){
                 public void mouseDragged(MouseEvent e){
 
-                    path_.lineTo(new Double(e.getPoint().getX()), new Double(e.getPoint().getY()));
+                    if (parentFrame_.getNoteboardToggleButton().isSelected()) {
+                        path_.lineTo(new Double(e.getPoint().getX()), new Double(e.getPoint().getY()));
 
-                    Coords2D dcPoint = new Coords2D(new Double(e.getPoint().getX()),new Double(e.getPoint().getY()));
-                    Coords2D wcPoint = new Coords2D();
-                    parentFrame_.phaseSpacePanel().scene().getViewingTransform().dcInverseTransform(dcPoint,wcPoint);
-                    wpath_.lineTo(wcPoint.getX(),wcPoint.getY());
+                        Coords2D dcPoint = new Coords2D(new Double(e.getPoint().getX()),new Double(e.getPoint().getY()));
+                        Coords2D wcPoint = new Coords2D();
+                        parentFrame_.phaseSpacePanel().scene().getViewingTransform().dcInverseTransform(dcPoint,wcPoint);
+                        wpath_.lineTo(wcPoint.getX(),wcPoint.getY());
 
-                    repaint();
+                        repaint();
                     
-                    path_.moveTo(new Double(e.getPoint().getX()), new Double(e.getPoint().getY()));
+                        path_.moveTo(new Double(e.getPoint().getX()), new Double(e.getPoint().getY()));
 
-                    dcPoint = new Coords2D(new Double(e.getPoint().getX()),new Double(e.getPoint().getY()));
-                    wcPoint = new Coords2D();
-                    parentFrame_.phaseSpacePanel().scene().getViewingTransform().dcInverseTransform(dcPoint,wcPoint);
-                    wpath_.moveTo(wcPoint.getX(),wcPoint.getY());
-
+                        dcPoint = new Coords2D(new Double(e.getPoint().getX()),new Double(e.getPoint().getY()));
+                        wcPoint = new Coords2D();
+                        parentFrame_.phaseSpacePanel().scene().getViewingTransform().dcInverseTransform(dcPoint,wcPoint);
+                        wpath_.moveTo(wcPoint.getX(),wcPoint.getY());
+                    }
                 }
         });
     }

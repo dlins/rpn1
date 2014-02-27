@@ -27,7 +27,7 @@ public interface ViewingTransform {
 
     Map viewingMap();
 
-    /** Returns a map transformation associeted with translation, scaling and translation coordinate transformations. */
+    /** Returns a map transformation associated with translation, scaling and translation coordinate transformations. */
     Map coordSysTransform();
 
     /** Returns the view plane of a visual form.   */
