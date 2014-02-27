@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import rpn.component.util.CorrespondenceMark;
-import rpn.component.util.GraphicsUtil;
 import rpnumerics.BifurcationCurve;
 import wave.multid.*;
 import wave.multid.map.Map;
@@ -32,13 +31,13 @@ public class BifurcationCurveGeom extends BifurcationCurveBranchGeom implements 
     private Space space_;
     private BoundingBox boundary_;
 //    private RpGeometry otherSide_;
-    private List<GraphicsUtil> annotationsList_;
+
     private final List<BifurcationCurveBranchGeom> bifurcationGeomBranches_;
 
     public BifurcationCurveGeom(List<BifurcationCurveBranchGeom> branches, BifurcationCurveGeomFactory factory) {
 
         viewingAttr_ = new ViewingAttr(Color.white);
-        annotationsList_ = new ArrayList<GraphicsUtil>();
+
         bifurcationGeomBranches_ = branches;
         factory_ = factory;
         space_ = new Space("Auxiliar Space", rpnumerics.RPNUMERICS.domainDim());
@@ -134,35 +133,7 @@ public class BifurcationCurveGeom extends BifurcationCurveBranchGeom implements 
         return viewingAttr_.isSelected();
     }
 
-    @Override
-    public void addAnnotation(GraphicsUtil annotation) {
-
-        annotationsList_.add(annotation);
-
-    }
-
-    @Override
-    public void clearAnnotations() {
-        annotationsList_.clear();
-    }
-
-    @Override
-    public Iterator<GraphicsUtil> getAnnotationIterator() {
-        return annotationsList_.iterator();
-    }
-
-    @Override
-    public void removeLastAnnotation() {
-        if (!annotationsList_.isEmpty()) {
-            annotationsList_.remove(annotationsList_.size() - 1);
-        }
-    }
-
-    @Override
-    public void removeAnnotation(GraphicsUtil selectedAnnotation) {
-        annotationsList_.remove(selectedAnnotation);
-    }
-
+   
     @Override
     public void showSpeed(CoordsArray curvePoint, CoordsArray wcPoint, ViewingTransform transform) {
 

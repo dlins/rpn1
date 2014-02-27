@@ -18,10 +18,6 @@ import wave.multid.CoordsArray;
 import wave.multid.Space;
 import rpnumerics.RPNUMERICS;
 
-/**
- *
- * @author moreira
- */
 public class RPnCorrespondencePlotter extends RPn2DMouseController {
 
     private RealVector cursorPos_;
@@ -56,8 +52,8 @@ public class RPnCorrespondencePlotter extends RPn2DMouseController {
             if (rpGeometry instanceof BifurcationCurveBranchGeom) {
 
                 BifurcationCurveBranchGeom bifurcationCurveGeom = (BifurcationCurveBranchGeom) rpGeometry;
-                bifurcationCurveGeom.removeLastAnnotation();
-                bifurcationCurveGeom.removeLastAnnotation();
+                bifurcationCurveGeom.clearCorrespondenceMarks();
+                bifurcationCurveGeom.clearCorrespondenceMarks();
                 bifurcationCurveGeom.showCorrespondentPoint(coordsWC, panel.scene().getViewingTransform());
          
 
@@ -70,40 +66,6 @@ public class RPnCorrespondencePlotter extends RPn2DMouseController {
 
     public void mousePressed(MouseEvent me) {
 
-//        RPnVelocityPlotter.listaEquil.clear();
-//
-//        RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) me.getSource();
-//
-//        if (addLine_ == false) {
-//
-//                        addLine_ = true;
-//
-////                    }
-//
-////                }
-//
-////            if (curve instanceof BifurcationCurve) {
-////                int i = curve.findClosestSegment(newValue);
-////                GeometryGraphND.pMarcaDC = ((BifurcationCurve) curve).secondPointDCOtherVersion(i);
-////                correspondentList = ((BifurcationCurve) (curve)).correspondentPoints(GeometryGraphND.pMarca);
-////                
-////                for (RealVector realVector : correspondentList) {
-////                    System.out.println(realVector);
-////                    
-////                }
-////                
-////            } else {
-////                GeometryGraphND.pMarcaDC = GeometryGraphND.pMarca;
-////            }
-//        } else {
-//                addLine_ = false;
-//        }
-//
-//                UIController.instance()
-//                        .globalInputTable().reset();
-//
-////            }
-////       }
     }
 
     public void mouseDragged(MouseEvent me) {
@@ -149,11 +111,32 @@ public class RPnCorrespondencePlotter extends RPn2DMouseController {
     }
 
     public void mouseEntered(MouseEvent e) {
+        
+        RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) e.getSource();
+        RPnPhaseSpaceAbstraction phaseSpace = (RPnPhaseSpaceAbstraction) panel.scene().getAbstractGeom();
+        Iterator<RpGeometry> geometry = phaseSpace.getGeomObjIterator();
+        while (geometry.hasNext()) {
+
+            RpGeometry rpGeometry = geometry.next();
+
+            if (rpGeometry instanceof BifurcationCurveBranchGeom) {
+
+                BifurcationCurveBranchGeom bifurcationCurveGeom = (BifurcationCurveBranchGeom) rpGeometry;
+                bifurcationCurveGeom.clearCorrespondenceMarks();
+
+            }
+
+        }
+
+        UIController.instance().panelsUpdate();        
+        
+        
+
         //throw new UnsupportedOperationException("Not supported yet.");
     }
 
     public void mouseExited(MouseEvent e) {
-        //throw new UnsupportedOperationException("Not supported yet.");
+        mouseEntered(e);
     }
 
     public static RPnCorrespondencePlotter instance() {

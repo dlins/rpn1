@@ -1,6 +1,7 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ /*
+ * Instituto de Matematica Pura e Aplicada - IMPA
+ * Departamento de Dinamica dos Fluidos
+ *
  */
 
 package rpn.command;
@@ -16,12 +17,8 @@ import rpn.controller.ui.UIController;
 import wave.util.RealVector;
 import rpn.controller.ui.CLASSIFIERAGENT_CONFIG;
 import rpn.controller.ui.RPnCorrespondencePlotter;
-import rpn.controller.ui.RPnStringPlotter;
 
-/**
- *
- * @author moreira
- */
+
 public class BifurcationCorrespondenceCommand extends RpModelPlotCommand {
 
     static public final String DESC_TEXT = "Bifurcation Correspondence";

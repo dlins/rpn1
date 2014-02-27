@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import rpn.component.util.CorrespondenceMark;
-import rpn.component.util.GraphicsUtil;
 import wave.multid.*;
 import wave.multid.map.Map;
 import wave.multid.model.AbstractPath;
@@ -32,7 +31,7 @@ public class BifurcationCurveGeomSide extends  BifurcationCurveBranchGeom implem
     private List<MultiPolyLine> segList_;
     private Space space_;
     private BoundingBox boundary_;
-    private final List<GraphicsUtil> annotationsList_;
+
     private final List<BifurcationCurveBranchGeom> bifurcationGeomBranches_;
     
     private BifurcationCurveGeomSide otherSide_;
@@ -40,7 +39,7 @@ public class BifurcationCurveGeomSide extends  BifurcationCurveBranchGeom implem
     public BifurcationCurveGeomSide(RealSegGeom[] segArray, BifurcationCurveGeomFactory factory) {
 
         viewingAttr_ = segArray[0].viewingAttr();
-        annotationsList_ = new ArrayList<GraphicsUtil>();
+    
         bifurcationGeomBranches_ = new ArrayList<BifurcationCurveBranchGeom>();
         segList_ = new ArrayList();
         for (int i = 0; i < segArray.length; i++) {
@@ -145,35 +144,7 @@ public class BifurcationCurveGeomSide extends  BifurcationCurveBranchGeom implem
         return viewingAttr_.isSelected();
     }
 
-    @Override
-    public void addAnnotation(GraphicsUtil annotation) {
-
-        annotationsList_.add(annotation);
-
-    }
-
-    @Override
-    public void clearAnnotations() {
-        annotationsList_.clear();
-    }
-
-    @Override
-    public Iterator<GraphicsUtil> getAnnotationIterator() {
-        return annotationsList_.iterator();
-    }
-
-    @Override
-    public void removeLastAnnotation() {
-        if (!annotationsList_.isEmpty()) {
-            annotationsList_.remove(annotationsList_.size() - 1);
-        }
-    }
-
-    @Override
-    public void removeAnnotation(GraphicsUtil selectedAnnotation) {
-        annotationsList_.remove(selectedAnnotation);
-    }
-
+   
     @Override
     public void showSpeed(CoordsArray curvePoint, CoordsArray wcPoint, ViewingTransform transform) {
 
