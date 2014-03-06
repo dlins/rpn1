@@ -524,6 +524,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
             wave.multid.view.ViewingTransform viewingTransf =
                     ((RPnProjDescriptor) RPnVisualizationModule.DESCRIPTORS.get(
                     i)).createTransform(clipping);
+
                                              
             try {
                 wave.multid.view.Scene scene = RPnDataModule.PHASESPACE.createScene(viewingTransf,

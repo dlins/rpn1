@@ -7,7 +7,7 @@
 
 package wave.multid.graphs;
 
-import wave.multid.map.HomogeneousMap;
+import wave.multid.map.Map;
 
 public class ViewPlane {
     private dcViewport viewport_;
@@ -29,7 +29,7 @@ public class ViewPlane {
     //
     // Methods
     //
-    public void update(HomogeneousMap map) {
+    public void update(Map map) {
 
 	getWindow().update(map);
 

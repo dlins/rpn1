@@ -8,7 +8,6 @@ package rpn.controller;
 import wave.multid.graphs.ViewPlane;
 import wave.multid.view.Viewing2DTransform;
 import wave.multid.view.Viewing3DTransform;
-import wave.multid.view.Iso2EquiTransform;
 import wave.multid.graphs.dcViewport;
 import rpn.RPnPhaseSpacePanel;
 import java.util.ArrayList;
@@ -88,9 +87,7 @@ public class PhaseSpacePanel2DController extends ComponentUI implements PhaseSpa
                 RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) event.getComponent();
                 int xCursorPos = event.getPoint().x;
                 int yCursorPos = event.getPoint().y;
-//<<<<<<< HEAD
-//                if (UIController.instance().getState() instanceof TRACKPOINT_CONFIG) {
-//=======
+
                 if ((UIController.instance().getState() instanceof TRACKPOINT_CONFIG )&&
                         (panel.scene().getViewingTransform().projectionMap().getDomain().getDim()==rpnumerics.RPNUMERICS.domainDim())){
 

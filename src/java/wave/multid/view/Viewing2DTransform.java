@@ -61,17 +61,16 @@ public class Viewing2DTransform implements ViewingTransform {
     }
 
     public void setViewPlane(ViewPlane vPlane) {
+
         viewPlane_ = vPlane;
+
         makeCoordSysTransform();
         makeCompositeTransform();
-
     }
 
     //
     // Methods
     //
-
-
     public void makeCoordSysTransform() {
         /*
          * COORDINATE SYSTEM TRANSFORMATION
@@ -88,14 +87,21 @@ public class Viewing2DTransform implements ViewingTransform {
         // we are working with RASTER
         double YTranslateFactor = -viewPlane_.getWindow().getOriginPosition().y * YScaleFactor
                 + viewPlane_.getViewport().getHeight();
+
+	// just in case you need it... this is the shear transform... ;)
+	double XShearFactor = 0.*XScaleFactor;
+	double YShearFactor = 0.*YScaleFactor;
+ 
         // the viewport translation
         XTranslateFactor += viewPlane_.getViewport().getOriginPosition().x;
         YTranslateFactor += viewPlane_.getViewport().getOriginPosition().y;
         coordSysTransform_.getTransfMatrix().setElement(0, 0, XScaleFactor);
+        coordSysTransform_.getTransfMatrix().setElement(1, 0, XShearFactor);
         coordSysTransform_.getTransfMatrix().setElement(1, 1, YScaleFactor);
+        coordSysTransform_.getTransfMatrix().setElement(0, 1, YShearFactor);
         coordSysTransform_.getTransfMatrix().setElement(2, 0, XTranslateFactor);
         coordSysTransform_.getTransfMatrix().setElement(2, 1, YTranslateFactor);
-        coordSysTransform_.setInversible(true);
+        //coordSysTransform_.setInversible(true);
     }
 
     public void makeCompositeTransform() {
