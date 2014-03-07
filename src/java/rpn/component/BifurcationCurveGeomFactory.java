@@ -20,11 +20,13 @@ public class BifurcationCurveGeomFactory extends RpCalcBasedGeomFactory {
     public BifurcationCurveGeomFactory(ContourCurveCalc calc) {
 
         super(calc);
+
     }
 
     public BifurcationCurveGeomFactory(ContourCurveCalc calc, RpSolution curve) {
 
         super(calc, curve);
+
     }
 
     @Override
@@ -79,13 +81,13 @@ public class BifurcationCurveGeomFactory extends RpCalcBasedGeomFactory {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    protected ViewingAttr leftViewingAttr() {
-        return new ViewingAttr(Color.yellow);
-    }
-
-    protected ViewingAttr rightViewingAttr() {
-        return new ViewingAttr(Color.magenta);
-    }
+//    static ViewingAttr leftViewingAttr() {
+//        return leftViewingAtt;
+//    }
+//
+//    static ViewingAttr rightViewingAttr() {
+//        return rightViewingAttr;
+//    }
 
     void updateGeomSource(List<Area> areaListToRifine) {
     }
@@ -147,7 +149,7 @@ public class BifurcationCurveGeomFactory extends RpCalcBasedGeomFactory {
     public RpGeometry createGeomFromSource() {
 
         BifurcationCurve curve = (BifurcationCurve) geomSource();
-        
+
         segmentsMap_ = new HashMap<BifurcationCurveGeomSide, List<RealSegment>>();
 
         RealSegGeom[] bifurcationArrayRight = new RealSegGeom[curve.rightSegments().size()];
@@ -157,9 +159,12 @@ public class BifurcationCurveGeomFactory extends RpCalcBasedGeomFactory {
         System.out.println("curve.rightSegments().size() :: " + curve.rightSegments().size());
         System.out.println("curve.leftSegments().size() ::: " + curve.leftSegments().size());
 
+        ViewingAttr leftViewingAtt = new ViewingAttr(Color.yellow);
+        ViewingAttr rightViewingAttr = new ViewingAttr(Color.magenta);
+
         int i = 0;
         for (Object realSegment : curve.rightSegments()) {
-            bifurcationArrayRight[i] = new RealSegGeom((RealSegment) realSegment, rightViewingAttr());
+            bifurcationArrayRight[i] = new RealSegGeom((RealSegment) realSegment, rightViewingAttr);
 
             i++;
 
@@ -168,7 +173,7 @@ public class BifurcationCurveGeomFactory extends RpCalcBasedGeomFactory {
 
         int j = 0;
         for (Object realSegment : curve.leftSegments()) {
-            bifurcationArrayLeft[j] = new RealSegGeom((RealSegment) realSegment, leftViewingAttr());
+            bifurcationArrayLeft[j] = new RealSegGeom((RealSegment) realSegment, leftViewingAtt);
 
             j++;
         }

@@ -11,7 +11,6 @@ import wave.multid.view.ViewingAttr;
 
 public class EnvelopeGeomFactory extends BifurcationCurveGeomFactory {
 
-    private static ViewingAttr viewAtt_ = new ViewingAttr(Color.white);
 
     public EnvelopeGeomFactory(EnvelopeCurveCalc calc, EnvelopeCurve curve) {
         super(calc, curve);
@@ -23,15 +22,5 @@ public class EnvelopeGeomFactory extends BifurcationCurveGeomFactory {
     }
 
    
-
-    @Override
-    protected ViewingAttr leftViewingAttr(){
-        return new ViewingAttr(Color.yellow);
-    }
-
-
-    @Override
-    protected ViewingAttr rightViewingAttr() {
-        return new ViewingAttr(Color.magenta);
-    }
+  
 }

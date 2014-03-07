@@ -7,18 +7,11 @@
 package rpn.component;
 
 import java.awt.Color;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import rpn.component.util.CorrespondenceMark;
 import rpnumerics.BifurcationCurve;
 import wave.multid.*;
-import wave.multid.map.Map;
-import wave.multid.model.AbstractPath;
-import wave.multid.model.AbstractPathIterator;
-import wave.multid.model.BoundingBox;
 import wave.multid.model.MultiGeometry;
 import wave.multid.view.*;
 import wave.util.RealSegment;
@@ -26,35 +19,16 @@ import wave.util.RealVector;
 
 public class BifurcationCurveGeom extends BifurcationCurveBranchGeom implements MultiGeometry{
 
-    private RpGeomFactory factory_;
-    private ViewingAttr viewingAttr_;
-    private Space space_;
-    private BoundingBox boundary_;
-//    private RpGeometry otherSide_;
-
     private final List<BifurcationCurveBranchGeom> bifurcationGeomBranches_;
 
     public BifurcationCurveGeom(List<BifurcationCurveBranchGeom> branches, BifurcationCurveGeomFactory factory) {
-
-        viewingAttr_ = new ViewingAttr(Color.white);
-
+        super(factory);
         bifurcationGeomBranches_ = branches;
-        factory_ = factory;
-        space_ = new Space("Auxiliar Space", rpnumerics.RPNUMERICS.domainDim());
-        try {
-            boundary_ = new BoundingBox(new CoordsArray(space_), new CoordsArray(space_));
-        } catch (DimMismatchEx dex) {
-            dex.printStackTrace();
-        }
-
     }
 
-    // ************************************************
-    public Iterator getRealSegIterator() {
-        return null;
-    }
-    // ************************************************
+   
 
+    @Override
     public GeomObjView createView(ViewingTransform transf) throws DimMismatchEx {
         return new BifurcationCurveView(this, transf, viewingAttr());
     }
@@ -62,77 +36,7 @@ public class BifurcationCurveGeom extends BifurcationCurveBranchGeom implements 
     public void addBranch(BifurcationCurveGeom branch) {
         bifurcationGeomBranches_.add(branch);
     }
-
-    public RpGeomFactory geomFactory() {
-        return factory_;
-    }
-
-    public AbstractPathIterator getPathIterator() {
-        AbstractPath nullPath = new AbstractPath(getSpace());
-        return nullPath.getPathIterator();
-    }
-
-    public AbstractPathIterator getPathIterator(Map map) throws DimMismatchEx {
-        AbstractPath nullPath = new AbstractPath(getSpace());
-        return nullPath.getPathIterator(map);
-    }
-
-    public ViewingAttr viewingAttr() {
-        return viewingAttr_;
-    }
-
-//    public RpGeometry getOtherSide() {
-//        return otherSide_;
-//    }
-//
-//    public void setOtherSide(RpGeometry otherSide) {
-//        otherSide_ = otherSide;
-//    }
-//    public Iterator getBifurcationSegmentsIterator() {
-//        return segList_.iterator();
-//    }
-    public BoundingBox getBoundary() {
-        return boundary_;
-    }
-
-    public Space getSpace() {
-        return space_;
-    }
-
-    //
-    // Methods
-    //
-    public void applyMap(Map map) {
-    }
-
-    public void print(FileWriter cout) {
-    }
-
-    public void load(FileReader cin) {
-    }
-
-    @Override
-    public void setVisible(boolean visible) {
-        for (BifurcationCurveBranchGeom object : getBifurcationListGeom()) {
-            object.setVisible(visible);
-        }
-    }
-
-    @Override
-    public void setSelected(boolean selected) {
-        viewingAttr_.setSelected(selected);
-    }
-
-    @Override
-    public boolean isVisible() {
-        return viewingAttr_.isVisible();
-    }
-
-    @Override
-    public boolean isSelected() {
-        return viewingAttr_.isSelected();
-    }
-
+   
    
     @Override
     public void showSpeed(CoordsArray curvePoint, CoordsArray wcPoint, ViewingTransform transform) {
@@ -150,7 +54,7 @@ public class BifurcationCurveGeom extends BifurcationCurveBranchGeom implements 
         if (getCorrespondenceDirection() != BifurcationCurveBranchGeom.NONE) {
             RealVector pointOnCurve = new RealVector(curvePoint.getCoords());
 
-            BifurcationCurve bifurcationCurve = (BifurcationCurve) factory_.geomSource();
+            BifurcationCurve bifurcationCurve = (BifurcationCurve) geomFactory().geomSource();
 
             List<RealSegment> thisSegments = null;
             List<RealSegment> otherSegments = null;
@@ -198,5 +102,7 @@ public class BifurcationCurveGeom extends BifurcationCurveBranchGeom implements 
     public List<BifurcationCurveBranchGeom> getBifurcationListGeom() {
         return bifurcationGeomBranches_;
     }
+
+   
 
 }

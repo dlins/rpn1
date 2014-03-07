@@ -57,7 +57,7 @@ import rpnumerics.StationaryPointCalc;
 import wave.multid.model.MultiGeometry;
 import wave.util.RealVector;
 
-public class RPnCurvesList extends Observable implements ActionListener, ListSelectionListener, TableModelListener, MouseListener,ItemListener {
+public class RPnCurvesList extends Observable implements ActionListener, ListSelectionListener, TableModelListener, MouseListener, ItemListener {
 
     private JScrollPane tablePanel_;
     private JToolBar toolBar_;
@@ -221,7 +221,6 @@ public class RPnCurvesList extends Observable implements ActionListener, ListSel
 
         JComboBox comboBox = new JComboBox();
 
-
         comboBox.addItem("Left to Right");
         comboBox.addItem("Right to Left");
         comboBox.addItem("None");
@@ -306,9 +305,8 @@ public class RPnCurvesList extends Observable implements ActionListener, ListSel
     }
 
     public void actionPerformed(ActionEvent e) {
-        
-        
-        System.out.println("Comando: "+ e.paramString());
+
+        System.out.println("Comando: " + e.paramString());
 
         if (e.getSource() instanceof JButton) {
             JButton button = (JButton) e.getSource();
@@ -357,7 +355,6 @@ public class RPnCurvesList extends Observable implements ActionListener, ListSel
             }
 
         }
-
 
     }
 
@@ -487,11 +484,8 @@ public class RPnCurvesList extends Observable implements ActionListener, ListSel
 
     @Override
     public void mousePressed(MouseEvent e) {
-
         Point eventPoint = e.getPoint();
-
         pressedRow = curvesTable_.rowAtPoint(eventPoint);
-        System.out.println("Linha selecionada" + curvesTable_.rowAtPoint(eventPoint));
 
     }
 
@@ -512,18 +506,15 @@ public class RPnCurvesList extends Observable implements ActionListener, ListSel
 
     @Override
     public void itemStateChanged(ItemEvent e) {
-        
+
         if (e.getSource() instanceof JComboBox) {
             JComboBox combo = (JComboBox) e.getSource();
 
-                BifurcationCurveBranchGeom bifurcationCurveBranchGeom = (BifurcationCurveBranchGeom) geometryList_.get(pressedRow);
-                bifurcationCurveBranchGeom.setCorrespondenceDirection(combo.getSelectedIndex());
+            BifurcationCurveBranchGeom bifurcationCurveBranchGeom = (BifurcationCurveBranchGeom) geometryList_.get(pressedRow);
+            bifurcationCurveBranchGeom.setCorrespondenceDirection(combo.getSelectedIndex());
 
-            
         }
 
-       System.out.println("Disparando item state changed"+e.getItem());
     }
 
-   
 }
