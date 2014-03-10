@@ -36,10 +36,14 @@ public abstract class BifurcationCurveBranchGeom implements RpGeometry {
     private ViewingAttr viewingAttr_;
     private Space space_;
     private BoundingBox boundary_;
+    private boolean isSelected_;
+    private boolean isVisible_;
     
     public BifurcationCurveBranchGeom(BifurcationCurveGeomFactory factory) {
         annotationsList_ = new ArrayList<GraphicsUtil>();
         viewingAttr_ = new ViewingAttr(Color.white);
+        isSelected_=false;
+        isVisible_=true;
         factory_ = factory;
         space_ = new Space("Auxiliar Space", rpnumerics.RPNUMERICS.domainDim());
         try {
@@ -89,7 +93,7 @@ public abstract class BifurcationCurveBranchGeom implements RpGeometry {
     
     @Override
     public void setSelected(boolean selected) {
-        viewingAttr_.setSelected(selected);
+        isSelected_=selected;
         for (BifurcationCurveBranchGeom object : getBifurcationListGeom()) {
             object.setSelected(selected);
         }
@@ -97,17 +101,17 @@ public abstract class BifurcationCurveBranchGeom implements RpGeometry {
     
     @Override
     public boolean isVisible() {
-        return viewingAttr_.isVisible();
+        return isVisible_;
     }
     
     @Override
     public boolean isSelected() {
-        return viewingAttr_.isSelected();
+        return isSelected_;
     }
     
     @Override
     public void setVisible(boolean visible) {
-        viewingAttr_.setSelected(visible);
+        isVisible_=visible;
         for (BifurcationCurveBranchGeom object : getBifurcationListGeom()) {
             object.setVisible(visible);
         }

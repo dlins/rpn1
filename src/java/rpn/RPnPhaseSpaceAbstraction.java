@@ -20,9 +20,7 @@ import rpn.component.util.GeometryGraphND;
 import rpn.controller.ui.UIController;
 import rpn.controller.ui.UserInputTable;
 import wave.multid.model.MultiGeometry;
-import wave.multid.model.MultiPolyLine;
 import wave.util.RealVector;
-import rpn.parser.RPnDataModule;
 
 public class RPnPhaseSpaceAbstraction extends AbstractScene implements Observer {
     //
@@ -408,6 +406,7 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene implements Observer 
             RpGeometry rpGeometry = (RpGeometry) object;
             if (!selectedGeometries_.contains(rpGeometry)) {
                 if (rpGeometry.isSelected()) {
+                    System.out.println(rpGeometry +"Esta selecionada");
                     selectedGeometries_.add(rpGeometry);
                     Timer timer = new Timer();
                     CurveFlasher flasher = new CurveFlasher(rpGeometry);
