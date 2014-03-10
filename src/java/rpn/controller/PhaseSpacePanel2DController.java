@@ -27,6 +27,7 @@ import rpnumerics.RPnCurve;
 import wave.multid.Coords2D;
 import wave.multid.CoordsArray;
 import wave.multid.Space;
+
 import wave.multid.graphs.wcWindow;
 import wave.multid.view.ViewingTransform;
 import wave.util.RealVector;
@@ -83,8 +84,12 @@ public class PhaseSpacePanel2DController extends ComponentUI implements PhaseSpa
                 RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) event.getComponent();
                 int xCursorPos = event.getPoint().x;
                 int yCursorPos = event.getPoint().y;
-                if ((UIController.instance().getState() instanceof TRACKPOINT_CONFIG)
-                        && (panel.scene().getViewingTransform().projectionMap().getDomain().getDim() == rpnumerics.RPNUMERICS.domainDim())) {
+
+
+                if ((UIController.instance().getState() instanceof TRACKPOINT_CONFIG )&&
+                        (panel.scene().getViewingTransform().projectionMap().getDomain().getDim()==rpnumerics.RPNUMERICS.domainDim())){
+
+
                     Coords2D dcCoords = new Coords2D(xCursorPos, yCursorPos);
                     CoordsArray wcCoords = new Coords2D();
                     panel.scene().getViewingTransform().dcInverseTransform(dcCoords, wcCoords);
@@ -146,8 +151,7 @@ public class PhaseSpacePanel2DController extends ComponentUI implements PhaseSpa
 
                 int wPanel = panel.getWidth();
                 int hPanel = panel.getHeight();
-
-                
+   
                 dcViewport newViewport = new dcViewport(wPanel,hPanel);
                 wcWindow currWindow = panel.scene().getViewingTransform().viewPlane().getWindow();
                         

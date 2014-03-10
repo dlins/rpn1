@@ -517,6 +517,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                 auxFrames_[2 * i].setTitle(((RPnProjDescriptor) RPnVisualizationModule.AUXDESCRIPTORS.get(i)).label());
                 auxFrames_[2 * i + 1].setTitle(((RPnProjDescriptor) RPnVisualizationModule.AUXDESCRIPTORS.get(i + 1)).label());
 
+
                 UIController.instance().install(auxFrames_[2 * i].phaseSpacePanel());
                 UIController.instance().install(auxFrames_[2 * i + 1].phaseSpacePanel());
                 setFramesPosition(auxFrames_[2 * i]);
@@ -537,7 +538,6 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
             wave.multid.view.ViewingTransform viewingTransf =
                     ((RPnProjDescriptor) RPnVisualizationModule.DESCRIPTORS.get(
                     i)).createTransform(clipping);
-                                             
 
             try {
                 wave.multid.view.Scene scene = RPnDataModule.PHASESPACE.createScene(viewingTransf,
