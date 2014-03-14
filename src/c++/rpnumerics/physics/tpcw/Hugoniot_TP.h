@@ -12,11 +12,12 @@ private:
     const FluxFunction *ff;
     const AccumulationFunction *aa;
 
+
 public:
 
-    Hugoniot_TP() {
-        gv = 0;
-    }
+    
+    Hugoniot_TP(const FluxFunction * flux, const AccumulationFunction * accum);
+    
     ~Hugoniot_TP();
 
     double complete_points(const RealVector &Uplus);
@@ -24,24 +25,9 @@ public:
     int function_on_square(double *foncub, int i, int j);
 
 
-    int classified_curve(const FluxFunction *f, const AccumulationFunction *a,
-            GridValues &g, const RealVector &r,
-            std::vector<HugoniotPolyLine> &hugoniot_curve,const Viscosity_Matrix *);
+    int classified_curve(GridValues &, ReferencePoint &,std::vector<HugoniotPolyLine> &hugoniot_curve,std::vector<RealVector> & transitionList);
 
 
-    int classified_curve(const FluxFunction *f, const AccumulationFunction *a,
-            GridValues &g, const RealVector &r,
-            std::vector<HugoniotPolyLine> &hugoniot_curve, std::vector<RealVector> & transitionList,const Viscosity_Matrix *);
-
-    int classified_curve(const FluxFunction *f, const AccumulationFunction *a,
-            GridValues &g, const RealVector &r,
-            std::vector<HugoniotPolyLine> &hugoniot_curve, std::vector<RealVector> &transitionList,
-            std::vector<bool> &circular,const Viscosity_Matrix *);
-
-
-    int curve(const FluxFunction *f, const AccumulationFunction *a,
-            GridValues &g, const RealVector &r,
-            std::vector<RealVector> &hugoniot_curve);
 
     void map(const RealVector &p, double &f, RealVector &map_Jacobian);
 

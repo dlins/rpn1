@@ -279,6 +279,8 @@ int WaveCurveFactory::Liu_half_wavecurve(const ReferencePoint &ref,
 
             std::cout << "WaveCurveFactory. shck_info = " << shck_info << ", shock_stopped_because = " << shock_stopped_because << std::endl;
 
+//            TestTools::pause("After shock");
+
             hwc.wavecurve.push_back(shkcurve);
 
             if (shck_info == SHOCKCURVE_OK){
@@ -468,5 +470,74 @@ int WaveCurveFactory::wavecurve_from_boundary(const RealVector &initial_point, i
     }
 
     return WAVECURVE_OK;
+}
+
+int WaveCurveFactory::wavecurve_from_inflection(const std::vector<RealVector> &inflection_curve, const RealVector &p, int family, int increase, HugoniotContinuation *h, WaveCurve &hwc, int &wavecurve_stopped_because, int &edge){
+    // Proceed.
+    //
+    hugoniot = h;
+
+    family_for_directional_derivative = family;
+
+    RealVector closest_point;
+    Utilities::pick_point_from_segmented_curve(inflection_curve, p, closest_point);
+
+    reference_for_directional_derivative = closest_point - p;
+    normalize(reference_for_directional_derivative);
+
+    RealVector point_on_level_curve;
+    int info_find_point_on_level_curve = Utilities::find_point_on_level_curve((void*)this, &rarefaction_directional_derivative, p, closest_point, point_on_level_curve);
+
+    // Compute the eigenvectors in point_on_level_curve.
+    //
+    std::vector<eigenpair> e;
+    Eigen::fill_eigenpairs(f, g, point_on_level_curve, e);
+
+    double deltaxi = 1e-3;
+    int n = p.size();
+
+    std::vector<RealVector> direction;
+    direction.push_back(RealVector(n, e[family].vrr.data()));
+    direction.push_back(-direction[0]);
+
+    ReferencePoint ref(point_on_level_curve, f, g, 0);
+
+    hwc.family          = family;
+    hwc.increase        = increase;
+    hwc.reference_point = ref;
+
+    for (int i = 0; i < direction.size(); i++){
+        std::vector<double> lambda;
+        Eigen::fill_eigenvalues(f, g, point_on_level_curve + deltaxi*direction[i], lambda);
+
+        int start_as;
+
+        std::cout << "i = " << i << ", lambda = " << lambda[family] << ", e[family].r = " << e[family].r << std::endl;
+//        TestTools::pause();
+
+        if (
+            (lambda[family] > e[family].r && increase == SPEED_INCREASE) ||
+            (lambda[family] < e[family].r && increase == SPEED_DECREASE)
+           ) {
+            start_as = RAREFACTION_CURVE;
+        }
+        else {
+            start_as = SHOCK_CURVE;
+        }
+
+        Liu_half_wavecurve(ref, point_on_level_curve + deltaxi*direction[i], family, increase, start_as, direction[i], hwc, wavecurve_stopped_because, edge);
+    }
+
+    return WAVECURVE_OK;
+}
+
+double WaveCurveFactory::rarefaction_directional_derivative(void *obj, const RealVector &p){
+    WaveCurveFactory *wavecurve = (WaveCurveFactory*)obj;
+
+    RarefactionCurve *rarefactioncurve = wavecurve->rarefactioncurve;
+    int family = wavecurve->family_for_directional_derivative; 
+    RealVector reference_for_directional_derivative = wavecurve->reference_for_directional_derivative;
+
+    return rarefactioncurve->directional_derivative(p, family, reference_for_directional_derivative);
 }
 

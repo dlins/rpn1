@@ -16,7 +16,7 @@ Cub2::Cub2(const Cub2FluxParams & params) : SubPhysics(*defaultBoundary(), *new 
 
 //    CubHugoniotFunction * cubHugoniot = new CubHugoniotFunction(Uref, (Cub2FluxFunction&) * fluxFunction_);
     //
-    setHugoniotFunction(new Hugoniot_Curve());
+    setHugoniotFunction(new Hugoniot_Curve(&fluxFunction(),&accumulation()));
 
 
 }
@@ -29,7 +29,7 @@ Cub2::~Cub2() {
 Cub2::Cub2(const Cub2 & copy) : SubPhysics(copy.fluxFunction(), copy.accumulation(), copy.getBoundary(), *new Space("R2", 2), "Cub2", _SIMPLE_ACCUMULATION_) {
 
 
-    setHugoniotFunction(new Hugoniot_Curve());
+    setHugoniotFunction(new Hugoniot_Curve(&copy.fluxFunction(),&copy.accumulation()));
 
 }
 

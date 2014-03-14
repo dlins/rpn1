@@ -1,6 +1,8 @@
 #include "Curve.h"
 
 void Curve::init(const Curve &orig){
+    clear();
+
     type = orig.type;
 
     back_curve_index = orig.back_curve_index;

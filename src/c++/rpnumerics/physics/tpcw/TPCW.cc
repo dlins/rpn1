@@ -52,7 +52,7 @@ SubPhysics(*defaultBoundary(), *new Space("R3", 3), "TPCW", _GENERAL_ACCUMULATIO
     }
 
 
-    setHugoniotFunction(new Hugoniot_TP());
+    setHugoniotFunction(new Hugoniot_TP(&fluxFunction(),&accumulation()));
     setDoubleContactFunction(new Double_Contact_TP());
 
     RealVector min(getBoundary().minimums());
@@ -149,7 +149,7 @@ SubPhysics(copy.fluxFunction(), copy.accumulation(), copy.getBoundary(), *new Sp
 TD(new Thermodynamics_SuperCO2_WaterAdimensionalized(*copy.TD)) {
 
 
-    setHugoniotFunction(new Hugoniot_TP());
+    setHugoniotFunction(new Hugoniot_TP(&copy.fluxFunction(),&copy.accumulation()));
     setDoubleContactFunction(new Double_Contact_TP());
 //    setShockMethod(new ShockContinuationMethod3D2D());
 

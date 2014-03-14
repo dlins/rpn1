@@ -37,6 +37,8 @@ class Curve {
         std::vector<RealVector> curve;
         std::vector<int>        back_pointer;
 
+        std::vector<int>        extension_of_whom;
+
         RealVector last_point;
         RealVector final_direction;
 

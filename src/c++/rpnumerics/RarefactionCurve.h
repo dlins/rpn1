@@ -33,6 +33,15 @@
 
 #include <complex> // To handle complex eigenpairs.
 
+//#define TEST
+//#ifdef TEST
+//    #include "canvas.h"
+//    #include "canvasmenuscroll.h"
+//    #include "curve2d.h"
+//
+//    #include "TestTools.h"
+//#endif
+
 class WaveCurveFactory;
 
 class RarefactionCurve {
@@ -48,11 +57,6 @@ class RarefactionCurve {
         RealVector reference_vector;
 
         double directional_derivative(const RealVector &p, int fam, const RealVector &ref);
-
-        int initialize(const RealVector &p, int family, const RealVector &direction, RealVector &ref, double &dd);
-
-        // Move it to WaveCurveFactory.
-        int initialize(const RealVector &p, int family, int increase, RealVector &ref, double &dd);
 
         void all_eigenvalues(const RealVector &p, int fam, std::vector<std::complex<double> > &lambda);
         void all_eigenvalues(const RealVector &p, int fam, RealVector &lambda);
@@ -100,6 +104,9 @@ class RarefactionCurve {
 
         static int elliptic_region_signal_event_2D2D(const RealVector & where, double &discriminant, int *signal_object, int * /* reference_direction */);
         static int elliptic_region_signal_event_3D2D(const RealVector & where, double &discriminant, int *signal_object, int * /* reference_direction */);
+
+        int initialize(const RealVector &p, int family, const RealVector &direction, RealVector &ref, double &dd);
+        int initialize(const RealVector &p, int family, int increase, RealVector &ref, double &dd);
 
         friend class WaveCurveFactory;
         friend class ShockCurve;

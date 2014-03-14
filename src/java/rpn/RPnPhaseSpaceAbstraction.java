@@ -406,7 +406,6 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene implements Observer 
             RpGeometry rpGeometry = (RpGeometry) object;
             if (!selectedGeometries_.contains(rpGeometry)) {
                 if (rpGeometry.isSelected()) {
-                    System.out.println(rpGeometry +"Esta selecionada");
                     selectedGeometries_.add(rpGeometry);
                     Timer timer = new Timer();
                     CurveFlasher flasher = new CurveFlasher(rpGeometry);

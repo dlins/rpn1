@@ -11,6 +11,7 @@
 class Boundary;
 
 #include "Matrix.h"
+#include "DoubleMatrix.h"
 
 // The definitions below will help the Contour to decide whether a cell is to be
 // processed (and if so, how) or not.
@@ -48,8 +49,11 @@ class GridValues {
         Matrix<RealVector>               G_on_grid;                  // Accumulation
         bool                             functions_on_grid_computed; // Already computed?
 
-        Matrix< Matrix<double> >         JF_on_grid;                 // Jacobians of the flux
-        Matrix< Matrix<double> >         JG_on_grid;                 // Jacobians of the accumulation
+//        Matrix< Matrix<double> >         JF_on_grid;                 // Jacobians of the flux
+//        Matrix< Matrix<double> >         JG_on_grid;                 // Jacobians of the accumulation
+
+        Matrix<DoubleMatrix>             JF_on_grid;                 // Jacobians of the flux
+        Matrix<DoubleMatrix>             JG_on_grid;                 // Jacobians of the accumulation
         bool                             Jacobians_on_grid_computed; // Already computed?
 
         Matrix< std::vector<double> >    dd;                         // Directional derivatives

@@ -571,6 +571,7 @@ int RarefactionCurve::curve_from_boundary(const RealVector &initial_point, int s
     //
     RealVector to_interior = b->side_transverse_interior(initial_point, side);
 
+    std::cout << "to_interior = " << to_interior << std::endl;
 
     // Find a point inside the domain, close to the initial point.
     //
@@ -606,9 +607,9 @@ int RarefactionCurve::curve_from_boundary(const RealVector &initial_point, int s
         double dd;
 
         initialize(inner_point, curve_family, increase, temp, dd);
-//        std::cout << "dd = " << dd << ", temp = " << temp << std::endl;
-//
-//        std::cout << "initial_direction = " << initial_direction << std::endl;
+        std::cout << "dd = " << dd << ", temp = " << temp << std::endl;
+
+        std::cout << "initial_direction = " << initial_direction << std::endl;
     }
     else return RAREFACTION_ERROR;
 

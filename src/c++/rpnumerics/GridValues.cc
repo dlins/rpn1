@@ -1,7 +1,7 @@
 #include "GridValues.h"
 #include "Boundary.h"
-#include "Debug.h"
-//#include "timer.h"
+
+
 
 GridValues::GridValues(const Boundary *b, 
                        const RealVector &pmin, const RealVector &pmax,
@@ -16,8 +16,8 @@ void GridValues::set_grid(const Boundary *b,
                           const RealVector &min, const RealVector &max,
                           const std::vector<int> &number_of_cells){
 
-    grid_computed =
-    functions_on_grid_computed = Jacobians_on_grid_computed =
+    grid_computed = 
+    functions_on_grid_computed = Jacobians_on_grid_computed = 
     dd_computed = e_computed = false;
 
     fill_values_on_grid(b, min, max, number_of_cells);
@@ -30,28 +30,20 @@ void GridValues::set_grid(const Boundary *b,
 void GridValues::fill_values_on_grid(const Boundary *b, 
                                      const RealVector &pmin, const RealVector &pmax,
                                      const std::vector<int> &number_of_cells){
-//    timer tm;
     if (!grid_computed){
-//        tm.reset();
         int dim = pmin.size();
 
-        if ( Debug::get_debug_level() == 5 ) {
-            printf("Inside GridValues::fill_values_on_grid\n");
-        }
+//        printf("Inside GridValues::fill_values_on_grid\n");
 
         grid_resolution.resize(dim);
         for (int i = 0; i < dim; i++) grid_resolution.component(i) = (fabs(pmax.component(i) - pmin.component(i))) / (double) (number_of_cells[i]);
 
         
-        if ( Debug::get_debug_level() == 5 ) {
-            cout<<"Number of cells: "<<number_of_cells[0]<<" "<<number_of_cells[1]<<endl;
-        }
+        cout<<"Number of cells: "<<number_of_cells[0]<<" "<<number_of_cells[1]<<endl;
         
         grid.resize(number_of_cells[0] + 1, number_of_cells[1] + 1);
 
-#ifdef _OPENMP
         #pragma omp parallel for schedule(dynamic)
-#endif
         for (int i = 0; i <= number_of_cells[0]; i++) {
             for (int j = 0; j <= number_of_cells[1]; j++) {
                 grid(i, j).resize(dim);
@@ -67,6 +59,7 @@ void GridValues::fill_values_on_grid(const Boundary *b,
 
         point_inside.resize(number_of_cells[0] + 1, number_of_cells[1] + 1);
 
+        #pragma omp parallel for schedule(dynamic)
         for (int i = 0; i <= number_of_cells[0]; i++) {
             for (int j = 0; j <= number_of_cells[1]; j++) {
                 point_inside(i, j) = b->inside(grid(i, j));
@@ -75,6 +68,7 @@ void GridValues::fill_values_on_grid(const Boundary *b,
 
         cell_type.resize(number_of_cells[0], number_of_cells[1]);
 
+        #pragma omp parallel for schedule(dynamic)
         for (int i = 0; i < number_of_cells[0]; i++) {
             for (int j = 0; j < number_of_cells[1]; j++) {
 
@@ -96,20 +90,20 @@ void GridValues::fill_values_on_grid(const Boundary *b,
         //
         functions_on_grid_computed = Jacobians_on_grid_computed = 
         dd_computed = e_computed = false; 
-//        std::cerr << "--------------------------------------Fill values on grid: " << tm.elapsed() << "s" << std::endl;
     }
 
     return;
 }
 
 void GridValues::fill_functions_on_grid(const FluxFunction *ff, const AccumulationFunction *aa){
-//    timer tm;
+    printf("    point_inside = %d x %d\n", point_inside.rows(), point_inside.cols());
+
     if (!functions_on_grid_computed){
-//        tm.reset();
 //        fill_values_on_grid(GridValues &gv);
-        if ( Debug::get_debug_level() == 5 ) {
-            printf("Inside GridValues::fill_functions_on_grid\n");
-        }
+
+        printf("Inside GridValues::fill_functions_on_grid\n");
+        
+           cout<<"Flux e acumm em grid values: "<<ff<<" "<<aa<<endl;
 
         int rows = grid.rows(), cols = grid.cols(); 
         int n = rows*cols;
@@ -119,25 +113,27 @@ void GridValues::fill_functions_on_grid(const FluxFunction *ff, const Accumulati
         G_on_grid.resize(rows, cols);
 
         int dim = grid(0, 0).size();
-        
+        std::cout << "Dim = " << dim << std::endl;
 
         #pragma omp parallel for schedule(dynamic)
         for (int i = 0; i < n; i++) {
             F_on_grid(i).resize(dim);
             G_on_grid(i).resize(dim);
 
+            //printf("    i = %d\n", i);
+
             // We only compute the value of the function on points that are inside the physical domain
             // given by "boundary".
             if (point_inside(i)) {
-
                 ff->fill_with_jet(dim, grid(i).components(), 0, F_on_grid(i).components(), 0, 0);
                 aa->fill_with_jet(dim, grid(i).components(), 0, G_on_grid(i).components(), 0, 0);
             }
         }
 
         functions_on_grid_computed = true;
-//        std::cerr << "--------------------------------------Fill functions on grid: " << tm.elapsed() << "s" << std::endl;
     }
+
+    printf("Filled correctly\n");
 
     return;
 }
@@ -156,6 +152,7 @@ void GridValues::fill_Jacobians_on_grid(const FluxFunction *ff, const Accumulati
         JF_on_grid.resize(rows, cols);
         JG_on_grid.resize(rows, cols);
 
+        #pragma omp parallel for schedule(dynamic)
         for (int i = 0; i < n; i++){
             
             if (point_inside(i)){
@@ -164,6 +161,7 @@ void GridValues::fill_Jacobians_on_grid(const FluxFunction *ff, const Accumulati
                 JG_on_grid(i).resize(dim, dim);//printf("GridValues::fill_Jacobians_on_grid. point inside, i = %d\n", i);
 
                 if (functions_on_grid_computed){
+                    //printf("ff = %p\n", ff);
                     ff->fill_with_jet(dim, grid(i).components(), 1, 0, JF_on_grid(i).data(), 0); 
                     aa->fill_with_jet(dim, grid(i).components(), 1, 0, JG_on_grid(i).data(), 0);
                 }
@@ -186,9 +184,7 @@ void GridValues::fill_Jacobians_on_grid(const FluxFunction *ff, const Accumulati
 void GridValues::fill_eigenpairs_on_grid(const FluxFunction *ff, const AccumulationFunction *aa){
     if (!e_computed){
         fill_Jacobians_on_grid(ff, aa);
-        if ( Debug::get_debug_level() == 5 ) {
-            printf("Inside GridValues::fill_eigenpairs_on_grid\n");
-        }
+        printf("Inside GridValues::fill_eigenpairs_on_grid\n");
 
         int rows = grid.rows(), cols = grid.cols(); 
         int n = rows*cols;
@@ -200,6 +196,7 @@ void GridValues::fill_eigenpairs_on_grid(const FluxFunction *ff, const Accumulat
         e.resize(rows, cols);
         eig_is_real.resize(rows, cols);
 
+        #pragma omp parallel for schedule(dynamic)
         for (int i = 0; i < n; i++){
             if (point_inside(i)){
                 // Find the eigenpairs
@@ -257,6 +254,8 @@ void GridValues::fill_eigenpairs_on_grid(const FluxFunction *ff, const Accumulat
 
 //        for (int i = 0; i < number_of_cells[0]; i++) {
 //            for (int j = 0; j < number_of_cells[1]; j++) {
+
+        #pragma omp parallel for schedule(dynamic)
         for (int i = 0; i < rows - 1; i++) {
             for (int j = 0; j < cols - 1; j++) {
 
@@ -296,23 +295,17 @@ void GridValues::fill_dirdrv_on_grid(const FluxFunction *ff, const AccumulationF
 
         dd.resize(rows, cols);
 
+        #pragma omp parallel for schedule(dynamic)
         for (int i = 0; i < n; i++){
-            if ( Debug::get_debug_level() == 5 ) {
-                printf("GridValues::fill_dirdrv_on_grid(). i = %d\n", i);
-            }
+            //printf("GridValues::fill_dirdrv_on_grid(). i = %d\n", i);
             if (point_inside(i)){
-                if ( Debug::get_debug_level() == 5 ) {
-                    printf("    i = %d\n", i);
-                }
+                //printf("    i = %d\n", i);
                 dd(i).resize(dim);
 
                 double H[dim][dim][dim];
                 double M[dim][dim][dim];
                 aa->fill_with_jet(dim, grid(i).components(), 2, 0, 0, &M[0][0][0]);
-                ff->fill_with_jet(dim, grid(i).components(), 2, 0, 0, &H[0][0][0]);
-                if ( Debug::get_debug_level() == 5 ) {
-                    printf("    i = %d, e(i).size() = %d\n", i, e(i).size());
-                }
+                ff->fill_with_jet(dim, grid(i).components(), 2, 0, 0, &H[0][0][0]); //printf("    i = %d, e(i).size() = %d\n", i, e(i).size());
 
                 for (int fam = 0; fam < e(i).size(); fam++){
                     double norm = 0.0;
@@ -326,9 +319,7 @@ void GridValues::fill_dirdrv_on_grid(const FluxFunction *ff, const AccumulationF
                     double lambda;
 
                     if (fabs(e(i)[fam].i) > epsilon) {
-                        if ( Debug::get_debug_level() == 5 ) {
-                            printf("Inside dirdrv(): Init step, eigenvalue %d is complex: % f %+f.\n", fam, e(i)[fam].r, e(i)[fam].i);
-                        }
+                        printf("Inside dirdrv(): Init step, eigenvalue %d is complex: % f %+f.\n", fam, e(i)[fam].r, e(i)[fam].i);
                         continue;
                     } 
                     else lambda = e(i)[fam].r;
@@ -355,9 +346,7 @@ void GridValues::fill_dirdrv_on_grid(const FluxFunction *ff, const AccumulationF
                     dd(i)[fam] = dirdrv / norm;
 
                 } // End fam
-                if ( Debug::get_debug_level() == 5 ) {
-                    printf("    ****\n");
-                }
+                //printf("    ****\n");
             }
         } // End grid
 

@@ -51,7 +51,7 @@ public class BifurcationCurveGeom extends BifurcationCurveBranchGeom implements 
     @Override
     public void showCorrespondentPoint(CoordsArray curvePoint,  ViewingTransform transform) {
 
-        if (getCorrespondenceDirection() != BifurcationCurveBranchGeom.NONE) {
+        if (getCorrespondenceDirection() != CorrespondenceDirection.NONE.ordinal()) {
             RealVector pointOnCurve = new RealVector(curvePoint.getCoords());
 
             BifurcationCurve bifurcationCurve = (BifurcationCurve) geomFactory().geomSource();
@@ -59,12 +59,12 @@ public class BifurcationCurveGeom extends BifurcationCurveBranchGeom implements 
             List<RealSegment> thisSegments = null;
             List<RealSegment> otherSegments = null;
 
-            if (getCorrespondenceDirection() == BifurcationCurveBranchGeom.LEFTRIGHT) {
+            if (getCorrespondenceDirection() == CorrespondenceDirection.LEFTRIGHT.ordinal()) {
                 thisSegments = bifurcationCurve.leftSegments();
                 otherSegments = bifurcationCurve.rightSegments();
             }
 
-            if (getCorrespondenceDirection()== BifurcationCurveBranchGeom.RIGHTLEFT) {
+            if (getCorrespondenceDirection()== CorrespondenceDirection.RIGHTLEFT.ordinal()) {
                 thisSegments = bifurcationCurve.rightSegments();
                 otherSegments = bifurcationCurve.leftSegments();
             }
@@ -94,6 +94,9 @@ public class BifurcationCurveGeom extends BifurcationCurveBranchGeom implements 
             CorrespondenceMark testeLabelRight = new CorrespondenceMark(wcObjectsRight, transform, new ViewingAttr(Color.white));
 
             addAnnotation(testeLabelRight);
+        }
+        else {
+            clearCorrespondenceMarks();
         }
 
     }

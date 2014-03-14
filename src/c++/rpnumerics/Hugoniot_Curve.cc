@@ -1,114 +1,41 @@
 #include "Hugoniot_Curve.h"
-#include "Debug.h"
+
+Hugoniot_Curve::Hugoniot_Curve(const FluxFunction * flux, const AccumulationFunction * accum)
+:  ff(flux), aa(accum) {
+
+
+}
+
+
 
 // This is the classified Hugoniot given by segments
 //
-// TODO : Implementar com esta assinatura (Pablo/Leandro 18FEV)
-//int Hugoniot_Curve::classified_curve(const FluxFunction *f, const AccumulationFunction *a,
-//                                     GridValues &g, const RealVector &r,
-//                                     std::vector<HugoniotPolyLine> &hugoniot_curve, std::vector<RealVector> &testeTransitionalList) {
 
-int Hugoniot_Curve::classified_curve(const FluxFunction *f, const AccumulationFunction *a,
-                                     GridValues &g, const RealVector &r,
-                                     std::vector<HugoniotPolyLine> &hugoniot_curve,const Viscosity_Matrix * vm) {
+int Hugoniot_Curve::classified_curve(GridValues & grid, ReferencePoint & refPoint,std::vector<HugoniotPolyLine> &hugoniot_curve, std::vector<RealVector> &transitionList) {
 
-    // The segments by a search algorithm are stored here, to be used in the ColorCurve
-    std::vector<RealVector> vrs;
-    std::vector<RealVector> testeTransitionalList;
-
-    // This is auxiliary stuff (not filled, not used)
-    std::vector< std::deque <RealVector> > curves;
-    std::vector < bool > circular;
-    int method = SEGMENTATION_METHOD;
-
-    // Compute the Hugoniot curve as usual
-    //
-    int info = curve(f, a, g, r, vrs, curves, circular, method);
-
-    ColorCurve colorCurve(*f, *a);
+    grid.fill_functions_on_grid(ff, aa);
     
-    ReferencePoint refPoint (r,f,a,vm);
-    colorCurve.classify_segmented_curve(vrs,refPoint,hugoniot_curve,testeTransitionalList);
-    
-    return info;
-}
+    gv=&grid;
+    Fref = refPoint.F;
+    Gref = refPoint.G;
 
-        
+    JFref = refPoint.JF;
+    JGref = refPoint.JG;
 
-// This is the classified Hugoniot given by continuous curves
-//
-// TODO : Implementar com esta assinatura (Pablo/Leandro 18FEV)
-int Hugoniot_Curve::classified_curve(const FluxFunction *f, const AccumulationFunction *a,
-                                     GridValues &g, const RealVector &r,
-                                     std::vector<HugoniotPolyLine> &hugoniot_curve, std::vector<RealVector> &transitionList,
-                                     std::vector<bool> &circular,const Viscosity_Matrix * vm) {
-
-//int Hugoniot_Curve::classified_curve(const FluxFunction *f, const AccumulationFunction *a, 
-//                                     GridValues &g, const RealVector &r, 
-//                                     std::vector<HugoniotPolyLine> &hugoniot_curve,
-//                                     std::vector<bool> &circular) {
-
-    // --- Pablo/Leandro 18FEV
-//    std::vector<RealVector> transitionList;
-    transitionList.clear();
-    // ---
-
-    if ( Debug::get_debug_level() == 5 ) {
-        cout << "Hugoniot: classified_curve por continuacao" << endl;
-    }
-
-    // The continuous curve is stored by Contour2D
-    std::vector< std::deque <RealVector> > curves;
-
-    // This is auxiliary stuff (not filled, not used)
-    std::vector<RealVector> vrs;
-    int method = CONTINUATION_METHOD;
-
-    // Compute the Hugoniot curve by continuation
-    //
-    int info = curve(f, a, g, r, vrs, curves, circular, method);
-    int no_of_curves = curves.size();
-
-    // There is a single list of Transitional points instead as one list for curves.
-    std::vector<RealVector> testeTransitionalList;
-    testeTransitionalList.clear();
     hugoniot_curve.clear();
 
-    ColorCurve colorCurve(*f, *a);
-    
-    ReferencePoint refPoint(r,f,a,vm);
+    std::vector<RealVector> vrs;
 
-    for (int i = 0; i < no_of_curves; i++) {
-        HugoniotPolyLine hugoniot;
-        colorCurve.classify_continuous_curve(curves[i],refPoint,hugoniot,testeTransitionalList);
-        hugoniot_curve.push_back(hugoniot);
-        if ( Debug::get_debug_level() == 5 ) {
-            cout << "Size da lista de transicao " << i  <<  "  " << testeTransitionalList.size() << endl;
-        }
+    // Notice that method splitts which curve is filled
+    int info = ContourMethod::contour2d(this, vrs);
 
-        // --- Pablo/Leandro 18FEV
-        for (int j=0; j< testeTransitionalList.size(); j++) {
-            transitionList.push_back(testeTransitionalList[j]);
-        }
-        // ---
-    }
+    ColorCurve colorCurve(*ff, *aa);
 
-    if ( Debug::get_debug_level() == 5 ) {
-        cout << "Size da lista total " << transitionList.size() << endl;
-    }
+    colorCurve.classify_segmented_curve(vrs, refPoint,
+            hugoniot_curve, transitionList);
 
-    
-    
     return info;
 }
-
- int Hugoniot_Curve::curve(const FluxFunction *f, const AccumulationFunction *a,
-            GridValues &g, const RealVector &r,
-            std::vector<RealVector> &hugoniot_curve){
-     return 0;
-     
- }
-
 
 Hugoniot_Curve::~Hugoniot_Curve() {
 }
@@ -141,12 +68,11 @@ int Hugoniot_Curve::function_on_square(double *foncub, int i, int j) {
                 double df2 = gv->F_on_grid(i + l, j + k).component(1) - Fref.component(1);
 
                 f_aux[l * 2 + k] = dg2 * df1 - dg1*df2;
-            } 
-            else {
+            } else {
                 // First-order expansion of F in terms of G.
                 //
 
-                double inv_det = 1.0 / (JGref(0) * JGref(3) - JGref(1) * JGref(2) );
+                double inv_det = 1.0 / (JGref(0) * JGref(3) - JGref(1) * JGref(2));
 
                 f_aux[l * 2 + k] = ((JFref(0) * JGref(3) - JFref(2) * JGref(1) + JFref(1) * JGref(2) - JFref(3) * JGref(0)) * dg1 * dg2 +
                         (JFref(1) * JGref(3) - JFref(3) * JGref(1)) * dg2 * dg2 +
@@ -164,41 +90,6 @@ int Hugoniot_Curve::function_on_square(double *foncub, int i, int j) {
     if (is_square == CELL_IS_SQUARE) foncub[2] = f_aux[3]; // Was: foncub[0][2]
 
     return 1;
-}
-
-int Hugoniot_Curve::curve(const FluxFunction *f, const AccumulationFunction *a, 
-                          GridValues &g, const RealVector &r,
-                          std::vector<RealVector> &hugoniot_curve,
-                          std::vector< std::deque <RealVector> > &curves, std::vector <bool> &is_circular,
-                          const int method) {
-
-    ff = f;
-    aa = a;
-
-    g.fill_functions_on_grid(f, a);
-    gv = &g;
-
-    int n = r.size();
-
-    Fref.resize(n);
-    Gref.resize(n);
-
-    JFref.resize(n, n); 
-    JGref.resize(n, n);
-
-    RealVector p(r);
-
-    ff->fill_with_jet(n, p.components(), 1, Fref.components(), JFref.data(), 0);
-    aa->fill_with_jet(n, p.components(), 1, Gref.components(), JGref.data(), 0);
-
-    hugoniot_curve.clear();
-    curves.clear();
-    is_circular.clear();
-
-    // Notice that method splitts which curve is filled
-    int info = ContourMethod::contour2d(this, hugoniot_curve, curves, is_circular, method);
-
-    return info;
 }
 
 void Hugoniot_Curve::map(const RealVector &r, double &f, RealVector &map_Jacobian) {
@@ -222,7 +113,7 @@ void Hugoniot_Curve::map(const RealVector &r, double &f, RealVector &map_Jacobia
     double df1 = F[0] - Fref[0];
     double df2 = F[1] - Fref[1];
 
-    f = dg2*df1 - dg1*df2;
+    f = dg2 * df1 - dg1*df2;
 
     map_Jacobian.component(0) = JF[0][0] * dg2 + JG[1][0] * df1 - JF[1][0] * dg1 - JG[0][0] * df2;
     map_Jacobian.component(1) = JF[0][1] * dg2 + JG[1][1] * df1 - JF[1][1] * dg1 - JG[0][1] * df2;
@@ -244,6 +135,14 @@ void Hugoniot_Curve::map(const RealVector &r, double &f, RealVector &map_Jacobia
     return;
 }
 
+int Hugoniot_Curve::complete(const RealVector &p0, const RealVector &p1, const RealVector &p_init, RealVector &p_completed) {
+    Newton_Improvement newton_improver(this);
+    int newton_info = newton_improver.newton(p0, p1, p_init, p_completed);
+
+    return IMPROVABLE_OK;
+}
+
 bool Hugoniot_Curve::improvable(void) {
     return true;
 }
+

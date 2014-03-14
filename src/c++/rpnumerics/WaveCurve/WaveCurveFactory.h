@@ -12,6 +12,7 @@
 #include "CompositeCurve.h"
 #include "ShockCurve.h"
 #include "ODE_Solver.h"
+#include "Utilities.h"
 
 #include "WaveCurve.h"
 
@@ -40,6 +41,9 @@ class WaveCurveFactory {
         HugoniotContinuation *hugoniot;
 
         std::vector<std::string> type;
+
+        int family_for_directional_derivative;
+        RealVector reference_for_directional_derivative;
     public:
         WaveCurveFactory(const AccumulationFunction *gg, const FluxFunction *ff, const Boundary *bb, const ODE_Solver *o, RarefactionCurve *r, ShockCurve *s, CompositeCurve *c);
         ~WaveCurveFactory();
@@ -60,6 +64,14 @@ class WaveCurveFactory {
 
         // s = side.
         int wavecurve_from_boundary(const RealVector &initial_point, int s, int family, int increase, HugoniotContinuation *h, WaveCurve &hwc, int &wavecurve_stopped_because, int &edge);
+
+        int wavecurve_from_inflection(const std::vector<RealVector> &inflection_curve, 
+                                      const RealVector &p, 
+                                      int family, int increase, 
+                                      HugoniotContinuation *h, 
+                                      WaveCurve &hwc, int &wavecurve_stopped_because, int &edge);
+
+        static double rarefaction_directional_derivative(void *obj, const RealVector &p);
 };
 
 #endif // _WAVECURVEFACTORY_

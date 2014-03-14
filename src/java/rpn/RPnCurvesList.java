@@ -8,7 +8,6 @@ package rpn;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.ItemSelectable;
 import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -57,7 +56,7 @@ import rpnumerics.StationaryPointCalc;
 import wave.multid.model.MultiGeometry;
 import wave.util.RealVector;
 
-public class RPnCurvesList extends Observable implements ActionListener, ListSelectionListener, TableModelListener, MouseListener, ItemListener {
+public class RPnCurvesList extends Observable implements ActionListener, ListSelectionListener, TableModelListener, MouseListener{
 
     private JScrollPane tablePanel_;
     private JToolBar toolBar_;
@@ -92,7 +91,7 @@ public class RPnCurvesList extends Observable implements ActionListener, ListSel
 
         frame_.setLocation((int) (width - (width * .55)), (int) (height - (height * .35)));
 
-        tableModel_ = new RPnCurvesTableModel();
+        tableModel_ = new RPnCurvesTableModel(phaseSpace);
         tableModel_.addTableModelListener(this);
 
         toolBar_ = new JToolBar();
@@ -151,6 +150,16 @@ public class RPnCurvesList extends Observable implements ActionListener, ListSel
 
         curvesTable_.getColumnModel().getColumn(2).setCellEditor(new DefaultCellEditor(new JCheckBox()));
         curvesTable_.getColumnModel().getColumn(3).setCellEditor(new DefaultCellEditor(new JCheckBox()));
+        
+         JComboBox comboBox = new JComboBox();
+
+        comboBox.addItem("LEFTRIGHT");
+        comboBox.addItem("RIGHTLEFT");
+        comboBox.addItem("NONE");
+        comboBox.setSelectedIndex(2);
+
+        
+        curvesTable_.getColumnModel().getColumn(4).setCellEditor(new DefaultCellEditor(comboBox));
 
     }
 
@@ -216,22 +225,13 @@ public class RPnCurvesList extends Observable implements ActionListener, ListSel
         }
 
         data.add(userInputString);
-        data.add(geometry.viewingAttr().isVisible());
-        data.add(geometry.viewingAttr().isSelected());
+        data.add(geometry.isVisible());
+        data.add(geometry.isSelected());
 
-        JComboBox comboBox = new JComboBox();
+        data.add("NONE");
 
-        comboBox.addItem("Left to Right");
-        comboBox.addItem("Right to Left");
-        comboBox.addItem("None");
-        comboBox.setSelectedIndex(2);
-        data.add("None");
-        comboBox.addItemListener(this);
-        if (!(geometry instanceof BifurcationCurveBranchGeom)) {
-            comboBox.setEnabled(false);
-        }
 
-        curvesTable_.getColumnModel().getColumn(4).setCellEditor(new DefaultCellEditor(comboBox));
+
 
         tableModel_.addRow(data);
 
@@ -304,6 +304,7 @@ public class RPnCurvesList extends Observable implements ActionListener, ListSel
 
     }
 
+    @Override
     public void actionPerformed(ActionEvent e) {
 
         System.out.println("Comando: " + e.paramString());
@@ -504,17 +505,6 @@ public class RPnCurvesList extends Observable implements ActionListener, ListSel
 
     }
 
-    @Override
-    public void itemStateChanged(ItemEvent e) {
-
-        if (e.getSource() instanceof JComboBox) {
-            JComboBox combo = (JComboBox) e.getSource();
-
-            BifurcationCurveBranchGeom bifurcationCurveBranchGeom = (BifurcationCurveBranchGeom) geometryList_.get(pressedRow);
-            bifurcationCurveBranchGeom.setCorrespondenceDirection(combo.getSelectedIndex());
-
-        }
-
-    }
+  
 
 }

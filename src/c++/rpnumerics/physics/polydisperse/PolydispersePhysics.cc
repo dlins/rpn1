@@ -23,7 +23,7 @@
 
 
 PolydispersePhysics::PolydispersePhysics() : SubPhysics(Polydisperse(Polydisperse_Params()), StoneAccumulation(), *defaultBoundary(), Multid::PLANE, "Polydisperse", _SIMPLE_ACCUMULATION_) {
-    setHugoniotFunction(new Hugoniot_Curve());
+    setHugoniotFunction(new Hugoniot_Curve(&fluxFunction(),&accumulation()));
     setDoubleContactFunction(new Double_Contact());
     setViscosityMatrix(new Viscosity_Matrix());
     preProcessedBoundary_ = defaultBoundary();
@@ -35,7 +35,7 @@ SubPhysics * PolydispersePhysics::clone()const {
 }
 
 PolydispersePhysics::PolydispersePhysics(const PolydispersePhysics & copy) : SubPhysics(copy.fluxFunction(), copy.accumulation(), copy.getBoundary(), copy.domain(), "Polydisperse", _SIMPLE_ACCUMULATION_) {
-    setHugoniotFunction(new Hugoniot_Curve());
+    setHugoniotFunction(new Hugoniot_Curve(&copy.fluxFunction(),&copy.accumulation()));
     setDoubleContactFunction(new Double_Contact());
     setViscosityMatrix(copy.getViscosityMatrix());
     preProcessedBoundary_ = copy.getPreProcessedBoundary()->clone();

@@ -3,7 +3,7 @@
 
 #include "FluxFunction.h"
 #include "AccumulationFunction.h"
-#include "Matrix.h"
+#include "DoubleMatrix.h"
 #include "RealVector.h"
 
 #include "ImplicitFunction.h"
@@ -12,52 +12,48 @@
 #include "GridValues.h"
 #include "Hugoniot_Locus.h"
 
+#include "Newton_Improvement.h"
+
 #include <vector>
 #include <deque>
 
 class Hugoniot_Curve : public Hugoniot_Locus {
     private:
-        Matrix<double> JFref, JGref;
+        DoubleMatrix JFref, JGref;
         RealVector Fref, Gref;
+
 
         const FluxFunction *ff;
         const AccumulationFunction *aa;
+
     protected:
     public:
-        Hugoniot_Curve(){gv = 0;}
+        Hugoniot_Curve(const FluxFunction *, const AccumulationFunction *);
         ~Hugoniot_Curve();
 
         int function_on_square(double *foncub, int i, int j);
 
         // For classification of segmented curves
-        int classified_curve(const FluxFunction *f, const AccumulationFunction *a, 
-                             GridValues &g, const RealVector &r, 
-                             std::vector<HugoniotPolyLine> &hugoniot_curve,const Viscosity_Matrix *);
+        int classified_curve(GridValues &, ReferencePoint &,std::vector<HugoniotPolyLine> & ,std::vector<RealVector> &);
 
-        // For classification of continuous curves
+//        // For classification of continuous curves
 //        int classified_curve(const FluxFunction *f, const AccumulationFunction *a, 
-//                             GridValues &g, const RealVector &r, 
+//                             GridValues &g, const ReferencePoint &r, 
 //                             std::vector<HugoniotPolyLine> &hugoniot_curve,
 //                             std::vector<bool> &circular);
+//
+//        int curve(const FluxFunction *f, const AccumulationFunction *a, 
+//                  GridValues &g, const ReferencePoint &r,
+//                  std::vector<RealVector> &hugoniot_curve,
+//                  std::vector< std::deque <RealVector> > &curves, std::vector <bool> &is_circular,
+//                  const int method);
         
-        
-        int classified_curve(const FluxFunction *f, const AccumulationFunction *a,
-                                     GridValues &g, const RealVector &r,
-                                     std::vector<HugoniotPolyLine> &hugoniot_curve, std::vector<RealVector> &transitionList,
-                                     std::vector<bool> &circular,const Viscosity_Matrix * vm ) ;
-        
+//        int curve(const FluxFunction *f, const AccumulationFunction *a,
+//            GridValues &g, const RealVector &r,
+//            std::vector<RealVector> &hugoniot_curve);
         
 
-        int curve(const FluxFunction *f, const AccumulationFunction *a, 
-                  GridValues &g, const RealVector &r,
-                  std::vector<RealVector> &hugoniot_curve,
-                  std::vector< std::deque <RealVector> > &curves, std::vector <bool> &is_circular,
-                  const int method);
-        
-        int curve(const FluxFunction *f, const AccumulationFunction *a,
-            GridValues &g, const RealVector &r,
-            std::vector<RealVector> &hugoniot_curve);
-        
+        int complete(const RealVector &p0, const RealVector &p1, const RealVector &p_init, RealVector &p_completed);
 
         void map(const RealVector &p, double &f, RealVector &map_Jacobian);
 

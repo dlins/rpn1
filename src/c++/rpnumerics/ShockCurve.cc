@@ -608,6 +608,11 @@ void ShockCurve::add_point(Curve &c, const RealVector &p){
     return;
 }
 
+// TODO: Generalize the interruption to say if (lambda - sigma) increases or decreases, at each family used.
+// TODO: Write classifier based on the interruption functions. Possible answers: "Lax shock of some family", "Classification in Alexei-Marchesin".
+// TODO: Write classifier without using the interruption functions for non-connected branches.
+//
+//
 int ShockCurve::call_interruption_functions(const RealVector &previous_lambdaref_minus_sigma, const RealVector &previous_lambda_minus_sigma, const RealVector &previous_point, 
                                             const RealVector &lambdaref_minus_sigma,          const RealVector &lambda_minus_sigma,          const RealVector &candidate_point,
                                             int what_family_to_use,
@@ -1037,3 +1042,161 @@ int ShockCurve::curve(const ReferencePoint &ref,
 
     return HUGONIOTCONTINUATION_CURVE_OK;
 }
+
+// TODO: THIS METHOD IS INCOMPLETE!!!
+//
+// There are two complementary ways to code this method:
+//
+//     a) The curve that contains the Bethe-Wendroff points was created using this ShockCurve's flux, accumulation, etc., while the curve_containing_the_extension was created with different flux, accumulation, etc.,
+//     b) The curve_containing_the_extension was created using this ShockCurve's flux, accumulation, etc., while the curve that contains the Bethe-Wendroff points was created with different flux, accumulation, etc.
+//
+// The first alternative is in use here. The method could also be coded as a static method, but that would break the style.
+//
+//                                               ==================================
+//                                               NOTE ON HOW THE RESULTS ARE STORED
+//                                               ==================================
+//
+// The extension of a Bethe-Wendroff point may be formed by several points. Since this method extends several Bethe-Wendroff points,
+// it would be more natural to store the results in
+//
+//     std::vector<std::vector<RealVector> > &extension,
+//
+// that is, a vector of points per Bethe-Wendroff point. On the downside, if no extension points are found for a particular Bethe-Wendroff
+// point, the corresponding std::vector<RealVector> would be empty. To avoid this situation the results are stored as a pair of vectors:
+// of points and indices:
+//
+//     std::vector<RealVector> &extension      and     std::vector<int> &corresponding_Bethe_Wendroff.
+//
+// In "extension" all the extended points will be stored, while in "corresponding_Bethe_Wendroff" will be stored the indices of the corresponding
+// Bethe-Wendroff point that was extended.
+//
+//
+//                                               ==============================
+//                                               NOTE ON THE RESULTS THEMSELVES
+//                                               ==============================
+//
+// There seems to be a problem with the results (the extension), which is found where it should not be. Perhaps it is a problem with the updating
+// of the sigmas. THIS SHOULD BE TAKEN CARE OF! To complete this method we are waiting for a correct/precise definition of "extension of a Bethe-Wendroff point".
+//
+void ShockCurve::Bethe_Wendroff_extension(const Curve &curve, const std::vector<int> &transition_current_index, const std::vector<int> &transition_current_family, const Curve &curve_where_extension_is_to_be_found, 
+                                          std::vector<RealVector> &curve_with_extension, std::vector<int> &corresponding_Bethe_Wendroff){
+
+    // Create a copy.
+    //
+    curve_with_extension.clear();
+    for (int i = 0; i < curve_where_extension_is_to_be_found.curve.size(); i++){
+        curve_with_extension.push_back(curve_where_extension_is_to_be_found.curve[i]);
+    }
+
+    corresponding_Bethe_Wendroff.clear();
+
+    const FluxFunction *ext_f;
+    const AccumulationFunction *ext_g;
+
+    // This may change in the future, so far all the computations will happen on the same domain.
+    ext_f = f;
+    ext_g = g;
+    HugoniotContinuation *ext_hc = hc;
+
+    // TODO: This ShockCurve may come from the outside. I don't like this solution.
+    //
+    ShockCurve ext_sc(ext_hc);
+
+    for (int i = 0; i < transition_current_index.size(); i++){
+        int n = curve.curve[transition_current_index[i]].size();
+
+        JetMatrix F_J(n), G_J(n);
+        f->jet(curve.curve[transition_current_index[i]], F_J, 0);
+        g->jet(curve.curve[transition_current_index[i]], G_J, 0);
+
+        RealVector F = F_J.function();
+        RealVector G = G_J.function();
+
+        double Bethe_Wendroff_speed = curve.speed[transition_current_index[i]];
+
+        JetMatrix ext_F_J(n), ext_G_J(n);
+        ext_f->jet(curve_where_extension_is_to_be_found.curve[0], ext_F_J, 0);
+        ext_g->jet(curve_where_extension_is_to_be_found.curve[0], ext_G_J, 0);
+
+        double prev_sigma = ext_hc->sigma(F, G, ext_F_J.function(), ext_G_J.function());
+//        std::cout << curve.curve[transition_current_index[i]] << ", Bethe-Wendroff sigma = " << Bethe_Wendroff_speed << std::endl;
+
+        for (int j = 1; j < curve_where_extension_is_to_be_found.curve.size(); j++){
+            // If curve and curve_to_be_extended are the same, avoid extending 
+            if ((&curve != &curve_where_extension_is_to_be_found) || (transition_current_index[i] != j)){
+                ext_f->jet(curve_where_extension_is_to_be_found.curve[j], ext_F_J, 0);
+                ext_g->jet(curve_where_extension_is_to_be_found.curve[j], ext_G_J, 0);
+
+                double sigma = ext_hc->sigma(F, G, ext_F_J.function(), ext_G_J.function());
+
+                if ((sigma - Bethe_Wendroff_speed)*(prev_sigma - Bethe_Wendroff_speed) < 0.0){
+                    // Compute the point. TODO: 
+                    //
+                    RealVector extension_point = .5*(curve_where_extension_is_to_be_found.curve[j] + curve_where_extension_is_to_be_found.curve[j - 1]);
+
+                    curve_with_extension.insert(curve_with_extension.begin() + j, extension_point);
+                    corresponding_Bethe_Wendroff.push_back(transition_current_index[i]);
+
+//                    std::cout << "    **** Extension found:" << std::endl;
+                }
+
+//                std::cout << "    point = " << curve_to_be_extended.curve[j] << std::endl;
+//                std::cout << "    prev_sigma = " << prev_sigma << ", sigma = " << sigma << std::endl << std::endl;
+
+                prev_sigma = sigma;
+            }
+        }
+    }
+
+    return;
+}
+
+// TODO: Test this method.
+void ShockCurve::Bethe_Wendroff_extension(const Curve &curve, 
+                                          const std::vector<int> &transition_current_index, 
+                                          std::vector<ExtensionPoint> &curve_plus_extensions){
+    curve_plus_extensions.clear();
+
+    // Make a copy of the curve that is being extended.
+    //
+    for (int i = 0; i < curve.curve.size(); i++) curve_plus_extensions.push_back(ExtensionPoint(curve.curve[i], -1));
+
+    for (int i = 0; i < transition_current_index.size(); i++){
+        double Bethe_Wendroff_speed = curve.speed[transition_current_index[i]];
+
+        double prev_sigma = curve.speed[0];
+
+        int tci = transition_current_index[i];
+
+        for (int j = 1; j < curve.curve.size(); j++){
+            double sigma = curve.speed[j];
+
+            // Avoid extending a point onto itself.
+            //
+            if (j != tci){
+                if ((sigma - Bethe_Wendroff_speed)*(prev_sigma - Bethe_Wendroff_speed) < 0.0){
+                    // Compute the point. TODO: For starters, use a linear interpolation.
+                    //
+                    double alpha = (Bethe_Wendroff_speed - sigma)/(prev_sigma - sigma);
+                    RealVector approximate_extension = alpha*curve.curve[j - 1] + (1.0 - alpha)*curve.curve[j];
+                    RealVector accurate_extension(approximate_extension);
+
+//                    // TODO: For some reason the method below is failing to compute the accurate extension.
+//                    int info_extension = find_point_for_sigma_equal_reference_lambda(approximate_extension, Bethe_Wendroff_speed, accurate_extension);
+//                    if (info_extension != SHOCKCURVE_NEWTON_CONVERGED) accurate_extension = approximate_extension;
+
+                    ExtensionPoint extension_point(accurate_extension, tci);
+
+                    curve_plus_extensions.insert(curve_plus_extensions.begin() + j, extension_point);
+                }
+            }
+
+            prev_sigma = sigma;
+        }
+    }
+
+    // TODO: The output must change: the method must return a Curve.
+
+    return;
+}
+

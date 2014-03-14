@@ -3,45 +3,80 @@
 #include "Hugoniot_TP.h"
 #include "Hugoniot_Curve.h"
 
-int Hugoniot_TP::classified_curve(const FluxFunction *f, const AccumulationFunction *a,
-        GridValues &g, const RealVector &r,
-        std::vector<HugoniotPolyLine> &hugoniot_curve,std::vector<RealVector> &transitionList,
-        std::vector<bool> &circular,const Viscosity_Matrix *vm ) {
 
-    return classified_curve(f, a, g, r, hugoniot_curve,transitionList,vm);
+Hugoniot_TP::Hugoniot_TP(const FluxFunction * flux, const AccumulationFunction * accum)
+:  ff(flux), aa(accum) {
 
+
+   
+
+   
 
 }
 
-int Hugoniot_TP::classified_curve(const FluxFunction *f, const AccumulationFunction *a,
-        GridValues &g, const RealVector &r,
-        std::vector<HugoniotPolyLine> &hugoniot_curve,std::vector<RealVector> &transition_list,const Viscosity_Matrix * vm) {
 
-    // Compute the Hugoniot curve as usual
-    //
-    vector<RealVector> vrs;
 
-    int info = curve(f, a, g, r, vrs);
+
+int Hugoniot_TP::classified_curve(GridValues & grid,ReferencePoint & refPoint,std::vector<HugoniotPolyLine> &hugoniot_curve,std::vector<RealVector> &transitionList)
+{
     
-    ReferencePoint refPoint(r,f,a,vm);
+    grid.fill_functions_on_grid(ff, aa);
+    gv=&grid;
+    
+    Fref = refPoint.F;
+    Gref = refPoint.G;
+    
+    
+    hugoniot_curve.clear();
+    
+    std::vector<RealVector> vrs;
 
-    ColorCurve colorCurve(*f, *a);
-    colorCurve.classify_segmented_curve(vrs, refPoint, hugoniot_curve, transition_list);
+    int info = ContourMethod::contour2d(this, vrs);
 
+    RealVector Utemp(2);
 
+    // Here the third coordinate is assigned...
+    for (int i = 0; i < vrs.size(); i++) {
+        Utemp = vrs[i];
+
+        vrs[i].resize(3);
+        vrs[i].component(2) = complete_points(Utemp);
+
+    }
+    
+    
+    
+    ColorCurve colorCurve(*ff, *aa);
+    colorCurve.classify_segmented_curve(vrs, refPoint, hugoniot_curve, transitionList);
 
     return info;
+    
+
+
 }
 
+//int Hugoniot_TP::classified_curve(const FluxFunction *f, const AccumulationFunction *a,
+//        GridValues &g, const ReferencePoint &r,
+//        std::vector<HugoniotPolyLine> &hugoniot_curve,std::vector<RealVector> &transition_list,const Viscosity_Matrix * vm) {
+//
+//    // Compute the Hugoniot curve as usual
+//    //
+//    vector<RealVector> vrs;
+//
+//    int info = curve(f, a, g, r, vrs);
+//    
+////    ReferencePoint refPoint(r,f,a,vm);
+//
+//    ColorCurve colorCurve(*f, *a);
+//    colorCurve.classify_segmented_curve(vrs, r, hugoniot_curve, transition_list);
+//
+//
+//
+//    return info;
+//}
 
 
- int Hugoniot_TP::classified_curve(const FluxFunction *f, const AccumulationFunction *a,
-            GridValues &g, const RealVector &r,
-            std::vector<HugoniotPolyLine> &hugoniot_curve,const Viscosity_Matrix * vm){
-     
-     return 0;
-     
- }
+
 
 Hugoniot_TP::~Hugoniot_TP() {
 }
@@ -122,42 +157,42 @@ int Hugoniot_TP::function_on_square(double *foncub, int i, int j) {
     return 1;
 }
 
-int Hugoniot_TP::curve(const FluxFunction *f, const AccumulationFunction *a,
-        GridValues &g, const RealVector &r,
-        std::vector<RealVector> &hugoniot_curve) {
-
-    ff = f;
-    aa = a;
-
-    g.fill_functions_on_grid(f, a);
-    gv = &g;
-    int n = r.size();
-
-    Fref.resize(n);
-    Gref.resize(n);
-
-    Uref = r;
-
-    ff->fill_with_jet(n, Uref.components(), 0, Fref.components(), 0, 0);
-    aa->fill_with_jet(n, Uref.components(), 0, Gref.components(), 0, 0);
-
-    hugoniot_curve.clear();
-
-    int info = ContourMethod::contour2d(this, hugoniot_curve);
-
-    RealVector Utemp(2);
-
-    // Here the third coordinate is assigned...
-    for (int i = 0; i < hugoniot_curve.size(); i++) {
-        Utemp = hugoniot_curve[i];
-
-        hugoniot_curve[i].resize(3);
-        hugoniot_curve[i].component(2) = complete_points(Utemp);
-
-    }
-
-    return info;
-}
+//int Hugoniot_TP::curve(const FluxFunction *f, const AccumulationFunction *a,
+//        GridValues &g, const RealVector &r,
+//        std::vector<RealVector> &hugoniot_curve) {
+//
+//    ff = f;
+//    aa = a;
+//
+//    g.fill_functions_on_grid(f, a);
+//    gv = &g;
+//    int n = r.size();
+//
+//    Fref.resize(n);
+//    Gref.resize(n);
+//
+//    Uref = r;
+//
+//    ff->fill_with_jet(n, Uref.components(), 0, Fref.components(), 0, 0);
+//    aa->fill_with_jet(n, Uref.components(), 0, Gref.components(), 0, 0);
+//
+//    hugoniot_curve.clear();
+//
+//    int info = ContourMethod::contour2d(this, hugoniot_curve);
+//
+//    RealVector Utemp(2);
+//
+//    // Here the third coordinate is assigned...
+//    for (int i = 0; i < hugoniot_curve.size(); i++) {
+//        Utemp = hugoniot_curve[i];
+//
+//        hugoniot_curve[i].resize(3);
+//        hugoniot_curve[i].component(2) = complete_points(Utemp);
+//
+//    }
+//
+//    return info;
+//}
 
 void Hugoniot_TP::map(const RealVector &r, double &f, RealVector &map_Jacobian) {
 

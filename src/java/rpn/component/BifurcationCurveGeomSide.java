@@ -7,17 +7,10 @@
 package rpn.component;
 
 import java.awt.Color;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import rpn.component.util.CorrespondenceMark;
 import wave.multid.*;
-import wave.multid.map.Map;
-import wave.multid.model.AbstractPath;
-import wave.multid.model.AbstractPathIterator;
-import wave.multid.model.BoundingBox;
 import wave.multid.model.MultiGeometry;
 import wave.multid.model.MultiPolyLine;
 import wave.multid.view.*;
@@ -69,40 +62,43 @@ public class BifurcationCurveGeomSide extends BifurcationCurveBranchGeom impleme
 
     }
 
+    @Override
     public void showCorrespondentPoint(CoordsArray curvePoint, ViewingTransform transform) {
+        
+        if (getCorrespondenceDirection() != CorrespondenceDirection.NONE.ordinal()) {
+            RealVector pointOnDomain = new RealVector(curvePoint.getCoords());
 
-        RealVector pointOnDomain = new RealVector(curvePoint.getCoords());
+            BifurcationCurveGeomFactory factory = (BifurcationCurveGeomFactory) geomFactory();
 
-        BifurcationCurveGeomFactory factory = (BifurcationCurveGeomFactory) geomFactory();
+            List<RealSegment> thisSegments = factory.segmentsList(this);
 
-        List<RealSegment> thisSegments = factory.segmentsList(this);
+            ClosestDistanceCalculator closestCalculator = new ClosestDistanceCalculator(thisSegments, pointOnDomain);
 
-        ClosestDistanceCalculator closestCalculator = new ClosestDistanceCalculator(thisSegments, pointOnDomain);
+            int segmentIndex = closestCalculator.getSegmentIndex();
 
-        int segmentIndex = closestCalculator.getSegmentIndex();
+            RealSegment thisSegment = thisSegments.get(segmentIndex);
 
-        RealSegment thisSegment = thisSegments.get(segmentIndex);
+            RealVector thisMark = ClosestDistanceCalculator.convexCombination(thisSegment.p1(), thisSegment.p2(), closestCalculator.getAlpha());
 
-        RealVector thisMark = ClosestDistanceCalculator.convexCombination(thisSegment.p1(), thisSegment.p2(), closestCalculator.getAlpha());
+            RealSegment otherSideSegment = factory.segmentsList(getOtherSide()).get(segmentIndex);
+            RealVector otherSideMark = ClosestDistanceCalculator.convexCombination(otherSideSegment.p1(), otherSideSegment.p2(), closestCalculator.getAlpha());
 
-        RealSegment otherSideSegment = factory.segmentsList(getOtherSide()).get(segmentIndex);
-        RealVector otherSideMark = ClosestDistanceCalculator.convexCombination(otherSideSegment.p1(), otherSideSegment.p2(), closestCalculator.getAlpha());
+            List<Object> wcObjectsLeft = new ArrayList();
 
-        List<Object> wcObjectsLeft = new ArrayList();
+            wcObjectsLeft.add(thisMark);
 
-        wcObjectsLeft.add(thisMark);
+            CorrespondenceMark testeLabelLeft = new CorrespondenceMark(wcObjectsLeft, transform, new ViewingAttr(Color.white));
 
-        CorrespondenceMark testeLabelLeft = new CorrespondenceMark(wcObjectsLeft, transform, new ViewingAttr(Color.white));
+            addAnnotation(testeLabelLeft);
 
-        addAnnotation(testeLabelLeft);
+            List<Object> wcObjectsRight = new ArrayList();
 
-        List<Object> wcObjectsRight = new ArrayList();
+            wcObjectsRight.add(otherSideMark);
 
-        wcObjectsRight.add(otherSideMark);
-
-        CorrespondenceMark testeLabelRight = new CorrespondenceMark(wcObjectsRight, transform, new ViewingAttr(Color.white));
-        getOtherSide().removeLastAnnotation();
-        getOtherSide().addAnnotation(testeLabelRight);
+            CorrespondenceMark testeLabelRight = new CorrespondenceMark(wcObjectsRight, transform, new ViewingAttr(Color.white));
+            getOtherSide().removeLastAnnotation();
+            getOtherSide().addAnnotation(testeLabelRight);
+        }
 
     }
 
@@ -114,8 +110,7 @@ public class BifurcationCurveGeomSide extends BifurcationCurveBranchGeom impleme
         }
 
     }
-    
-    
+
     @Override
     public void setSelected(boolean selected) {
         viewingAttr().setSelected(selected);

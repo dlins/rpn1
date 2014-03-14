@@ -455,7 +455,7 @@ public class RPNUMERICS {
     //public ExtensionCurveCalc(ContourParams contourParams, List<RealSegment> list, int extensionFamily, int characteristicDomain, boolean singular) {
     public static EnvelopeCurveCalc createEnvelopeCurveCalc() {
 
-        int[] resolution = RPnDataModule.processResolution(getParamValue("envelopecurve", "resolution"));
+        int[] resolution = RPnDataModule.processResolution(getParamValue("extensioncurve", "resolution"));
         int whereIsConstant = new Integer(getParamValue("envelopecurve", "edge"));
         int numberOfSteps = new Integer(getParamValue("envelopecurve", "numberofsteps"));
 

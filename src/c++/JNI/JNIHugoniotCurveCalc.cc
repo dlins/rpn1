@@ -116,29 +116,30 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
     Viscosity_Matrix * vm = RpNumerics::getPhysics().getSubPhysics(0).getViscosityMatrix();
 
 
-    hugoniotCurve->classified_curve(&RpNumerics::getPhysics().fluxFunction(), &RpNumerics::getPhysics().accumulation(),
-            *gv, Uref, hugoniotPolyLineVector, transitionList, isCircular, vm);
+    ReferencePoint refPoint(Uref, &RpNumerics::getPhysics().fluxFunction(), &RpNumerics::getPhysics().accumulation(), 0);
+
+    hugoniotCurve->classified_curve(*gv, refPoint, hugoniotPolyLineVector,transitionList);
 
 
     jobject transitionArray = env->NewObject(arrayListClass, arrayListConstructor, NULL);
 
-    for (int i = 0; i < transitionList.size(); i++) {
-
-//        if (Debug::get_debug_level() == 5) {
-            cout << "Ponto de transicao: " << transitionList[i] << endl;
-//        }
-
-        jdoubleArray transPointArray = env->NewDoubleArray(dimension);
-        double * leftCoords = (double *) transitionList[i];
-
-        env->SetDoubleArrayRegion(transPointArray, 0, dimension, leftCoords);
-
-        jobject transPointrealVector = env->NewObject(realVectorClass, realVectorConstructorDoubleArray, transPointArray);
-
-        env->CallObjectMethod(transitionArray, arrayListAddMethod, transPointrealVector);
-
-
-    }
+//    for (int i = 0; i < transitionList.size(); i++) {
+//
+//        //        if (Debug::get_debug_level() == 5) {
+//        cout << "Ponto de transicao: " << transitionList[i] << endl;
+//        //        }
+//
+//        jdoubleArray transPointArray = env->NewDoubleArray(dimension);
+//        double * leftCoords = (double *) transitionList[i];
+//
+//        env->SetDoubleArrayRegion(transPointArray, 0, dimension, leftCoords);
+//
+//        jobject transPointrealVector = env->NewObject(realVectorClass, realVectorConstructorDoubleArray, transPointArray);
+//
+//        env->CallObjectMethod(transitionArray, arrayListAddMethod, transPointrealVector);
+//
+//
+//    }
 
 
 
@@ -300,13 +301,13 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
 
 
 
-  vector<bool> isCircular;
+    vector<bool> isCircular;
 
     vector<RealVector> transitionList;
 
     Viscosity_Matrix * vm = RpNumerics::getPhysics().getSubPhysics(0).getViscosityMatrix();
 
-
+    ReferencePoint refPoint(Uref, &RpNumerics::getPhysics().fluxFunction(), &RpNumerics::getPhysics().accumulation(), 0);
 
 
     Hugoniot_Locus *hugoniotCurve = RpNumerics::getPhysics().getSubPhysics(0).getHugoniotFunction();
@@ -314,40 +315,39 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
 
 
 
-    hugoniotCurve->classified_curve(&RpNumerics::getPhysics().fluxFunction(), &RpNumerics::getPhysics().accumulation(),
-            gv, Uref, hugoniotPolyLineVector, transitionList, isCircular, vm);
-    
-    
-    
-    
-    
-    
+    hugoniotCurve->classified_curve(gv, refPoint, hugoniotPolyLineVector,transitionList);
+
+
+
+
+
+
     jobject transitionArray = env->NewObject(arrayListClass, arrayListConstructor, NULL);
+//
+//    for (int i = 0; i < transitionList.size(); i++) {
+//
+//        if (Debug::get_debug_level() == 5) {
+//            cout << "Ponto de transicao: " << transitionList[i] << endl;
+//        }
+//
+//        jdoubleArray transPointArray = env->NewDoubleArray(dimension);
+//        double * leftCoords = (double *) transitionList[i];
+//
+//        env->SetDoubleArrayRegion(transPointArray, 0, dimension, leftCoords);
+//
+//        jobject transPointrealVector = env->NewObject(realVectorClass, realVectorConstructorDoubleArray, transPointArray);
+//
+//        env->CallObjectMethod(transitionArray, arrayListAddMethod, transPointrealVector);
+//
+//
+//    }
 
-    for (int i = 0; i < transitionList.size(); i++) {
-
-        if (Debug::get_debug_level() == 5) {
-            cout << "Ponto de transicao: " << transitionList[i] << endl;
-        }
-
-        jdoubleArray transPointArray = env->NewDoubleArray(dimension);
-        double * leftCoords = (double *) transitionList[i];
-
-        env->SetDoubleArrayRegion(transPointArray, 0, dimension, leftCoords);
-
-        jobject transPointrealVector = env->NewObject(realVectorClass, realVectorConstructorDoubleArray, transPointArray);
-
-        env->CallObjectMethod(transitionArray, arrayListAddMethod, transPointrealVector);
 
 
-    }
-    
-    
-    
-    
-    
-    
-    
+
+
+
+
 
 
 
@@ -401,7 +401,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
 
     }
 
-    
+
 
     jobject result = env->NewObject(hugoniotCurveClass, hugoniotCurveConstructor, uMinus, segmentsArray, transitionArray);
 

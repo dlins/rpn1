@@ -3,6 +3,9 @@
 
 #include "GridValues.h"
 
+#define IMPROVABLE_OK    0
+#define IMPROVABLE_ERROR 1
+
 class ImplicitFunction {
     private:
     protected:
@@ -10,11 +13,15 @@ class ImplicitFunction {
 
     public:
         ImplicitFunction(){gv = 0;}
-        ~ImplicitFunction(){}
+        virtual ~ImplicitFunction(){}
 
         virtual int function_on_square(double *foncub, int i, int j) = 0;
 
+        // If available, the linear interpolation provided by hcube will be
+        // completed here.
+        // 
         virtual bool improvable(void){return false;}
+        virtual int complete(const RealVector &p0, const RealVector &p1, const RealVector &p_init, RealVector &p_completed){return IMPROVABLE_ERROR;}
 
         virtual void map(const RealVector &p, double &f, RealVector &map_Jacobian) {
             /**
