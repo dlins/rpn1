@@ -223,7 +223,7 @@ RealVector operator+(const RealVector &x, const RealVector &y) {
 // Subtraction of two RealVectors
 
 RealVector operator-(const RealVector &x, const RealVector &y) {
-    RealVector temp(x);
+       RealVector temp(x);
     for (int i = 0; i < x.size_; i++) temp.data[i] -= y.data[i];
 
     return temp;
@@ -232,6 +232,10 @@ RealVector operator-(const RealVector &x, const RealVector &y) {
 // Euclidean norm of a RealVector
 double norm(const RealVector &x){
     return sqrt(x*x);
+}
+
+double norm2_squared(const RealVector &x){
+    return x*x;
 }
 
 // Norm in L1.
@@ -414,5 +418,33 @@ void convex_hull(std::vector<RealVector> &polygon, std::vector<RealVector> &ch){
     ch.resize(k);
 
     return;
+}
+
+RealVector project_point_onto_line_2D(const RealVector &q, const RealVector &p0, const RealVector &p1){
+    RealVector p1_minus_p0 = p1 - p0;
+
+    DoubleMatrix P(2, 2);
+    P(0, 0) = p1_minus_p0(0);
+    P(0, 1) = p1_minus_p0(1);
+    P(1, 0) = p1_minus_p0(1);
+    P(1, 1) = p1_minus_p0(0);
+
+    RealVector b(2);
+    b(0) = -q*p1_minus_p0;
+    b(1) = -p0(1)*p1_minus_p0(0) + p0(0)*p1_minus_p0(1);
+
+    RealVector p;
+    solve(P, b, p);
+
+    return p;
+}
+
+double distance_point_line_2D(const RealVector &q, const RealVector &p0, const RealVector &p1){
+    double a, b, c;
+    a = p1(1) - p0(1);
+    b = p0(0) - p1(0);
+    c = p1(0)*p0(1) - p0(0)*p1(1);
+
+    return std::abs(a*q(0) + b*q(1) + c)/sqrt(a*a + b*b);
 }
 

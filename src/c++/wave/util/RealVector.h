@@ -91,6 +91,7 @@ public:
  
     // Euclidean norm of a RealVector
     friend double norm(const RealVector &x);
+    friend double norm2_squared(const RealVector &x);
 
     // Norm in L1.
     friend double norm_L1(const RealVector &x);
@@ -165,6 +166,18 @@ public:
     // http://en.wikibooks.org/wiki/Algorithm_Implementation/Geometry/Convex_hull/Monotone_chain
     //
     friend void convex_hull(std::vector<RealVector> &polygon, std::vector<RealVector> &ch);
+
+    // Based on
+    //
+    //     http://cs.nyu.edu/~yap/classes/visual/03s/hw/h2/math.pdf
+    //
+    friend RealVector project_point_onto_line_2D(const RealVector &q, const RealVector &p0, const RealVector &p1);
+
+    // Based on
+    //
+    //     http://en.wikipedia.org/wiki/Distance_from_a_point_to_a_line
+    //
+    friend double distance_point_line_2D(const RealVector &q, const RealVector &p0, const RealVector &p1);
 };
 
 // Extract rows and columns of a DoubleMatrix and return them as RealVectors.

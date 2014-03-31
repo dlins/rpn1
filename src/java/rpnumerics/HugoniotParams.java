@@ -10,12 +10,13 @@ public class HugoniotParams extends ContourParams {
     private RealMatrix2 dFMinus_;
     private FluxFunction fluxFunction_;
     private int direction_;
+    private final String methodName_;
 
-    public HugoniotParams(PhasePoint xZero, int direction, int[] resolution) {
+    public HugoniotParams(PhasePoint xZero, int direction, int[] resolution,String methodName) {
 
         super(resolution);
         xZero_ = xZero;
-
+        methodName_=methodName;
         direction_ = direction;
     }
 
@@ -24,6 +25,13 @@ public class HugoniotParams extends ContourParams {
         setUMinus(uMinus);
 
     }
+
+    public String getMethodName() {
+        return methodName_;
+    }
+    
+    
+    
 
     public void setUMinus(PhasePoint pPoint) {
 

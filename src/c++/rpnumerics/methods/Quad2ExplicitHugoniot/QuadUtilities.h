@@ -1,5 +1,5 @@
-#ifndef _UTILITIES_
-#define _UTILITIES_
+#ifndef _QUADUTILITIES_
+#define _QUADUTILITIES_
 
 #include <iostream>
 #include <vector>
@@ -29,7 +29,7 @@
 #endif
 // For Utilities::solve1
 
-class Utilities {
+class QuadUtilities {
     private:
     protected:
         static double cubic_polynomial(double m, double aa, double bb, double cc);

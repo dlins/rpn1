@@ -19,9 +19,9 @@
                     <PHYSICSPARAM name="grw" position="0" value ="1.0" />
                     <PHYSICSPARAM name="grg" position="1" value ="1.0" />
                     <PHYSICSPARAM name="gro" position="2" value ="1.0" />
-                    <PHYSICSPARAM name="muw" position="3" value ="1.0" />
-                    <PHYSICSPARAM name="mug" position="4" value ="1.0" />
-                    <PHYSICSPARAM name="muo" position="5" value ="1.0" />
+                    <PHYSICSPARAM name="muw" position="3" value ="2.0" />
+                    <PHYSICSPARAM name="mug" position="4" value ="2.0" />
+                    <PHYSICSPARAM name="muo" position="5" value ="2.0" />
                     <PHYSICSPARAM name="vel" position="6" value ="1.0" />
             
 
@@ -52,6 +52,8 @@
 
             <CURVECONFIGURATION name="hugoniotcurve">
                 <CURVEPARAM name="resolution" value="120 120"/>
+                <CURVEPARAM name="method" value="IMPLICIT"/>
+                
             </CURVECONFIGURATION>
     
             <CURVECONFIGURATION name="bifurcationcurve">
@@ -101,6 +103,14 @@
                 <CURVEPARAM name="level" value="0.1"/>
 
             </CURVECONFIGURATION>
+            
+            
+            
+               
+            <CURVECONFIGURATION name="derivativediscriminant">
+                <CURVEPARAM name="u" value="0"/>
+            </CURVECONFIGURATION>
+            
 
 
             <CURVECONFIGURATION name="hysteresiscurve">
@@ -109,9 +119,10 @@
             </CURVECONFIGURATION>
     
     
-            <CURVECONFIGURATION name="explicitsecondarybifurcation">
+            <CURVECONFIGURATION name="secondarybifurcation">
                 <CURVEPARAM name="edge" value="0"/>
                 <CURVEPARAM name="numberofsteps" value="128"/>
+                 <CURVEPARAM name="method" value="IMPLICIT"/>
             </CURVECONFIGURATION>
     
 

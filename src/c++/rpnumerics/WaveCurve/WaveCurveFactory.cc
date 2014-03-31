@@ -480,7 +480,9 @@ int WaveCurveFactory::wavecurve_from_inflection(const std::vector<RealVector> &i
     family_for_directional_derivative = family;
 
     RealVector closest_point;
+    cout<<"Valor de p: "<<p<<endl;
     Utilities::pick_point_from_segmented_curve(inflection_curve, p, closest_point);
+    cout<<"closest point: "<<closest_point<<endl;
 
     reference_for_directional_derivative = closest_point - p;
     normalize(reference_for_directional_derivative);

@@ -30,7 +30,7 @@ public class EllipticBoundaryCommand extends BifurcationPlotCommand {
     // Constructors/Initializers
     //
     protected EllipticBoundaryCommand() {
-        super(DESC_TEXT, rpn.configuration.RPnConfig.HUGONIOT, new JButton());
+        super(DESC_TEXT, null, new JButton());
     }
 
     @Override

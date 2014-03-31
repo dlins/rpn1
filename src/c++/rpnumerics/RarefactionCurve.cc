@@ -101,12 +101,12 @@ double RarefactionCurve::directional_derivative(const RealVector &p, int fam, co
     std::vector<DoubleMatrix> F_H = F_jet.Hessian();
     std::vector<DoubleMatrix> G_H = G_jet.Hessian();
 
-    std::vector<eigenpair> e;
+    std::vector<eigenpair> e; 
     Eigen::eig(n, F_J.data(), G_J.data(), e);
 
-    double lambda = e[family].r;
-    RealVector rm(n, e[family].vrr.data()); // Right eigenvector
-    RealVector lm(n, e[family].vlr.data()); // Left  eigenvector
+    double lambda = e[fam].r; 
+    RealVector rm(n, e[fam].vrr.data()); // Right eigenvector
+    RealVector lm(n, e[fam].vlr.data()); // Left  eigenvector
 
     // Verify that rm points in the right direction.
     // Since rm will be used below, it is necessary that this change is permanent.

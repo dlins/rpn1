@@ -9,7 +9,7 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 import rpn.component.util.LinePlotted;
-import rpnumerics.LevelCurve;
+import rpnumerics.EigenValueCurve;
 import wave.multid.CoordsArray;
 import wave.multid.DimMismatchEx;
 import wave.multid.view.GeomObjView;
@@ -39,7 +39,7 @@ public class LevelCurveGeom extends SegmentedCurveGeom {
         
      @Override
     public void showSpeed(CoordsArray curvePoint, CoordsArray wcPoint, ViewingTransform transform) {
-        LevelCurve fundamentalCurve = (LevelCurve) geomFactory().geomSource();
+        EigenValueCurve fundamentalCurve = (EigenValueCurve) geomFactory().geomSource();
         double level = fundamentalCurve.getLevel();
         List<Object> wcObject = new ArrayList<Object>();
         wcObject.add(new RealVector(curvePoint.getCoords()));

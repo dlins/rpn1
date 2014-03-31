@@ -22,45 +22,45 @@
 #include "StonePermeability.h"
 #include <math.h>
 
-
 /*
  * ---------------------------------------------------------------
  * Definitions:
  */
 
 
-class StoneFluxFunction:public FluxFunction {
-    
+class StoneFluxFunction : public FluxFunction {
 private:
     StonePermeability * perm_;
 
     double grw, grg, gro;
     double muw, mug, muo;
     double vel;
-    
+
 public:
-    
+
     StoneFluxFunction(const StoneParams & params, const StonePermParams & permParams);
     //StoneFluxFunction();
     virtual ~StoneFluxFunction();
-    
-    StoneFluxFunction(const StoneFluxFunction & );
-    
-    const StonePermeability & perm() const ;
-    
+
+    StoneFluxFunction(const StoneFluxFunction &);
+
+    const StonePermeability & perm() const;
+
     RpFunction * clone() const;
-    
+
     int jet(const WaveState &u, JetMatrix &m, int degree) const;
-      void setPermParams(const StonePermParams &);
-    
-//
-// Methods
-//
-    
-    
-    
+    void setPermParams(const StonePermParams &);
+
+    //
+    // Methods
+    //
+
+
+
 };
 
-inline const StonePermeability & StoneFluxFunction::perm()const  { return *perm_; }
+inline const StonePermeability & StoneFluxFunction::perm()const {
+    return *perm_;
+}
 
 #endif //! _StoneFluxFunction_H

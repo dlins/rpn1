@@ -34,7 +34,9 @@
 #define RAREFACTIONCURVE_LOCATION             "rpnumerics/RarefactionCurve"
 #define SHOCKCURVE_LOCATION                   "rpnumerics/ShockCurve"
 #define INTEGRALCURVE_LOCATION                "rpnumerics/IntegralCurve"
-#define LEVELCURVE_LOCATION                   "rpnumerics/LevelCurve"
+#define EIGENVALUECURVE_LOCATION              "rpnumerics/EigenValueCurve"
+#define CHARACTERISTICSPOLYCURVE_LOCATION     "rpnumerics/CharacteristicsPolynomialCurve"
+
 #define ELLIPTICBOUNDARY_LOCATION             "rpnumerics/EllipticBoundary"
 #define ELLIPTICEXTENSIONBOUNDARY_LOCATION    "rpnumerics/EllipticBoundaryExtension"
 #define ENVELOPECURVE_LOCATION                "rpnumerics/EnvelopeCurve"

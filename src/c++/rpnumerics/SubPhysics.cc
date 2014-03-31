@@ -14,6 +14,7 @@
 #include "physics/tpcw/Hugoniot_TP.h"
 #include "ThreeImplicitFunctions.h"
 #include "Debug.h"
+#include "Secondary_Bifurcation_Interface.h"
 
 /*
  * ---------------------------------------------------------------
@@ -21,21 +22,21 @@
  */
 
 SubPhysics::SubPhysics(const FluxFunction & fluxFunction, const AccumulationFunction & accumulationFunction, const Boundary & boundary, const Space & space, const char * id, int type) : fluxFunction_((FluxFunction *) fluxFunction.clone()),
-accumulationFunction_((AccumulationFunction*) accumulationFunction.clone()),
+accumulationFunction_((AccumulationFunction*) accumulationFunction.clone()), hugoniotArray_(new map<string, Hugoniot_Locus *>()),secondaryBifurcationArray_(new map<string, Secondary_Bifurcation_Interface *>()),
 boundary_(boundary.clone()),
 space_(new Space(space)),
 ID_(id),
 type_(type) {
     setHugoniotContinuationMethod(new HugoniotContinuation2D2D(fluxFunction_, accumulationFunction_, &getBoundary()));
-//    setShockMethod(new Shock());
+    //    setShockMethod(new Shock());
 }
 
 SubPhysics::SubPhysics(const Boundary & boundary, const Space & space, const char * name, int type) : boundary_(boundary.clone()),
-space_(new Space(space)),
+space_(new Space(space)), hugoniotArray_(new map<string, Hugoniot_Locus *>()),secondaryBifurcationArray_(new map<string, Secondary_Bifurcation_Interface *>()),
 ID_(name),
 type_(type) {
     setHugoniotContinuationMethod(new HugoniotContinuation2D2D(fluxFunction_, accumulationFunction_, &getBoundary()));
-//    setShockMethod(new Shock());
+    //    setShockMethod(new Shock());
 }
 
 const Space &SubPhysics::domain() const {
@@ -72,8 +73,33 @@ void SubPhysics::setParams(vector<string> paramsVector) {
 
     }
 
+}
+
+Hugoniot_Locus * SubPhysics::getHugoniotMethod(const string & gridName) {
+
+    if (hugoniotArray_->count(gridName) == 1) {
+        return hugoniotArray_->operator [](gridName);
+    } else {
+
+        cerr<<"Method not implemented "<<endl;
+    }
 
 }
+
+
+
+Secondary_Bifurcation_Interface * SubPhysics::getSecondaryBifurcationMethod(const string& methodName) {
+
+    if (secondaryBifurcationArray_->count(methodName) == 1) {
+        return secondaryBifurcationArray_->operator [](methodName);
+    } else {
+
+        cerr<<"Method not implemented "<<endl;
+    }
+
+}
+
+
 
 const Boundary * SubPhysics::getPreProcessedBoundary()const {
     return preProcessedBoundary_;
@@ -152,6 +178,7 @@ SubPhysics::~SubPhysics() {
     delete preProcessedBoundary_;
 
     delete viscosityMatrix_;
+    delete hugoniotArray_;
 
 
 }

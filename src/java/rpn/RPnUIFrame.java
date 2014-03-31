@@ -163,6 +163,9 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         auxiliarCurvesToolBar_.add(PointLevelCurvePlotCommand.instance().getContainer());
         auxiliarCurvesToolBar_.add(LevelCurvePlotCommand.instance().getContainer());
         auxiliarCurvesToolBar_.add(PhysicalBoundaryPlotCommand.instance().getContainer());
+        auxiliarCurvesToolBar_.add(DiscriminantLevelCurvePlotCommand.instance().getContainer());
+        auxiliarCurvesToolBar_.add(DiscriminantPointLevelCurvePlotCommand.instance().getContainer());
+        auxiliarCurvesToolBar_.add(DerivativeDiscriminantLevelCurvePlotCommand.instance().getContainer());
 
     }
 
@@ -188,7 +191,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         toolBar_.add(HysteresisPlotCommand.instance().getContainer());
 
         toolBar_.add(EnvelopeCurveCommand.instance().getContainer());
-        toolBar_.add(StoneSecondaryBifurcationCurveCommand.instance().getContainer());
+
 
         toolBar_.add(BuckleyLeverettiInflectionCommand.instance().getContainer());
         toolBar_.add(CoincidencePlotCommand.instance().getContainer());

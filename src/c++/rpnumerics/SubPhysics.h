@@ -25,8 +25,9 @@
 #include "ThreeImplicitFunctions.h"
 #include "Double_Contact_Function.h"
 #include "methods/ShockMethod.h"
-//#include "Shock.h"
+#include <map>
 #include "HugoniotContinuation2D2D.h"
+#include "Secondary_Bifurcation_Interface.h"
 #include <sstream>
 
 /*
@@ -41,6 +42,7 @@ private:
 
 
     Hugoniot_Locus * hugoniotFunction_;
+
     Double_Contact_Function * doubleContactFunction_;
     HugoniotContinuation * hugoniot_continuation_method_;
     ShockMethod * shock_method_;
@@ -48,7 +50,7 @@ private:
     Space * space_;
     const char * ID_;
     int type_;
-    
+
 
 protected:
 
@@ -56,6 +58,8 @@ protected:
     AccumulationFunction * accumulationFunction_;
     Viscosity_Matrix * viscosityMatrix_;
     Boundary * preProcessedBoundary_;
+    std::map<string, Hugoniot_Locus *> * hugoniotArray_;
+    std::map<string, Secondary_Bifurcation_Interface *> * secondaryBifurcationArray_;
 
 public:
 
@@ -63,8 +67,8 @@ public:
     SubPhysics(const Boundary &, const Space &, const char *, int);
 
     SubPhysics(const FluxFunction &, const AccumulationFunction &, const Boundary &, const Space &, const char *, int);
-    
-//    SubPhysics(const FluxFunction &, const AccumulationFunction &, const Boundary &,  Viscosity_Matrix *,const Space &, const char *, int);
+
+    //    SubPhysics(const FluxFunction &, const AccumulationFunction &, const Boundary &,  Viscosity_Matrix *,const Space &, const char *, int);
 
     void fluxParams(const FluxParams &);
 
@@ -79,23 +83,23 @@ public:
     const FluxFunction & fluxFunction() const;
 
     Hugoniot_Locus * getHugoniotFunction() const;
-    
+
     Viscosity_Matrix * getViscosityMatrix() const;
-    
+
     void setViscosityMatrix(Viscosity_Matrix *);
 
     void setHugoniotFunction(Hugoniot_Locus *);
-    
+
     void setDoubleContactFunction(Double_Contact_Function *tif);
-    
+
     Double_Contact_Function * getDoubleContactFunction();
-    
+
     void setHugoniotContinuationMethod(HugoniotContinuation *);
-    
+
     void setShockMethod(ShockMethod *);
-    
+
     ShockMethod * getShockMethod();
-    
+
     HugoniotContinuation * getHugoniotContinuationMethod();
 
     const Space & domain() const;
@@ -105,14 +109,19 @@ public:
     virtual SubPhysics * clone()const = 0;
 
     virtual Boundary * defaultBoundary()const = 0;
+
+    const Boundary * getPreProcessedBoundary()const;
+
+
+    Hugoniot_Locus * getHugoniotMethod(const string &);
     
-    const Boundary * getPreProcessedBoundary()const ;
+    Secondary_Bifurcation_Interface * getSecondaryBifurcationMethod(const string &);
 
     virtual ~SubPhysics();
 
     virtual void setParams(vector<string>);
-    
-    virtual vector<double> * getParams()=0;
+
+    virtual vector<double> * getParams() = 0;
 
     const int type() const;
 

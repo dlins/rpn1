@@ -19,25 +19,17 @@
  */
 
 
-int StoneHugoniot::classified_curve(const FluxFunction *f, const AccumulationFunction *a,
-        GridValues &g, const RealVector &r,
-        std::vector<HugoniotPolyLine> &hugoniot_curve) {
 
-
-
+StoneHugoniot::StoneHugoniot(const FluxFunction * flux, const AccumulationFunction * accum):Hugoniot_Curve(flux,accum){
+    
 }
 
-int StoneHugoniot::classified_curve(const FluxFunction *f, const AccumulationFunction *a,
-        GridValues &g, const RealVector &r,
-        std::vector<HugoniotPolyLine> &hugoniot_curve, std::vector<RealVector> &transitionList,
-        std::vector<bool> &circular,const Viscosity_Matrix * vm) {
+
+ int StoneHugoniot::classified_curve(GridValues & g, ReferencePoint & r,std::vector<HugoniotPolyLine> & hugoniot_curve,std::vector<RealVector> & transitionList){
 
 
-
-
-
-    StoneExplicitHugoniot *q2eh = new StoneExplicitHugoniot((StoneFluxFunction*) f);
-    q2eh->set_reference_point(r);
+    StoneExplicitHugoniot *q2eh = new StoneExplicitHugoniot((StoneFluxFunction*) ff);
+    q2eh->set_reference_point(r.point);
 
     RealVector polar_domain(2);
     polar_domain.component(0) = 0.0;
@@ -66,14 +58,12 @@ int StoneHugoniot::classified_curve(const FluxFunction *f, const AccumulationFun
             out);
     delete q2eh;
 
-    ColorCurve colorCurve(*f, *a);
-            
-    ReferencePoint refPoint(r,f,a,vm);
+    ColorCurve colorCurve(*ff, *aa);
 
     for (int i = 0; i < out.size(); i++) {
 
         HugoniotPolyLine polyLine;
-        colorCurve.classify_continuous_curve(out.at(i), refPoint, polyLine, transitionList);
+        colorCurve.classify_continuous_curve(out.at(i), r, polyLine, transitionList);
 
         hugoniot_curve.push_back(polyLine);
 
@@ -82,8 +72,3 @@ int StoneHugoniot::classified_curve(const FluxFunction *f, const AccumulationFun
 
 }
 
-int StoneHugoniot::curve(const FluxFunction *f, const AccumulationFunction *a,
-        GridValues &g, const RealVector &r,
-        std::vector<RealVector> &hugoniot_curve) {
-
-}

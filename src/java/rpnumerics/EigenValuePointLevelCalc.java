@@ -7,11 +7,11 @@ package rpnumerics;
 
 import wave.util.RealVector;
 
-public class PointLevelCalc extends LevelCurveCalc {
+public class EigenValuePointLevelCalc extends EigenValueLevelCalc {
 
     private RealVector startPoint_;
 
-    public PointLevelCalc(RealVector point, int family, ContourParams params) {
+    public EigenValuePointLevelCalc(RealVector point, int family, ContourParams params) {
         super(family, params);
         startPoint_ = point;
         configuration_ = RPNUMERICS.getConfiguration("levelcurve");
@@ -20,7 +20,7 @@ public class PointLevelCalc extends LevelCurveCalc {
 
     @Override
     public RpSolution calc() throws RpException {
-        LevelCurve result = (LevelCurve) calcNative(getFamily(), startPoint_);
+        EigenValueCurve result = (EigenValueCurve) calcNative(getFamily(), startPoint_);
 
         if (result == null) {
             throw new RpException("Error in native layer");

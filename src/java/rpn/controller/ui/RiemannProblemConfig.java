@@ -17,10 +17,10 @@ import rpn.command.EnvelopeCurveCommand;
 import rpn.command.HysteresisPlotCommand;
 import rpn.command.InflectionPlotCommand;
 import rpn.command.SecondaryBifurcationCurveCommand;
-import rpn.command.StoneSecondaryBifurcationCurveCommand;
+
 import rpn.command.SubInflectionExtensionCurveCommand;
 import rpn.command.SubInflectionPlotCommand;
-import rpnumerics.StoneExplicitSecondaryBifurcationCurveCalc;
+
 import wave.util.RealVector;
 
 public class RiemannProblemConfig extends UI_ACTION_SELECTED {
@@ -41,7 +41,6 @@ public class RiemannProblemConfig extends UI_ACTION_SELECTED {
         EllipticBoundaryExtensionCommand.instance().setEnabled(true);
         EnvelopeCurveCommand.instance().setEnabled(true);
         SecondaryBifurcationCurveCommand.instance().setEnabled(true);
-        StoneSecondaryBifurcationCurveCommand.instance().setEnabled(true);
 
     }
 

@@ -10,10 +10,10 @@ extern "C" {
 /*
  * Class:     rpnumerics_SecondaryBifurcationCurveCalc
  * Method:    nativeCalc
- * Signature: ()Lrpnumerics/RpSolution;
+ * Signature: (Ljava/lang/String;I)Lrpnumerics/RpSolution;
  */
-JNIEXPORT jobject JNICALL Java_rpnumerics_SecondaryBifurcationCurveCalc_nativeCalc__
-  (JNIEnv *, jobject);
+JNIEXPORT jobject JNICALL Java_rpnumerics_SecondaryBifurcationCurveCalc_nativeCalc__Ljava_lang_String_2I
+  (JNIEnv *, jobject, jstring, jint);
 
 /*
  * Class:     rpnumerics_SecondaryBifurcationCurveCalc

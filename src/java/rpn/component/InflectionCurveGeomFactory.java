@@ -5,7 +5,6 @@
  */
 package rpn.component;
 
-import java.awt.Color;
 import rpnumerics.Area;
 import java.util.List;
 import java.util.logging.Level;
@@ -13,15 +12,10 @@ import java.util.logging.Logger;
 import rpnumerics.InflectionCurve;
 import rpnumerics.InflectionCurveCalc;
 import rpnumerics.RpException;
-import wave.multid.view.ViewingAttr;
-import wave.util.RealSegment;
 
 public class InflectionCurveGeomFactory extends BifurcationCurveGeomFactory {
 
-    private static ViewingAttr viewAtt_ = new ViewingAttr(Color.GREEN);
-
-
-
+    
     public InflectionCurveGeomFactory(InflectionCurveCalc calc) {
         super(calc);
     }
@@ -33,22 +27,7 @@ public class InflectionCurveGeomFactory extends BifurcationCurveGeomFactory {
     //
     // Methods
     //
-//    @Override
-//    public RpGeometry createGeomFromSource() {
-//
-//        InflectionCurve curve = (InflectionCurve) geomSource();
-//
-//        // assuming a container with HugoniotSegment elements
-//        int resultSize = curve.segments().size();
-//
-//        RealSegGeom[] bifurcationSegArray = new RealSegGeom[resultSize];
-//        for (int i = 0; i < resultSize; i++) {
-//            bifurcationSegArray[i] = new RealSegGeom((RealSegment) curve.segments().get(i), viewAtt_);
-//        }
-//
-//        return new InflectionCurveGeom(bifurcationSegArray, this);
-//
-//    }
+
     
     @Override
     void updateGeomSource (List<Area> areaListToRefine){

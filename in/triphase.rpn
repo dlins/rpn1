@@ -50,6 +50,13 @@
                 <CURVEPARAM name="family" value="0"/>
                 <CURVEPARAM name="level" value="0.5"/>
             </CURVECONFIGURATION>
+            
+             <CURVECONFIGURATION name="bifurcationcurve">
+
+                <CURVEPARAM name="resolution" value="60 60"/>
+            </CURVECONFIGURATION>
+    
+    
 
             <CURVECONFIGURATION name="hugoniotcurve">
                 <CURVEPARAM name="resolution" value="120 120"/>

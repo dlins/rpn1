@@ -269,7 +269,7 @@ if ( method == CONTINUATION_METHOD ) {
                         refval = foncub[0][0];
                         for (int l = 1; l < 4; l++) {
                             if (l == 2 && gv->cell_type(i, j) == CELL_IS_TRIANGLE) {
-                            } 
+                            }
                             else {
                                 if (refval * foncub[0][l] < 0.0) zero = 1;
                             }
@@ -289,12 +289,6 @@ if ( method == CONTINUATION_METHOD ) {
                                            ncvert_, hn, hm, ssimp, nsface_, sface, &u[0][0], &g[0][0],
                                            stormd, storm_);
 
-                        // Decide if the solution stored in sol is acceptable or not.
-                        // This makes sense only in the context of an improvable curve.
-                        //
-                        bool store_sol = true;
-                        std::vector<int> store_edge;
-
                         // IMPROVE THE SOLUTION USING A ZERO-FINDER.
                         if (impf->improvable()) {
                             for (int ii = 0; ii < sface; ii++){
@@ -302,30 +296,23 @@ if ( method == CONTINUATION_METHOD ) {
                                 if (sptr_[ii] == -1) continue;
                                 int sp = sptr_[ii];
 
-                                RealVector p0complete(2), p1complete(2), p_init_complete(2), p_completed(2);
+                                RealVector p0newton(2), p1newton(2), p_init_newton(2), p_improved_newton(2);
 
-                                p0complete.component(0) = vert[face_[0*dimf_ + ii]*hn + 0]; // p1(1) = vert(1,face(1,i)+1)
-                                p0complete.component(1) = vert[face_[0*dimf_ + ii]*hn + 1]; // p1(2) = vert(2,face(1,i)+1)
+                                p0newton.component(0) = vert[face_[0*dimf_ + ii]*hn + 0]; // p1(1) = vert(1,face(1,i)+1)
+                                p0newton.component(1) = vert[face_[0*dimf_ + ii]*hn + 1]; // p1(2) = vert(2,face(1,i)+1)
 
-                                p1complete.component(0) = vert[face_[1*dimf_ + ii]*hn + 0]; // p2(1) = vert(1,face(2,i)+1)
-                                p1complete.component(1) = vert[face_[1*dimf_ + ii]*hn + 1]; // p2(2) = vert(2,face(2,i)+1)
+                                p1newton.component(0) = vert[face_[1*dimf_ + ii]*hn + 0]; // p2(1) = vert(1,face(2,i)+1)
+                                p1newton.component(1) = vert[face_[1*dimf_ + ii]*hn + 1]; // p2(2) = vert(2,face(2,i)+1)
 
                                 // To initialize:
                                 //
-                                for (int jj = 0; jj < 2; jj++) p_init_complete.component(jj) = sol_[jj*dims_ + sp];
+                                for (int jj = 0; jj < 2; jj++) p_init_newton.component(jj) = sol_[jj*dims_ + sp];
 
-//                                Newton_Improvement *newton_improver = new Newton_Improvement(impf);
-//                                int newton_info = newton_improver->newton(p0newton, p1newton, p_init_newton, p_improved_newton);
+                                Newton_Improvement *newton_improver = new Newton_Improvement(impf);
+                                int newton_info = newton_improver->newton(p0newton, p1newton, p_init_newton, p_improved_newton);
 
-//                                Newton_Improvement newton_improver(impf);
-//                                int newton_info = newton_improver.newton(p0complete, p1complete, p_init_complete, p_completed);
-
-                                int info_improvable = impf->complete(p0complete, p1complete, p_init_complete, p_completed);
-//                                if (info_improvable == IMPROVABLE_ERROR) store_sol = false;
-                                store_edge.push_back(info_improvable);
-
-                                sol_[0*dims_ + sp] = p_completed.component(0); // sol(1,sp) = v(1)
-                                sol_[1*dims_ + sp] = p_completed.component(1); // sol(2,sp) = v(2)
+                                sol_[0*dims_ + sp] = p_improved_newton.component(0); // sol(1,sp) = v(1)
+                                sol_[1*dims_ + sp] = p_improved_newton.component(1); // sol(2,sp) = v(2)
 
                             }
                         }
@@ -351,13 +338,10 @@ if ( method == CONTINUATION_METHOD ) {
 //                                cout << "The first point:  " << chains(i,j)[0][0] << endl;
                             }
 
-                            // The segments are stored in pairs
+                            // The segments are store in pairs
                             //
-                            if ( method == SEGMENTATION_METHOD/* && store_sol*/) {
+                            if ( method == SEGMENTATION_METHOD ) {
                                 for (nedg = 0; nedg < nedges_; nedg++) {
-                                   if (impf->improvable()) {
-                                       if (store_edge[nedg] == IMPROVABLE_ERROR) continue;
-                                   }
 
                                    // Store the segments
                                    RealVector p1(2), p2(2);
@@ -375,7 +359,8 @@ if ( method == CONTINUATION_METHOD ) {
                             }
                         }
                     }
-                //
+
+                    // 
             }
         }
     }

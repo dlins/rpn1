@@ -47,7 +47,7 @@ import rpn.parser.RPnDataModule;
 import rpnumerics.HugoniotCurve;
 import rpnumerics.HugoniotCurveCalcND;
 import rpnumerics.OrbitCalc;
-import rpnumerics.PointLevelCalc;
+import rpnumerics.EigenValuePointLevelCalc;
 import rpnumerics.RPnCurve;
 import rpnumerics.RarefactionExtensionCalc;
 import rpnumerics.RpCalculation;
@@ -189,8 +189,8 @@ public class RPnCurvesList extends Observable implements ActionListener, ListSel
                 userInput = curve.getXZero().getCoords();
             }
 
-            if (calc instanceof PointLevelCalc) {
-                PointLevelCalc hCalc = (PointLevelCalc) calc;
+            if (calc instanceof EigenValuePointLevelCalc) {
+                EigenValuePointLevelCalc hCalc = (EigenValuePointLevelCalc) calc;
                 userInput = hCalc.getStartPoint();
             }
 

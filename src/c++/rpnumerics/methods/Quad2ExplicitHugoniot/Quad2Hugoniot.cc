@@ -19,22 +19,19 @@
  */
 
 
-int Quad2Hugoniot::classified_curve(const FluxFunction *f, const AccumulationFunction *a,
-        GridValues &g, const RealVector &r,
-        std::vector<HugoniotPolyLine> &hugoniot_curve ) {
 
-}
-
-int Quad2Hugoniot::classified_curve(const FluxFunction *f, const AccumulationFunction *a,
-        GridValues &g, const RealVector &r,
-        std::vector<HugoniotPolyLine> &hugoniot_curve, std::vector<RealVector> &transitionList,
-        std::vector<bool> &circular,const Viscosity_Matrix * vm) {
-    
+ Quad2Hugoniot::Quad2Hugoniot (const FluxFunction *f, const AccumulationFunction *a):Hugoniot_Curve(f,a){
+     
+ }
+ 
+  int Quad2Hugoniot::classified_curve(GridValues &g, ReferencePoint &r,std::vector<HugoniotPolyLine> & hugoniot_curve ,std::vector<RealVector> & transitionList){
+      
+  
     if ( Debug::get_debug_level() == 5 ) {
         cout<<"Plotando com o metodo explicito"<<endl;
     }
-    Quad2_Explicit_Hugoniot *q2eh = new Quad2_Explicit_Hugoniot((Quad2FluxFunction*)f);
-    q2eh->set_reference_point(r);
+    Quad2_Explicit_Hugoniot *q2eh = new Quad2_Explicit_Hugoniot((Quad2FluxFunction*)ff);
+    q2eh->set_reference_point(r.point);
 
     RealVector polar_domain(2);
     polar_domain.component(0) = 0.0;
@@ -64,14 +61,12 @@ int Quad2Hugoniot::classified_curve(const FluxFunction *f, const AccumulationFun
                            out);
     delete q2eh;
     
-    ColorCurve colorCurve(*f,*a);
-    
-    ReferencePoint refPoint(r,f,a,vm);
+    ColorCurve colorCurve(*ff,*aa);
 
     for (int i = 0; i < out.size(); i++) {
         
         HugoniotPolyLine polyLine;
-        colorCurve.classify_continuous_curve(out.at(i), refPoint,polyLine,transitionList);
+        colorCurve.classify_continuous_curve(out.at(i), r,polyLine,transitionList);
         
         hugoniot_curve.push_back(polyLine);
 
@@ -82,8 +77,3 @@ int Quad2Hugoniot::classified_curve(const FluxFunction *f, const AccumulationFun
 
 }
 
-int Quad2Hugoniot::curve(const FluxFunction *f, const AccumulationFunction *a,
-        GridValues &g, const RealVector &r,
-        std::vector<RealVector> &hugoniot_curve) {
-
-}

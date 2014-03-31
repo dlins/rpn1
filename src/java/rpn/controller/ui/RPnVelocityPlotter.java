@@ -70,6 +70,10 @@ public class RPnVelocityPlotter extends RPn2DMouseController {
             }
 
             geometry_=RPnDataModule.PHASESPACE.findClosestGeometry(newValue);
+            
+            System.out.println("Geometria mais proxima: "+geometry_);
+            
+            
             RPnCurve curve = (RPnCurve) (geometry_.geomFactory().geomSource());
             RealVector closestPoint = curve.findClosestPoint(newValue);
 

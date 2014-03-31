@@ -93,6 +93,77 @@ void Utilities::alpha_convex_combination_projection(const RealVector &p0, const 
 }
 
 void Utilities::pick_point_from_continuous_curve(const std::vector<RealVector> &curve, const RealVector &p, RealVector &closest_point){
+    int closest_segment_index;
+    pick_point_from_continuous_curve(curve, p, closest_point, closest_segment_index);
+
+//    if (curve.size() < 2) return;
+
+//    // Distance to a point and the position of the first point of the segment in curve.
+//    //
+//    int pos = 0;
+//    double min_distance = norm(p - curve[0]);
+
+//    for (int i = 1; i < curve.size(); i++){
+//        double distance = norm(p - curve[i]);
+
+//        if (distance < min_distance){
+//            pos = i;
+//            min_distance = distance;
+//        }
+//    }
+
+//    // http://paulbourke.net/geometry/pointlineplane/
+//    //
+//    if (pos == 0){
+//        double alpha;
+//        RealVector proj;
+//        
+//        alpha_convex_combination_projection(curve[pos], curve[pos + 1], p, alpha, proj);
+
+//        if (validate_alpha(alpha)) closest_point = proj;
+//        else                       closest_point = curve[pos];
+//    }
+//    else if (pos == curve.size() - 1){
+//        double alpha;
+//        RealVector proj;
+//        
+//        alpha_convex_combination_projection(curve[pos], curve[pos - 1], p, alpha, proj);
+
+//        if (validate_alpha(alpha)) closest_point = proj;
+//        else                       closest_point = curve[pos];
+//    }
+//    else {
+//        // Check both segments.
+//        //
+//        double alpha_next, alpha_prev;
+//        RealVector proj_next, proj_prev;
+//        
+//        alpha_convex_combination_projection(curve[pos], curve[pos + 1], p, alpha_next, proj_next);
+//        alpha_convex_combination_projection(curve[pos], curve[pos - 1], p, alpha_prev, proj_prev);
+
+//        bool alpha_next_valid = validate_alpha(alpha_next);
+//        bool alpha_prev_valid = validate_alpha(alpha_prev);
+
+//        if (alpha_next_valid && alpha_prev_valid){
+//            double distance_next = norm2_squared(proj_next - p);
+//            double distance_prev = norm2_squared(proj_prev - p);
+
+//            if (distance_next < distance_prev) closest_point = proj_next;
+//            else                               closest_point = proj_prev;
+//        }
+//        else {
+//            if      (alpha_next_valid && !alpha_prev_valid) closest_point = proj_next;
+//            else if (alpha_prev_valid && !alpha_next_valid) closest_point = proj_prev;
+//            else                                            closest_point = curve[pos];
+//        }
+
+//    }
+
+//    return;
+}
+
+void Utilities::pick_point_from_continuous_curve(const std::vector<RealVector> &curve, const RealVector &p, 
+                                                 RealVector &closest_point, int &closest_segment_index){
     if (curve.size() < 2) return;
 
     // Distance to a point and the position of the first point of the segment in curve.
@@ -119,6 +190,8 @@ void Utilities::pick_point_from_continuous_curve(const std::vector<RealVector> &
 
         if (validate_alpha(alpha)) closest_point = proj;
         else                       closest_point = curve[pos];
+
+        closest_segment_index = pos;
     }
     else if (pos == curve.size() - 1){
         double alpha;
@@ -128,6 +201,8 @@ void Utilities::pick_point_from_continuous_curve(const std::vector<RealVector> &
 
         if (validate_alpha(alpha)) closest_point = proj;
         else                       closest_point = curve[pos];
+
+        closest_segment_index = pos - 1;
     }
     else {
         // Check both segments.
@@ -149,11 +224,19 @@ void Utilities::pick_point_from_continuous_curve(const std::vector<RealVector> &
             else                               closest_point = proj_prev;
         }
         else {
-            if      (alpha_next_valid && !alpha_prev_valid) closest_point = proj_next;
-            else if (alpha_prev_valid && !alpha_next_valid) closest_point = proj_prev;
-            else                                            closest_point = curve[pos];
+            if (alpha_next_valid && !alpha_prev_valid){
+                closest_point = proj_next;
+                closest_segment_index = pos;
+            }
+            else if (alpha_prev_valid && !alpha_next_valid){
+                closest_point = proj_prev;
+                closest_segment_index = pos - 1;
+            }
+            else {
+                closest_point = curve[pos];
+                closest_segment_index = pos;
+            }
         }
-
     }
 
     return;
@@ -183,6 +266,43 @@ void Utilities::pick_point_from_segmented_curve(const std::vector<RealVector> &c
             p1 = curve[2*i + 1];
         }
     }
+
+    alpha_convex_combination_projection(p0, p1, p, alpha, proj);
+
+    if      (alpha < 0.0) closest_point = p0;
+    else if (alpha > 1.0) closest_point = p1;
+    else                  closest_point = proj;
+
+    return;
+}
+
+void Utilities::pick_point_from_segmented_curve(const std::vector<RealVector> &curve, const RealVector &p, RealVector &closest_point, int &index_p0, int &index_p1){
+    if (curve.size() < 2) return;
+
+    double min_distance = std::numeric_limits<double>::infinity();
+
+    double alpha;
+    RealVector proj;
+
+    for (int i = 0; i < curve.size()/2; i++){
+        alpha_convex_combination_projection(curve[2*i], curve[2*i + 1], p, alpha, proj);
+
+        double distance;
+
+        if (alpha < 0.0)      distance = norm2_squared(p - curve[2*i]);
+        else if (alpha > 1.0) distance = norm2_squared(p - curve[2*i + 1]);
+        else                  distance = norm2_squared(p - proj);
+
+        if (min_distance > distance){
+            min_distance = distance;
+
+            index_p0 = 2*i;
+            index_p1 = 2*i + 1;
+        }
+    }
+
+    RealVector p0 = curve[index_p0];
+    RealVector p1 = curve[index_p1];
 
     alpha_convex_combination_projection(p0, p1, p, alpha, proj);
 
@@ -228,4 +348,54 @@ int Utilities::find_point_on_level_curve(void *obj, double (*function_for_bisect
     return UTILITIES_BISECTION_ERROR;
 }
 
+void Utilities::pick_point_from_wavecurve(const WaveCurve &wavecurve, const RealVector &p, 
+                                          int &curve_index, int &segment_index_in_curve, RealVector &closest_point, double &speed){
+    std::vector<double> distance;
+    std::vector<int> segment_index;
+    std::vector<RealVector> point;
+
+    for (int i = 0; i < wavecurve.wavecurve.size(); i++){
+        RealVector closest_point;
+        int closest_segment_index;
+
+        pick_point_from_continuous_curve(wavecurve.wavecurve[i].curve, p, closest_point, closest_segment_index);
+
+        segment_index.push_back(closest_segment_index);
+        point.push_back(closest_point);
+        distance.push_back(norm2_squared(closest_point - p));
+    }
+
+    double min_distance = std::numeric_limits<double>::infinity();
+    int pos = 0;
+
+    for (int i = 0; i < distance.size(); i++){
+        if (min_distance > distance[i]){
+            min_distance = distance[i];
+            pos = i;
+        }
+    }
+
+    closest_point = point[pos];
+    curve_index = pos;
+    segment_index_in_curve = segment_index[pos];
+
+    double alpha;
+    RealVector proj;
+
+    // Point.
+    //
+    RealVector p0 = wavecurve.wavecurve[pos].curve[segment_index_in_curve];
+    RealVector p1 = wavecurve.wavecurve[pos].curve[segment_index_in_curve + 1];
+
+    alpha_convex_combination_projection(p0, p1, closest_point, alpha, proj);
+
+    // Speed.
+    //
+    double speed0 = wavecurve.wavecurve[pos].speed[segment_index_in_curve];
+    double speed1 = wavecurve.wavecurve[pos].speed[segment_index_in_curve + 1];
+
+    speed = alpha*speed0 + (1.0 - alpha)*speed1;
+
+    return;
+}
 

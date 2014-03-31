@@ -16,10 +16,13 @@ public class SecondaryBifurcationCurveCalc extends ContourCurveCalc {
 
     int xResolution_;
     int yResolution_;
+    private final String methodName_;
+    private final int edge_;
 
-    public SecondaryBifurcationCurveCalc(ContourParams params) {
+    public SecondaryBifurcationCurveCalc(ContourParams params, String methodName,int edge) {
         super(params);
-        
+        methodName_=methodName;
+        edge_=edge;
       
     }
 
@@ -27,13 +30,11 @@ public class SecondaryBifurcationCurveCalc extends ContourCurveCalc {
     public RpSolution calc() throws RpException {
         RpSolution result = null;
 
-        result = (SecondaryBifurcationCurve) nativeCalc();
+        result = (SecondaryBifurcationCurve) nativeCalc(methodName_,edge_);
 
         if (result == null) {
             throw new RpException("Error in native layer");
         }
- 
-
         return result;
     }
     
@@ -43,7 +44,15 @@ public class SecondaryBifurcationCurveCalc extends ContourCurveCalc {
         return nativeCalc(areaListToRefine);
     }
 
-    private native RpSolution nativeCalc() throws RpException;
+    private native RpSolution nativeCalc(String methodName,int edge) throws RpException;
     private native RpSolution nativeCalc(List<Area> areasToRefine) throws RpException;
+    
+    
+    public enum SecondaryBifurcationMethods {
+        
+        IMPLICIT,
+        STONE;
+        
+    }
  
 }

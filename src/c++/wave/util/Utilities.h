@@ -4,6 +4,7 @@
 #include <limits>
 #include <vector>
 #include "RealVector.h"
+#include "WaveCurve.h"
 
 #define BISECTIONONSEGMENT_OK    0
 #define BISECTIONONSEGMENT_ERROR 1
@@ -27,8 +28,17 @@ class Utilities {
         static int bisection_on_segment(void* obj, double (*function_for_bisection)(void*, const RealVector&), const RealVector &p, const RealVector &q, RealVector &r);
 
         static void alpha_convex_combination_projection(const RealVector &p0, const RealVector &p1, const RealVector &p, double &alpha, RealVector &proj);
-        static void pick_point_from_continuous_curve(const std::vector<RealVector> &curve, const RealVector &p, RealVector &closest_point);
+
+        static void pick_point_from_continuous_curve(const std::vector<RealVector> &curve, const RealVector &p, 
+                                                     RealVector &closest_point);
+        static void pick_point_from_continuous_curve(const std::vector<RealVector> &curve, const RealVector &p, 
+                                                     RealVector &closest_point, int &closest_segment_index);
+
         static void pick_point_from_segmented_curve(const std::vector<RealVector> &curve, const RealVector &p, RealVector &closest_point);
+        static void pick_point_from_segmented_curve(const std::vector<RealVector> &curve, const RealVector &p, RealVector &closest_point, int &index_p0, int &index_p1);
+
+        static void pick_point_from_wavecurve(const WaveCurve &wavecurve, const RealVector &p, 
+                                              int &curve_index, int &segment_index_in_curve, RealVector &closest_point, double &speed);
 
         static int find_point_on_level_curve(void *obj, double (*function_for_bisection)(void*, const RealVector &), const RealVector &p, const RealVector &q0, RealVector &point_on_level_curve);
 };

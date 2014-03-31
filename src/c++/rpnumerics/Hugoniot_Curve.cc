@@ -14,7 +14,7 @@ Hugoniot_Curve::Hugoniot_Curve(const FluxFunction * flux, const AccumulationFunc
 int Hugoniot_Curve::classified_curve(GridValues & grid, ReferencePoint & refPoint,std::vector<HugoniotPolyLine> &hugoniot_curve, std::vector<RealVector> &transitionList) {
 
     grid.fill_functions_on_grid(ff, aa);
-    
+
     gv=&grid;
     Fref = refPoint.F;
     Gref = refPoint.G;

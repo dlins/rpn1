@@ -533,7 +533,10 @@ public class RPnDataModule {
                     int direction = Integer.parseInt(currentConfiguration_.getParam("direction"));
 
                     int[] resolution = processResolution(currentConfiguration_.getParam("resolution"));
-                    HugoniotParams params = new HugoniotParams(startPoint_, direction, resolution);
+                    
+                    //TODO Replace !!
+                    
+                    HugoniotParams params = new HugoniotParams(startPoint_, direction, resolution,"IMPLICIT");
 
                     HugoniotCurveCalcND calc = new HugoniotCurveCalcND(params);
 
@@ -543,23 +546,23 @@ public class RPnDataModule {
 
                 }
 
-                if (curve_name_.equals(rpnumerics.LevelCurve.class.getSimpleName())) {
+                if (curve_name_.equals(rpnumerics.EigenValueCurve.class.getSimpleName())) {
 
                     int family = Integer.parseInt(currentConfiguration_.getParam("family"));
                     double level = Double.parseDouble(currentConfiguration_.getParam("level"));
                     int[] resolution = processResolution(currentConfiguration_.getParam("resolution"));
                     ContourParams params = new ContourParams(resolution);
-                    LevelCurve curve = new LevelCurve(family, realSegments_, level);
-                    LevelCurveCalc calc = null;
+                    EigenValueCurve curve = new EigenValueCurve(family, realSegments_, level);
+                    CharacteristicPolynomialLevelCalc calc = null;
                     if (startPoint_ != null) {
 
-                        calc = new PointLevelCalc(startPoint_, family, params);
+                        calc = new EigenValuePointLevelCalc(startPoint_, family, params);
                         LevelCurveGeomFactory factory = new LevelCurveGeomFactory(calc, curve);
                         PointLevelCurvePlotCommand.instance().execute(factory);
 
 
                     } else {
-                        calc = new LevelCurveCalc(family, level, params);
+                        calc = new EigenValueLevelCalc(family, level, params);
                         LevelCurveGeomFactory factory = new LevelCurveGeomFactory(calc, curve);
                         LevelCurvePlotCommand.instance().execute(factory);
                     }
@@ -579,7 +582,7 @@ public class RPnDataModule {
                 if (curve_name_.equals(rpnumerics.WaveCurve.class.getSimpleName())) {
 
                     WaveCurveCalc calc = new WaveCurveCalc(startPoint_, Integer.parseInt(currentConfiguration_.getParam("family")),
-                            Integer.parseInt(currentConfiguration_.getParam("direction")));
+                            Integer.parseInt(currentConfiguration_.getParam("direction")),0,0); //TODO Ler de onde a curva esta partindo e o edge se for da fronteira
 
                     WaveCurveGeomFactory factory = new WaveCurveGeomFactory(calc);
 

@@ -18,6 +18,9 @@ import rpn.command.CoincidencePlotCommand;
 import rpn.command.CurveSelectionCommand;
 import rpn.command.CompositePlotCommand;
 import rpn.command.CurveRefineCommand;
+import rpn.command.DerivativeDiscriminantLevelCurvePlotCommand;
+import rpn.command.DiscriminantLevelCurvePlotCommand;
+import rpn.command.DiscriminantPointLevelCurvePlotCommand;
 import rpn.command.DoubleContactCommand;
 import rpn.command.EllipticBoundaryCommand;
 import rpn.command.EllipticBoundaryExtensionCommand;
@@ -36,7 +39,6 @@ import rpn.command.RarefactionCurvePlotCommand;
 import rpn.command.RiemannProfileCommand;
 import rpn.command.SecondaryBifurcationCurveCommand;
 import rpn.command.ShockCurvePlotCommand;
-import rpn.command.StoneSecondaryBifurcationCurveCommand;
 import rpn.command.SubInflectionExtensionCurveCommand;
 import rpn.command.SubInflectionPlotCommand;
 import rpn.command.WaveCurvePlotCommand;
@@ -61,6 +63,9 @@ public class CurvesConfig extends UI_ACTION_SELECTED {
         DomainSelectionCommand.instance().setEnabled(true);
         CompositePlotCommand.instance().setEnabled(true);
         PointLevelCurvePlotCommand.instance().setEnabled(true);
+        DiscriminantLevelCurvePlotCommand.instance().setEnabled(true);
+        DiscriminantPointLevelCurvePlotCommand.instance().setEnabled(true);
+        DerivativeDiscriminantLevelCurvePlotCommand.instance().setEnabled(true);
         LevelCurvePlotCommand.instance().setEnabled(true);
         ChangeOrbitLevelCommand.instance().setEnabled(true);
         EllipticBoundaryCommand.instance().setEnabled(true);
@@ -78,6 +83,7 @@ public class CurvesConfig extends UI_ACTION_SELECTED {
         
         
         
+        
         CoincidencePlotCommand.instance().setEnabled(true);
         SubInflectionPlotCommand.instance().setEnabled(true);
         BuckleyLeverettiInflectionCommand.instance().setEnabled(true);
@@ -91,7 +97,7 @@ public class CurvesConfig extends UI_ACTION_SELECTED {
         EllipticBoundaryExtensionCommand.instance().setEnabled(true);
         EnvelopeCurveCommand.instance().setEnabled(true);
         SecondaryBifurcationCurveCommand.instance().setEnabled(true);
-        StoneSecondaryBifurcationCurveCommand.instance().setEnabled(true);
+        
 
 
 

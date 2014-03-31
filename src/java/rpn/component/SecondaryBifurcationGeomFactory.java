@@ -5,14 +5,8 @@
  */
 package rpn.component;
 
-import java.awt.Color;
 import java.util.List;
 import rpnumerics.*;
-import wave.multid.CoordsArray;
-import wave.multid.model.MultiPoint;
-import wave.multid.view.ViewingAttr;
-import wave.util.RealSegment;
-import wave.util.RealVector;
 
 public class SecondaryBifurcationGeomFactory extends BifurcationCurveGeomFactory {
 

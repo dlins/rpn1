@@ -5,33 +5,37 @@
  */
 package rpnumerics;
 
-public class LevelCurveCalc extends ContourCurveCalc {
+public class EigenValueLevelCalc extends CharacteristicPolynomialLevelCalc {
 
-    private int family_;
-    private double level_;
+    private final int family_;
+    
  
 
 
-    public LevelCurveCalc(int family, double level, ContourParams params) {
+    public EigenValueLevelCalc(int family, double level, ContourParams params) {
+        super(level,params);
+        family_ = family;
+        
+        configuration_=RPNUMERICS.getConfiguration("levelcurve");
+        configuration_.setParamValue("resolution", RPNUMERICS.getParamValue("hugoniotcurve", "resolution"));
+
+    }
+    
+    
+     protected  EigenValueLevelCalc(int family, ContourParams params) {
         super(params);
         family_ = family;
-        level_ = level;
-
+        
         configuration_=RPNUMERICS.getConfiguration("levelcurve");
         configuration_.setParamValue("resolution", RPNUMERICS.getParamValue("hugoniotcurve", "resolution"));
 
     }
 
 
-    protected LevelCurveCalc(int family, ContourParams params) {
-        super(params);
-        family_ = family;
-    }
-
 
     public RpSolution calc() throws RpException {
 
-        LevelCurve result = (LevelCurve) calcNative(family_, level_);
+        EigenValueCurve result = (EigenValueCurve) calcNative(family_,getLevel());
 
         if (result == null) {
             throw new RpException("Error in native layer");

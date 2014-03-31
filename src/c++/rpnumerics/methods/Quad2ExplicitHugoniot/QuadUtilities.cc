@@ -1,4 +1,4 @@
-#include "Utilities.h"
+#include "QuadUtilities.h"
 #include "Debug.h"
 
 // Quadratic equation. Translated from finder.F::quaeqt.
@@ -11,7 +11,7 @@
 //     it returns  quaeqt = 0  if the roots are complex
 //     it returns  quaeqt = 2  if the roots had been found
 //
-int Utilities::quadratic_equation(double a, double b, double &x1, double &x2){
+int QuadUtilities::quadratic_equation(double a, double b, double &x1, double &x2){
     double disc = a*a - 4*b;
 
     if (disc >= 0.0){
@@ -32,7 +32,7 @@ int Utilities::quadratic_equation(double a, double b, double &x1, double &x2){
 //     it returns  cubert = 1  if there is only one real root of f
 //     it returns  cubert = 3  if there are three real roots of f
 //
-int Utilities::cubic_equation(std::vector<double> &x, double a, double b, double c){
+int QuadUtilities::cubic_equation(std::vector<double> &x, double a, double b, double c){
     x.clear();
 
     double tol  = 1.e-5;
@@ -93,7 +93,7 @@ int Utilities::cubic_equation(std::vector<double> &x, double a, double b, double
 //
 // It uses cubic_polynomial, hardwired.
 //
-int Utilities::solve1(double &xn, double xa, double xb,
+int QuadUtilities::solve1(double &xn, double xa, double xb,
                       double aa, double bb, double cc,
                       double tol){
 
@@ -145,7 +145,7 @@ int Utilities::solve1(double &xn, double xa, double xb,
 }
 
 // Cubic polynomial. Translated from finder.F::fcub.
-double Utilities::cubic_polynomial(double m, double aa, double bb, double cc){
+double QuadUtilities::cubic_polynomial(double m, double aa, double bb, double cc){
     return m*(m*(m + aa) + bb) + cc;
 }
 

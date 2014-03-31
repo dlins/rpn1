@@ -11,6 +11,7 @@
  * Includes:
  */
 #include "Stone.h"
+#include "rpnumerics/Secondary_Bifurcation.h"
 
 /*
  * ---------------------------------------------------------------
@@ -72,7 +73,6 @@ Boundary * Stone::defaultBoundary() const {
 
 void Stone::setParams(vector<string> params) {
 
-    cout<<"Vetor de parametros: "<<params.size()<<endl;
     RealVector fluxParamVector(7);
     double paramValue;
     //Flux params
@@ -136,7 +136,15 @@ vector<double> * Stone::getParams() {
 }
 
 Stone::Stone() : SubPhysics(StoneFluxFunction(StoneParams(), StonePermParams()), StoneAccumulation(), *defaultBoundary(), Multid::PLANE, "Stone", _SIMPLE_ACCUMULATION_) {
-    setHugoniotFunction(new Hugoniot_Curve(&fluxFunction(),&accumulation()));
+
+    hugoniotArray_->operator []("IMPLICIT") = new Hugoniot_Curve(&fluxFunction(), &accumulation());
+    hugoniotArray_->operator []("STONE") = new StoneHugoniot(&fluxFunction(), &accumulation());
+
+    secondaryBifurcationArray_->operator []("IMPLICIT") = new Secondary_Bifurcation(&fluxFunction(), &accumulation(), &fluxFunction(), &accumulation());
+
+
+
+    setHugoniotFunction(new Hugoniot_Curve(&fluxFunction(), &accumulation()));
     setDoubleContactFunction(new Double_Contact());
     setViscosityMatrix(new Viscosity_Matrix());
     preProcessedBoundary_ = defaultBoundary();
@@ -144,7 +152,14 @@ Stone::Stone() : SubPhysics(StoneFluxFunction(StoneParams(), StonePermParams()),
 }
 
 Stone::Stone(const Stone & copy) : SubPhysics(copy.fluxFunction(), copy.accumulation(), copy.getBoundary(), Multid::PLANE, "Stone", _SIMPLE_ACCUMULATION_) {
-    setHugoniotFunction(new Hugoniot_Curve(&copy.fluxFunction(),&copy.accumulation()));
+
+    hugoniotArray_->operator []("IMPLICIT") = new Hugoniot_Curve(&fluxFunction(), &accumulation());
+    hugoniotArray_->operator []("STONE") = new StoneHugoniot(&fluxFunction(), &accumulation());
+    secondaryBifurcationArray_->operator []("IMPLICIT") = new Secondary_Bifurcation(&fluxFunction(), &accumulation(), &fluxFunction(), &accumulation());
+
+
+
+    setHugoniotFunction(new Hugoniot_Curve(&copy.fluxFunction(), &copy.accumulation()));
     setDoubleContactFunction(new Double_Contact());
     setViscosityMatrix(copy.getViscosityMatrix());
     preProcessedBoundary_ = copy.getPreProcessedBoundary()->clone();
