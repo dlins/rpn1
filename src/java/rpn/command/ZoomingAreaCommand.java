@@ -38,7 +38,7 @@ public class ZoomingAreaCommand extends RpModelPlotCommand implements Observer {
 
         while (iterator.hasNext()) {
             RPnPhaseSpacePanel panel = iterator.next();
-            ZoomingSquare boxPlotter = new ZoomingSquare();
+            ZoomingSquare boxPlotter = new ZoomingSquare(panel.scene());
             panel.addMouseListener(boxPlotter);
             panel.addMouseMotionListener(boxPlotter);
         }

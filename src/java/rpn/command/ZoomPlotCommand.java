@@ -99,7 +99,7 @@ public class ZoomPlotCommand extends RpModelPlotCommand implements RPnMenuComman
         int[] testeArrayIndex = {0, 1};
 
         // tanto faz a meu ver a proporcao em DC...
-        RPnProjDescriptor projDescriptor = new RPnProjDescriptor(zoomSpace, "", width, height, testeArrayIndex, false);
+        RPnProjDescriptor projDescriptor = new RPnProjDescriptor(zoomSpace, "", width, height, testeArrayIndex, true);
 
         wave.multid.view.ViewingTransform viewingTransf = projDescriptor.createTransform(clipping);
 

@@ -9,6 +9,7 @@ import java.awt.Color;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Path2D;
+import java.awt.geom.PathIterator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,24 +24,65 @@ import wave.multid.CoordsArray;
 import wave.multid.Space;
 import wave.multid.view.ViewingAttr;
 import rpnumerics.RPNUMERICS;
+import wave.multid.view.Iso2EquiTransform;
+import wave.multid.view.Scene;
+import wave.multid.view.Viewing2DTransform;
+import wave.multid.view.ViewingTransform;
+import wave.util.IsoTriang2DBoundary;
+import wave.util.RealVector;
 
 public class ZoomingSquare extends RPn2DMouseController {
 
     private Point cursorPos_;
     private boolean addRectangle_ = false;
 
+    private final ViewingTransform viewingTransform_;
+
+    public ZoomingSquare(Scene scene) {
+
+        ViewingTransform viewingTransform = scene.getViewingTransform();
+
+        viewingTransform_ = new Viewing2DTransform(viewingTransform.projectionMap(), viewingTransform.viewPlane());
+
+    }
+
     public void mouseMoved(MouseEvent me) {
 
         if (addRectangle_) {
             RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) me.getSource();
 
-            Path2D.Double selectionPath = plotCenteredWCArea(cursorPos_, me, panel);
+            Path2D.Double selectionPath = plotCenteredWCArea(cursorPos_, me, viewingTransform_);
 
             List<Object> wcObjList = new ArrayList();
 
             wcObjList.add(selectionPath);
             ViewingAttr viewingAttr = new ViewingAttr(Color.red);
-            GraphicsUtil graphicsUtil = new AreaSelected(wcObjList, panel.scene().getViewingTransform(), viewingAttr);
+            GraphicsUtil graphicsUtil = new AreaSelected(wcObjList, viewingTransform_, viewingAttr);
+
+            //----------------------------------------TESTE -----------------------------------------------------
+            PathIterator iterator = selectionPath.getPathIterator(null);
+            Viewing2DTransform testeTransf = new Iso2EquiTransform(viewingTransform_.projectionMap(), viewingTransform_.viewPlane());
+
+            while (!iterator.isDone()) {
+
+                double[] segmentArray = new double[RPNUMERICS.domainDim()];      // *** Estava hard
+                int segment = iterator.currentSegment(segmentArray);
+                if (segment != PathIterator.SEG_CLOSE) {
+
+                    Coords2D dcSelectionPoint = new Coords2D(0, 0);
+                    CoordsArray wcSelectionPoint = new CoordsArray(segmentArray);
+                    panel.scene().getViewingTransform().viewPlaneTransform(wcSelectionPoint, dcSelectionPoint);
+                    RealVector wcCoords = new RealVector(dcSelectionPoint.getCoords());
+                    System.out.println(wcCoords);
+
+                }
+
+                iterator.next();
+            }
+
+            System.out.println("----------------------------------------------");
+
+            //----------------------------------------
             panel.setLastGraphicsUtil(graphicsUtil);
 
             panel.repaint();
@@ -56,21 +98,19 @@ public class ZoomingSquare extends RPn2DMouseController {
             cursorPos_ = new Point(me.getX(), me.getY());
 
             double[] mePosArray = {me.getX(), me.getY()};
-            
+
             CoordsArray cursorPosWC = new CoordsArray(new Space(" ", RPNUMERICS.domainDim()));
             Coords2D mePosDC = new Coords2D(mePosArray);
             CoordsArray mePosWC = new CoordsArray(new Space(" ", RPNUMERICS.domainDim()));
-            panel.scene().getViewingTransform().dcInverseTransform(mePosDC, mePosWC);
+            viewingTransform_.dcInverseTransform(mePosDC, mePosWC);
             Path2D.Double selectionPath = new Path2D.Double();
             selectionPath.moveTo(cursorPosWC.getElement(0), cursorPosWC.getElement(1));
             List<Object> wcObjectsList = new ArrayList();
             wcObjectsList.add(selectionPath);
             ViewingAttr viewingAttr = new ViewingAttr(Color.red);
-            GraphicsUtil emptyGraphicsUtil = new AreaSelected(wcObjectsList, panel.scene().getViewingTransform(), viewingAttr);
-
+            GraphicsUtil emptyGraphicsUtil = new AreaSelected(wcObjectsList, viewingTransform_, viewingAttr);
 
             panel.addGraphicUtil(emptyGraphicsUtil);
-
 
             addRectangle_ = true;
         } else {
@@ -79,11 +119,9 @@ public class ZoomingSquare extends RPn2DMouseController {
 
             graphicsUtil.setID(String.valueOf(panel.getGraphicsUtil().size() - 1));
 
-            
             ZoomPlotCommand.instance().setAreaAndPanel((AreaSelected) graphicsUtil, panel);
 
             ZoomPlotCommand.instance().execute();
-
 
             if (RPnNetworkStatus.instance().isOnline() && RPnNetworkStatus.instance().isMaster()) {
                 RPnNetworkStatus.instance().sendCommand(rpn.controller.ui.UndoActionController.instance().getLastCommand().toXML());

@@ -92,6 +92,14 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_IntegralCurveCalc_calc(JNIEnv * env, j
             deltaxi,
             familyIndex,
             coords, inflectionPoints);
+    
+    
+    
+    
+    
+    
+    
+    
 
     if (coords.size() == 0) {
         return NULL;

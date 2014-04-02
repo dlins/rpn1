@@ -23,18 +23,18 @@ public abstract class RPn2DMouseController extends Observable implements  MouseM
 
     
     
-     protected Path2D.Double plotCenteredWCArea(Point center, MouseEvent me, RPnPhaseSpacePanel panel) {
+     protected Path2D.Double plotCenteredWCArea(Point center, MouseEvent me, ViewingTransform viewingTransform) {
          
          
-         ViewingTransform viewingTransform = panel.scene().getViewingTransform();
+//         ViewingTransform viewingTransform = panel.scene().getViewingTransform();
 
         double[] cursorPosArray = {center.x, center.y};
         double[] mePosArray = {me.getX(), me.getY()};
-        int dimension = panel.scene().getViewingTransform().projectionMap().getDomain().getDim();
+        int dimension = viewingTransform.projectionMap().getDomain().getDim();
         CoordsArray cursorPosWC = new CoordsArray(new Space(" ", dimension));
         CoordsArray mePosWC = new CoordsArray(new Space(" ", dimension));
 
-        int[] compIndex = panel.scene().getViewingTransform().projectionMap().getCompIndexes();
+        int[] compIndex = viewingTransform.projectionMap().getCompIndexes();
 
         int biggestIndex = Math.max(compIndex[0], compIndex[1]);
         int smallestIndex = Math.min(compIndex[0], compIndex[1]);
@@ -58,23 +58,9 @@ public abstract class RPn2DMouseController extends Observable implements  MouseM
         mePosWC.setElement(0, tempCoords2.getElement(smallestIndex));
         mePosWC.setElement(1, tempCoords2.getElement(biggestIndex));
 
-
         
         double halfSide = Math.abs(Math.max(cursorPosWC.getElement(0)-mePosWC.getElement(0), 
                 cursorPosWC.getElement(1)-mePosWC.getElement(1)));
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
         
 
         Path2D.Double selectionPath = new Path2D.Double();
