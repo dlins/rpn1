@@ -13,6 +13,8 @@ import java.awt.geom.PathIterator;
 import java.util.ArrayList;
 import java.util.List;
 import rpn.component.RpGeometry;
+import wave.multid.Coords2D;
+import wave.multid.CoordsArray;
 import wave.multid.view.ViewingAttr;
 import wave.multid.view.ViewingTransform;
 import wave.util.RealVector;
@@ -122,6 +124,48 @@ public abstract class GraphicsUtil {
         return areaPointsList;
 
     }
+    
+    
+     public List<RealVector> getDCVertices() {
+
+        List<RealVector> areaPointsList = new ArrayList<RealVector>();
+        Path2D.Double wcObject = getWCObject();
+        PathIterator pathIterator = wcObject.getPathIterator(null);
+
+        double[] segmentArray = new double[2];
+
+        while (!pathIterator.isDone()) {
+
+            int segment = pathIterator.currentSegment(segmentArray);
+            if (segment != PathIterator.SEG_CLOSE) {
+                  
+                CoordsArray wcCoords = new Coords2D(segmentArray);
+                Coords2D dcCoords = new Coords2D();
+                getViewingTransform().viewPlaneTransform(wcCoords,dcCoords);
+                areaPointsList.add(new RealVector(dcCoords.getCoords()));
+  
+            }
+
+            pathIterator.next();
+
+        }
+
+        return areaPointsList;
+
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
     public void setID(String id) {
         id_ = id;
