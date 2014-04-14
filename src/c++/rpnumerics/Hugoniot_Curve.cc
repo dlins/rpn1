@@ -7,11 +7,20 @@ Hugoniot_Curve::Hugoniot_Curve(const FluxFunction * flux, const AccumulationFunc
 }
 
 
+void Hugoniot_Curve::curve(GridValues & grid,  RealVector & referencePoint,int type,std::vector<HugoniotPolyLine> & hugoniot_curve ,std::vector<RealVector> & transitionList){
+    
+    
+    ReferencePoint ref(referencePoint,ff,aa,0);
+    
+    curve(grid,ref,type,hugoniot_curve,transitionList);
+    
+}
+
 
 // This is the classified Hugoniot given by segments
 //
 
-int Hugoniot_Curve::classified_curve(GridValues & grid, ReferencePoint & refPoint,std::vector<HugoniotPolyLine> &hugoniot_curve, std::vector<RealVector> &transitionList) {
+void Hugoniot_Curve::curve(GridValues & grid, ReferencePoint & refPoint,int type,std::vector<HugoniotPolyLine> &hugoniot_curve, std::vector<RealVector> &transitionList) {
 
     grid.fill_functions_on_grid(ff, aa);
 
@@ -34,7 +43,7 @@ int Hugoniot_Curve::classified_curve(GridValues & grid, ReferencePoint & refPoin
     colorCurve.classify_segmented_curve(vrs, refPoint,
             hugoniot_curve, transitionList);
 
-    return info;
+//    return info;
 }
 
 Hugoniot_Curve::~Hugoniot_Curve() {

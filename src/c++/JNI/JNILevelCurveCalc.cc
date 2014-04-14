@@ -85,7 +85,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_EigenValuePointLevelCalc_calcNative(JN
     vector < RealVector > eigen_contours;
     double level;
 
-    GridValues * gv = RpNumerics::getGridFactory().getGrid("bifurcation");
+    GridValues * gv = RpNumerics::getGridFactory().getGrid("bifurcationcurve");
     
     
      CharacteristicPolynomialLevels ec;
@@ -180,7 +180,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_EigenValueLevelCalc_calcNative(JNIEnv 
 
 //    double vec_levels;
 
-    GridValues * gv = RpNumerics::getGridFactory().getGrid("bifurcation");
+    GridValues * gv = RpNumerics::getGridFactory().getGrid("bifurcationcurve");
 
     CharacteristicPolynomialLevels ec;
 

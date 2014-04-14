@@ -52,7 +52,7 @@ protected:
     void line(const RealVector &p, const RealVector &q, int nos, std::vector<RealVector> &v);
     RealVector sec_bif_correspondence(int side_opposite_vertex, const RealVector &point, const RealVector &mu);
 
-    void vertex_and_side(int side_opposite_vertex, const RealVector &mu, RealVector &vertex, RealVector &point_on_side);
+  
 
     void points_to_segments(std::vector<RealVector> &v);
 
@@ -71,6 +71,8 @@ public:
     int region(const RealVector &equations);
 
     int cross_sec_bif(const RealVector &previous_point, const RealVector &point, RealVector &crossing_point, int &region);
+    
+    void vertex_and_side(int side_opposite_vertex, const RealVector &mu, RealVector &vertex, RealVector &point_on_side);
 
     void sec_bif_correspondence(int side_opposite_vertex, int nos,
             std::vector<RealVector> &point,

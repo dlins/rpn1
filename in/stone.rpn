@@ -53,6 +53,7 @@
             <CURVECONFIGURATION name="hugoniotcurve">
                 <CURVEPARAM name="resolution" value="120 120"/>
                 <CURVEPARAM name="method" value="IMPLICIT"/>
+                <CURVEPARAM name="case" value="0"/>
                 
             </CURVECONFIGURATION>
     
@@ -81,11 +82,11 @@
                 <CURVEPARAM name="resolution" value="128 128"/>
             </CURVECONFIGURATION>
 
-
+<!--
             <CURVECONFIGURATION name="envelopecurve">
                 <CURVEPARAM name="edge" value="0"/>
                 <CURVEPARAM name="numberofsteps" value="128"/>
-            </CURVECONFIGURATION>
+            </CURVECONFIGURATION>-->
 
 
             <CURVECONFIGURATION name="ellipticextension">

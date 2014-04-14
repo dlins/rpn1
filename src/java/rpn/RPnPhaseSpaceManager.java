@@ -63,6 +63,7 @@ public class RPnPhaseSpaceManager {
         
         
         phaseSpace.remove(bifurcationGeom);
+        
         if (phaseSpaceMap_.containsKey(phaseSpace)) {
             ArrayList<RPnPhaseSpaceAbstraction> pointedPhaseSpaceAbstractions = phaseSpaceMap_.get(phaseSpace);
             for (RPnPhaseSpaceAbstraction pointedPhaseSpace : pointedPhaseSpaceAbstractions) {

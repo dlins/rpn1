@@ -6,8 +6,11 @@
 package rpnumerics;
 
 import java.util.List;
+import rpn.configuration.Configuration;
 
 import rpn.configuration.CurveConfiguration;
+import rpn.parser.RPnDataModule;
+import static rpnumerics.RPNUMERICS.getParamValue;
 
 import wave.util.RealVector;
 import wave.util.RealMatrix2;
@@ -35,10 +38,32 @@ public class HugoniotCurveCalcND extends ContourCurveCalc implements HugoniotCur
         configuration_.setParamValue("resolution", RPNUMERICS.getParamValue("hugoniotcurve", "resolution"));
 
     }
+
+    public HugoniotCurveCalcND(PhasePoint input, CurveConfiguration hugoniotConfiguration) {
+
+        super(createHugoniotParams(input, hugoniotConfiguration));
+
+        configuration_ = hugoniotConfiguration.clone();
+
+    }
+
+    private static HugoniotParams createHugoniotParams(PhasePoint input, Configuration config) {
+
+        int[] resolution = RPnDataModule.processResolution(getParamValue("hugoniotcurve", "resolution"));
+
+        Integer direction = new Integer(getParamValue("fundamentalcurve", "direction"));
+
+        String methodName = HugoniotCurveCalcND.HugoniotMethods.valueOf(getParamValue("hugoniotcurve", "method")).name();
+
+        HugoniotParams params = new HugoniotParams(new PhasePoint(input), direction, resolution, methodName);
+
+        return params;
+
+    }
+
     //
     // Accessors/Mutators
     //
-
     public void uMinusChangeNotify(PhasePoint uMinus) {
 
         setUMinus(uMinus);
@@ -82,7 +107,7 @@ public class HugoniotCurveCalcND extends ContourCurveCalc implements HugoniotCur
 
         HugoniotCurve result;
         String methodName = ((HugoniotParams) getParams()).getMethodName();
-        result = (HugoniotCurve) calc(((HugoniotParams) getParams()).getXZero(), methodName);
+        result = (HugoniotCurve) calc(((HugoniotParams) getParams()).getXZero(), configuration_);
 
         result.setDirection(((HugoniotParams) getParams()).getDirection());
 
@@ -117,7 +142,7 @@ public class HugoniotCurveCalcND extends ContourCurveCalc implements HugoniotCur
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    private native RpSolution calc(PhasePoint initialpoint, String methodName) throws RpException;
+    private native RpSolution calc(PhasePoint initialpoint, Configuration configuration) throws RpException;
 
     //TODO : How to find the correct number of transition points after curve refinement??
     private native RpSolution calc(PhasePoint initialpoint, int xRes_, int yRes_, RealVector topR, RealVector dwnL) throws RpException;

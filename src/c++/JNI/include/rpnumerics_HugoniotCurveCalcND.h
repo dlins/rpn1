@@ -12,10 +12,10 @@ extern "C" {
 /*
  * Class:     rpnumerics_HugoniotCurveCalcND
  * Method:    calc
- * Signature: (Lrpnumerics/PhasePoint;Ljava/lang/String;)Lrpnumerics/RpSolution;
+ * Signature: (Lrpnumerics/PhasePoint;Lrpn/configuration/Configuration;)Lrpnumerics/RpSolution;
  */
-JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_PhasePoint_2Ljava_lang_String_2
-  (JNIEnv *, jobject, jobject, jstring);
+JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_PhasePoint_2Lrpn_configuration_Configuration_2
+  (JNIEnv *, jobject, jobject, jobject);
 
 /*
  * Class:     rpnumerics_HugoniotCurveCalcND

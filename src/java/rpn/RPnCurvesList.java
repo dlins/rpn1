@@ -12,8 +12,6 @@ import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.text.NumberFormat;
@@ -40,6 +38,8 @@ import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import rpn.component.BifurcationCurveBranchGeom;
+import rpn.component.BifurcationCurveGeom;
+import rpn.component.BifurcationCurveGeomSide;
 import rpn.component.RpCalcBasedGeomFactory;
 import rpn.component.RpGeometry;
 import rpn.controller.ui.UIController;
@@ -70,7 +70,7 @@ public class RPnCurvesList extends Observable implements ActionListener, ListSel
     private List indexGeometries;
     private List<RpGeometry> geometryList_;
     private ArrayList<RpGeometry> geometriesToRemove_;
-    private int pressedRow;
+
 
     public RPnCurvesList(String title, RPnPhaseSpaceAbstraction phaseSpace) {
 
@@ -164,12 +164,21 @@ public class RPnCurvesList extends Observable implements ActionListener, ListSel
     }
 
     public void removeGeometrySide(MultiGeometry geometry) {
-//        if (geometry instanceof BifurcationCurveGeom) {
-//            BifurcationCurveGeom bifurcationGeom = (BifurcationCurveGeom) geometry;
-//            phaseSpace_.remove(bifurcationGeom.getOtherSide());
-//            
-//        }
-//        
+
+        if (geometry instanceof BifurcationCurveGeomSide) {
+            BifurcationCurveGeomSide bifurcationGeom = (BifurcationCurveGeomSide) geometry;
+            phaseSpace_.remove(bifurcationGeom.getOtherSide());
+            
+        }
+        
+        if (geometry instanceof BifurcationCurveGeom ){
+            BifurcationCurveGeom branch = (BifurcationCurveGeom)geometry;
+            for (BifurcationCurveBranchGeom rpGeometry : branch.getBifurcationListGeom()) {
+                removeGeometrySide(rpGeometry);
+            }
+            
+        }
+        
     }
 
     //**** alteracao do metodo original para testar (Leandro)
@@ -485,8 +494,6 @@ public class RPnCurvesList extends Observable implements ActionListener, ListSel
 
     @Override
     public void mousePressed(MouseEvent e) {
-        Point eventPoint = e.getPoint();
-        pressedRow = curvesTable_.rowAtPoint(eventPoint);
 
     }
 

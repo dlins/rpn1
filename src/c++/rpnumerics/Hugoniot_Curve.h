@@ -17,7 +17,7 @@
 #include <vector>
 #include <deque>
 
-class Hugoniot_Curve : public Hugoniot_Locus {
+class Hugoniot_Curve : public Hugoniot_Locus,public ImplicitFunction {
     private:
         DoubleMatrix JFref, JGref;
         RealVector Fref, Gref;
@@ -37,7 +37,9 @@ class Hugoniot_Curve : public Hugoniot_Locus {
         int function_on_square(double *foncub, int i, int j);
 
         // For classification of segmented curves
-        int classified_curve(GridValues &, ReferencePoint &,std::vector<HugoniotPolyLine> & ,std::vector<RealVector> &);
+        void curve(GridValues &,  ReferencePoint &,int,std::vector<HugoniotPolyLine> & ,std::vector<RealVector> &);
+        
+        void curve(GridValues &,  RealVector &,int,std::vector<HugoniotPolyLine> & ,std::vector<RealVector> &);
 
         int complete(const RealVector &p0, const RealVector &p1, const RealVector &p_init, RealVector &p_completed);
 

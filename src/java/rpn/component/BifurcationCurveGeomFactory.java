@@ -161,6 +161,14 @@ public class BifurcationCurveGeomFactory extends RpCalcBasedGeomFactory {
 
         ViewingAttr leftViewingAtt = new ViewingAttr(Color.yellow);
         ViewingAttr rightViewingAttr = new ViewingAttr(Color.magenta);
+       ContourCurveCalc rpCalc = (ContourCurveCalc) rpCalc();
+        
+        if(!rpCalc.getMethodName().equals("IMPLICIT")){
+            leftViewingAtt.setColor(Color.white);
+            rightViewingAttr.setColor(Color.white);
+            
+        }
+        
 
         int i = 0;
         for (Object realSegment : curve.rightSegments()) {

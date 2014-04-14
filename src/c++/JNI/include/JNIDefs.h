@@ -23,6 +23,7 @@
 #define HESSIANMATRIX_LOCATION                "wave/util/HessianMatrix"
 #define REALSEGMENT_LOCATION                  "wave/util/RealSegment"
 #define AREA_LOCATION                         "rpnumerics/Area"
+#define CONFIGURATION_LOCATION                "rpn/configuration/Configuration"
 
 
 

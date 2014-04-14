@@ -12,7 +12,7 @@
 #include "Physics.h"
 #include "GridValuesFactory.h"
 #include "StationaryPoint.h"
-
+#include "WaveCurve.h"
 
 
 class RpNumerics {
@@ -23,6 +23,7 @@ private:
     static  Physics * physics_;
     static GridValuesFactory * gridValuesFactory_;
     static vector<StationaryPoint* > * stationaryPointVector_;
+    static map<int,WaveCurve *>  *waveCurveMap_;
     
     static double sigma;
     
@@ -70,6 +71,7 @@ inline void RpNumerics::setPhysics(const Physics & physics){
     delete gridValuesFactory_;
     gridValuesFactory_=new GridValuesFactory(physics_);
     stationaryPointVector_=new vector<StationaryPoint *>();
+    waveCurveMap_ = new map<int,WaveCurve *>();
 }
 
 inline void RpNumerics::setSigma(double s){sigma=s;}

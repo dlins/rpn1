@@ -90,7 +90,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_DiscriminantPointLevelCalc_calcNative(
     vector < RealVector > eigen_contours;
     double vec_levels;
 
-    GridValues * gv = RpNumerics::getGridFactory().getGrid("bifurcation");
+    GridValues * gv = RpNumerics::getGridFactory().getGrid("bifurcationcurve");
 
     ec.discriminant_curve(&RpNumerics::getPhysics().fluxFunction(), &RpNumerics::getPhysics().accumulation(),
             *gv, realVectorInput,eigen_contours, vec_levels);
@@ -177,7 +177,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_DiscriminantLevelCurveCalc_calcNative(
 
     double vec_levels;
 
-    GridValues * gv = RpNumerics::getGridFactory().getGrid("bifurcation");
+    GridValues * gv = RpNumerics::getGridFactory().getGrid("bifurcationcurve");
     
     
     

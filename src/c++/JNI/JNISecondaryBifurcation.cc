@@ -44,7 +44,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_SecondaryBifurcationCurveCalc_nativeCa
 
     jclass arrayListClass = env->FindClass("java/util/ArrayList");
 
-    jclass hysteresisCurveClass = env->FindClass(SECONDARY_BIFURCATION_LOCATION);
+    jclass secondaryBifurcationCurveClass = env->FindClass(SECONDARY_BIFURCATION_LOCATION);
 
     jmethodID toDoubleMethodID = (env)->GetMethodID(classPhasePoint, "toDouble", "()[D");
     jmethodID realVectorConstructorDoubleArray = env->GetMethodID(realVectorClass, "<init>", "([D)V");
@@ -52,7 +52,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_SecondaryBifurcationCurveCalc_nativeCa
 
     jmethodID arrayListConstructor = env->GetMethodID(arrayListClass, "<init>", "()V");
     jmethodID arrayListAddMethod = env->GetMethodID(arrayListClass, "add", "(Ljava/lang/Object;)Z");
-    jmethodID hysteresisCurveConstructor = env->GetMethodID(hysteresisCurveClass, "<init>", "(Ljava/util/List;Ljava/util/List;)V");
+    jmethodID hysteresisCurveConstructor = env->GetMethodID(secondaryBifurcationCurveClass, "<init>", "(Ljava/util/List;Ljava/util/List;)V");
 
     int dimension = RpNumerics::getPhysics().domain().dim();
     //int dimension = 2;
@@ -103,7 +103,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_SecondaryBifurcationCurveCalc_nativeCa
     
 
     if (secondaryBifurcationMethodName.compare("IMPLICIT") == 0) {
-        cout<<"entrando aqui"<<endl;
+
         Secondary_Bifurcation sb;
 
         sb.curve(leftFlux, leftAccum, *gv,
@@ -213,7 +213,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_SecondaryBifurcationCurveCalc_nativeCa
     }
 
 
-    jobject result = env->NewObject(hysteresisCurveClass, hysteresisCurveConstructor, leftSegmentsArray, rightSegmentsArray);
+    jobject result = env->NewObject(secondaryBifurcationCurveClass, hysteresisCurveConstructor, leftSegmentsArray, rightSegmentsArray);
 
 
     return result;

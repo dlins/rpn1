@@ -41,13 +41,14 @@ JNIEXPORT void JNICALL Java_rpnumerics_HugoniotCurveCalcND_setUMinus
 
 }
 
-JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_PhasePoint_2Ljava_lang_String_2
-(JNIEnv * env, jobject obj, jobject uMinus, jstring methodName) {
 
-
-
+JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_PhasePoint_2Lrpn_configuration_Configuration_2
+  (JNIEnv * env , jobject obj, jobject uMinus, jobject configuration){
 
     jclass classPhasePoint = (env)->FindClass(PHASEPOINT_LOCATION);
+    
+    jclass classConfiguration = env->FindClass(CONFIGURATION_LOCATION);
+    
 
     jclass hugoniotSegmentClass = (env)->FindClass(HUGONIOTSEGMENTCLASS_LOCATION);
 
@@ -56,7 +57,11 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
     jclass arrayListClass = env->FindClass("java/util/ArrayList");
 
     jclass hugoniotCurveClass = env->FindClass(HUGONIOTCURVE_LOCATION);
+    
+    
 
+    jmethodID getParamMethodID = (env)->GetMethodID(classConfiguration, "getParam", "(Ljava/lang/String;)Ljava/lang/String;");
+    
     jmethodID toDoubleMethodID = (env)->GetMethodID(classPhasePoint, "toDouble", "()[D");
     jmethodID realVectorConstructorDoubleArray = env->GetMethodID(realVectorClass, "<init>", "([D)V");
 
@@ -73,6 +78,30 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
     int dimension = env->GetArrayLength(phasePointArray);
 
     double input [dimension];
+    
+    
+    
+    //Reading configuration 
+    
+//    jstring methodParam = 
+    
+    cout<<"Aqui"<<endl;
+    
+    jstring javaMethodName = (jstring)env->CallObjectMethod(configuration,getParamMethodID,env->NewStringUTF("method"));
+    
+    jstring javaCaseName = (jstring)env->CallObjectMethod(configuration,getParamMethodID,env->NewStringUTF("case"));
+    
+    
+    
+    string methodName(env->GetStringUTFChars(javaMethodName, NULL));
+    string caseName(env->GetStringUTFChars(javaCaseName, NULL));
+
+    
+    
+    cout<<"Method pego no JNI: "<<methodName<<endl;
+    cout<<"Caso pego no JNI: "<<caseName<<endl;
+
+    
 
     //Input point
 
@@ -93,9 +122,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
 
     RpNumerics::getPhysics().getSubPhysics(0).preProcess(Uref);
 
-    string hugoniotMethodName(env->GetStringUTFChars(methodName, NULL));
+//    string hugoniotMethodName(env->GetStringUTFChars(methodName, NULL));
 
-    Hugoniot_Locus *hugoniotCurve = RpNumerics::getPhysics().getSubPhysics(0).getHugoniotMethod(hugoniotMethodName);
+    Hugoniot_Locus *hugoniotCurve = RpNumerics::getPhysics().getSubPhysics(0).getHugoniotMethod(methodName);
 
     GridValues * gv = RpNumerics::getGridFactory().getGrid("hugoniotcurve");
 
@@ -110,8 +139,14 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
     ReferencePoint refPoint(Uref, &RpNumerics::getPhysics().fluxFunction(), &RpNumerics::getPhysics().accumulation(), 0);
 
     cout << "flux :" << &RpNumerics::getPhysics().fluxFunction() << " " << &RpNumerics::getPhysics().accumulation() << endl;
+    
+    
+    int caseFlag;
+     std::stringstream stream(caseName);
 
-    hugoniotCurve->classified_curve(*gv, refPoint, hugoniotPolyLineVector, transitionList);
+     stream >> caseFlag;
+        
+    hugoniotCurve->curve(*gv, refPoint, caseFlag,  hugoniotPolyLineVector, transitionList);
 
 
     jobject transitionArray = env->NewObject(arrayListClass, arrayListConstructor, NULL);
@@ -302,7 +337,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
 
 
 
-    hugoniotCurve->classified_curve(gv, refPoint, hugoniotPolyLineVector, transitionList);
+    hugoniotCurve->curve(gv, refPoint, 0,hugoniotPolyLineVector, transitionList);
 
 
 

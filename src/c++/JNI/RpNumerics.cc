@@ -56,6 +56,7 @@ Physics * RpNumerics::physics_ = NULL;
 GridValuesFactory * RpNumerics::gridValuesFactory_ = NULL;
 
 vector<StationaryPoint *> * RpNumerics::stationaryPointVector_ = NULL;
+map<int,WaveCurve *> * RpNumerics::waveCurveMap_=NULL;
 
 double RpNumerics::sigma = 0;
 
@@ -479,8 +480,10 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_clean(JNIEnv * env, jclass cls
 }
 
 void RpNumerics::clean() {
-
+    delete gridValuesFactory_;
+    delete    stationaryPointVector_;
     delete physics_;
+    
 }
 
 /* Class:     rpnumerics_RPNUMERICS

@@ -4,13 +4,14 @@
 
 #include "Hugoniot_Locus.h"
 
-class Hugoniot_TP : public Hugoniot_Locus {
+class Hugoniot_TP : public ImplicitFunction,public Hugoniot_Locus {
 private:
     RealVector Fref, Gref;
     RealVector Uref;
 
     const FluxFunction *ff;
     const AccumulationFunction *aa;
+    
 
 
 public:
@@ -25,9 +26,9 @@ public:
     int function_on_square(double *foncub, int i, int j);
 
 
-    int classified_curve(GridValues &, ReferencePoint &,std::vector<HugoniotPolyLine> &hugoniot_curve,std::vector<RealVector> & transitionList);
+    void curve(GridValues &, ReferencePoint &,int ,std::vector<HugoniotPolyLine> &hugoniot_curve,std::vector<RealVector> & transitionList);
 
-
+    void curve(GridValues &, RealVector &,int ,std::vector<HugoniotPolyLine> &hugoniot_curve,std::vector<RealVector> & transitionList);
 
     void map(const RealVector &p, double &f, RealVector &map_Jacobian);
 

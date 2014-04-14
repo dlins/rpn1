@@ -13,6 +13,7 @@ public abstract class ContourCurveCalc implements RpCalculation {
 
     private ContourParams params_;
     protected Configuration configuration_;
+    private final String methodName_;
 
     //
     // Constructors
@@ -20,10 +21,22 @@ public abstract class ContourCurveCalc implements RpCalculation {
     public ContourCurveCalc(ContourParams params) {
         params_ = params;
 
-    
+        methodName_="IMPLICIT";
 
     }
 
+     public ContourCurveCalc(ContourParams params,String methodName) {
+        params_ = params;
+
+        methodName_=methodName;
+
+    }
+    
+     
+      public String getMethodName() {
+        return methodName_;
+    }
+    
     public RpSolution recalc() throws RpException {
         return calc();
     }

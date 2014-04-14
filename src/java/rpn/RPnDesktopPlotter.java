@@ -17,7 +17,7 @@ import javax.swing.JOptionPane;
 import org.iso_relax.verifier.Verifier;
 import org.iso_relax.verifier.VerifierFactory;
 import org.xml.sax.SAXParseException;
-import rpn.controller.ui.UIController;
+import rpn.parser.RPnInterfaceModule;
 import rpnumerics.RPNUMERICS;
 
 public class RPnDesktopPlotter implements RPnMenuCommand {
@@ -43,7 +43,6 @@ public class RPnDesktopPlotter implements RPnMenuCommand {
         // this error handler will throw an exception if there is an error
         verifier.setErrorHandler(com.sun.msv.verifier.util.ErrorHandlerImpl.theInstance);
 
-
         if (verifier.verify(new File(configFile))) {
             System.out.println("The input document is valid");
         }
@@ -56,9 +55,10 @@ public class RPnDesktopPlotter implements RPnMenuCommand {
     public void finalizeApplication() {
         try {
 
-            if (RPnNetworkStatus.instance().isOnline())
+            if (RPnNetworkStatus.instance().isOnline()) {
                 RPnNetworkStatus.instance().disconnect();
-                        
+            }
+
             RPNUMERICS.clean();
             System.exit(0);
         } catch (Exception ex) {
@@ -66,7 +66,7 @@ public class RPnDesktopPlotter implements RPnMenuCommand {
         }
     }
 
-    public void networkCommand() {       
+    public void networkCommand() {
 
         RPnNetworkDialog netDialog = RPnNetworkDialog.instance();
 
@@ -84,12 +84,11 @@ public class RPnDesktopPlotter implements RPnMenuCommand {
         return rpnUIFrame_;
     }
 
-    public static void setUIFrame(RPnUIFrame rpnUIFrame){
-        rpnUIFrame_=rpnUIFrame;
+    public static void setUIFrame(RPnUIFrame rpnUIFrame) {
+        rpnUIFrame_ = rpnUIFrame;
     }
-    
-    public static void main(final String[] args) {
 
+    public static void main(final String[] args) {
 
         Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).setLevel(Level.INFO);
 
@@ -103,10 +102,8 @@ public class RPnDesktopPlotter implements RPnMenuCommand {
 
     public static void createAndShowGUI(String[] args) {
 
-
         RPnDesktopPlotter plotter = null;
         try {
-
 
             plotter = new RPnDesktopPlotter(args[0]);
 
@@ -116,30 +113,25 @@ public class RPnDesktopPlotter implements RPnMenuCommand {
 
             rpnUIFrame_ = new RPnUIFrame(plotter);
 
+            rpnUIFrame_.setMainToolBarButtons(RPnInterfaceModule.getMainToolSelectedButtons());
+
             rpnUIFrame_.pack();
 
             rpnUIFrame_.setVisible(true);
- 
-            RPnConfigurationFrame configFrame = new RPnConfigurationFrame("Curves Configuration");
-            
-            configFrame.setSize(rpnUIFrame_.getWidth(), rpnUIFrame_.getHeight()/2);
 
+            RPnConfigurationFrame configFrame = new RPnConfigurationFrame("Curves Configuration");
+
+            configFrame.setSize(rpnUIFrame_.getWidth(), rpnUIFrame_.getHeight() / 2);
 
             configFrame.setVisible(true);
-            
 
             // the control frame should be up front...
             rpnUIFrame_.toFront();
 
-
             RPnDesktopPlotter.configReader_.exec(configStream_); //Reading input file
-            
-            
-            
+
         } catch (FileNotFoundException ex) {
             JOptionPane.showMessageDialog(rpnUIFrame_, "No input file !", "RPn", JOptionPane.ERROR_MESSAGE);
-
-
 
         } catch (VerifierConfigurationException ex) {
             System.out.println("Error in configuration file");
@@ -151,12 +143,9 @@ public class RPnDesktopPlotter implements RPnMenuCommand {
             // if the document is invalid, then the execution will reach here
             // because we throw an exception for an error.
 
-
         } catch (SAXException ex) {
 
             ex.printStackTrace();
-
-
 
         } catch (IOException exception) {
         } finally {

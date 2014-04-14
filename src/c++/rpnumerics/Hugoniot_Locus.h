@@ -30,15 +30,17 @@
  */
 
 
-class Hugoniot_Locus : public ImplicitFunction {
-private:
+class Hugoniot_Locus  {
 
+    protected:
+    RealVector referencepoint;
 
 
 public:
 
 
-    virtual int classified_curve(GridValues & , ReferencePoint &,std::vector<HugoniotPolyLine> & ,std::vector<RealVector> &) = 0;
+    virtual void curve(GridValues &, ReferencePoint &ref, int type, std::vector<HugoniotPolyLine> &, std::vector<RealVector> &) = 0;
+
 
 };
 

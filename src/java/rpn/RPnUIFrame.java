@@ -99,6 +99,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     private static RPnPhaseSpaceFrame[] riemannFrames_;
     private static List<RPnPhaseSpaceFrame> characteristicsFrames_ = new ArrayList<RPnPhaseSpaceFrame>();
     private JPanel utilitiesToolBarPanel = new JPanel();
+    private List <AbstractButton> mainButtonsToolBarList_ = new ArrayList<AbstractButton>();
 
     public RPnUIFrame(RPnMenuCommand command) {
 
@@ -256,6 +257,13 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
                 rarefactionConfigMenu();
                 toolBar_.removeAll();
+                
+//                for (AbstractButton button : mainButtonsToolBarList_) {
+//                    
+//                    toolBar_.add(button);
+//                    
+//                }
+//                
                 createCurvesTooBar();
                 toolBar_.revalidate();
             }
@@ -575,12 +583,28 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         //Phase Spaces associations
         ArrayList<RPnPhaseSpaceAbstraction> leftPhaseSpaceArray = new ArrayList<RPnPhaseSpaceAbstraction>();
         ArrayList<RPnPhaseSpaceAbstraction> rightPhaseSpaceArray = new ArrayList<RPnPhaseSpaceAbstraction>();
+        
+        
+        ArrayList<RPnPhaseSpaceAbstraction> centerPhaseSpaceArray = new ArrayList<RPnPhaseSpaceAbstraction>();
+        
+        
+        centerPhaseSpaceArray.add(RPnDataModule.RIGHTPHASESPACE);
+        centerPhaseSpaceArray.add(RPnDataModule.LEFTPHASESPACE);
 
         leftPhaseSpaceArray.add(RPnDataModule.RIGHTPHASESPACE);
         rightPhaseSpaceArray.add(RPnDataModule.LEFTPHASESPACE);
 
         RPnPhaseSpaceManager.instance().register(RPnDataModule.LEFTPHASESPACE, leftPhaseSpaceArray);
         RPnPhaseSpaceManager.instance().register(RPnDataModule.RIGHTPHASESPACE, rightPhaseSpaceArray);
+        
+        
+        RPnPhaseSpaceManager.instance().register(RPnDataModule.PHASESPACE, centerPhaseSpaceArray);
+        
+        
+        
+        
+        
+        
     }
 
     private void associatePhaseSpacesAndCurvesList() {
@@ -1459,6 +1483,10 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 //        } catch (IOException ex) {
 //            ex.printStackTrace();
 //        }                                
+    }
+
+    void setMainToolBarButtons(List<AbstractButton> mainToolBar) {
+        mainButtonsToolBarList_.addAll(mainToolBar);
     }
 
     private class ConfigAction implements Action {

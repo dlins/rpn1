@@ -137,8 +137,11 @@ vector<double> * Stone::getParams() {
 
 Stone::Stone() : SubPhysics(StoneFluxFunction(StoneParams(), StonePermParams()), StoneAccumulation(), *defaultBoundary(), Multid::PLANE, "Stone", _SIMPLE_ACCUMULATION_) {
 
+    Stone_Explicit_Bifurcation_Curves *stoneBifurcation = new Stone_Explicit_Bifurcation_Curves((StoneFluxFunction*)&fluxFunction());
+    
+    
     hugoniotArray_->operator []("IMPLICIT") = new Hugoniot_Curve(&fluxFunction(), &accumulation());
-    hugoniotArray_->operator []("STONE") = new StoneHugoniot(&fluxFunction(), &accumulation());
+    hugoniotArray_->operator []("STONE") = new StoneExplicitHugoniot((StoneFluxFunction *)&fluxFunction(),(StoneAccumulation *)&accumulation(), &getBoundary(),stoneBifurcation);
 
     secondaryBifurcationArray_->operator []("IMPLICIT") = new Secondary_Bifurcation(&fluxFunction(), &accumulation(), &fluxFunction(), &accumulation());
 
@@ -152,9 +155,10 @@ Stone::Stone() : SubPhysics(StoneFluxFunction(StoneParams(), StonePermParams()),
 }
 
 Stone::Stone(const Stone & copy) : SubPhysics(copy.fluxFunction(), copy.accumulation(), copy.getBoundary(), Multid::PLANE, "Stone", _SIMPLE_ACCUMULATION_) {
-
+    Stone_Explicit_Bifurcation_Curves *stoneBifurcation = new Stone_Explicit_Bifurcation_Curves((StoneFluxFunction*)&fluxFunction());
     hugoniotArray_->operator []("IMPLICIT") = new Hugoniot_Curve(&fluxFunction(), &accumulation());
-    hugoniotArray_->operator []("STONE") = new StoneHugoniot(&fluxFunction(), &accumulation());
+    hugoniotArray_->operator []("STONE") = new StoneExplicitHugoniot((StoneFluxFunction *)&fluxFunction(),(StoneAccumulation *) &accumulation(),&getBoundary(),stoneBifurcation);
+//    hugoniotArray_->operator []("STONE") = new StoneHugoniot(&fluxFunction(), &accumulation());
     secondaryBifurcationArray_->operator []("IMPLICIT") = new Secondary_Bifurcation(&fluxFunction(), &accumulation(), &fluxFunction(), &accumulation());
 
 
