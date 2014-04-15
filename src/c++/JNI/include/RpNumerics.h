@@ -27,12 +27,22 @@ private:
     
     static double sigma;
     
+    static int curveCounter;
+    
     
 public:
     
     static  Physics & getPhysics();
 
     static GridValuesFactory & getGridFactory();
+    
+    static WaveCurve * getWaveCurve(int);
+    
+    static void addWaveCurve(WaveCurve * );
+    
+    static int getCurrentCurveID();
+    
+    static void increaseCurveID();
 
     static vector<StationaryPoint *> & getStationaryPointVector();
     
@@ -57,8 +67,28 @@ inline Physics & RpNumerics::getPhysics(){return *physics_;}
 inline GridValuesFactory & RpNumerics::getGridFactory(){return *gridValuesFactory_;
 }
 
+inline WaveCurve * RpNumerics::getWaveCurve(int n){
+    return waveCurveMap_->operator[](n);
+}
+
+inline void RpNumerics::addWaveCurve(WaveCurve * wc){
+    waveCurveMap_->operator [](curveCounter) = wc;
+
+    cout<<"Tamanho do mapa de wc: "<<waveCurveMap_->size()<<endl;
+}
+
 inline vector<StationaryPoint *> & RpNumerics::getStationaryPointVector() {
     return *stationaryPointVector_;
+}
+
+inline int RpNumerics::getCurrentCurveID() {
+    return  curveCounter;
+}
+
+
+
+inline void RpNumerics::increaseCurveID(){
+    curveCounter++;
 }
 
 inline  const FluxFunction & RpNumerics::getFlux() {return physics_->fluxFunction();}

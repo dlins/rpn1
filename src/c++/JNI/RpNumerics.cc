@@ -60,6 +60,8 @@ map<int,WaveCurve *> * RpNumerics::waveCurveMap_=NULL;
 
 double RpNumerics::sigma = 0;
 
+int RpNumerics::curveCounter=0;
+
 /*
  * Class:     rpnumerics_RPNUMERICS
  * Method:    setRPnHome

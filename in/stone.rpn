@@ -82,11 +82,15 @@
                 <CURVEPARAM name="resolution" value="128 128"/>
             </CURVECONFIGURATION>
 
-<!--
-            <CURVECONFIGURATION name="envelopecurve">
+
+            <CURVECONFIGURATION name="wavecurve">
                 <CURVEPARAM name="edge" value="0"/>
-                <CURVEPARAM name="numberofsteps" value="128"/>
-            </CURVECONFIGURATION>-->
+                <CURVEPARAM name="origin" value="0"/>
+                <CURVEPARAM name="curve" value="0"/>
+                 <CURVEPARAM name="direction" value="10"/>
+                <CURVEPARAM name="family" value="0"/>
+                
+            </CURVECONFIGURATION>
 
 
             <CURVECONFIGURATION name="ellipticextension">

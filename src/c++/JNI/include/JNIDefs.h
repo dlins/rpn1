@@ -83,5 +83,6 @@
 
 #define NUMERICSPROFILE_LOCATION              "rpnumerics/RPNumericsProfile"
 #define RPNUMERICS_LOCATION                   "rpnumerics/RPNUMERICS"
+#define RPNCURVE_LOCATION                     "rpnumerics/RPnCurve"
 #endif	/* _JNIDEFS_H */
 

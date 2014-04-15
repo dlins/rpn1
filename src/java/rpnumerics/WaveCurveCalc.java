@@ -6,6 +6,8 @@
  */
 package rpnumerics;
 
+import rpn.configuration.CurveConfiguration;
+
 public class WaveCurveCalc extends WaveCurveOrbitCalc {
 
     public static int DOMAIN = 0;
@@ -27,6 +29,19 @@ public class WaveCurveCalc extends WaveCurveOrbitCalc {
         edge_ = edge;
         origin_ = origin;
     }
+    
+    
+    public WaveCurveCalc(PhasePoint input, CurveConfiguration hugoniotConfiguration) {
+
+        super(new OrbitPoint(input), Integer.parseInt(hugoniotConfiguration.getParam("family")),Integer.parseInt(hugoniotConfiguration.getParam("direction")));
+
+        edge_=0;
+        origin_=0;
+        configuration_ = hugoniotConfiguration.clone();
+
+    }
+
+    
 
     //
     // Accessors/Mutators
@@ -51,6 +66,7 @@ public class WaveCurveCalc extends WaveCurveOrbitCalc {
 
 
     private native RpSolution nativeCalc(OrbitPoint initialPoint, int family, int timeDirection, int origin, int edge);
+    private native RpSolution nativeCalc(OrbitPoint initialPoint, CurveConfiguration config);
 
    
 }
