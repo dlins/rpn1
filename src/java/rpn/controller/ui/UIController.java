@@ -215,6 +215,13 @@ public class UIController extends ComponentUI {
 
         @Override
         public void mouseReleased(MouseEvent event) {
+
+
+	    if(event.getClickCount() == 2 && globalInputTable().isComplete()) {
+                globalInputTable().reset();
+                resetPanelsCursorCoords();
+            }
+
         }
 
         @Override
@@ -248,8 +255,8 @@ public class UIController extends ComponentUI {
                         // execute
                         if (globalInputTable().isComplete()) {
                             userInputComplete(globalInputTable().values());
-                            globalInputTable().reset();
-                            resetPanelsCursorCoords();
+                            //globalInputTable().reset();
+                            //resetPanelsCursorCoords();
                             RPnUIFrame.enableSliders();
                         }
 

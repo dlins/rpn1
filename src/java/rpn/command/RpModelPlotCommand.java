@@ -7,6 +7,7 @@ package rpn.command;
 
 import java.awt.Font;
 import java.awt.geom.AffineTransform;
+import java.awt.event.ActionEvent;
 import java.util.Arrays;
 import javax.swing.event.ChangeEvent;
 import wave.util.RealVector;
@@ -53,7 +54,11 @@ public abstract class RpModelPlotCommand extends RpModelActionCommand {
 
     public void execute() {
 
-        RealVector[] userInputList = UIController.instance().userInputList();
+        //RealVector[] userInputList = UIController.instance().userInputList();
+        RealVector[] userInputList = new RealVector[1];
+
+	// TODO : retornar o codigo acima... mvera.
+	userInputList[0] = UIController.instance().globalInputTable().values();
 
 
         Iterator oldValue = UIController.instance().getActivePhaseSpace().getGeomObjIterator();
@@ -120,6 +125,19 @@ public abstract class RpModelPlotCommand extends RpModelActionCommand {
         }
         // remove the last...
         RPnDataModule.PHASESPACE.delete(added);
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent event) {
+
+	super.actionPerformed(event);
+
+	if (UIController.instance().globalInputTable().isComplete()) {
+
+		execute();
+		UIController.instance().panelsUpdate();
+	}
+
     }
 
     public abstract RpGeometry createRpGeometry(RealVector[] coords);

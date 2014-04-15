@@ -23,7 +23,7 @@ public class wcWindow {
     // Members
     //
     private Point2D.Double origin_;
-    private GeneralPath wcWindowPath_;
+    private GeneralPath polygon_;
 
     //
     // Constructors/Initializers
@@ -36,14 +36,14 @@ public class wcWindow {
      */
     public wcWindow(RealVector2[] defPoints, Point2D.Double origin) {
         origin_ = new Point2D.Double(origin.getX(), origin.getY());
-        wcWindowPath_ = new GeneralPath();
+        polygon_ = new GeneralPath();
         for (int i = 0; i < defPoints.length; i++) {
             if (i == 0)
-                wcWindowPath_.moveTo(new Double(defPoints[i].getX()).floatValue(), new Double(defPoints[i].getY()).floatValue());
+                polygon_.moveTo(new Double(defPoints[i].getX()).floatValue(), new Double(defPoints[i].getY()).floatValue());
             else
-                wcWindowPath_.lineTo(new Double(defPoints[i].getX()).floatValue(), new Double(defPoints[i].getY()).floatValue());
+                polygon_.lineTo(new Double(defPoints[i].getX()).floatValue(), new Double(defPoints[i].getY()).floatValue());
         }
-        wcWindowPath_.closePath();
+        polygon_.closePath();
     }
 
     public wcWindow(wcWindow copy) {
@@ -57,14 +57,14 @@ public class wcWindow {
     //
     public Point2D.Double getOriginPosition() { return origin_; }
 
-    public double getWidth() { return wcWindowPath_.getBounds2D().getWidth(); }
+    public double getWidth() { return polygon_.getBounds2D().getWidth(); }
 
-    public double getHeight() { return wcWindowPath_.getBounds2D().getHeight(); }
+    public double getHeight() { return polygon_.getBounds2D().getHeight(); }
 
     protected RealVector2[] getDefPoints() {
 
 
-        PathIterator wcIterator = wcWindowPath_.getPathIterator(new AffineTransform());
+        PathIterator wcIterator = polygon_.getPathIterator(new AffineTransform());
         ArrayList vertexList = new ArrayList();
 
         while (!(wcIterator.isDone())) {
@@ -114,8 +114,10 @@ public class wcWindow {
             dcMatrix[4] = coordSysTransform.getTransfMatrix().getElement(3, 0);
             dcMatrix[5] = coordSysTransform.getTransfMatrix().getElement(3, 1);
         }
+
+
         AffineTransform dcTransform = new AffineTransform(dcMatrix);
-        PathIterator dcIterator = wcWindowPath_.getPathIterator(dcTransform);
+        PathIterator dcIterator = polygon_.getPathIterator(dcTransform);
         ArrayList vertexList = new ArrayList();
         while (!(dcIterator.isDone())) {
             double[] vertexNode = new double[6];
@@ -132,9 +134,6 @@ public class wcWindow {
         for (int i = 0; i < vertexList.size(); i++) {
             defPointsX[i] = new Double(((double[]) vertexList.get(i)) [0]).intValue();
             defPointsY[i] = new Double(((double[]) vertexList.get(i)) [1]).intValue();
-
-	    System.out.println("DEF POL POINTS X : " + defPointsX[i]);
-	    System.out.println("DEF POL POINTS Y : " + defPointsY[i]);
         }
 
 
@@ -167,9 +166,8 @@ public class wcWindow {
             wcMatrix[5] = map.getTransfMatrix().getElement(3, 1);
         }
         AffineTransform wcTransform = new AffineTransform(wcMatrix);
-        PathIterator wcIterator = wcWindowPath_.getPathIterator(wcTransform);
+        PathIterator wcIterator = polygon_.getPathIterator(wcTransform);
         ArrayList vertexList = new ArrayList();
-
         while (!(wcIterator.isDone())) {
             double[] vertexNode = new double[6];
             int segType = wcIterator.currentSegment(vertexNode);
@@ -180,23 +178,22 @@ public class wcWindow {
         }
 
         // rebuild the Polygon and Origin
-
 	double[] old_origin = new double[2];
 	double[] new_origin = new double[2];
 	old_origin[0] = origin_.getX();
 	old_origin[1] = origin_.getY();
 
 	wcTransform.transform(old_origin,0,new_origin,0,1);
-
+	
         origin_ = new Point2D.Double(new_origin[0], new_origin[1]);
-        wcWindowPath_ = new GeneralPath();
+        polygon_ = new GeneralPath();
         for (int i = 0; i < vertexList.size(); i++) {
             if (i == 0)
-                wcWindowPath_.moveTo(((double[])vertexList.get(i))[0],((double[])vertexList.get(i))[1]);
+                polygon_.moveTo(((double[])vertexList.get(i))[0],((double[])vertexList.get(i))[1]);
             else
-                wcWindowPath_.lineTo(((double[])vertexList.get(i))[0],((double[])vertexList.get(i))[1]);
+                polygon_.lineTo(((double[])vertexList.get(i))[0],((double[])vertexList.get(i))[1]);
         }
-
-        wcWindowPath_.closePath();
+        polygon_.closePath();
+        
     }
 }
