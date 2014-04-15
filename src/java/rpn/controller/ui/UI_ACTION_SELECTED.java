@@ -55,19 +55,6 @@ public class UI_ACTION_SELECTED implements UserInputHandler {
             
         }
         
-        
-        
-        
-       
-        
-        
-        
-        
-        
-        
-        
-        
-        
     }
     
     public void clearUserInputList(){
@@ -82,19 +69,8 @@ public class UI_ACTION_SELECTED implements UserInputHandler {
     public void userInputComplete(rpn.controller.ui.UIController ui,
             RealVector userInput, int curveId) {
         userInputList_.add(new RealVector(userInput));
-        System.out.println("User input list");
-        for (Object object : userInputList_) {
-            
-            
-            System.out.println((RealVector)object);
-            
-            
-        }
-        
         actionSelected_.execute(curveId);
 
-
-        
     }    
     
     public void userInputComplete(rpn.controller.ui.UIController ui,
@@ -128,6 +104,7 @@ public class UI_ACTION_SELECTED implements UserInputHandler {
             userInputList_.clear();
             ui.panelsBufferClear();
             rpn.parser.RPnDataModule.PHASESPACE.unselectAll();
+
         } else {
             
             UIController.instance().setWaitCursor();
@@ -156,7 +133,6 @@ public class UI_ACTION_SELECTED implements UserInputHandler {
     protected boolean isPoincareInputReady() {
         
         if (userInputList_.size() == rpnumerics.RPNUMERICS.domainDim()) {
-            System.out.println("Return true in isPoincareInputReady() !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
             return true;
         }
         return false;

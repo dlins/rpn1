@@ -114,6 +114,8 @@ public class wcWindow {
             dcMatrix[4] = coordSysTransform.getTransfMatrix().getElement(3, 0);
             dcMatrix[5] = coordSysTransform.getTransfMatrix().getElement(3, 1);
         }
+
+
         AffineTransform dcTransform = new AffineTransform(dcMatrix);
         PathIterator dcIterator = polygon_.getPathIterator(dcTransform);
         ArrayList vertexList = new ArrayList();
@@ -180,16 +182,13 @@ public class wcWindow {
         }
 
         // rebuild the Polygon and Origin
-
 	double[] old_origin = new double[2];
 	double[] new_origin = new double[2];
 	old_origin[0] = origin_.getX();
 	old_origin[1] = origin_.getY();
 
-	
 	wcTransform.transform(old_origin,0,new_origin,0,1);
 	
-
         origin_ = new Point2D.Double(new_origin[0], new_origin[1]);
         polygon_ = new GeneralPath();
         for (int i = 0; i < vertexList.size(); i++) {
@@ -201,5 +200,4 @@ public class wcWindow {
         polygon_.closePath();
         
     }
-
 }

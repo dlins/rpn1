@@ -27,14 +27,13 @@ public class Iso2EquiTransform extends Viewing2DTransform {
 	// for initialization porpouses...
 	super.makeCoordSysTransform();
 
-        double XScaleFactor = viewPlane().getViewport().getWidth() / viewPlane().getWindow().getWidth();
+        double XScaleFactor = viewPlane().getViewport().getWidth() / (viewPlane().getWindow().getWidth() + viewPlane().getWindow().getWidth()*.5);
         // not to be upside down...
         double YScaleFactor = -viewPlane().getViewport().getHeight() / viewPlane().getWindow().getHeight();
 
-
 	YScaleFactor *= Math.sqrt(3)/2.;
 
-        double XTranslateFactor = -viewPlane().getWindow().getOriginPosition().x * XScaleFactor;
+        double XTranslateFactor = -(viewPlane().getWindow().getOriginPosition().x + viewPlane().getWindow().getOriginPosition().x*.5) * XScaleFactor;
         // we are working with RASTER
         double YTranslateFactor = -viewPlane().getWindow().getOriginPosition().y * YScaleFactor
                 + viewPlane().getViewport().getHeight();
