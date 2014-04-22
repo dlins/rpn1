@@ -32,7 +32,7 @@ public class WaveCurveOrbitGeom extends OrbitGeom implements WaveCurveBranchGeom
     public void showSpeed(CoordsArray curvePoint, CoordsArray wcPoint, ViewingTransform transform) {
 
         WaveCurveBranch fundamentalCurve = (WaveCurveBranch) geomFactory().geomSource();
-
+        
         double speed = fundamentalCurve.getSpeed(new OrbitPoint(curvePoint.getCoords(), 0d));
 
         List<Object> wcObject = new ArrayList<Object>();

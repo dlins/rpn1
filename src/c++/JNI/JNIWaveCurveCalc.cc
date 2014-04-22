@@ -71,13 +71,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc__Lrpnumerics_
     jmethodID setIDMethodID = (env)->GetMethodID(rpnCurveClass, "setId", "(I)V");
 
 
-
-
     jmethodID setCurveTypeID = (env)->GetMethodID(classWaveCurveOrbit, "setCurveType", "(I)V");
     jmethodID setCurveIndexID = (env)->GetMethodID(classWaveCurveOrbit, "setCurveIndex", "(I)V");
     jmethodID setInitialSubCurveID = (env)->GetMethodID(classWaveCurveOrbit, "setInitialSubCurve", "(Z)V");
-
-
 
 
     jmethodID shockCurveConstructor = (env)->GetMethodID(shockCurveClass, "<init>", "([Lrpnumerics/OrbitPoint;II)V");
@@ -126,7 +122,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc__Lrpnumerics_
     HugoniotContinuation_nDnD hug(flux, accum, boundary);
     ShockCurve sc(&hug);
 
-    CompositeCurve cmp(accum, flux, boundary, &sc);
+    CompositeCurve cmp(accum, flux, boundary, &sc,0);
 
     LSODE lsode;
     ODE_Solver *odesolver;
@@ -388,7 +384,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc__Lrpnumerics_
     HugoniotContinuation_nDnD hug(flux, accum, boundary);
     ShockCurve sc(&hug);
 
-    CompositeCurve cmp(accum, flux, boundary, &sc);
+    CompositeCurve cmp(accum, flux, boundary, &sc,0);
 
     LSODE lsode;
     ODE_Solver *odesolver;
@@ -402,85 +398,81 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc__Lrpnumerics_
     jstring jedge = (jstring) env->CallObjectMethod(configuration, getParamMethodID, env->NewStringUTF("edge"));
 
     jstring jorigin = (jstring) env->CallObjectMethod(configuration, getParamMethodID, env->NewStringUTF("origin"));
-    jstring jcurve  = (jstring) env->CallObjectMethod(configuration, getParamMethodID, env->NewStringUTF("curve"));
+    jstring jcurve = (jstring) env->CallObjectMethod(configuration, getParamMethodID, env->NewStringUTF("curve"));
     jstring jdirection = (jstring) env->CallObjectMethod(configuration, getParamMethodID, env->NewStringUTF("direction"));
-    
-    
-    
-    jstring jfamily = (jstring) env->CallObjectMethod(configuration, getParamMethodID, env->NewStringUTF("family"));
 
+
+    jstring jfamily = (jstring) env->CallObjectMethod(configuration, getParamMethodID, env->NewStringUTF("family"));
 
 
     string edge(env->GetStringUTFChars(jedge, NULL));
     string origin(env->GetStringUTFChars(jorigin, NULL));
     string curve(env->GetStringUTFChars(jcurve, NULL));
     string direction(env->GetStringUTFChars(jdirection, NULL));
-    
+
     string family(env->GetStringUTFChars(jfamily, NULL));
-    
-    
-    int timeDirection ;
+
+
+    int timeDirection;
     std::stringstream stream(direction);
     stream >> timeDirection;
-    
-    
-    int edgeNumber ;
+
+
+    int edgeNumber;
     std::stringstream streamEdge(edge);
     streamEdge >> edgeNumber;
-    
-    
-    int originNumber ;
+
+
+    int originNumber;
     std::stringstream streamOrigin(origin);
     streamOrigin >> originNumber;
-    
-    
-    int curveNumber ;
+
+
+    int curveNumber;
     std::stringstream streamCurve(curve);
     streamCurve >> curveNumber;
-    
-    
-    int familyNumber ;
+
+
+    int familyNumber;
     std::stringstream streamFamily(family);
     streamFamily >> familyNumber;
-    
-    
-    cout << "Valor de origin" << originNumber << endl;\
+
+
+    cout << "Valor de origin" << originNumber << endl;
+
+    cout << "Ponto entrado: " << realVectorInput << endl;
+
+
     cout << "Curve index: " << curveNumber << endl;
     cout << "Direcao: " << timeDirection << endl;
-    cout << "Family" << familyNumber<< endl;
+    cout << "Family" << familyNumber << endl;
     cout << "Edge" << edgeNumber << endl;
-    
-
-
 
 
     WaveCurve * hwc = new WaveCurve();
 
     int reason_why, s;
 
-    if (timeDirection == 20)//TODO REMOVE !!!
+    //    if (timeDirection == 20)//TODO REMOVE !!!
+    //
+    //        timeDirection = RAREFACTION_SPEED_SHOULD_INCREASE; //WAVE_FORWARD;
+    //
+    //    if (timeDirection == 22)
+    //
+    //        timeDirection = RAREFACTION_SPEED_SHOULD_DECREASE; //WAVE_BACKWARD;
 
-        timeDirection = RAREFACTION_SPEED_SHOULD_INCREASE; //WAVE_FORWARD;
-
-    if (timeDirection == 22)
-
-        timeDirection = RAREFACTION_SPEED_SHOULD_DECREASE; //WAVE_BACKWARD;
-
-
-
-
-    if (originNumber == 0) {
+    if (originNumber == 11) {
 
         wavecurvefactory.wavecurve(realVectorInput, familyNumber, timeDirection, &hug, *hwc, reason_why, s);
     }
 
-    if (originNumber == 1) {
-        wavecurvefactory.wavecurve_from_boundary(realVectorInput, edgeNumber, familyNumber, timeDirection, &hug, *hwc, reason_why,s);
+    if ((originNumber == 1) || (originNumber == 2) || (originNumber == 3)) {
+        wavecurvefactory.wavecurve_from_boundary(realVectorInput, edgeNumber, familyNumber, timeDirection, &hug, *hwc, reason_why, s);
     }
 
 
 
-    if (originNumber == 2) {
+    if (originNumber == 12) {
 
         Inflection_Curve inflectionCurve;
 
@@ -511,16 +503,16 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc__Lrpnumerics_
         //        }
 
 
-        cout << "Valor de origin" << origin << endl;\
-
-
-        cout << "Ponto entrado: " << realVectorInput << endl;
-        cout << "Direcao: " << timeDirection << endl;
-
-        cout << "Reason" << reason_why << endl;
-        cout << "Edge" << s << endl;
 
         wavecurvefactory.wavecurve_from_inflection(left_vrs, realVectorInput, familyNumber, timeDirection, &hug, *hwc, reason_why, s);
+    }
+
+
+    if (originNumber == 13) {
+
+        WaveCurve * waveCurve = RpNumerics::getWaveCurve(curveNumber);
+        wavecurvefactory.wavecurve_from_wavecurve(*waveCurve, realVectorInput, &hug, *hwc, reason_why, s);
+
     }
 
 
@@ -557,7 +549,12 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc__Lrpnumerics_
                 (env)->SetDoubleArrayRegion(jTempArray, 0, tempVector.size(), dataCoords);
 
                 //Lambda is the last component.
-                double lambda = 0;
+                double lambda = wc.speed[j];
+                
+                
+                
+                
+                        
                 jobject orbitPoint = (env)->NewObject(classOrbitPoint, orbitPointConstructor, jTempArray, lambda);
 
                 env->CallObjectMethod(orbitPoint, setCorrespondingCurveIndexID, relatedCurvesIndexVector);

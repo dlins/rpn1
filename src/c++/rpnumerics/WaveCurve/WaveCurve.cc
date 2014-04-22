@@ -95,3 +95,36 @@ void WaveCurve::insert_rarefaction_composite_pair(int composite_curve_index, int
     return;
 }
 
+void WaveCurve::validate_compatibility(WaveCurve &other_wavecurve, int curve_index, int point_index, int direction){
+    double d;
+    if (direction == SPEED_INCREASE){
+        d =  1.0;
+    }
+    else {
+        d = -1.0;
+    }
+
+    double speed = wavecurve[curve_index].speed[point_index];
+
+    for (int i = 0; i < other_wavecurve.wavecurve.size(); i++){
+        other_wavecurve.wavecurve[i].compatible.clear();
+
+        for (int j = 0; j < other_wavecurve.wavecurve[i].speed.size(); j++){
+            if ((speed - other_wavecurve.wavecurve[i].speed[j])*d < 0.0){
+                other_wavecurve.wavecurve[i].compatible.push_back(true);
+            }
+            else {
+                other_wavecurve.wavecurve[i].compatible.push_back(false);
+            }
+        }
+    }
+
+    return;
+}
+
+void WaveCurve::clear(){
+    for (int i = 0; i < wavecurve.size(); i++) wavecurve[i].clear();
+
+    return;
+}
+

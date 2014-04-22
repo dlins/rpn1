@@ -85,7 +85,7 @@
 
             <CURVECONFIGURATION name="wavecurve">
                 <CURVEPARAM name="edge" value="0"/>
-                <CURVEPARAM name="origin" value="0"/>
+                <CURVEPARAM name="origin" value="13"/>
                 <CURVEPARAM name="curve" value="0"/>
                  <CURVEPARAM name="direction" value="10"/>
                 <CURVEPARAM name="family" value="0"/>

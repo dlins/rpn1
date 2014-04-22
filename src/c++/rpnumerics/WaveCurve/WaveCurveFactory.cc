@@ -1,5 +1,32 @@
 #include "WaveCurveFactory.h"
 
+// Find the intesection between two segments: p1-p2 and q1-q2, store the answer in r.
+// If there is no intersection, return false (and r is useless), otherwise return true.
+//
+bool WaveCurveFactory::segment_intersection(double *p1, double *p2, double *q1, double *q2, double *r){
+    double alpha, beta;
+
+    double A[2][2], b[2];
+    for (int i = 0; i < 2; i++){
+        A[i][0] = p1[i] - p2[i];
+        A[i][1] = q2[i] - q1[i];
+
+        b[i]    = q2[i] - p2[i];
+    }
+
+    double delta = A[0][0]*A[1][1] - A[0][1]*A[1][0];
+    if (fabs(delta) < 1e-10) {
+        return false;
+    }
+
+    alpha = (b[0]*A[1][1] - b[1]*A[0][1])/delta;
+    beta  = (b[1]*A[0][0] - b[0]*A[1][0])/delta;
+
+    for (int i = 0; i < 2; i++) r[i] = .5*(alpha*p1[i] + (1.0 - alpha)*p2[i] + beta*q1[i] + (1.0 - beta)*q2[i]);
+
+    return (alpha >= 0.0 && alpha <= 1.0) && (beta >= 0.0 && beta <= 1.0);
+}
+
 WaveCurveFactory::WaveCurveFactory(const AccumulationFunction *gg, const FluxFunction *ff, const Boundary *bb, const ODE_Solver *o,
                                    RarefactionCurve *r, ShockCurve *s, CompositeCurve *c){
     g = gg;
@@ -27,9 +54,14 @@ int WaveCurveFactory::Liu_half_wavecurve(const ReferencePoint &ref,
                                          int increase, 
                                          int initial_curve, 
                                          const RealVector &initial_direction, 
-                                         WaveCurve &hwc, 
+                                         WaveCurve &hwc,
                                          int &wavecurve_stopped_because, 
                                          int &edge){
+
+    // Kludge to solve the fact that the shockspeed at the reference point is being returned as NaN, 
+    // which messes up with the Riemann Profile.
+    //
+    bool is_first = true;
 
     // This changes if the rarefaction reaches a coincidence.
     //
@@ -54,7 +86,7 @@ int WaveCurveFactory::Liu_half_wavecurve(const ReferencePoint &ref,
         if (current_curve == RAREFACTION_CURVE){
             std::cout << "WaveCurveFactory: entering Rarefaction." << std::endl;
 
-            double deltaxi = 1e-3;
+            double deltaxi = 3e-4; // Was: 1e-3
             std::vector<RealVector> inflection_point;
             Curve rarcurve;
 
@@ -74,6 +106,24 @@ int WaveCurveFactory::Liu_half_wavecurve(const ReferencePoint &ref,
                                                    final_direction,
                                                    rar_stopped_because,
                                                    edge);
+
+            // Update the back pointers.
+            //
+            rarcurve.back_curve_index = hwc.wavecurve.size() - 1;
+
+            is_first = false;
+
+            if (rarcurve.curve.size() > 0){
+                rarcurve.back_curve_pointer.resize(rarcurve.curve.size());
+                rarcurve.back_curve_pointer[0] = hwc.wavecurve.size() - 1;
+                for (int i = 1; i < rarcurve.curve.size(); i++) rarcurve.back_curve_pointer[i] = hwc.wavecurve.size();
+                
+                if (hwc.wavecurve.size() > 0) rarcurve.back_pointer[0] = hwc.wavecurve.back().curve.size() - 1;
+            }
+
+            std::ofstream rar_out("rar_out.txt", std::ofstream::out);
+            for (int i = 0; i < rarcurve.curve.size(); i++) rar_out << "Index: " << i << ", curve = " << rarcurve.back_curve_pointer[i] << ", point = " << rarcurve.back_pointer[i] << std::endl;
+            rar_out.close();
 
             // Store regardless of what happened during the computation.
             //
@@ -176,9 +226,11 @@ int WaveCurveFactory::Liu_half_wavecurve(const ReferencePoint &ref,
             std::cout << "WaveCurveFactory: entering Composite." << std::endl;
 
 //            double deltaxi = 1e-3;
-            double deltaxi = 1e-3;
+            double deltaxi = 3e-4; // Was: 1e-3
 
             Curve cmpcurve, new_rarcurve;
+            std::vector<int> index_explicit_bifurcation_transition;
+
             RealVector final_direction;
 
             int composite_stopped_because;
@@ -191,10 +243,12 @@ int WaveCurveFactory::Liu_half_wavecurve(const ReferencePoint &ref,
                                                  future_composite_type, // COMPOSITE_BEGINS_AT_INFLECTION or COMPOSITE_AFTER_COMPOSITE.
                                                  family, 
                                                  new_rarcurve,
-                                                 cmpcurve, 
+                                                 cmpcurve,
                                                  final_direction,
                                                  composite_stopped_because,
                                                  edge);
+
+            is_first = false;
 
             std::cout << "WaveCurveFactory, composite completed. Info = " << info_cmp << ", final_direction = " << final_direction << std::endl;
             cmpcurve.final_direction = final_direction;
@@ -203,6 +257,12 @@ int WaveCurveFactory::Liu_half_wavecurve(const ReferencePoint &ref,
 
             if (info_cmp == COMPOSITE_OK){
                 cmpcurve.back_curve_index = rarefaction_list.back();
+
+                cmpcurve.back_curve_pointer.resize(cmpcurve.curve.size());
+                for (int i = 0; i < cmpcurve.curve.size(); i++) cmpcurve.back_curve_pointer[i] = rarefaction_list.back();
+
+                std::cout << "cmpcurve.back_curve_index = " << cmpcurve.back_curve_index << std::endl;
+          
                 
                 hwc.wavecurve.push_back(cmpcurve);
 
@@ -277,10 +337,22 @@ int WaveCurveFactory::Liu_half_wavecurve(const ReferencePoint &ref,
                                             shock_stopped_because,
                                             edge);
 
+            // Kludge to solve the fact that the shockspeed at the reference point is being returned as NaN, 
+            // which messes up with the Riemann Profile.
+            //
+            if (is_first){
+                shkcurve.speed[0] = hwc.reference_point.e[family].r;
+//                shkcurve.speed[0] = shkcurve.speed.back();
+            }
+
+            is_first = false;
+
             std::cout << "WaveCurveFactory. shck_info = " << shck_info << ", shock_stopped_because = " << shock_stopped_because << std::endl;
 
-//            TestTools::pause("After shock");
+            std::cout << "Speed at first shockpoint = " << shkcurve.speed[0] << std::endl;
+       
 
+            shkcurve.back_curve_index = hwc.wavecurve.size() - 1;
             hwc.wavecurve.push_back(shkcurve);
 
             if (shck_info == SHOCKCURVE_OK){
@@ -383,7 +455,7 @@ int WaveCurveFactory::Liu_half_wavecurve(const ReferencePoint &ref,
                     return WAVECURVE_OK;
                 }
                 else {
-//                    TestTools::pause("Non-classical shock. The code is not written.\nStopping.");
+               
 
                     return WAVECURVE_OK;
                 }
@@ -405,7 +477,8 @@ int WaveCurveFactory::Liu_half_wavecurve(const ReferencePoint &ref,
 //
 // TODO: Create the rarefaction, shock and composite externally, pass them here, use them as pointers in all the methods of WaveCurve.
 //
-int WaveCurveFactory::wavecurve(const RealVector &initial_point, int family, int increase, HugoniotContinuation *h, WaveCurve &hwc, int &wavecurve_stopped_because, int &edge){
+int WaveCurveFactory::wavecurve(const RealVector &initial_point, int family, int increase, HugoniotContinuation *h, WaveCurve &hwc, 
+                                int &wavecurve_stopped_because, int &edge){
 
     // Initialize.
     //
@@ -480,9 +553,7 @@ int WaveCurveFactory::wavecurve_from_inflection(const std::vector<RealVector> &i
     family_for_directional_derivative = family;
 
     RealVector closest_point;
-    cout<<"Valor de p: "<<p<<endl;
     Utilities::pick_point_from_segmented_curve(inflection_curve, p, closest_point);
-    cout<<"closest point: "<<closest_point<<endl;
 
     reference_for_directional_derivative = closest_point - p;
     normalize(reference_for_directional_derivative);
@@ -515,7 +586,7 @@ int WaveCurveFactory::wavecurve_from_inflection(const std::vector<RealVector> &i
         int start_as;
 
         std::cout << "i = " << i << ", lambda = " << lambda[family] << ", e[family].r = " << e[family].r << std::endl;
-//        TestTools::pause();
+   
 
         if (
             (lambda[family] > e[family].r && increase == SPEED_INCREASE) ||
@@ -527,6 +598,7 @@ int WaveCurveFactory::wavecurve_from_inflection(const std::vector<RealVector> &i
             start_as = SHOCK_CURVE;
         }
 
+        std::cout << "start as: " << start_as << std::endl; 
         Liu_half_wavecurve(ref, point_on_level_curve + deltaxi*direction[i], family, increase, start_as, direction[i], hwc, wavecurve_stopped_because, edge);
     }
 
@@ -541,5 +613,93 @@ double WaveCurveFactory::rarefaction_directional_derivative(void *obj, const Rea
     RealVector reference_for_directional_derivative = wavecurve->reference_for_directional_derivative;
 
     return rarefactioncurve->directional_derivative(p, family, reference_for_directional_derivative);
+}
+
+int WaveCurveFactory::intersection(const WaveCurve &c1, const WaveCurve &c2, const RealVector &pmin, const RealVector &pmax, 
+                                   RealVector &p, int &subc1, int &subc1_point, int &subc2, int &subc2_point){
+
+    // This will be removed in the near future. The wavecurves will have an accompanying hyperoctree. Thus,
+    // there will be no need to build said hyperoctree here. Alternatively, the domain will not be [0, 0]-[1, 1]
+    // and therefor the lines below will also be wrong.
+    PointND hpmin(2), hpmax(2);
+    hpmin(0) = hpmin(1) = 0.0;
+    hpmax(0) = hpmax(1) = 1.0;
+    BoxND b(hpmin, hpmax);
+
+    HyperOctree<WaveCurveSegment> h1(b), h2(b);
+
+    // Fill quadtrees
+    for (int i = 0; i < c1.wavecurve.size(); i++){
+        if (c1.wavecurve[i].curve.size() < 2) continue;
+        for (int j = 0; j < c1.wavecurve[i].curve.size() - 1; j++){
+            //std::cout << "1, (" <<  c1[i].curve[j] << ")-(" << c1[i].curve[j + 1] << ")" << std::endl;
+            WaveCurveSegment *wcs = new WaveCurveSegment(c1.wavecurve[i].curve[j], c1.wavecurve[i].curve[j + 1], i, j);
+            h1.add(wcs);
+        }
+    }
+
+    for (int i = 0; i < c2.wavecurve.size(); i++){
+        if (c2.wavecurve[i].curve.size() < 2) continue;
+        for (int j = 0; j < c2.wavecurve[i].curve.size() - 1; j++){
+            //std::cout << "2, (" <<  c2[i].curve[j] << ")-(" << c2[i].curve[j + 1] << ")" << std::endl;
+            WaveCurveSegment *wcs = new WaveCurveSegment(c2.wavecurve[i].curve[j], c2.wavecurve[i].curve[j + 1], i, j);
+            h2.add(wcs);
+        }
+    }
+
+    // Query the quadtrees to find the segments contained in the given box.
+    PointND ppmin(2), ppmax(2);            // Add lambda as the third component of each point of the composite curve
+
+    for (int i = 0; i < 2; i++){
+        ppmin(i) = pmin.component(i);
+        ppmax(i) = pmax.component(i);
+    }
+
+    BoxND box(ppmin, ppmax);
+
+    std::vector<WaveCurveSegment*> wcs1, wcs2;
+    h1.within_box(box, wcs1);
+    h2.within_box(box, wcs2);
+
+    // Find the first intersection point:
+    //
+    bool found = false;
+
+    for (int i = 0; i < wcs1.size(); i++){
+        for (int j = 0; j < wcs2.size(); j++){
+            RealVector r(2);
+
+            if (segment_intersection(wcs1[i]->rv[0].components(), wcs1[i]->rv[1].components(), 
+                                     wcs2[j]->rv[0].components(), wcs2[j]->rv[1].components(), 
+                                     r.components())
+               ) {
+                p = r;
+                subc1 = wcs1[i]->curve_position; subc1_point = wcs1[i]->segment_position;
+                subc2 = wcs2[j]->curve_position; subc2_point = wcs2[j]->segment_position;
+
+                found = true;
+                continue;
+            }
+        }
+    }
+
+    for (int i = 0; i < wcs1.size(); i++) delete wcs1[i];
+    for (int i = 0; i < wcs2.size(); i++) delete wcs2[i];
+
+    if (found) return WAVE_CURVE_INTERSECTION_FOUND;
+    else       return WAVE_CURVE_INTERSECTION_NOT_FOUND;
+}
+
+int WaveCurveFactory::wavecurve_from_wavecurve(const WaveCurve &c, const RealVector &p, HugoniotContinuation *h, WaveCurve &hwc, int &wavecurve_stopped_because, int &edge){
+
+    int curve_index, segment_index_in_curve;
+    RealVector closest_point;
+    double speed;
+
+    Utilities::pick_point_from_wavecurve(c, p, curve_index, segment_index_in_curve, closest_point, speed);
+
+    int family = (c.increase == SPEED_INCREASE) ? c.family + 1 : c.family - 1;
+
+    return wavecurve(closest_point, family, c.increase, h, hwc, wavecurve_stopped_because, edge);
 }
 

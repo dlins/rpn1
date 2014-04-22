@@ -100,6 +100,7 @@ public class ClearPhaseSpaceCommand extends javax.swing.AbstractAction {
 
         clear();
 
+
     }
 
     static public ClearPhaseSpaceCommand instance() {

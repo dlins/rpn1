@@ -113,6 +113,13 @@ int CompositeCurve::composite_field(int *two_n, double *xi, double *pointpair, d
         return FIELD_ERROR;
     }
 
+    if (composite_object->normalize_with_respect_to_whom == NORMALIZE_WITH_RESPECT_TO_COMPOSITE){
+        double inv_nrm = 1.0/norm(cf);
+
+        rm *= inv_nrm;
+        cf *= inv_nrm;
+    }
+
     // The first part of the field:
     //
     for (int i = 0; i < n; i++) field[i] = rm(i);
@@ -121,28 +128,24 @@ int CompositeCurve::composite_field(int *two_n, double *xi, double *pointpair, d
      //
     for (int i = 0; i < n; i++) field[i + n] = cf(i);
 
-    double nrm = 0.0;
-    for (int i = 0; i < n; i++) nrm += cf(i)*cf(i);
-    nrm = sqrt(nrm);
+//    // TODO: This normalization does not appear to improve the quality of the solutions.
+//    //       The curves are longer, though, which produces better-looking curves.
+//    //
+//    //for (int i = 0; i < (*two_n); i++) field[i]first_backwards_rarefaction_point /= nrm;
 
-    // TODO: This normalization does not appear to improve the quality of the solutions.
-    //       The curves are longer, though, which produces better-looking curves.
-    //
-    //for (int i = 0; i < (*two_n); i++) field[i]first_backwards_rarefaction_point /= nrm;
+//    // TODO: This normalization seems to be working ok in terms of results. Nevertheless, since
+//    //       the distance between two consecutive points in the rarefaction thus computed is smaller
+//    //       than in the original curve, we will not reach the starting point (because).
+//    //        
+//    // std::cout << "*** Composite. Field = " << RealVector(*two_n, field) << std::endl;
 
-    // TODO: This normalization seems to be working ok in terms of results. Nevertheless, since
-    //       the distance between two consecutive points in the rarefaction thus computed is smaller
-    //       than in the original curve, we will not reach the starting point (because).
-    //        
-    // std::cout << "*** Composite. Field = " << RealVector(*two_n, field) << std::endl;
+//    // TODO: The last part of the field, corresponding to the composite, MAY need to be normalized.
+//    //       In that case the first part should be renormalized.
 
-    // TODO: The last part of the field, corresponding to the composite, MAY need to be normalized.
-    //       In that case the first part should be renormalized.
-
-    // If the field vector is large, switch to the field near the double contact
-    if (nrm*composite_object->cmp_deltaxi > .005){
-        composite_object->use_field_near_double_contact = true;
-    }
+//    // If the field vector is large, switch to the field near the double contact
+//    if (nrm*composite_object->cmp_deltaxi > .005){
+//        composite_object->use_field_near_double_contact = true;
+//    }
 
     return FIELD_OK;
 }
@@ -515,16 +518,27 @@ RealVector CompositeCurve::composite_field(const RealVector &final_point_pair){
     return RealVector(n, &(field.components()[n]));
 }
 
-void CompositeCurve::add_point_to_curve(const RealVector &p, int back, Curve &curve){
+void CompositeCurve::all_eigenvalues(const RealVector &p, int family, RealVector &point_eigenvalues){
+    std::vector<double> lambda;
+    Eigen::fill_eigenvalues(flux, accum, p, lambda);
+
+    point_eigenvalues.resize(lambda.size());
+    for (int i = 0; i < lambda.size(); i++) point_eigenvalues(i) = lambda[i];
+
+    return;
+}
+
+void CompositeCurve::add_point_to_curve(const RealVector &p, int back, const Curve &rarcurve, Curve &curve){
     curve.curve.push_back(p);
     curve.back_pointer.push_back(back);
 
-//    RealVector point_eigenvalues;
-//    all_eigenvalues(p, family, point_eigenvalues);
+    RealVector point_eigenvalues;
+    all_eigenvalues(p, family, point_eigenvalues);
 
-//    curve.eigenvalues.push_back(point_eigenvalues);
+    curve.eigenvalues.push_back(point_eigenvalues);
 
 //    curve.speed.push_back(point_eigenvalues(family));
+    curve.speed.push_back(rarcurve.speed[back]);
 
     return;
 }
@@ -543,6 +557,7 @@ int CompositeCurve::curve(const AccumulationFunction *RarAccum, const FluxFuncti
                           int &reason_why,
                           int &edge){
 
+    normalize_with_respect_to_whom = NORMALIZE_WITH_RESPECT_TO_RAREFACTION;
     compute_first_determinant = true;
     cmp_deltaxi = deltaxi;
     use_field_near_double_contact = false;
@@ -571,7 +586,7 @@ int CompositeCurve::curve(const AccumulationFunction *RarAccum, const FluxFuncti
 
     // Store the first point.
     //
-    add_point_to_curve(composite_initial_point, last_point_in_rarefaction, compositecurve);
+    add_point_to_curve(composite_initial_point, last_point_in_rarefaction, rarcurve, compositecurve);
     new_rarcurve.curve.push_back(rarcurve.curve[last_point_in_rarefaction]);
 
     // Initialize the composite curve.
@@ -654,7 +669,7 @@ int CompositeCurve::curve(const AccumulationFunction *RarAccum, const FluxFuncti
                 rarcmp_point(i + n) = first_composite_point(i);
             }
 
-            add_point_to_curve(RealVector(n, n, rarcmp_point), retreat_index, compositecurve);
+            add_point_to_curve(RealVector(n, n, rarcmp_point), retreat_index, rarcurve, compositecurve);
 
             // The second point in the composite corresponds to this point in the rarefaction:
             //
@@ -755,7 +770,7 @@ int CompositeCurve::curve(const AccumulationFunction *RarAccum, const FluxFuncti
         //
         if (info_intersect == BOUNDARY_INTERSECTION_FOUND){
             compositecurve.last_point = intersection_point;
-            add_point_to_curve(intersection_point, index_of_corresponding_point_in_rarefaction, compositecurve);
+            add_point_to_curve(intersection_point, index_of_corresponding_point_in_rarefaction, rarcurve, compositecurve);
             new_rarcurve.curve.push_back(RealVector(0, n, rarcmp_point)); // TODO: WRONG!!!
 
             reason_why = COMPOSITE_REACHED_BOUNDARY;
@@ -807,7 +822,7 @@ int CompositeCurve::curve(const AccumulationFunction *RarAccum, const FluxFuncti
             // Return the last point and the final direction.
             if (info_bisection == BISECTION_FUNCTION_OK){
                 compositecurve.last_point = RealVector(n, n, p_c);
-                add_point_to_curve(compositecurve.last_point, index_of_corresponding_point_in_rarefaction, compositecurve);
+                add_point_to_curve(compositecurve.last_point, index_of_corresponding_point_in_rarefaction, rarcurve, compositecurve);
                 new_rarcurve.curve.push_back(RealVector(0, n, p_c));
 
                 compositecurve.final_direction = final_direction = RealVector(n, n, out - rarcmp_point); // composite_field(p_c);
@@ -862,7 +877,7 @@ int CompositeCurve::curve(const AccumulationFunction *RarAccum, const FluxFuncti
                 std::cout << "out = " << out << ", p_c = " << p_c << std::endl;
 
                 compositecurve.last_point = RealVector(n, n, p_c);
-                add_point_to_curve(compositecurve.last_point, index_of_corresponding_point_in_rarefaction, compositecurve);
+                add_point_to_curve(compositecurve.last_point, index_of_corresponding_point_in_rarefaction, rarcurve, compositecurve);
                 new_rarcurve.curve.push_back(RealVector(0, n, p_c));
                     
 //                compositecurve.final_direction = final_direction = composite_field(p_c);
@@ -883,6 +898,21 @@ int CompositeCurve::curve(const AccumulationFunction *RarAccum, const FluxFuncti
                 return COMPOSITE_ERROR_AT_RAREFACTION_BEGINNING;
             }
         }
+
+        // Explicit bifurcation curve intersection. TEMPORARY!
+        if (explicit_bifurcation_curve != 0){
+            normalize_with_respect_to_whom = NORMALIZE_WITH_RESPECT_TO_COMPOSITE;
+
+            int info_transition = transition_with_explicit_bifurcation(odesolver, rarcmp_point, init_time, out, final_time);
+
+            if (info_transition == SECUNDARY_BIFURCATION_DETECTED){
+                std::cout << "CompositeCurve. Transition detected @ " << out << std::endl;
+                compositecurve.explicit_bifurcation_transition_index.push_back(compositecurve.curve.size());
+            }
+
+            normalize_with_respect_to_whom = NORMALIZE_WITH_RESPECT_TO_RAREFACTION;
+        }
+        // Explicit bifurcation curve intersection. TEMPORARY!
                 
         // Update the determinant.
         //
@@ -892,7 +922,7 @@ int CompositeCurve::curve(const AccumulationFunction *RarAccum, const FluxFuncti
         //
         previous_diff_lambda_init = current_diff_lambda_init;
 
-        add_point_to_curve(point_on_composite, index_of_corresponding_point_in_rarefaction, compositecurve);
+        add_point_to_curve(point_on_composite, index_of_corresponding_point_in_rarefaction, rarcurve, compositecurve);
         new_rarcurve.curve.push_back(RealVector(0, n, rarcmp_point));
 
         // Update.
@@ -1148,12 +1178,14 @@ int CompositeCurve::correct_last_point(const ODE_Solver *odesolver, double delta
     return COMPOSITE_OK;
 }
 
-CompositeCurve::CompositeCurve(const AccumulationFunction *a, const FluxFunction *f, const Boundary *b, ShockCurve *s){
+CompositeCurve::CompositeCurve(const AccumulationFunction *a, const FluxFunction *f, const Boundary *b, ShockCurve *s, Explicit_Bifurcation_Curves *ebc){
     flux = f;
     accum = a;
     boundary = b;
     
     shock = s;
+
+    explicit_bifurcation_curve = ebc;
 
     tolerance = 1e-10; // For the determinant of the characteristic matrix, qv composite_field().
 
@@ -1400,5 +1432,103 @@ int CompositeCurve::sigma_minus_maxsigma_signal_event(const RealVector &where, d
     sigma_minus_maxsigma = sigma - composite_object->maxsigma;
 
     return BISECTION_FUNCTION_OK; 
+}
+
+int CompositeCurve::explicit_bifurcation_expression_signal_event(const RealVector &where, double &expression, int *obj, int * /*not used*/){
+    CompositeCurve *composite_object = (CompositeCurve*)obj;
+
+    int two_n = where.size();
+    int n = two_n/2;
+
+    RealVector composite_point(n, n, where);
+    RealVector f = composite_object->explicit_bifurcation_curve->expressions(composite_point);
+
+    expression = f(composite_object->index_of_explicit_bifurcation_expression);
+
+    std::cout << "where           = " << where << std::endl;
+    std::cout << "composite_point = " << composite_point << std::endl;
+    std::cout << "f               = " << f << std::endl;
+    std::cout << "index           = " << composite_object->index_of_explicit_bifurcation_expression << std::endl;
+    std::cout << "expression      = " << expression << std::endl;
+
+//    TestTools::pause();
+
+    return BISECTION_FUNCTION_OK;
+}
+
+// TODO: As soon as possible have fp come from the outside, and be replaced with fq.
+//
+int CompositeCurve::transition_with_explicit_bifurcation(const ODE_Solver *odesolver, const RealVector &rarcmp_point, double init_time, RealVector &out, double &final_time){
+//    class alpha_index {
+//        public:
+//            double alpha;
+//            int index;
+
+//            alpha_index() : alpha(0.0), index(0){}
+
+//            alpha_index(double a, int i) : alpha(a), index(i){}
+
+//            ~alpha_index(){}
+
+//            bool operator<(const alpha_index &a){
+//                return alpha < a.alpha;
+//            }
+
+//            alpha_index & operator=(const alpha_index &orig){
+//                if (&orig != this){
+//                    alpha = orig.alpha;
+//                    index = orig.index;
+//                }
+
+//                return *this;
+//            }
+//    };
+
+    int two_n = rarcmp_point.size();
+    int n = two_n/2;
+
+    RealVector fp = explicit_bifurcation_curve->expressions(RealVector(n, n, rarcmp_point));
+
+    RealVector fq = explicit_bifurcation_curve->expressions(RealVector(n, n, out));
+
+    std::vector<alpha_index> alphaindex;
+
+    for (int k = 0; k < fq.size(); k++) {
+        if (fp(k)*fq(k) < 0.0)  alphaindex.push_back(alpha_index(    -fq(k)/(fp(k) - fq(k)), k    ));
+    }
+
+    if (alphaindex.size() > 0){
+        std::sort(alphaindex.rbegin(), alphaindex.rend());
+
+//        {
+//            std::stringstream ss;
+//            for (int ii = 0; ii < alphaindex.size(); ii++) ss << "Alpha = " << alphaindex[ii].alpha << ", index = " << alphaindex[ii].index << std::endl;
+//            TestTools::pause(ss);
+//        }
+
+        double bisection_epsilon = 1e-7;
+        double c_t;
+        RealVector p_c;
+
+        index_of_explicit_bifurcation_expression = alphaindex[0].index;
+
+        int info_bisection = Bisection::bisection_method(init_time,  rarcmp_point,
+                                                         final_time, out,
+                                                         bisection_epsilon, 
+                                                         c_t, p_c,
+                                                         &composite_field, (int*)this, (double*)0,
+                                                         odesolver,
+                                                         &explicit_bifurcation_expression_signal_event, (int*)this /*int *signal_event_object*/, (int*)0 /*int *signal_event_data*/);
+
+        if (info_bisection == BISECTION_FUNCTION_OK){
+            out = p_c;
+            final_time = c_t;
+        }
+
+        return SECUNDARY_BIFURCATION_DETECTED;
+    } 
+    else {
+        return SECUNDARY_BIFURCATION_NOT_DETECTED;
+    }
 }
 

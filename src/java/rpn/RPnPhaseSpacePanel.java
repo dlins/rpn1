@@ -28,8 +28,6 @@ import java.awt.FontMetrics;
 import java.awt.Polygon;
 import javax.swing.JPanel;
 import java.awt.Shape;
-import java.awt.geom.Line2D;
-import java.awt.geom.Rectangle2D;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -37,6 +35,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JCheckBox;
 import org.apache.batik.dom.GenericDOMImplementation;
 import org.apache.batik.svggen.SVGGraphics2D;
 import org.w3c.dom.DOMImplementation;
@@ -131,7 +130,6 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
         }
         ui_.install(this);
 
-
         // calculates viewing window dimensions
         int myW = new Double(scene().getViewingTransform().viewPlane().
                 getViewport().getWidth()).intValue();
@@ -144,7 +142,10 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
         graphicsUtilList_ = new ArrayList();
         this.setName("");
 
+
     }
+
+   
 
     //
     // Accessors/Mutators
@@ -181,9 +182,7 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
 
     public void addGraphicUtil(GraphicsUtil gu) {
 
-
         graphicsUtilList_.add(gu);
-
 
     }
 
@@ -199,29 +198,11 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
         graphicsUtilList_.clear();
     }
 
-    public Polygon getPhysicalBoundaryPolygon() {
+    public final Polygon getPhysicalBoundaryPolygon() {
 
         Polygon dcView = scene_.getViewingTransform().viewPlane().getWindow().dcView(scene_.getViewingTransform());
-//            PathIterator pathIterator = dcView.getPathIterator(null);
-
-//            while (!pathIterator.isDone()) {
-//                double[] segmentArray = new double[2];
-//                int segment = pathIterator.currentSegment(segmentArray);
-//
-//                for (int i = 0; i < segmentArray.length; i++) {
-//                    double d = segmentArray[i];
-//
-//                    System.out.println(d);
-//
-//                }
-//
-//                System.out.println("-------------------------");
-//                pathIterator.next();
-//
-//            }
 
         return dcView;
-
 
     }
 
@@ -230,7 +211,6 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
 
         for (int i = 0; i < graphicsUtilList_.size(); i++) {
             GraphicsUtil graphUtil = graphicsUtilList_.get(i);
-
 
             if (graphUtil instanceof AreaSelected) {
                 toRemove.add(graphUtil);
@@ -244,7 +224,6 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
     }
 
     public void setLastGraphicsUtil(GraphicsUtil lastGraphicsUtil) {
-
 
         if (graphicsUtilList_.isEmpty()) {
             graphicsUtilList_.add(lastGraphicsUtil);
@@ -360,11 +339,9 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
         /*
          * BOUNDARY WINDOW
          */
-
         g.setColor(DEFAULT_BACKGROUND_COLOR);
         Shape s = scene_.getViewingTransform().viewPlane().getWindow().dcView(scene_.getViewingTransform());
         ((Graphics2D) g).fill(s);
-
 
         if (isPhysicalBoundarySelected()) {
             Color selectedColor = new Color(255, 0, 0, 60);
@@ -376,7 +353,6 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
         /*
          * POINT MARKS
          */
-
         g.setColor(DEFAULT_POINTMARK_COLOR);
         for (int i = 0; i < getCastedUI().pointMarkBuffer().size(); i++) {
             g.fillRect(((Point) getCastedUI().pointMarkBuffer().get(i)).x,
@@ -387,7 +363,6 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
         /*
          * SELECTED AREAS
          */
-
         int i = 0;
         for (GraphicsUtil graphicUtil : graphicsUtilList_) {
 
@@ -412,7 +387,6 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
 //
 //            }
             // ------------
-
             graphicUtil.draw((Graphics2D) g);
 
         }
@@ -427,15 +401,12 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
         }
 
         //** Leandro: início.
-
         myH_ = getHeight();
         myW_ = getWidth();
-
 
         GeometryGraph geom = new GeometryGraph();
         geom.markPoints(scene());
         geom.paintComponent(g, scene(), this);
-
 
         if (UIController.instance().getState() instanceof AREASELECTION_CONFIG) {        // acrescentei isso (Leandro)
             getCastedUI().pointMarkBuffer().clear();
@@ -481,10 +452,6 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
             ((Graphics2D) g).setStroke(stroke);
         }
 
-
-
-
-
         for (MultiGeometryImpl multiPolyLine : testeList_) {
             try {
 
@@ -500,14 +467,9 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
         /*
          * SCENE
          */
-
-
         if (scene_ != null) {
             scene_.draw((Graphics2D) g);
         }
-
-
-
 
     }
 
@@ -517,10 +479,6 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
             graphicsUtil.update(scene().getViewingTransform());
 
         }
-
-
-
-
 
     }
 
@@ -604,7 +562,6 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
             // Ask the test to render into the SVG Graphics2D implementation.
             boolean useCSS = true; // we want to use CSS style attributes
 
-
             //Draw boundary
             Shape s = scene_.getViewingTransform().viewPlane().getWindow().dcView(scene_.getViewingTransform());
             svgGenerator.fill(s);
@@ -617,7 +574,6 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
                     geometry.draw(svgGenerator);
                 }
 
-
             }
             // Finally, stream out SVG to the standard output using
             // UTF-8 encoding.
@@ -628,7 +584,6 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
 
         } catch (UnsupportedEncodingException ex) {
             ex.printStackTrace();
-
 
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -662,7 +617,6 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
 
         ArrayList<AreaSelected> intersectedAreas = new ArrayList<AreaSelected>();
 
-
         while (areaIterator.hasNext()) {
             AreaSelected area = areaIterator.next();
 
@@ -674,7 +628,6 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
 
         return intersectedAreas;
 
-
     }
 
     public void addGenericSelection(MultiGeometryImpl multiPolyLine) {
@@ -683,13 +636,9 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
 
         GenericExtensionCurveCommand.instance().logCommand(command);
 
-
         if (RPnNetworkStatus.instance().isOnline() && RPnNetworkStatus.instance().isMaster()) {
             RPnNetworkStatus.instance().sendCommand(rpn.controller.ui.UndoActionController.instance().getLastCommand().toXML());
         }
-
-
-
 
         testeList_.add(multiPolyLine);
     }

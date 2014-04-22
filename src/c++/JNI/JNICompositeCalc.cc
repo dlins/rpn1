@@ -152,7 +152,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CompositeCalc_nativeCalc(JNIEnv * env,
     HugoniotContinuation_nDnD hug(flux, accum, boundary);
     ShockCurve sc(&hug);
 
-    CompositeCurve cmp(accum, flux, boundary, &sc);
+    CompositeCurve cmp(accum, flux, boundary, &sc,0);
 
     //    LSODE lsode;
     //    //   EulerSolver eulersolver(boundary, 1);

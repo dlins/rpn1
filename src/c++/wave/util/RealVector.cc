@@ -223,7 +223,7 @@ RealVector operator+(const RealVector &x, const RealVector &y) {
 // Subtraction of two RealVectors
 
 RealVector operator-(const RealVector &x, const RealVector &y) {
-       RealVector temp(x);
+    RealVector temp(x);
     for (int i = 0; i < x.size_; i++) temp.data[i] -= y.data[i];
 
     return temp;
@@ -446,5 +446,27 @@ double distance_point_line_2D(const RealVector &q, const RealVector &p0, const R
     c = p1(0)*p0(1) - p0(0)*p1(1);
 
     return std::abs(a*q(0) + b*q(1) + c)/sqrt(a*a + b*b);
+}
+
+bool segment_segment_intersection(const RealVector &p0, const RealVector &p1, const RealVector &q0, const RealVector &q1, RealVector &r, double &alpha, double &beta){
+    DoubleMatrix A(2, 2);
+    for (int i = 0; i < 2; i++){
+        A(i, 0) = p0(i) - p1(i);
+        A(i, 1) = q1(i) - q0(i);
+    }
+
+    RealVector b = q1 - p1;
+
+    double delta = A(0, 0)*A(1, 1) - A(0, 1)*A(1, 0);
+    if (fabs(delta) < 1e-10) {
+        return false;
+    }
+
+    alpha = (b(0)*A(1, 1) - b(1)*A(0, 1))/delta;
+    beta  = (b(1)*A(0, 0) - b(0)*A(1, 0))/delta;
+
+    r = .5*(alpha*p0 + (1.0 - alpha)*p1 + beta*q0 + (1.0 - beta)*q1);
+
+    return (alpha >= 0.0 && alpha <= 1.0) && (beta >= 0.0 && beta <= 1.0);
 }
 

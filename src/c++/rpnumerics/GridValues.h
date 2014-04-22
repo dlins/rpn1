@@ -28,6 +28,12 @@ class Boundary;
 #define CELL_IS_SQUARE 2
 #endif
 
+#define UP    10
+#define LEFT  11
+#define DOWN  12
+#define RIGHT 13
+#define NONE  14
+
 class GridValues {
     private:
     protected:
@@ -64,6 +70,8 @@ class GridValues {
         Matrix<bool>                     cell_is_real;               // Is the whole cell real or complex?
         bool                             e_computed;                 // Already computed?
 
+        // TODO:
+        // Replace (or complement) the use of cell_is_real by (with) a Matrix of discriminants.
 
         RealVector grid_resolution;                                  //Number of cells
 
@@ -100,6 +108,10 @@ class GridValues {
         // Fill the directional derivatives.
         //
         void fill_dirdrv_on_grid(const FluxFunction *ff, const AccumulationFunction *aa);
+
+        bool inside(const RealVector &p);
+
+        bool cell(const RealVector &p, int &row, int &col);
 };
 
 #endif // _GRIDVALUES_

@@ -82,15 +82,6 @@ public class UI_ACTION_SELECTED implements UserInputHandler {
     public void userInputComplete(rpn.controller.ui.UIController ui,
             RealVector userInput, int curveId) {
         userInputList_.add(new RealVector(userInput));
-        System.out.println("User input list");
-        for (Object object : userInputList_) {
-            
-            
-            System.out.println((RealVector)object);
-            
-            
-        }
-        
         actionSelected_.execute(curveId);
 
 

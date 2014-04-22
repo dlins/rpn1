@@ -2,12 +2,16 @@
 #define _COMPOSITECURVE_
 
 #include <cmath> // For std::abs.
+#include <algorithm>
+
 
 #include "FluxFunction.h"
 #include "AccumulationFunction.h"
 #include "Boundary.h"
 #include "ShockCurve.h"
 #include "ReferencePoint.h"
+
+#include "Explicit_Bifurcation_Curves.h"
 
 #include "ODE_Solver.h"
 #include "Bisection.h"
@@ -72,6 +76,47 @@ class WaveCurve;
 #define COMPOSITE_COMPLETED              102
 #endif
 
+#ifndef SECUNDARY_BIFURCATION_DETECTED    
+#define SECUNDARY_BIFURCATION_DETECTED       200
+#endif
+
+#ifndef SECUNDARY_BIFURCATION_NOT_DETECTED    
+#define SECUNDARY_BIFURCATION_NOT_DETECTED   201
+#endif
+
+#ifndef NORMALIZE_WITH_RESPECT_TO_COMPOSITE
+#define NORMALIZE_WITH_RESPECT_TO_COMPOSITE 300
+#endif
+
+#ifndef NORMALIZE_WITH_RESPECT_TO_RAREFACTION
+#define NORMALIZE_WITH_RESPECT_TO_RAREFACTION 301
+#endif
+
+    class alpha_index {
+        public:
+            double alpha;
+            int index;
+
+            alpha_index() : alpha(0.0), index(0){}
+
+            alpha_index(double a, int i) : alpha(a), index(i){}
+
+            ~alpha_index(){}
+
+            friend bool operator<(const alpha_index &a, const alpha_index &b){
+                return a.alpha < b.alpha;
+            }
+
+            alpha_index & operator=(const alpha_index &orig){
+                if (&orig != this){
+                    alpha = orig.alpha;
+                    index = orig.index;
+                }
+
+                return *this;
+            }
+    };
+
 class CompositeCurve {
     private:
     protected:
@@ -98,7 +143,8 @@ class CompositeCurve {
 
         RealVector composite_field(const RealVector &final_point_pair);
 
-        void add_point_to_curve(const RealVector &p, int back, Curve &curve);
+        void all_eigenvalues(const RealVector &p, int family, RealVector &point_eigenvalues);
+        void add_point_to_curve(const RealVector &p, int back, const Curve &rarcurve, Curve &curve);
 
         // To be used by the correction of the last point.
         //                #include "Hugoniot_Curve.h"
@@ -120,8 +166,16 @@ class CompositeCurve {
         int (*field)(int *two_n, double *xi, double *pointpair, double *field, int *obj, double *data);
         double cmp_deltaxi;
         bool use_field_near_double_contact;
+
+        // Explicit bifurcation transitions.
+        //
+        Explicit_Bifurcation_Curves *explicit_bifurcation_curve;
+        int index_of_explicit_bifurcation_expression;
+//        void transition_with_explicit_bifurcation(const RealVector &rarcmp_point, double initial_time, RealVector &out, double &final_time, int &index_of_explicit_bifurcation);
+
+        int normalize_with_respect_to_whom;
     public:
-        CompositeCurve(const AccumulationFunction *a, const FluxFunction *f, const Boundary *b, ShockCurve *s);
+        CompositeCurve(const AccumulationFunction *a, const FluxFunction *f, const Boundary *b, ShockCurve *s, Explicit_Bifurcation_Curves *ebc);
         virtual ~CompositeCurve();
 
         static int composite_field(int *two_n, double *xi, double *pointpair, double *field, int *obj, double *data);
@@ -168,6 +222,9 @@ class CompositeCurve {
         // To be used only if use_maxsigma (above) is TRUE.
         //
         static int sigma_minus_maxsigma_signal_event(const RealVector &where, double &sigma_minus_maxsigma, int *obj, int * /*not used*/);
+
+        static int explicit_bifurcation_expression_signal_event(const RealVector &where, double &expression, int *obj, int * /*not used*/);
+        int transition_with_explicit_bifurcation(const ODE_Solver *odesolver, const RealVector &rarcmp_point, double init_time, RealVector &out, double &final_time);
 
 //        static int characteristic_shock_signal_event(const RealVector &where, double &diff_lambda, int *obj, int * /*not used*/);
 

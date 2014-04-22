@@ -30,6 +30,14 @@ class WaveCurve {
         //
         void insert_rarefaction_composite_pair(int composite_curve_index, int composite_insertion_point_index, const RealVector &rar_point, const RealVector &cmp_point);
         void insert_rarefaction_composite_pair(int composite_curve_index, int composite_insertion_point_index, const RealVector &rarcmp_point);
+
+        // Validate the compatibility between the wavespeeds of two states in the wavecurves.
+        //
+        void validate_compatibility(WaveCurve &other_wavecurve, int curve_index, int point_index, int direction);
+
+        // Clear a wavecurve.
+        //
+        void clear();
 };
 
 #endif // _WAVECURVE_

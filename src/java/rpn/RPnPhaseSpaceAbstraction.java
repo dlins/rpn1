@@ -158,6 +158,11 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene implements Observer 
         selectedGeometries_.remove((RpGeometry) geom);
         
         
+        
+        RPnCurve curve = (RPnCurve) ((RpGeometry) geom).geomFactory().geomSource();
+        
+        RPNUMERICS.removeCurve(curve.getId());
+        
 
         super.remove(geom);
         for (Iterator<RpGeometry> it = selectedGeometries_.iterator(); it.hasNext();) {
@@ -167,6 +172,8 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene implements Observer 
             geometry.setVisible(true);
         }
                 
+        
+
         
         
         notifyState();
@@ -310,7 +317,7 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene implements Observer 
         notifyState();
     }
 
-    // overwriting so we don't remove the last Hugoniot
+
     @Override
     public void clear() {
 
@@ -326,6 +333,8 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene implements Observer 
         for (int i = 0; i < deleteList.size(); i++) {
             delete((RpGeometry) deleteList.get(i));
         }
+        
+        RPNUMERICS.clearCurvesCache();
 
         notifyState();
 

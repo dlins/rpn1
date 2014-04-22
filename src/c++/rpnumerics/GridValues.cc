@@ -356,3 +356,29 @@ void GridValues::fill_dirdrv_on_grid(const FluxFunction *ff, const AccumulationF
     return;
 }
 
+bool GridValues::inside(const RealVector &p){
+    int maxx = grid.cols() - 1;
+    int maxy = grid.rows() - 1;
+
+    return (
+            p(0) >= grid(0, 0)(0) && p(0) <= grid(maxx, maxy)(0) &&
+            p(1) >= grid(0, 0)(1) && p(1) <= grid(maxx, maxy)(1)
+           );
+}
+
+bool GridValues::cell(const RealVector &p, int &row, int &col){
+    row = col = -1;
+
+    if (!inside(p)) return false;
+
+    RealVector dp = p - grid(0, 0);
+
+//    row = (int)floor(dp(1)/grid_resolution(1));
+//    col = (int)floor(dp(0)/grid_resolution(0));
+
+    col = (int)floor(dp(1)/grid_resolution(1));
+    row = (int)floor(dp(0)/grid_resolution(0));
+
+    return true;
+}
+

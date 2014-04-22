@@ -5,6 +5,7 @@ import rpn.component.RpCalcBasedGeomFactory;
 import rpn.component.RpGeomFactory;
 import rpn.component.RpGeometry;
 import rpn.component.WaveCurveGeomFactory;
+import rpn.configuration.CurveConfiguration;
 import rpn.controller.ui.UIController;
 import rpnumerics.InflectionCurve;
 import rpnumerics.InflectionCurveCalc;
@@ -13,7 +14,7 @@ import rpnumerics.PhysicalBoundary;
 import wave.util.RealVector;
 import rpnumerics.RPNUMERICS;
 import rpnumerics.RPnCurve;
-import rpnumerics.RpCalculation;
+import rpnumerics.WaveCurve;
 import rpnumerics.WaveCurveCalc;
 
 public class WaveCurvePlotCommand extends RpModelPlotCommand {
@@ -30,7 +31,9 @@ public class WaveCurvePlotCommand extends RpModelPlotCommand {
     public RpGeometry createRpGeometry(RealVector[] input) {
 
         OrbitPoint oPoint = new OrbitPoint(input[input.length - 1]);
-        WaveCurveGeomFactory factory ;
+        WaveCurveGeomFactory factory = null;
+
+        RPNUMERICS.setParamValue("wavecurve", "origin", String.valueOf(11));
 
         if (UIController.instance().getSelectedGeometriesList().size() == 1) {
 
@@ -41,33 +44,31 @@ public class WaveCurvePlotCommand extends RpModelPlotCommand {
                 PhysicalBoundary physicalBoundary = (PhysicalBoundary) curve;
 
                 int edge = physicalBoundary.edgeSelection(oPoint);
-                WaveCurveCalc waveCurveCalc = RPNUMERICS.createBoundaryWaveCurveCalc(oPoint,WaveCurveCalc.BOUNDARY, edge);
-                factory = new WaveCurveGeomFactory(waveCurveCalc);
+                RPNUMERICS.setParamValue("wavecurve", "origin", String.valueOf(1));
+                RPNUMERICS.setParamValue("wavecurve", "edge", String.valueOf(edge));
 
-            }
-            
-            else if (curve instanceof InflectionCurve){
-                
-                RpCalcBasedGeomFactory rpFactory = (RpCalcBasedGeomFactory)geomFactory;
+            } else if (curve instanceof InflectionCurve) {
+
+                RpCalcBasedGeomFactory rpFactory = (RpCalcBasedGeomFactory) geomFactory;
                 InflectionCurveCalc rpCalc = (InflectionCurveCalc) rpFactory.rpCalc();
-                
-                int family = rpCalc.getFamilyIndex();
-                
-                factory = new WaveCurveGeomFactory(RPNUMERICS.createInflectionWaveCurveCalc(oPoint,family));
-                
 
-            } else {
-                factory = new WaveCurveGeomFactory(RPNUMERICS.createWaveCurveCalc(oPoint));
+                int family = rpCalc.getFamilyIndex();
+
+                RPNUMERICS.setParamValue("wavecurve", "origin", String.valueOf(12));
+                RPNUMERICS.setParamValue("wavecurve", "family", String.valueOf(family));
+
+            } else if (curve instanceof WaveCurve) {
+                RPNUMERICS.setParamValue("wavecurve", "origin", String.valueOf(13));
+                RPNUMERICS.setParamValue("wavecurve", "curve", String.valueOf(curve.getId()));
+
             }
 
-
-        } else {
-            factory = new WaveCurveGeomFactory(RPNUMERICS.createWaveCurveCalc(oPoint));
         }
 
+        CurveConfiguration waveCurveConfiguration = (CurveConfiguration) RPNUMERICS.getConfiguration("wavecurve");
+        factory = new WaveCurveGeomFactory(new WaveCurveCalc(oPoint, waveCurveConfiguration));
 
         return factory.geom();
-
 
     }
 

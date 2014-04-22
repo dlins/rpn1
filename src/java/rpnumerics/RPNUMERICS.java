@@ -17,6 +17,7 @@ import java.util.Set;
 import rpn.configuration.BoundaryConfiguration;
 import rpn.configuration.RPnConfig;
 import rpn.configuration.ConfigurationProfile;
+import rpn.configuration.CurveConfiguration;
 import rpn.configuration.PhysicsConfiguration;
 import rpn.parser.RPnDataModule;
 import wave.multid.CoordsArray;
@@ -297,10 +298,7 @@ public class RPNUMERICS {
         return new WaveCurveCalc(orbitPoint, Integer.parseInt(getParamValue("fundamentalcurve", "family")), direction, WaveCurveCalc.BOUNDARY, edge);
     }
 
-    public static WaveCurveCalc createWaveCurveCalc(OrbitPoint orbitPoint) {
-        Integer direction = new Integer(getParamValue("fundamentalcurve", "direction"));
-        return new WaveCurveCalc(orbitPoint, Integer.parseInt(getParamValue("fundamentalcurve", "family")), direction, WaveCurveCalc.DOMAIN, 0);
-    }
+   
 
     public static RarefactionCurveCalc createRarefactionCalc(OrbitPoint orbitPoint) {
         Integer direction = new Integer(getParamValue("fundamentalcurve", "direction"));
@@ -353,11 +351,6 @@ public class RPNUMERICS {
 
     }
 
-//    public static WaveCurveCalc createWaveCurveCalc(OrbitPoint orbitPoint) {
-//        Integer direction = new Integer(getParamValue("fundamentalcurve", "direction"));
-//        return new WaveCurveCalc(orbitPoint, Integer.parseInt(getParamValue("fundamentalcurve", "family")), direction);
-//
-//    }
     public static CharacteristicPolynomialLevelCalc createPointLevelCurveCalc(RealVector orbitPoint) {
 
         int[] resolution = RPnDataModule.processResolution(getParamValue("hugoniotcurve", "resolution"));
@@ -424,7 +417,7 @@ public class RPNUMERICS {
         return new BoundaryExtensionCurveCalc(params, edgeResolution, family, edge, characteristic);
     }
 
-    //public ExtensionCurveCalc(ContourParams contourParams, List<RealSegment> list, int extensionFamily, int characteristicDomain, boolean singular) {
+
     public static EnvelopeCurveCalc createEnvelopeCurveCalc() {
 
         int[] resolution = RPnDataModule.processResolution(getParamValue("extensioncurve", "resolution"));
@@ -955,6 +948,10 @@ public class RPNUMERICS {
     public static native int domainDim();
 
     public static native Space domain();
+    
+    public static native void clearCurvesCache();
+    
+    public static native void removeCurve(int curveID);
 
     private static native void setFluxParams(FluxParams fluxParams);
 
