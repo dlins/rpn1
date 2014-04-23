@@ -36,9 +36,9 @@ public class Viewing2DTransform implements ViewingTransform {
 
         projection_ = projection;
         viewPlane_ = new ViewPlane(viewPlane.getViewport(),viewPlane.getWindow());
+
         makeCoordSysTransform();
         makeCompositeTransform();
-
     }
 
     //

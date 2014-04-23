@@ -150,7 +150,7 @@
             <VIEWPARAM name="axis" value="0 1"/>
             <VIEWPARAM name="vpwidth" value="450"/>
             <VIEWPARAM name="vpheight" value="450"/>
-            <VIEWPARAM name="iso2equi" value="true"/>
+            <VIEWPARAM name="iso2equi" value="false"/>
         </PROJDESC>
 
     </VIEWCONFIGURATION>
