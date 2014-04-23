@@ -98,7 +98,43 @@ public class RPnBoundarySelector extends Observable implements ActionListener, I
 
         int checkBoxIndex = verticesArray_.indexOf(e.getSource());
         JCheckBox checkBoxEvent = verticesArray_.get(checkBoxIndex);
-        System.out.println("Clicando no check: " + checkBoxEvent.getName());
+        phaseSpacePanel_.getCastedUI().pointMarkBuffer().clear();
+        
+        
+        
+        ArrayList<JCheckBox> selectedCheckBox = new ArrayList<JCheckBox>();
+        
+        for (JCheckBox jCheckBox : verticesArray_) {
+            
+            if (jCheckBox.isSelected()){
+                selectedCheckBox.add(jCheckBox);                
+            }
+
+            
+        }
+        
+        
+        for (int i = 0; i < selectedCheckBox.size(); i++) {
+            JCheckBox jCheckBox = selectedCheckBox.get(i);
+            
+            String [] pointCoords = jCheckBox.getName().split(" ");
+            
+            int xCoord = Integer.parseInt(pointCoords[0]);
+            int yCoord = Integer.parseInt(pointCoords[1]);
+            
+            
+            Point point = new Point(xCoord, yCoord);
+            
+            
+            phaseSpacePanel_.getCastedUI().pointMarkBuffer().add(point);
+            
+            
+            
+            
+            
+        }
+        
+        phaseSpacePanel_.repaint();
         
 
 
