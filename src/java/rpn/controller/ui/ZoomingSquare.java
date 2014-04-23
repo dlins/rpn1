@@ -59,30 +59,30 @@ public class ZoomingSquare extends RPn2DMouseController {
             ViewingAttr viewingAttr = new ViewingAttr(Color.red);
             GraphicsUtil graphicsUtil = new AreaSelected(wcObjList, viewingTransform_, viewingAttr);
 
-//            //----------------------------------------TESTE -----------------------------------------------------
-//            PathIterator iterator = selectionPath.getPathIterator(null);
-//            Viewing2DTransform testeTransf = new Iso2EquiTransform(viewingTransform_.projectionMap(), viewingTransform_.viewPlane());
-//
-//            while (!iterator.isDone()) {
-//
-//                double[] segmentArray = new double[RPNUMERICS.domainDim()];      // *** Estava hard
-//                int segment = iterator.currentSegment(segmentArray);
-//                if (segment != PathIterator.SEG_CLOSE) {
-//
-//                    Coords2D dcSelectionPoint = new Coords2D(0, 0);
-//                    CoordsArray wcSelectionPoint = new CoordsArray(segmentArray);
-//                    panel.scene().getViewingTransform().viewPlaneTransform(wcSelectionPoint, dcSelectionPoint);
-//                    RealVector wcCoords = new RealVector(dcSelectionPoint.getCoords());
-//                    System.out.println(wcCoords);
-//
-//                }
-//
-//                iterator.next();
-//            }
-//
-//            System.out.println("----------------------------------------------");
-//
-//            //----------------------------------------
+            //----------------------------------------TESTE -----------------------------------------------------
+            PathIterator iterator = selectionPath.getPathIterator(null);
+            Viewing2DTransform testeTransf = new Iso2EquiTransform(viewingTransform_.projectionMap(), viewingTransform_.viewPlane());
+
+            while (!iterator.isDone()) {
+
+                double[] segmentArray = new double[RPNUMERICS.domainDim()];      // *** Estava hard
+                int segment = iterator.currentSegment(segmentArray);
+                if (segment != PathIterator.SEG_CLOSE) {
+
+                    Coords2D dcSelectionPoint = new Coords2D(0, 0);
+                    CoordsArray wcSelectionPoint = new CoordsArray(segmentArray);
+                    panel.scene().getViewingTransform().viewPlaneTransform(wcSelectionPoint, dcSelectionPoint);
+                    RealVector wcCoords = new RealVector(dcSelectionPoint.getCoords());
+                    System.out.println(wcCoords);
+
+                }
+
+                iterator.next();
+            }
+
+            System.out.println("----------------------------------------------");
+
+            //----------------------------------------
             panel.setLastGraphicsUtil(graphicsUtil);
 
             panel.repaint();
