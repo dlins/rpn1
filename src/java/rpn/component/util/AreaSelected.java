@@ -162,6 +162,38 @@ public class AreaSelected extends GraphicsUtil {
         return wcList;
 
     }
+
+    public ArrayList<RealVector> getDCVertices() {
+        
+        
+         PathIterator iterator = ((Path2D.Double) getWCObject()).getPathIterator(null);
+         ArrayList<RealVector> dcCoordsArray = new ArrayList<RealVector>();
+
+        while (!iterator.isDone()) {
+
+            double[] segmentArray = new double[RPNUMERICS.domainDim()];      // *** Estava hard
+
+            int segment = iterator.currentSegment(segmentArray);
+            if (segment != PathIterator.SEG_CLOSE) {
+
+                Coords2D dcSelectionPoint = new Coords2D();//0, 0);
+                CoordsArray wcSelectionPoint = new CoordsArray(segmentArray);
+
+                getViewingTransform().dcInverseTransform(dcSelectionPoint, wcSelectionPoint);
+
+
+                RealVector dcPoint = new RealVector(dcSelectionPoint.getCoords());
+                dcCoordsArray.add(dcPoint);
+                
+                
+            }
+
+            iterator.next();
+        }
+
+        return dcCoordsArray;
+
+    }
     
     
     

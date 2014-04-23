@@ -6,9 +6,11 @@
 package rpn.command;
 
 import java.awt.Color;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -23,10 +25,16 @@ import rpn.component.util.AreaSelected;
 import rpn.component.util.Label;
 import rpn.controller.ui.UIController;
 import rpnumerics.RPNUMERICS;
+import wave.multid.Coords2D;
+import wave.multid.CoordsArray;
 import wave.multid.Space;
+import wave.multid.graphs.ViewPlane;
+import wave.multid.graphs.dcViewport;
+import wave.multid.graphs.wcWindow;
 import wave.multid.view.Scene;
 import wave.util.Boundary;
 import wave.util.RealVector;
+import wave.util.RealVector2;
 import wave.util.RectBoundary;
 
 public class ZoomPlotCommand extends RpModelPlotCommand implements RPnMenuCommand, WindowListener {
@@ -47,10 +55,126 @@ public class ZoomPlotCommand extends RpModelPlotCommand implements RPnMenuComman
     public void execute() {
 
         List<RealVector> wcVertices = selectedArea_.getWCVertices();
+        
+        
+        
 
+        for (RealVector testeCoordsL : selectedArea_.getDCVertices()) {
+            System.out.println(testeCoordsL);
+        }
+
+        CoordsArray wcCoords0 = new Coords2D();
+        CoordsArray wcCoords2 = new Coords2D();
+
+        Coords2D dcCoords0 = new Coords2D(selectedArea_.getDCVertices().get(0).toDouble());
+        Coords2D dcCoords2 = new Coords2D(selectedArea_.getDCVertices().get(2).toDouble());
+
+        originalPanel_.scene().getViewingTransform().dcInverseTransform(dcCoords0, wcCoords0);
+        originalPanel_.scene().getViewingTransform().dcInverseTransform(dcCoords2, wcCoords2);
+        
+        CoordsArray wcCoords1 = new Coords2D();
+        CoordsArray wcCoords3 = new Coords2D();
+        
+        Coords2D dcCoords1 = new Coords2D(selectedArea_.getDCVertices().get(1).toDouble());
+        Coords2D dcCoords3 = new Coords2D(selectedArea_.getDCVertices().get(3).toDouble());
+
+        originalPanel_.scene().getViewingTransform().dcInverseTransform(dcCoords1, wcCoords1);
+        originalPanel_.scene().getViewingTransform().dcInverseTransform(dcCoords3, wcCoords3);
+        
+        
+        System.out.println("Em coordenadas do mundo ");
+        
+        
+        System.out.println(wcCoords0);
+        System.out.println(wcCoords1);
+        System.out.println(wcCoords2);
+        System.out.println(wcCoords3);
+        
+        
+        
+        
+//        
+//        RealVector min = new RealVector (wcCoords0.getCoords());
+//        RealVector max = new RealVector(wcCoords2.getCoords());
+//       
+//        
+        
+        
+        
+            
+        
+//        RealVector min = new RealVector (wcVertices.get(0));
+//        RealVector max = new RealVector(wcVertices.get(2));
+        
+        
+         
         RealVector min = wcVertices.get(0);
         RealVector max = wcVertices.get(2);
+        
+        
+        
         Boundary boundary = new RectBoundary(min, max);
+
+        
+        
+//        
+//        
+//        RealVector2 realVector0 = new RealVector2 (wcCoords0.getCoords()[0],wcCoords0.getCoords()[1]);
+//        
+//        RealVector2 realVector1 = new RealVector2 (wcCoords1.getCoords()[0],wcCoords1.getCoords()[1]);
+//        
+//        RealVector2 realVector2 = new RealVector2 (wcCoords2.getCoords()[0],wcCoords2.getCoords()[1]);
+//        
+//        RealVector2 realVector3 = new RealVector2(wcCoords3.getCoords()[0],wcCoords3.getCoords()[1]);
+//
+//        RealVector2  []wcArray = new RealVector2[4];
+//        
+//        
+//        wcArray[0]=realVector0;
+//        wcArray[1]=realVector1;
+//        wcArray[2]=realVector2;
+//        wcArray[3]=realVector3;
+//        
+//        
+//        
+//        wcWindow testeWCWindow = new wcWindow(wcArray,new Point2D.Double (realVector0.getX(),realVector0.getY()));
+//        RealVector dcOrigin = selectedArea_.getDCVertices().get(0);
+//        
+//        Point dcOriginPoint = new Point((int)dcOrigin.getElement(0), (int)dcOrigin.getElement(1));
+//        
+//        dcViewport viewPort  = new dcViewport(dcOriginPoint,700,700);
+//        
+//        ViewPlane testeViewPlane = new ViewPlane(viewPort, testeWCWindow);
+//        
+//        int[] testeArrayIndex = {0, 1};
+//        
+//        Space zoomSpace = new Space("", RPNUMERICS.domainDim());
+//        
+//        RPnProjDescriptor projDescriptor = new RPnProjDescriptor(zoomSpace, "", 700, 700, testeArrayIndex, true);
+//        wave.multid.graphs.ClippedShape clipping = new wave.multid.graphs.ClippedShape(boundary);
+//        
+//        wave.multid.view.ViewingTransform viewingTransf = projDescriptor.createTransform(clipping);
+//        
+//        viewingTransf.setViewPlane(testeViewPlane);
+//        
+//        
+//        Scene scene = null;
+//         try {
+//
+//            RPnPhaseSpaceAbstraction phaseSpace = (RPnPhaseSpaceAbstraction) originalPanel_.scene().getAbstractGeom();
+//
+//             scene = phaseSpace.createScene(viewingTransf,
+//                    new wave.multid.view.ViewingAttr(Color.black));
+//
+//
+//
+//        } catch (wave.multid.DimMismatchEx dex) {
+//            dex.printStackTrace();
+//        }
+        
+        
+
+ 
 
         Scene scene = phaseSpaceFrameZoom(boundary);
 
@@ -64,13 +188,13 @@ public class ZoomPlotCommand extends RpModelPlotCommand implements RPnMenuComman
         zoomFrame.pack();
         zoomFrame.setVisible(true);
 
-        
         RealVector labelPosition = calculateLabelPosition(min, max);
         List<Object> wcObject = new ArrayList<Object>();
         wcObject.add(labelPosition);
         wcObject.add(areaID);
 
         zoomFrame.phaseSpacePanel().addGraphicUtil(new Label(wcObject, scene.getViewingTransform(), selectedArea_.getViewingAttr()));
+
 
         areaZoomFrameMap_.put(zoomFrame, selectedArea_);
 
@@ -99,7 +223,7 @@ public class ZoomPlotCommand extends RpModelPlotCommand implements RPnMenuComman
         int[] testeArrayIndex = {0, 1};
 
         // tanto faz a meu ver a proporcao em DC...
-        RPnProjDescriptor projDescriptor = new RPnProjDescriptor(zoomSpace, "", width, height, testeArrayIndex, true);
+        RPnProjDescriptor projDescriptor = new RPnProjDescriptor(zoomSpace, "", width, height, testeArrayIndex, false);
 
         wave.multid.view.ViewingTransform viewingTransf = projDescriptor.createTransform(clipping);
 
@@ -226,7 +350,7 @@ public class ZoomPlotCommand extends RpModelPlotCommand implements RPnMenuComman
 
         double x = p.getElement(0);
 
-        RealVector result = new RealVector(x+ " " + y);
+        RealVector result = new RealVector(x + " " + y);
 
         return result;
 

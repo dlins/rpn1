@@ -96,7 +96,7 @@ public class Viewing2DTransform implements ViewingTransform {
         
         
         
-        
+         YScaleFactor *= Math.sqrt(3)/2;
         
         double XTranslateFactor = -viewPlane_.getWindow().getOriginPosition().x * XScaleFactor;
         // we are working with RASTER
@@ -104,7 +104,7 @@ public class Viewing2DTransform implements ViewingTransform {
                 + viewPlane_.getViewport().getHeight();
 
 	// just in case you need it... this is the shear transform... ;)
-	double XShearFactor = 0.*XScaleFactor;
+	double XShearFactor = 0.5*XScaleFactor;
 	double YShearFactor = 0.*YScaleFactor;
  
         // the viewport translation
