@@ -42,7 +42,7 @@ public class ZoomingSquare extends RPn2DMouseController {
 
         ViewingTransform viewingTransform = scene.getViewingTransform();
 
-        viewingTransform_ = new Viewing2DTransform(viewingTransform.projectionMap(), viewingTransform.viewPlane());
+        viewingTransform_ = scene.getViewingTransform();//new Viewing2DTransform(viewingTransform.projectionMap(), viewingTransform.viewPlane());
 
     }
 
