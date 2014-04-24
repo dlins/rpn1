@@ -9,7 +9,6 @@ import java.awt.Color;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Path2D;
-import java.awt.geom.PathIterator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,12 +23,9 @@ import wave.multid.CoordsArray;
 import wave.multid.Space;
 import wave.multid.view.ViewingAttr;
 import rpnumerics.RPNUMERICS;
-import wave.multid.view.Iso2EquiTransform;
 import wave.multid.view.Scene;
 import wave.multid.view.Viewing2DTransform;
 import wave.multid.view.ViewingTransform;
-import wave.util.IsoTriang2DBoundary;
-import wave.util.RealVector;
 
 public class ZoomingSquare extends RPn2DMouseController {
 

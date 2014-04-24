@@ -6,11 +6,9 @@
 package rpn.command;
 
 import java.awt.Color;
-import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -28,13 +26,9 @@ import rpnumerics.RPNUMERICS;
 import wave.multid.Coords2D;
 import wave.multid.CoordsArray;
 import wave.multid.Space;
-import wave.multid.graphs.ViewPlane;
-import wave.multid.graphs.dcViewport;
-import wave.multid.graphs.wcWindow;
 import wave.multid.view.Scene;
 import wave.util.Boundary;
 import wave.util.RealVector;
-import wave.util.RealVector2;
 import wave.util.RectBoundary;
 
 public class ZoomPlotCommand extends RpModelPlotCommand implements RPnMenuCommand, WindowListener {
@@ -55,9 +49,6 @@ public class ZoomPlotCommand extends RpModelPlotCommand implements RPnMenuComman
     public void execute() {
 
         List<RealVector> wcVertices = selectedArea_.getWCVertices();
-        
-        
-        
 
         for (RealVector testeCoordsL : selectedArea_.getDCVertices()) {
             System.out.println(testeCoordsL);
@@ -98,9 +89,6 @@ public class ZoomPlotCommand extends RpModelPlotCommand implements RPnMenuComman
 //        RealVector max = new RealVector(wcCoords2.getCoords());
 //       
 //        
-        
-        
-        
             
         
 //        RealVector min = new RealVector (wcVertices.get(0));

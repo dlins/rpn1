@@ -169,9 +169,10 @@ public class AreaSelected extends GraphicsUtil {
          PathIterator iterator = ((Path2D.Double) getWCObject()).getPathIterator(null);
          ArrayList<RealVector> dcCoordsArray = new ArrayList<RealVector>();
 
+           double[] segmentArray = new double[RPNUMERICS.domainDim()];      // *** Estava hard
         while (!iterator.isDone()) {
 
-            double[] segmentArray = new double[RPNUMERICS.domainDim()];      // *** Estava hard
+          
 
             int segment = iterator.currentSegment(segmentArray);
             if (segment != PathIterator.SEG_CLOSE) {
