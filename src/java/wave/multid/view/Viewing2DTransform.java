@@ -33,9 +33,8 @@ public class Viewing2DTransform implements ViewingTransform {
     // Constructors
     //
     public Viewing2DTransform(ProjectionMap projection, ViewPlane viewPlane) {
-
         projection_ = projection;
-        viewPlane_ = new ViewPlane(viewPlane.getViewport(),viewPlane.getWindow());
+        viewPlane_ = viewPlane;
         makeCoordSysTransform();
         makeCompositeTransform();
 
@@ -61,16 +60,61 @@ public class Viewing2DTransform implements ViewingTransform {
     }
 
     public void setViewPlane(ViewPlane vPlane) {
-
         viewPlane_ = vPlane;
-
         makeCoordSysTransform();
         makeCompositeTransform();
+
     }
 
     //
     // Methods
     //
+
+    /*
+     * these linear transformations are post-multiplication (T=tXT)
+     */
+    public void shear(double xshear, double yshear) {
+        IdentityMap shearTransform = new IdentityMap(Multid.PLANE, Multid.PLANE);
+        shearTransform.getTransfMatrix().setElement(0, 1, yshear);
+        shearTransform.getTransfMatrix().setElement(1, 0, xshear);
+        coordSysTransform().getTransfMatrix().mul(shearTransform.getTransfMatrix(), coordSysTransform().getTransfMatrix());
+        // updates the composite transformation
+        makeCompositeTransform();
+    }
+
+    public void rotate(double radians) {
+        double sin = Math.sin(radians);
+        double cos = Math.cos(radians);
+        IdentityMap rotateTransform = new IdentityMap(Multid.PLANE, Multid.PLANE);
+        rotateTransform.getTransfMatrix().setElement(0, 0, cos);
+        rotateTransform.getTransfMatrix().setElement(0, 1, sin);
+        rotateTransform.getTransfMatrix().setElement(1, 0, -sin);
+        rotateTransform.getTransfMatrix().setElement(1, 1, cos);
+        coordSysTransform().getTransfMatrix().mul(rotateTransform.getTransfMatrix(), coordSysTransform().getTransfMatrix());
+        // updates the composite transformation
+        makeCompositeTransform();
+    }
+
+    public void translate(double tX, double tY) {
+        IdentityMap translateTransform = new IdentityMap(Multid.PLANE, Multid.PLANE);
+        translateTransform.getTransfMatrix().setElement(2, 0, tX);
+        translateTransform.getTransfMatrix().setElement(2, 1, tY);
+        coordSysTransform().getTransfMatrix().mul(translateTransform.getTransfMatrix(), coordSysTransform().getTransfMatrix());
+        // updates the composite transformation
+        makeCompositeTransform();
+    }
+
+    public void scale(double sX, double sY) {
+        IdentityMap scaleTransform = new IdentityMap(Multid.PLANE, Multid.PLANE);
+        scaleTransform.getTransfMatrix().setElement(0, 0, sX);
+        scaleTransform.getTransfMatrix().setElement(1, 1, sY);
+        coordSysTransform().getTransfMatrix().mul(scaleTransform.getTransfMatrix(), coordSysTransform().getTransfMatrix());
+        // updates the composite transformation
+        makeCompositeTransform();
+        
+
+        
+    }
 
     public void makeCoordSysTransform() {
         /*
@@ -96,29 +140,21 @@ public class Viewing2DTransform implements ViewingTransform {
         
         
         
-         YScaleFactor *= Math.sqrt(3)/2;
+        
         
         double XTranslateFactor = -viewPlane_.getWindow().getOriginPosition().x * XScaleFactor;
         // we are working with RASTER
         double YTranslateFactor = -viewPlane_.getWindow().getOriginPosition().y * YScaleFactor
                 + viewPlane_.getViewport().getHeight();
-
-	// just in case you need it... this is the shear transform... ;)
-	double XShearFactor = 0.5*XScaleFactor;
-	double YShearFactor = 0.*YScaleFactor;
- 
         // the viewport translation
         XTranslateFactor += viewPlane_.getViewport().getOriginPosition().x;
         YTranslateFactor += viewPlane_.getViewport().getOriginPosition().y;
         coordSysTransform_.getTransfMatrix().setElement(0, 0, XScaleFactor);
-        coordSysTransform_.getTransfMatrix().setElement(1, 0, XShearFactor);
         coordSysTransform_.getTransfMatrix().setElement(1, 1, YScaleFactor);
-        coordSysTransform_.getTransfMatrix().setElement(0, 1, YShearFactor);
         coordSysTransform_.getTransfMatrix().setElement(2, 0, XTranslateFactor);
-
-        coordSysTransform_.getTransfMatrix().setElement(2, 1, YTranslateFactor);
-        //coordSysTransform_.setInversible(true);
-
+        coordSysTransform_.getTransfMatrix().setElement(2, 1, YTranslateFactor);              
+        
+        coordSysTransform_.setInversible(true);
     }
 
     public void makeCompositeTransform() {

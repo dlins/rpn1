@@ -73,13 +73,21 @@ public class ZoomPlotCommand extends RpModelPlotCommand implements RPnMenuComman
         originalPanel_.scene().getViewingTransform().dcInverseTransform(dcCoords3, wcCoords3);
         
         
-        System.out.println("Em coordenadas do mundo ");
+        System.out.println("Em coordenadas do dispositivo ");
+        
+//        
+//        System.out.println(wcCoords0);
+//        System.out.println(wcCoords1);
+//        System.out.println(wcCoords2);
+//        System.out.println(wcCoords3);
         
         
-        System.out.println(wcCoords0);
-        System.out.println(wcCoords1);
-        System.out.println(wcCoords2);
-        System.out.println(wcCoords3);
+        
+          
+        System.out.println(selectedArea_.getDCVertices().get(0));
+        System.out.println(selectedArea_.getDCVertices().get(1));
+        System.out.println(selectedArea_.getDCVertices().get(2));
+        System.out.println(selectedArea_.getDCVertices().get(3));
         
         
         
@@ -93,13 +101,9 @@ public class ZoomPlotCommand extends RpModelPlotCommand implements RPnMenuComman
         
 //        RealVector min = new RealVector (wcVertices.get(0));
 //        RealVector max = new RealVector(wcVertices.get(2));
-        
-        
          
         RealVector min = wcVertices.get(0);
         RealVector max = wcVertices.get(2);
-        
-        
         
         Boundary boundary = new RectBoundary(min, max);
 

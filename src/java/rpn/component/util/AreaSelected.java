@@ -55,9 +55,7 @@ public class AreaSelected extends GraphicsUtil {
 
                 Coords2D dcSelectionPoint = new Coords2D(0, 0);
                 CoordsArray wcSelectionPoint = new CoordsArray(segmentArray);
-
                 getViewingTransform().viewPlaneTransform(wcSelectionPoint, dcSelectionPoint);
-
                 selectedPolygon.addPoint((int) dcSelectionPoint.getX(), (int) dcSelectionPoint.getY());   // --- original
             }
 
@@ -166,27 +164,21 @@ public class AreaSelected extends GraphicsUtil {
     public ArrayList<RealVector> getDCVertices() {
         
         
-         PathIterator iterator = ((Path2D.Double) getWCObject()).getPathIterator(null);
+         PathIterator iterator = ((Path2D.Double) wcObjects_.get(0)).getPathIterator(null);
          ArrayList<RealVector> dcCoordsArray = new ArrayList<RealVector>();
 
-           double[] segmentArray = new double[RPNUMERICS.domainDim()];      // *** Estava hard
+           double[] segmentArray = new double[RPNUMERICS.domainDim()];   
         while (!iterator.isDone()) {
-
-          
 
             int segment = iterator.currentSegment(segmentArray);
             if (segment != PathIterator.SEG_CLOSE) {
 
-                Coords2D dcSelectionPoint = new Coords2D();//0, 0);
+                Coords2D dcSelectionPoint = new Coords2D();
                 CoordsArray wcSelectionPoint = new CoordsArray(segmentArray);
-
-                getViewingTransform().dcInverseTransform(dcSelectionPoint, wcSelectionPoint);
-
-
+                getViewingTransform().viewPlaneTransform(wcSelectionPoint, dcSelectionPoint);
                 RealVector dcPoint = new RealVector(dcSelectionPoint.getCoords());
                 dcCoordsArray.add(dcPoint);
-                
-                
+                                
             }
 
             iterator.next();

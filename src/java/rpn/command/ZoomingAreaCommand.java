@@ -43,18 +43,6 @@ public class ZoomingAreaCommand extends RpModelPlotCommand implements Observer {
             panel.addMouseMotionListener(boxPlotter);
         }
 
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-       
     }
 
     public static ZoomingAreaCommand instance() {
