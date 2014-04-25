@@ -101,6 +101,7 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
 //    private JPEGImageEncoder encoder_;
     private boolean printFlag_ = false;
     private PhaseSpacePanelController ui_;
+    private static boolean showLastCursorPos_;
     private static boolean showCursorLine_;
     private static boolean cursorLine_;
     private boolean physicalBoundarySelected_;
@@ -479,10 +480,6 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
             g.setColor(prev);
             ((Graphics2D) g).setStroke(stroke);
         }
-
-
-
-
 
         for (MultiGeometryImpl multiPolyLine : testeList_) {
             try {
