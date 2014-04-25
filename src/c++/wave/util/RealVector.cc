@@ -470,3 +470,11 @@ bool segment_segment_intersection(const RealVector &p0, const RealVector &p1, co
     return (alpha >= 0.0 && alpha <= 1.0) && (beta >= 0.0 && beta <= 1.0);
 }
 
+double sum(const RealVector &v){
+    double s = 0.0;
+
+    for (int i = 0; i < v.size(); i++) s += v(i);
+
+    return s;
+}
+

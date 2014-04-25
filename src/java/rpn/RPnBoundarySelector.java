@@ -6,6 +6,7 @@
  */
 package rpn;
 
+import java.awt.Color;
 import java.awt.Point;
 import java.awt.Polygon;
 import java.awt.event.ActionEvent;
@@ -22,9 +23,16 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JToolBar;
 import javax.swing.table.DefaultTableModel;
+import rpn.component.PhysicalBoundaryFactory;
+import rpn.component.PhysicalBoundaryGeom;
 import rpn.component.RpGeometry;
-import rpn.parser.RPnDataModule;
-import wave.multid.view.PointMark;
+import rpn.component.util.LinePlotted;
+import rpnumerics.PhysicalBoundaryCalc;
+import wave.multid.Coords2D;
+import wave.multid.CoordsArray;
+import wave.multid.Space;
+import wave.multid.view.ViewingAttr;
+import wave.util.RealVector;
 
 public class RPnBoundarySelector extends Observable implements ActionListener, ItemListener {
 
@@ -100,7 +108,7 @@ public class RPnBoundarySelector extends Observable implements ActionListener, I
         JCheckBox checkBoxEvent = verticesArray_.get(checkBoxIndex);
         phaseSpacePanel_.getCastedUI().pointMarkBuffer().clear();
         
-        
+
         
         ArrayList<JCheckBox> selectedCheckBox = new ArrayList<JCheckBox>();
         
@@ -112,29 +120,31 @@ public class RPnBoundarySelector extends Observable implements ActionListener, I
 
             
         }
+
         
+        createEdgeSelection(selectedCheckBox);
         
-        for (int i = 0; i < selectedCheckBox.size(); i++) {
-            JCheckBox jCheckBox = selectedCheckBox.get(i);
-            
-            String [] pointCoords = jCheckBox.getName().split(" ");
-            
-            int xCoord = Integer.parseInt(pointCoords[0]);
-            int yCoord = Integer.parseInt(pointCoords[1]);
-            
-            
-            Point point = new Point(xCoord, yCoord);
-            
-            
-            phaseSpacePanel_.getCastedUI().pointMarkBuffer().add(point);
-            
-            
-            
-            
-            
-        }
-        
-        phaseSpacePanel_.repaint();
+//        for (int i = 0; i < selectedCheckBox.size(); i++) {
+//            JCheckBox jCheckBox = selectedCheckBox.get(i);
+//            
+//            String [] pointCoords = jCheckBox.getName().split(" ");
+//            
+//            int xCoord = Integer.parseInt(pointCoords[0]);
+//            int yCoord = Integer.parseInt(pointCoords[1]);
+//            
+//            
+//            Point point = new Point(xCoord, yCoord);
+//            
+//            
+//            phaseSpacePanel_.getCastedUI().pointMarkBuffer().add(point);
+//            
+//            
+//            
+//            
+//            
+//        }
+//        
+//        phaseSpacePanel_.repaint();
         
 
 
@@ -142,7 +152,65 @@ public class RPnBoundarySelector extends Observable implements ActionListener, I
 
     
     
-    
+    private void createEdgeSelection(List<JCheckBox> selectedVertices){
+        
+        if (selectedVertices.size()==1){
+            JCheckBox jCheckBox = selectedVertices.get(0);
+            String [] pointCoords = jCheckBox.getName().split(" ");
+            
+            int xCoord = Integer.parseInt(pointCoords[0]);
+            int yCoord = Integer.parseInt(pointCoords[1]);
+            
+            Point point = new Point(xCoord, yCoord);
+
+            phaseSpacePanel_.getCastedUI().pointMarkBuffer().add(point);
+            
+        }
+        
+        if (selectedVertices.size()==2){
+            
+            List<Object> lineEdges = new ArrayList<Object>();
+
+            for (int i = 0; i < selectedVertices.size(); i++) {
+            JCheckBox jCheckBox = selectedVertices.get(i);
+            
+            String [] pointCoords = jCheckBox.getName().split(" ");
+            
+            int xCoord = Integer.parseInt(pointCoords[0]);
+            int yCoord = Integer.parseInt(pointCoords[1]);
+            
+                        
+            
+            Coords2D dcSelectionPoint = new Coords2D(xCoord, yCoord);
+            CoordsArray wcSelectionPoint = new CoordsArray(new Space("", 2));
+            
+            phaseSpacePanel_.scene().getViewingTransform().dcInverseTransform(dcSelectionPoint, wcSelectionPoint);
+
+            lineEdges.add(wcSelectionPoint);
+            
+            
+        }
+            
+            PhysicalBoundaryGeom  boundaryGeom =null;
+            
+            PhysicalBoundaryFactory factory  = new PhysicalBoundaryFactory(new PhysicalBoundaryCalc());
+            
+            boundaryGeom= (PhysicalBoundaryGeom) factory.geom();
+            
+
+            boundaryGeom.edgeSelection((CoordsArray)lineEdges.get(0), (CoordsArray)lineEdges.get(1));
+            
+//            lineEdges.add("");
+//            
+//            LinePlotted edge = new LinePlotted(lineEdges, phaseSpacePanel_.scene().getViewingTransform(), new ViewingAttr(Color.yellow));            
+//            
+//            phaseSpacePanel_.addGraphicUtil(edge);
+//            phaseSpacePanel_.repaint();
+            
+        }
+        
+        
+    }
     
 
     

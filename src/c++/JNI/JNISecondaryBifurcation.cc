@@ -138,9 +138,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_SecondaryBifurcationCurveCalc_nativeCa
 
         int numberOfSteps = 128;
 
-        Stone_Explicit_Bifurcation_Curves sebc((StoneFluxFunction*) leftFlux);
-
-        sebc.sec_bif_correspondence(edge, numberOfSteps, left_vrs, right_vrs);
+//        Stone_Explicit_Bifurcation_Curves sebc((StoneFluxFunction*) leftFlux);
+//
+//        sebc.sec_bif_correspondence(edge, numberOfSteps, left_vrs, right_vrs);
 
 
 

@@ -12,12 +12,17 @@ public class PhysicalBoundary extends SegmentedCurve {
 
         super(hSegments);
         System.out.println("Tamanho da lista de segmentos : " + hSegments.size());
+        for (RealSegment realSegment : hSegments) {
+
+            System.out.println(realSegment);
+        }
+
 
 
 
     }
 
-    public int edgeSelection(RealVector point) {
+    public int getEdge(RealVector point) {
 
         // THREE_PHASE_BOUNDARY_SW_ZERO 0
        // THREE_PHASE_BOUNDARY_SO_ZERO 1

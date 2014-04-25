@@ -43,7 +43,7 @@ public class WaveCurvePlotCommand extends RpModelPlotCommand {
 
                 PhysicalBoundary physicalBoundary = (PhysicalBoundary) curve;
 
-                int edge = physicalBoundary.edgeSelection(oPoint);
+                int edge = physicalBoundary.getEdge(oPoint);
                 RPNUMERICS.setParamValue("wavecurve", "origin", String.valueOf(1));
                 RPNUMERICS.setParamValue("wavecurve", "edge", String.valueOf(edge));
 

@@ -194,6 +194,10 @@ public:
     // r = alpha*p0 + (1.0 - alpha)*p1 = beta*q0 + (1.0 - beta)*q1.
     //
     friend bool segment_segment_intersection(const RealVector &p0, const RealVector &p1, const RealVector &q0, const RealVector &q1, RealVector &r, double &alpha, double &beta);
+
+    // Sum of all the elements of a vector.
+    //
+    friend double sum(const RealVector &v);
 };
 
 // Extract rows and columns of a DoubleMatrix and return them as RealVectors.
