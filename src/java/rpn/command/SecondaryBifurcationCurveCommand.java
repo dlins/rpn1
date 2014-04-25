@@ -57,37 +57,7 @@ public class SecondaryBifurcationCurveCommand extends RpModelPlotCommand {
 
         SecondaryBifurcationGeomFactory factory = new SecondaryBifurcationGeomFactory(RPNUMERICS.createSecondaryBifurcationCurveCalc());
 
-
-        RPnPhaseSpaceAbstraction leftPhaseSpace = RPnDataModule.LEFTPHASESPACE;
-
-        RPnPhaseSpaceAbstraction rightPhaseSpace = RPnDataModule.RIGHTPHASESPACE;
-
-        RpGeometry leftGeometry = factory.leftGeom();
-        RpGeometry rightGeometry = factory.rightGeom();
-
-        leftPhaseSpace.join(leftGeometry);
-        rightPhaseSpace.join(rightGeometry);
-
-
-        Iterator oldValue = RPnDataModule.PHASESPACE.getGeomObjIterator();
-        PropertyChangeEvent event = new PropertyChangeEvent(this, UIController.instance().getActivePhaseSpace().getName(), oldValue, factory.geom());
-
-
-
-        ArrayList<RealVector> emptyInput = new ArrayList<RealVector>();
-        logCommand(new RpCommand(event, emptyInput));
-
-
-
-
-        RPnDataModule.PHASESPACE.join(factory.geom());
-
-
-
-
-
-
-
+        execute(factory);
 
     }
 

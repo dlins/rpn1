@@ -68,7 +68,7 @@ public class RPnCursorMonitor extends JLabel {
         }
         transf.dcInverseTransform(dcMousePos, wcMousePos);
         // we are working with PLANE
-        setText(createCoordsString(wcMousePos, transf.projectionMap()));
+        setText(pos.getX()+" "+pos.getY()+"/" +createCoordsString(wcMousePos, transf.projectionMap()));
     }
 
     protected String createCoordsString(CoordsArray wcCoords, ProjectionMap projMap) {

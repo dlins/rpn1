@@ -62,4 +62,6 @@ public class CharacteristicsCurve extends RPnCurve {
         return segments_;
 
     }
+
+   
 }

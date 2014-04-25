@@ -17,9 +17,15 @@ public class RPnCurvesTableModel extends DefaultTableModel {
 
         columnIdentifiers.add("Curve");
         columnIdentifiers.add("User Input");
+        columnIdentifiers.add("Visible");
+        columnIdentifiers.add("Selected");
+        columnIdentifiers.add("Correspondence");
 
 
     }
+    
+    
+    
 
     @Override
     public Class getColumnClass(int c) {
@@ -28,16 +34,20 @@ public class RPnCurvesTableModel extends DefaultTableModel {
 
     @Override
     public int getColumnCount() {
-        return 2;
+        return 5;
     }
 
     @Override
     public boolean isCellEditable(int row, int col) {
-        if (col == 0) {
+        if ((col==2) || (col==3) || (col==4)) {
             return true;
+            
         }
+       
         return false;
     }
+
+    
 
    
 }

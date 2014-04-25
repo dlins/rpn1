@@ -7,7 +7,9 @@
 
 package wave.multid.graphs;
 
+
 import wave.multid.map.Map;
+
 
 public class ViewPlane {
     private dcViewport viewport_;
@@ -30,6 +32,7 @@ public class ViewPlane {
     // Methods
     //
     public void update(Map map) {
+
 
 	getWindow().update(map);
 

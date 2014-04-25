@@ -33,7 +33,12 @@ import rpn.message.*;
 import rpn.parser.RPnDataModule;
 import rpnumerics.RPnCurve;
 
-/** This class implements a general controller to the application. With the UIController class, the state of the application is changed, the controllers of each panel are installed or removed and the user inputs are stored in a global table. */
+/**
+ * This class implements a general controller to the application. With the
+ * UIController class, the state of the application is changed, the controllers
+ * of each panel are installed or removed and the user inputs are stored in a
+ * global table.
+ */
 public class UIController extends ComponentUI {
     //
     // Constants
@@ -50,13 +55,14 @@ public class UIController extends ComponentUI {
     private MouseController mouseController_;
     private MouseMotionController mouseMotionController_;
     private rpn.controller.ui.UserInputTable globalInputTable_;
-    private static UIController instance_ = null;    
+    private static UIController instance_ = null;
     private String clientID_;
     private RPnPhaseSpacePanel focusPanel_;
     private StateInputController stateController_;
     private boolean auxPanelsEnabled_;
     private RPnPhaseSpaceAbstraction activePhaseSpace_;
     private boolean drag_ = false;
+    private List<RpGeometry> selectedGeometryList_;
 
     //
     // Constructors
@@ -71,12 +77,12 @@ public class UIController extends ComponentUI {
         globalInputTable_ = new UserInputTable(rpnumerics.RPNUMERICS.domainDim());
 
 
-        handler_ = new RAREFACTION_CONFIG();
+        handler_ = new CurvesConfig();
         auxPanelsEnabled_ = true;
 
         activePhaseSpace_ = RPnDataModule.PHASESPACE;       //***
+        selectedGeometryList_ = new ArrayList<RpGeometry>();
 
-        
     }
 
     private void toggleCursorLines() {
@@ -138,6 +144,10 @@ public class UIController extends ComponentUI {
 
         }
 
+    }
+
+    public List<RpGeometry> getSelectedGeometriesList() {
+        return selectedGeometryList_;
     }
 
     //
@@ -245,8 +255,6 @@ public class UIController extends ComponentUI {
 
                 if (RPnNetworkStatus.instance().isMaster() || !(RPnNetworkStatus.instance().isOnline())) {
 
-
-
                     int sceneDim = panel.scene().getViewingTransform().projectionMap().getDomain().getDim();
                     if (sceneDim == globalInputTable_.flags().length) {
 
@@ -265,6 +273,9 @@ public class UIController extends ComponentUI {
                 }
             }
 
+        }
+
+        public void mouseMoved(MouseEvent me) {
         }
 
         @Override
@@ -293,18 +304,24 @@ public class UIController extends ComponentUI {
     //
     // Accessors/Mutators
     //
-    /** Returns the values entered by the user for a specific action. */
+    /**
+     * Returns the values entered by the user for a specific action.
+     */
     public RealVector[] userInputList() {
         return handler_.userInputList(this);
     }
 
-    /** Returns a table with all the points entered by the user. 
-     * The application holds a table with all points entered by the user.
-     * This points are taked by mouse clicks in all panels .*/
+    /**
+     * Returns a table with all the points entered by the user. The application
+     * holds a table with all points entered by the user. This points are taked
+     * by mouse clicks in all panels .
+     */
     public rpn.controller.ui.UserInputTable globalInputTable() {
 
-        if (activePhaseSpace_ == null) return RPnDataModule.PHASESPACE.getUserInputTable();
-        
+        if (activePhaseSpace_ == null) {
+            return RPnDataModule.PHASESPACE.getUserInputTable();
+        }
+
         return activePhaseSpace_.getUserInputTable();
 
     }
@@ -312,7 +329,9 @@ public class UIController extends ComponentUI {
     //
     // Methods
     //
-    /** This method installs a listener into a panel of application.*/
+    /**
+     * This method installs a listener into a panel of application.
+     */
     public void install(RPnPhaseSpacePanel panel) {
         installedPanels_.add(panel);
         panel.addMouseListener(mouseController_);
@@ -320,7 +339,9 @@ public class UIController extends ComponentUI {
 
     }
 
-    /** This method removes  a listener of a  panel.*/
+    /**
+     * This method removes a listener of a panel.
+     */
     public void uninstall(RPnPhaseSpacePanel panel) {
         installedPanels_.remove(panel);
         panel.removeMouseListener(mouseController_);
@@ -328,7 +349,9 @@ public class UIController extends ComponentUI {
 
     }
 
-    /** This method removes all listeners .*/
+    /**
+     * This method removes all listeners .
+     */
     public void uninstallPanels() {
         for (int i = 0; i < installedPanels_.size(); i++) {
             RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) installedPanels_.get(i);
@@ -347,7 +370,13 @@ public class UIController extends ComponentUI {
 
     }
 
-    /** Takes the coordinates of a clicked point in a panel and adds this coordinates in a buffer . Each panel has a buffer to store points entered by the user , this method add points in this buffer. The variables absComplete_ and ordComplete_ controls if the pair X/Y are taked correctely.*/
+    /**
+     * Takes the coordinates of a clicked point in a panel and adds this
+     * coordinates in a buffer . Each panel has a buffer to store points entered
+     * by the user , this method add points in this buffer. The variables
+     * absComplete_ and ordComplete_ controls if the pair X/Y are taked
+     * correctely.
+     */
     protected void evaluatePanelsCursorCoords(RPnPhaseSpacePanel clickedPanel, Point point) {
         for (int i = 0; i < installedPanels_.size(); i++) {
             RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) installedPanels_.get(i);
@@ -355,7 +384,9 @@ public class UIController extends ComponentUI {
         }
     }
 
-    /** Sets the wait cursor to all panels .*/
+    /**
+     * Sets the wait cursor to all panels .
+     */
     public void setWaitCursor() {
         for (int i = 0; i < installedPanels_.size(); i++) {
             RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) installedPanels_.get(i);
@@ -364,7 +395,9 @@ public class UIController extends ComponentUI {
         }
     }
 
-    /** Sets de default cursor to all panels. */
+    /**
+     * Sets de default cursor to all panels.
+     */
     public void resetCursor() {
         for (int i = 0; i < installedPanels_.size(); i++) {
             RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) installedPanels_.get(i);
@@ -372,16 +405,23 @@ public class UIController extends ComponentUI {
         }
     }
 
-    /** Updates the panels. This method is invoked when any atualization in the visuals objects shown by a panel is necessary. */
+    /**
+     * Updates the panels. This method is invoked when any atualization in the
+     * visuals objects shown by a panel is necessary.
+     */
     public void panelsUpdate() {
         for (int i = 0; i < installedPanels_.size(); i++) {
             RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) installedPanels_.get(i);
             panel.invalidate();
             panel.repaint();
+
         }
     }
 
-    /** This method sets the absComplete_ and  ordComplete_ variables to false. This forces a new data input. */
+    /**
+     * This method sets the absComplete_ and ordComplete_ variables to false.
+     * This forces a new data input.
+     */
     protected void resetPanelsCursorCoords() {
         for (int i = 0; i < installedPanels_.size(); i++) {
             RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) installedPanels_.get(i);
@@ -389,7 +429,10 @@ public class UIController extends ComponentUI {
         }
     }
 
-    /** Clear the list that holds the points entered by the user with mouse clicks .*/
+    /**
+     * Clear the list that holds the points entered by the user with mouse
+     * clicks .
+     */
     public void panelsBufferClear() {
         for (int i = 0; i < installedPanels_.size(); i++) {
             RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) installedPanels_.get(i);
@@ -399,20 +442,25 @@ public class UIController extends ComponentUI {
         }
     }
 
-    /** Do a specific action when all user inputs has been made. */
+    /**
+     * Do a specific action when all user inputs has been made.
+     */
     public void userInputComplete(RealVector userInput) {
 
         // state dependent
         handler_.userInputComplete(this, userInput);
-        
+
 
     }
 
-    /** Sets the state of the application. The application works as a state machine and this method changes the actual state.*/
+    /**
+     * Sets the state of the application. The application works as a state
+     * machine and this method changes the actual state.
+     */
     public void setState(rpn.controller.ui.UserInputHandler newAction) {
 
 
-        stateController_.propertyChange(new PropertyChangeEvent(this, "aplication state", handler_, newAction));       
+        stateController_.propertyChange(new PropertyChangeEvent(this, "aplication state", handler_, newAction));
 
         if (handler_ instanceof UI_ACTION_SELECTED) {
 
@@ -450,7 +498,11 @@ public class UIController extends ComponentUI {
 
     }
 
-    /** Sets the state of the application when a input file is read. The application works as a state machine and this method changes the actual state.*/
+    /**
+     * Sets the state of the application when a input file is read. The
+     * application works as a state machine and this method changes the actual
+     * state.
+     */
     public void setStateFromFile(rpn.controller.ui.UserInputHandler newAction) {
         stateController_.propertyChange(new PropertyChangeEvent(this, "aplication state", handler_, newAction));
 
@@ -486,7 +538,10 @@ public class UIController extends ComponentUI {
 
     }
 
-    /** Updates the user input table. If the user input table is not completed yet this method adds a point to this table . */
+    /**
+     * Updates the user input table. If the user input table is not completed
+     * yet this method adds a point to this table .
+     */
     public void updateUserInputTable(RPnPhaseSpacePanel clickedPanel, Point point) {
         Coords2D dcPoint = new Coords2D(point.getX(), point.getY());
         CoordsArray wcProjectedPoint = rpn.component.MultidAdapter.createCoords();
@@ -509,7 +564,9 @@ public class UIController extends ComponentUI {
         }
     }
 
-    /** This method converts all user inputs to a RealVector array. */
+    /**
+     * This method converts all user inputs to a RealVector array.
+     */
     static public RealVector[] inputConvertion(List userInputList) {
         // coords type convertion
         RealVector[] coords = new RealVector[userInputList.size()];
@@ -522,9 +579,16 @@ public class UIController extends ComponentUI {
     public UserInputHandler getState() {
         return handler_;
     }
-    
+
     public RPnPhaseSpaceAbstraction getActivePhaseSpace() {
         return activePhaseSpace_;
+    }
+
+    public void setSelectedGeometry(List<RpGeometry> geometry) {
+        selectedGeometryList_ = geometry;
+        if (geometry.isEmpty()) {
+            globalInputTable().reset();
+        }
     }
 
     /**

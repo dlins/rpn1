@@ -5,11 +5,12 @@ import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.geom.GeneralPath;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import rpn.component.util.GraphicsUtil;
 import rpnumerics.OrbitPoint;
-import rpnumerics.WaveCurveCalc;
 import rpnumerics.WaveCurveOrbitCalc;
 import wave.multid.CoordsArray;
 import wave.multid.model.MultiGeometryImpl;
@@ -22,13 +23,11 @@ import wave.multid.view.ViewingAttr;
 
 public class WaveCurveView extends WaveCurveOrbitGeomView {
 
-    
     public WaveCurveView(MultiGeometryImpl geom, ViewingTransform transf,
             ViewingAttr attr) throws DimMismatchEx {
         super(geom, transf, attr);
-        
-    }
 
+    }
 
     @Override
     public Shape createShape() {
@@ -41,7 +40,7 @@ public class WaveCurveView extends WaveCurveOrbitGeomView {
 
         for (WaveCurveBranchGeom branchGeom : branchGeomList) {
             try {
-                OrbitGeom orbitGeom = (OrbitGeom)branchGeom;
+                OrbitGeom orbitGeom = (OrbitGeom) branchGeom;
                 WaveCurveOrbitGeomView orbitView = (WaveCurveOrbitGeomView) orbitGeom.createView(getViewingTransform());
                 gPath.append(orbitView.createShape(), false);
 
@@ -50,18 +49,14 @@ public class WaveCurveView extends WaveCurveOrbitGeomView {
             }
         }
 
-
         return gPath;
 
     }
-    
-
 
     @Override
     public void draw(Graphics2D g) {
 
         //List<WaveCurveOrbitGeom> orbitGeomList = ((WaveCurveGeom) getAbstractGeom()).getOrbitsGeomList();
-
         WaveCurveGeom waveCurveGeom = ((WaveCurveGeom) getAbstractGeom());
 
         RpCalcBasedGeomFactory wCurveFactory = (WaveCurveGeomFactory) waveCurveGeom.geomFactory();
@@ -73,7 +68,6 @@ public class WaveCurveView extends WaveCurveOrbitGeomView {
         CoordsArray coordsArray = new CoordsArray(initialPoint);
 
         ViewingAttr viewAtt = new ViewingAttr(Color.yellow);
-
 
         MultiPoint mPoint = new MultiPoint(coordsArray, viewAtt);
 
@@ -88,49 +82,17 @@ public class WaveCurveView extends WaveCurveOrbitGeomView {
 
         super.draw(g);
 
-//        for (WaveCurveOrbitGeom orbitGeom : orbitGeomList) {
-//            try {
-//                WaveCurveOrbitGeomView orbitView = (WaveCurveOrbitGeomView) orbitGeom.createView(getViewingTransform());
-//
-//                if (orbitView instanceof CompositeOrbitView) {
-//                    CompositeOrbitView teste = (CompositeOrbitView) orbitView;
-//                    g.setColor(Color.green);
-//                    g.setStroke(new BasicStroke(1.0f));
-//                    g.draw(teste.createShape());
-//                }
-//
-//                if (orbitView instanceof ShockCurveGeomView) {
-//                    ShockCurveGeomView teste = (ShockCurveGeomView) orbitView;
-//
-//                    g.setColor(Color.blue);
-//                    g.setStroke(new BasicStroke(1.0f));
-//                    g.draw(teste.createShape());
-//
-//                }
-//
-//
-//                if (orbitView instanceof RarefactionOrbitView) {
-//
-//
-//                    RarefactionOrbitView teste = (RarefactionOrbitView) orbitView;
-//
-//                    g.setColor(Color.red);
-//                    g.setStroke(new BasicStroke(1.0f));
-//                    g.draw(teste.createShape());
-//
-//                }
-//
-//
-//            } catch (DimMismatchEx ex) {
-//                Logger.getLogger(WaveCurveView.class.getName()).log(Level.SEVERE, null, ex);
-//            }
-//
-//            pointMark.draw(g);
-//
-//        }
+        Iterator<GraphicsUtil> annotationIterator = waveCurveGeom.getAnnotationIterator();
 
+        while (annotationIterator.hasNext()) {
+            GraphicsUtil graphicsUtil = annotationIterator.next();
+            graphicsUtil.update(getViewingTransform());
+            graphicsUtil.getViewingAttr().setVisible(waveCurveGeom.viewingAttr().isVisible());
+            g.setColor(graphicsUtil.getViewingAttr().getColor());
+            graphicsUtil.draw(g);
+
+        }
 
     }
 
-    
 }

@@ -65,7 +65,7 @@ public class RPnAdjustedSelectionPlotter extends RPn2DMouseController {
             panel.setLastGraphicsUtil(selectedArea);
             panel.repaint();
 
-            indexToRemove(panel);
+//            indexToRemove(panel);
             if (UIController.instance().isAuxPanelsEnabled()) {
                 secondArea(panel, viewingTransform);
             }
@@ -185,6 +185,9 @@ public class RPnAdjustedSelectionPlotter extends RPn2DMouseController {
     private void indexToRemove(RPnPhaseSpacePanel panel) {
         List<Integer> indexToRemove = new ArrayList<Integer>();
         List<AreaSelected> selectedAreas = panel.getSelectedAreas();
+        
+        
+
 
         for (AreaSelected area : selectedAreas) {
             Iterator geomIterator = panel.scene().geometries();

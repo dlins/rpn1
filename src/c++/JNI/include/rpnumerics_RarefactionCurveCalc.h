@@ -9,6 +9,14 @@ extern "C" {
 #endif
 /*
  * Class:     rpnumerics_RarefactionCurveCalc
+ * Method:    boundaryNativeCalc
+ * Signature: (Lrpnumerics/OrbitPoint;III)Lrpnumerics/RpSolution;
+ */
+JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionCurveCalc_boundaryNativeCalc
+  (JNIEnv *, jobject, jobject, jint, jint, jint);
+
+/*
+ * Class:     rpnumerics_RarefactionCurveCalc
  * Method:    calc
  * Signature: (Ljava/lang/String;Ljava/lang/String;Lrpnumerics/PhasePoint;II)Lrpnumerics/RpSolution;
  */

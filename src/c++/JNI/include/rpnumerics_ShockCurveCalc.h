@@ -15,6 +15,14 @@ extern "C" {
 JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc
   (JNIEnv *, jobject, jstring, jdouble, jobject, jint, jint);
 
+/*
+ * Class:     rpnumerics_ShockCurveCalc
+ * Method:    boundaryCalc
+ * Signature: (Lrpnumerics/PhasePoint;III)Lrpnumerics/RpSolution;
+ */
+JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_boundaryCalc
+  (JNIEnv *, jobject, jobject, jint, jint, jint);
+
 #ifdef __cplusplus
 }
 #endif

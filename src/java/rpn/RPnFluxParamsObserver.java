@@ -4,6 +4,8 @@
  */
 package rpn;
 
+import rpn.ui.physics.RPnSubject;
+import rpn.ui.physics.RPnObserver;
 import rpn.ui.RPnInputComponent;
 import rpn.configuration.Configuration;
 import rpnumerics.RPNUMERICS;

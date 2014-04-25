@@ -178,10 +178,13 @@ class HugoniotContinuation {
 
         virtual double sigma(const RealVector &F, const RealVector &G) const;
 
-        virtual int curve_point(const RealVector &previous_point, const RealVector &direction, 
+        virtual double sigma(const RealVector &Fp, const RealVector &Gp, const RealVector &Fm, const RealVector &Gm) const;
+
+        virtual int curve_point(const RealVector &previous_point, double previous_sigma_between_points,
+                                const RealVector &direction, 
                                 int &step_size_increased,
                                 double &step_size, int &number_of_steps_with_unchanged_size, 
-                                RealVector &Hugoniot_intersection,
+                                RealVector &Hugoniot_intersection, double &sigma_between_points,
                                 RealVector &Hugoniot_direction);
 
         virtual int curve_engine(const RealVector &in, const RealVector &initial_direction, 

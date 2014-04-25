@@ -16,12 +16,14 @@ public class MultiPolyLine extends MultiGeometryImpl {
 
     private final int ALFA_DOWN = 20;
     private final int ALFA_UP = 255;
+
     //
     // Constructors
     //
 
     public MultiPolyLine(CoordsArray[] vertices, ViewingAttr viewAttr) {
         super(vertices[0].getSpace(), viewAttr);
+
         try {
             AbstractSegment[] segList = new AbstractSegment[vertices.length];
             CoordsArray[] moveToVx = new CoordsArray[AbstractSegment.MAX_DEF_POINTS];
@@ -80,5 +82,26 @@ public class MultiPolyLine extends MultiGeometryImpl {
         viewingAttr().setColor(newColor);
 
 
+    }
+
+    @Override
+    public void setVisible(boolean visible) {
+        viewingAttr().setVisible(visible);
+    }
+
+    @Override
+    public boolean isVisible() {
+        return viewingAttr().isVisible();
+    }
+
+    @Override
+    public void setSelected(boolean selected) {
+       
+        viewingAttr().setSelected(selected);
+    }
+
+    @Override
+    public boolean isSelected() {
+        return viewingAttr().isSelected();
     }
 }

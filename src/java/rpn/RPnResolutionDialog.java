@@ -45,7 +45,7 @@ public class RPnResolutionDialog extends RPnDialog {
 
         for (Entry<String, Configuration> entry : configSet) {
             SpinButtonCreator input = new SpinButtonCreator(entry.getValue(),"resolution");
-            if (entry.getValue().getName().equals("inflectioncurve")) {
+            if (entry.getValue().getName().equals("bifurcationcurve")) {
                 extensionPanel_.addTab("Bifurcation Curves", input.createUIComponent());
             }
 

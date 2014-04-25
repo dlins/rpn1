@@ -13,13 +13,27 @@ RealVector::RealVector(int n) : size_(n) {
     data = new double[n];
 }
 
-RealVector::RealVector(int n, double * values) : size_(n) {
+RealVector::RealVector(int n, const double * values) : size_(n) {
     data = new double[n];
     for (int i = 0; i < n; i++) {
         data[i] = values[i];
     }
+}
 
+RealVector::RealVector(int init, int size, double *values) : size_(size){
+    data = new double[size];
+    
+    for (int i = 0; i < size; i++){
+        data[i] = values[init + i];
+    }
+}
 
+RealVector::RealVector(int init, int size, const RealVector &orig) : size_(size){
+    data = new double[size];
+    
+    for (int i = 0; i < size; i++){
+        data[i] = orig(init + i);
+    }
 }
 
 RealVector::RealVector(const RealVector &orig) : size_(orig.size_) {
@@ -215,18 +229,36 @@ RealVector operator-(const RealVector &x, const RealVector &y) {
     return temp;
 }
 
-// Norm of a RealVector
+// Euclidean norm of a RealVector
 double norm(const RealVector &x){
     return sqrt(x*x);
 }
 
+// Norm in L1.
+double norm_L1(const RealVector &x){
+    double d = 0.0;
+
+    for (int i = 0; i < x.size(); i++) d += std::abs(x.data[i]);
+
+    return d;
+}
+
+// Norm in L \infty.
+double norm_inf(const RealVector &x){
+    double d = 0.0;
+
+    for (int i = 0; i < x.size(); i++) d = std::max(d, std::abs(x.data[i]));
+
+    return d;
+}
+
 // Normalize a RealVector
-void normalize(RealVector &x){
+RealVector normalize(RealVector &x){
     double inv_norm_x = 1.0/norm(x);
 
     x = x*inv_norm_x;
     
-    return;
+    return x;
 }
 
 // Inner product of two RealVectors

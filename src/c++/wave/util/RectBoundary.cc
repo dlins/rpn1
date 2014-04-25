@@ -13,7 +13,6 @@
 #include <vector>
 
 #include "RectBoundary.h"
-#include "Debug.h"
 
 /*
  * ---------------------------------------------------------------
@@ -56,6 +55,42 @@ void RectBoundary::extension_curve(const FluxFunction *f, const AccumulationFunc
         int where_constant, int number_of_steps, bool singular,
         int fam, int characteristic,
         std::vector<RealVector> &c, std::vector<RealVector> &d) {
+//    c.clear();
+//    d.clear();
+
+//    std::vector<RealVector> seg;
+
+//    RealVector limMin = gv.grid(0, 0);
+////    RealVector limMax = gv.grid(gv.noc[0], gv.noc[1]);
+//    
+
+//    RealVector limMax = gv.grid(gv.grid.rows()-1,gv.grid.cols()-1);
+//    edge_segments(where_constant, number_of_steps, limMin, limMax, seg);
+
+//    Extension_Curve extension_curve;
+
+//    cout<<"Primeiro seg: "<<seg[0]<<endl;
+
+//    cout <<"Ultimo seg: "<<seg[seg.size()-1]<<endl;
+
+//    extension_curve.curve(f, a, gv, characteristic, singular, fam,
+//            seg,
+//            c, d);
+
+    extension_curve(f, a, f, a, gv, where_constant, number_of_steps, singular,
+                    fam, characteristic,
+                    c, d);
+
+    return;
+}
+
+void RectBoundary::extension_curve(const FluxFunction *df, const AccumulationFunction *da, // Over the domain
+                                   const FluxFunction *cf, const AccumulationFunction *ca, // Over the curve 
+                                   GridValues &gv,
+                                   int where_constant, int number_of_steps, bool singular,
+                                   int fam, int characteristic,
+                                   std::vector<RealVector> &c, std::vector<RealVector> &d) {
+
     c.clear();
     d.clear();
 
@@ -70,14 +105,13 @@ void RectBoundary::extension_curve(const FluxFunction *f, const AccumulationFunc
 
     Extension_Curve extension_curve;
 
-    if ( Debug::get_debug_level() == 5 ) {
-        cout<<"Primeiro seg: "<<seg[0]<<endl;
-        cout <<"Ultimo seg: "<<seg[seg.size()-1]<<endl;
-    }
+//    cout<<"Primeiro seg: "<<seg[0]<<endl;
 
-    extension_curve.curve(f, a, gv, characteristic, singular, fam,
-            seg,
-            c, d);
+//    cout <<"Ultimo seg: "<<seg[seg.size()-1]<<endl;
+
+    extension_curve.curve(df, da, cf, ca,gv, characteristic, singular, fam,
+                          seg,
+                          c, d);
 
     return;
 }
@@ -166,8 +200,22 @@ int RectBoundary::edge_segments(int where_constant, int number_of_steps, const R
 //
 //}
 
-void RectBoundary::physical_boundary(std::vector<RealVector> &) {
+void RectBoundary::physical_boundary(std::vector<RealVector> &side) {
+    RealVector p(2);
 
+    p(0) = minimums_->component(0); p(1) = minimums_->component(1);
+    side.push_back(p);
+
+    p(0) = minimums_->component(0); p(1) = maximums_->component(1);
+    side.push_back(p);    
+
+    p(0) = maximums_->component(0); p(1) = maximums_->component(1);
+    side.push_back(p);    
+
+    p(0) = maximums_->component(0); p(1) = minimums_->component(1);
+    side.push_back(p);        
+
+    return;
 }
 
 RectBoundary::RectBoundary(const RealVector & minimums, const RealVector & maximums)
@@ -182,9 +230,7 @@ size_(minimums.size()), type_("rect") {
 }
 
 RectBoundary::RectBoundary(const RealVector & minimums, const RealVector & maximums, const std::vector<bool> & test, const double eps) {
-    if ( Debug::get_debug_level() == 5 ) {
-        printf("Here\n");
-    }
+    printf("Here\n");
 
     minimums_ = new RealVector(minimums.size());
     maximums_ = new RealVector(minimums.size());
@@ -237,9 +283,7 @@ bool RectBoundary::inside(const RealVector &p) const {
         //        if (p(pos) < minimums()(pos) || p(pos) > maximums()(pos)) in = false;
         pos++;
     }
-    if ( Debug::get_debug_level() == 5 ) {
-        cout << "tamanho dentro de inside"<<in<<" "<<p.size() << endl;
-    }
+    //    cout << "tamanho dentro de inside"<<in<<" "<<p.size() << endl;
     return in;
 
 
@@ -264,9 +308,7 @@ bool RectBoundary::inside(const RealVector &p) const {
     //        if (p(pos) < minimums()(pos) || p(pos) > maximums()(pos)) in = false;
     //        pos++;
     //    }
-    //    if ( Debug::get_debug_level() == 5 ) {
-    //        cout << "tamanho dentro de inside" << in << " " << p.size() << endl;
-    //    }
+    //    cout << "tamanho dentro de inside" << in << " " << p.size() << endl;
     //    return in;
 }
 
@@ -284,28 +326,20 @@ bool RectBoundary::inside(const RealVector &p) const {
 
 //int RectBoundary::intersection(const RealVector &p, const RealVector &q, RealVector &r)const {
 //
-//    if ( Debug::get_debug_level() == 5 ) {
-//        cout << "min" << minimums() << endl;
-//        cout << "max" << maximums() << endl;
-//    }
+//    cout << "min" << minimums() << endl;
+//    cout << "max" << maximums() << endl;
 //
 //    if (inside(p) && inside(q)) {
 //
-//        if ( Debug::get_debug_level() == 5 ) {
-//            cout << "tamanho de p " << p.size() << " q" << q.size() << " r" << r.size();
-//        }
+//        cout << "tamanho de p " << p.size() << " q" << q.size() << " r" << r.size();
 //        return 1;
 //
 //    } else if (!inside(p) && !inside(q)) {
-//        if ( Debug::get_debug_level() == 5 ) {
-//            cout << "tamanho de p " << p << " q" << q << " r --------------" << r.size();
-//        }
+//        cout << "tamanho de p " << p << " q" << q << " r --------------" << r.size();
 //        return -1;
 //
 //    } else {
-//        if ( Debug::get_debug_level() == 5 ) {
-//            cout << "tamanho de p " << p.size() << " q" << q.size() << " r***************" << r.size();
-//        }
+//        cout << "tamanho de p " << p.size() << " q" << q.size() << " r***************" << r.size();
 //        int n = p.size();
 //        double alpha, beta;
 //        int pos = 0;
@@ -322,9 +356,7 @@ bool RectBoundary::inside(const RealVector &p) const {
 //                    for (int i = 0; i < n; i++) r(i) = alpha * p(i) + (1.0 - alpha) * q(i);
 //                    found = true;
 //#ifdef _TEST_HYPERBOX_
-//                    if ( Debug::get_debug_level() == 5 ) {
-//                        printf("ALPHA = %f, beta = %f, pos = %d\n", alpha, beta, pos);
-//                    }
+//                    printf("ALPHA = %f, beta = %f, pos = %d\n", alpha, beta, pos);
 //#endif
 //                }
 //
@@ -332,9 +364,7 @@ bool RectBoundary::inside(const RealVector &p) const {
 //                    for (int i = 0; i < n; i++) r(i) = beta * p(i) + (1.0 - beta) * q(i);
 //                    found = true;
 //#ifdef _TEST_HYPERBOX_
-//                    if ( Debug::get_debug_level() == 5 ) {
-//                        printf("alpha = %f, BETA = %f, pos = %d\n", alpha, beta, pos);
-//                    }
+//                    printf("alpha = %f, BETA = %f, pos = %d\n", alpha, beta, pos);
 //#endif
 //                }
 //            }
@@ -410,9 +440,7 @@ int RectBoundary::intersection(const RealVector &p, const RealVector &q, RealVec
                     for (int i = 0; i < n; i++) r.component(i) = alpha * p.component(i) + (1.0 - alpha) * q.component(i);
                     found = true;
 #ifdef _TEST_HYPERBOX_
-                    if ( Debug::get_debug_level() == 5 ) {
-                        printf("ALPHA = %f, beta = %f, pos = %d\n", alpha, beta, pos);
-                    }
+                    printf("ALPHA = %f, beta = %f, pos = %d\n", alpha, beta, pos);
 #endif
 
                     // Return the index
@@ -423,9 +451,7 @@ int RectBoundary::intersection(const RealVector &p, const RealVector &q, RealVec
                     for (int i = 0; i < n; i++) r.component(i) = beta * p.component(i) + (1.0 - beta) * q.component(i);
                     found = true;
 #ifdef _TEST_HYPERBOX_
-                    if ( Debug::get_debug_level() == 5 ) {
-                        printf("alpha = %f, BETA = %f, pos = %d\n", alpha, beta, pos);
-                    }
+                    printf("alpha = %f, BETA = %f, pos = %d\n", alpha, beta, pos);
 #endif
 
                     // Return the index
@@ -452,4 +478,18 @@ RectBoundary::~RectBoundary() {
 }
 
 
+RealVector RectBoundary::side_transverse_interior(const RealVector &p, int s) const {
+    RealVector v(2);
+
+    if (s == RECT_BOUNDARY_SG_ZERO){
+        v(0) = 1.0;
+        v(1) = 0.0;
+    }
+    else if (s == RECT_BOUNDARY_SG_ONE){
+        v(0) = -1.0;
+        v(1) = 0.0;
+    }
+
+    return v;
+}
 

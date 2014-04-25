@@ -5,9 +5,11 @@
  */
 package rpn.component;
 
+import java.util.List;
+
 public class HysteresisCurveGeom extends BifurcationCurveGeom{
 
-    public HysteresisCurveGeom(RealSegGeom[] hugoniotArray, HysteresisCurveGeomFactory aThis) {
+    public HysteresisCurveGeom(List<BifurcationCurveBranchGeom> hugoniotArray, HysteresisCurveGeomFactory aThis) {
         super(hugoniotArray,aThis);
 
     }

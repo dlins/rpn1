@@ -7,15 +7,13 @@ package rpn.command;
 
 
 import java.awt.event.ActionEvent;
-import java.beans.PropertyChangeEvent;
-import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.List;
 import javax.swing.AbstractButton;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import rpn.RPnPhaseSpaceAbstraction;
 import rpn.component.*;
-import rpn.controller.ui.BIFURCATION_CONFIG;
+import rpn.controller.ui.RiemannProblemConfig;
 import rpn.controller.ui.UIController;
 import rpn.controller.ui.UI_ACTION_SELECTED;
 import rpn.parser.RPnDataModule;
@@ -47,7 +45,7 @@ public class BifurcationPlotCommand extends RpModelPlotCommand {
     public void actionPerformed(ActionEvent event) {
 
         UI_ACTION_SELECTED action = new UI_ACTION_SELECTED(this);
-        UIController.instance().setState(new BIFURCATION_CONFIG());
+        UIController.instance().setState(new RiemannProblemConfig());
 
         action.userInputComplete(UIController.instance());// No input needed
 
@@ -69,23 +67,16 @@ public class BifurcationPlotCommand extends RpModelPlotCommand {
     public void execute(RpGeomFactory factory) {
 
         super.execute(factory);
+        
+        BifurcationCurveGeomFactory bifurcationFactory = (BifurcationCurveGeomFactory)factory;
+        
+        BifurcationCurveGeom bifurcationGeom = (BifurcationCurveGeom) bifurcationFactory.geom();
+        List<BifurcationCurveBranchGeom> bifurcationListGeom = bifurcationGeom.getBifurcationListGeom();
+        
 
-        if (factory instanceof BifurcationCurveGeomFactory) {
-
-            RPnPhaseSpaceAbstraction leftPhaseSpace = RPnDataModule.LEFTPHASESPACE;
-            RPnPhaseSpaceAbstraction rightPhaseSpace = RPnDataModule.RIGHTPHASESPACE;
-
-            RpGeometry leftGeometry = ((BifurcationCurveGeomFactory)factory).leftGeom();
-            RpGeometry rightGeometry = ((BifurcationCurveGeomFactory)factory).rightGeom();
-
-            leftPhaseSpace.join(leftGeometry);
-            rightPhaseSpace.join(rightGeometry);           
-
-        } else {
-
-            throw new RuntimeException("Error ... not a Bifurcation curve factory...");
-
-        }
+        RPnDataModule.LEFTPHASESPACE.join(bifurcationListGeom.get(0));
+        RPnDataModule.RIGHTPHASESPACE.join(bifurcationListGeom.get(1));
+ 
     }
 
     

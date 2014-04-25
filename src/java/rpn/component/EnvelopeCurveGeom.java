@@ -5,6 +5,7 @@
  */
 package rpn.component;
 
+import java.util.List;
 import wave.multid.view.*;
 import wave.multid.*;
 
@@ -16,7 +17,7 @@ public class EnvelopeCurveGeom extends BifurcationCurveGeom {
     //
 
 
-    public EnvelopeCurveGeom(RealSegGeom[] segArray, BifurcationCurveGeomFactory factory) {
+    public EnvelopeCurveGeom(List<BifurcationCurveBranchGeom> segArray, BifurcationCurveGeomFactory factory) {
         super(segArray, factory);
     }
 

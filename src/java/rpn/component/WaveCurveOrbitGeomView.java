@@ -12,6 +12,8 @@ import wave.multid.model.*;
 import wave.multid.view.*;
 import wave.util.*;
 import java.util.ArrayList;
+import java.util.Iterator;
+import rpn.component.util.GraphicsUtil;
 
 public class WaveCurveOrbitGeomView extends OrbitGeomView {
 
@@ -172,7 +174,21 @@ public class WaveCurveOrbitGeomView extends OrbitGeomView {
         g.setColor(getViewingAttr().getColor());
 
         super.draw(g);
+        Color previousColor = g.getColor();
+        
+        OrbitGeom shockGeom = (OrbitGeom) getAbstractGeom();
+        Iterator<GraphicsUtil> annotationIterator = shockGeom.getAnnotationIterator();
 
+        while (annotationIterator.hasNext()) {
+            GraphicsUtil graphicsUtil = annotationIterator.next();
+            graphicsUtil.update(getViewingTransform());
+            graphicsUtil.getViewingAttr().setVisible(getViewingAttr().isVisible());
+            g.setColor(graphicsUtil.getViewingAttr().getColor());
+            graphicsUtil.draw(g);
+
+        }
+
+        g.setColor(previousColor);
 
     }
 }

@@ -7,11 +7,9 @@ package rpn.command;
 
 import java.awt.event.ActionEvent;
 import javax.swing.JButton;
-import rpn.RPnPhaseSpaceAbstraction;
 import rpn.component.*;
 import rpn.controller.ui.UIController;
 import rpn.controller.ui.UI_ACTION_SELECTED;
-import rpn.parser.RPnDataModule;
 import rpnumerics.*;
 import wave.util.RealVector;
 
@@ -31,6 +29,7 @@ public class EllipticBoundaryExtensionCommand extends BifurcationPlotCommand {
     //
     protected EllipticBoundaryExtensionCommand() {
         super(DESC_TEXT, rpn.configuration.RPnConfig.HUGONIOT, new JButton());
+
     }
 
     @Override

@@ -70,7 +70,7 @@ public class RPnAppletPlotter extends JApplet implements RPnMenuCommand {
 
 	//Reset the application
 
-	UIController.instance().setState(new SHOCK_CONFIG());
+	UIController.instance().setState(new ShockConfig());
 
     }
 

@@ -140,7 +140,11 @@ public class wcWindow {
         return new Polygon(defPointsX, defPointsY, vertexList.size());
     }
 
+
+
+
     public void update(Map map) {
+
 
         double[] wcMatrix = new double[6];
 

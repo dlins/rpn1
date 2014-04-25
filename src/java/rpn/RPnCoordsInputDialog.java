@@ -104,6 +104,7 @@ public class RPnCoordsInputDialog extends RPnDialog {
             inputCoordsPanel_.add(axisNumberLabel, constraints);
             
             beginButton.setText("Clear");
+            setLocation(400, 300);
             
         }
         

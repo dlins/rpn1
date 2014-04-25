@@ -54,7 +54,7 @@ public class EllipticBoundaryCommand extends BifurcationPlotCommand {
 
         EllipticBoundaryFactory factory = new EllipticBoundaryFactory(RPNUMERICS.createEllipticBoundaryCalc());
 
-        RPnDataModule.PHASESPACE.plot(factory.geom());
+        execute(factory);
 
     }
 

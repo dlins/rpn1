@@ -317,12 +317,24 @@ public class RPNUMERICS {
 
 
     }
+    
+    public static WaveCurveCalc createBoundaryWaveCurve (OrbitPoint orbitPoint,int edge){
+        Integer direction = new Integer(getParamValue("fundamentalcurve", "direction"));
+        return new WaveCurveCalc(orbitPoint, Integer.parseInt(getParamValue("fundamentalcurve", "family")), direction,edge);
+    }
 
     public static RarefactionCurveCalc createRarefactionCalc(OrbitPoint orbitPoint) {
         Integer direction = new Integer(getParamValue("fundamentalcurve", "direction"));
         return new RarefactionCurveCalc(orbitPoint, Integer.parseInt(getParamValue("fundamentalcurve", "family")), direction);
 
     }
+    
+     public static RarefactionCurveCalc createRarefactionCalc(OrbitPoint orbitPoint,int edge) {
+        Integer direction = new Integer(getParamValue("fundamentalcurve", "direction"));
+        return new RarefactionCurveCalc(orbitPoint, Integer.parseInt(getParamValue("fundamentalcurve", "family")), direction,edge);
+
+    }
+    
 
     public static DoubleContactCurveCalc createDoubleContactCurveCalc(Configuration configuration) {
 
@@ -576,6 +588,24 @@ public class RPNUMERICS {
         return new DoubleContactCurveCalc(params, curveFamily, domainFamily);
 
     }
+    
+    
+    
+    
+     public static SecondaryBifurcationCurveCalc createStoneSecondaryBifurcationCurveCalc() {
+
+        int[] resolution = RPnDataModule.processResolution(getParamValue("bifurcationcurve", "resolution"));
+
+        int edgeresolution = new Integer (getParamValue("explicitsecondarybifurcation", "numberofsteps"));
+        int edge =  new Integer (getParamValue("explicitsecondarybifurcation", "edge"));
+
+        ContourParams params = new ContourParams(resolution);
+
+        return new StoneExplicitSecondaryBifurcationCurveCalc(params, edge, edgeresolution);
+
+    }
+    
+    
 
     public static SecondaryBifurcationCurveCalc createSecondaryBifurcationCurveCalc() {
 
@@ -691,6 +721,18 @@ public class RPNUMERICS {
     }
     
     
+   public static ShockCurveCalc createShockCurveCalc(OrbitPoint orbitPoint,int edge) {
+
+        Integer family = new Integer(getParamValue("fundamentalcurve", "family"));
+        Double tolerance = new Double(getParamValue("Newton", "tolerance"));
+
+        Integer direction = new Integer(getParamValue("fundamentalcurve", "direction"));
+        return new ShockCurveCalc(orbitPoint, family, direction, tolerance);
+
+
+    }
+    
+    
      public static ShockCurveCalc createShockCurveCalc(OrbitPoint orbitPoint,Configuration shockConfiguration) {
 
         Integer family = new Integer(shockConfiguration.getParam("family"));
@@ -724,7 +766,7 @@ public class RPNUMERICS {
 
     public static InflectionCurveCalc createInflectionCurveCalc() {
 
-        int[] resolution = RPnDataModule.processResolution(RPNUMERICS.getParamValue("inflectioncurve", "resolution"));
+        int[] resolution = RPnDataModule.processResolution(RPNUMERICS.getParamValue("bifurcationcurve", "resolution"));
 
         ContourParams params = new ContourParams(resolution);
 

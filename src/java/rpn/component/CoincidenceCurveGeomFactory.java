@@ -25,20 +25,20 @@ public class CoincidenceCurveGeomFactory extends BifurcationCurveGeomFactory{
   
     // Methods
     //
-    public RpGeometry createGeomFromSource() {
-
-        CoincidenceCurve curve = (CoincidenceCurve) geomSource();
-
-        // assuming a container with HugoniotSegment elements
-        int resultSize = curve.segments().size();
-        RealSegGeom[] hugoniotArray = new RealSegGeom[resultSize];
-        for (int i = 0; i < resultSize; i++) {
-            hugoniotArray[i] = new RealSegGeom((RealSegment) curve.segments().get(i));
-
-        }
-        return new CoincidenceCurveGeom(hugoniotArray, this);
-
-    }
+//    public RpGeometry createGeomFromSource() {
+//
+//        CoincidenceCurve curve = (CoincidenceCurve) geomSource();
+//
+//        // assuming a container with HugoniotSegment elements
+//        int resultSize = curve.segments().size();
+//        RealSegGeom[] hugoniotArray = new RealSegGeom[resultSize];
+//        for (int i = 0; i < resultSize; i++) {
+//            hugoniotArray[i] = new RealSegGeom((RealSegment) curve.segments().get(i));
+//
+//        }
+//        return new CoincidenceCurveGeom(hugoniotArray, this);
+//
+//    }
     
     
     @Override

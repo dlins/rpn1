@@ -12,7 +12,7 @@ import java.awt.geom.Path2D;
 import java.awt.geom.PathIterator;
 import java.util.ArrayList;
 import java.util.List;
-import rpn.RPnPhaseSpacePanel;
+import rpn.component.RpGeometry;
 import wave.multid.view.ViewingAttr;
 import wave.multid.view.ViewingTransform;
 import wave.util.RealVector;
@@ -27,16 +27,18 @@ public abstract class GraphicsUtil {
     private ViewingTransform viewingTransform_;
     private ViewingAttr viewAttr_;
     private Shape shape_;
+    protected RpGeometry geometry_;
+    protected String id_;
 
     public GraphicsUtil() {
     }
-
 
     public GraphicsUtil(List<Object> wcObjects, ViewingTransform viewingTransform, ViewingAttr viewAttr) {
         this.wcObjects_ = wcObjects;
         this.viewingTransform_ = viewingTransform;
         viewAttr_ = viewAttr;
         setShape(createShape());
+        id_ = "";
     }
 
     public void draw(Graphics2D g) {
@@ -49,15 +51,14 @@ public abstract class GraphicsUtil {
         if (viewAttr_.isSelected()) {
 
             drawSelected(g);
-          
+
         }
-        
 
         g.setColor(previousColor);
         g.setStroke(previousStroke);
     }
-   
-    public void setShape(Shape createShape) {
+
+    public final void setShape(Shape createShape) {
         shape_ = createShape;
 
     }
@@ -69,8 +70,8 @@ public abstract class GraphicsUtil {
     public Shape getShape() {
         return shape_;
     }
-    
-    public ViewingAttr getViewingAttr(){
+
+    public ViewingAttr getViewingAttr() {
         return viewAttr_;
     }
 
@@ -83,6 +84,14 @@ public abstract class GraphicsUtil {
         setShape(createShape());
     }
 
+    public void setGeometry(RpGeometry geometry) {
+        geometry_ = geometry;
+    }
+
+    public RpGeometry getGeometry() {
+        return geometry_;
+    }
+
     // ---------------
     public void update(ViewingAttr viewAttr) {
         viewAttr_ = viewAttr;
@@ -90,9 +99,7 @@ public abstract class GraphicsUtil {
     }
     // ---------------
 
-    
-    
-     public List<RealVector> getWCVertices() {
+    public List<RealVector> getWCVertices() {
 
         List<RealVector> areaPointsList = new ArrayList<RealVector>();
         Path2D.Double wcObject = getWCObject();
@@ -115,28 +122,32 @@ public abstract class GraphicsUtil {
         return areaPointsList;
 
     }
-    
-    public String toXML(){
-        
-         StringBuffer buffer = new StringBuffer();
+
+    public void setID(String id) {
+        id_ = id;
+    }
+
+    public String getID() {
+        return id_;
+    }
+
+    public String toXML() {
+
+        StringBuffer buffer = new StringBuffer();
 
         buffer.append("<CURVESELECTION>\n");
-        
 
         List<RealVector> vertices = getWCVertices();
-        
+
         for (int i = 0; i < vertices.size(); i++) {
             buffer.append(vertices.get(i).toXML());
         }
-       
+
         buffer.append("<\\CURVESELECTION>");
 
         return buffer.toString();
-        
-        
-        
+
     }
-    
 
     public abstract Shape createShape();
 

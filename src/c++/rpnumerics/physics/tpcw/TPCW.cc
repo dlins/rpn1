@@ -151,7 +151,7 @@ TD(new Thermodynamics_SuperCO2_WaterAdimensionalized(*copy.TD)) {
 
     setHugoniotFunction(new Hugoniot_TP());
     setDoubleContactFunction(new Double_Contact_TP());
-    setShockMethod(new ShockContinuationMethod3D2D());
+//    setShockMethod(new ShockContinuationMethod3D2D());
 
     
     setViscosityMatrix(new Viscosity_Matrix());
@@ -162,7 +162,7 @@ TD(new Thermodynamics_SuperCO2_WaterAdimensionalized(*copy.TD)) {
 
     preProcessedBoundary_ = new RectBoundary(min, max);
 
-    setShockMethod (new ShockContinuationMethod3D2D());
+//    setShockMethod (new ShockContinuationMethod3D2D());
     setHugoniotContinuationMethod(new HugoniotContinuation3D2D(fluxFunction_,accumulationFunction_,copy.getPreProcessedBoundary()));
 
 }

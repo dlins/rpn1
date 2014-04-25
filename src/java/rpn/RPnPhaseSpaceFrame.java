@@ -13,7 +13,6 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.event.*;
 import java.util.*;
-import rpn.component.util.GeometryGraph;
 import rpn.component.util.GeometryGraphND;
 import rpn.controller.ui.UIController;
 import rpn.glasspane.RPnGlassPane;
