@@ -6,13 +6,7 @@
  */
 package rpnumerics;
 
-import java.util.List;
-
-
-import wave.multid.view.ViewingAttr;
-import java.awt.Color;
 import rpn.component.MultidAdapter;
-import wave.util.RealSegment;
 
 public class RiemannProfile extends RPnCurve  {
     //
@@ -32,6 +26,12 @@ public class RiemannProfile extends RPnCurve  {
         super(MultidAdapter.converseCoordsArrayToRealSegments(MultidAdapter.converseOrbitPointsToCoordsArray(points)));
 //        segments_= MultidAdapter.converseRPnCurveToRealSegments(this);
         points_ = points;
+        
+        for (OrbitPoint orbitPoint : points) {
+            
+            System.out.println(orbitPoint);
+            
+        }
 
 
     }

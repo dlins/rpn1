@@ -121,6 +121,8 @@ class WaveCurveFactory {
                                 RealVector &p, int &subc1, int &subc1_point, int &subc2, int &subc2_point);
 
         int wavecurve_from_wavecurve(const WaveCurve &c, const RealVector &p, HugoniotContinuation *h, WaveCurve &hwc, int &wavecurve_stopped_because, int &edge);
+
+        void R_regions(HugoniotContinuation *h, const WaveCurve &c, std::vector<WaveCurve> &curves);
 };
 
 #endif // _WAVECURVEFACTORY_

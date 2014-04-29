@@ -99,7 +99,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     private static RPnPhaseSpaceFrame[] riemannFrames_;
     private static List<RPnPhaseSpaceFrame> characteristicsFrames_ = new ArrayList<RPnPhaseSpaceFrame>();
     private JPanel utilitiesToolBarPanel = new JPanel();
-    private List <AbstractButton> mainButtonsToolBarList_ = new ArrayList<AbstractButton>();
+    private List<AbstractButton> mainButtonsToolBarList_ = new ArrayList<AbstractButton>();
 
     public RPnUIFrame(RPnMenuCommand command) {
 
@@ -193,7 +193,6 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
         toolBar_.add(EnvelopeCurveCommand.instance().getContainer());
 
-
         toolBar_.add(BuckleyLeverettiInflectionCommand.instance().getContainer());
         toolBar_.add(CoincidencePlotCommand.instance().getContainer());
         toolBar_.add(SubInflectionPlotCommand.instance().getContainer());
@@ -257,7 +256,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
                 rarefactionConfigMenu();
                 toolBar_.removeAll();
-                
+
 //                for (AbstractButton button : mainButtonsToolBarList_) {
 //                    
 //                    toolBar_.add(button);
@@ -479,6 +478,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
             }
         }
 
+        System.out.println("Limites de riemann: " + profileMin + profileMax);
         RectBoundary boundary = new RectBoundary(profileMin, profileMax);
         Space riemanProfileSpace = new Space("RiemannProfileSpace", RPNUMERICS.domainDim() + 1);
         riemannFrames_ = new RPnRiemannFrame[RPNUMERICS.domainDim()];
@@ -583,11 +583,9 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         //Phase Spaces associations
         ArrayList<RPnPhaseSpaceAbstraction> leftPhaseSpaceArray = new ArrayList<RPnPhaseSpaceAbstraction>();
         ArrayList<RPnPhaseSpaceAbstraction> rightPhaseSpaceArray = new ArrayList<RPnPhaseSpaceAbstraction>();
-        
-        
+
         ArrayList<RPnPhaseSpaceAbstraction> centerPhaseSpaceArray = new ArrayList<RPnPhaseSpaceAbstraction>();
-        
-        
+
         centerPhaseSpaceArray.add(RPnDataModule.RIGHTPHASESPACE);
         centerPhaseSpaceArray.add(RPnDataModule.LEFTPHASESPACE);
 
@@ -596,15 +594,9 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
         RPnPhaseSpaceManager.instance().register(RPnDataModule.LEFTPHASESPACE, leftPhaseSpaceArray);
         RPnPhaseSpaceManager.instance().register(RPnDataModule.RIGHTPHASESPACE, rightPhaseSpaceArray);
-        
-        
+
         RPnPhaseSpaceManager.instance().register(RPnDataModule.PHASESPACE, centerPhaseSpaceArray);
-        
-        
-        
-        
-        
-        
+
     }
 
     private void associatePhaseSpacesAndCurvesList() {

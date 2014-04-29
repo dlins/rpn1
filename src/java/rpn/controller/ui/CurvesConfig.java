@@ -6,6 +6,7 @@
 package rpn.controller.ui;
 
 import rpn.command.AnnotationSelectionCommand;
+import rpn.command.AreaSelectionCommand;
 import rpn.command.DomainSelectionCommand;
 import rpn.command.BoundaryExtensionCurveCommand;
 import rpn.command.BuckleyLeverettiInflectionCommand;
@@ -70,7 +71,7 @@ public class CurvesConfig extends UI_ACTION_SELECTED {
         ChangeOrbitLevelCommand.instance().setEnabled(true);
         EllipticBoundaryCommand.instance().setEnabled(true);
         PhysicalBoundaryPlotCommand.instance().setEnabled(true);
-        RiemannProfileCommand.instance().setEnabled(false);
+        RiemannProfileCommand.instance().setEnabled(true);
         WaveCurvePlotCommand.instance().setEnabled(true);
         CurveRefineCommand.instance().setEnabled(false);
         ChooseAreaCommand.instance().setEnabled(true);
@@ -80,6 +81,8 @@ public class CurvesConfig extends UI_ACTION_SELECTED {
         ZoomPlotCommand.instance().setEnabled(true);
         ZoomingAreaCommand.instance().setEnabled(true);
         AnnotationSelectionCommand.instance().setEnabled(true);
+        
+        AreaSelectionCommand.instance().setEnabled(true);
         
         
         

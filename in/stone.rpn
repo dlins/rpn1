@@ -81,6 +81,18 @@
             <CURVECONFIGURATION name="ellipticboundary">
                 <CURVEPARAM name="resolution" value="128 128"/>
             </CURVECONFIGURATION>
+            
+            
+            
+              <CURVECONFIGURATION name="riemannprofile">
+                <CURVEPARAM name="speedrange" value="0 3"/>
+            </CURVECONFIGURATION>
+
+            
+            
+            
+            
+            
 
 
             <CURVECONFIGURATION name="wavecurve">

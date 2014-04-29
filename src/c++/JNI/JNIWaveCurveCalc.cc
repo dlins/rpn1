@@ -144,7 +144,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc__Lrpnumerics_
 
         timeDirection = RAREFACTION_SPEED_SHOULD_DECREASE; //WAVE_BACKWARD;
 
-
+    
 
 
     if (origin == 0) {
