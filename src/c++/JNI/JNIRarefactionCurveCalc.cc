@@ -127,10 +127,14 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionCurveCalc_calc(JNIEnv * env
 
         double lambda = rarcurve.speed[i];
 
+        for (int k = 0; k < rarcurve.eigenvalues[i].size(); k++) {
+            cout << " i: " << i << " " << rarcurve.eigenvalues[i][k] << endl;
 
-        if (Debug::get_debug_level() == 5) {
-            cout << tempVector << endl;
         }
+
+
+
+
 
         double * dataCoords = tempVector;
 
@@ -205,10 +209,10 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionCurveCalc_boundaryNativeCal
 
     env->DeleteLocalRef(inputPhasePointArray);
 
-//    vector <RealVector> coords;
+    //    vector <RealVector> coords;
 
     const Boundary * tempBoundary = RpNumerics::getPhysics().getSubPhysics(0).getPreProcessedBoundary();
-    
+
     const FluxFunction * flux = &RpNumerics::getPhysics().fluxFunction();
     const AccumulationFunction * accum = &RpNumerics::getPhysics().accumulation();
 
@@ -231,9 +235,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionCurveCalc_boundaryNativeCal
     ODE_Solver *odesolver;
 
     odesolver = &lsode;
-    
-//    realVectorInput(0)=0.538996;
-//    realVectorInput(1)=0.461004;
+
+    //    realVectorInput(0)=0.538996;
+    //    realVectorInput(1)=0.461004;
 
     cout << "Ponto de entrada: " << realVectorInput << " edge " << edge << " familyIndex " << familyIndex << " timedirection " << timeDirection << endl;
     cout << " rar for itself " << RAREFACTION << " odesolver " << odesolver << " deltaxi " << deltaxi << endl;
@@ -249,8 +253,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionCurveCalc_boundaryNativeCal
             final_direction,
             rar_stopped_because,
             s);
-    
-    cout <<"Info rar: "<<info_rar<<endl;
+
+    cout << "Info rar: " << info_rar << endl;
 
     cout << "final direction : " << final_direction << endl;
     cout << "rar_stop : " << rar_stopped_because << endl;

@@ -12,6 +12,7 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import java.util.*;
+import wave.multid.model.AbstractGeomObj;
 
 public class RPnRiemannFrame extends RPnPhaseSpaceFrame {
 
@@ -83,6 +84,8 @@ public class RPnRiemannFrame extends RPnPhaseSpaceFrame {
     @Override
     protected void processWindowEvent(WindowEvent e) {
         if (e.getID() == WindowEvent.WINDOW_CLOSING) {
+            RPnPhaseSpaceAbstraction abstractGeom = (RPnPhaseSpaceAbstraction) phaseSpacePanel.scene().getAbstractGeom();
+            abstractGeom.clear();
             dispose();
         }
     }

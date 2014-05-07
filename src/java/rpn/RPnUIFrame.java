@@ -232,6 +232,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
         utilitiesToolBar_.add(ZoomingAreaCommand.instance().getContainer());
         utilitiesToolBar_.add(BifurcationCorrespondenceCommand.instance().getContainer());
+        utilitiesToolBar_.add(WaveCurveSpeedPlotCommand.instance().getContainer());
     }
 
     private void createRiemmanProblemToolBar() {
@@ -628,6 +629,10 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         curvesList.addObserver(RiemannProfileCommand.instance());
         leftCurvesList.addObserver(RiemannProfileCommand.instance());
         rightCurvesList.addObserver(RiemannProfileCommand.instance());
+
+        curvesList.addObserver(WaveCurveSpeedPlotCommand.instance());
+        leftCurvesList.addObserver(WaveCurveSpeedPlotCommand.instance());
+        rightCurvesList.addObserver(WaveCurveSpeedPlotCommand.instance());
 
         curvesList.addObserver(DomainSelectionCommand.instance());
         leftCurvesList.addObserver(DomainSelectionCommand.instance());

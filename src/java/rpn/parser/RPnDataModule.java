@@ -45,6 +45,7 @@ public class RPnDataModule {
     static public RPnPhaseSpaceAbstraction LEFTPHASESPACE = null;
     static public RPnPhaseSpaceAbstraction RIGHTPHASESPACE = null;
     static public RPnPhaseSpaceAbstraction RIEMANNPHASESPACE = null;
+    static public RPnPhaseSpaceAbstraction SPEEDGRAPHICSPHASESPACE = null;
     static public RPnPhaseSpaceAbstraction[] CHARACTERISTICSPHASESPACEARRAY = null;
     private static HashMap<String, RPnPhaseSpaceAbstraction> phaseSpaceMap_ = new HashMap<String, RPnPhaseSpaceAbstraction>();
 
@@ -53,6 +54,8 @@ public class RPnDataModule {
         phaseSpaceMap_.put(PHASESPACE.getName(), PHASESPACE);
         phaseSpaceMap_.put(LEFTPHASESPACE.getName(), LEFTPHASESPACE);
         phaseSpaceMap_.put(RIGHTPHASESPACE.getName(), RIGHTPHASESPACE);
+
+        
 
     }
 
@@ -142,6 +145,12 @@ public class RPnDataModule {
                     RPNUMERICS.domain(), new NumConfigImpl());//  RpNumerics.domain(),
             RIEMANNPHASESPACE = new RPnPhaseSpaceAbstraction("Riemann Phase Space",
                     new Space("Riemann Space", RPNUMERICS.domainDim() + 1), new NumConfigImpl());
+            
+            
+            
+              SPEEDGRAPHICSPHASESPACE = new RPnPhaseSpaceAbstraction("Speed Graphics Phase Space",
+                      new Space("Speed Graphics Space", 2), new NumConfigImpl());
+            
 
             CHARACTERISTICSPHASESPACEARRAY = new RPnPhaseSpaceAbstraction[RPNUMERICS.domainDim()];
 
@@ -154,6 +163,7 @@ public class RPnDataModule {
             phaseSpaceMap_.put(PHASESPACE.getName(), PHASESPACE);
             phaseSpaceMap_.put(LEFTPHASESPACE.getName(), LEFTPHASESPACE);
             phaseSpaceMap_.put(RIGHTPHASESPACE.getName(), RIGHTPHASESPACE);
+
 
         }
 

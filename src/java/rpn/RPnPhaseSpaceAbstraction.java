@@ -318,28 +318,6 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene implements Observer 
     }
 
 
-    @Override
-    public void clear() {
-
-        ArrayList deleteList = new ArrayList();
-
-        Iterator geomList = getGeomObjIterator();
-        while (geomList.hasNext()) {
-            RpGeometry geom = (RpGeometry) geomList.next();
-
-            deleteList.add(geom);
-
-        }
-        for (int i = 0; i < deleteList.size(); i++) {
-            delete((RpGeometry) deleteList.get(i));
-        }
-        
-        RPNUMERICS.clearCurvesCache();
-
-        notifyState();
-
-    }
-
     public RpGeometry getSelectedGeom() {
         return selectedGeom_;
     }

@@ -71,7 +71,7 @@ public class CurvesConfig extends UI_ACTION_SELECTED {
         ChangeOrbitLevelCommand.instance().setEnabled(true);
         EllipticBoundaryCommand.instance().setEnabled(true);
         PhysicalBoundaryPlotCommand.instance().setEnabled(true);
-        RiemannProfileCommand.instance().setEnabled(true);
+        RiemannProfileCommand.instance().setEnabled(false);
         WaveCurvePlotCommand.instance().setEnabled(true);
         CurveRefineCommand.instance().setEnabled(false);
         ChooseAreaCommand.instance().setEnabled(true);
@@ -82,7 +82,7 @@ public class CurvesConfig extends UI_ACTION_SELECTED {
         ZoomingAreaCommand.instance().setEnabled(true);
         AnnotationSelectionCommand.instance().setEnabled(true);
         
-        AreaSelectionCommand.instance().setEnabled(true);
+        AreaSelectionCommand.instance().setEnabled(false);
         
         
         

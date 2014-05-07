@@ -15,7 +15,6 @@ public class RiemannProfile extends RPnCurve  {
 
 
     private OrbitPoint[] points_;
-//    private List<RealSegment> segments_;
 
 
     //
@@ -24,16 +23,7 @@ public class RiemannProfile extends RPnCurve  {
    
     public RiemannProfile(OrbitPoint[] points) {
         super(MultidAdapter.converseCoordsArrayToRealSegments(MultidAdapter.converseOrbitPointsToCoordsArray(points)));
-//        segments_= MultidAdapter.converseRPnCurveToRealSegments(this);
         points_ = points;
-        
-        for (OrbitPoint orbitPoint : points) {
-            
-            System.out.println(orbitPoint);
-            
-        }
-
-
     }
 
     @Override
@@ -58,14 +48,7 @@ public class RiemannProfile extends RPnCurve  {
     public OrbitPoint [] getPoints(){
         return points_;
     }
-   
-
-//    @Override
-//    public List<RealSegment> segments() {
-//        
-//        return segments_;
-//
-//    }
+ 
 
    
 }

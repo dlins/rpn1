@@ -10,10 +10,10 @@ extern "C" {
 /*
  * Class:     rpnumerics_RiemannProfileCalc
  * Method:    nativeCalc
- * Signature: (Lwave/util/RealVector;Lwave/util/RealVector;Ljava/util/List;Ljava/util/List;)Lrpnumerics/RpSolution;
+ * Signature: (Lwave/util/RealVector;Lwave/util/RealVector;[I)Lrpnumerics/RpSolution;
  */
 JNIEXPORT jobject JNICALL Java_rpnumerics_RiemannProfileCalc_nativeCalc
-  (JNIEnv *, jobject, jobject, jobject, jobject, jobject);
+  (JNIEnv *, jobject, jobject, jobject, jintArray);
 
 #ifdef __cplusplus
 }

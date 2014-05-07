@@ -10,8 +10,6 @@ import java.util.List;
 import wave.util.RealVector;
 
 
-import wave.multid.view.ViewingAttr;
-import java.awt.Color;
 import rpn.component.MultidAdapter;
 import wave.multid.CoordsArray;
 import wave.util.RealSegment;

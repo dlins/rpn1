@@ -7,10 +7,7 @@
 package rpnumerics;
 
 import rpn.configuration.Configuration;
-import java.util.ArrayList;
 import java.util.List;
-import rpn.configuration.CommandConfiguration;
-import rpn.configuration.ConfigurationProfile;
 import wave.util.RealVector;
 
 public class RiemannProfileCalc implements RpCalculation {
@@ -25,13 +22,14 @@ public class RiemannProfileCalc implements RpCalculation {
     private List<FundamentalCurve> forwardList_;
     private List<FundamentalCurve> backwardList_;
     private Configuration configuration_;
+    private int[] waveCurvesID_;
 
     //
     // Constructors/Initializers
     //
     public RiemannProfileCalc(Area area, WaveCurve forwardCurve, WaveCurve backwardCurve) {
 
-        area_ = area;
+     
 //        List<WaveCurveBranch> forwardBranch = forwardCurve.getBranchsList();
 //        forwardList_ = new ArrayList<FundamentalCurve>();
 //
@@ -80,6 +78,11 @@ public class RiemannProfileCalc implements RpCalculation {
 
     }
 
+    public RiemannProfileCalc(Area selectedArea, int[] waveCurvesID) {
+           area_ = selectedArea;
+           waveCurvesID_=waveCurvesID;
+    }
+
     //
     // Methods
     //
@@ -97,7 +100,7 @@ public class RiemannProfileCalc implements RpCalculation {
         RealVector pmax = area_.getTopRight();
 
 
-        RpSolution result = nativeCalc(pmin, pmax, forwardList_, backwardList_);
+        RpSolution result = nativeCalc(pmin, pmax, waveCurvesID_);
 
         if (result == null) {
             throw new RpException("Error in native layer");
@@ -107,7 +110,7 @@ public class RiemannProfileCalc implements RpCalculation {
         return result;
     }
 
-    private native RpSolution nativeCalc(RealVector pmin, RealVector pmax, List<FundamentalCurve> forwardWaveCurve, List<FundamentalCurve> backwardWaveCurve) throws RpException;
+    private native RpSolution nativeCalc(RealVector pmin, RealVector pmax,int [] waveCurveIdArray) throws RpException;
 
     public RpSolution recalc(Area area) throws RpException {
         throw new UnsupportedOperationException("Not supported yet.");

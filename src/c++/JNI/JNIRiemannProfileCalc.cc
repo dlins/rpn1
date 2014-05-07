@@ -32,7 +32,7 @@ using std::vector;
 using namespace std;
 
 JNIEXPORT jobject JNICALL Java_rpnumerics_RiemannProfileCalc_nativeCalc
-(JNIEnv * env, jobject obj, jobject pmin, jobject pmax, jobject forwardList, jobject backwardList) {
+(JNIEnv * env, jobject obj, jobject pmin, jobject pmax, jintArray waveCurveIDArray) {
 
 
     jclass realVectorClass = env->FindClass(REALVECTOR_LOCATION);
@@ -84,10 +84,29 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RiemannProfileCalc_nativeCalc
     RealVector nativeTopRight(dimension, limitsBuffer);
 
     //Processing forward wavecurve orbit list
+    
+    
+    int waveCurves = env->GetArrayLength(waveCurveIDArray);
+    
+    int  nativeWaveCurvesIDArray [2];
+    
+    
+    env->GetIntArrayRegion(waveCurveIDArray, 0, waveCurves, nativeWaveCurvesIDArray);
+    
+    
+    cout <<"ID da curva 0 "<<nativeWaveCurvesIDArray[0]<<endl;
+    cout <<"ID da curva 1 "<<nativeWaveCurvesIDArray[1]<<endl;
+    
+    
 
-    const WaveCurve * waveCurve1 = RpNumerics::getWaveCurve(0);
-    const WaveCurve * waveCurve2 = RpNumerics::getWaveCurve(1);
+    const WaveCurve * waveCurve1 = RpNumerics::getWaveCurve(nativeWaveCurvesIDArray[0]);
+    const WaveCurve * waveCurve2 = RpNumerics::getWaveCurve(nativeWaveCurvesIDArray[1]);
 
+    
+    cout <<"Curva 0 "<< waveCurve1 <<endl;
+    cout <<"Curva 1 "<< waveCurve2 <<endl;
+
+    
 
     RealVector intersectionPoint(dimension);
     int subcurve1;

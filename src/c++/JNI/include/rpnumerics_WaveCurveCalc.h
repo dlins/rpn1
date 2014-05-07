@@ -10,17 +10,9 @@ extern "C" {
 /*
  * Class:     rpnumerics_WaveCurveCalc
  * Method:    nativeCalc
- * Signature: (Lrpnumerics/OrbitPoint;IIII)Lrpnumerics/RpSolution;
- */
-JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc__Lrpnumerics_OrbitPoint_2IIII
-  (JNIEnv *, jobject, jobject, jint, jint, jint, jint);
-
-/*
- * Class:     rpnumerics_WaveCurveCalc
- * Method:    nativeCalc
  * Signature: (Lrpnumerics/OrbitPoint;Lrpn/configuration/CurveConfiguration;)Lrpnumerics/RpSolution;
  */
-JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc__Lrpnumerics_OrbitPoint_2Lrpn_configuration_CurveConfiguration_2
+JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc
   (JNIEnv *, jobject, jobject, jobject);
 
 #ifdef __cplusplus

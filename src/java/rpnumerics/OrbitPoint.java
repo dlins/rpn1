@@ -20,6 +20,7 @@ public final class OrbitPoint extends PhasePoint {
     private double lambda_;
     private int correspondingPointIndex_;
     private int correspondingCurveIndex_;
+    private double [] eigenValues_;
 
     //
     // Constructor
@@ -33,11 +34,25 @@ public final class OrbitPoint extends PhasePoint {
         super(pCoords);
         lambda_ = pTime;
     }
+    
+    
+    public OrbitPoint(RealVector pCoords, double [] eigenValues,double pTime) {
+        super(pCoords);
+        lambda_ = pTime;
+        eigenValues_=eigenValues;
+    }
 
     public OrbitPoint(RealVector pCoords) {
         this(pCoords, DEFAULT_TIME);
     }
+    
+    public OrbitPoint(double[] coords, double [] eigenValues,double lambda) {
 
+        super(new RealVector(coords));
+        lambda_ = lambda;
+        eigenValues_=eigenValues;
+    }
+    
     public OrbitPoint(double[] coords, double lambda) {
 
         super(new RealVector(coords));

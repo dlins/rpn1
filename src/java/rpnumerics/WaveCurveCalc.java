@@ -18,26 +18,20 @@ public class WaveCurveCalc extends WaveCurveOrbitCalc {
     //
     // Constructors/Initializers
     //
-    private final int edge_;
-
-    private final int origin_;
-
+   
 
     public WaveCurveCalc(PhasePoint point, int familyIndex, int timeDirection, int origin, int edge) {
 
         super(new OrbitPoint(point), familyIndex, timeDirection);
-        edge_ = edge;
-        origin_ = origin;
+       
     }
     
     
-    public WaveCurveCalc(PhasePoint input, CurveConfiguration hugoniotConfiguration) {
+    public WaveCurveCalc(PhasePoint input, CurveConfiguration waveCurveConfiguration) {
 
-        super(new OrbitPoint(input), Integer.parseInt(hugoniotConfiguration.getParam("family")),Integer.parseInt(hugoniotConfiguration.getParam("direction")));
+        super(new OrbitPoint(input), Integer.parseInt(waveCurveConfiguration.getParam("family")),Integer.parseInt(waveCurveConfiguration.getParam("direction")));
 
-        edge_=0;
-        origin_=0;
-        configuration_ = hugoniotConfiguration.clone();
+        configuration_ = waveCurveConfiguration.clone();
 
     }
 
@@ -67,7 +61,7 @@ public class WaveCurveCalc extends WaveCurveOrbitCalc {
     }
 
 
-    private native RpSolution nativeCalc(OrbitPoint initialPoint, int family, int timeDirection, int origin, int edge);
+//    private native RpSolution nativeCalc(OrbitPoint initialPoint, int family, int timeDirection, int origin, int edge);
     private native RpSolution nativeCalc(OrbitPoint initialPoint, CurveConfiguration config);
 
    

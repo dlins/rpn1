@@ -72,11 +72,11 @@ inline GridValuesFactory & RpNumerics::getGridFactory() {
 }
 
 inline WaveCurve * RpNumerics::getWaveCurve(int n) {
-    return waveCurveMap_->operator[](n);
+    return waveCurveMap_->at(n);
 }
 
 inline void RpNumerics::addWaveCurve(WaveCurve * wc) {
-    waveCurveMap_->operator [](curveCounter) = wc;
+    waveCurveMap_->insert(std::pair<int,WaveCurve *>(curveCounter,wc));
 
     cout << "Tamanho do mapa de wc: " << waveCurveMap_->size() << endl;
 }
@@ -116,16 +116,20 @@ inline void RpNumerics::clearCurveMap() {
     for (std::map<int, WaveCurve *>::iterator it = waveCurveMap_->begin(); it != waveCurveMap_->end(); ++it) {
         delete it->second;
     }
-    
+
     waveCurveMap_->clear();
 
 }
 
-inline  void RpNumerics::removeCurve(int curveID){
-    
-    delete  waveCurveMap_->at(curveID);
-    waveCurveMap_->erase(curveID);
-    
+inline void RpNumerics::removeCurve(int curveID) {
+
+
+    if (waveCurveMap_->count(curveID) == 1) {
+        delete waveCurveMap_->at(curveID);
+        waveCurveMap_->erase(curveID);
+    }
+
+
 }
 
 inline void RpNumerics::setSigma(double s) {

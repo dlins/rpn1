@@ -6,7 +6,6 @@
 package rpn.command;
 
 import java.awt.event.ActionEvent;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Observable;
@@ -26,7 +25,6 @@ import rpn.controller.ui.UIController;
 import rpn.controller.ui.UI_ACTION_SELECTED;
 import rpn.parser.RPnDataModule;
 import rpnumerics.*;
-import wave.multid.view.GeomObjView;
 import wave.util.Boundary;
 import wave.util.RealVector;
 
@@ -71,15 +69,13 @@ public class RiemannProfileCommand extends RpModelPlotCommand implements Observe
 
     @Override
     public void update(Observable o, Object arg) {
-        if (arg != null) {
-            boolean enable = checkCurvesForRiemmanProfile((List<RpGeometry>) arg);
+
+        if (!UIController.instance().getSelectedGeometriesList().isEmpty()) {
+            boolean enable = checkCurvesForRiemmanProfile(UIController.instance().getSelectedGeometriesList());
 
             setEnabled(enable);
             DomainSelectionCommand.instance().setEnabled(enable);
-
-            if (enable) {
-                instance_.selectedCurves = (List<RpGeometry>) arg;
-            }
+           
         }
 
     }
@@ -88,6 +84,8 @@ public class RiemannProfileCommand extends RpModelPlotCommand implements Observe
     public void execute() {
 
         selectedCurves = UIController.instance().getSelectedGeometriesList();
+        
+      
 
         Iterator<RPnPhaseSpacePanel> panelsIterator = UIController.instance().getInstalledPanelsIterator();
         while (panelsIterator.hasNext()) {
@@ -95,7 +93,11 @@ public class RiemannProfileCommand extends RpModelPlotCommand implements Observe
 
             for (AreaSelected sArea : rPnPhaseSpacePanel.getSelectedAreas()) {
                 Area selectedArea = new Area(sArea);
-                RiemannProfileCalc rc = new RiemannProfileCalc(selectedArea, waveCurveForward_, waveCurveBackward_);
+                
+                int [] waveCurvesID = new int[2];
+                waveCurvesID[0]= waveCurveForward_.getId();
+                waveCurvesID[1]= waveCurveBackward_.getId();
+                RiemannProfileCalc rc = new RiemannProfileCalc(selectedArea,waveCurvesID);
                 RiemannProfileGeomFactory riemannProfileGeomFactory = new RiemannProfileGeomFactory(rc);
 
                 RiemannProfile riemannProfile = (RiemannProfile) riemannProfileGeomFactory.geomSource();
