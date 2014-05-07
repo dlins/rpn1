@@ -132,10 +132,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionCurveCalc_calc(JNIEnv * env
 
         }
 
-
-
-
-
         double * dataCoords = tempVector;
 
         //Reading only coodinates
