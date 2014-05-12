@@ -143,11 +143,8 @@ public class GenericExtensionCurveCommand extends BifurcationPlotCommand {
             }
             
             segments = segmentsIntoArea(selectedGeometry, indexToRemove);
-            
-            InflectionCurve testeCurve = new InflectionCurve(segments);
-            InflectionCurveCalc testeCalc = new InflectionCurveCalc(new ContourParams(), 0);
-            InflectionCurveGeomFactory testeFactory = new InflectionCurveGeomFactory(testeCalc, testeCurve);
-            RPnDataModule.PHASESPACE.join(testeFactory.geom());
+                      
+          
         }
         
         if (!imageSelection_.isEmpty()) {
