@@ -381,6 +381,9 @@ public class RPnCommandModule {
                     CurveRemoveCommand.instance().remove(curveId_);
                 }
 
+                if (currentCommand_.equals("physicalboundary")) {
+                    PhysicalBoundaryPlotCommand.instance().execute();
+                }
 
                 if (currentCommand_.equals("eigenvaluelevel")) {
                     LevelCurvePlotCommand.instance().execute();
