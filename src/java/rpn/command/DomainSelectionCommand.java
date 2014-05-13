@@ -87,13 +87,13 @@ public class DomainSelectionCommand extends RpModelPlotCommand implements Observ
 //            } else {
                 setEnabled(true);
                 GenericExtensionCurveCommand.instance().setEnabled(true);
-
-                if (RPnNetworkStatus.instance().isOnline() && RPnNetworkStatus.instance().isMaster()) {
-                    RpGeomFactory factory = geometryList.get(0).geomFactory();
-                    RPnCurve curve = (RPnCurve) factory.geomSource();
-                    RpCommand command = new RpCommand(curve.getId());
-                    RPnNetworkStatus.instance().sendCommand(command.toXML());
-                }
+//
+//                if (RPnNetworkStatus.instance().isOnline() && RPnNetworkStatus.instance().isMaster()) {
+//                    RpGeomFactory factory = geometryList.get(0).geomFactory();
+//                    RPnCurve curve = (RPnCurve) factory.geomSource();
+//                    RpCommand command = new RpCommand(curve.getId());
+//                    RPnNetworkStatus.instance().sendCommand(command.toXML());
+//                }
 
 //            }
 

@@ -83,11 +83,6 @@ public class RpCommand extends AbstractAction implements UndoableAction, Seriali
         }
 
 
-
-
-
-
-
         xmlString_ = buffer.toString();
 
 
