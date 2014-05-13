@@ -250,8 +250,8 @@ public class RPnCommandModule {
 
                 } else if (currentCommand_.equalsIgnoreCase("curveselection")) {
                     selectedGeometry_ = pickCurve(curveId_);
-                    selectedGeometry_.setSelected(!selectedGeometry_.isSelected());
-//                    UIController.instance().getSelectedGeometriesList().add(selectedGeometry_);
+//                    selectedGeometry_.setSelected(!selectedGeometry_.isSelected());
+                    UIController.instance().getSelectedGeometriesList().add(selectedGeometry_);
                     System.out.println("Selecionando curva :" + curveId_);
 
                     UIController.instance().getActivePhaseSpace().updateCurveSelection();
