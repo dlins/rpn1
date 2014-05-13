@@ -369,8 +369,14 @@ public class RPnCommandModule {
                 
                 
                 if (currentCommand_.equals("discriminantlevel")) {
-                    LevelCurvePlotCommand.instance().execute();
+                    DiscriminantLevelCurvePlotCommand.instance().execute();
                 }
+                
+                if (currentCommand_.equalsIgnoreCase("derivativediscriminantlevel")) {
+                    DerivativeDiscriminantLevelCurvePlotCommand.instance().execute();
+                }
+                
+                
             }
 
         }
