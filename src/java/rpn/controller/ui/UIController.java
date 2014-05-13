@@ -33,7 +33,10 @@ import rpn.message.*;
 import rpn.parser.RPnDataModule;
 import rpnumerics.RPnCurve;
 
-/** This class implements a general controller to the application. With the UIController class, the state of the application is changed, the controllers of each panel are installed or removed and the user inputs are stored in a global table. */
+/* This class implements a general controller to the application. 
+With the UIController class, the state of the application is changed, 
+the controllers of each panel are installed or removed and the user inputs are stored in a global table. */
+
 public class UIController extends ComponentUI {
     //
     // Constants
@@ -74,9 +77,22 @@ public class UIController extends ComponentUI {
         handler_ = new RAREFACTION_CONFIG();
         auxPanelsEnabled_ = true;
 
-        activePhaseSpace_ = RPnDataModule.PHASESPACE;       //***
+        activePhaseSpace_ = RPnDataModule.PHASESPACE;
 
         
+    }
+
+    public void toggleShowLastInputCursorPos(RPnPhaseSpacePanel panel) {
+
+        if (panel.isShowLastInputCursorPos()) {
+            panel.setShowLastInputCursorPos(false);
+
+        } else {
+            panel.setShowLastInputCursorPos(true);
+        }
+
+        panel.repaint();
+
     }
 
     private void toggleCursorLines() {
@@ -87,6 +103,7 @@ public class UIController extends ComponentUI {
         } else {
             RPnPhaseSpacePanel.setShowCursor(true);
         }
+
         Iterator it = installedPanels_.iterator();
 
         while (it.hasNext()) {
@@ -97,6 +114,7 @@ public class UIController extends ComponentUI {
     }
 
     public void showCursorLines(boolean showCursor) {
+
         RPnPhaseSpacePanel.setCursorLineVisible(showCursor);
         Iterator it = installedPanels_.iterator();
 
@@ -250,15 +268,20 @@ public class UIController extends ComponentUI {
                 if (RPnNetworkStatus.instance().isMaster() || !(RPnNetworkStatus.instance().isOnline())) {
 
 
-
                     int sceneDim = panel.scene().getViewingTransform().projectionMap().getDomain().getDim();
                     if (sceneDim == globalInputTable_.flags().length) {
 
                         updateUserInputTable(panel, event.getPoint());
                         evaluatePanelsCursorCoords(panel, event.getPoint());
+
                         // execute
                         if (globalInputTable().isComplete()) {
-                            userInputComplete(globalInputTable().values());
+
+			    if (panel.isBlinkLastInputCursorPos())
+                            	userInputComplete(globalInputTable().lastValues());
+			    else
+                            	userInputComplete(globalInputTable().values());
+
                             globalInputTable().reset();
                             resetPanelsCursorCoords();
                             RPnUIFrame.enableSliders();
@@ -408,8 +431,10 @@ public class UIController extends ComponentUI {
 
         // state dependent
         handler_.userInputComplete(this, userInput);
-        
-
+        for (int i = 0; i < installedPanels_.size(); i++) {
+            RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) installedPanels_.get(i);
+	    panel.setShowLastInputCursorPos(true);
+	}
     }
 
     /** Sets the state of the application. The application works as a state machine and this method changes the actual state.*/

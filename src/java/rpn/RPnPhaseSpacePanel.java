@@ -8,26 +8,16 @@ package rpn;
 import java.io.UnsupportedEncodingException;
 import org.apache.batik.svggen.SVGGraphics2DIOException;
 import wave.multid.view.*;
+import wave.multid.*;
+import wave.util.*;
 import rpn.controller.PhaseSpacePanel2DController;
 import rpn.controller.PhaseSpacePanelController;
 import rpn.controller.PhaseSpacePanel3DController;
-import java.awt.Graphics2D;
-import java.awt.Stroke;
-import java.awt.BasicStroke;
+import java.awt.*;
 import java.awt.print.Printable;
 import java.awt.print.PageFormat;
-import java.awt.GraphicsEnvironment;
-import java.awt.GraphicsConfiguration;
-import java.awt.GraphicsDevice;
 import java.awt.image.BufferedImage;
-import java.awt.Graphics;
-import java.awt.Point;
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.Polygon;
 import javax.swing.JPanel;
-import java.awt.Shape;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 import java.io.File;
@@ -92,6 +82,7 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
     public static boolean isCursorLine() {
         return cursorLine_;
     }
+
     //
     // Members
     //
@@ -101,7 +92,8 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
 //    private JPEGImageEncoder encoder_;
     private boolean printFlag_ = false;
     private PhaseSpacePanelController ui_;
-    private static boolean showLastCursorPos_;
+    private boolean showLastInputCursorPos_ = false;
+    private boolean blinkLastInputCursorPos_ = false;
     private static boolean showCursorLine_;
     private static boolean cursorLine_;
     private boolean physicalBoundarySelected_;
@@ -110,6 +102,7 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
     // Constructors
     //
     public RPnPhaseSpacePanel(Scene scene) {
+
         scene_ = scene;
         testeList_ = new ArrayList<MultiGeometryImpl>();
 
@@ -141,6 +134,7 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
                 getViewport().getHeight()).intValue();
 
         cursorPos_ = new Point(0, 0);
+
         setBackground(DEFAULT_BOUNDARY_COLOR);
         setPreferredSize(new java.awt.Dimension(myW, myH));
         graphicsUtilList_ = new ArrayList();
@@ -174,6 +168,22 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
 
     public static void setCursorLineVisible(boolean aSetCursorLine_) {
         cursorLine_ = aSetCursorLine_;
+    }
+
+    public boolean isShowLastInputCursorPos() {
+        return showLastInputCursorPos_;
+    }
+
+    public boolean isBlinkLastInputCursorPos() {
+        return blinkLastInputCursorPos_;
+    }
+
+    public void setShowLastInputCursorPos(boolean showCursor) {
+        showLastInputCursorPos_ = showCursor;
+    }
+
+    public void setBlinkLastInputCursorPos(boolean blinkCursor) {
+        blinkLastInputCursorPos_ = blinkCursor;
     }
 
     public void setTrackedPoint(Point trackedPoint) {
@@ -318,6 +328,7 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
     }
 
     public void clearClassifiers() {
+
         GeometryGraphND.clearpMarca();
         ArrayList<GraphicsUtil> toRemove = new ArrayList();
         ArrayList<String> velRemove = new ArrayList();
@@ -477,15 +488,50 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
                 g.drawLine(xCursor, 0, xCursor, getHeight());
                 g.drawLine(0, yCursor, getWidth(), yCursor);
             }
+
+	    // returns to default values	
             g.setColor(prev);
             ((Graphics2D) g).setStroke(stroke);
         }
+
+	// this is a design flaw due to the addition of several PhaseSpaces
+	// UIController was supposed to be a singleton contrlling the only instance of a PhaseSpace originally.
+	RPnPhaseSpaceAbstraction phaseSpace = (RPnPhaseSpaceAbstraction)scene_.getAbstractGeom();
+	String phaseSpaceName = phaseSpace.getName();
+
+	if ((showLastInputCursorPos_) && (scene().getViewingTransform() instanceof Viewing2DTransform) 
+		&& !phaseSpaceName.startsWith("Left") && !phaseSpaceName.startsWith("Right")) {
+
+	     g.setColor(Color.yellow);
+	     float[] dash = { 5F, 5 };  
+	     Stroke dashedStroke = new BasicStroke( 1.1F, BasicStroke.CAP_SQUARE,  
+		BasicStroke.JOIN_MITER, 3F, dash, 0F );  
+		
+            ((Graphics2D) g).setStroke(dashedStroke);
+
+	    Coords2D dcCoords = new Coords2D();
+
+	    RealVector lastValues = UIController.instance().globalInputTable().lastValues();
+
+            CoordsArray wcCoords = new Coords2D(lastValues.toDouble());
+            scene().getViewingTransform().viewPlaneTransform(wcCoords, dcCoords);
+
+            int xCursor = new Double(dcCoords.getX()).intValue();
+            int yCursor = new Double(dcCoords.getY()).intValue();
+            g.drawLine(xCursor, 0, xCursor, getHeight());
+            g.drawLine(0, yCursor, getWidth(), yCursor);
+
+	    // returns to default values	
+            g.setColor(prev);
+            ((Graphics2D) g).setStroke(stroke);
+	}
 
         for (MultiGeometryImpl multiPolyLine : testeList_) {
             try {
 
                 GeomObjView createView = multiPolyLine.createView(scene_.getViewingTransform());
                 createView.draw((Graphics2D) g);
+
             } catch (DimMismatchEx ex) {
                 Logger.getLogger(RPnPhaseSpacePanel.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -508,15 +554,12 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
     }
 
     public void updateGraphicsUtil() {
+
         for (GraphicsUtil graphicsUtil : graphicsUtilList_) {
 
             graphicsUtil.update(scene().getViewingTransform());
 
         }
-
-
-
-
 
     }
 
