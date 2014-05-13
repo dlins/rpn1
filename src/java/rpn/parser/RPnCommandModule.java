@@ -249,7 +249,8 @@ public class RPnCommandModule {
                     GenericExtensionCurveCommand.instance().execute();
 
                 } else if (currentCommand_.equalsIgnoreCase("curveselection")) {
-                    selectedGeometry_ = selectCurve(curveId_);
+                    selectedGeometry_ = pickCurve(curveId_);
+                    selectedGeometry_.setSelected(!selectedGeometry_.isSelected());
                     System.out.println("Selecionando curva :" + curveId_);
                     RPnPhaseSpaceFrame frame = (RPnPhaseSpaceFrame) RPnUIFrame.getFrame("Axis0 Axis1");
                     GenericExtensionCurveCommand.instance().setGeometryAndPanel(selectedGeometry_, frame.phaseSpacePanel());
@@ -420,7 +421,7 @@ public class RPnCommandModule {
             }
         }
 
-        private RpGeometry selectCurve(int curveID) {
+        private RpGeometry pickCurve(int curveID) {
 
             System.out.println("Curve id :" + curveID);
             RPnPhaseSpaceAbstraction phaseSpace = UIController.instance().getActivePhaseSpace();

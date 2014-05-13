@@ -26,6 +26,7 @@ public class CurveSelectionCommand extends RpModelPlotCommand {
     //
     static private CurveSelectionCommand instance_ = null;
 
+    int curveToSelect_;
 
     //
     // Constructors/Initializers
@@ -64,9 +65,22 @@ public class CurveSelectionCommand extends RpModelPlotCommand {
 
     }
 
+    public void setCurveToSelect(int curveToSelect_) {
+        this.curveToSelect_ = curveToSelect_;
+    }
+    
+    
+    
+    
+    
+    
+
     @Override
     public void execute() {
 
+
+        
+        System.out.println("chamando execute do curves selection");
 
     }
 
