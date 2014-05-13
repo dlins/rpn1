@@ -249,7 +249,6 @@ public class RPnCommandModule {
                     GenericExtensionCurveCommand.instance().execute();
 
                 } else if (currentCommand_.equalsIgnoreCase("curveselection")) {
-                    selectPhaseSpace(att.getValue("phasespace"));
                     selectedGeometry_ = pickCurve(curveId_);
                     selectedGeometry_.setSelected(!selectedGeometry_.isSelected());
 //                    UIController.instance().getSelectedGeometriesList().add(selectedGeometry_);
