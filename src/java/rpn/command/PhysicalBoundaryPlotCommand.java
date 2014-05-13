@@ -50,14 +50,16 @@ public class PhysicalBoundaryPlotCommand extends RpModelPlotCommand {
     @Override
     public void execute() {
 
+//
+//        PhysicalBoundaryFactory factory = new PhysicalBoundaryFactory(new PhysicalBoundaryCalc());
 
-        PhysicalBoundaryFactory factory = new PhysicalBoundaryFactory(new PhysicalBoundaryCalc());
+//        RPnDataModule.PHASESPACE.join(factory.geom());
+        super.execute();
+        RpGeometry geom = createRpGeometry(null);
+        RPnDataModule.LEFTPHASESPACE.join(geom);
+        RPnDataModule.RIGHTPHASESPACE.join(geom);
 
-        RPnDataModule.LEFTPHASESPACE.join(factory.geom());
-        RPnDataModule.RIGHTPHASESPACE.join(factory.geom());
-        RPnDataModule.PHASESPACE.join(factory.geom());
-
-
+        
 
     }
 
