@@ -127,10 +127,10 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionCurveCalc_calc(JNIEnv * env
 
         double lambda = rarcurve.speed[i];
 
-        for (int k = 0; k < rarcurve.eigenvalues[i].size(); k++) {
-            cout << " i: " << i << " " << rarcurve.eigenvalues[i][k] << endl;
-
-        }
+//        for (int k = 0; k < rarcurve.eigenvalues[i].size(); k++) {
+//            cout << " i: " << i << " " << rarcurve.eigenvalues[i][k] << endl;
+//
+//        }
 
         double * dataCoords = tempVector;
 

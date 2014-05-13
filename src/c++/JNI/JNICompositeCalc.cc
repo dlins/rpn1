@@ -195,8 +195,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CompositeCalc_nativeCalc(JNIEnv * env,
 //    if (cmpcurve.curve.size() == 0)
 //        return NULL;
 
-    cout<<"Tamanho da curva composta: "<<cmpcurve.curve.size()<<endl;
-    cout <<cmpcurve.curve[0]<<endl;
+//    cout<<"Tamanho da curva composta: "<<cmpcurve.curve.size()<<endl;
+//    cout <<cmpcurve.curve[0]<<endl;
 
     //Orbit members creation
     
@@ -207,7 +207,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CompositeCalc_nativeCalc(JNIEnv * env,
     for (int i = 1; i < cmpcurve.curve.size(); i++) {
 
         RealVector tempVector = cmpcurve.curve[i];
-        cout<<tempVector<<endl;
+//        cout<<tempVector<<endl;
 
 
         double * dataCoords = tempVector;

@@ -82,6 +82,8 @@ public class RPnCommandModule {
 
         @Override
         public void endDocument() {
+            
+
         }
 
         @Override
@@ -206,10 +208,10 @@ public class RPnCommandModule {
                     UIController.instance().setState(new FILE_ACTION_SELECTED(IntegralCurvePlotCommand.instance()));
                 } else if (currentCommand_.equalsIgnoreCase("wavecurve")) {
                     UIController.instance().setState(new FILE_ACTION_SELECTED(WaveCurvePlotCommand.instance()));
-                } else if (currentCommand_.equalsIgnoreCase("levelcurve")) {
+                } else if (currentCommand_.equalsIgnoreCase("eigenvaluelevel")) {
                     UIController.instance().setState(new FILE_ACTION_SELECTED(LevelCurvePlotCommand.instance()));
                     
-                } else if (currentCommand_.equalsIgnoreCase("pointlevelcurve")) {
+                } else if (currentCommand_.equalsIgnoreCase("eigenvaluepointlevel")) {
 
                     UIController.instance().setState(new FILE_ACTION_SELECTED(PointLevelCurvePlotCommand.instance()));
                 } else if (currentCommand_.equalsIgnoreCase("compositecurve")) {

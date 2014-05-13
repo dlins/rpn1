@@ -241,7 +241,6 @@ public class RPnConsumer implements RPnResetableListener {
 
                 // COMMAND MESSAGES PARSING
                 RPnCommandModule.init(XMLReaderFactory.createXMLReader(), new StringBufferInputStream(text));
-                System.out.println(text);
 
                 // updates the PhaseSpace Frames...
                 rpn.RPnPhaseSpaceFrame[] framesList = rpn.RPnUIFrame.getPhaseSpaceFrames();
