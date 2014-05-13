@@ -206,18 +206,16 @@ public class RPnCommandModule {
                 } else if (currentCommand_.equalsIgnoreCase("eigenvaluepointlevel")) {
 
                     UIController.instance().setState(new FILE_ACTION_SELECTED(PointLevelCurvePlotCommand.instance()));
-                } 
-                
-                else if (currentCommand_.equalsIgnoreCase("discriminantlevel")) {
+                } else if (currentCommand_.equalsIgnoreCase("discriminantlevel")) {
 
                     UIController.instance().setState(new FILE_ACTION_SELECTED(DiscriminantLevelCurvePlotCommand.instance()));
-                }
-                else if (currentCommand_.equalsIgnoreCase("discriminantpointlevel")) {
+                } else if (currentCommand_.equalsIgnoreCase("discriminantpointlevel")) {
 
                     UIController.instance().setState(new FILE_ACTION_SELECTED(DiscriminantPointLevelCurvePlotCommand.instance()));
-                }
-                
-                else if (currentCommand_.equalsIgnoreCase("compositecurve")) {
+                } else if (currentCommand_.equalsIgnoreCase("derivativediscriminantlevel")) {
+
+                    UIController.instance().setState(new FILE_ACTION_SELECTED(DerivativeDiscriminantLevelCurvePlotCommand.instance()));
+                } else if (currentCommand_.equalsIgnoreCase("compositecurve")) {
                     UIController.instance().setState(new FILE_ACTION_SELECTED(CompositePlotCommand.instance()));
                 } else if (currentCommand_.equalsIgnoreCase("rarefactioncurve")) {
                     UIController.instance().setState(new FILE_ACTION_SELECTED(RarefactionCurvePlotCommand.instance()));
@@ -366,6 +364,11 @@ public class RPnCommandModule {
                 }
 
                 if (currentCommand_.equals("eigenvaluelevel")) {
+                    LevelCurvePlotCommand.instance().execute();
+                }
+                
+                
+                if (currentCommand_.equals("discriminantlevel")) {
                     LevelCurvePlotCommand.instance().execute();
                 }
             }
