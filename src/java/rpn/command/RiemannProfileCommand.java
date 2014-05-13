@@ -70,13 +70,13 @@ public class RiemannProfileCommand extends RpModelPlotCommand implements Observe
     @Override
     public void update(Observable o, Object arg) {
 
-        if (!UIController.instance().getSelectedGeometriesList().isEmpty()) {
+//        if (!UIController.instance().getSelectedGeometriesList().isEmpty()) {
             boolean enable = checkCurvesForRiemmanProfile(UIController.instance().getSelectedGeometriesList());
 
             setEnabled(enable);
-            DomainSelectionCommand.instance().setEnabled(enable);
+            DomainSelectionCommand.instance().setEnabled(!UIController.instance().getSelectedGeometriesList().isEmpty());
            
-        }
+//        }
 
     }
 
@@ -84,9 +84,6 @@ public class RiemannProfileCommand extends RpModelPlotCommand implements Observe
     public void execute() {
 
         selectedCurves = UIController.instance().getSelectedGeometriesList();
-        
-      
-
         Iterator<RPnPhaseSpacePanel> panelsIterator = UIController.instance().getInstalledPanelsIterator();
         while (panelsIterator.hasNext()) {
             RPnPhaseSpacePanel rPnPhaseSpacePanel = panelsIterator.next();

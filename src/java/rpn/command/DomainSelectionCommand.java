@@ -73,14 +73,18 @@ public class DomainSelectionCommand extends RpModelPlotCommand implements Observ
 
     @Override
     public void update(Observable o, Object arg) {
-        if (!UIController.instance().getSelectedGeometriesList().isEmpty()) {
-            List<RpGeometry> geometryList = UIController.instance().getSelectedGeometriesList();//List<RpGeometry>) arg);
-            if (geometryList.size() != 1) {
-                setEnabled(false);
-                getContainer().setSelected(false);
-                GenericExtensionCurveCommand.instance().setEnabled(false);
+        
 
-            } else {
+        if (!UIController.instance().getSelectedGeometriesList().isEmpty()) {
+            
+            
+            List<RpGeometry> geometryList = UIController.instance().getSelectedGeometriesList();
+//            if (geometryList.size() != 1) {
+//                setEnabled(false);
+//                getContainer().setSelected(false);
+//                GenericExtensionCurveCommand.instance().setEnabled(false);
+//
+//            } else {
                 setEnabled(true);
                 GenericExtensionCurveCommand.instance().setEnabled(true);
 
@@ -91,8 +95,21 @@ public class DomainSelectionCommand extends RpModelPlotCommand implements Observ
                     RPnNetworkStatus.instance().sendCommand(command.toXML());
                 }
 
-            }
+//            }
 
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
         } else {
             setEnabled(false);
             getContainer().setSelected(false);

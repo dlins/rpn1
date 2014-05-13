@@ -646,9 +646,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         leftCurvesList.addObserver(EnableLRPhaseSpaceCommand.instance());
         rightCurvesList.addObserver(EnableLRPhaseSpaceCommand.instance());
 
-        curvesList.addObserver(DomainSelectionCommand.instance());
-        leftCurvesList.addObserver(DomainSelectionCommand.instance());
-        rightCurvesList.addObserver(DomainSelectionCommand.instance());
+       
 
         curvesList.update();
 //        leftCurvesList.update();

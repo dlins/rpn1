@@ -61,7 +61,7 @@ public class CurvesConfig extends UI_ACTION_SELECTED {
         ChangeFluxParamsCommand.instance().setEnabled(true);
         RarefactionExtensionCurvePlotCommand.instance().setEnabled(true);
         IntegralCurvePlotCommand.instance().setEnabled(true);
-        DomainSelectionCommand.instance().setEnabled(true);
+//        DomainSelectionCommand.instance().setEnabled(true);
         CompositePlotCommand.instance().setEnabled(true);
         PointLevelCurvePlotCommand.instance().setEnabled(true);
         DiscriminantLevelCurvePlotCommand.instance().setEnabled(true);
