@@ -249,11 +249,13 @@ public class RPnCommandModule {
                     GenericExtensionCurveCommand.instance().execute();
 
                 } else if (currentCommand_.equalsIgnoreCase("curveselection")) {
+                    selectPhaseSpace(att.getValue("phasespace"));
                     selectedGeometry_ = pickCurve(curveId_);
                     selectedGeometry_.setSelected(!selectedGeometry_.isSelected());
-                    UIController.instance().getSelectedGeometriesList().add(selectedGeometry_);
+//                    UIController.instance().getSelectedGeometriesList().add(selectedGeometry_);
                     System.out.println("Selecionando curva :" + curveId_);
-                    RPnDataModule.PHASESPACE.update();
+
+                    UIController.instance().getActivePhaseSpace().updateCurveSelection();
                     RPnPhaseSpaceFrame frame = (RPnPhaseSpaceFrame) RPnUIFrame.getFrame("Axis0 Axis1");
                     GenericExtensionCurveCommand.instance().setGeometryAndPanel(selectedGeometry_, frame.phaseSpacePanel());
 
