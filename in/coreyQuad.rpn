@@ -22,9 +22,16 @@
                 <METHODPARAM  name="tolerance" value="0.001" />
             </METHOD>
 
-            <CURVECONFIGURATION name="hugoniotcurve">
-                <CURVEPARAM name="resolution" value="250 250"/>
+            
+            
+             <CURVECONFIGURATION name="hugoniotcurve">
+                <CURVEPARAM name="resolution" value="120 120"/>
+                <CURVEPARAM name="method" value="COREY"/>
+                <CURVEPARAM name="case" value="0"/>
+                
             </CURVECONFIGURATION>
+            
+            
             
             <CURVECONFIGURATION name="bifurcationcurve">
 

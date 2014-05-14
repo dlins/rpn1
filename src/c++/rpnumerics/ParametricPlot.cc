@@ -1,11 +1,11 @@
 #include "ParametricPlot.h"
+//#include "TestTools.h"
 
-
-//#ifdef TEST_PARAMETRICPLOT
-//Canvas* ParametricPlot::canvas = 0;
-//CanvasMenuScroll* ParametricPlot::scroll = 0;
-//#include "curve2d.h"
-//#endif
+#ifdef TEST_PARAMETRICPLOT
+Canvas* ParametricPlot::canvas = 0;
+CanvasMenuScroll* ParametricPlot::scroll = 0;
+#include "curve2d.h"
+#endif
 
 // Angle phi will be updated to the first viable value.
 //
@@ -24,21 +24,21 @@ int ParametricPlot::find_initial_point_within_domain(RealVector (*f)(void*, doub
 
             point = (*f)(obj, phi + delta_phi);
 
-//            #ifdef TEST_PARAMETRICPLOT
-//            if (canvas != 0){
-//                std::vector<RealVector> temp;
-//                temp.push_back(point);
-//                Curve2D *c = new Curve2D(temp, 1.0, 0.0, 0.0, CURVE2D_MARKERS);
-//                canvas->add(c);
-//
-//                std::stringstream ss;
-//                ss << "Outside. phi = " << phi + delta_phi;
-//
-//                scroll->add(ss.str().c_str(), canvas, c);
-//
-////                TestTools::pause("Click to continue");
-//            }
-//            #endif
+            #ifdef TEST_PARAMETRICPLOT
+            if (canvas != 0){
+                std::vector<RealVector> temp;
+                temp.push_back(point);
+                Curve2D *c = new Curve2D(temp, 1.0, 0.0, 0.0, CURVE2D_MARKERS);
+                canvas->add(c);
+
+                std::stringstream ss;
+                ss << "Outside. phi = " << phi + delta_phi;
+
+                scroll->add(ss.str().c_str(), canvas, c);
+
+//                TestTools::pause("Click to continue");
+            }
+            #endif
 
             RealVector boundary_point;
             int edge;
@@ -68,64 +68,75 @@ int ParametricPlot::find_initial_point_within_domain(RealVector (*f)(void*, doub
     return INITIAL_POINT_NOT_FOUND;
 }
 
-void ParametricPlot::find_curve(RealVector (*f)(void*, double), void *obj, double &phi, double phi_final, double max_distance, double delta_phi, const Boundary *b, Curve &curve){
+void ParametricPlot::find_curve(RealVector (*f)(void*, double), 
+                                bool (*f_asymptote)(void*, const RealVector&, const RealVector&), 
+                                void *obj, 
+                                double &phi, double phi_final, double max_distance, double delta_phi, const Boundary *b, Curve &curve){
+
     if (curve.curve.size() == 0) return;
 
     RealVector old_point = curve.curve.back();
 //    std::cout << "Initial old_point = " << old_point << std::endl;
 
-    int max_halvings = 5;
+    int max_halvings = 20;
     int halvings = 0;
 
     while (phi <= phi_final){
 //        phi += delta_phi;
         RealVector point = (*f)(obj, phi + delta_phi);
 
+        // TODO: As of now, delta_phi only decreases. This step should be really adaptive, increasing if necessary.
+
         // Verify that two consecutive points are not too far. If they are, halve delta_phi.
         //
         while (norm(point - old_point) > max_distance*.01 && halvings < max_halvings){
-            std::cout << "max_distance = " << max_distance*.01 << std::endl;
-            std::cout << "distance = " << norm(point - old_point) << std::endl;
-            std::cout << "delta_phi = " << delta_phi << std::endl;
+//            std::cout << "max_distance = " << max_distance*.01 << std::endl;
+//            std::cout << "distance = " << norm(point - old_point) << std::endl;
+//            std::cout << "delta_phi = " << delta_phi << std::endl;
 
             delta_phi *= .5;
 
-            std::cout << "new delta_phi = " << delta_phi << std::endl << std::endl;
+//            std::cout << "new delta_phi = " << delta_phi << std::endl << std::endl;
             halvings++;
 
             point = (*f)(obj, phi + delta_phi);
-            std::cout << "Candidate point: " << point << std::endl;
+//            std::cout << "Candidate point: " << point << std::endl;
         }
 
-        std::cout << "Minimum distance achieved:\n" << "old_point = " << old_point << ", point = " << point << ", d = " << norm(point - old_point) << std::endl;
+//        std::cout << "Minimum distance achieved:\n" << "old_point = " << old_point << ", point = " << point << ", d = " << norm(point - old_point) << std::endl;
 
 
         // Update phi.
         //
         phi += delta_phi;
 
-        std::cout << "phi = " << phi << ", point = " << point << ", inside = " << b->inside(point) << std::endl;
+//        std::cout << "phi = " << phi << ", point = " << point << ", inside = " << b->inside(point) << std::endl;
 //        TestTools::pause();
 
+        if (halvings >= max_halvings){
+            if (f_asymptote != 0){
+                if ((*f_asymptote)(obj, old_point, point)) return;
+            }
+        }
 
         if (b->inside(point)){
             curve.curve.push_back(point);
 
-//            #ifdef TEST_PARAMETRICPLOT
-//            if (canvas != 0){
-//                std::vector<RealVector> temp;
-//                temp.push_back(point);
-//                Curve2D *c = new Curve2D(temp, 0.0, 0.0, 0.0, CURVE2D_MARKERS);
-//                canvas->add(c);
-//
-//                std::stringstream ss;
-//                ss << "Inside. phi = " << phi + delta_phi;
-//
-//                scroll->add(ss.str().c_str(), canvas, c);
-//
-////                TestTools::pause("Click to continue");
-//            }
-//            #endif
+            #ifdef TEST_PARAMETRICPLOT
+            if (canvas != 0){
+                std::vector<RealVector> temp;
+                temp.push_back(point);
+                Curve2D *c = new Curve2D(temp, 0.0, 0.0, 0.0, CURVE2D_MARKERS);
+                canvas->add(c);
+
+                std::stringstream ss;
+                ss << "Inside. phi = " << phi + delta_phi;
+
+                scroll->add(ss.str().c_str(), canvas, c);
+
+//                TestTools::pause("Click to continue");
+            }
+            #endif
         }
         else {
             RealVector boundary_point;
@@ -144,7 +155,7 @@ void ParametricPlot::find_curve(RealVector (*f)(void*, double), void *obj, doubl
     return;
 }
 
-void ParametricPlot::plot(RealVector (*f)(void*, double), 
+void ParametricPlot::plot(RealVector (*f)(void*, double), bool (*f_asymptote)(void*, const RealVector&, const RealVector&),
                           void *obj, double phi_init, double phi_final, int n, const Boundary *b, std::vector<Curve> &curve){
     curve.clear();
 
@@ -164,10 +175,10 @@ void ParametricPlot::plot(RealVector (*f)(void*, double),
         int info_find_initial_point = find_initial_point_within_domain(f, obj, phi, phi_final, delta_phi, b, temp);
 
         if (info_find_initial_point == INITIAL_POINT_FOUND) {
-            std::cout << "Initial point: " << temp.curve.back() << std::endl;
+//            std::cout << "Initial point: " << temp.curve.back() << std::endl;
 //            TestTools::pause("Initial point found, check console.");
 
-            find_curve(f, obj, phi, phi_final, max_distance, delta_phi, b, temp);
+            find_curve(f, f_asymptote, obj, phi, phi_final, max_distance, delta_phi, b, temp);
 
             if (temp.curve.size() > 0) curve.push_back(temp);
         }
@@ -236,4 +247,13 @@ void ParametricPlot::intersection(RealVector (*f)(void*, double), void *obj, con
 
 //    }
 }
+
+//void ParametricPlot::segmented_curve(RealVector (*f)(void*, double), void *obj, const Boundary *b,
+//                                     double phi_init, double phi_final,
+//                                     std::vector<RealVector> &sc){
+//    
+//    
+
+//    return;
+//}
 

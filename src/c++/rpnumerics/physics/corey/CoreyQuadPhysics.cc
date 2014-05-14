@@ -14,6 +14,7 @@
 #include "Hugoniot_Curve.h"
 #include "Double_Contact.h"
 #include "HugoniotContinuation2D2D.h"
+#include "CoreyQuadExplicitHugoniotCurve.h"
 
 /*
  * ---------------------------------------------------------------
@@ -23,9 +24,18 @@
 
 
 CoreyQuadPhysics::CoreyQuadPhysics() : SubPhysics(CoreyQuad(CoreyQuad_Params()), StoneAccumulation(), *defaultBoundary(), Multid::PLANE, "CoreyQuad", _SIMPLE_ACCUMULATION_) {
-    
+
+    StoneParams * params = new StoneParams();
+
+    StonePermParams * permParams = new StonePermParams();
+
+    StoneFluxFunction * stoneFluxFunction = new StoneFluxFunction(*params, *permParams);
+
+    stoneExplicitBifurcation_ = new Stone_Explicit_Bifurcation_Curves(stoneFluxFunction);
+
+    hugoniotCurveArray_->operator []("COREY") = new CoreyQuadExplicitHugoniotCurve((CoreyQuad *) & fluxFunction(), stoneExplicitBifurcation_, &getBoundary());
     setDoubleContactFunction(new Double_Contact());
-    setHugoniotFunction(new Hugoniot_Curve(&fluxFunction(),&accumulation()));
+    setHugoniotFunction(new Hugoniot_Curve(&fluxFunction(), &accumulation()));
     setViscosityMatrix(new Viscosity_Matrix());
     preProcessedBoundary_ = defaultBoundary();
 
@@ -38,9 +48,9 @@ SubPhysics * CoreyQuadPhysics::clone()const {
 
 CoreyQuadPhysics::CoreyQuadPhysics(const CoreyQuadPhysics & copy) : SubPhysics(copy.fluxFunction(), copy.accumulation(), copy.getBoundary(), copy.domain(), "CoreyQuad", _SIMPLE_ACCUMULATION_) {
 
-
+    hugoniotCurveArray_->operator []("COREY") = new CoreyQuadExplicitHugoniotCurve((CoreyQuad *) & fluxFunction(), stoneExplicitBifurcation_, &getBoundary());
     setDoubleContactFunction(new Double_Contact());
-    setHugoniotFunction(new Hugoniot_Curve(&copy.fluxFunction(),&copy.accumulation()));
+    setHugoniotFunction(new Hugoniot_Curve(&copy.fluxFunction(), &copy.accumulation()));
     setViscosityMatrix(copy.getViscosityMatrix());
     preProcessedBoundary_ = copy.getPreProcessedBoundary()->clone();
 
@@ -54,7 +64,7 @@ void CoreyQuadPhysics::setParams(vector<string> newParams) {
 
 
     RealVector fluxParamVector(7);
-    double paramValue ;
+    double paramValue;
     //Flux params
     for (int i = 0; i < fluxParamVector.size(); i++) {
         std::stringstream stream(newParams[i]);

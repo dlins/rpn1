@@ -427,10 +427,10 @@ RealVector project_point_onto_line_2D(const RealVector &q, const RealVector &p0,
     P(0, 0) = p1_minus_p0(0);
     P(0, 1) = p1_minus_p0(1);
     P(1, 0) = p1_minus_p0(1);
-    P(1, 1) = p1_minus_p0(0);
+    P(1, 1) = -p1_minus_p0(0);
 
     RealVector b(2);
-    b(0) = -q*p1_minus_p0;
+    b(0) = q*p1_minus_p0;
     b(1) = -p0(1)*p1_minus_p0(0) + p0(0)*p1_minus_p0(1);
 
     RealVector p;

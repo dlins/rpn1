@@ -124,7 +124,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
 
 //    string hugoniotMethodName(env->GetStringUTFChars(methodName, NULL));
 
-    Hugoniot_Locus *hugoniotCurve = RpNumerics::getPhysics().getSubPhysics(0).getHugoniotMethod(methodName);
+//    Hugoniot_Locus *hugoniotCurve = RpNumerics::getPhysics().getSubPhysics(0).getHugoniotMethod(methodName);
+    
+    HugoniotCurve *hugoniotCurve = RpNumerics::getPhysics().getSubPhysics(0).getHugoniotCurve(methodName);
 
     GridValues * gv = RpNumerics::getGridFactory().getGrid("hugoniotcurve");
 
@@ -145,8 +147,13 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
      std::stringstream stream(caseName);
 
      stream >> caseFlag;
+     
+     
+     vector<Curve> vectorCurve;
+     
+     hugoniotCurve->curve(refPoint, 0, vectorCurve);
         
-    hugoniotCurve->curve(*gv, refPoint, caseFlag,  hugoniotPolyLineVector, transitionList);
+//    hugoniotCurve->curve(*gv, refPoint, caseFlag,  hugoniotPolyLineVector, transitionList);
 
 
     jobject transitionArray = env->NewObject(arrayListClass, arrayListConstructor, NULL);
@@ -169,21 +176,27 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
     //
     //    }
 
+    
+    
 
-    for (int i = 0; i < hugoniotPolyLineVector.size(); i++) {
+    
+    
+     for (int i = 0; i < vectorCurve.size(); i++) {
 
+         cout<<"Tamanho do vetor de curves " <<vectorCurve[i].curve.size()<<endl;
+         
 
-        for (unsigned int j = 0; j < hugoniotPolyLineVector[i].point.size() - 1; j++) {
+        for (unsigned int j = 0; j < vectorCurve[i].curve.size()-1; j++) {
 
 
             jdoubleArray eigenValRLeft = env->NewDoubleArray(dimension);
             jdoubleArray eigenValRRight = env->NewDoubleArray(dimension);
 
-            RpNumerics::getPhysics().getSubPhysics(0).postProcess(hugoniotPolyLineVector[i].point[j]);
-            RpNumerics::getPhysics().getSubPhysics(0).postProcess(hugoniotPolyLineVector[i].point[j + 1]);
+//            RpNumerics::getPhysics().getSubPhysics(0).postProcess(hugoniotPolyLineVector[i].point[j]);
+//            RpNumerics::getPhysics().getSubPhysics(0).postProcess(hugoniotPolyLineVector[i].point[j + 1]);
 
-            double * leftCoords = (double *) hugoniotPolyLineVector[i].point[j];
-            double * rightCoords = (double *) hugoniotPolyLineVector[i].point[j + 1];
+            double * leftCoords = (double *) vectorCurve[i].curve[j];
+            double * rightCoords = (double *) vectorCurve[i].curve[j+1];
 
             env->SetDoubleArrayRegion(eigenValRLeft, 0, dimension, leftCoords);
             env->SetDoubleArrayRegion(eigenValRRight, 0, dimension, rightCoords);
@@ -195,19 +208,19 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
             env->DeleteLocalRef(eigenValRLeft);
             env->DeleteLocalRef(eigenValRRight);
 
-            int pointType = hugoniotPolyLineVector[i].type[j];
+            int pointType = 0;//hugoniotPolyLineVector[i].type[j];
 
-            string signature = hugoniotPolyLineVector[i].signature[j];
+            string signature = "NAN";//hugoniotPolyLineVector[i].signature[j];
 
 
-            double leftSigma = hugoniotPolyLineVector[i].speed[j];
-            double rightSigma = hugoniotPolyLineVector[i].speed[j + 1];
+            double leftSigma = 0;//hugoniotPolyLineVector[i].speed[j];
+            double rightSigma = 0;//hugoniotPolyLineVector[i].speed[j + 1];
 
-            double leftLambda1 = hugoniotPolyLineVector[i].eigenvalue[j].component(0);
-            double leftLambda2 = hugoniotPolyLineVector[i].eigenvalue[j].component(1);
+            double leftLambda1 = 0;//hugoniotPolyLineVector[i].eigenvalue[j].component(0);
+            double leftLambda2 = 0;//hugoniotPolyLineVector[i].eigenvalue[j].component(1);
 
-            double rightLambda1 = hugoniotPolyLineVector[i].eigenvalue[j + 1].component(0);
-            double rightLambda2 = hugoniotPolyLineVector[i].eigenvalue[j + 1].component(1);
+            double rightLambda1 = 0;//hugoniotPolyLineVector[i].eigenvalue[j + 1].component(0);
+            double rightLambda2 = 0;//hugoniotPolyLineVector[i].eigenvalue[j + 1].component(1);
 
 
             jobject hugoniotSegment = env->NewObject(hugoniotSegmentClass, hugoniotSegmentConstructor, realVectorLeftPoint, leftSigma, realVectorRightPoint, rightSigma, leftLambda1, leftLambda2, rightLambda1, rightLambda2, pointType, env->NewStringUTF(signature.c_str()));
@@ -216,7 +229,68 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
         }
 
 
-    }
+    
+    
+    
+    
+     }
+    
+    
+    
+    
+    
+    
+    
+//    
+//    
+//
+//    for (int i = 0; i < hugoniotPolyLineVector.size(); i++) {
+//
+//
+//        for (unsigned int j = 0; j < hugoniotPolyLineVector[i].point.size() - 1; j++) {
+//
+//
+//            jdoubleArray eigenValRLeft = env->NewDoubleArray(dimension);
+//            jdoubleArray eigenValRRight = env->NewDoubleArray(dimension);
+//
+//            RpNumerics::getPhysics().getSubPhysics(0).postProcess(hugoniotPolyLineVector[i].point[j]);
+//            RpNumerics::getPhysics().getSubPhysics(0).postProcess(hugoniotPolyLineVector[i].point[j + 1]);
+//
+//            double * leftCoords = (double *) hugoniotPolyLineVector[i].point[j];
+//            double * rightCoords = (double *) hugoniotPolyLineVector[i].point[j + 1];
+//
+//            env->SetDoubleArrayRegion(eigenValRLeft, 0, dimension, leftCoords);
+//            env->SetDoubleArrayRegion(eigenValRRight, 0, dimension, rightCoords);
+//
+//            //Construindo left e right points
+//            jobject realVectorLeftPoint = env->NewObject(realVectorClass, realVectorConstructorDoubleArray, eigenValRLeft);
+//            jobject realVectorRightPoint = env->NewObject(realVectorClass, realVectorConstructorDoubleArray, eigenValRRight);
+//
+//            env->DeleteLocalRef(eigenValRLeft);
+//            env->DeleteLocalRef(eigenValRRight);
+//
+//            int pointType = hugoniotPolyLineVector[i].type[j];
+//
+//            string signature = hugoniotPolyLineVector[i].signature[j];
+//
+//
+//            double leftSigma = hugoniotPolyLineVector[i].speed[j];
+//            double rightSigma = hugoniotPolyLineVector[i].speed[j + 1];
+//
+//            double leftLambda1 = hugoniotPolyLineVector[i].eigenvalue[j].component(0);
+//            double leftLambda2 = hugoniotPolyLineVector[i].eigenvalue[j].component(1);
+//
+//            double rightLambda1 = hugoniotPolyLineVector[i].eigenvalue[j + 1].component(0);
+//            double rightLambda2 = hugoniotPolyLineVector[i].eigenvalue[j + 1].component(1);
+//
+//
+//            jobject hugoniotSegment = env->NewObject(hugoniotSegmentClass, hugoniotSegmentConstructor, realVectorLeftPoint, leftSigma, realVectorRightPoint, rightSigma, leftLambda1, leftLambda2, rightLambda1, rightLambda2, pointType, env->NewStringUTF(signature.c_str()));
+//            env->CallObjectMethod(segmentsArray, arrayListAddMethod, hugoniotSegment);
+//
+//        }
+//
+//
+//    }
 
 
 

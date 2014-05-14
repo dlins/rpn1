@@ -22,7 +22,7 @@
  */
 
 SubPhysics::SubPhysics(const FluxFunction & fluxFunction, const AccumulationFunction & accumulationFunction, const Boundary & boundary, const Space & space, const char * id, int type) : fluxFunction_((FluxFunction *) fluxFunction.clone()),
-accumulationFunction_((AccumulationFunction*) accumulationFunction.clone()), hugoniotArray_(new map<string, Hugoniot_Locus *>()),secondaryBifurcationArray_(new map<string, Secondary_Bifurcation_Interface *>()),
+accumulationFunction_((AccumulationFunction*) accumulationFunction.clone()),  hugoniotCurveArray_(new map<string, HugoniotCurve *>()),hugoniotArray_(new map<string, Hugoniot_Locus *>()),secondaryBifurcationArray_(new map<string, Secondary_Bifurcation_Interface *>()),
 boundary_(boundary.clone()),
 space_(new Space(space)),
 ID_(id),
@@ -32,7 +32,7 @@ type_(type) {
 }
 
 SubPhysics::SubPhysics(const Boundary & boundary, const Space & space, const char * name, int type) : boundary_(boundary.clone()),
-space_(new Space(space)), hugoniotArray_(new map<string, Hugoniot_Locus *>()),secondaryBifurcationArray_(new map<string, Secondary_Bifurcation_Interface *>()),
+space_(new Space(space)), hugoniotCurveArray_(new map<string, HugoniotCurve *>()),hugoniotArray_(new map<string, Hugoniot_Locus *>()),secondaryBifurcationArray_(new map<string, Secondary_Bifurcation_Interface *>()),
 ID_(name),
 type_(type) {
     setHugoniotContinuationMethod(new HugoniotContinuation2D2D(fluxFunction_, accumulationFunction_, &getBoundary()));
@@ -79,6 +79,18 @@ Hugoniot_Locus * SubPhysics::getHugoniotMethod(const string & gridName) {
 
     if (hugoniotArray_->count(gridName) == 1) {
         return hugoniotArray_->operator [](gridName);
+    } else {
+
+        cerr<<"Method not implemented "<<endl;
+    }
+
+}
+
+
+HugoniotCurve * SubPhysics::getHugoniotCurve(const string & hugoniotName) {
+
+    if (hugoniotCurveArray_->count(hugoniotName) == 1) {
+        return hugoniotCurveArray_->operator [](hugoniotName);
     } else {
 
         cerr<<"Method not implemented "<<endl;
@@ -179,7 +191,9 @@ SubPhysics::~SubPhysics() {
 
     delete viscosityMatrix_;
     delete hugoniotArray_;
-
+    
+//    delete hugoniotCurveArray_;
+    
 
 }
 

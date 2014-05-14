@@ -399,3 +399,13 @@ void Utilities::pick_point_from_wavecurve(const WaveCurve &wavecurve, const Real
     return;
 }
 
+void Utilities::regularly_sampled_segment(const RealVector &p, const RealVector &q, int n, Curve &curve){
+    curve.curve.clear();
+
+    double delta = 1.0/(double)(n - 1);
+
+    for (int i = 0; i < n; i++) curve.curve.push_back((p - q)*(delta*(double)(i)) + q);
+
+    return;
+}
+

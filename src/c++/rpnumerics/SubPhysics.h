@@ -22,6 +22,7 @@
 #include  "Multid.h"
 #include "eigen.h"
 #include "Hugoniot_Locus.h"
+#include "HugoniotCurve.h"
 #include "ThreeImplicitFunctions.h"
 #include "Double_Contact_Function.h"
 #include "methods/ShockMethod.h"
@@ -59,6 +60,7 @@ protected:
     Viscosity_Matrix * viscosityMatrix_;
     Boundary * preProcessedBoundary_;
     std::map<string, Hugoniot_Locus *> * hugoniotArray_;
+    std::map<string, HugoniotCurve *> * hugoniotCurveArray_;
     std::map<string, Secondary_Bifurcation_Interface *> * secondaryBifurcationArray_;
 
 public:
@@ -89,6 +91,8 @@ public:
     void setViscosityMatrix(Viscosity_Matrix *);
 
     void setHugoniotFunction(Hugoniot_Locus *);
+    
+    HugoniotCurve * getHugoniotCurve(const string &);
 
     void setDoubleContactFunction(Double_Contact_Function *tif);
 

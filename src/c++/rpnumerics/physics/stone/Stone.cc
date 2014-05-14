@@ -141,7 +141,7 @@ Stone::Stone() : SubPhysics(StoneFluxFunction(StoneParams(), StonePermParams()),
     
     
     hugoniotArray_->operator []("IMPLICIT") = new Hugoniot_Curve(&fluxFunction(), &accumulation());
-//    hugoniotArray_->operator []("STONE") = new StoneExplicitHugoniot((StoneFluxFunction *)&fluxFunction(),(StoneAccumulation *)&accumulation(), &getBoundary(),stoneBifurcation);
+
 
 //    secondaryBifurcationArray_->operator []("IMPLICIT") = new Secondary_Bifurcation(&fluxFunction(), &accumulation(), &fluxFunction(), &accumulation());
 

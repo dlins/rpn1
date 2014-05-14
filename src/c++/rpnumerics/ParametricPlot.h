@@ -14,12 +14,12 @@
 #define INITIAL_POINT_NOT_FOUND 1
 #endif
 
-#define TEST_PARAMETRICPLOT
-//
-//#ifdef TEST_PARAMETRICPLOT
-//#include "canvas.h"
-//#include "canvasmenuscroll.h"
-//#endif 
+//#define TEST_PARAMETRICPLOT
+
+#ifdef TEST_PARAMETRICPLOT
+#include "canvas.h"
+#include "canvasmenuscroll.h"
+#endif 
 
 class ParametricPlot {
     private:
@@ -30,15 +30,28 @@ class ParametricPlot {
                                                     const Boundary *b,
                                                     Curve &curve);
 
-        static void find_curve(RealVector (*f)(void*, double), void *obj, double &phi, double phi_final, double max_distance, double delta_phi, const Boundary *b, Curve &curve);
+        static void find_curve(RealVector (*f)(void*, double),
+                               bool (*f_asymptote)(void*, const RealVector&, const RealVector&), 
+                               void *obj,
+                               double &phi, double phi_final, double max_distance, double delta_phi, const Boundary *b, Curve &curve);
 
         static void intersection(RealVector (*f)(void*, double), void *obj, const Boundary *b, double max_distance,
                                   double init_phi_p, double init_phi_q, 
                                   double &phi);
 
     public:
+        static void plot(RealVector (*f)(void*, double),
+                         bool (*f_asymptote)(void*, const RealVector&, const RealVector&), 
+                         void *obj, 
+                         double phi_init, double phi_final, int n, const Boundary *b, std::vector<Curve> &curve);
+
         static void plot(RealVector (*f)(void*, double), 
-                         void *obj, double phi_init, double phi_final, int n, const Boundary *b, std::vector<Curve> &curve);
+                         void *obj, double phi_init, double phi_final, int n, const Boundary *b, std::vector<Curve> &curve){
+
+            plot(f, 0, obj, phi_init, phi_final, n, b, curve);
+
+            return;
+        }
 
         static void plot(RealVector (*f)(void*, double), 
                          void *obj, const Boundary *b, std::vector<Curve> &curve){
@@ -53,10 +66,10 @@ class ParametricPlot {
             return;
         }
 
-//        #ifdef TEST_PARAMETRICPLOT
-//        static Canvas *canvas;
-//        static CanvasMenuScroll *scroll;
-//        #endif
+        #ifdef TEST_PARAMETRICPLOT
+        static Canvas *canvas;
+        static CanvasMenuScroll *scroll;
+        #endif
 };
 
 #endif // _PARAMETRICPLOT_
