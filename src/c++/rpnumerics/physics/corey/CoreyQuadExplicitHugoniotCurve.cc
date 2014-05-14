@@ -59,7 +59,7 @@ void CoreyQuadExplicitHugoniotCurve::curve(const ReferencePoint &ref, int type, 
         // Project the reference point according to the case.
         //
         reference_point.point = project(ref.point, type);
-
+        cout <<"Type dentro do curve: "<<type<<endl;
         switch (type){
             case COREYQUADHUGONIOTCURVE_GENERIC_POINT:
             {

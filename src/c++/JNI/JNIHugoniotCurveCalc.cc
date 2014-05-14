@@ -99,10 +99,10 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
     
     
     cout<<"Method pego no JNI: "<<methodName<<endl;
-    cout<<"Caso pego no JNI: "<<caseName<<endl;
+
 
     
-
+   
     //Input point
 
 
@@ -140,7 +140,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
 
     ReferencePoint refPoint(Uref, &RpNumerics::getPhysics().fluxFunction(), &RpNumerics::getPhysics().accumulation(), 0);
 
-    cout << "flux :" << &RpNumerics::getPhysics().fluxFunction() << " " << &RpNumerics::getPhysics().accumulation() << endl;
+    cout << "flux :" << RpNumerics::getPhysics().fluxFunction().fluxParams().params() << " " << &RpNumerics::getPhysics().accumulation() << endl;
     
     
     int caseFlag;
@@ -148,10 +148,13 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
 
      stream >> caseFlag;
      
+     cout<<"Caso pego no JNI: "<<caseFlag<<endl;
+     
+     
      
      vector<Curve> vectorCurve;
      
-     hugoniotCurve->curve(refPoint, 0, vectorCurve);
+     hugoniotCurve->curve(refPoint, caseFlag, vectorCurve);
         
 //    hugoniotCurve->curve(*gv, refPoint, caseFlag,  hugoniotPolyLineVector, transitionList);
 
@@ -188,6 +191,11 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
 
         for (unsigned int j = 0; j < vectorCurve[i].curve.size()-1; j++) {
 
+            
+            
+            if (j > 200)
+                
+                break;
 
             jdoubleArray eigenValRLeft = env->NewDoubleArray(dimension);
             jdoubleArray eigenValRRight = env->NewDoubleArray(dimension);
