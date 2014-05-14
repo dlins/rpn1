@@ -254,7 +254,7 @@ public class RPnCommandModule {
 //                    UIController.instance().getSelectedGeometriesList().add(selectedGeometry_);
                     System.out.println("Selecionando curva :" + curveId_);
 
-                    UIController.instance().getActivePhaseSpace().updateCurveSelection();
+                    UIController.instance().getActivePhaseSpace().notifyState();
                     RPnPhaseSpaceFrame frame = (RPnPhaseSpaceFrame) RPnUIFrame.getFrame("Axis0 Axis1");
                     GenericExtensionCurveCommand.instance().setGeometryAndPanel(selectedGeometry_, frame.phaseSpacePanel());
 
