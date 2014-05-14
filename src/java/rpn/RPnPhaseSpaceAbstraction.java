@@ -366,7 +366,7 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene implements Observer 
         }
     }
 
-    public void notifyState() {
+    private void notifyState() {
         for (RPnCurvesList curvesListFrame : curvesListFrames_) {
             curvesListFrame.update();
         }
