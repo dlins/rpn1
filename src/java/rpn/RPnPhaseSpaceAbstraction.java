@@ -17,11 +17,9 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.Timer;
 import rpn.command.CurveSelectionCommand;
-import rpn.command.RpCommand;
 import rpn.component.util.GeometryGraphND;
 import rpn.controller.ui.UIController;
 import rpn.controller.ui.UserInputTable;
-import rpn.message.RPnNetworkStatus;
 import wave.multid.model.MultiGeometry;
 import wave.util.RealVector;
 
