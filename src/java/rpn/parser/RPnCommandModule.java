@@ -387,7 +387,7 @@ public class RPnCommandModule {
 
                     }
 
-                    RpGeometry geometry = pickCurve(0);
+                    RpGeometry geometry = pickCurve(curveId_);
 
                     RPnPhaseSpaceFrame frame = (RPnPhaseSpaceFrame) RPnUIFrame.getFrame(RPnNetworkStatus.ACTIVATED_FRAME_TITLE);
 
@@ -411,7 +411,7 @@ public class RPnCommandModule {
 
                     }
 
-                    RpGeometry geometry = pickCurve(0);
+                    RpGeometry geometry = pickCurve(curveId_);
 
                     RPnPhaseSpaceFrame frame = (RPnPhaseSpaceFrame) RPnUIFrame.getFrame(RPnNetworkStatus.ACTIVATED_FRAME_TITLE);
 

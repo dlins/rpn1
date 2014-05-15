@@ -93,8 +93,8 @@ public class RPnVelocityPlotter extends RPn2DMouseController {
                lastAnnotation = annotationIterator.next();
                 
             }
-            
-            RpCommand command = new RpCommand(lastAnnotation.toXML(),"velocity");
+             RPnCurve curve = (RPnCurve)            geometry_.geomFactory().geomSource();
+            RpCommand command = new RpCommand(lastAnnotation.toXML(),"velocity",curve.getId());
 
             GenericExtensionCurveCommand.instance().logCommand(command);
 
