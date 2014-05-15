@@ -330,6 +330,7 @@ public class RPnCommandModule {
 
                 geometry.showSpeed(coords[0], coords[1], panel.scene().getViewingTransform());
                 
+                panel.updateGraphicsUtil();
                 
             }
             
