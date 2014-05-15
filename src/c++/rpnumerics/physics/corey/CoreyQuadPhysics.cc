@@ -57,7 +57,7 @@ CoreyQuadPhysics::CoreyQuadPhysics(const CoreyQuadPhysics & copy) : SubPhysics(c
     StoneFluxFunction * stoneFluxFunction = new StoneFluxFunction(*params, *permParams);
 
    Stone_Explicit_Bifurcation_Curves * stoneExplicitBifurcation = new Stone_Explicit_Bifurcation_Curves(stoneFluxFunction);
-   cout<<"sebc antes: "<<stoneExplicitBifurcation<<endl;
+
     
     
     hugoniotCurveArray_->operator []("COREY") = new CoreyQuadExplicitHugoniotCurve((CoreyQuad *) & fluxFunction(), &copy.accumulation(),stoneExplicitBifurcation, &getBoundary());
