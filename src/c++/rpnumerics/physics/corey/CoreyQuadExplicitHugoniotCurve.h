@@ -43,10 +43,16 @@ class CoreyQuadExplicitHugoniotCurve : public CoreyQuadHugoniotCurve {
         RealVector compute_umbilic_point(const RealVector &mu);
 
     public:
-        CoreyQuadExplicitHugoniotCurve(CoreyQuad *f, Stone_Explicit_Bifurcation_Curves *s, const Boundary *b);
+        CoreyQuadExplicitHugoniotCurve(const CoreyQuad *ff, const AccumulationFunction *aa, Stone_Explicit_Bifurcation_Curves *s, const Boundary *b);
         ~CoreyQuadExplicitHugoniotCurve();
 
         void curve(const ReferencePoint &ref, int type, std::vector<Curve> &c);
+
+        virtual void curve(const ReferencePoint &ref, int type, std::vector<HugoniotPolyLine> &classified_curve){
+            CoreyQuadHugoniotCurve::curve(ref, type, classified_curve);
+
+            return;
+        }
 
         // To be used by ParametricPlot.
         //

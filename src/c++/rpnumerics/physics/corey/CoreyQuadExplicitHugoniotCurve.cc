@@ -1,6 +1,6 @@
 #include "CoreyQuadExplicitHugoniotCurve.h"
 
-CoreyQuadExplicitHugoniotCurve::CoreyQuadExplicitHugoniotCurve(CoreyQuad *f, Stone_Explicit_Bifurcation_Curves *s, const Boundary *b) : CoreyQuadHugoniotCurve(f, s, b){
+CoreyQuadExplicitHugoniotCurve::CoreyQuadExplicitHugoniotCurve(const CoreyQuad *ff, const AccumulationFunction *aa, Stone_Explicit_Bifurcation_Curves *s, const Boundary *b) : CoreyQuadHugoniotCurve(ff, aa, s, b){
     side_opposite_vertex.push_back(THREE_PHASE_BOUNDARY_SW_ZERO);
     side_opposite_vertex.push_back(THREE_PHASE_BOUNDARY_SO_ZERO);
     side_opposite_vertex.push_back(THREE_PHASE_BOUNDARY_SG_ZERO);
@@ -18,6 +18,8 @@ CoreyQuadExplicitHugoniotCurve::CoreyQuadExplicitHugoniotCurve(CoreyQuad *f, Sto
     pure_G_vertex.resize(2);
     pure_G_vertex(0) = 0.0;
     pure_G_vertex(1) = 0.0;
+
+    method_ = EXPLICIT_HUGONIOT;
 }
 
 CoreyQuadExplicitHugoniotCurve::~CoreyQuadExplicitHugoniotCurve(){
@@ -59,7 +61,7 @@ void CoreyQuadExplicitHugoniotCurve::curve(const ReferencePoint &ref, int type, 
         // Project the reference point according to the case.
         //
         reference_point.point = project(ref.point, type);
-        
+
         switch (type){
             case COREYQUADHUGONIOTCURVE_GENERIC_POINT:
             {
@@ -67,20 +69,23 @@ void CoreyQuadExplicitHugoniotCurve::curve(const ReferencePoint &ref, int type, 
                 double phi_end   = M_PI;
 
                 std::vector<Curve> curve;
-                ParametricPlot::plot(&generic, &f_asymptote, (void*)this, phi_begin, phi_end, 10, boundary, curve);
+                ParametricPlot::plot(&generic, &f_asymptote, (void*)this, phi_begin, phi_end, 50, boundary, curve);
                 for (int i = 0; i < curve.size(); i++) c.push_back(curve[i]);
 
                 break;
             }
             case COREYQUADHUGONIOTCURVE_G_VERTEX:
             {
+
                 // This stays here (and not at the ctor) because the user may have change the parameters.
                 //
                 std::vector<RealVector> vertex(3), point_on_side(3);
+                cout<<"sebc"<<sebc<<endl;
                 for (int i = 0; i < 3; i++){
+                    cout<<"Entrei no curve gvertex"<< mu<<" "<<side_opposite_vertex[i]<<endl;
                     sebc->vertex_and_side(side_opposite_vertex[i], mu, vertex[i], point_on_side[i]);
                 }                
-
+                cout<<"Antes do 87"<<endl;
                 // Add GW side as two Curves.
                 //
                 {
@@ -234,7 +239,7 @@ void CoreyQuadExplicitHugoniotCurve::curve(const ReferencePoint &ref, int type, 
                 double phi_end   =  M_PI/2;
 
                 std::vector<Curve> curve;
-                ParametricPlot::plot(&GW_side, &f_asymptote, (void*)this, phi_begin, phi_end, 10, boundary, curve);
+                ParametricPlot::plot(&GW_side, &f_asymptote, (void*)this, phi_begin, phi_end, 50, boundary, curve);
                 for (int i = 0; i < curve.size(); i++) c.push_back(curve[i]);
 
                 break;
@@ -245,7 +250,7 @@ void CoreyQuadExplicitHugoniotCurve::curve(const ReferencePoint &ref, int type, 
                 double phi_end   =  M_PI/2;
 
                 std::vector<Curve> curve;
-                ParametricPlot::plot(&WO_side, &f_asymptote, (void*)this, phi_begin, phi_end, 10, boundary, curve);
+                ParametricPlot::plot(&WO_side, &f_asymptote, (void*)this, phi_begin, phi_end, 50, boundary, curve);
                 for (int i = 0; i < curve.size(); i++) c.push_back(curve[i]);
 
                 break;
@@ -256,7 +261,7 @@ void CoreyQuadExplicitHugoniotCurve::curve(const ReferencePoint &ref, int type, 
                 double phi_end   =  M_PI/2;
 
                 std::vector<Curve> curve;
-                ParametricPlot::plot(&GO_side, &f_asymptote, (void*)this, phi_begin, phi_end, 10, boundary, curve);
+                ParametricPlot::plot(&GO_side, &f_asymptote, (void*)this, phi_begin, phi_end, 50, boundary, curve);
                 for (int i = 0; i < curve.size(); i++) c.push_back(curve[i]);
 
                 break;
@@ -289,7 +294,7 @@ void CoreyQuadExplicitHugoniotCurve::curve(const ReferencePoint &ref, int type, 
                 double phi_end   = M_PI;
 
                 std::vector<Curve> curve;
-                ParametricPlot::plot(&G_bif, &f_asymptote, (void*)this, phi_begin, phi_end, 10, boundary, curve);
+                ParametricPlot::plot(&G_bif, &f_asymptote, (void*)this, phi_begin, phi_end, 50, boundary, curve);
                 for (int i = 0; i < curve.size(); i++) c.push_back(curve[i]);
 
                 break;
@@ -322,7 +327,7 @@ void CoreyQuadExplicitHugoniotCurve::curve(const ReferencePoint &ref, int type, 
                 double phi_end   = M_PI;
 
                 std::vector<Curve> curve;
-                ParametricPlot::plot(&W_bif, &f_asymptote, (void*)this, phi_begin, phi_end, 10, boundary, curve);
+                ParametricPlot::plot(&W_bif, &f_asymptote, (void*)this, phi_begin, phi_end, 50, boundary, curve);
                 for (int i = 0; i < curve.size(); i++) c.push_back(curve[i]);
 
                 break;
@@ -355,7 +360,7 @@ void CoreyQuadExplicitHugoniotCurve::curve(const ReferencePoint &ref, int type, 
                 double phi_end   = M_PI;
 
                 std::vector<Curve> curve;
-                ParametricPlot::plot(&O_bif, &f_asymptote, (void*)this, phi_begin, phi_end, 10, boundary, curve);
+                ParametricPlot::plot(&O_bif, &f_asymptote, (void*)this, phi_begin, phi_end, 50, boundary, curve);
                 for (int i = 0; i < curve.size(); i++) c.push_back(curve[i]);
 
                 break;

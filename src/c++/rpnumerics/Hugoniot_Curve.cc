@@ -38,7 +38,7 @@ void Hugoniot_Curve::curve(GridValues & grid, ReferencePoint & refPoint,int type
     // Notice that method splitts which curve is filled
     int info = ContourMethod::contour2d(this, vrs);
 
-    ColorCurve colorCurve(*ff, *aa);
+    ColorCurve colorCurve(*ff, *aa,0);
 
     colorCurve.classify_segmented_curve(vrs, refPoint,
             hugoniot_curve, transitionList);

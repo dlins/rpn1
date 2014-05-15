@@ -2,7 +2,7 @@
 #define _HUGONIOTCURVE_
 
 #include <vector>
-//#include "HugoniotPolyLine.h"
+#include "ColorCurve.h"
 #include "Curve.h"
 #include "ReferencePoint.h"
 
@@ -15,12 +15,18 @@ class HugoniotCurve {
     private:
     protected:
         ReferencePoint reference_point;
-        const Boundary *boundary;
+
+        const FluxFunction         *f;
+        const AccumulationFunction *a;
+        const Boundary             *boundary;
 
         int method_;
     public:
-        HugoniotCurve(const Boundary *bb) : boundary(bb){
+        HugoniotCurve(const FluxFunction *ff, const AccumulationFunction *aa, const Boundary *bb) : f(ff), a(aa), boundary(bb){
         }
+
+//        HugoniotCurve(const Boundary *bb) : boundary(bb){
+//        }
 
         virtual ~HugoniotCurve(){
         }
@@ -35,6 +41,34 @@ class HugoniotCurve {
         //        c: Output.
         // 
         virtual void curve(const ReferencePoint &ref, int type, std::vector<Curve> &c) = 0;
+
+        virtual void curve(const ReferencePoint &ref, int type, std::vector<HugoniotPolyLine> &classified_curve){
+            std::vector<Curve> cc;
+            cout<<"Antes da 48"<<endl;
+            curve(ref, type, cc);
+            cout<<"Depois da 48"<<endl;
+            ColorCurve colorcurve(*f, *a, (const Viscosity_Matrix*)0);
+
+            for (int i = 0; i < cc.size(); i++){
+                if (cc[i].curve.size() > 0){
+
+                    std::vector<RealVector> segmented_curve;
+                    for (int j = 0; j < cc[i].curve.size() - 1; j++){
+                        segmented_curve.push_back(cc[i].curve[j]);
+                        segmented_curve.push_back(cc[i].curve[j + 1]);
+                    }
+
+                    std::vector<HugoniotPolyLine> temp_classified_curve;
+                    std::vector<RealVector> transition_list;
+
+                    colorcurve.classify_segmented_curve(segmented_curve, ref, temp_classified_curve, transition_list);
+
+                    for (int j = 0; j < temp_classified_curve.size(); j++) classified_curve.push_back(temp_classified_curve[j]);
+                }
+            }
+
+            return;
+        }
 
         // Derived classes will fill these two vectors, name being the descriptor of type.
         // E.g.: For Stone these values could be used:

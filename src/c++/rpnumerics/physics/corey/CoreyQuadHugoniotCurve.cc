@@ -1,6 +1,6 @@
 #include "CoreyQuadHugoniotCurve.h"
 
-CoreyQuadHugoniotCurve::CoreyQuadHugoniotCurve(CoreyQuad *f, Stone_Explicit_Bifurcation_Curves *s, const Boundary *b) : HugoniotCurve(b){
+CoreyQuadHugoniotCurve::CoreyQuadHugoniotCurve(const CoreyQuad *ff, const AccumulationFunction *aa, Stone_Explicit_Bifurcation_Curves *s, const Boundary *b) : HugoniotCurve((FluxFunction*)ff, aa, b){
     G_vertex.resize(2);
     G_vertex(0) = 0.0;
     G_vertex(1) = 0.0;
@@ -13,7 +13,7 @@ CoreyQuadHugoniotCurve::CoreyQuadHugoniotCurve(CoreyQuad *f, Stone_Explicit_Bifu
     O_vertex(0) = 0.0;
     O_vertex(1) = 1.0;
 
-    flux = f;
+    flux = ff;
     sebc = s;
 }
 

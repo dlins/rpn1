@@ -20,12 +20,12 @@
 class CoreyQuadHugoniotCurve : public HugoniotCurve {
     private:
     protected:
-        CoreyQuad *flux;
+        const CoreyQuad *flux;
         Stone_Explicit_Bifurcation_Curves *sebc;
 
         RealVector G_vertex, W_vertex, O_vertex;
     public:
-        CoreyQuadHugoniotCurve(CoreyQuad *f, Stone_Explicit_Bifurcation_Curves *s, const Boundary *b);
+        CoreyQuadHugoniotCurve(const CoreyQuad *ff, const AccumulationFunction *aa, Stone_Explicit_Bifurcation_Curves *s, const Boundary *b);
         virtual ~CoreyQuadHugoniotCurve();
 
         void types(std::vector<int> &type, std::vector<std::string> &name) const {
@@ -64,6 +64,12 @@ class CoreyQuadHugoniotCurve : public HugoniotCurve {
 
             type.push_back(COREYQUADHUGONIOTCURVE_UMBILIC_POINT);
             name.push_back(std::string("Umbilic point"));            
+
+            return;
+        }
+
+        virtual void curve(const ReferencePoint &ref, int type, std::vector<HugoniotPolyLine> &classified_curve){
+            HugoniotCurve::curve(ref, type, classified_curve);
 
             return;
         }

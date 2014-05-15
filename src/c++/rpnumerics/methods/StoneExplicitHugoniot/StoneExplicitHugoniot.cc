@@ -152,7 +152,7 @@ void StoneExplicitHugoniot::curve(GridValues & grid, ReferencePoint &ref, int ty
         for (int i = 0; i < secondary_bifurcation.size(); i++) outputCurve.push_back(secondary_bifurcation[i]);
 
 
-        ColorCurve colorCurve(*f, *a);
+        ColorCurve colorCurve(*f, *a,0);
 
         vector<RealVector> segments;
 

@@ -61,7 +61,7 @@
                            out);
     delete q2eh;
     
-    ColorCurve colorCurve(*ff,*aa);
+    ColorCurve colorCurve(*ff,*aa,0);
 
     for (int i = 0; i < out.size(); i++) {
         

@@ -31,9 +31,9 @@ CoreyQuadPhysics::CoreyQuadPhysics() : SubPhysics(CoreyQuad(CoreyQuad_Params()),
 
     StoneFluxFunction * stoneFluxFunction = new StoneFluxFunction(*params, *permParams);
 
-    stoneExplicitBifurcation_ = new Stone_Explicit_Bifurcation_Curves(stoneFluxFunction);
-
-    hugoniotCurveArray_->operator []("COREY") = new CoreyQuadExplicitHugoniotCurve((CoreyQuad *) & fluxFunction(), stoneExplicitBifurcation_, &getBoundary());
+   Stone_Explicit_Bifurcation_Curves * stoneExplicitBifurcation = new Stone_Explicit_Bifurcation_Curves(stoneFluxFunction);
+   cout<<"sebc antes: "<<stoneExplicitBifurcation<<endl;
+    hugoniotCurveArray_->operator []("COREY") = new CoreyQuadExplicitHugoniotCurve((CoreyQuad *) & fluxFunction(),&accumulation(), stoneExplicitBifurcation, &getBoundary());
     setDoubleContactFunction(new Double_Contact());
     setHugoniotFunction(new Hugoniot_Curve(&fluxFunction(), &accumulation()));
     setViscosityMatrix(new Viscosity_Matrix());
@@ -48,7 +48,19 @@ SubPhysics * CoreyQuadPhysics::clone()const {
 
 CoreyQuadPhysics::CoreyQuadPhysics(const CoreyQuadPhysics & copy) : SubPhysics(copy.fluxFunction(), copy.accumulation(), copy.getBoundary(), copy.domain(), "CoreyQuad", _SIMPLE_ACCUMULATION_) {
 
-    hugoniotCurveArray_->operator []("COREY") = new CoreyQuadExplicitHugoniotCurve((CoreyQuad *) & fluxFunction(), stoneExplicitBifurcation_, &getBoundary());
+    
+    
+    StoneParams * params = new StoneParams();
+
+    StonePermParams * permParams = new StonePermParams();
+
+    StoneFluxFunction * stoneFluxFunction = new StoneFluxFunction(*params, *permParams);
+
+   Stone_Explicit_Bifurcation_Curves * stoneExplicitBifurcation = new Stone_Explicit_Bifurcation_Curves(stoneFluxFunction);
+   cout<<"sebc antes: "<<stoneExplicitBifurcation<<endl;
+    
+    
+    hugoniotCurveArray_->operator []("COREY") = new CoreyQuadExplicitHugoniotCurve((CoreyQuad *) & fluxFunction(), &copy.accumulation(),stoneExplicitBifurcation, &getBoundary());
     setDoubleContactFunction(new Double_Contact());
     setHugoniotFunction(new Hugoniot_Curve(&copy.fluxFunction(), &copy.accumulation()));
     setViscosityMatrix(copy.getViscosityMatrix());

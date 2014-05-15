@@ -53,7 +53,7 @@ void Hugoniot_TP::curve(GridValues & grid,ReferencePoint & refPoint,int type,std
     
     
     
-    ColorCurve colorCurve(*ff, *aa);
+    ColorCurve colorCurve(*ff, *aa,0);
     colorCurve.classify_segmented_curve(vrs, refPoint, hugoniot_curve, transitionList);
 
 //    return info;
