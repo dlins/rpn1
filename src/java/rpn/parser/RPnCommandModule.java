@@ -103,14 +103,6 @@ public class RPnCommandModule {
                 creatingSelection_ = true;
 
             }
-            
-            
-             if (currentElement_.equals("CURVESPEED")) {
-
-                realVectorList_.clear();
-                creatingSelection_ = true;
-
-            }
 
             if (currentElement_.equals("RPNSESSION")) {
 
@@ -258,10 +250,10 @@ public class RPnCommandModule {
 
                 } else if (currentCommand_.equalsIgnoreCase("curveselection")) {
                     selectedGeometry_ = pickCurve(curveId_);
-                    boolean selected  = !selectedGeometry_.isSelected();
+                    boolean selected = !selectedGeometry_.isSelected();
                     selectedGeometry_.setSelected(selected);
 //                    UIController.instance().getSelectedGeometriesList().add(selectedGeometry_);
-                    System.out.println("Selecionando curva :" + curveId_ + " "+ selected);
+                    System.out.println("Selecionando curva :" + curveId_ + " " + selected);
 
                     RPnDataModule.PHASESPACE.update();
                     RPnPhaseSpaceFrame frame = (RPnPhaseSpaceFrame) RPnUIFrame.getFrame("Axis0 Axis1");
@@ -269,6 +261,10 @@ public class RPnCommandModule {
 
                 } else if (currentCommand_.equalsIgnoreCase("clear")) {
                     ClearPhaseSpaceCommand.instance().clear();
+
+                } else if (currentCommand_.equalsIgnoreCase("velocity")) {
+                    realVectorList_.clear();
+                    creatingSelection_ = true;
 
                 }
 
@@ -309,36 +305,7 @@ public class RPnCommandModule {
                 creatingSelection_ = false;
 
             }
-            
-            
-            if (name.equals("CURVESPEED")) {
-
-                System.out.println("Em curves speed");
-                CoordsArray[] coords = new CoordsArray[realVectorList_.size()];
-
-                for (int i = 0; i < realVectorList_.size(); i++) {
-
-                    System.out.println(realVectorList_.get(i));
-                    coords[i] = new CoordsArray(realVectorList_.get(i));
-
-                }
-                
-                
-
-                
-                
-                RpGeometry geometry = pickCurve(0);
-                
-                RPnPhaseSpaceFrame frame = (RPnPhaseSpaceFrame) RPnUIFrame.getFrame(RPnNetworkStatus.ACTIVATED_FRAME_TITLE);
-                
-                RPnPhaseSpacePanel panel = frame.phaseSpacePanel();
-
-                geometry.showSpeed(coords[0], coords[1], panel.scene().getViewingTransform());
-                
-                panel.updateGraphicsUtil();
-                
-            }
-            
+           
 
             if (name.equals("DOMAINSELECTION")) {
 
@@ -402,6 +369,28 @@ public class RPnCommandModule {
 
             if (name.equals("COMMAND")) {
 
+                if (currentCommand_.equals("velocity")) {
+                    System.out.println("Em curves speed");
+                    CoordsArray[] coords = new CoordsArray[realVectorList_.size()];
+
+                    for (int i = 0; i < realVectorList_.size(); i++) {
+
+                        System.out.println(realVectorList_.get(i));
+                        coords[i] = new CoordsArray(realVectorList_.get(i));
+
+                    }
+
+                    RpGeometry geometry = pickCurve(0);
+
+                    RPnPhaseSpaceFrame frame = (RPnPhaseSpaceFrame) RPnUIFrame.getFrame(RPnNetworkStatus.ACTIVATED_FRAME_TITLE);
+
+                    RPnPhaseSpacePanel panel = frame.phaseSpacePanel();
+
+                    geometry.showSpeed(coords[0], coords[1], panel.scene().getViewingTransform());
+
+                    panel.updateGraphicsUtil();
+                }
+
                 if (currentCommand_.equals("Curve Remove Command")) {
                     CurveRemoveCommand.instance().remove(curveId_);
                 }
@@ -409,17 +398,15 @@ public class RPnCommandModule {
                 if (currentCommand_.equals("eigenvaluelevel")) {
                     LevelCurvePlotCommand.instance().execute();
                 }
-                
-                
+
                 if (currentCommand_.equals("discriminantlevel")) {
                     DiscriminantLevelCurvePlotCommand.instance().execute();
                 }
-                
+
                 if (currentCommand_.equalsIgnoreCase("derivativediscriminantlevel")) {
                     DerivativeDiscriminantLevelCurvePlotCommand.instance().execute();
                 }
-                
-                
+
             }
 
         }

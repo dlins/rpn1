@@ -94,7 +94,7 @@ public class RPnVelocityPlotter extends RPn2DMouseController {
                 
             }
             
-            RpCommand command = new RpCommand(lastAnnotation.toXML());
+            RpCommand command = new RpCommand(lastAnnotation.toXML(),"velocity");
 
             GenericExtensionCurveCommand.instance().logCommand(command);
 

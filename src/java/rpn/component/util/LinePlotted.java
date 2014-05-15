@@ -109,14 +109,9 @@ public class LinePlotted extends GraphicsUtil {
 
         StringBuilder buffer = new StringBuilder();
 
-        buffer.append("<CURVESPEED>\n");
-
-
         for (int i = 0; i < wcObjects_.size()-1; i++) {
             buffer.append(((RealVector)wcObjects_.get(i)).toXML());
         }
-
-        buffer.append("<\\CURVESPEED>");
 
         return buffer.toString();
 
