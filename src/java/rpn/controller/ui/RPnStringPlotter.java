@@ -6,10 +6,15 @@ package rpn.controller.ui;
 
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import rpn.RPnPhaseSpacePanel;
+import rpn.command.GenericExtensionCurveCommand;
+import rpn.command.RpCommand;
 import rpn.component.RpGeometry;
 import rpn.component.util.GeometryGraphND;
+import rpn.component.util.GraphicsUtil;
+import rpn.message.RPnNetworkStatus;
 import rpnumerics.RPnCurve;
 import wave.util.RealVector;
 import rpn.parser.RPnDataModule;
@@ -81,27 +86,7 @@ public class RPnStringPlotter extends RPn2DMouseController {
             
             addLine_ = true;
             
-            
-
-//            if (curve instanceof HugoniotCurve) {
-//                int dir = ((HugoniotCurve) curve).getDirection();
-//                HugoniotSegment segment = (HugoniotSegment) (((SegmentedCurve) curve).segments()).get(curve.findClosestSegment(closestPoint));
-//                typeStr = permuteString(HugoniotSegGeom.s[segment.getType()], dir);
-//
-//                cursorPos_ = closestPoint;
-//
-//                List<Object> wcObjectsList = new ArrayList();
-//                ViewingAttr viewingAttr = new ViewingAttr(Color.white);
-//
-//                wcObjectsList.add(closestPoint);
-//                wcObjectsList.add(closestPoint);
-//                wcObjectsList.add(typeStr);
-//                GraphicsUtil empty = new LinePlotted(wcObjectsList, panel.scene().getViewingTransform(), viewingAttr);
-//
-//                geometry_.addAnnotation(empty);
-//
-//                addLine_ = true;
-//            }
+  
             if (curve instanceof BifurcationCurve) {
                 int i = curve.findClosestSegment(newValue);
                 GeometryGraphND.pMarcaDC = ((BifurcationCurve) curve).secondPointDCOtherVersion(i);
@@ -112,6 +97,26 @@ public class RPnStringPlotter extends RPn2DMouseController {
             }
 
         } else {
+            
+            Iterator<GraphicsUtil> annotationIterator = geometry_.getAnnotationIterator();
+            
+            GraphicsUtil lastAnnotation=null;
+            while (annotationIterator.hasNext()) {
+               lastAnnotation = annotationIterator.next();
+                
+            }
+            
+            RpCommand command = new RpCommand(lastAnnotation.toXML(),"classify");
+
+            GenericExtensionCurveCommand.instance().logCommand(command);
+
+
+            if (RPnNetworkStatus.instance().isOnline() && RPnNetworkStatus.instance().isMaster()) {
+                RPnNetworkStatus.instance().sendCommand(rpn.controller.ui.UndoActionController.instance().getLastCommand().toXML());
+            }
+            
+            
+            
             addLine_ = false;
         }
 

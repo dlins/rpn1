@@ -267,6 +267,13 @@ public class RPnCommandModule {
                     creatingSelection_ = true;
 
                 }
+                
+                
+                else if (currentCommand_.equalsIgnoreCase("classify")) {
+                    realVectorList_.clear();
+                    creatingSelection_ = true;
+
+                }
 
             }
 
@@ -370,7 +377,7 @@ public class RPnCommandModule {
             if (name.equals("COMMAND")) {
 
                 if (currentCommand_.equals("velocity")) {
-                    System.out.println("Em curves speed");
+
                     CoordsArray[] coords = new CoordsArray[realVectorList_.size()];
 
                     for (int i = 0; i < realVectorList_.size(); i++) {
@@ -390,6 +397,30 @@ public class RPnCommandModule {
 
                     panel.updateGraphicsUtil();
                 }
+                
+                
+                 if (currentCommand_.equals("classify")) {
+
+                    CoordsArray[] coords = new CoordsArray[realVectorList_.size()];
+
+                    for (int i = 0; i < realVectorList_.size(); i++) {
+
+                        System.out.println(realVectorList_.get(i));
+                        coords[i] = new CoordsArray(realVectorList_.get(i));
+
+                    }
+
+                    RpGeometry geometry = pickCurve(0);
+
+                    RPnPhaseSpaceFrame frame = (RPnPhaseSpaceFrame) RPnUIFrame.getFrame(RPnNetworkStatus.ACTIVATED_FRAME_TITLE);
+
+                    RPnPhaseSpacePanel panel = frame.phaseSpacePanel();
+
+                    geometry.showClassification(coords[0], coords[1], panel.scene().getViewingTransform());
+
+                    panel.updateGraphicsUtil();
+                }
+                
 
                 if (currentCommand_.equals("Curve Remove Command")) {
                     CurveRemoveCommand.instance().remove(curveId_);
