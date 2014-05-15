@@ -396,6 +396,7 @@ public class RPnCommandModule {
                     geometry.showSpeed(coords[0], coords[1], panel.scene().getViewingTransform());
 
                     panel.updateGraphicsUtil();
+                    creatingSelection_=false;
                 }
                 
                 
@@ -419,6 +420,7 @@ public class RPnCommandModule {
                     geometry.showClassification(coords[0], coords[1], panel.scene().getViewingTransform());
 
                     panel.updateGraphicsUtil();
+                    creatingSelection_=false;
                 }
                 
 
