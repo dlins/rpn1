@@ -103,6 +103,14 @@ public class RPnCommandModule {
                 creatingSelection_ = true;
 
             }
+            
+            
+             if (currentElement_.equals("CURVESPEED")) {
+
+                realVectorList_.clear();
+                creatingSelection_ = true;
+
+            }
 
             if (currentElement_.equals("RPNSESSION")) {
 
@@ -301,6 +309,30 @@ public class RPnCommandModule {
                 creatingSelection_ = false;
 
             }
+            
+            
+            if (name.equals("CURVESPEED")) {
+
+                CoordsArray[] coords = new CoordsArray[realVectorList_.size()];
+
+                for (int i = 0; i < realVectorList_.size(); i++) {
+
+                    coords[i] = new CoordsArray(realVectorList_.get(i));
+
+                }
+                
+                
+                RpGeometry geometry = pickCurve(0);
+                
+                RPnPhaseSpaceFrame frame = (RPnPhaseSpaceFrame) RPnUIFrame.getFrame(RPnNetworkStatus.ACTIVATED_FRAME_TITLE);
+                
+                RPnPhaseSpacePanel panel = frame.phaseSpacePanel();
+
+                geometry.showSpeed(coords[0], coords[1], panel.scene().getViewingTransform());
+                
+                
+            }
+            
 
             if (name.equals("DOMAINSELECTION")) {
 

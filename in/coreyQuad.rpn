@@ -27,7 +27,7 @@
              <CURVECONFIGURATION name="hugoniotcurve">
                 <CURVEPARAM name="resolution" value="120 120"/>
                 <CURVEPARAM name="method" value="COREY"/>
-                <CURVEPARAM name="case" value="5"/>
+                <CURVEPARAM name="case" value="0"/>
                 
             </CURVECONFIGURATION>
             
