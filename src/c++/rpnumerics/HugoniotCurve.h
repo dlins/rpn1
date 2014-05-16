@@ -46,6 +46,7 @@ class HugoniotCurve {
             std::vector<Curve> cc;
 
             curve(ref, type, cc);
+            
 
             ColorCurve colorcurve(*f, *a, (const Viscosity_Matrix*)0);
 

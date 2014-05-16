@@ -104,9 +104,9 @@ public abstract class RpModelPlotCommand extends RpModelActionCommand implements
 
         RPnCurve curve = (RPnCurve) factory.geomSource();
          
-//
-//        curve.setId(curveID_);
-//        curveID_++;
+
+        curve.setId(curveID_);
+        curveID_++;
 
         PropertyChangeEvent event_ = new PropertyChangeEvent(this, UIController.instance().getActivePhaseSpace().getName(), oldValue, geometry);
 
