@@ -62,6 +62,8 @@ void CoreyQuadExplicitHugoniotCurve::curve(const ReferencePoint &ref, int type, 
         //
         reference_point.point = project(ref.point, type);
 
+        int n = 100;
+
         switch (type){
             case COREYQUADHUGONIOTCURVE_GENERIC_POINT:
             {
@@ -69,28 +71,23 @@ void CoreyQuadExplicitHugoniotCurve::curve(const ReferencePoint &ref, int type, 
                 double phi_end   = M_PI;
 
                 std::vector<Curve> curve;
-                ParametricPlot::plot(&generic, &f_asymptote, (void*)this, phi_begin, phi_end, 50, boundary, curve);
+                ParametricPlot::plot(&generic, &f_asymptote, (void*)this, phi_begin, phi_end, n, boundary, curve);
                 for (int i = 0; i < curve.size(); i++) c.push_back(curve[i]);
 
                 break;
             }
             case COREYQUADHUGONIOTCURVE_G_VERTEX:
             {
-
                 // This stays here (and not at the ctor) because the user may have change the parameters.
                 //
                 std::vector<RealVector> vertex(3), point_on_side(3);
-                cout<<"sebc"<<sebc<<endl;
                 for (int i = 0; i < 3; i++){
-                    cout<<"Entrei no curve gvertex"<< mu<<" "<<side_opposite_vertex[i]<<endl;
                     sebc->vertex_and_side(side_opposite_vertex[i], mu, vertex[i], point_on_side[i]);
                 }                
-                cout<<"Antes do 87"<<endl;
+
                 // Add GW side as two Curves.
                 //
                 {
-                    int n = 50;
-
                     Curve temp_curve;
                     Utilities::regularly_sampled_segment(pure_G_vertex, point_on_side[1], n, temp_curve);
                     c.push_back(temp_curve);
@@ -102,8 +99,6 @@ void CoreyQuadExplicitHugoniotCurve::curve(const ReferencePoint &ref, int type, 
                 // Add GO side as two Curves.
                 //
                 {
-                    int n = 50;
-
                     Curve temp_curve;
                     Utilities::regularly_sampled_segment(pure_G_vertex, point_on_side[0], n, temp_curve);
                     c.push_back(temp_curve);
@@ -116,8 +111,6 @@ void CoreyQuadExplicitHugoniotCurve::curve(const ReferencePoint &ref, int type, 
                 //
                 {
                     RealVector umbilic_point = compute_umbilic_point(mu);
-
-                    int n = 50;
 
                     Curve temp_curve;
                     Utilities::regularly_sampled_segment(pure_G_vertex, umbilic_point, n, temp_curve);
@@ -141,8 +134,6 @@ void CoreyQuadExplicitHugoniotCurve::curve(const ReferencePoint &ref, int type, 
                 // Add GW side as two Curves.
                 //
                 {
-                    int n = 50;
-
                     Curve temp_curve;
                     Utilities::regularly_sampled_segment(pure_G_vertex, point_on_side[1], n, temp_curve);
                     c.push_back(temp_curve);
@@ -154,8 +145,6 @@ void CoreyQuadExplicitHugoniotCurve::curve(const ReferencePoint &ref, int type, 
                 // Add WO side as two Curves.
                 //
                 {
-                    int n = 50;
-
                     Curve temp_curve;
                     Utilities::regularly_sampled_segment(pure_W_vertex, point_on_side[2], n, temp_curve);
                     c.push_back(temp_curve);
@@ -168,8 +157,6 @@ void CoreyQuadExplicitHugoniotCurve::curve(const ReferencePoint &ref, int type, 
                 //
                 {
                     RealVector umbilic_point = compute_umbilic_point(mu);
-
-                    int n = 50;
 
                     Curve temp_curve;
                     Utilities::regularly_sampled_segment(pure_W_vertex, umbilic_point, n, temp_curve);
@@ -193,8 +180,6 @@ void CoreyQuadExplicitHugoniotCurve::curve(const ReferencePoint &ref, int type, 
                 // Add GO side as two Curves.
                 //
                 {
-                    int n = 50;
-
                     Curve temp_curve;
                     Utilities::regularly_sampled_segment(pure_G_vertex, point_on_side[0], n, temp_curve);
                     c.push_back(temp_curve);
@@ -206,8 +191,6 @@ void CoreyQuadExplicitHugoniotCurve::curve(const ReferencePoint &ref, int type, 
                 // Add WO side as two Curves.
                 //
                 {
-                    int n = 50;
-
                     Curve temp_curve;
                     Utilities::regularly_sampled_segment(pure_W_vertex, point_on_side[2], n, temp_curve);
                     c.push_back(temp_curve);
@@ -221,8 +204,6 @@ void CoreyQuadExplicitHugoniotCurve::curve(const ReferencePoint &ref, int type, 
                 {
                     RealVector umbilic_point = compute_umbilic_point(mu);
 
-                    int n = 50;
-
                     Curve temp_curve;
                     Utilities::regularly_sampled_segment(pure_O_vertex, umbilic_point, n, temp_curve);
                     c.push_back(temp_curve);
@@ -235,33 +216,87 @@ void CoreyQuadExplicitHugoniotCurve::curve(const ReferencePoint &ref, int type, 
             }
             case COREYQUADHUGONIOTCURVE_GW_SIDE:
             {
+                // This stays here (and not at the ctor) because the user may have change the parameters.
+                //
+                std::vector<RealVector> vertex(3), point_on_side(3);
+                for (int i = 0; i < 3; i++){
+                    sebc->vertex_and_side(side_opposite_vertex[i], mu, vertex[i], point_on_side[i]);
+                }                
+
+                // Add GW side as two Curves.
+                //
+                {
+                    Curve temp_curve;
+                    Utilities::regularly_sampled_segment(pure_G_vertex, point_on_side[1], n, temp_curve);
+                    c.push_back(temp_curve);
+
+                    Utilities::regularly_sampled_segment(point_on_side[1], pure_W_vertex, n, temp_curve);
+                    c.push_back(temp_curve);
+                }
+
                 double phi_begin = -M_PI/2;
                 double phi_end   =  M_PI/2;
 
                 std::vector<Curve> curve;
-                ParametricPlot::plot(&GW_side, &f_asymptote, (void*)this, phi_begin, phi_end, 50, boundary, curve);
+                ParametricPlot::plot(&GW_side, &f_asymptote, (void*)this, phi_begin, phi_end, n, boundary, curve);
                 for (int i = 0; i < curve.size(); i++) c.push_back(curve[i]);
 
                 break;
             }
             case COREYQUADHUGONIOTCURVE_WO_SIDE:
             {
+                // This stays here (and not at the ctor) because the user may have change the parameters.
+                //
+                std::vector<RealVector> vertex(3), point_on_side(3);
+                for (int i = 0; i < 3; i++){
+                    sebc->vertex_and_side(side_opposite_vertex[i], mu, vertex[i], point_on_side[i]);
+                }                
+
+                // Add WO side as two Curves.
+                //
+                {
+                    Curve temp_curve;
+                    Utilities::regularly_sampled_segment(pure_W_vertex, point_on_side[2], n, temp_curve);
+                    c.push_back(temp_curve);
+
+                    Utilities::regularly_sampled_segment(point_on_side[2], pure_O_vertex, n, temp_curve);
+                    c.push_back(temp_curve);
+                }
+
                 double phi_begin = -M_PI/2;
                 double phi_end   =  M_PI/2;
 
                 std::vector<Curve> curve;
-                ParametricPlot::plot(&WO_side, &f_asymptote, (void*)this, phi_begin, phi_end, 50, boundary, curve);
+                ParametricPlot::plot(&WO_side, &f_asymptote, (void*)this, phi_begin, phi_end, n, boundary, curve);
                 for (int i = 0; i < curve.size(); i++) c.push_back(curve[i]);
 
                 break;
             }
             case COREYQUADHUGONIOTCURVE_GO_SIDE:
             {
+                // This stays here (and not at the ctor) because the user may have change the parameters.
+                //
+                std::vector<RealVector> vertex(3), point_on_side(3);
+                for (int i = 0; i < 3; i++){
+                    sebc->vertex_and_side(side_opposite_vertex[i], mu, vertex[i], point_on_side[i]);
+                }                
+
+                // Add GO side as two Curves.
+                //
+                {
+                    Curve temp_curve;
+                    Utilities::regularly_sampled_segment(pure_G_vertex, point_on_side[0], n, temp_curve);
+                    c.push_back(temp_curve);
+
+                    Utilities::regularly_sampled_segment(point_on_side[0], pure_O_vertex, n, temp_curve);
+                    c.push_back(temp_curve);
+                }
+
                 double phi_begin = -M_PI/2;
                 double phi_end   =  M_PI/2;
 
                 std::vector<Curve> curve;
-                ParametricPlot::plot(&GO_side, &f_asymptote, (void*)this, phi_begin, phi_end, 50, boundary, curve);
+                ParametricPlot::plot(&GO_side, &f_asymptote, (void*)this, phi_begin, phi_end, n, boundary, curve);
                 for (int i = 0; i < curve.size(); i++) c.push_back(curve[i]);
 
                 break;
@@ -280,8 +315,6 @@ void CoreyQuadExplicitHugoniotCurve::curve(const ReferencePoint &ref, int type, 
                 // Add G-point_on_side as two Curves.
                 //
                 {
-                    int n = 50;
-
                     Curve temp_curve;
                     Utilities::regularly_sampled_segment(pure_G_vertex, umbilic_point, n, temp_curve);
                     c.push_back(temp_curve);
@@ -294,7 +327,7 @@ void CoreyQuadExplicitHugoniotCurve::curve(const ReferencePoint &ref, int type, 
                 double phi_end   = M_PI;
 
                 std::vector<Curve> curve;
-                ParametricPlot::plot(&G_bif, &f_asymptote, (void*)this, phi_begin, phi_end, 50, boundary, curve);
+                ParametricPlot::plot(&G_bif, &f_asymptote, (void*)this, phi_begin, phi_end, n, boundary, curve);
                 for (int i = 0; i < curve.size(); i++) c.push_back(curve[i]);
 
                 break;
@@ -313,8 +346,6 @@ void CoreyQuadExplicitHugoniotCurve::curve(const ReferencePoint &ref, int type, 
                 // Add W-point_on_side as two Curves.
                 //
                 {
-                    int n = 50;
-
                     Curve temp_curve;
                     Utilities::regularly_sampled_segment(pure_W_vertex, umbilic_point, n, temp_curve);
                     c.push_back(temp_curve);
@@ -327,7 +358,7 @@ void CoreyQuadExplicitHugoniotCurve::curve(const ReferencePoint &ref, int type, 
                 double phi_end   = M_PI;
 
                 std::vector<Curve> curve;
-                ParametricPlot::plot(&W_bif, &f_asymptote, (void*)this, phi_begin, phi_end, 50, boundary, curve);
+                ParametricPlot::plot(&W_bif, &f_asymptote, (void*)this, phi_begin, phi_end, n, boundary, curve);
                 for (int i = 0; i < curve.size(); i++) c.push_back(curve[i]);
 
                 break;
@@ -346,8 +377,6 @@ void CoreyQuadExplicitHugoniotCurve::curve(const ReferencePoint &ref, int type, 
                 // Add O-point_on_side as two Curves.
                 //
                 {
-                    int n = 50;
-
                     Curve temp_curve;
                     Utilities::regularly_sampled_segment(pure_O_vertex, umbilic_point, n, temp_curve);
                     c.push_back(temp_curve);
@@ -360,7 +389,7 @@ void CoreyQuadExplicitHugoniotCurve::curve(const ReferencePoint &ref, int type, 
                 double phi_end   = M_PI;
 
                 std::vector<Curve> curve;
-                ParametricPlot::plot(&O_bif, &f_asymptote, (void*)this, phi_begin, phi_end, 50, boundary, curve);
+                ParametricPlot::plot(&O_bif, &f_asymptote, (void*)this, phi_begin, phi_end, n, boundary, curve);
                 for (int i = 0; i < curve.size(); i++) c.push_back(curve[i]);
 
                 break;
@@ -379,8 +408,6 @@ void CoreyQuadExplicitHugoniotCurve::curve(const ReferencePoint &ref, int type, 
                 // Add W-point_on_side as two Curves.
                 //
                 {
-                    int n = 50;
-
                     Curve temp_curve;
                     Utilities::regularly_sampled_segment(pure_W_vertex, umbilic_point, n, temp_curve);
                     c.push_back(temp_curve);
@@ -392,8 +419,6 @@ void CoreyQuadExplicitHugoniotCurve::curve(const ReferencePoint &ref, int type, 
                 // Add O-point_on_side as two Curves.
                 //
                 {
-                    int n = 50;
-
                     Curve temp_curve;
                     Utilities::regularly_sampled_segment(pure_O_vertex, umbilic_point, n, temp_curve);
                     c.push_back(temp_curve);
@@ -405,8 +430,6 @@ void CoreyQuadExplicitHugoniotCurve::curve(const ReferencePoint &ref, int type, 
                 // Add G-point_on_side as two Curves.
                 //
                 {
-                    int n = 50;
-
                     Curve temp_curve;
                     Utilities::regularly_sampled_segment(pure_G_vertex, umbilic_point, n, temp_curve);
                     c.push_back(temp_curve);

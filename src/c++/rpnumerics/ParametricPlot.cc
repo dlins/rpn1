@@ -81,6 +81,11 @@ void ParametricPlot::find_curve(RealVector (*f)(void*, double),
     int max_halvings = 20;
     int halvings = 0;
 
+    // To increase.
+    //
+    int max_steps_current_delta_phi = 5;
+    int steps_current_delta_phi = 0;
+
     while (phi <= phi_final){
 //        phi += delta_phi;
         RealVector point = (*f)(obj, phi + delta_phi);
@@ -89,18 +94,50 @@ void ParametricPlot::find_curve(RealVector (*f)(void*, double),
 
         // Verify that two consecutive points are not too far. If they are, halve delta_phi.
         //
-        while (norm(point - old_point) > max_distance*.01 && halvings < max_halvings){
-//            std::cout << "max_distance = " << max_distance*.01 << std::endl;
-//            std::cout << "distance = " << norm(point - old_point) << std::endl;
-//            std::cout << "delta_phi = " << delta_phi << std::endl;
+//        while (norm(point - old_point) > max_distance*.01 && halvings < max_halvings){
+////            std::cout << "max_distance = " << max_distance*.01 << std::endl;
+////            std::cout << "distance = " << norm(point - old_point) << std::endl;
+////            std::cout << "delta_phi = " << delta_phi << std::endl;
 
-            delta_phi *= .5;
+//            delta_phi *= .5;
 
-//            std::cout << "new delta_phi = " << delta_phi << std::endl << std::endl;
-            halvings++;
+////            std::cout << "new delta_phi = " << delta_phi << std::endl << std::endl;
+//            halvings++;
+
+//            point = (*f)(obj, phi + delta_phi);
+////            std::cout << "Candidate point: " << point << std::endl;
+//        }
+
+        if (norm(point - old_point) > max_distance*.01){
+            while (norm(point - old_point) > max_distance*.01 && halvings < max_halvings){
+                delta_phi *= .5;
+                halvings++;
+
+                point = (*f)(obj, phi + delta_phi);
+            }
+        }
+        else {
+            if (steps_current_delta_phi == max_steps_current_delta_phi){
+                if (curve.curve.size() > 2){
+                    int last_position = curve.curve.size() - 1;
+
+                    RealVector old_direction = curve.curve[last_position - 1] - curve.curve[last_position - 2];
+                    normalize(old_direction);
+
+                    RealVector     direction = curve.curve[last_position] - curve.curve[last_position - 1];
+                    normalize(direction);
+
+                    if (old_direction*direction > MAX_COS_ANGLE){
+                        steps_current_delta_phi = 0;
+                        delta_phi *= SQRT_TWO;
+                    }
+                }
+            }
+            else {
+                steps_current_delta_phi++;
+            }
 
             point = (*f)(obj, phi + delta_phi);
-//            std::cout << "Candidate point: " << point << std::endl;
         }
 
 //        std::cout << "Minimum distance achieved:\n" << "old_point = " << old_point << ", point = " << point << ", d = " << norm(point - old_point) << std::endl;

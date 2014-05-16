@@ -15,11 +15,19 @@
 #endif
 
 //#define TEST_PARAMETRICPLOT
+//
+//#ifdef TEST_PARAMETRICPLOT
+//#include "canvas.h"
+//#include "canvasmenuscroll.h"
+//#endif 
 
-#ifdef TEST_PARAMETRICPLOT
-#include "canvas.h"
-#include "canvasmenuscroll.h"
-#endif 
+#ifndef SQRT_TWO
+#define SQRT_TWO 1.41421356237
+#endif
+
+#ifndef MAX_COS_ANGLE
+#define MAX_COS_ANGLE (0.96)
+#endif
 
 class ParametricPlot {
     private:

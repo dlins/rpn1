@@ -44,9 +44,9 @@ class HugoniotCurve {
 
         virtual void curve(const ReferencePoint &ref, int type, std::vector<HugoniotPolyLine> &classified_curve){
             std::vector<Curve> cc;
-            cout<<"Antes da 48"<<endl;
+
             curve(ref, type, cc);
-            cout<<"Depois da 48"<<endl;
+
             ColorCurve colorcurve(*f, *a, (const Viscosity_Matrix*)0);
 
             for (int i = 0; i < cc.size(); i++){
