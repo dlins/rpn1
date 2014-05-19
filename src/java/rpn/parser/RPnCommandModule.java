@@ -404,7 +404,7 @@ public class RPnCommandModule {
 
                     RPnPhaseSpacePanel panel = frame.phaseSpacePanel();
 
-                    geometry.showSpeed(coords[0], coords[1], panel.scene().getViewingTransform());
+                    selectedGeometry_.showSpeed(coords[0], coords[1], panel.scene().getViewingTransform());
 
                     panel.updateGraphicsUtil();
                     creatingSelection_=false;
@@ -428,7 +428,7 @@ public class RPnCommandModule {
 
                     RPnPhaseSpacePanel panel = frame.phaseSpacePanel();
 
-                    geometry.showClassification(coords[0], coords[1], panel.scene().getViewingTransform());
+                    selectedGeometry_.showClassification(coords[0], coords[1], panel.scene().getViewingTransform());
 
                     panel.updateGraphicsUtil();
                     creatingSelection_=false;
