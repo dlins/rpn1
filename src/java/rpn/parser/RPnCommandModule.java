@@ -252,7 +252,8 @@ public class RPnCommandModule {
                     selectedGeometry_ = pickCurve(curveId_);
                     boolean selected = !selectedGeometry_.isSelected();
                     selectedGeometry_.setSelected(selected);
-                    UIController.instance().getSelectedGeometriesList().add(selectedGeometry_);
+                    
+//                    UIController.instance().getSelectedGeometriesList().add(selectedGeometry_);
                     System.out.println("Selecionando curva :" + curveId_);// + " " + selected);
 
                     RPnDataModule.PHASESPACE.update();
