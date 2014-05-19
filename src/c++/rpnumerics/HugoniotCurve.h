@@ -25,9 +25,6 @@ class HugoniotCurve {
         HugoniotCurve(const FluxFunction *ff, const AccumulationFunction *aa, const Boundary *bb) : f(ff), a(aa), boundary(bb){
         }
 
-//        HugoniotCurve(const Boundary *bb) : boundary(bb){
-//        }
-
         virtual ~HugoniotCurve(){
         }
 

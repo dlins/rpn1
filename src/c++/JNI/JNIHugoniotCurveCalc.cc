@@ -23,11 +23,9 @@ NOTE :
 #include "RpNumerics.h"
 #include <vector>
 #include <iostream>
-#include "TPCW.h"
-#include "ColorCurve.h"
-#include "Hugoniot_Curve.h"
-#include "GridValuesFactory.h"
+#include "ImplicitHugoniotCurve.h"
 #include "Debug.h"
+
 
 using std::vector;
 using namespace std;
@@ -92,17 +90,11 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
     jstring javaCaseName = (jstring)env->CallObjectMethod(configuration,getParamMethodID,env->NewStringUTF("case"));
     
     
-    
     string methodName(env->GetStringUTFChars(javaMethodName, NULL));
     string caseName(env->GetStringUTFChars(javaCaseName, NULL));
-
-    
     
     cout<<"Method pego no JNI: "<<methodName<<endl;
 
-
-    
-   
     //Input point
 
 
@@ -116,24 +108,12 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
 
     //-------------------------------------------------------------------
 
-
     RealVector Uref(dimension, input);
 
-
     RpNumerics::getPhysics().getSubPhysics(0).preProcess(Uref);
-
-//    string hugoniotMethodName(env->GetStringUTFChars(methodName, NULL));
-
-//    Hugoniot_Locus *hugoniotCurve = RpNumerics::getPhysics().getSubPhysics(0).getHugoniotMethod(methodName);
     
     HugoniotCurve *hugoniotCurve = RpNumerics::getPhysics().getSubPhysics(0).getHugoniotCurve(methodName);
-
-    GridValues * gv = RpNumerics::getGridFactory().getGrid("hugoniotcurve");
-
-    if (Debug::get_debug_level() == 5) {
-        cout << "Resolucao: " << gv->grid_resolution << endl;
-    }
-
+  
     vector<RealVector> transitionList;
 
     vector<HugoniotPolyLine> hugoniotPolyLineVector;
@@ -153,9 +133,25 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
 
      cout<<"Ponto clicado: "<<Uref<<endl;
      
-     hugoniotCurve->curve(refPoint, caseFlag, hugoniotPolyLineVector);
+     cout<<"Tipo do metodo c++" <<hugoniotCurve->implemented_method()<<endl;
      
-     cout<<"Depois do curve"<<endl;
+     
+if (hugoniotCurve-> implemented_method()== IMPLICIT_HUGONIOT){
+    ImplicitHugoniotCurve * implicitMetod = (ImplicitHugoniotCurve*)hugoniotCurve;
+    
+    
+    implicitMetod->set_grid(RpNumerics::getGridFactory().getGrid("hugoniotcurve"));
+    
+    hugoniotCurve->curve(refPoint, caseFlag, hugoniotPolyLineVector);
+}
+     
+     
+     
+    
+     
+     
+     
+
         
 //    hugoniotCurve->curve(*gv, refPoint, caseFlag,  hugoniotPolyLineVector, transitionList);
 

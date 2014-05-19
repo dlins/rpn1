@@ -151,7 +151,8 @@ public class HugoniotCurveCalcND extends ContourCurveCalc implements HugoniotCur
         COREY,
         IMPLICIT,
         QUAD2,
-        STONE;
+        STONE,
+        TESTE;
 
     }
 

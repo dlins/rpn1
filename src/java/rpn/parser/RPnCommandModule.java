@@ -377,6 +377,8 @@ public class RPnCommandModule {
             if (name.equals("COMMAND")) {
 
                 if (currentCommand_.equals("velocity")) {
+                    
+                    System.out.println("tamanho da lista de realvector: "+realVectorList_.size());
 
                     CoordsArray[] coords = new CoordsArray[realVectorList_.size()];
 
