@@ -398,13 +398,13 @@ public class RPnCommandModule {
 
                     }
 
-                    RpGeometry geometry = pickCurve(0);
+                    RpGeometry geometry = pickCurve(curveId_);
 
                     RPnPhaseSpaceFrame frame = (RPnPhaseSpaceFrame) RPnUIFrame.getFrame(RPnNetworkStatus.ACTIVATED_FRAME_TITLE);
 
                     RPnPhaseSpacePanel panel = frame.phaseSpacePanel();
 
-                    selectedGeometry_.showSpeed(coords[0], coords[1], panel.scene().getViewingTransform());
+                    geometry.showSpeed(coords[0], coords[1], panel.scene().getViewingTransform());
 
                     panel.updateGraphicsUtil();
                     creatingSelection_=false;
@@ -422,13 +422,13 @@ public class RPnCommandModule {
 
                     }
 
-                    RpGeometry geometry = pickCurve(0);
+                    RpGeometry geometry = pickCurve(curveId_);
 
                     RPnPhaseSpaceFrame frame = (RPnPhaseSpaceFrame) RPnUIFrame.getFrame(RPnNetworkStatus.ACTIVATED_FRAME_TITLE);
 
                     RPnPhaseSpacePanel panel = frame.phaseSpacePanel();
 
-                    selectedGeometry_.showClassification(coords[0], coords[1], panel.scene().getViewingTransform());
+                    geometry.showClassification(coords[0], coords[1], panel.scene().getViewingTransform());
 
                     panel.updateGraphicsUtil();
                     creatingSelection_=false;
