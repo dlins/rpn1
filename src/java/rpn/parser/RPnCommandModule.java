@@ -253,8 +253,16 @@ public class RPnCommandModule {
                     boolean selected = !selectedGeometry_.isSelected();
                     selectedGeometry_.setSelected(selected);
                     
-//                    UIController.instance().getSelectedGeometriesList().add(selectedGeometry_);
-                    System.out.println("Selecionando curva :" + curveId_);// + " " + selected);
+                    if(selected){
+                    UIController.instance().getSelectedGeometriesList().add(selectedGeometry_);                        
+                    
+                    }
+                    else {
+                    UIController.instance().getSelectedGeometriesList().remove(selectedGeometry_);
+                    }
+                    
+
+                    System.out.println("Selecionando curva :" + curveId_ + " " + selected);
 
                     RPnDataModule.PHASESPACE.update();
 //                    RPnPhaseSpaceFrame frame = (RPnPhaseSpaceFrame) RPnUIFrame.getFrame("Axis0 Axis1");
