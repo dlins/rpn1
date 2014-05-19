@@ -393,9 +393,9 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene implements Observer 
 
             }
             
-            RpGeometry geometry = (RpGeometry)geomList_;
+
             
-            RPnCurve curve = (RPnCurve) geometry.geomFactory().geomSource();
+            RPnCurve curve = (RPnCurve) rpGeometry.geomFactory().geomSource();
             
             CurveSelectionCommand.instance().setCurveToSelect(curve.getId());
             
