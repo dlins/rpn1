@@ -37,6 +37,7 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
+import rpn.command.CurveSelectionCommand;
 import rpn.component.BifurcationCurveBranchGeom;
 import rpn.component.BifurcationCurveGeom;
 import rpn.component.BifurcationCurveGeomSide;
@@ -56,7 +57,7 @@ import rpnumerics.StationaryPointCalc;
 import wave.multid.model.MultiGeometry;
 import wave.util.RealVector;
 
-public class RPnCurvesList extends Observable implements ActionListener, ListSelectionListener, TableModelListener, MouseListener{
+public class RPnCurvesList extends Observable implements ActionListener, ListSelectionListener, TableModelListener, MouseListener {
 
     private JScrollPane tablePanel_;
     private JToolBar toolBar_;
@@ -70,7 +71,6 @@ public class RPnCurvesList extends Observable implements ActionListener, ListSel
     private List indexGeometries;
     private List<RpGeometry> geometryList_;
     private ArrayList<RpGeometry> geometriesToRemove_;
-
 
     public RPnCurvesList(String title, RPnPhaseSpaceAbstraction phaseSpace) {
 
@@ -150,15 +150,14 @@ public class RPnCurvesList extends Observable implements ActionListener, ListSel
 
         curvesTable_.getColumnModel().getColumn(2).setCellEditor(new DefaultCellEditor(new JCheckBox()));
         curvesTable_.getColumnModel().getColumn(3).setCellEditor(new DefaultCellEditor(new JCheckBox()));
-        
-         JComboBox comboBox = new JComboBox();
+
+        JComboBox comboBox = new JComboBox();
 
         comboBox.addItem("LEFTRIGHT");
         comboBox.addItem("RIGHTLEFT");
         comboBox.addItem("NONE");
         comboBox.setSelectedIndex(2);
 
-        
         curvesTable_.getColumnModel().getColumn(4).setCellEditor(new DefaultCellEditor(comboBox));
 
     }
@@ -168,17 +167,17 @@ public class RPnCurvesList extends Observable implements ActionListener, ListSel
         if (geometry instanceof BifurcationCurveGeomSide) {
             BifurcationCurveGeomSide bifurcationGeom = (BifurcationCurveGeomSide) geometry;
             phaseSpace_.remove(bifurcationGeom.getOtherSide());
-            
+
         }
-        
-        if (geometry instanceof BifurcationCurveGeom ){
-            BifurcationCurveGeom branch = (BifurcationCurveGeom)geometry;
+
+        if (geometry instanceof BifurcationCurveGeom) {
+            BifurcationCurveGeom branch = (BifurcationCurveGeom) geometry;
             for (BifurcationCurveBranchGeom rpGeometry : branch.getBifurcationListGeom()) {
                 removeGeometrySide(rpGeometry);
             }
-            
+
         }
-        
+
     }
 
     //**** alteracao do metodo original para testar (Leandro)
@@ -186,20 +185,19 @@ public class RPnCurvesList extends Observable implements ActionListener, ListSel
 
         RealVector userInput = new RealVector(2);
         String geometryName = "Poincare";
-        
-        
-        int curveID=1000;
+
+        int curveID = 1000;
         if (geometry.geomFactory() instanceof RpCalcBasedGeomFactory) {
             RpCalcBasedGeomFactory factory = (RpCalcBasedGeomFactory) geometry.geomFactory();
 
             geometryName = factory.geomSource().getClass().getSimpleName();
             RpCalculation calc = factory.rpCalc();
-            
-            RPnCurve curveToID  = (RPnCurve) factory.geomSource();
+
+            RPnCurve curveToID = (RPnCurve) factory.geomSource();
 
             if (calc instanceof HugoniotCurveCalcND) {
                 HugoniotCurve curve = (HugoniotCurve) factory.geomSource();
-                curveID= curveToID.getId();
+                curveID = curveToID.getId();
                 userInput = curve.getXZero().getCoords();
             }
 
@@ -231,7 +229,7 @@ public class RPnCurvesList extends Observable implements ActionListener, ListSel
         NumberFormat formatter = NumberFormat.getInstance();
         formatter.setMaximumFractionDigits(4);
 
-        data.add(geometryName+ " curve ID: "+ curveID);
+        data.add(geometryName + " curve ID: " + curveID);
         String userInputString = "";
         for (int i = 0; i < userInput.getSize(); i++) {
             userInputString = userInputString.concat(formatter.format(userInput.getElement(i)) + " ");
@@ -243,9 +241,6 @@ public class RPnCurvesList extends Observable implements ActionListener, ListSel
         data.add(geometry.isSelected());
 
         data.add("NONE");
-
-
-
 
         tableModel_.addRow(data);
 
@@ -480,6 +475,12 @@ public class RPnCurvesList extends Observable implements ActionListener, ListSel
 
                     }
 
+                    RPnCurve curve = (RPnCurve) geometry.geomFactory().geomSource();
+
+                    CurveSelectionCommand.instance().setCurveToSelect(curve.getId());
+
+                    CurveSelectionCommand.instance().execute();
+
                     setChanged();
                     notifyObservers();
 
@@ -516,7 +517,5 @@ public class RPnCurvesList extends Observable implements ActionListener, ListSel
     public void mouseExited(MouseEvent e) {
 
     }
-
-  
 
 }
