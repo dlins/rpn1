@@ -66,7 +66,7 @@ public class RPnCommandModule {
         private int glassDrawMode_;
         private boolean creatingSelection_;
         private static RPnPhaseSpacePanel curvesPanel_;
-        private RpGeometry selectedGeometry_;
+//        private RpGeometry selectedGeometry_;
 
         public RPnCommandParser() {
 
@@ -249,16 +249,16 @@ public class RPnCommandModule {
                     GenericExtensionCurveCommand.instance().execute();
 
                 } else if (currentCommand_.equalsIgnoreCase("curveselection")) {
-                    selectedGeometry_ = pickCurve(curveId_);
-                    boolean selected = !selectedGeometry_.isSelected();
-                    selectedGeometry_.setSelected(selected);
+                    RpGeometry selectedGeometry = pickCurve(curveId_);
+                    boolean selected = !selectedGeometry.isSelected();
+                    selectedGeometry.setSelected(selected);
                     
                     if(selected){
-                    UIController.instance().getSelectedGeometriesList().add(selectedGeometry_);                        
+                    UIController.instance().getSelectedGeometriesList().add(selectedGeometry);                        
                     
                     }
                     else {
-                    UIController.instance().getSelectedGeometriesList().remove(selectedGeometry_);
+                    UIController.instance().getSelectedGeometriesList().remove(selectedGeometry);
                     }
                     
 
