@@ -11,7 +11,7 @@ import rpn.command.*;
 import java.beans.PropertyChangeEvent;
 import rpnumerics.Area;
 
-/** This class implements the methods to manipulate some calculus controllers, this calculus difines the geometric model ofa geometric visualization . When specifics elements (XZero , Profile and Hugoniot )changes its controllers, with methods implemented by this class, do the  visualization properties updates. */
+/** This class implements the methods to manipulate some calculus controllers, this calculus defines the geometric model of geometric visualization . When specifics elements (XZero , Profile and Hugoniot )changes its controllers, with methods implemented by this class, do the  visualization properties updates. */
 public class RpCalcController implements RpController {
     //
     // Members

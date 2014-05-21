@@ -193,11 +193,11 @@ public class RPnCurvesList extends Observable implements ActionListener, ListSel
             geometryName = factory.geomSource().getClass().getSimpleName();
             RpCalculation calc = factory.rpCalc();
 
-            RPnCurve curveToID = (RPnCurve) factory.geomSource();
+//            RPnCurve curveToID = (RPnCurve) factory.geomSource();
 
             if (calc instanceof HugoniotCurveCalcND) {
                 HugoniotCurve curve = (HugoniotCurve) factory.geomSource();
-                curveID = curveToID.getId();
+//                curveID = curveToID.getId();
                 userInput = curve.getXZero().getCoords();
             }
 
@@ -229,7 +229,7 @@ public class RPnCurvesList extends Observable implements ActionListener, ListSel
         NumberFormat formatter = NumberFormat.getInstance();
         formatter.setMaximumFractionDigits(4);
 
-        data.add(geometryName + " curve ID: " + curveID);
+        data.add(geometryName);
         String userInputString = "";
         for (int i = 0; i < userInput.getSize(); i++) {
             userInputString = userInputString.concat(formatter.format(userInput.getElement(i)) + " ");

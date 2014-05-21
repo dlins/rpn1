@@ -185,6 +185,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         toolBar_.add(RarefactionExtensionCurvePlotCommand.instance().getContainer());
         toolBar_.add(HugoniotContinuationPlotCommand.instance().getContainer());
         toolBar_.add(RarefactionExtensionCurvePlotCommand.instance().getContainer());
+        toolBar_.add(WaveCurveRRegionsPlotCommand.instance().getContainer());
 
         toolBar_.add(DoubleContactCommand.instance().getContainer());
         toolBar_.add(BoundaryExtensionCurveCommand.instance().getContainer());
@@ -238,6 +239,9 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     private void createRiemmanProblemToolBar() {
         toolBar_.setLayout(new GridLayout(1, 2));
         toolBar_.add(RiemannProfileCommand.instance().getContainer());
+        toolBar_.add(RiemannAllProfileCommand.instance().getContainer());
+        
+        
         toolBar_.add(WaveCurvePlotCommand.instance().getContainer());
     }
 

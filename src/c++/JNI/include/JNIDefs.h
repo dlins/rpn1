@@ -43,6 +43,7 @@
 #define ENVELOPECURVE_LOCATION                "rpnumerics/EnvelopeCurve"
 #define PHYSICALBOUNDARY_LOCATION             "rpnumerics/PhysicalBoundary"
 #define WAVECURVE_LOCATION                    "rpnumerics/WaveCurve"
+#define WAVECURVERREGIONS_LOCATION            "rpnumerics/WaveCurveRRegions"
 #define WAVECURVEORBIT_LOCATION               "rpnumerics/FundamentalCurve"
 #define RIEMANNPROFILE_LOCATION               "rpnumerics/RiemannProfile"
 #define CHARACTERISTICSCURVE_LOCATION         "rpnumerics/CharacteristicsCurve"

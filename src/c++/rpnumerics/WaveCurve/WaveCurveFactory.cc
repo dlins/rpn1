@@ -738,7 +738,7 @@ void WaveCurveFactory::R_regions(HugoniotContinuation *h, const WaveCurve &c, st
     int increase = c.increase;
     int family = (c.increase == SPEED_INCREASE) ? c.family + 1: c.family - 1;
 
-    for (int i = 0; i < c.wavecurve.size(); i++){
+    for (int i = 1; i < c.wavecurve.size(); i++){
         WaveCurve w;
 
         int wavecurve_stopped_because, edge;

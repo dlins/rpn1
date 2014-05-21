@@ -514,7 +514,7 @@ public class RPnCommandModule {
 
             }
 
-            System.out.println("Curva selecionada nao achada !");
+            System.out.println("Curve " + curveID + " not found !");
 
             return null;
 

@@ -78,7 +78,6 @@ inline WaveCurve * RpNumerics::getWaveCurve(int n) {
 inline void RpNumerics::addWaveCurve(WaveCurve * wc) {
     waveCurveMap_->insert(std::pair<int,WaveCurve *>(curveCounter,wc));
 
-    cout << "Tamanho do mapa de wc: " << waveCurveMap_->size() << endl;
 }
 
 inline vector<StationaryPoint *> & RpNumerics::getStationaryPointVector() {
@@ -123,7 +122,7 @@ inline void RpNumerics::clearCurveMap() {
 
 inline void RpNumerics::removeCurve(int curveID) {
 
-
+    cout <<"Vou tentar destruir curve: "<<curveID<<endl;
     if (waveCurveMap_->count(curveID) == 1) {
         delete waveCurveMap_->at(curveID);
         waveCurveMap_->erase(curveID);

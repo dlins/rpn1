@@ -15,6 +15,14 @@ extern "C" {
 JNIEXPORT jobject JNICALL Java_rpnumerics_RiemannProfileCalc_nativeCalc
   (JNIEnv *, jobject, jobject, jobject, jintArray);
 
+/*
+ * Class:     rpnumerics_RiemannProfileCalc
+ * Method:    nativeAllProfileCalc
+ * Signature: (IILwave/util/RealVector;Lwave/util/RealVector;)Lrpnumerics/RpSolution;
+ */
+JNIEXPORT jobject JNICALL Java_rpnumerics_RiemannProfileCalc_nativeAllProfileCalc
+  (JNIEnv *, jobject, jint, jint, jobject, jobject);
+
 #ifdef __cplusplus
 }
 #endif

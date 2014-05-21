@@ -37,12 +37,14 @@ import rpn.command.PhysicalBoundaryPlotCommand;
 import rpn.command.PointLevelCurvePlotCommand;
 import rpn.command.RarefactionExtensionCurvePlotCommand;
 import rpn.command.RarefactionCurvePlotCommand;
+import rpn.command.RiemannAllProfileCommand;
 import rpn.command.RiemannProfileCommand;
 import rpn.command.SecondaryBifurcationCurveCommand;
 import rpn.command.ShockCurvePlotCommand;
 import rpn.command.SubInflectionExtensionCurveCommand;
 import rpn.command.SubInflectionPlotCommand;
 import rpn.command.WaveCurvePlotCommand;
+import rpn.command.WaveCurveRRegionsPlotCommand;
 import rpn.command.ZoomPlotCommand;
 import rpn.command.ZoomingAreaCommand;
 import wave.util.RealVector;
@@ -62,6 +64,7 @@ public class CurvesConfig extends UI_ACTION_SELECTED {
         RarefactionExtensionCurvePlotCommand.instance().setEnabled(true);
         IntegralCurvePlotCommand.instance().setEnabled(true);
 //        DomainSelectionCommand.instance().setEnabled(true);
+
         CompositePlotCommand.instance().setEnabled(true);
         PointLevelCurvePlotCommand.instance().setEnabled(true);
         DiscriminantLevelCurvePlotCommand.instance().setEnabled(true);
@@ -73,6 +76,7 @@ public class CurvesConfig extends UI_ACTION_SELECTED {
         PhysicalBoundaryPlotCommand.instance().setEnabled(true);
         RiemannProfileCommand.instance().setEnabled(false);
         WaveCurvePlotCommand.instance().setEnabled(true);
+        WaveCurveRRegionsPlotCommand.instance().setEnabled(true);
         CurveRefineCommand.instance().setEnabled(false);
         ChooseAreaCommand.instance().setEnabled(true);
         ImageSelectionCommand.instance().setEnabled(true);
@@ -101,7 +105,7 @@ public class CurvesConfig extends UI_ACTION_SELECTED {
         EnvelopeCurveCommand.instance().setEnabled(true);
         SecondaryBifurcationCurveCommand.instance().setEnabled(true);
         
-
+        RiemannAllProfileCommand.instance().setEnabled(true);
 
 
     }

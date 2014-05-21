@@ -7,6 +7,7 @@ package rpn.component;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import rpnumerics.CompositeCurve;
 import rpnumerics.RPnCurve;
@@ -18,7 +19,10 @@ import rpnumerics.FundamentalCurve;
 import rpnumerics.Orbit;
 import rpnumerics.OrbitPoint;
 import rpnumerics.RPNUMERICS;
+import rpnumerics.RpSolution;
 import rpnumerics.WaveCurveOrbitCalc;
+import rpnumerics.WaveCurveRRegions;
+import rpnumerics.WaveCurveRRegionsCalc;
 import wave.multid.view.ViewingAttr;
 import wave.util.RealSegment;
 
@@ -32,10 +36,20 @@ public class WaveCurveGeomFactory extends WaveCurveOrbitGeomFactory {
     //
     // Constructors/Initializers
     //
-
+    int waveCurveIndexForRRegions_;
+    
     public WaveCurveGeomFactory(WaveCurveOrbitCalc calc) {
         super(calc);
     }
+    
+    
+     public WaveCurveGeomFactory(WaveCurveRRegionsCalc calc,WaveCurve curve,int waveCurveIndex) {
+        super(calc,curve);
+        waveCurveIndexForRRegions_ = waveCurveIndex;
+        
+
+    }
+    
 
     //
     // Accessors/Mutators
@@ -46,7 +60,22 @@ public class WaveCurveGeomFactory extends WaveCurveOrbitGeomFactory {
     @Override
     public RpGeometry createGeomFromSource() {
 
-        WaveCurve waveCurve = (WaveCurve) geomSource();
+        RpSolution solution = (RpSolution) geomSource();
+        
+        WaveCurve waveCurve =null;
+        
+        if (solution instanceof WaveCurve)
+        
+            waveCurve  = (WaveCurve) geomSource();
+        
+        if (solution instanceof WaveCurveRRegions){
+            
+            WaveCurveRRegions rRegions = (WaveCurveRRegions)geomSource();
+
+            waveCurve = rRegions.getWaveCurve(waveCurveIndexForRRegions_);
+            
+        }
+        
         List<RealSegment> list = waveCurve.segments();
 
         WaveCurveGeom wcGeom = new WaveCurveGeom(MultidAdapter.converseRealSegmentsToCoordsArray(list), this);
@@ -95,7 +124,25 @@ public class WaveCurveGeomFactory extends WaveCurveOrbitGeomFactory {
 
     @Override
     protected ViewingAttr selectViewingAttr() {
-        int family = (((WaveCurve) this.geomSource()).getFamily());
+        
+         RpSolution solution = (RpSolution) geomSource();
+         WaveCurve waveCurve =null;
+        
+        if (solution instanceof WaveCurve)
+        
+            waveCurve  = (WaveCurve) geomSource();
+        
+        if (solution instanceof WaveCurveRRegions){
+            
+            WaveCurveRRegions rRegions = (WaveCurveRRegions)geomSource();
+
+            waveCurve = rRegions.getWaveCurve(waveCurveIndexForRRegions_);
+            
+        }
+        
+        
+        
+        int family = waveCurve.getFamily();
 
         if (family == 1) {
             return new ViewingAttr(Color.red);
