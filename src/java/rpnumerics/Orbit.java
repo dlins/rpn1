@@ -119,11 +119,11 @@ public class Orbit extends RPnCurve implements RpSolution {
         // opposite time directions assumed...
         OrbitPoint[] swap = new OrbitPoint[points_.length
                 + curve.getPoints().length - 1];
-        double deltat = lastPoint().getLambda() - curve.lastPoint().getLambda();
+        double deltat = lastPoint().getSpeed() - curve.lastPoint().getSpeed();
         for (int i = 0, j = curve.getPoints().length - 2; i < swap.length; i++) {
             if (i >= points_.length) {
                 swap[i] = curve.getPoints()[j--];
-                swap[i].setLambda(swap[i].getLambda() + deltat);
+                swap[i].setLambda(swap[i].getSpeed() + deltat);
             } else {
                 swap[i] = (OrbitPoint) points_[i];
             }

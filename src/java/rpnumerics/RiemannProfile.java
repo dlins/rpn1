@@ -33,7 +33,7 @@ public class RiemannProfile extends RPnCurve  {
         for (int i = 0; i < points_.length; i++) {
 
 
-            buf.append("[" + i + "] = " + points_[i]+" lambda: "+ points_[i].getLambda());
+            buf.append("[" + i + "] = " + points_[i]+" lambda: "+ points_[i].getSpeed());
             buf.append("\n");
         }
         return buf.toString();

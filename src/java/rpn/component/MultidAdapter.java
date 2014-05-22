@@ -108,7 +108,7 @@ public class MultidAdapter {
         for (int i = 0; i < coords.length; i++) {
             
             RealVector riemannCoords = new RealVector(coords[i].getCoords().getSize()+1);
-            riemannCoords.setElement(0, coords[i].getLambda());
+            riemannCoords.setElement(0, coords[i].getSpeed());
             for (int j = 0; j < coords[i].getSize(); j++) {
 
                 riemannCoords.setElement(j+1, coords[i].getElement(j));

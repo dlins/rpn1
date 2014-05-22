@@ -40,7 +40,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionCurveCalc_calc(JNIEnv * env
     jclass classRarefactionOrbit = (env)->FindClass(RAREFACTIONCURVE_LOCATION);
 
     jmethodID rarefactionOrbitConstructor = (env)->GetMethodID(classRarefactionOrbit, "<init>", "([Lrpnumerics/OrbitPoint;II)V");
-    jmethodID orbitPointConstructor = (env)->GetMethodID(classOrbitPoint, "<init>", "([DD)V");
+    jmethodID orbitPointConstructor = (env)->GetMethodID(classOrbitPoint, "<init>", "([D[DD)V");
     jmethodID toDoubleMethodID = (env)->GetMethodID(classOrbitPoint, "toDouble", "()[D");
 
     //Input processing
@@ -70,6 +70,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionCurveCalc_calc(JNIEnv * env
     //    double deltaxi = 1e-3; // This is the original value (Rodrigo/ Panters)
 
 
+    int dimension = realVectorInput.size();
 
 
     const FluxFunction * flux = &RpNumerics::getPhysics().fluxFunction();
@@ -140,7 +141,20 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionCurveCalc_calc(JNIEnv * env
         (env)->SetDoubleArrayRegion(jTempArray, 0, tempVector.size(), dataCoords);
 
         //Lambda is the last component.
-        jobject orbitPoint = (env)->NewObject(classOrbitPoint, orbitPointConstructor, jTempArray, lambda);
+        
+        
+        jdoubleArray jeigenValuesArray = (env)->NewDoubleArray(dimension);
+        
+        
+        RealVector eigenValue =   rarcurve.eigenvalues[i];
+        
+        
+        
+        (env)->SetDoubleArrayRegion(jeigenValuesArray, 0, eigenValue.size(),(double *) eigenValue);
+        
+        
+        
+        jobject orbitPoint = (env)->NewObject(classOrbitPoint, orbitPointConstructor, jTempArray,jeigenValuesArray, lambda);
 
         (env)->SetObjectArrayElement(orbitPointArray, i, orbitPoint);
 

@@ -27,7 +27,7 @@ public final class OrbitPoint extends PhasePoint {
     //
     public OrbitPoint(OrbitPoint copy) {
         super(copy.getCoords());
-        lambda_ = copy.getLambda();
+        lambda_ = copy.getSpeed();
     }
 
     public OrbitPoint(RealVector pCoords, double pTime) {
@@ -64,6 +64,13 @@ public final class OrbitPoint extends PhasePoint {
         lambda_ = coords[coords.length - 1];
     }
 
+    public double[] getEigenValues() {
+        return eigenValues_;
+    }
+
+    
+    
+    
     public OrbitPoint(PhasePoint pPoint) {
         this(pPoint.getCoords());
     }
@@ -105,7 +112,7 @@ public final class OrbitPoint extends PhasePoint {
     //
     // Accessors/Mutators
     //
-    public double getLambda() {
+    public double getSpeed() {
         return lambda_;
     }
 
@@ -136,7 +143,7 @@ public final class OrbitPoint extends PhasePoint {
     public String toXML() {
 
         StringBuilder buffer = new StringBuilder();
-        buffer.append("<ORBITPOINT lambda=\"").append(getLambda()).append('\"' + " coords=\"").append(getCoords().toString()).append("\"/>\n");
+        buffer.append("<ORBITPOINT lambda=\"").append(getSpeed()).append('\"' + " coords=\"").append(getCoords().toString()).append("\"/>\n");
         
 
 

@@ -181,7 +181,7 @@ public class FundamentalCurve extends Orbit implements WaveCurveBranch, RpSoluti
 
         OrbitPoint curvePoint = points_.get(segmentIndex);
         
-        return curvePoint.getLambda();
+        return curvePoint.getSpeed();
     }
 
 

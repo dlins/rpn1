@@ -228,7 +228,7 @@ public class WaveCurve extends RPnCurve implements WaveCurveBranch, RpSolution {
         
         int segmentIndex = findClosestSegment(new RealVector(point.getCoords()));
         OrbitPoint get = points_.get(segmentIndex);
-        return get.getLambda();
+        return get.getSpeed();
     }
 
 

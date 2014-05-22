@@ -47,7 +47,7 @@ public class IntegralGeom extends OrbitGeom implements RpGeometry {
                 List<Object> wcObject = new ArrayList<Object>();
                 wcObject.add(new RealVector(curvePoint.getCoords()));
                 wcObject.add(new RealVector(wcPoint.getCoords()));
-                wcObject.add(String.valueOf(orbitPoint.getLambda()));
+                wcObject.add(String.valueOf(orbitPoint.getSpeed()));
 
                 LinePlotted speedAnnotation = new LinePlotted(wcObject, transform, new ViewingAttr(Color.white));
 
