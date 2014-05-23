@@ -7,9 +7,12 @@ package rpn.command;
 
 import javax.swing.JToggleButton;
 import rpn.component.*;
+import rpn.controller.ui.UIController;
 import rpnumerics.OrbitPoint;
+import rpnumerics.PhysicalBoundary;
 import wave.util.RealVector;
 import rpnumerics.RPNUMERICS;
+import rpnumerics.RPnCurve;
 import rpnumerics.ShockCurveCalc;
 
 public class ShockCurvePlotCommand extends RpModelPlotCommand {
@@ -32,8 +35,30 @@ public class ShockCurvePlotCommand extends RpModelPlotCommand {
 
     public RpGeometry createRpGeometry(RealVector[] input) {
         OrbitPoint oPoint = new OrbitPoint(input[input.length - 1]);
-        ShockCurveCalc shockCalc = RPNUMERICS.createShockCurveCalc(oPoint);
-        ShockCurveGeomFactory factory = new ShockCurveGeomFactory(shockCalc);
+        ShockCurveGeomFactory factory = null;
+        if (UIController.instance().getSelectedGeometriesList().size() == 1) {
+
+            RpGeomFactory geomFactory = UIController.instance().getSelectedGeometriesList().get(0).geomFactory();
+            RPnCurve curve = (RPnCurve) geomFactory.geomSource();
+            if (curve instanceof PhysicalBoundary) {
+
+                PhysicalBoundary physicalBoundary = (PhysicalBoundary) curve;
+
+                int edge = physicalBoundary.edgeSelection(oPoint);
+
+                factory = new ShockCurveGeomFactory(RPNUMERICS.createShockCurveCalc(oPoint, edge));
+
+            }
+            else {
+                 factory = new ShockCurveGeomFactory(RPNUMERICS.createShockCurveCalc(oPoint));
+            }
+
+        } else {
+
+            factory = new ShockCurveGeomFactory(RPNUMERICS.createShockCurveCalc(oPoint));
+
+        }
+
         return factory.geom();
     }
 

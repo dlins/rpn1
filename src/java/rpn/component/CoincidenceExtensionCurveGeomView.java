@@ -14,7 +14,7 @@ import wave.multid.view.GeomObjView;
 import wave.multid.view.ViewingAttr;
 import wave.multid.view.ViewingTransform;
 
-class CoincidenceExtensionCurveGeomView extends GeomObjView {
+class CoincidenceExtensionCurveGeomView extends BifurcationCurveView{
     //
     // Members
     //
@@ -69,20 +69,20 @@ class CoincidenceExtensionCurveGeomView extends GeomObjView {
         }
     }
 
-    //Original update method
-    public void update() {
-        viewList_.clear();
-        Iterator geomListIterator = ((CoincidenceExtensionCurveGeom) abstractGeom_).getBifurcationSegmentsIterator();
-        while (geomListIterator.hasNext()) {
-            RealSegGeom geomObj = (RealSegGeom) geomListIterator.next();
-
-            geomObj.viewingAttr().setColor(CoincidenceExtensionCurveGeom.COLOR);
-
-            try {
-                viewList_.add(geomObj.createView(getViewingTransform()));
-            } catch (DimMismatchEx dex) {
-                dex.printStackTrace();
-            }
-        }
-    }
+//    //Original update method
+//    public void update() {
+//        viewList_.clear();
+//        Iterator geomListIterator = ((CoincidenceExtensionCurveGeom) abstractGeom_).getBifurcationSegmentsIterator();
+//        while (geomListIterator.hasNext()) {
+//            RealSegGeom geomObj = (RealSegGeom) geomListIterator.next();
+//
+//            geomObj.viewingAttr().setColor(CoincidenceExtensionCurveGeom.COLOR);
+//
+//            try {
+//                viewList_.add(geomObj.createView(getViewingTransform()));
+//            } catch (DimMismatchEx dex) {
+//                dex.printStackTrace();
+//            }
+//        }
+//    }
 }

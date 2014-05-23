@@ -92,6 +92,8 @@ public class MultidAdapter {
     public static CoordsArray[] converseOrbitPointsToCoordsArray(OrbitPoint[] coords) {
 
         CoordsArray[] vertices = new CoordsArray[coords.length];
+        
+
 
         for (int i = 0; i < coords.length; i++) {
             vertices[i] = new CoordsArray(coords[i].getCoords());

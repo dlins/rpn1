@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SubInflectionCurveView
-        extends GeomObjView {
+        extends BifurcationCurveView {
     //
     // Members
     //
@@ -30,20 +30,20 @@ public class SubInflectionCurveView
 
     }
 
-    //Original update method
-    public void update() {
-
-
-        viewList_.clear();
-        Iterator geomListIterator = ((SubInflectionCurveGeom) getAbstractGeom()).getBifurcationSegmentsIterator();
-        while (geomListIterator.hasNext()) {
-            RealSegGeom geomObj = (RealSegGeom) geomListIterator.next();
-            geomObj.viewingAttr().setColor(SubInflectionCurveGeom.COLOR);
-            try {
-                viewList_.add(geomObj.createView(getViewingTransform()));
-            } catch (DimMismatchEx dex) {
-                dex.printStackTrace();
-            }
-        }
-    }
+//    //Original update method
+//    public void update() {
+//
+//
+//        viewList_.clear();
+//        Iterator geomListIterator = ((SubInflectionCurveGeom) getAbstractGeom()).getBifurcationSegmentsIterator();
+//        while (geomListIterator.hasNext()) {
+//            RealSegGeom geomObj = (RealSegGeom) geomListIterator.next();
+//            geomObj.viewingAttr().setColor(SubInflectionCurveGeom.COLOR);
+//            try {
+//                viewList_.add(geomObj.createView(getViewingTransform()));
+//            } catch (DimMismatchEx dex) {
+//                dex.printStackTrace();
+//            }
+//        }
+//    }
 }

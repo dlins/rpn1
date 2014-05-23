@@ -3,7 +3,6 @@
  * Departamento de Dinamica dos Fluidos
  *
  */
-
 package wave.multid.view;
 
 import java.awt.Color;
@@ -12,13 +11,13 @@ public class ViewingAttr {
     //
     // Constants
     //
+
     static public class DefaultAttr extends ViewingAttr {
+
         public DefaultAttr() {
             super(Color.black);
         }
     }
-
-
     //
     // Members
     //
@@ -26,14 +25,16 @@ public class ViewingAttr {
     private boolean visible_;
     private boolean selected_;
     private boolean highLight_;
+    private final int ALFA_DOWN = 20;
+    private final int ALFA_UP = 255;
 
     //
     // Constructors
     //
     public ViewingAttr(Color color) {
         color_ = new Color(color.getRed(), color.getGreen(), color.getBlue());
-        visible_ = true;
-        selected_ = false;
+        setVisible(true);
+        setSelected(false);
         highLight_ = true;
     }
 
@@ -57,23 +58,56 @@ public class ViewingAttr {
     //
     // Methods
     //
-    public Color getColor() { return color_; }
+    public Color getColor() {
+        return color_;
+    }
 
-    public void setColor(Color color) { color_ = color; }
+    public void setColor(Color color) {
+        color_ = color;
+    }
 
-    public boolean isVisible() { return visible_; }
+    public boolean isVisible() {
+        return visible_;
+    }
 
-    public void setVisible(boolean flag) { visible_ = flag; }
+    public final void setVisible(boolean flag) {
 
-    public boolean isSelected() { return selected_; }
+        if (flag) {
+            color_ = new Color(color_.getRed(), color_.getGreen(), color_.getBlue(), ALFA_UP);
+        } else {
 
-    public void setSelected(boolean flag) { 
+            color_ = new Color(color_.getRed(), color_.getGreen(), color_.getBlue(), ALFA_DOWN);
+        }
+
+
+        visible_ = flag;
+    }
+
+    public boolean isSelected() {
+        return selected_;
+    }
+
+    public final void setSelected(boolean flag) {
+        
+        
+//        if(flag){
+//            color_ = color_.brighter();
+//        }
+//        else {
+//
+//            color_=color_.darker();
+//            
+//        }
+        
         selected_ = flag;
         highLight_ = flag;
     }
 
-    public boolean hasHighLight() {return highLight_;}
+    public boolean hasHighLight() {
+        return highLight_;
+    }
 
-    public void setHighLight(boolean flag) {highLight_ = flag;}
-    
+    public void setHighLight(boolean flag) {
+        highLight_ = flag;
+    }
 }

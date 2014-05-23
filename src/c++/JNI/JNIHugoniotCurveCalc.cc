@@ -124,9 +124,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
 
     for (int i = 0; i < transitionList.size(); i++) {
 
-        if (Debug::get_debug_level() == 5) {
+//        if (Debug::get_debug_level() == 5) {
             cout << "Ponto de transicao: " << transitionList[i] << endl;
-        }
+//        }
 
         jdoubleArray transPointArray = env->NewDoubleArray(dimension);
         double * leftCoords = (double *) transitionList[i];

@@ -10,6 +10,9 @@ import wave.multid.model.MultiPolyLine;
 import wave.multid.view.ViewingAttr;
 import wave.multid.CoordsArray;
 import java.awt.Color;
+import java.util.Iterator;
+import rpn.component.util.GraphicsUtil;
+import wave.multid.view.ViewingTransform;
 
 public class ManifoldGeom extends MultiPolyLine implements RpGeometry {
     //
@@ -34,6 +37,43 @@ public class ManifoldGeom extends MultiPolyLine implements RpGeometry {
     // Accessors/Mutators
     //
     public RpGeomFactory geomFactory() { return factory_; }
+
+    @Override
+    public void addAnnotation(GraphicsUtil annotation) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Iterator<GraphicsUtil> getAnnotationIterator() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void clearAnnotations() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void removeLastAnnotation() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void removeAnnotation(GraphicsUtil selectedAnnotation) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void showSpeed(CoordsArray curvePoint, CoordsArray wcPoint, ViewingTransform transform) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void showClassification(CoordsArray curvePoint, CoordsArray wcPoint, ViewingTransform transform) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+   
 
     
 }

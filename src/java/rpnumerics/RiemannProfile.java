@@ -29,7 +29,7 @@ public class RiemannProfile extends RPnCurve  {
     //
    
     public RiemannProfile(OrbitPoint[] points) {
-        super(MultidAdapter.converseCoordsArrayToRealSegments(MultidAdapter.converseOrbitPointsToCoordsArray(points)), new ViewingAttr(Color.white));
+        super(MultidAdapter.converseCoordsArrayToRealSegments(MultidAdapter.converseOrbitPointsToCoordsArray(points)));
 //        segments_= MultidAdapter.converseRPnCurveToRealSegments(this);
         points_ = points;
 
@@ -66,5 +66,6 @@ public class RiemannProfile extends RPnCurve  {
 //        return segments_;
 //
 //    }
-    
+
+   
 }

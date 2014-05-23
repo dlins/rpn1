@@ -5,9 +5,11 @@
  */
 package rpn.component;
 
+import java.util.List;
+
 public class InflectionCurveGeom extends BifurcationCurveGeom{
 
-    public InflectionCurveGeom(RealSegGeom[] hugoniotArray, InflectionCurveGeomFactory aThis) {
+    public InflectionCurveGeom(List<BifurcationCurveBranchGeom> hugoniotArray, InflectionCurveGeomFactory aThis) {
         super(hugoniotArray,aThis);
 
     }

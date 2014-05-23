@@ -65,4 +65,17 @@ public class MultiPoint extends MultiGeometryImpl {
     public GeomObjView createView(ViewingTransform transf) throws DimMismatchEx {
         return new PointMark(this, transf, viewingAttr());
     }
+
+    @Override
+    public boolean isVisible() {
+        return viewingAttr().isVisible();
+    }
+
+    @Override
+    public boolean isSelected() {
+        return viewingAttr().isSelected();
+    }
+    
+    
+   
 }

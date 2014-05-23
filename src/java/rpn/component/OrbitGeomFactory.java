@@ -9,6 +9,8 @@ import java.awt.Color;
 import rpn.controller.OrbitController;
 import rpn.controller.RpController;
 import rpnumerics.*;
+import wave.multid.CoordsArray;
+import wave.multid.model.MultiPoint;
 import wave.multid.view.ViewingAttr;
 import wave.util.RealVector;
 
@@ -46,10 +48,20 @@ public class OrbitGeomFactory extends RpCalcBasedGeomFactory {
         return new OrbitController();
     }
 
+    @Override
     public RpGeometry createGeomFromSource() {
+
         Orbit orbit = (Orbit) geomSource();
+
+        OrbitPoint firstPoint = orbit.firstPoint();
+        CoordsArray coords = new CoordsArray(firstPoint);
+        MultiPoint startPoint= new MultiPoint(coords, selectViewingAttr());
         
-        return new OrbitGeom(MultidAdapter.converseOrbitToCoordsArray(orbit), this);
+        OrbitGeom orbitGeom = new OrbitGeom(MultidAdapter.converseOrbitToCoordsArray(orbit), this);
+        
+        orbitGeom.setStarPoint(startPoint);
+        
+        return orbitGeom;
     }
 
 

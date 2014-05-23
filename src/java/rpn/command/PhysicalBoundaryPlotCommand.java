@@ -7,7 +7,6 @@ package rpn.command;
 
 import java.awt.event.ActionEvent;
 import javax.swing.JButton;
-import rpn.RPnPhaseSpaceAbstraction;
 import rpn.component.*;
 import rpn.controller.ui.UIController;
 import rpn.controller.ui.UI_ACTION_SELECTED;
@@ -30,7 +29,7 @@ public class PhysicalBoundaryPlotCommand extends RpModelPlotCommand {
     // Constructors/Initializers
     //
     protected PhysicalBoundaryPlotCommand() {
-        super(DESC_TEXT, rpn.configuration.RPnConfig.HUGONIOT, new JButton());
+        super(DESC_TEXT, null, new JButton());
     }
 
     @Override

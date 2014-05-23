@@ -1,10 +1,4 @@
-
 #include "Boundary.h"
-#include "Debug.h"
-
-
-#include <iostream>
-using namespace std;
 
 Boundary::~Boundary() {
 };
@@ -13,153 +7,43 @@ Boundary::~Boundary() {
 int Boundary::intersection(const RealVector &p, const RealVector &q, RealVector &r, int &w) const {
     w = -1;
 
-    if ( Debug::get_debug_level() == 5 ) {
-        cout<<"Entrando em intersection Boundary"<<endl;
-        cout<<"P: "<<p<<"Q: "<<q<<endl;
-    }
-    if (inside(p) && inside(q)) return 1;
-    else if (!inside(p) && !inside(q)) {
-        if ( Debug::get_debug_level() == 5 ) {
-            cout << "Both outside, should abort" << endl;
-        }
-        return -1;
-    } else {
+    std::cout << "Boundary. p = " << p << ", q = " << q << std::endl;
+    std::cout << "inside(p) = " << inside(p) << ", inside(q) = " << inside(q) << std::endl;
+
+
+    if      ( inside(p) &&  inside(q)) return BOUNDARY_INTERSECTION_BOTH_INSIDE;
+    else if (!inside(p) && !inside(q)) return BOUNDARY_INTERSECTION_BOTH_OUTSIDE;
+    else {
         int n = p.size();
-        if ( Debug::get_debug_level() == 5 ) {
-            cout<<"Dentro "<<endl;
-        }
 
-        // Initialize the temporal points
-        double *pp, *qq;
-        pp = new double[n];
-        qq = new double[n];
+        // Initialize the temporary points
+        RealVector pp(p);
+        RealVector qq(q);
 
-        for (int i = 0; i < n; i++) {
-            pp[i] = p.component(i);
-            qq[i] = q.component(i);
-        }
-
-        // Switch the temporal points if need be, such that pp is inside and qq is outside
+        // Switch the temporary points if need be, such that pp is inside and qq is outside
         if (!inside(pp)) {
-            double temp;
-            for (int i = 0; i < n; i++) {
-                temp = pp[i];
-                pp[i] = qq[i];
-                qq[i] = temp;
-            }
+            RealVector temp(pp);
+            pp = qq;
+            qq = temp;
         }
 
         // Minimum distance.
-        double d = epsilon * distance(n, pp, qq);
-
-        // Mean point
-        double *mean = new double[n];
+        double d = epsilon*norm(pp - qq);
 
         // Iterate while the distance between the points is greater than d.
-#ifdef _TEST_BOUNDARY_
-        int it = 0;
-#endif
-
+        //
         int count = 0;
-        while (distance(n, pp, qq) > d && count < 100) {
+
+        while (norm(pp - qq) > d && count < 100) {
             count++;
-            for (int i = 0; i < n; i++) mean[i] = (pp[i] + qq[i]) / 2;
+            r = .5*(pp + qq);
 
-            if (inside(mean)) for (int i = 0; i < n; i++) pp[i] = mean[i];
-            else for (int i = 0; i < n; i++) qq[i] = mean[i];
-#ifdef _TEST_BOUNDARY_
-            it++;
-#endif
+            if (inside(r)) pp = r;
+            else           qq = r;
         }
 
-        // Store the point in r
-        r.resize(n);
-        for (int i = 0; i < n; i++) r.component(i) = mean[i];
+        return BOUNDARY_INTERSECTION_FOUND;
 
-        delete mean;
-        delete qq;
-        delete pp;
-
-#ifdef _TEST_BOUNDARY_
-        if ( Debug::get_debug_level() == 5 ) {
-            printf("Iterations = %d\n", it);
-        }
-#endif
-
-
-        return 0;
-
-        //
-        //
-        //    if (inside(p) && inside(q)) return 1;
-        //    else if (!inside(p) && !inside(q)) return -1;
-        //    else {
-        //        int n = p.size();
-        //
-        //        // Initialize the temporal points
-        //        double *pp, *qq;
-        //        pp = new double[n];
-        //        qq = new double[n];
-        //
-        //        for (int i = 0; i < n; i++) {
-        //            pp[i] = p(i);
-        //            qq[i] = q(i);
-        //        }
-        //
-        //        // Switch the temporal points if need be, such that pp is inside and qq is outside
-        //        if (!inside(RealVector(n, pp))) {
-        //            double temp;
-        //            for (int i = 0; i < n; i++) {
-        //                temp = pp[i];
-        //                pp[i] = qq[i];
-        //                qq[i] = temp;
-        //            }
-        //        }
-        //
-        //        // Minimum distance.
-        //        double d = epsilon * distance(RealVector(n, pp), RealVector(n, qq));
-        //
-        //        // Mean point
-        //        double *mean = new double[n];
-        //
-        //        // Iterate while the distance between the points is greater than d.
-        //#ifdef _TEST_DOMAIN_
-        //        int it = 0;
-        //#endif
-        //        while (distance(RealVector(n, pp), RealVector(n, qq)) > d) {
-        //            for (int i = 0; i < n; i++) mean[i] = (pp[i] + qq[i]) / 2;
-        //
-        //            if (inside(RealVector(n, mean))) for (int i = 0; i < n; i++) pp[i] = mean[i];
-        //            else for (int i = 0; i < n; i++) qq[i] = mean[i];
-        //#ifdef _TEST_DOMAIN_
-        //            it++;
-        //#endif
-        //        }
-        //
-        //        // Store the point in r
-        //        r.resize(n);
-        //        for (int i = 0; i < n; i++) r[i] = mean[i];
-        //
-        //        delete mean;
-        //        delete qq;
-        //        delete pp;
-        //
-        //#ifdef _TEST_DOMAIN_
-        //        if ( Debug::get_debug_level() == 5 ) {
-        //            printf("Iterations = %d\n", it);
-        //        }
-        //#endif
-        //
-        //        return 0;
     }
 }
-
-double Boundary::distance(int n, const double * p, const double * q)const {
-    double d = 0.0;
-    for (int i = 0; i < n; i++) d += (p[i] - q[i])*(p[i] - q[i]);
-
-    return sqrt(d);
-}
-
-
 

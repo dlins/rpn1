@@ -13,7 +13,7 @@ import java.util.Iterator;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EnvelopeCurveView extends GeomObjView {
+public class EnvelopeCurveView extends BifurcationCurveView {
     //
     // Members
     //
@@ -31,25 +31,25 @@ public class EnvelopeCurveView extends GeomObjView {
 
   
     
-    //Original update method
-    public void update() {
-        viewList_.clear();
-
-        EnvelopeCurveGeom doubleContactGeom = (EnvelopeCurveGeom) getAbstractGeom();
-        Iterator geomListIterator = doubleContactGeom.getBifurcationSegmentsIterator();
-
-
-        while (geomListIterator.hasNext()) {
-            RealSegGeom geomObj = (RealSegGeom) geomListIterator.next();
-            try {
-                if (geomObj == null) {
-                    System.out.println("Eh nulo segmento");
-                }
-
-                viewList_.add(geomObj.createView(getViewingTransform()));
-            } catch (DimMismatchEx dex) {
-                dex.printStackTrace();
-            }
-        }
-    }
+//    //Original update method
+//    public void update() {
+//        viewList_.clear();
+//
+//        EnvelopeCurveGeom doubleContactGeom = (EnvelopeCurveGeom) getAbstractGeom();
+//        Iterator geomListIterator = doubleContactGeom.getBifurcationSegmentsIterator();
+//
+//
+//        while (geomListIterator.hasNext()) {
+//            RealSegGeom geomObj = (RealSegGeom) geomListIterator.next();
+//            try {
+//                if (geomObj == null) {
+//                    System.out.println("Eh nulo segmento");
+//                }
+//
+//                viewList_.add(geomObj.createView(getViewingTransform()));
+//            } catch (DimMismatchEx dex) {
+//                dex.printStackTrace();
+//            }
+//        }
+//    }
 }

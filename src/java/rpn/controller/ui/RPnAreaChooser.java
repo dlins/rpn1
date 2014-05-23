@@ -6,9 +6,6 @@
 package rpn.controller.ui;
 
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
-import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import rpn.RPnPhaseSpacePanel;

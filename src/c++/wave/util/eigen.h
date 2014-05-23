@@ -8,6 +8,11 @@
 #include <math.h>
 
 #include "RealVector.h"
+#include "DoubleMatrix.h"
+
+// Forward declarations
+class FluxFunction;
+class AccumulationFunction;
 
 using namespace std;
 
@@ -68,11 +73,11 @@ struct eigenpair {
                vrr.resize(n);
                vri.resize(n);
             
-               for (int i = 0; i < n; i++){
-                   vlr[i] = original.vlr[i];
-                   vli[i] = original.vli[i];
-                   vrr[i] = original.vrr[i];
-                   vri[i] = original.vri[i];
+               for (int ii = 0; ii < n; ii++){
+                   vlr[ii] = original.vlr[ii];
+                   vli[ii] = original.vli[ii];
+                   vrr[ii] = original.vrr[ii];
+                   vri[ii] = original.vri[ii];
                }
             }
 
@@ -97,10 +102,14 @@ class Eigen {
         static int eig(int n, const double*, const double*, vector<eigenpair>&); // Generalized eigenproblem
         static int eig(int n, const double*, const double*, int family, eigenpair&); // Generalized eigenproblem for a given family
         static int eig(int n, const double *A, const double *B, int family, RealVector &r); //Generalized eigenproblem for a given family, returning ONLY the right-eigenvector
+        static int eig(const RealVector &p, const FluxFunction *f, const AccumulationFunction *g, std::vector<eigenpair> &e);
 
         static void print_eigen(const vector<eigenpair> &);
         static void eps(double);
         static double eps(void);
+
+        static void fill_eigenpairs(const FluxFunction *f, const AccumulationFunction *a, const RealVector &u, std::vector<eigenpair> &e);
+        static void fill_eigenvalues(const FluxFunction *f, const AccumulationFunction *a, const RealVector &u, std::vector<double> &lambda);
 };
 /* Class Eigen. */
 

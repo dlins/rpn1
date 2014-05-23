@@ -5,6 +5,7 @@
  */
 package rpn.component;
 
+import java.util.List;
 import wave.multid.view.*;
 import wave.multid.*;
 
@@ -14,7 +15,7 @@ public class EllipticBoundaryExtensionGeom extends BifurcationCurveGeom {//imple
     //
     // Constructors
     //
-    public EllipticBoundaryExtensionGeom(RealSegGeom[] segArray, EllipticBoundaryExtensionFactory factory) {
+    public EllipticBoundaryExtensionGeom(List<BifurcationCurveBranchGeom> segArray, EllipticBoundaryExtensionFactory factory) {
 
         super(segArray, factory);
 

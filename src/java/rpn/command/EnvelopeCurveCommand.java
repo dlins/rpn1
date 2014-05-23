@@ -51,21 +51,8 @@ public class EnvelopeCurveCommand extends BifurcationPlotCommand {
     @Override
     public void execute() {
 
-
         EnvelopeGeomFactory factory = new EnvelopeGeomFactory(RPNUMERICS.createEnvelopeCurveCalc());
-
-            RPnPhaseSpaceAbstraction leftPhaseSpace = RPnDataModule.LEFTPHASESPACE;
-
-            RPnPhaseSpaceAbstraction rightPhaseSpace = RPnDataModule.RIGHTPHASESPACE;
-
-            RpGeometry leftGeometry = factory.leftGeom();
-            RpGeometry rightGeometry = factory.rightGeom();
-
-            leftPhaseSpace.join(leftGeometry);
-            rightPhaseSpace.join(rightGeometry);
-
-            RPnDataModule.PHASESPACE.join(factory.geom());
-
+        execute(factory);
 
     }
 

@@ -10,8 +10,6 @@ import rpnumerics.FundamentalCurve;
 import rpnumerics.Orbit;
 import rpnumerics.OrbitPoint;
 import rpnumerics.RPNUMERICS;
-import rpnumerics.RpSolution;
-import rpnumerics.WaveCurve;
 import rpnumerics.WaveCurveOrbitCalc;
 import wave.multid.view.ViewingAttr;
 

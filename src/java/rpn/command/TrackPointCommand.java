@@ -8,6 +8,8 @@ package rpn.command;
 import java.awt.event.ActionEvent;
 import javax.swing.JToggleButton;
 import rpn.RPnStateInformationFrame;
+import static rpn.command.ClassifierCommand.DESC_TEXT;
+import rpn.component.RpGeometry;
 import rpn.controller.ui.TRACKPOINT_CONFIG;
 import rpn.controller.ui.UIController;
 import rpnumerics.RPnStateInfo;
@@ -15,20 +17,15 @@ import rpnumerics.StateInformation;
 import wave.multid.CoordsArray;
 import wave.util.RealVector;
 
-public class TrackPointCommand extends RpModelActionCommand {
+public class TrackPointCommand extends RpModelPlotCommand {
 
     static public final String DESC_TEXT = "Track Point";
     static private TrackPointCommand instance_ = null;
-    private JToggleButton button_;
     private RPnStateInfo info_;
     private RPnStateInformationFrame testFrame_;
 
     private TrackPointCommand() {
-        super(DESC_TEXT, null);
-        
-        button_ = new JToggleButton(this);
-        button_.setToolTipText(DESC_TEXT);
-        button_.setFont(rpn.RPnConfigReader.MODELPLOT_BUTTON_FONT);
+        super(DESC_TEXT, null ,new JToggleButton());
         setEnabled(true);
         testFrame_ = new RPnStateInformationFrame();
 
@@ -42,13 +39,11 @@ public class TrackPointCommand extends RpModelActionCommand {
         return instance_;
     }
 
-    public JToggleButton getContainer() {
-        return button_;
-    }
+    
 
     @Override
     public void unexecute() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        
     }
 
     @Override
@@ -84,7 +79,6 @@ public class TrackPointCommand extends RpModelActionCommand {
 
 
         if (button_.isSelected()) {
-//            if (UIController.instance().globalInputTable().values().getSize() == rpnumerics.RPNUMERICS.domainDim()) {
                 
                 if (UIController.instance().getActivePhaseSpace().getSpace().getDim() == rpnumerics.RPNUMERICS.domainDim()) {
                 StateInformation stateInformation = new StateInformation();
@@ -101,6 +95,11 @@ public class TrackPointCommand extends RpModelActionCommand {
 
     public RPnStateInfo getInfo() {
         return info_;
+    }
+
+    @Override
+    public RpGeometry createRpGeometry(RealVector[] coords) {
+       return null;
     }
 
 

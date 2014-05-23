@@ -24,8 +24,6 @@ public class PhysicalBoundaryFactory extends RpCalcBasedGeomFactory {
 
         PhysicalBoundary curve = (PhysicalBoundary) geomSource();
 
-
-        // assuming a container with HugoniotSegment elements
         int resultSize = curve.segments().size();
 
         RealSegGeom[] segmentsArray = new RealSegGeom[resultSize];

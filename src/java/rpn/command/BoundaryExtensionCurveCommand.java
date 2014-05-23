@@ -58,31 +58,7 @@ public class BoundaryExtensionCurveCommand extends BifurcationPlotCommand {
     public void execute() {
 
         BoundaryExtensionCurveGeomFactory factory = new BoundaryExtensionCurveGeomFactory(RPNUMERICS.createBoundaryExtensionCurveCalc());
-
-
-        RPnPhaseSpaceAbstraction leftPhaseSpace = RPnDataModule.LEFTPHASESPACE;
-
-        RPnPhaseSpaceAbstraction rightPhaseSpace = RPnDataModule.RIGHTPHASESPACE;
-
-        RpGeometry leftGeometry = factory.leftGeom();
-        RpGeometry rightGeometry = factory.rightGeom();
-
-        leftPhaseSpace.join(leftGeometry);
-        rightPhaseSpace.join(rightGeometry);
-
-
-
-        Iterator oldValue = RPnDataModule.PHASESPACE.getGeomObjIterator();
-        PropertyChangeEvent event_ = new PropertyChangeEvent(this, UIController.instance().getActivePhaseSpace().getName(), oldValue, factory.geom());
-
-        ArrayList<RealVector> emptyInput = new ArrayList<RealVector>();
-        logCommand(new RpCommand(event_, emptyInput));
-
-
-
-        RPnDataModule.PHASESPACE.join(factory.geom());
-
-
+        execute(factory);
 
     }
 

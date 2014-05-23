@@ -6,6 +6,7 @@
 package rpn.component;
 
 import java.awt.Color;
+import java.util.List;
 import wave.multid.view.*;
 import wave.multid.*;
 
@@ -16,7 +17,7 @@ public class BuckleyLeverettinInflectionGeom extends BifurcationCurveGeom {//imp
     //
     public static Color COLOR = new Color(0, 255, 0);
 
-    public BuckleyLeverettinInflectionGeom(RealSegGeom[] segArray, BuckleyLeverettinCurveGeomFactory factory) {
+    public BuckleyLeverettinInflectionGeom(List<BifurcationCurveBranchGeom> segArray, BuckleyLeverettinCurveGeomFactory factory) {
         super(segArray, factory);
 
     }

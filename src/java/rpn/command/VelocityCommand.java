@@ -26,7 +26,7 @@ public class VelocityCommand extends RpModelPlotCommand {
 
     static public final String DESC_TEXT = "Velocity";
     static private VelocityCommand instance_ = null;
-    private JToggleButton button_;
+//    private JToggleButton button_;
 
     static public List vel = new ArrayList();
     //** Para a posição da velocidade em coordenadas físicas
@@ -39,11 +39,6 @@ public class VelocityCommand extends RpModelPlotCommand {
 
     private VelocityCommand() {
         super(DESC_TEXT, null ,new JToggleButton());
-
-        button_ = new JToggleButton(this);
-        button_.setToolTipText(DESC_TEXT);
-
-        button_.setFont(rpn.RPnConfigReader.MODELPLOT_BUTTON_FONT);
         setEnabled(true);
     }
 
@@ -68,11 +63,6 @@ public class VelocityCommand extends RpModelPlotCommand {
             instance_ = new VelocityCommand();
         }
         return instance_;
-    }
-
-    @Override
-    public JToggleButton getContainer() {
-        return button_;
     }
 
 

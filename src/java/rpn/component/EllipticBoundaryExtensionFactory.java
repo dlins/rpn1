@@ -26,21 +26,21 @@ public class EllipticBoundaryExtensionFactory extends BifurcationCurveGeomFactor
     // Methods
     //
 
-    public RpGeometry createGeomFromSource() {
-
-        EllipticBoundaryExtension curve = (EllipticBoundaryExtension) geomSource();
-
-
-        // assuming a container with HugoniotSegment elements
-        int resultSize = curve.segments().size();
-
-        RealSegGeom[] hugoniotArray = new RealSegGeom[resultSize];
-        for (int i = 0; i < resultSize; i++) {
-            hugoniotArray[i] = new RealSegGeom((RealSegment) curve.segments().get(i));
-        }
-        return new EllipticBoundaryExtensionGeom(hugoniotArray, this);
-
-    }
+//    public RpGeometry createGeomFromSource() {
+//
+//        EllipticBoundaryExtension curve = (EllipticBoundaryExtension) geomSource();
+//
+//
+//        // assuming a container with HugoniotSegment elements
+//        int resultSize = curve.segments().size();
+//
+//        RealSegGeom[] hugoniotArray = new RealSegGeom[resultSize];
+//        for (int i = 0; i < resultSize; i++) {
+//            hugoniotArray[i] = new RealSegGeom((RealSegment) curve.segments().get(i));
+//        }
+//        return new EllipticBoundaryExtensionGeom(hugoniotArray, this);
+//
+//    }
 
     public String toMatlab(int curveIndex) {
         return null;

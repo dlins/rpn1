@@ -25,12 +25,13 @@ public class ShockCurveGeomView extends WaveCurveOrbitGeomView {
 
     @Override
     public void draw(Graphics2D g) {
-
-        g.setColor(getViewingAttr().getColor());
+        Color color = getViewingAttr().getColor();
+        g.setColor(color);
         super.draw(g);
-        
-    }
 
+        
+
+    }
 
     @Override
     public Shape createShape() {
@@ -38,30 +39,29 @@ public class ShockCurveGeomView extends WaveCurveOrbitGeomView {
         GeneralPath composite = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
 
         composite.append(dash(), false);
-        
+
         return composite;
 
     }
-
 
     private Shape dash() {
         GeneralPath composite = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
         ShockCurveGeom absGeom = (ShockCurveGeom) getAbstractGeom();
 
         OrbitPoint[] points = absGeom.getPointsArray();
-        
+
         int begin = 0;
         int end = points.length;
-        
-        int k = Math.max(10, (int) Math.round(0.15*end));   // *******
+
+        int k = Math.max(10, (int) Math.round(0.15 * end));   // *******
 
         if (end > 1) {
-            for (int i = begin; i < end - k/2; i+=k) {
+            for (int i = begin; i < end - k / 2; i += k) {
                 Coords2D P1DC = new Coords2D();
                 Coords2D P2DC = new Coords2D();
 
                 RealVector P1WC = new RealVector(points[i]);
-                RealVector P2WC = new RealVector(points[i + k/2]);
+                RealVector P2WC = new RealVector(points[i + k / 2]);
 
                 getViewingTransform().viewPlaneTransform(new CoordsArray(P1WC), P1DC);
                 getViewingTransform().viewPlaneTransform(new CoordsArray(P2WC), P2DC);
@@ -72,6 +72,5 @@ public class ShockCurveGeomView extends WaveCurveOrbitGeomView {
         }
         return composite;
     }
-
 
 }

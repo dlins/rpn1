@@ -25,7 +25,7 @@ public class ClassifierCommand extends RpModelPlotCommand {
 
     static public final String DESC_TEXT = "Classify";
     static private ClassifierCommand instance_ = null;
-    private JToggleButton button_;
+
 
     //** para classificar os segmentos (Leandro)
     static public List tipo = new ArrayList();
@@ -40,9 +40,7 @@ public class ClassifierCommand extends RpModelPlotCommand {
     private ClassifierCommand() {
         super(DESC_TEXT, null ,new JToggleButton());
 
-        button_ = new JToggleButton(this);
-        button_.setToolTipText(DESC_TEXT);
-        button_.setFont(rpn.RPnConfigReader.MODELPLOT_BUTTON_FONT);
+       
         setEnabled(true);
     }
 
@@ -69,10 +67,7 @@ public class ClassifierCommand extends RpModelPlotCommand {
         return instance_;
     }
 
-    @Override
-    public JToggleButton getContainer() {
-        return button_;
-    }
+   
 
 
     @Override

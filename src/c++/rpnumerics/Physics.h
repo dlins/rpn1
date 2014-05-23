@@ -24,6 +24,7 @@
 #include "CoreyQuadPhysics.h"
 #include "Cub2.h"
 #include "TriPhase.h"
+#include "NegativeStone.h"
 
 //!
 

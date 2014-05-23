@@ -19,22 +19,22 @@ public class CoincidenceExtensionCurveGeomFactory extends BifurcationCurveGeomFa
 
     // Methods
     //
-    @Override
-    public RpGeometry createGeomFromSource() {
-
-        CoincidenceExtensionCurve curve = (CoincidenceExtensionCurve) geomSource();
-
-        // assuming a container with HugoniotSegment elements
-        int resultSize = curve.segments().size();
-        //ViewingAttr viewingAttr = new ViewingAttr(Color.MAGENTA);
-        RealSegGeom[] hugoniotArray = new RealSegGeom[resultSize];
-        for (int i = 0; i < resultSize; i++) {
-            hugoniotArray[i] = new RealSegGeom((HugoniotSegment) curve.segments().get(i));
-
-        }
-        return new CoincidenceExtensionCurveGeom(hugoniotArray, this);
-
-    }
+//    @Override
+//    public RpGeometry createGeomFromSource() {
+//
+//        CoincidenceExtensionCurve curve = (CoincidenceExtensionCurve) geomSource();
+//
+//        // assuming a container with HugoniotSegment elements
+//        int resultSize = curve.segments().size();
+//        //ViewingAttr viewingAttr = new ViewingAttr(Color.MAGENTA);
+//        RealSegGeom[] hugoniotArray = new RealSegGeom[resultSize];
+//        for (int i = 0; i < resultSize; i++) {
+//            hugoniotArray[i] = new RealSegGeom((HugoniotSegment) curve.segments().get(i));
+//
+//        }
+//        return new CoincidenceExtensionCurveGeom(hugoniotArray, this);
+//
+//    }
 
 
 }

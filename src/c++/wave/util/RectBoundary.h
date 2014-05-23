@@ -75,6 +75,13 @@ public:
             int fam, int characteristic,
             std::vector<RealVector> &c, std::vector<RealVector> &d);
 
+    void extension_curve(const FluxFunction *df, const AccumulationFunction *da, // Over the domain
+                         const FluxFunction *cf, const AccumulationFunction *ca, // Over the curve 
+                         GridValues &gv,
+                         int where_constant, int number_of_steps, bool singular,
+                         int fam, int characteristic,
+                         std::vector<RealVector> &c, std::vector<RealVector> &d);
+
 
       void envelope_curve(const FluxFunction *f, const AccumulationFunction *a,
             GridValues &gv,
@@ -84,6 +91,8 @@ public:
 
 
     void physical_boundary(std::vector<RealVector> &);
+
+    RealVector side_transverse_interior(const RealVector &p, int s) const;
 
 };
 
