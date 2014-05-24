@@ -85,19 +85,6 @@ public class UIController extends ComponentUI {
 
     }
 
-    public void toggleShowLastInputCursorPos(RPnPhaseSpacePanel panel) {
-
-        if (panel.isShowLastInputCursorPos()) {
-            panel.setShowLastInputCursorPos(false);
-
-        } else {
-            panel.setShowLastInputCursorPos(true);
-        }
-
-        panel.repaint();
-
-    }
-
     private void toggleCursorLines() {
 
         if (RPnPhaseSpacePanel.isShowCursor()) {

@@ -56,16 +56,16 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
     static public Color DEFAULT_BOUNDARY_COLOR = Color.gray;
     static public Color DEFAULT_BACKGROUND_COLOR = Color.black;
     static public Color DEFAULT_POINTMARK_COLOR = Color.red;
-    //***
+    static public Color DEFAULT_LASTINPUT_CURSOR_COLOR = Color.yellow;
+    static public Color DEFAULT_LASTINPUT_HIGHLIGHT_CURSOR_COLOR = Color.white;
+
+    static float[] DEFAULT_LASTINPUT_CURSOR_DASH = { 5F, 5 };  
+
+    static Stroke DEFAULT_LASTINPUT_CURSOR_STROKE = new BasicStroke( 1.1F, BasicStroke.CAP_SQUARE,  
+		BasicStroke.JOIN_MITER, 3F, DEFAULT_LASTINPUT_CURSOR_DASH, 0F );  
+
     public static int myH_;                                          //** declarei isso    (Leandro)
     public static int myW_;                                          //** declarei isso    (Leandro)
-    protected List<GraphicsUtil> graphicsUtilList_;
-    protected List<MultiGeometryImpl> testeList_;//TODO Will replace List<GraphicsUtil> graphicsUtilList_
-
-    public List<MultiGeometryImpl> getConvexSelection() {
-        return testeList_;
-    }
-
     //*** declarei esses métodos (Leandro)
     public static void blackBackground() {
         DEFAULT_BACKGROUND_COLOR = Color.black;
@@ -85,15 +85,25 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
     //
     // Members
     //
+    // a flag to say the current location is close enough...
+    private boolean showLastInputCursorPosHighlight_ = false;
+    private boolean showLastInputCursorPos_ = true;
+    private static boolean showCursorLine_ = true;
+
+    public List<MultiGeometryImpl> getConvexSelection() {
+        return testeList_;
+    }
+
+
+    protected List<GraphicsUtil> graphicsUtilList_;
+    protected List<MultiGeometryImpl> testeList_;//TODO Will replace List<GraphicsUtil> graphicsUtilList_
     private Scene scene_;
     private Point cursorPos_;
     private Point trackedPoint_;
 //    private JPEGImageEncoder encoder_;
     private boolean printFlag_ = false;
     private PhaseSpacePanelController ui_;
-    private boolean showLastInputCursorPos_ = false;
     private boolean blinkLastInputCursorPos_ = false;
-    private static boolean showCursorLine_;
     private static boolean cursorLine_;
     private boolean physicalBoundarySelected_;
 
@@ -144,6 +154,12 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
     //
     // Accessors/Mutators
     //
+    public void setLastInputCursorPosHightlight(boolean bool) {
+
+	showLastInputCursorPosHighlight_ = bool;
+
+    }
+
     public PhaseSpacePanelController getCastedUI() {
         return ui_;
     }
@@ -177,8 +193,9 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
         return blinkLastInputCursorPos_;
     }
 
-    public void setShowLastInputCursorPos(boolean showCursor) {
-        showLastInputCursorPos_ = showCursor;
+    
+    public void setShowLastInputCursorPosHighlight(boolean showCursor) {
+        showLastInputCursorPosHighlight_ = showCursor;
     }
 
     public void setBlinkLastInputCursorPos(boolean blinkCursor) {
@@ -503,17 +520,15 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
 	if ((showLastInputCursorPos_) && (scene().getViewingTransform() instanceof Viewing2DTransform) 
 		&& !phaseSpaceName.startsWith("Left") && !phaseSpaceName.startsWith("Right")) {
 
-	     g.setColor(Color.yellow);
-	     float[] dash = { 5F, 5 };  
-	     Stroke dashedStroke = new BasicStroke( 1.1F, BasicStroke.CAP_SQUARE,  
-		BasicStroke.JOIN_MITER, 3F, dash, 0F );  
-		
-            ((Graphics2D) g).setStroke(dashedStroke);
+            ((Graphics2D) g).setStroke(DEFAULT_LASTINPUT_CURSOR_STROKE);
+
+	    if (showLastInputCursorPosHighlight_)
+		g.setColor(DEFAULT_LASTINPUT_HIGHLIGHT_CURSOR_COLOR);
+	    else
+		g.setColor(DEFAULT_LASTINPUT_CURSOR_COLOR);
 
 	    Coords2D dcCoords = new Coords2D();
-
 	    RealVector lastValues = UIController.instance().globalInputTable().lastValues();
-
             CoordsArray wcCoords = new Coords2D(lastValues.toDouble());
             scene().getViewingTransform().viewPlaneTransform(wcCoords, dcCoords);
 

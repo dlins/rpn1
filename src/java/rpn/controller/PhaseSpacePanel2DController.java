@@ -91,7 +91,6 @@ public class PhaseSpacePanel2DController extends ComponentUI implements PhaseSpa
 	public void mouseEntered(MouseEvent event){
             if (event.getComponent() instanceof RPnPhaseSpacePanel) {
                 RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) event.getComponent();
-		UIController.instance().toggleShowLastInputCursorPos(panel);
 	    	panel.repaint();
 	    }
 
@@ -101,7 +100,6 @@ public class PhaseSpacePanel2DController extends ComponentUI implements PhaseSpa
 	public void mouseExited(MouseEvent event){
             if (event.getComponent() instanceof RPnPhaseSpacePanel) {
                 RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) event.getComponent();
-		UIController.instance().toggleShowLastInputCursorPos(panel);
 	    	panel.repaint();
 	    }
 
@@ -186,9 +184,9 @@ public class PhaseSpacePanel2DController extends ComponentUI implements PhaseSpa
 
 		if (Math.abs(xCursorPos - xLastInputCursorPos) < LASTINPUT_DISTANCE && Math.abs(yCursorPos - yLastInputCursorPos) < LASTINPUT_DISTANCE) 
 
-			panel.setShowLastInputCursorPos(true);
+			panel.setShowLastInputCursorPosHighlight(true);
 		else
-			panel.setShowLastInputCursorPos(false);
+			panel.setShowLastInputCursorPosHighlight(false);
 
                 panel.repaint();
             }
