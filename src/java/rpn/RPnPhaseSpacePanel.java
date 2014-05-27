@@ -63,6 +63,8 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
 
     static Stroke DEFAULT_LASTINPUT_CURSOR_STROKE = new BasicStroke( 1.1F, BasicStroke.CAP_SQUARE,  
 		BasicStroke.JOIN_MITER, 3F, DEFAULT_LASTINPUT_CURSOR_DASH, 0F );  
+    static Stroke DEFAULT_LASTINPUT_CURSOR_HIGHLIGHT_STROKE = new BasicStroke( 2.2F, BasicStroke.CAP_SQUARE,  
+		BasicStroke.JOIN_MITER, 3F, DEFAULT_LASTINPUT_CURSOR_DASH, 0F );  
 
     public static int myH_;                                          //** declarei isso    (Leandro)
     public static int myW_;                                          //** declarei isso    (Leandro)
@@ -104,7 +106,7 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
     private boolean printFlag_ = false;
     private PhaseSpacePanelController ui_;
     private boolean blinkLastInputCursorPos_ = false;
-    private static boolean cursorLine_;
+    private static boolean cursorLine_ = true;
     private boolean physicalBoundarySelected_;
 
     //
@@ -281,7 +283,6 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
         }
     }
 
-    // -----
     public List<GraphicsUtil> getGraphicsUtil() {
         return graphicsUtilList_;
     }
@@ -367,7 +368,6 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
         getCastedUI().getTypeString().removeAll(strRemove);
 
     }
-    // -----
 
     //
     // Methods
@@ -496,11 +496,16 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
          * for printing and 3D projections we will not use cursor
          * orientation
          */
+
+	showCursorLine_ = true;
+
         if (showCursorLine_ && isCursorLine()) {
 
             if ((!printFlag_)
                     && (scene().getViewingTransform() instanceof Viewing2DTransform)) {
+
                 g.setColor(Color.red);
+
                 int xCursor = new Double(cursorPos_.getX()).intValue();
                 int yCursor = new Double(cursorPos_.getY()).intValue();
                 g.drawLine(xCursor, 0, xCursor, getHeight());
@@ -520,12 +525,18 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
 	if ((showLastInputCursorPos_) && (scene().getViewingTransform() instanceof Viewing2DTransform) 
 		&& !phaseSpaceName.startsWith("Left") && !phaseSpaceName.startsWith("Right")) {
 
-            ((Graphics2D) g).setStroke(DEFAULT_LASTINPUT_CURSOR_STROKE);
 
-	    if (showLastInputCursorPosHighlight_)
+	    if (showLastInputCursorPosHighlight_) {
+
 		g.setColor(DEFAULT_LASTINPUT_HIGHLIGHT_CURSOR_COLOR);
+            	((Graphics2D) g).setStroke(DEFAULT_LASTINPUT_CURSOR_HIGHLIGHT_STROKE);
+		
+            }
 	    else
+	    {
 		g.setColor(DEFAULT_LASTINPUT_CURSOR_COLOR);
+            	((Graphics2D) g).setStroke(DEFAULT_LASTINPUT_CURSOR_STROKE);
+            }
 
 	    Coords2D dcCoords = new Coords2D();
 	    RealVector lastValues = UIController.instance().globalInputTable().lastValues();
@@ -554,11 +565,9 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
 
         }
 
-
         /*
          * SCENE
          */
-
 
         if (scene_ != null) {
             scene_.draw((Graphics2D) g);
