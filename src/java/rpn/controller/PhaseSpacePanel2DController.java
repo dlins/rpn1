@@ -8,11 +8,14 @@ package rpn.controller;
 import wave.multid.graphs.ViewPlane;
 
 import wave.multid.graphs.dcViewport;
+import wave.multid.*;
+import wave.util.*;
 import rpn.RPnPhaseSpacePanel;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.plaf.ComponentUI;
 import java.awt.event.MouseMotionAdapter;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
@@ -34,14 +37,18 @@ import wave.util.RealVector;
 
 
 public class PhaseSpacePanel2DController extends ComponentUI implements PhaseSpacePanelController {
+
     //
     // Constants
     //
+    public static int LASTINPUT_DISTANCE = 3;
+
     //
     // Members
     //
 
     private MouseMotionController mouseMotionController_;
+    private MouseController mouseController_;
     private int absIndex_;
     private int ordIndex_;
     private List pointMarkBuffer_;
@@ -59,6 +66,7 @@ public class PhaseSpacePanel2DController extends ComponentUI implements PhaseSpa
     //
     public PhaseSpacePanel2DController(int absIndex, int ordIndex) {
         mouseMotionController_ = new MouseMotionController();
+        mouseController_ = new MouseController();
         absIndex_ = absIndex;
         ordIndex_ = ordIndex;
         absComplete_ = false;
@@ -76,10 +84,36 @@ public class PhaseSpacePanel2DController extends ComponentUI implements PhaseSpa
     //
     // Inner Classes
     //
+
+    class MouseController extends MouseAdapter {
+
+
+	public void mouseEntered(MouseEvent event){
+            if (event.getComponent() instanceof RPnPhaseSpacePanel) {
+                RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) event.getComponent();
+	    	panel.repaint();
+	    }
+
+
+	}
+
+	public void mouseExited(MouseEvent event){
+            if (event.getComponent() instanceof RPnPhaseSpacePanel) {
+                RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) event.getComponent();
+	    	panel.repaint();
+	    }
+
+	}
+
+    }
+
     class MouseMotionController extends MouseMotionAdapter {
 
         @Override
         public void mouseMoved(MouseEvent event) {
+
+
+	    
             if (event.getComponent() instanceof RPnPhaseSpacePanel) {
                 RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) event.getComponent();
                 int xCursorPos = event.getPoint().x;
@@ -119,13 +153,13 @@ public class PhaseSpacePanel2DController extends ComponentUI implements PhaseSpa
                     for (int i = 0; i < closestPoint.getSize(); i++) {
                         UIController.instance().globalInputTable().setElement(i, closestPoint.getElement(i));
                     }
-                    
+
 //                    System.out.println("Ponto mais proximo: "+closestPoint);
                     ViewingTransform viewingTransform = panel.scene().getViewingTransform();
                     Coords2D wcCoords = new Coords2D(closestPoint.getElement(0), closestPoint.getElement(1));
                     Coords2D painelCoords = new Coords2D();
                     viewingTransform.viewPlaneTransform(wcCoords, painelCoords);
-                   
+
                     Point point = new Point((int) painelCoords.getX(), (int) painelCoords.getY());
                     List pointMarkBuffer = panel.getCastedUI().pointMarkBuffer();
                     if (pointMarkBuffer.isEmpty()) {
@@ -135,6 +169,25 @@ public class PhaseSpacePanel2DController extends ComponentUI implements PhaseSpa
                     }
 
                 }
+
+
+		// this is for user friendly orientation of the last input and SHOULD NOT BE HERE...
+		RealVector lastValues = UIController.instance().globalInputTable().lastValues();
+
+		Coords2D dcCoords = new Coords2D();
+		CoordsArray wcCoords = new Coords2D(lastValues.toDouble());
+		panel.scene().getViewingTransform().viewPlaneTransform(wcCoords, dcCoords);
+
+		int xLastInputCursorPos = new Double(dcCoords.getX()).intValue();
+		int yLastInputCursorPos = new Double(dcCoords.getY()).intValue();
+
+
+		if (Math.abs(xCursorPos - xLastInputCursorPos) < LASTINPUT_DISTANCE && Math.abs(yCursorPos - yLastInputCursorPos) < LASTINPUT_DISTANCE) 
+
+			panel.setShowLastInputCursorPosHighlight(true);
+		else
+			panel.setShowLastInputCursorPosHighlight(false);
+
                 panel.repaint();
             }
         }
@@ -156,8 +209,6 @@ public class PhaseSpacePanel2DController extends ComponentUI implements PhaseSpa
                 wcWindow currWindow = panel.scene().getViewingTransform().viewPlane().getWindow();
                         
                 panel.scene().getViewingTransform().setViewPlane(new ViewPlane(newViewport,currWindow));
-                               
-
                 panel.scene().update();
                 panel.updateGraphicsUtil();
                 panel.repaint();
@@ -222,12 +273,15 @@ public class PhaseSpacePanel2DController extends ComponentUI implements PhaseSpa
     //
     public void install(RPnPhaseSpacePanel panel) {
         panel.addMouseMotionListener(mouseMotionController_);
+        panel.addMouseListener(mouseController_);
         panel.addComponentListener(new PanelSizeController());
 
     }
 
     public void uninstall(RPnPhaseSpacePanel panel) {
         panel.removeMouseMotionListener(mouseMotionController_);
+        panel.removeMouseListener(mouseController_);
+        panel.removeComponentListener(new PanelSizeController());
 
     }
 

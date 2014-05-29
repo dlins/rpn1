@@ -80,7 +80,7 @@ public class UIController extends ComponentUI {
         handler_ = new CurvesConfig();
         auxPanelsEnabled_ = true;
 
-        activePhaseSpace_ = RPnDataModule.PHASESPACE;       //***
+        activePhaseSpace_ = RPnDataModule.PHASESPACE;       
         selectedGeometryList_ = new ArrayList<RpGeometry>();
 
     }
@@ -93,6 +93,7 @@ public class UIController extends ComponentUI {
         } else {
             RPnPhaseSpacePanel.setShowCursor(true);
         }
+
         Iterator it = installedPanels_.iterator();
 
         while (it.hasNext()) {
@@ -103,6 +104,7 @@ public class UIController extends ComponentUI {
     }
 
     public void showCursorLines(boolean showCursor) {
+
         RPnPhaseSpacePanel.setCursorLineVisible(showCursor);
         Iterator it = installedPanels_.iterator();
 
@@ -264,9 +266,15 @@ public class UIController extends ComponentUI {
 
                         updateUserInputTable(panel, event.getPoint());
                         evaluatePanelsCursorCoords(panel, event.getPoint());
+
                         // execute
                         if (globalInputTable().isComplete()) {
-                            userInputComplete(globalInputTable().values());
+
+			    if (panel.isBlinkLastInputCursorPos())
+                            	userInputComplete(globalInputTable().lastValues());
+			    else
+                            	userInputComplete(globalInputTable().values());
+
                             globalInputTable().reset();
                             resetPanelsCursorCoords();
                             RPnUIFrame.enableSliders();
@@ -453,8 +461,6 @@ public class UIController extends ComponentUI {
 
         // state dependent
         handler_.userInputComplete(this, userInput);
-
-
     }
 
     /**

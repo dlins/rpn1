@@ -1,0 +1,27 @@
+Buildfile: /impa/home/w/mvera/oficina/impa/fluid/geomrpn/rpn/src/build.xml
+
+init:
+
+compile-java:
+    [javac] /impa/home/w/mvera/oficina/impa/fluid/geomrpn/rpn/src/build.xml:39: warning: 'includeantruntime' was not set, defaulting to build.sysclasspath=last; set to false for repeatable builds
+    [javac] Compiling 584 source files to /impa/home/w/mvera/oficina/impa/fluid/geomrpn/rpn/lib/build/classes
+    [javac] warning: [options] bootstrap class path not set in conjunction with -source 1.6
+    [javac] Note: Some input files use or override a deprecated API.
+    [javac] Note: Recompile with -Xlint:deprecation for details.
+    [javac] Note: Some input files use unchecked or unsafe operations.
+    [javac] Note: Recompile with -Xlint:unchecked for details.
+    [javac] 1 warning
+      [jar] Building jar: /impa/home/w/mvera/oficina/impa/fluid/geomrpn/rpn/lib/rpn.jar
+      [jar] Building jar: /impa/home/w/mvera/oficina/impa/fluid/geomrpn/rpn/lib/rpnbatch.jar
+      [war] Building war: /impa/home/w/mvera/oficina/impa/fluid/geomrpn/rpn/lib/rpnmediatorproxy.war
+
+compile-c++:
+     [exec] make: Nothing to be done for `all'.
+
+compile-plugins:
+     [exec] make: Nothing to be done for `all'.
+
+all:
+
+BUILD SUCCESSFUL
+Total time: 11 seconds
