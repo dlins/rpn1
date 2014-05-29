@@ -38,10 +38,13 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionCurveCalc_calc(JNIEnv * env
 
     jclass classOrbitPoint = (env)->FindClass(ORBITPOINT_LOCATION);
     jclass classRarefactionOrbit = (env)->FindClass(RAREFACTIONCURVE_LOCATION);
+    jclass classWaveCurveBranch = (env)->FindClass(WAVECURVEBRANCH_LOCATION);
 
     jmethodID rarefactionOrbitConstructor = (env)->GetMethodID(classRarefactionOrbit, "<init>", "([Lrpnumerics/OrbitPoint;II)V");
     jmethodID orbitPointConstructor = (env)->GetMethodID(classOrbitPoint, "<init>", "([D[DD)V");
     jmethodID toDoubleMethodID = (env)->GetMethodID(classOrbitPoint, "toDouble", "()[D");
+
+    jmethodID setReferencePointID = (env)->GetMethodID(classWaveCurveBranch, "setReferencePoint", "(Lrpnumerics/OrbitPoint;)V");
 
     //Input processing
     jdoubleArray inputPhasePointArray = (jdoubleArray) (env)->CallObjectMethod(initialPoint, toDoubleMethodID);
@@ -112,6 +115,29 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionCurveCalc_calc(JNIEnv * env
             edge);
 
 
+    ReferencePoint referencePoint(realVectorInput, flux, accum, 0);
+
+    double lambda = referencePoint.e[familyIndex].r;
+
+    double nativeEigenValues [dimension];
+
+    for (int i = 0; i < dimension; i++) {
+
+        nativeEigenValues[i] = referencePoint.e[i].r;
+
+    }
+
+    jdoubleArray eigenValuesArray = (env)->NewDoubleArray(dimension);
+
+    (env)->SetDoubleArrayRegion(eigenValuesArray, 0, dimension, nativeEigenValues);
+
+
+    jdoubleArray refPointCoords = (env)->NewDoubleArray(dimension);
+
+    (env)->SetDoubleArrayRegion(refPointCoords, 0, dimension, input);
+
+    jobject referenceOrbitPoint = (env)->NewObject(classOrbitPoint, orbitPointConstructor, refPointCoords, eigenValuesArray, lambda);
+
 
 
 
@@ -128,10 +154,10 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionCurveCalc_calc(JNIEnv * env
 
         double lambda = rarcurve.speed[i];
 
-//        for (int k = 0; k < rarcurve.eigenvalues[i].size(); k++) {
-//            cout << " i: " << i << " " << rarcurve.eigenvalues[i][k] << endl;
-//
-//        }
+        //        for (int k = 0; k < rarcurve.eigenvalues[i].size(); k++) {
+        //            cout << " i: " << i << " " << rarcurve.eigenvalues[i][k] << endl;
+        //
+        //        }
 
         double * dataCoords = tempVector;
 
@@ -141,20 +167,20 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionCurveCalc_calc(JNIEnv * env
         (env)->SetDoubleArrayRegion(jTempArray, 0, tempVector.size(), dataCoords);
 
         //Lambda is the last component.
-        
-        
+
+
         jdoubleArray jeigenValuesArray = (env)->NewDoubleArray(dimension);
-        
-        
-        RealVector eigenValue =   rarcurve.eigenvalues[i];
-        
-        
-        
-        (env)->SetDoubleArrayRegion(jeigenValuesArray, 0, eigenValue.size(),(double *) eigenValue);
-        
-        
-        
-        jobject orbitPoint = (env)->NewObject(classOrbitPoint, orbitPointConstructor, jTempArray,jeigenValuesArray, lambda);
+
+
+        RealVector eigenValue = rarcurve.eigenvalues[i];
+
+
+
+        (env)->SetDoubleArrayRegion(jeigenValuesArray, 0, eigenValue.size(), (double *) eigenValue);
+
+
+
+        jobject orbitPoint = (env)->NewObject(classOrbitPoint, orbitPointConstructor, jTempArray, jeigenValuesArray, lambda);
 
         (env)->SetObjectArrayElement(orbitPointArray, i, orbitPoint);
 
@@ -167,6 +193,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionCurveCalc_calc(JNIEnv * env
     //Building the orbit
 
     jobject rarefactionOrbit = (env)->NewObject(classRarefactionOrbit, rarefactionOrbitConstructor, orbitPointArray, familyIndex, timeDirection);
+
+    env->CallVoidMethod(rarefactionOrbit, setReferencePointID, referenceOrbitPoint);
 
 
     //Cleaning up

@@ -44,10 +44,13 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CompositeCalc_nativeCalc(JNIEnv * env,
 
     jclass classOrbitPoint = (env)->FindClass(ORBITPOINT_LOCATION);
     jclass classRarefactionOrbit = (env)->FindClass(COMPOSITECURVE_LOCATION);
+     jclass classWaveCurveBranch = (env)->FindClass(WAVECURVEBRANCH_LOCATION);
 
     jmethodID rarefactionOrbitConstructor = (env)->GetMethodID(classRarefactionOrbit, "<init>", "([Lrpnumerics/OrbitPoint;II)V");
-    jmethodID orbitPointConstructor = (env)->GetMethodID(classOrbitPoint, "<init>", "([DD)V");
+    jmethodID orbitPointConstructor = (env)->GetMethodID(classOrbitPoint, "<init>", "([D[DD)V");
     jmethodID toDoubleMethodID = (env)->GetMethodID(classOrbitPoint, "toDouble", "()[D");
+    
+    jmethodID setReferencePointID = (env)->GetMethodID(classWaveCurveBranch, "setReferencePoint", "(Lrpnumerics/OrbitPoint;)V");
 
     //Input processing
     jdoubleArray inputPhasePointArray = (jdoubleArray) (env)->CallObjectMethod(initialPoint, toDoubleMethodID);
@@ -64,6 +67,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CompositeCalc_nativeCalc(JNIEnv * env,
         realVectorInput.component(i) = input[i];
 
     }
+    
+    int dimension = realVectorInput.size();
 
     env->DeleteLocalRef(inputPhasePointArray);
 
@@ -138,6 +143,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CompositeCalc_nativeCalc(JNIEnv * env,
             rar_stopped_because,
             edge);
 
+    //Usar o ponto de referencia da rarefacao. Pegar valores do mesmo jeito
 
 
     //    WaveCurve hwc;
@@ -153,16 +159,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CompositeCalc_nativeCalc(JNIEnv * env,
     ShockCurve sc(&hug);
 
     CompositeCurve cmp(accum, flux, boundary, &sc,0);
-
-    //    LSODE lsode;
-    //    //   EulerSolver eulersolver(boundary, 1);
-    //
-    //    ODE_Solver *odesolver;
-    //
-    //    odesolver = &lsode;
-    //   odesolver = &eulersolver;
-
-
 
     Curve cmpcurve, new_rarcurve;
     //    RealVector final_direction;
@@ -183,20 +179,42 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CompositeCalc_nativeCalc(JNIEnv * env,
             composite_stopped_because,
             edge);
 
+     ReferencePoint referencePoint(realVectorInput, flux, accum, 0);
+
+    double speed = referencePoint.e[familyIndex].r;
+    
+     double nativeEigenValues [dimension];
+
+    for (int i = 0; i < dimension; i++) {
+
+        cout<<"Tamanho de autovalores: "<<referencePoint.e[i].r<<endl;
+        nativeEigenValues[i] = referencePoint.e[i].r;
+
+    }
+
+    jdoubleArray eigenValuesArray = (env)->NewDoubleArray(dimension);
+
+    (env)->SetDoubleArrayRegion(eigenValuesArray, 0, dimension, nativeEigenValues);
 
 
-    //    CompositeCurve::curve(rarefactionCurve, COMPOSITE_FROM_NORMAL_RAREFACTION, familyIndex,
-    //            increase, 0, stoneflux, stoneaccum, tempBoundary, compositeCurve);
-    //
-    //    delete stoneflux;
-    //    delete stoneaccum;
-    //    delete tempBoundary;
+    jdoubleArray refPointCoords = (env)->NewDoubleArray(dimension);
 
-//    if (cmpcurve.curve.size() == 0)
-//        return NULL;
+    (env)->SetDoubleArrayRegion(refPointCoords, 0, dimension, (double *)realVectorInput);
 
-//    cout<<"Tamanho da curva composta: "<<cmpcurve.curve.size()<<endl;
-//    cout <<cmpcurve.curve[0]<<endl;
+    jobject referenceOrbitPoint = (env)->NewObject(classOrbitPoint, orbitPointConstructor, refPointCoords, eigenValuesArray, speed);
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+
 
     //Orbit members creation
     
@@ -216,10 +234,20 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CompositeCalc_nativeCalc(JNIEnv * env,
 
         (env)->SetDoubleArrayRegion(jTempArray, 0, tempVector.size(), dataCoords);
         
-        double lambda =cmpcurve.speed[i];
+        double speed =cmpcurve.speed[i];
+        
+      //  cmpcurve.eigenvalues //Autovalores em cada ponto da composta
+        
+        
+        
+          jdoubleArray jeigenValuesArray = (env)->NewDoubleArray(dimension);
+        RealVector eigenValue = cmpcurve.eigenvalues[i];
+        (env)->SetDoubleArrayRegion(jeigenValuesArray, 0, eigenValue.size(), (double *) eigenValue);
 
-        jobject orbitPoint = (env)->NewObject(classOrbitPoint, orbitPointConstructor, jTempArray,lambda);
 
+        jobject orbitPoint = (env)->NewObject(classOrbitPoint, orbitPointConstructor, jTempArray, jeigenValuesArray, speed);
+
+        
         (env)->SetObjectArrayElement(orbitPointArray, i-1, orbitPoint);
 
         env->DeleteLocalRef(jTempArray);
@@ -232,9 +260,13 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CompositeCalc_nativeCalc(JNIEnv * env,
 
     jobject rarefactionOrbit = (env)->NewObject(classRarefactionOrbit, rarefactionOrbitConstructor, orbitPointArray, increase, familyIndex);
 
+    
+     env->CallVoidMethod(rarefactionOrbit, setReferencePointID, referenceOrbitPoint);
 
     //Cleaning up
 
+    
+     
 
 
     env->DeleteLocalRef(orbitPointArray);

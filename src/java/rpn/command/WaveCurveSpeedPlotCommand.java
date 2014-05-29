@@ -26,6 +26,7 @@ import wave.multid.Coords2D;
 import wave.multid.CoordsArray;
 import wave.multid.DimMismatchEx;
 import wave.multid.Space;
+import wave.multid.model.AbstractPathIterator;
 import wave.multid.model.MultiPolyLine;
 import wave.multid.view.ViewingAttr;
 import wave.util.RealVector;
@@ -45,14 +46,14 @@ public class WaveCurveSpeedPlotCommand extends RpModelPlotCommand implements Obs
     private double maxX_;
     private List<RpGeometry> selectedCurves;
     private RPnRiemannFrame speedGraphicsFrame_;
-    private List<Double> distances_;
+    private OrbitPoint referencePoint_;
 
     //
     // Constructors/Initializers
     //
     protected WaveCurveSpeedPlotCommand() {
         super(DESC_TEXT, rpn.configuration.RPnConfig.HUGONIOT, new JButton());
-        distances_ = new ArrayList<Double>();
+
     }
 
     @Override
@@ -86,32 +87,46 @@ public class WaveCurveSpeedPlotCommand extends RpModelPlotCommand implements Obs
     public void execute() {
 
         selectedCurves = UIController.instance().getSelectedGeometriesList();
+        RpGeometry curveSelected = selectedCurves.get(0);
 
-        List<MultiPolyLine> polyLineList = null;
-        for (RpGeometry rpGeometry : selectedCurves) {
-            WaveCurveBranchGeom waveCurveGeom = (WaveCurveBranchGeom) rpGeometry;
+        WaveCurve waveCurve = (WaveCurve) curveSelected.geomFactory().geomSource();
 
-            List<WaveCurveBranchGeom> orbitGeom = waveCurveGeom.getOrbitGeom();
+        RpDiagramFactory factory = new RpDiagramFactory(waveCurve);
+        DiagramGeom geom = (DiagramGeom) factory.geom();
+        
+        
+        RPnDataModule.SPEEDGRAPHICSPHASESPACE.join(geom);
+        
+        
+        
+        updateSpeedGraphicsFrame(geom.getMin(), geom.getMax());
 
-            for (WaveCurveBranchGeom waveCurveBranchGeom : orbitGeom) {
-
-                WaveCurveOrbitGeom fundamentalGeom = (WaveCurveOrbitGeom) waveCurveBranchGeom;
-                polyLineList = createGraphics(fundamentalGeom);
-
-            }
-
-        }
-
-        for (MultiPolyLine multiPolyLine : polyLineList) {
-
-            RPnDataModule.SPEEDGRAPHICSPHASESPACE.join(multiPolyLine);
-        }
-
-        RealVector min = new RealVector("0 0");
-        RealVector max = new RealVector(maxX_ + " " + 3.0);
-
-        updateSpeedGraphicsFrame(min, max);
-
+//        RpSolution createDiagramSource = waveCurve.createDiagramSource();
+//
+//        RPnDataModule.SPEEDGRAPHICSPHASESPACE.clear();
+//        List<MultiPolyLine> polyLineList = null;
+//        for (RpGeometry rpGeometry : selectedCurves) {
+//            WaveCurveBranchGeom waveCurveGeom = (WaveCurveBranchGeom) rpGeometry;
+//
+//            List<WaveCurveBranchGeom> orbitGeom = waveCurveGeom.getOrbitGeom();
+//
+//            for (WaveCurveBranchGeom waveCurveBranchGeom : orbitGeom) {
+//
+//                WaveCurveOrbitGeom fundamentalGeom = (WaveCurveOrbitGeom) waveCurveBranchGeom;
+//                polyLineList = createGraphics(fundamentalGeom);
+//
+//            }
+//
+//        }
+//
+//       
+//
+//        for (MultiPolyLine multiPolyLine : polyLineList) {
+//
+//            RPnDataModule.SPEEDGRAPHICSPHASESPACE.join(multiPolyLine);
+//        }
+//
+// 
     }
 
     private void updateSpeedGraphicsFrame(RealVector profileMin, RealVector profileMax) {
@@ -138,10 +153,34 @@ public class WaveCurveSpeedPlotCommand extends RpModelPlotCommand implements Obs
 
     }
 
+    private MultiPolyLine drawReferencePointHorizontal(RealVector graphicsCoords, int familyIndex) {
+
+        CoordsArray[] coordsArray = new CoordsArray[2];
+
+        double[] referencePoint = new double[2];
+
+        referencePoint[0] = graphicsCoords.getElement(0);
+        referencePoint[1] = graphicsCoords.getElement(familyIndex + 1);//Speed at reference point
+
+        coordsArray[0] = new Coords2D(referencePoint);
+
+        double[] endPoint = new double[2];
+
+        endPoint[0] = 10.0;
+        endPoint[1] = graphicsCoords.getElement(familyIndex + 1);//Last distance data
+
+        coordsArray[1] = new Coords2D(endPoint);
+
+        MultiPolyLine polyLine = new MultiPolyLine(coordsArray, new ViewingAttr(Color.green));
+
+        return polyLine;
+
+    }
+
     private List<MultiPolyLine> createGraphics(WaveCurveOrbitGeom waveCurveOrbitGeom) {
         ArrayList<RealVector> graphicsCoords = new ArrayList<RealVector>();
         List<WaveCurveBranchGeom> orbitGeom = waveCurveOrbitGeom.getOrbitGeom();
-
+        int eigenValuesLength = 2;
         List<MultiPolyLine> polyLineList = new ArrayList<MultiPolyLine>();
 
         for (WaveCurveBranchGeom waveCurveBranchGeom : orbitGeom) {
@@ -149,16 +188,15 @@ public class WaveCurveSpeedPlotCommand extends RpModelPlotCommand implements Obs
             WaveCurveOrbitGeom fundamentalGeom = (WaveCurveOrbitGeom) waveCurveBranchGeom;
             WaveCurveBranch geomSource = (WaveCurveBranch) fundamentalGeom.geomFactory().geomSource();
 
+            referencePoint_ = geomSource.getReferencePoint();
+
+            maxY_ = referencePoint_.getSpeed();
+
+            eigenValuesLength = geomSource.getReferencePoint().getEigenValues().length;
+
+            graphicsCoords.add(makeReferencePointData(referencePoint_));
+
             List<OrbitPoint> branchPoints = geomSource.getBranchPoints();
-
-            double referencePointSpeed = geomSource.getSpeed(geomSource.getReferencePoint());
-
-            maxY_ = referencePointSpeed;
-            RealVector referencePoint = new RealVector(0 + " " + referencePointSpeed);
-
-            int eigenValuesLength = 2;//geomSource.getReferencePoint().getEigenValues().length;
-
-            graphicsCoords.add(referencePoint);
 
             for (int i = 0; i < branchPoints.size() - 1; i++) {
 
@@ -187,87 +225,78 @@ public class WaveCurveSpeedPlotCommand extends RpModelPlotCommand implements Obs
 
                 }
 
+                System.out.println("String: " + stringCoords.toString());
                 RealVector coords = new RealVector(stringCoords.toString());
 
                 graphicsCoords.add(coords);
 
             }
 
-            for (int i = 0; i < eigenValuesLength + 1; i++) {
+        }
 
-                CoordsArray[] coordsArray = new CoordsArray[graphicsCoords.size()];
+        for (int i = 1; i < eigenValuesLength + 2; i++) {
 
-                for (int j = 0; j < coordsArray.length; j++) {
+            MultiPolyLine polyLine = createPolyLine(graphicsCoords, i);
 
-                    double graphicsPoint[] = new double[2];
+            Color color;
+            if (i == 1) {
+                color = Color.WHITE;
+            } else if (i == 2) {
+                color = Color.BLUE;
+            } else if (i == 3) {
 
-                    graphicsPoint[0] = graphicsCoords.get(j).getElement(0);
-                    graphicsPoint[1] = graphicsCoords.get(j).getElement(i + 1);
-
-                    coordsArray[i] = new Coords2D(graphicsPoint);
-                }
-
-                MultiPolyLine polyLine = new MultiPolyLine(coordsArray, new ViewingAttr(Color.yellow));
-
-                polyLineList.add(polyLine);
+                color = Color.RED;
+            } else {
+                color = Color.gray;
 
             }
+
+            polyLine.viewingAttr().setColor(color);
+
+            polyLineList.add(polyLine);
 
         }
 
         return polyLineList;
     }
 
-    private MultiPolyLine createEigenValueGraphics(WaveCurveOrbitGeom waveCurveOrbitGeom) {
+    private MultiPolyLine createPolyLine(List<RealVector> graphicsCoords, int dataIndex) {
 
-        List<WaveCurveBranchGeom> orbitGeom = waveCurveOrbitGeom.getOrbitGeom();
+        CoordsArray[] coordsArray = new CoordsArray[graphicsCoords.size()];
 
-        MultiPolyLine polyLine = null;
+        for (int j = 0; j < coordsArray.length; j++) {
 
-        for (WaveCurveBranchGeom waveCurveBranchGeom : orbitGeom) {
+            double graphicsPoint[] = new double[2];
 
-            WaveCurveOrbitGeom fundamentalGeom = (WaveCurveOrbitGeom) waveCurveBranchGeom;
-            WaveCurveBranch geomSource = (WaveCurveBranch) fundamentalGeom.geomFactory().geomSource();
+            graphicsPoint[0] = graphicsCoords.get(j).getElement(0);
+            graphicsPoint[1] = graphicsCoords.get(j).getElement(dataIndex);
 
-            List<OrbitPoint> branchPoints = geomSource.getBranchPoints();
-
-            CoordsArray[] coordsArray = new CoordsArray[branchPoints.size()];
-
-            for (int i = 0; i < branchPoints.size(); i++) {
-                OrbitPoint orbitPoint = branchPoints.get(i);
-
-                double[] eigenValues = orbitPoint.getEigenValues();
-
-                coordsArray[i] = new Coords2D(distances_.get(i), eigenValues[1]);
-
-                System.out.println("Lambda: " + orbitPoint.getSpeed() + " " + eigenValues[0] + " " + eigenValues[1]);
-
-            }
-
-            polyLine = new MultiPolyLine(coordsArray, new ViewingAttr(Color.white));
-
+            coordsArray[j] = new Coords2D(graphicsPoint);
         }
+
+        MultiPolyLine polyLine = new MultiPolyLine(coordsArray, new ViewingAttr(Color.WHITE));
 
         return polyLine;
-
     }
 
-    private boolean checkCurvesForSpeedPlot(List<RpGeometry> selectedCurves) {
+    private RealVector makeReferencePointData(OrbitPoint referencePoint) {
 
-        if (selectedCurves.size() != 2) {
-            return false;
+        double[] eigenValues = referencePoint.getEigenValues();
+        double referencePointSpeed = referencePoint.getSpeed();
+
+        StringBuilder stringCoords = new StringBuilder();
+
+        stringCoords.append(0).append(" ").append(referencePointSpeed);
+
+        for (int j = 0; j < eigenValues.length; j++) {
+
+            stringCoords.append(" ").append(eigenValues[j]);
+
         }
 
-        boolean waveCurveForward0 = false;
-        boolean waveCurveBackward1 = false;
+        RealVector referencePointData = new RealVector(stringCoords.toString());
 
-        for (RpGeometry geometry : selectedCurves) {
-            if (geometry instanceof WaveCurveOrbitGeom) {
-
-            }
-        }
-
-        return (waveCurveForward0 && waveCurveBackward1);
+        return referencePointData;
 
     }
 

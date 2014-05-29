@@ -16,7 +16,8 @@ import wave.multid.view.ViewingTransform;
 
 public interface RpGeometry extends MultiGeometry {
 
-    /** Returns the object that constructs the geometric model. */
+    /** Returns the object that constructs the geometric model.
+     * @return  */
 
     RpGeomFactory geomFactory();
     

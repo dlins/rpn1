@@ -36,7 +36,7 @@ using std::vector;
 
 
 JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc
-  (JNIEnv * env , jobject obj, jobject initialPoint, jobject configuration){
+(JNIEnv * env, jobject obj, jobject initialPoint, jobject configuration) {
 
 
 
@@ -53,6 +53,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc
     jclass classRarefactionOrbit = (env)->FindClass(RAREFACTIONCURVE_LOCATION);
     jclass classComposite = (env)->FindClass(COMPOSITECURVE_LOCATION);
     jclass classWaveCurveOrbit = (env)->FindClass(WAVECURVEORBIT_LOCATION);
+    jclass classWaveCurveBranch = (env)->FindClass(WAVECURVEBRANCH_LOCATION);
+
 
 
 
@@ -68,6 +70,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc
     jmethodID setCurveTypeID = (env)->GetMethodID(classWaveCurveOrbit, "setCurveType", "(I)V");
     jmethodID setCurveIndexID = (env)->GetMethodID(classWaveCurveOrbit, "setCurveIndex", "(I)V");
     jmethodID setInitialSubCurveID = (env)->GetMethodID(classWaveCurveOrbit, "setInitialSubCurve", "(Z)V");
+    jmethodID setReferencePointID = (env)->GetMethodID(classWaveCurveBranch, "setReferencePoint", "(Lrpnumerics/OrbitPoint;)V");
+
 
 
 
@@ -79,7 +83,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc
 
 
     jmethodID waveCurveConstructor = (env)->GetMethodID(classWaveCurve, "<init>", "(II)V");
-    jmethodID orbitPointConstructor = (env)->GetMethodID(classOrbitPoint, "<init>", "([DD)V");
+    jmethodID orbitPointConstructor = (env)->GetMethodID(classOrbitPoint, "<init>", "([D[DD)V");
     jmethodID toDoubleMethodID = (env)->GetMethodID(classOrbitPoint, "toDouble", "()[D");
 
 
@@ -118,11 +122,13 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc
     HugoniotContinuation_nDnD hug(flux, accum, boundary);
     ShockCurve sc(&hug);
 
-    CompositeCurve cmp(accum, flux, boundary, &sc,0);
+    CompositeCurve cmp(accum, flux, boundary, &sc, 0);
 
     LSODE lsode;
     ODE_Solver *odesolver;
     odesolver = &lsode;
+
+    int dimension = realVectorInput.size();
 
 
     WaveCurveFactory wavecurvefactory(accum, flux, boundary, odesolver, &rc, &sc, &cmp);
@@ -187,13 +193,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc
 
     int reason_why, s;
 
-    //    if (timeDirection == 20)//TODO REMOVE !!!
-    //
-    //        timeDirection = RAREFACTION_SPEED_SHOULD_INCREASE; //WAVE_FORWARD;
-    //
-    //    if (timeDirection == 22)
-    //
-    //        timeDirection = RAREFACTION_SPEED_SHOULD_DECREASE; //WAVE_BACKWARD;
 
     if (originNumber == 11) {
 
@@ -216,28 +215,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc
 
         inflectionCurve.curve(& RpNumerics::getPhysics().fluxFunction(), & RpNumerics::getPhysics().accumulation(), *gv, familyNumber, left_vrs);
 
-        //        vector<RealVector> newCurve;
-        //        for (int i = 0; i < left_vrs.size() / 2; i++) {
-        //            bool invalidPoint = true;
-        //
-        //            for (int j = 0; j < 2; j++) {
-        //                RealVector point = left_vrs[2 * i + j];
-        //
-        ////                validPoint = (!isnan(std::abs(point(0))) && !isnan(std::abs(point(1))));
-        //                  invalidPoint = ((point(0)!=point(0)) || ((point(1)!=point(1))));
-        //
-        //            }
-        //
-        //
-        //            if (!invalidPoint) {
-        //                newCurve.push_back(left_vrs[2 * i]);
-        //                newCurve.push_back(left_vrs[2 * i + 1]);
-        //            }
-        //
-        //        }
-
-
-
         wavecurvefactory.wavecurve_from_inflection(left_vrs, realVectorInput, familyNumber, timeDirection, &hug, *hwc, reason_why, s);
     }
 
@@ -250,11 +227,34 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc
     }
 
 
+    double speedAtReferencePoint = hwc->reference_point.e[familyNumber].r;
+
+
+    double nativeEigenValues [dimension];
+
+    for (int i = 0; i < dimension; i++) {
+
+
+        nativeEigenValues[i] = hwc->reference_point.e[i].r;
+
+    }
+
+    jdoubleArray eigenValuesArray = (env)->NewDoubleArray(dimension);
+
+    (env)->SetDoubleArrayRegion(eigenValuesArray, 0, dimension, nativeEigenValues);
+
+
+    jdoubleArray refPointCoords = (env)->NewDoubleArray(dimension);
+
+    (env)->SetDoubleArrayRegion(refPointCoords, 0, dimension, (double *) hwc->reference_point.point);
+
+    jobject referenceOrbitPoint = (env)->NewObject(classOrbitPoint, orbitPointConstructor, refPointCoords, eigenValuesArray, speedAtReferencePoint);
+
+
+
     RpNumerics::addWaveCurve(hwc);
 
-
     jobject waveCurve = (env)->NewObject(classWaveCurve, waveCurveConstructor, familyNumber, timeDirection);
-
 
     env->CallVoidMethod(waveCurve, setIDMethodID, RpNumerics::getCurrentCurveID());
 
@@ -283,13 +283,15 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc
                 (env)->SetDoubleArrayRegion(jTempArray, 0, tempVector.size(), dataCoords);
 
                 //Lambda is the last component.
-                double lambda = wc.speed[j];
-                
-                
-                
-                
-                        
-                jobject orbitPoint = (env)->NewObject(classOrbitPoint, orbitPointConstructor, jTempArray, lambda);
+                double speed = wc.speed[j];
+
+                jdoubleArray jeigenValuesArray = (env)->NewDoubleArray(dimension);
+
+                RealVector eigenValue = wc.eigenvalues[i];
+
+                (env)->SetDoubleArrayRegion(jeigenValuesArray, 0, eigenValue.size(), (double *) eigenValue);
+
+                jobject orbitPoint = (env)->NewObject(classOrbitPoint, orbitPointConstructor, jTempArray, jeigenValuesArray, speed);
 
                 env->CallObjectMethod(orbitPoint, setCorrespondingCurveIndexID, relatedCurvesIndexVector);
                 env->CallObjectMethod(orbitPoint, setCorrespondingPointIndexID, correspondingPointIndexVector[j]);
@@ -345,6 +347,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc
     }
 
     env->CallObjectMethod(waveCurve, waveCurveAddBranch, waveCurveBranchForward);
+
+    env->CallVoidMethod(waveCurve, setReferencePointID, referenceOrbitPoint);
 
     return waveCurve;
 

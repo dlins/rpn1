@@ -24,6 +24,8 @@
 #define REALSEGMENT_LOCATION                  "wave/util/RealSegment"
 #define AREA_LOCATION                         "rpnumerics/Area"
 #define CONFIGURATION_LOCATION                "rpn/configuration/Configuration"
+#define DIAGRAM_LOCATION                      "rpnumerics/Diagram"
+#define DIAGRAMLINE_LOCATION                      "rpnumerics/DiagramLine"
 
 
 
@@ -80,6 +82,7 @@
 #define INFLECTIONCURVE_LOCATION              "rpnumerics/InflectionCurve"
 #define HYSTERESISCURVE_LOCATION              "rpnumerics/HysteresisCurve"
 #define RAREFACTIONEXTENSIONCURVE_LOCATION    "rpnumerics/RarefactionExtensionCurve"
+#define WAVECURVEBRANCH_LOCATION              "rpnumerics/WaveCurveBranch"
 
 
 #define NUMERICSPROFILE_LOCATION              "rpnumerics/RPNumericsProfile"

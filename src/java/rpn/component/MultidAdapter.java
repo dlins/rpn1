@@ -49,6 +49,15 @@ public class MultidAdapter {
     }
     
     
+     static public CoordsArray[] converseRealVectorListToCoordsArray(List<RealVector> input) {
+        CoordsArray[] output = new CoordsArray[input.size()];
+        for (int i = 0; i < input.size(); i++) {
+            output[i] = new CoordsArray(input.get(i));
+        }
+        return output;
+    }
+    
+    
 
     // -------------------------------------------------------------------------
 

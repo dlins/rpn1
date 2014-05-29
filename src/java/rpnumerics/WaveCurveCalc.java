@@ -54,15 +54,15 @@ public class WaveCurveCalc extends WaveCurveOrbitCalc {
         if (result == null) {
             throw new RpException("Error in native layer");
         }
-
-        result.setReferencePoint(getStart());
+       
 
         return result;
     }
 
-
-//    private native RpSolution nativeCalc(OrbitPoint initialPoint, int family, int timeDirection, int origin, int edge);
+    
+   
     private native RpSolution nativeCalc(OrbitPoint initialPoint, CurveConfiguration config);
 
+    
    
 }

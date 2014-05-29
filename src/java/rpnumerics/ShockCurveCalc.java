@@ -53,7 +53,6 @@ public class ShockCurveCalc extends WaveCurveOrbitCalc implements RpCalculation 
 
         ShockCurve result ;
         
-        
         if(fromBoundary_){
             result= (ShockCurve) boundaryCalc(getStart(), getFamilyIndex(), getDirection(),edge_);
         }
@@ -67,7 +66,8 @@ public class ShockCurveCalc extends WaveCurveOrbitCalc implements RpCalculation 
             throw new RpException("Error in native layer");
         }
         
-        result.setReferencePoint(getStart());
+        
+        System.out.print(result.getReferencePoint().getEigenValues().length);
         
         return result;
     }

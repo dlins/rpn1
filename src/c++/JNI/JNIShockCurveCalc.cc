@@ -43,10 +43,12 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc(JNIEnv * env, jobj
 
     jclass classOrbitPoint = (env)->FindClass(ORBITPOINT_LOCATION);
     jclass shockCurveClass = (env)->FindClass(SHOCKCURVE_LOCATION);
+    jclass classWaveCurveBranch = (env)->FindClass(WAVECURVEBRANCH_LOCATION);
 
     jmethodID shockCurveConstructor = (env)->GetMethodID(shockCurveClass, "<init>", "([Lrpnumerics/OrbitPoint;II)V");
-    jmethodID orbitPointConstructor = (env)->GetMethodID(classOrbitPoint, "<init>", "([DD)V");
+    jmethodID orbitPointConstructor = (env)->GetMethodID(classOrbitPoint, "<init>", "([D[DD)V");
     jmethodID toDoubleMethodID = (env)->GetMethodID(classOrbitPoint, "toDouble", "()[D");
+    jmethodID setReferencePointID = (env)->GetMethodID(classWaveCurveBranch, "setReferencePoint", "(Lrpnumerics/OrbitPoint;)V");
 
     //Input processing
     jdoubleArray inputPhasePointArray = (jdoubleArray) (env)->CallObjectMethod(initialPoint, toDoubleMethodID);
@@ -66,16 +68,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc(JNIEnv * env, jobj
 
     env->DeleteLocalRef(inputPhasePointArray);
 
-    //    dimension;
-    //
+    int dimension = realVectorInput.size();
 
-    //    vector <RealVector> coords, shock_alt;
-
-    //    RealVector * originalDirection = new RealVector(realVectorInput.size());
-    //
-    //    originalDirection->component(0) = 0;
-    //    originalDirection->component(1) = 0;
-
+   
 
     if (increase == 20)
         increase = RAREFACTION_SPEED_SHOULD_INCREASE;
@@ -120,7 +115,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc(JNIEnv * env, jobj
     fluxFunction->jet(candidate, F_j, 0);
     accumulationFunction->jet(candidate, G_j, 0);
 
-    double sigma = hc.sigma(F_j.function(), G_j.function(), ref.F, ref.G);
+    double sigma = hc.sigma(F_j.function(), G_j.function(), ref.F, ref.G); //Velocidade do choque no ponto de referencia
+
+
     RealVector direction;
 
     double lambda = ref.e[familyIndex].r;
@@ -147,24 +144,28 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc(JNIEnv * env, jobj
             edge);
 
 
+    cout<<"Sigma em C"<<sigma<<endl;
 
-    //
-    //    int info_shock_curve, info_shock_curve_alt;
-    //
-    //    int dim = realVectorInput.size();
-    //
-    //    RealVector original_direction(dim);
-    //
-    //    RpNumerics::getPhysics().getSubPhysics(0).preProcess(realVectorInput);
-    //
-    //    ShockMethod * shock = RpNumerics::getPhysics().getSubPhysics(0).getShockMethod();
+    double nativeEigenValues [dimension];
 
-    //    shock->curveCalc(realVectorInput, true, realVectorInput, increase, familyIndex, SHOCK_FOR_ITSELF,
-    //            &original_direction, 0,
-    //            fluxFunction, accumulationFunction, tempBoundary,
-    //            coords, info_shock_curve,
-    //            shock_alt,
-    //            info_shock_curve_alt, newtonTolerance);
+    for (int i = 0; i < dimension; i++) {
+
+        cout<<"Tamanho de autovalores: "<<ref.e[i].r<<endl;
+        nativeEigenValues[i] = ref.e[i].r;
+
+    }
+
+    jdoubleArray eigenValuesArray = (env)->NewDoubleArray(dimension);
+
+    (env)->SetDoubleArrayRegion(eigenValuesArray, 0, dimension, nativeEigenValues);
+
+
+    jdoubleArray refPointCoords = (env)->NewDoubleArray(dimension);
+
+    (env)->SetDoubleArrayRegion(refPointCoords, 0, dimension, (double *)ref.point);
+
+    jobject referenceOrbitPoint = (env)->NewObject(classOrbitPoint, orbitPointConstructor, refPointCoords, eigenValuesArray, sigma);
+
 
     //Orbit members creation
 
@@ -181,14 +182,22 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc(JNIEnv * env, jobj
 
         double lambda = shkcurve.speed[i];
 
+        //        shkcurve.eigenvalues // Autovalores em cada ponto
+
         double * dataCoords = tempVector;
 
         jdoubleArray jTempArray = (env)->NewDoubleArray(tempVector.size());
-
         (env)->SetDoubleArrayRegion(jTempArray, 0, tempVector.size(), dataCoords);
 
-        jobject orbitPoint = (env)->NewObject(classOrbitPoint, orbitPointConstructor, jTempArray, lambda);
 
+        jdoubleArray jeigenValuesArray = (env)->NewDoubleArray(dimension);
+        RealVector eigenValue = shkcurve.eigenvalues[i];
+        (env)->SetDoubleArrayRegion(jeigenValuesArray, 0, eigenValue.size(), (double *) eigenValue);
+
+
+        jobject orbitPoint = (env)->NewObject(classOrbitPoint, orbitPointConstructor, jTempArray, jeigenValuesArray, lambda);
+
+        
         (env)->SetObjectArrayElement(orbitPointArray, i, orbitPoint);
 
         env->DeleteLocalRef(jTempArray);
@@ -201,7 +210,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc(JNIEnv * env, jobj
 
     jobject rarefactionOrbit = (env)->NewObject(shockCurveClass, shockCurveConstructor, orbitPointArray, familyIndex, increase);
 
-
+    env->CallVoidMethod(rarefactionOrbit, setReferencePointID, referenceOrbitPoint);
+    
+    
     //Cleaning up
 
 
@@ -315,16 +326,16 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_boundaryCalc
     double sigma = hc.sigma(F_j.function(), G_j.function(), ref.F, ref.G);
     RealVector direction;
 
-    double lambda = ref.e[familyIndex].r;
+    double speed = ref.e[familyIndex].r;
 
-    if ((sigma >= lambda && (increase == RAREFACTION_SPEED_SHOULD_INCREASE)) ||
-            (sigma < lambda && (increase == RAREFACTION_SPEED_SHOULD_DECREASE))
+    if ((sigma >= speed && (increase == RAREFACTION_SPEED_SHOULD_INCREASE)) ||
+            (sigma < speed && (increase == RAREFACTION_SPEED_SHOULD_DECREASE))
             ) direction = r;
     else direction = -r;
 
 
 
-    int shck_info = shock.curve_engine_from_boundary(&rc, edge, increase, ref,realVectorInput,familyIndex,
+    int shck_info = shock.curve_engine_from_boundary(&rc, edge, increase, ref, realVectorInput, familyIndex,
             SHOCKCURVE_SHOCK_CURVE,
             DONT_CHECK_EQUALITY_AT_LEFT,
             SHOCK_SIGMA_EQUALS_LAMBDA_OF_FAMILY_AT_RIGHT,
@@ -353,7 +364,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_boundaryCalc
 
         RpNumerics::getPhysics().getSubPhysics(0).postProcess(tempVector);
 
-        double lambda = shkcurve.speed[i];
+        double speed = shkcurve.speed[i];
 
         double * dataCoords = tempVector;
 
@@ -361,7 +372,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_boundaryCalc
 
         (env)->SetDoubleArrayRegion(jTempArray, 0, tempVector.size(), dataCoords);
 
-        jobject orbitPoint = (env)->NewObject(classOrbitPoint, orbitPointConstructor, jTempArray, lambda);
+        jobject orbitPoint = (env)->NewObject(classOrbitPoint, orbitPointConstructor, jTempArray, speed);
 
         (env)->SetObjectArrayElement(orbitPointArray, i, orbitPoint);
 
