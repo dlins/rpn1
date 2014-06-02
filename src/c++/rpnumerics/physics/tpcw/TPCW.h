@@ -20,6 +20,9 @@
 #include "HugoniotContinuation3D2D.h"
 #include "ShockContinuationMethod3D2D.h"
 #include "Coincidence_TPCW.h"
+#include "Evap_Extension.h"
+#include "ShockCurve.h"
+#include "CompositeCurveTPCW.h"
 #include "RectBoundary.h"
 #include "Multid.h"
 

@@ -78,8 +78,8 @@ SubPhysics(*defaultBoundary(), *new Space("R3", 3), "TPCW", _GENERAL_ACCUMULATIO
     Evap_Extension  *ee = new Evap_Extension( (const Flux2Comp2PhasesAdimensionalized *) fluxFunction_, c);
     
     
-    CompositeCurveTPCW compositeCurve = new CompositeCurveTPCW (accumulationFunction_, fluxFunction_, preProcessedBoundary_,
-             *sc, 0, ee);
+    CompositeCurveTPCW * compositeCurve = new CompositeCurveTPCW (accumulationFunction_, fluxFunction_, preProcessedBoundary_,
+             sc, 0, ee);
     
 
 }
