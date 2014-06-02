@@ -23,6 +23,7 @@
 #define RAREFACTION_INITIALIZE                   50
 #define RAREFACTION_DONT_INITIALIZE              51
 
+#include "Coincidence.h"
 #include "ODE_Solver.h"
 #include "Bisection.h"
 #include "FluxFunction.h"
@@ -46,6 +47,8 @@ class RarefactionCurve {
 
         const ODE_Solver           *s;
 
+        const Coincidence          *coincidence_object;
+
         int family;
         RealVector reference_vector;
 
@@ -56,13 +59,12 @@ class RarefactionCurve {
 
         void add_point_to_curve(const RealVector &p, Curve &curve);
 
-        #ifdef TEST
-            Canvas *canvas;
-            CanvasMenuScroll *scroll;
-        #endif
+     
     public:
         RarefactionCurve(const AccumulationFunction *gg, const FluxFunction *ff, const Boundary *bb);
         ~RarefactionCurve();
+
+        void set_coincidence(const Coincidence *c){coincidence_object = c; return;}
 
         int curve(const RealVector &initial_point,
                   int curve_family,

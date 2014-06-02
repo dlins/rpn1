@@ -27,6 +27,11 @@ public class Diagram implements  RpSolution  {
         lines_= coords;
     
     }
+    
+    
+    public DiagramLine getLine (int lineIndex){
+        return lines_.get(lineIndex);
+    }
 
     public List<DiagramLine> getLines() {
         return lines_;

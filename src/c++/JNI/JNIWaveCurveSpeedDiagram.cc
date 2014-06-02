@@ -35,15 +35,15 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurve_nativeDiagramCalc
 
     jmethodID diagramConstructor = env->GetMethodID(diagramClass, "<init>", "(Ljava/util/List;)V");
     jmethodID diagramLineConstructor = env->GetMethodID(diagramLineClass, "<init>", "(Ljava/util/List;)V");
-    
-    jmethodID diagramLineDefaultConstructor = env->GetMethodID(diagramLineClass, "<init>", "(V)V");
-    
-    jmethodID addPartMethodID = env->GetMethodID(diagramLineClass, "<addPart>", "(Ljava/util/List;)V");
-    
-    
-    jmethodID setTypeMethodID = env->GetMethodID(diagramLineClass, "<setType>", "(II)V");
-    
-    
+
+    jmethodID diagramLineDefaultConstructor = env->GetMethodID(diagramLineClass, "<init>", "()V");
+
+    jmethodID addPartMethodID = env->GetMethodID(diagramLineClass, "addPart", "(Ljava/util/List;)V");
+
+
+    jmethodID setTypeMethodID = env->GetMethodID(diagramLineClass, "setType", "(II)V");
+
+
 
     jmethodID arrayListConstructor = env->GetMethodID(arrayListClass, "<init>", "()V");
     jmethodID arrayListAddMethod = env->GetMethodID(arrayListClass, "add", "(Ljava/lang/Object;)Z");
@@ -65,39 +65,37 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurve_nativeDiagramCalc
     jobject diagramLinesList = env->NewObject(arrayListClass, arrayListConstructor, NULL);
 
 
-    jobject speedLine = env->NewObject(diagramLineClass, diagramLineDefaultConstructor);
-    
+    jobject speedLine = env->NewObject(diagramLineClass, diagramLineDefaultConstructor, NULL);
+
     jobject speedLineList = env->NewObject(arrayListClass, arrayListConstructor, NULL); //ADDING SPEED 
 
     for (int i = 0; i < arclength_speed.size(); i++) {
 
         jobject speedLinePartList = env->NewObject(arrayListClass, arrayListConstructor, NULL);
 
+        int partType = arclength_speed[i].type;
         for (int j = 0; j < arclength_speed[i].curve.size(); j++) {
 
             jdoubleArray speedArray = env->NewDoubleArray(dimension);
-
             env->SetDoubleArrayRegion(speedArray, 0, dimension, (double *) arclength_speed[i].curve.at(j));
-
             jobject realVector = env->NewObject(realVectorClass, realVectorConstructorDoubleArray, speedArray);
-
-            //            cout << arclength_speed[i].curve.at(j) << endl;
-
             env->CallObjectMethod(speedLinePartList, arrayListAddMethod, realVector);
 
 
         }
         env->CallObjectMethod(speedLine, addPartMethodID, speedLinePartList);
+        env->CallObjectMethod(speedLine, setTypeMethodID, i, partType);
+
 
 //        env->CallObjectMethod(speedLineList, arrayListAddMethod, speedLinePartList);
 
     }
 
 
-//    jobject speedLine = env->NewObject(diagramLineClass, diagramLineConstructor, speedLineList);
-    
-    
-    env->CallObjectMethod(diagramLinesList, arrayListAddMethod, speedLine);
+    //    jobject speedLine = env->NewObject(diagramLineClass, diagramLineConstructor, speedLineList);
+
+
+        env->CallObjectMethod(diagramLinesList, arrayListAddMethod, speedLine);
 
 
     //
@@ -107,7 +105,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurve_nativeDiagramCalc
 
     for (int i = 0; i < arclength_reference_eigenvalues.size(); i++) {
 
-        jobject linePartsList = env->NewObject(arrayListClass, arrayListConstructor, NULL);
+        jobject eigenLine = env->NewObject(diagramLineClass, diagramLineDefaultConstructor, NULL);
+
+//        jobject linePartsList = env->NewObject(arrayListClass, arrayListConstructor, NULL);
 
         jobject speedLinePartList = env->NewObject(arrayListClass, arrayListConstructor, NULL);
 
@@ -123,14 +123,18 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurve_nativeDiagramCalc
 
             env->CallObjectMethod(speedLinePartList, arrayListAddMethod, realVector);
 
+
         }
 
-        env->CallObjectMethod(linePartsList, arrayListAddMethod, speedLinePartList);
+        env->CallObjectMethod(eigenLine, setTypeMethodID, 0, 0);// Pq nao passa duas vezes ??
+        env->CallObjectMethod(eigenLine, setTypeMethodID, 1, 1);
+
+        //        env->CallObjectMethod(linePartsList, arrayListAddMethod, speedLinePartList);
+        env->CallObjectMethod(eigenLine, addPartMethodID, speedLinePartList);
 
 
-        jobject eigenLine = env->NewObject(diagramLineClass, diagramLineConstructor, linePartsList);
 
-//        env->CallObjectMethod(diagramLinesList, arrayListAddMethod, eigenLine);
+        env->CallObjectMethod(diagramLinesList, arrayListAddMethod, eigenLine);
     }
 
 
@@ -138,13 +142,15 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurve_nativeDiagramCalc
 
 
 
-    cout << "Tamanho de autovalores: " << arclength_reference_eigenvalues.size() << endl;
 
 
-    for (int eigenValueIndex = 1; eigenValueIndex < dimension+1; eigenValueIndex++) {// Numero de auto valores
+
+    for (int eigenValueIndex = 1; eigenValueIndex < dimension + 1; eigenValueIndex++) {// Numero de auto valores
 
 
-        jobject eigenLineList = env->NewObject(arrayListClass, arrayListConstructor, NULL); //EIGEN VALUES 
+        jobject eigenLine = env->NewObject(diagramLineClass, diagramLineDefaultConstructor, NULL);
+        
+//        jobject eigenLineList = env->NewObject(arrayListClass, arrayListConstructor, NULL); //EIGEN VALUES 
 
 
         for (int i = 0; i < arclength_eigenvalues.size(); i++) { //Quantidade de subcurvas da curva de onda
@@ -153,59 +159,62 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurve_nativeDiagramCalc
             jobject speedLinePartList = env->NewObject(arrayListClass, arrayListConstructor, NULL);
 
 
-                for (int j = 0; j < arclength_eigenvalues[i].curve.size(); j++) { //Pontos dentro de cada subcurva
+            for (int j = 0; j < arclength_eigenvalues[i].curve.size(); j++) { //Pontos dentro de cada subcurva
 
 
-                    jdoubleArray speedArray = env->NewDoubleArray(dimension);
+                jdoubleArray speedArray = env->NewDoubleArray(dimension);
 
-                    double temp[dimension];
+                double temp[dimension];
 
-                    temp[0] = arclength_eigenvalues[i].curve[j](0);
-                    temp[1] = arclength_eigenvalues[i].curve[j](eigenValueIndex);
-
-
-                    env->SetDoubleArrayRegion(speedArray, 0, dimension, temp);
-
-                    jobject realVector = env->NewObject(realVectorClass, realVectorConstructorDoubleArray, speedArray);
-
-                    //            cout << arclength_speed[i].curve.at(j) << endl;
-
-                    env->CallObjectMethod(speedLinePartList, arrayListAddMethod, realVector);
+                temp[0] = arclength_eigenvalues[i].curve[j](0);
+                temp[1] = arclength_eigenvalues[i].curve[j](eigenValueIndex);
 
 
-                }
+                env->SetDoubleArrayRegion(speedArray, 0, dimension, temp);
 
-                env->CallObjectMethod(eigenLineList, arrayListAddMethod, speedLinePartList);
+                jobject realVector = env->NewObject(realVectorClass, realVectorConstructorDoubleArray, speedArray);
+
+                //            cout << arclength_speed[i].curve.at(j) << endl;
+
+                env->CallObjectMethod(speedLinePartList, arrayListAddMethod, realVector);
+
 
             }
+            
+            env->CallObjectMethod(eigenLine, setTypeMethodID, i, arclength_eigenvalues[i].type);// Pq nao passa duas vezes ??
+            env->CallObjectMethod(eigenLine, addPartMethodID, speedLinePartList);
 
-            jobject eigenLine = env->NewObject(diagramLineClass, diagramLineConstructor, eigenLineList);
-
-//            env->CallObjectMethod(diagramLinesList, arrayListAddMethod, eigenLine);
+//            env->CallObjectMethod(eigenLineList, arrayListAddMethod, speedLinePartList);
 
         }
 
+//        jobject eigenLine = env->NewObject(diagramLineClass, diagramLineConstructor, eigenLineList);
 
-
-
-
-
-
-        //
-
-
-
-
-
-
-        jobject diagram = (env)->NewObject(diagramClass, diagramConstructor, diagramLinesList);
-
-        return diagram;
-
-
-
+        env->CallObjectMethod(diagramLinesList, arrayListAddMethod, eigenLine);
 
     }
+
+
+
+
+
+
+
+    //
+
+
+
+
+
+
+    jobject diagram = (env)->NewObject(diagramClass, diagramConstructor, diagramLinesList);
+
+    return diagram;
+
+
+
+
+}
 
 
 

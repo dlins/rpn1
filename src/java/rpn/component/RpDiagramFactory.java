@@ -48,9 +48,6 @@ public final class RpDiagramFactory implements RpGeomFactory {
     }
 
     public RpGeometry createDiagramFromSource() {
-        
-        
-
 
         Diagram solution = (Diagram) calc_.createDiagramSource();
         ArrayList<MultiPolyLine> diagramLinesList = new ArrayList<MultiPolyLine>();
@@ -59,11 +56,18 @@ public final class RpDiagramFactory implements RpGeomFactory {
         for (DiagramLine line : linesList) {
             List<List<RealVector>> lineCoords = line.getCoords();
 
-
+            int index = 0;
+            System.out.println("Quatidade de partes: "+ line.getCoords().size());
             for (List<RealVector> linePart : lineCoords) {
                 CoordsArray[] diagramCoords = MultidAdapter.converseRealVectorListToCoordsArray(linePart);
                 MultiPolyLine diagramLine = new MultiPolyLine(diagramCoords, new ViewingAttr(Color.white));
+                System.out.println(line);
+                int type  = line.getType(index);
+                
+                
+                diagramLine.viewingAttr().setColor(colorChooser(type));
                 diagramLinesList.add(diagramLine);
+                index++;
 
             }
 
@@ -74,6 +78,49 @@ public final class RpDiagramFactory implements RpGeomFactory {
         return diagramGeom;
 
     }
+    
+    
+    
+     private Color colorChooser(int index) {
+
+        switch (index) {
+
+            case 0:
+                return Color.white;
+
+            case 1:
+                return Color.blue;
+
+            case 2:
+                return Color.green;
+
+            case 3:
+                return Color.red;
+            case 4:
+                return Color.gray;
+            case 5:
+                return Color.CYAN;
+
+            default:
+                return Color.PINK;
+
+        }
+
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
     @Override
     public void updateGeom(List<Area> area, List<Integer> segmentsToRemove) {

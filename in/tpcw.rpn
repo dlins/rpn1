@@ -31,20 +31,38 @@
 
 
             </PHYSICS>
+            
+            
+            
+
+            <CURVECONFIGURATION name="wavecurve">
+                <CURVEPARAM name="edge" value="0"/>
+                <CURVEPARAM name="origin" value="13"/>
+                <CURVEPARAM name="curve" value="0"/>
+                 <CURVEPARAM name="direction" value="10"/>
+                <CURVEPARAM name="family" value="0"/>
+                
+            </CURVECONFIGURATION>
 
 
 
-            <METHOD name="Contour">
+<!--            <METHOD name="Contour">
                 <METHODPARAM  name="x-resolution" value="30" />
                 <METHODPARAM  name="y-resolution" value="30" />
 
-            </METHOD>
+            </METHOD>-->
 
-
+            <!--
             <METHOD name="Newton">
                 <METHODPARAM  name="tolerance" value="0.001" />
-            </METHOD>
+            </METHOD>-->
 
+
+
+            <CURVECONFIGURATION name="bifurcationcurve">
+
+                <CURVEPARAM name="resolution" value="60 60"/>
+            </CURVECONFIGURATION>
 
             <CURVECONFIGURATION name="hugoniotcurve">
                 <CURVEPARAM name="resolution" value="20 20"/>
@@ -127,7 +145,7 @@
             <VIEWCONFIGURATION modeldomain="3">
 
                 <PROJDESC name="Axis1 Axis0">
-                    <VIEWPARAM name="axis" value="1 0"/>
+                    <VIEWPARAM name="axis" value="0 1"/>
                     <VIEWPARAM name="vpwidth" value="400"/>
                     <VIEWPARAM name="vpheight" value="400"/>
                     <VIEWPARAM name="iso2equi" value="false"/>
@@ -136,7 +154,7 @@
 
 
                 <PROJDESC name="Axis2 Axis0">
-                    <VIEWPARAM name="axis" value="2 0"/>
+                    <VIEWPARAM name="axis" value="0 2"/>
                     <VIEWPARAM name="vpwidth" value="400"/>
                     <VIEWPARAM name="vpheight" value="400"/>
                     <VIEWPARAM name="iso2equi" value="false"/>

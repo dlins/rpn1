@@ -19,6 +19,7 @@
 #include "Hugoniot_TP.h"
 #include "HugoniotContinuation3D2D.h"
 #include "ShockContinuationMethod3D2D.h"
+#include "Coincidence_TPCW.h"
 #include "RectBoundary.h"
 #include "Multid.h"
 

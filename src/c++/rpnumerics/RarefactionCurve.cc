@@ -4,6 +4,8 @@ RarefactionCurve::RarefactionCurve(const AccumulationFunction *gg, const FluxFun
     f = ff;
     g = gg;
     b = bb;
+
+    coincidence_object = 0;
 }
 
 RarefactionCurve::~RarefactionCurve(){
@@ -117,6 +119,8 @@ double RarefactionCurve::directional_derivative(const RealVector &p, int fam, co
 
     for (int i = 0; i < F_H.size(); i++) h(i) = rm*((F_H[i] - lambda*G_H[i])*rm);
     
+//    std::cout << "At dirdrv. lm*h = " << lm*h << ", lm*(G_J*rm) = " << lm*(G_J*rm) << std::endl;
+
     return (lm*h)/(lm*(G_J*rm));
 }
 
@@ -285,6 +289,7 @@ int RarefactionCurve::curve(const RealVector &initial_point,
     rarcurve.clear();
     rarcurve.type = RAREFACTION_CURVE;
     rarcurve.family = curve_family;
+    rarcurve.increase = increase;
 
     inflection_points.clear();
 
@@ -331,6 +336,16 @@ int RarefactionCurve::curve(const RealVector &initial_point,
     RealVector point(initial_point);
     RealVector next_point;
 
+    // Coincidence
+    double old_lambda_diff;
+    if (coincidence_object != 0){
+        std::cout << "Will check coincidence before while." << std::endl;
+
+        old_lambda_diff = coincidence_object->lambda_diff(initial_point);
+
+        std::cout << "    Done. lambda_diff = " << old_lambda_diff << std::endl;
+    }
+
     while (true){
         int info_odesolver = odesolver->integrate_step(&RarefactionCurve::field, 
                                                       (int*)this, 0 /*double *function_data*/,
@@ -373,9 +388,38 @@ int RarefactionCurve::curve(const RealVector &initial_point,
             return RAREFACTION_OK;
         }
 
+//        // Has the rarefaction curve reached the coincidence? 
+//        //     
+//        if (coincidence_object != 0){
+//            double current_lambda_diff = coincidence_object->lambda_diff(next_point); // lambda_s - lambda_e
+//            if (current_lambda_diff*old_lambda_diff < 0.0){
+//                add_point_to_curve(next_point, rarcurve);
+
+//                std::cout << "The rarefaction reached the Coincidence. Leaving..." << std::endl;
+
+//                return RAREFACTION_OK;
+
+////                // Coincidence reached. Get away from the coincidence locus and carry on with the same family.
+////                RealVector next_dir = next_point - old_point;
+////                next_point = next_point + 2.0*next_dir;
+//            }
+//            else {
+//                old_lambda_diff = current_lambda_diff;
+//            }
+//        }
+
         // Has the rarefaction curve reached an inflection? 
         // Update the directional derivative first.
         //
+        // At least in the case of TPCW we have found that, upon reaching the coincidence,
+        // the inflection is incorrectly detected instead (the sign of the directional derivative changes
+        // even though lambda is monotone). There is no simple method to avoid this problem.
+        // Right now what the user will have to do is start from a different point.
+        //
+        // For the record: the proposed method was: if dirdrv*old_dirdrv < 0.0 then 
+        // set a flag and track lambda for a few steps in the future, to check if the inflection
+        // was really found.
+        // 
         dirdrv = directional_derivative(next_point, family, reference_vector);
 
         #ifdef TEST
@@ -394,18 +438,20 @@ int RarefactionCurve::curve(const RealVector &initial_point,
 //            canvas->add(rar_point_for_canvas);
 //            scroll->add(ss.str().c_str(), canvas, rar_point_for_canvas);
 
-            std::cout << "Index = " << rarcurve.curve.size() - 1 << std::endl;
+//            std::cout << "Index = " << rarcurve.curve.size() - 1 << std::endl;
 
             std::vector<eigenpair> e;
             Eigen::eig(next_point, f, g, e);
 
             int n = next_point.size();
 
-            std::cout << "    dirdrv   = " << dirdrv << std::endl;
-            std::cout << "    lambda 0 = " << e[0].r << std::endl;
-            std::cout << "    lambda 1 = " << e[1].r << std::endl;
-            std::cout << "    eigenvector 0 = " << RealVector(n, e[0].vrr.data()) << std::endl;
-            std::cout << "    eigenvector 1 = " << RealVector(n, e[1].vrr.data()) << std::endl;
+//            std::cout << "    dirdrv   = " << dirdrv << std::endl;
+//            std::cout << "    lambda 0 = " << e[0].r << std::endl;
+//            std::cout << "    lambda 1 = " << e[1].r << std::endl;
+//            std::cout << "    l-eigenvector 0 = " << RealVector(n, e[0].vlr.data()) << std::endl;
+//            std::cout << "    l-eigenvector 1 = " << RealVector(n, e[1].vlr.data()) << std::endl;
+//            std::cout << "    r-eigenvector 0 = " << RealVector(n, e[0].vrr.data()) << std::endl;
+//            std::cout << "    r-eigenvector 1 = " << RealVector(n, e[1].vrr.data()) << std::endl;
         }
         #endif
 
@@ -469,8 +515,6 @@ int RarefactionCurve::curve(const RealVector &initial_point,
         
         }
 
-//        // Has the rarefaction curve reached the coincidence? 
-//        //           
 //        RealVector point_eigenvalues;
 //        all_eigenvalues(next_point, family, point_eigenvalues);
 

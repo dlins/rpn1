@@ -7,6 +7,7 @@
 package rpnumerics;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import wave.util.RealVector;
 
@@ -21,7 +22,7 @@ public class DiagramLine   {
     
     private int partsNumber_;
     
-    private List<Integer> typesID_;
+    private HashMap<Integer,Integer> typesID_;
     //
     // Constructor
     //
@@ -30,7 +31,7 @@ public class DiagramLine   {
 
         coords_= coords;
         partsNumber_=coords.size();
-        typesID_=new ArrayList<Integer>(partsNumber_);
+        typesID_=new HashMap<Integer,Integer>(partsNumber_);
         
         for (List<RealVector> list : coords) {
             
@@ -47,7 +48,7 @@ public class DiagramLine   {
         coords_= new ArrayList<List<RealVector>>();
         
         partsNumber_=coords_.size();
-        typesID_=new ArrayList<Integer>(partsNumber_);
+        typesID_=new HashMap<Integer,Integer>();
         
         for (List<RealVector> list : coords_) {
             
@@ -77,7 +78,7 @@ public class DiagramLine   {
 
    
     public void setType(int partIndex, int partType){
-        typesID_.set(partIndex, new Integer(partType));
+        typesID_.put(new Integer(partIndex), new Integer(partType));
     }
     
     

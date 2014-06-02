@@ -129,7 +129,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc
     odesolver = &lsode;
 
     int dimension = realVectorInput.size();
-
+    
 
     WaveCurveFactory wavecurvefactory(accum, flux, boundary, odesolver, &rc, &sc, &cmp);
 
@@ -276,7 +276,19 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc
             for (int j = 0; j < coords.size(); j++) {
 
                 RealVector tempVector = coords.at(j);
-                double * dataCoords = tempVector;
+
+
+                RealVector resizedVector(tempVector);
+                RpNumerics::getPhysics().getSubPhysics(0).postProcess(resizedVector);
+
+                cout << tempVector << endl;
+
+
+                double * dataCoords = resizedVector;
+
+
+
+
                 //Reading only coodinates
                 jdoubleArray jTempArray = (env)->NewDoubleArray(tempVector.size());
 

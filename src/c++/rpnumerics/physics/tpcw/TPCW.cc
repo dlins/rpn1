@@ -14,6 +14,7 @@
 #include "Double_Contact_TP.h"
 
 #include "Debug.h"
+#include "Coincidence_TPCW.h"
 
 /*
  * ---------------------------------------------------------------
@@ -69,7 +70,17 @@ SubPhysics(*defaultBoundary(), *new Space("R3", 3), "TPCW", _GENERAL_ACCUMULATIO
     preProcessedBoundary_ = new RectBoundary(min, max);
 
     setHugoniotContinuationMethod(new HugoniotContinuation3D2D(fluxFunction_,accumulationFunction_,preProcessedBoundary_));
-
+    
+    ShockCurve * sc = new ShockCurve (getHugoniotContinuationMethod());
+    
+    Coincidence_TPCW * c = new Coincidence_TPCW((const Flux2Comp2PhasesAdimensionalized *) fluxFunction_,(Accum2Comp2PhasesAdimensionalized *) accumulationFunction_);
+    
+    Evap_Extension  *ee = new Evap_Extension( (const Flux2Comp2PhasesAdimensionalized *) fluxFunction_, c);
+    
+    
+    CompositeCurveTPCW compositeCurve = new CompositeCurveTPCW (accumulationFunction_, fluxFunction_, preProcessedBoundary_,
+             *sc, 0, ee);
+    
 
 }
 
@@ -237,7 +248,9 @@ void TPCW::postProcess(RealVector & input) {
     input.resize(3);
     input.component(0) = temp.component(0);
     input.component(1) = TD->Theta2T(temp.component(1));
-    input.component(2) = getBoundary().maximums().component(2);
+//    input.component(2) = getBoundary().maximums().component(2);
+    
+    input.component(2) =1.0;
 
     //    input.component(2) = TD->U2u(temp.component(2));
 }

@@ -21,32 +21,7 @@ public class DiagramView extends PolyLine {
 
     }
 
-    private Color colorChooser(int index) {
-
-        switch (index) {
-
-            case 0:
-                return Color.white;
-
-            case 1:
-                return Color.blue;
-
-            case 2:
-                return Color.red;
-
-            case 3:
-                return Color.yellow;
-            case 4:
-                return Color.green;
-            case 5:
-                return Color.CYAN;
-
-            default:
-                return Color.PINK;
-
-        }
-
-    }
+   
 
     @Override
     public void draw(Graphics2D g) {
@@ -54,16 +29,13 @@ public class DiagramView extends PolyLine {
         DiagramGeom diagram = ((DiagramGeom) getAbstractGeom());
         Iterator<MultiPolyLine> diagramsIterator = diagram.diagramsIterator();
 
-        int index = 0;
+      
 
         while (diagramsIterator.hasNext()) {
             try {
                 MultiPolyLine multiPolyLine = diagramsIterator.next();
-
-                multiPolyLine.viewingAttr().setColor(colorChooser(index));
-
                 multiPolyLine.createView(getViewingTransform()).draw(g);
-                index++;
+
             } catch (DimMismatchEx ex) {
                 Logger.getLogger(DiagramView.class.getName()).log(Level.SEVERE, null, ex);
             }

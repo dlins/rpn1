@@ -708,10 +708,10 @@ public class RPNUMERICS {
     public static ShockCurveCalc createShockCurveCalc(OrbitPoint orbitPoint) {
 
         Integer family = new Integer(getParamValue("fundamentalcurve", "family"));
-        Double tolerance = new Double(getParamValue("Newton", "tolerance"));
+//        Double tolerance = new Double(getParamValue("Newton", "tolerance"));//TODO REMOVE ??
 
         Integer direction = new Integer(getParamValue("fundamentalcurve", "direction"));
-        return new ShockCurveCalc(orbitPoint, family, direction, tolerance);
+        return new ShockCurveCalc(orbitPoint, family, direction, 0.01);
 
     }
 

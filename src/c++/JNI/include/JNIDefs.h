@@ -25,7 +25,7 @@
 #define AREA_LOCATION                         "rpnumerics/Area"
 #define CONFIGURATION_LOCATION                "rpn/configuration/Configuration"
 #define DIAGRAM_LOCATION                      "rpnumerics/Diagram"
-#define DIAGRAMLINE_LOCATION                      "rpnumerics/DiagramLine"
+#define DIAGRAMLINE_LOCATION                  "rpnumerics/DiagramLine"
 
 
 

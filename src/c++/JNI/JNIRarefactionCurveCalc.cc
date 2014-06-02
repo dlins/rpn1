@@ -73,7 +73,10 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionCurveCalc_calc(JNIEnv * env
     //    double deltaxi = 1e-3; // This is the original value (Rodrigo/ Panters)
 
 
-    int dimension = realVectorInput.size();
+    int dimension = 2;//realVectorInput.size();
+    
+    
+    cout<<"Ponto de entrada: "<<realVectorInput<<endl;
 
 
     const FluxFunction * flux = &RpNumerics::getPhysics().fluxFunction();
@@ -141,7 +144,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionCurveCalc_calc(JNIEnv * env
 
 
 
-    RpNumerics::getPhysics().getSubPhysics(0).postProcess(coords);
+
     //----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
     //Orbit members creation
@@ -159,26 +162,29 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionCurveCalc_calc(JNIEnv * env
         //
         //        }
 
-        double * dataCoords = tempVector;
+//        double * dataCoords = tempVector;
+        
+        RealVector resizedVector(tempVector);
+        RpNumerics::getPhysics().getSubPhysics(0).postProcess(resizedVector);
+        
+        cout<<tempVector<<endl;
 
-        //Reading only coodinates
+
+        double * dataCoords = resizedVector;
+        
+        
         jdoubleArray jTempArray = (env)->NewDoubleArray(tempVector.size());
 
         (env)->SetDoubleArrayRegion(jTempArray, 0, tempVector.size(), dataCoords);
 
-        //Lambda is the last component.
 
 
         jdoubleArray jeigenValuesArray = (env)->NewDoubleArray(dimension);
-
-
         RealVector eigenValue = rarcurve.eigenvalues[i];
 
 
 
         (env)->SetDoubleArrayRegion(jeigenValuesArray, 0, eigenValue.size(), (double *) eigenValue);
-
-
 
         jobject orbitPoint = (env)->NewObject(classOrbitPoint, orbitPointConstructor, jTempArray, jeigenValuesArray, lambda);
 

@@ -5,8 +5,6 @@
  */
 package rpn.component;
 
-import rpnumerics.Orbit;
-import rpnumerics.RPNUMERICS;
 import rpnumerics.RarefactionCurve;
 import rpnumerics.RarefactionCurveCalc;
 
@@ -38,7 +36,6 @@ public class RarefactionCurveGeomFactory extends WaveCurveOrbitGeomFactory {
     public RpGeometry createGeomFromSource() {
 
         RarefactionCurve orbit = (RarefactionCurve) geomSource();
-
 
         return new RarefactionCurveGeom(MultidAdapter.converseOrbitPointsToCoordsArray(orbit.getPoints()), this);
 
