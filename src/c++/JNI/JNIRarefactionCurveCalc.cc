@@ -69,23 +69,35 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionCurveCalc_calc(JNIEnv * env
 
 
     const Boundary * tempBoundary = RpNumerics::getPhysics().getSubPhysics(0).getPreProcessedBoundary();
+    
+    
+    cout<<tempBoundary->minimums()<<endl;
+    cout<<tempBoundary->maximums()<<endl;
 
     //    double deltaxi = 1e-3; // This is the original value (Rodrigo/ Panters)
 
 
-    int dimension = 2;//realVectorInput.size();
-    
-    
-    cout<<"Ponto de entrada: "<<realVectorInput<<endl;
+    int dimension = 2; //realVectorInput.size();
+
+
+    cout << "Ponto de entrada: " << realVectorInput << endl;
 
 
     const FluxFunction * flux = &RpNumerics::getPhysics().fluxFunction();
     const AccumulationFunction * accum = &RpNumerics::getPhysics().accumulation();
 
 
+
+    cout << "Fluxo: " << flux << endl;
+    cout << "Accum: " << accum << endl;
+
+
     vector<RealVector> inflectionPoints;
 
     RpNumerics::getPhysics().getSubPhysics(0).preProcess(realVectorInput);
+    
+    
+    cout << "Ponto de entrada apos pos process: " << realVectorInput << endl;
 
     RarefactionCurve rc(accum, flux, tempBoundary);
 
@@ -162,17 +174,17 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionCurveCalc_calc(JNIEnv * env
         //
         //        }
 
-//        double * dataCoords = tempVector;
-        
+        //        double * dataCoords = tempVector;
+
         RealVector resizedVector(tempVector);
         RpNumerics::getPhysics().getSubPhysics(0).postProcess(resizedVector);
-        
-        cout<<tempVector<<endl;
+
+        cout << tempVector << endl;
 
 
         double * dataCoords = resizedVector;
-        
-        
+
+
         jdoubleArray jTempArray = (env)->NewDoubleArray(tempVector.size());
 
         (env)->SetDoubleArrayRegion(jTempArray, 0, tempVector.size(), dataCoords);

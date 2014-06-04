@@ -30,6 +30,8 @@
 #include "HugoniotContinuation2D2D.h"
 #include "Secondary_Bifurcation_Interface.h"
 #include <sstream>
+#include "CompositeCurve.h"
+#include "Extension.h"
 
 /*
  * ---------------------------------------------------------------
@@ -45,12 +47,12 @@ private:
     Hugoniot_Locus * hugoniotFunction_;
 
     Double_Contact_Function * doubleContactFunction_;
-    HugoniotContinuation * hugoniot_continuation_method_;
     ShockMethod * shock_method_;
     Boundary * boundary_;
     Space * space_;
     const char * ID_;
     int type_;
+
 
 
 protected:
@@ -61,7 +63,12 @@ protected:
     Boundary * preProcessedBoundary_;
     std::map<string, Hugoniot_Locus *> * hugoniotArray_;
     std::map<string, HugoniotCurve *> * hugoniotCurveArray_;
+    std::map<string, Extension *> * extensionCurveArray_;
     std::map<string, Secondary_Bifurcation_Interface *> * secondaryBifurcationArray_;
+    
+    HugoniotContinuation * hugoniot_continuation_method_;
+    CompositeCurve * compositeCurve_;
+    ShockCurve * shockCurve_;
 
 public:
 
@@ -101,6 +108,8 @@ public:
     void setHugoniotContinuationMethod(HugoniotContinuation *);
 
     void setShockMethod(ShockMethod *);
+    
+    CompositeCurve * getCompositeCurve();
 
     ShockMethod * getShockMethod();
 
@@ -116,7 +125,8 @@ public:
 
     const Boundary * getPreProcessedBoundary()const;
 
-
+    Extension * getExtensionMethod(const string &);
+    
     Hugoniot_Locus * getHugoniotMethod(const string &);
     
     Secondary_Bifurcation_Interface * getSecondaryBifurcationMethod(const string &);

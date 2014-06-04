@@ -6,6 +6,7 @@
 #include "Coincidence.h"
 #include "Flux2Comp2PhasesAdimensionalized.h"
 #include "Utilities.h"
+#include "Thermodynamics.h"
 
 // Only valid for TPCW-like classes.
 //

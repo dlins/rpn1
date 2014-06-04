@@ -1,12 +1,12 @@
 #include "AccumulationSinglePhaseVaporAdimensionalized.h"
 
-AccumulationSinglePhaseVaporAdimensionalized::AccumulationSinglePhaseVaporAdimensionalized(const AccumulationSinglePhaseVaporAdimensionalized &copy) : AccumulationFunction(copy.paramsVector()) {
+AccumulationSinglePhaseVaporAdimensionalized::AccumulationSinglePhaseVaporAdimensionalized(const AccumulationSinglePhaseVaporAdimensionalized &copy) : AccumulationFunction(copy.accumulationParams()) {
 
     thermo = copy.thermo;
 }
 
 
-AccumulationSinglePhaseVaporAdimensionalized::AccumulationSinglePhaseVaporAdimensionalized(double phi, Thermodynamics *t) {
+AccumulationSinglePhaseVaporAdimensionalized::AccumulationSinglePhaseVaporAdimensionalized(double phi, Thermodynamics *t):AccumulationFunction(AccumulationParams()) {
     accumulationParams().component(0,phi);
     thermo = t;
 }
@@ -24,7 +24,7 @@ int AccumulationSinglePhaseVaporAdimensionalized::jet(const WaveState &w, JetMat
 
 
 
-    double phi_ = paramsVector().component(0);
+    double phi_ = accumulationParams().component(0);
 
 
     double yw = w(0); // s_{sigma} = sg in FracFlow2PhasesHorizontal & FracFlow2PhasesVertical

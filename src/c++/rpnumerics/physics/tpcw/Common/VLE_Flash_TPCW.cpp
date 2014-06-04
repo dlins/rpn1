@@ -3,6 +3,9 @@
 VLE_Flash_TPCW::VLE_Flash_TPCW(const MolarDensity *mdl_, const MolarDensity *mdv_){
     mdl = (MolarDensity*)mdl_;
     mdv = (MolarDensity*)mdv_;
+    
+    
+    std::cout<<"mdl"<<mdl<<"  "<<mdv<<std::endl;
 
     Epsilon_machine = pow(0.1, 10); // Era 10^(-14)
 

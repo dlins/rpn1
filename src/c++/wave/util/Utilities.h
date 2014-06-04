@@ -12,6 +12,10 @@
 #define UTILITIES_BISECTION_OK    0
 #define UTILITIES_BISECTION_ERROR 1
 
+#define BHASKARA_COMPLEX_ROOTS       (-1)
+#define BHASKARA_DOUBLE_ROOTS          0
+#define BHASKARA_TWO_DIFFERENT_ROOTS   1
+
 class Utilities {
     private:
     protected:
@@ -45,6 +49,11 @@ class Utilities {
         // Subdivide a segment with vertices p and q in a Curve with (n + 1) vertices.
         // 
         static void regularly_sampled_segment(const RealVector &p, const RealVector &q, int n, Curve &curve);
+
+        // Find the roots of the polynomial x*x + b*x + c.
+        //
+        static int Bhaskara(double b, double c, double &x1, double &x2);
+        static int Bhaskara(double a, double b, double c, double &x1, double &x2);
 };
 
 #endif // _UTILITIES_

@@ -1,5 +1,4 @@
 #include "SubinflectionTP.h"
-#include "Debug.h"
 
 SubinflectionTP::SubinflectionTP(double p) {
     gv = 0;
@@ -53,14 +52,39 @@ void SubinflectionTP::subinflection_function(double & reduced_lambdae, double & 
     double d2Hr_dT2;
 
 
-    td->Diff_Rhosic(Theta, rhosigmac, drhosigmac_dT, d2rhosigmac_dT2);
+//    td->Diff_Rhosic(Theta, rhosigmac, drhosigmac_dT, d2rhosigmac_dT2);
+    JetMatrix rhosicj(1);
+    td->Rhosic_jet(Theta, 2, rhosicj);
+    rhosigmac = rhosicj.get(0); drhosigmac_dT = rhosicj.get(0, 0); d2rhosigmac_dT2 = rhosicj.get(0, 0, 0);
 
 
-    td->Diff_Rhosiw(Theta, rhosigmaw, drhosigmaw_dT, d2rhosigmaw_dT2);
-    td->Diff_Rhoac(Theta, rhoac, drhoac_dT, d2rhoac_dT2);
-    td->Diff_Rhoaw(Theta, rhoaw, drhoaw_dT, d2rhoaw_dT2);
-    td->Diff_AqueousEnthalpyVol(Theta, Ha, dHa_dT, d2Ha_dT2);
-    td->Diff_SuperCriticEnthalpyVol(Theta, Hsi, dHsi_dT, d2Hsi_dT2);
+
+//    td->Diff_Rhosiw(Theta, rhosigmaw, drhosigmaw_dT, d2rhosigmaw_dT2);
+    JetMatrix rhosiwj(1);
+    td->Rhosiw_jet(Theta, 2, rhosiwj);
+    rhosigmaw = rhosiwj.get(0); drhosigmaw_dT = rhosiwj.get(0, 0); d2rhosigmaw_dT2 = rhosiwj.get(0, 0, 0);
+
+
+//    td->Diff_Rhoac(Theta, rhoac, drhoac_dT, d2rhoac_dT2);
+    JetMatrix rhoacj(1);
+    td->Rhoac_jet(Theta, 2, rhoacj);
+    rhoac = rhoacj.get(0); drhoac_dT = rhoacj.get(0, 0); d2rhoac_dT2 = rhoacj.get(0, 0, 0);
+
+//    td->Diff_Rhoaw(Theta, rhoaw, drhoaw_dT, d2rhoaw_dT2);
+    JetMatrix rhoawj(1);
+    td->Rhoaw_jet(Theta, 2, rhoawj);
+    rhoaw = rhoawj.get(0); drhoaw_dT = rhoawj.get(0, 0); d2rhoaw_dT2 = rhoawj.get(0, 0, 0);
+
+//    td->Diff_AqueousEnthalpyVol(Theta, Ha, dHa_dT, d2Ha_dT2);
+    JetMatrix Haj(1);
+    td->AqueousEnthalpyVol_jet(Theta, 2, Haj);
+    Ha = Haj.get(0); dHa_dT = Haj.get(0, 0); d2Ha_dT2 = Haj.get(0, 0, 0);
+
+//    td->Diff_SuperCriticEnthalpyVol(Theta, Hsi, dHsi_dT, d2Hsi_dT2);
+    JetMatrix Hsij(1);
+    td->AqueousEnthalpyVol_jet(Theta, 2, Hsij);
+    Hsi = Hsij.get(0); dHsi_dT = Hsij.get(0, 0); d2Hsi_dT2 = Hsij.get(0, 0, 0);
+
 
     //    fh->Diff_Rhosic(double Theta, double &rhosigmac, double &drhosigmac_dT, double &d2rhosigmac_dT2);
     //    fh->Diff_Rhosiw(double Theta, double &rhosigmaw, double &drhosigmaw_dT, double &d2rhosigmaw_dT2);
@@ -68,7 +92,13 @@ void SubinflectionTP::subinflection_function(double & reduced_lambdae, double & 
     //    fh->Diff_Rhoaw(double Theta, double &rhoaw, double &drhoaw_dT, double &d2rhoaw_dT2);
     //    fh->Diff_AqueousEnthalpyVol(double Theta, double &Ha, double &dHa_dT, double &d2Ha_dT2);
     //    fh->Diff_SuperCriticEnthalpyVol(double Theta, double &Hsi, double &dHsi_dT, double &d2Hsi_dT2);
-    td->Diff_RockEnthalpyVol(Theta, Hr, dHr_dT, d2Hr_dT2);
+
+
+//    td->Diff_RockEnthalpyVol(Theta, Hr, dHr_dT, d2Hr_dT2);
+    JetMatrix Hrj(1);
+    td->RockEnthalpyVol_jet(Theta, 2, Hrj);
+    Hr = Hrj.get(0); dHr_dT = Hrj.get(0, 0); d2Hr_dT2 = Hrj.get(0, 0, 0);
+
 
     //  In this way we reproduce the artificial quantities given in Helmut's thesis numbers.
 
@@ -162,9 +192,7 @@ int SubinflectionTP::curve(const FluxFunction *f, const AccumulationFunction *a,
 
     double phi = a->accumulationParams().component(0);
 
-    if ( Debug::get_debug_level() == 5 ) {
-        cout << "Valor de phi em subinflection: " << phi << endl;
-    }
+    cout << "Valor de phi em subinflection: " << phi << endl;
 
 
     td = fluxAdimensional->getThermo();

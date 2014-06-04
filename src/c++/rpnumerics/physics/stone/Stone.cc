@@ -137,33 +137,47 @@ vector<double> * Stone::getParams() {
 
 Stone::Stone() : SubPhysics(StoneFluxFunction(StoneParams(), StonePermParams()), StoneAccumulation(), *defaultBoundary(), Multid::PLANE, "Stone", _SIMPLE_ACCUMULATION_) {
 
-//    Stone_Explicit_Bifurcation_Curves *stoneBifurcation = new Stone_Explicit_Bifurcation_Curves((StoneFluxFunction*)&fluxFunction());
-    
-    
+    //    Stone_Explicit_Bifurcation_Curves *stoneBifurcation = new Stone_Explicit_Bifurcation_Curves((StoneFluxFunction*)&fluxFunction());
+
+
     hugoniotArray_->operator []("IMPLICIT") = new Hugoniot_Curve(&fluxFunction(), &accumulation());
 
 
-//    secondaryBifurcationArray_->operator []("IMPLICIT") = new Secondary_Bifurcation(&fluxFunction(), &accumulation(), &fluxFunction(), &accumulation());
+    //    secondaryBifurcationArray_->operator []("IMPLICIT") = new Secondary_Bifurcation(&fluxFunction(), &accumulation(), &fluxFunction(), &accumulation());
 
 
 
-    setHugoniotFunction(new Hugoniot_Curve(&fluxFunction(), &accumulation()));
-    setDoubleContactFunction(new Double_Contact());
+
     setViscosityMatrix(new Viscosity_Matrix());
     preProcessedBoundary_ = defaultBoundary();
+
+
+    setDoubleContactFunction(new Double_Contact());
+
+    hugoniot_continuation_method_ = new HugoniotContinuation2D2D(&fluxFunction(), &accumulation(), &getBoundary());
+
+    shockCurve_ = new ShockCurve(hugoniot_continuation_method_);
+
+    compositeCurve_ = new CompositeCurve(accumulationFunction_, fluxFunction_, &getBoundary(), shockCurve_, 0);
 
 }
 
 Stone::Stone(const Stone & copy) : SubPhysics(copy.fluxFunction(), copy.accumulation(), copy.getBoundary(), Multid::PLANE, "Stone", _SIMPLE_ACCUMULATION_) {
-//    Stone_Explicit_Bifurcation_Curves *stoneBifurcation = new Stone_Explicit_Bifurcation_Curves((StoneFluxFunction*)&fluxFunction());
+    //    Stone_Explicit_Bifurcation_Curves *stoneBifurcation = new Stone_Explicit_Bifurcation_Curves((StoneFluxFunction*)&fluxFunction());
     hugoniotArray_->operator []("IMPLICIT") = new Hugoniot_Curve(&fluxFunction(), &accumulation());
-//    hugoniotArray_->operator []("STONE") = new StoneExplicitHugoniot((StoneFluxFunction *)&fluxFunction(),(StoneAccumulation *) &accumulation(),&getBoundary(),stoneBifurcation);
-//    hugoniotArray_->operator []("STONE") = new StoneHugoniot(&fluxFunction(), &accumulation());
-//    secondaryBifurcationArray_->operator []("IMPLICIT") = new Secondary_Bifurcation(&fluxFunction(), &accumulation(), &fluxFunction(), &accumulation());
+    //    hugoniotArray_->operator []("STONE") = new StoneExplicitHugoniot((StoneFluxFunction *)&fluxFunction(),(StoneAccumulation *) &accumulation(),&getBoundary(),stoneBifurcation);
+    //    hugoniotArray_->operator []("STONE") = new StoneHugoniot(&fluxFunction(), &accumulation());
+    //    secondaryBifurcationArray_->operator []("IMPLICIT") = new Secondary_Bifurcation(&fluxFunction(), &accumulation(), &fluxFunction(), &accumulation());
 
 
 
-    setHugoniotFunction(new Hugoniot_Curve(&copy.fluxFunction(), &copy.accumulation()));
+
+    hugoniot_continuation_method_ = new HugoniotContinuation2D2D(&fluxFunction(), &accumulation(), &getBoundary());
+
+    shockCurve_ = new ShockCurve(getHugoniotContinuationMethod());
+
+    compositeCurve_ = new CompositeCurve(accumulationFunction_, fluxFunction_, &getBoundary(), shockCurve_, 0);
+
     setDoubleContactFunction(new Double_Contact());
     setViscosityMatrix(copy.getViscosityMatrix());
     preProcessedBoundary_ = copy.getPreProcessedBoundary()->clone();

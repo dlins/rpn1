@@ -1,14 +1,14 @@
 #ifndef _SUBINFLECTIONTPCW_
 #define _SUBINFLECTIONTPCW_
 
-#include "Thermodynamics_SuperCO2_WaterAdimensionalized.h"
+#include "Thermodynamics.h"
 #include "HugoniotFunctionClass.h"
 #include "Flux2Comp2PhasesAdimensionalized.h"
 #include "Accum2Comp2PhasesAdimensionalized.h"
 
 class SubinflectionTPCW : public HugoniotFunctionClass {
 private:
-    const Thermodynamics_SuperCO2_WaterAdimensionalized *td;
+    const Thermodynamics *td;
     const Flux2Comp2PhasesAdimensionalized * fluxFunction_;
     double phi;
 

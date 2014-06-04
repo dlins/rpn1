@@ -409,3 +409,41 @@ void Utilities::regularly_sampled_segment(const RealVector &p, const RealVector 
     return;
 }
 
+int Utilities::Bhaskara(double b, double c, double &x1, double &x2){
+
+    double disc = b*b - 4.0*c;
+    if (disc < 0.0) return BHASKARA_COMPLEX_ROOTS;
+
+    double sqrt_disc = sqrt(disc);
+
+    // Rewrite the lines below if there is a 
+    // catastrophic cancellation due to c being
+    // too small.
+    //
+    x1 = 0.5*(-b + sqrt_disc);
+    x2 = 0.5*(-b - sqrt_disc);
+
+    if (sqrt_disc < 1e-8*std::abs(b)) return BHASKARA_DOUBLE_ROOTS;
+    else                              return BHASKARA_TWO_DIFFERENT_ROOTS;
+}
+
+int Utilities::Bhaskara(double a, double b, double c, double &x1, double &x2){
+
+    double disc = b*b - 4.0*a*c;
+    if (disc < 0.0) return BHASKARA_COMPLEX_ROOTS;
+
+    double sqrt_disc = sqrt(disc);
+
+    // Rewrite the lines below if there is a 
+    // catastrophic cancellation due to c being
+    // too small.
+    //
+    int den = .5*(1.0/a);
+
+    x1 = den*(-b + sqrt_disc);
+    x2 = den*(-b - sqrt_disc);
+
+    if (sqrt_disc < 1e-8*std::abs(b)) return BHASKARA_DOUBLE_ROOTS;
+    else                              return BHASKARA_TWO_DIFFERENT_ROOTS;
+}
+

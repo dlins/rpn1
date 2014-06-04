@@ -1,11 +1,11 @@
 #include "FluxSinglePhaseVaporAdimensionalized.h"
 
-FluxSinglePhaseVaporAdimensionalized::FluxSinglePhaseVaporAdimensionalized(const FluxSinglePhaseVaporAdimensionalized &copy) {
+FluxSinglePhaseVaporAdimensionalized::FluxSinglePhaseVaporAdimensionalized(const FluxSinglePhaseVaporAdimensionalized &copy):FluxFunction(FluxParams(RealVector(2))) {
 
     thermo = copy.thermo;
 }
 
-FluxSinglePhaseVaporAdimensionalized::FluxSinglePhaseVaporAdimensionalized(Thermodynamics *t) {
+FluxSinglePhaseVaporAdimensionalized::FluxSinglePhaseVaporAdimensionalized(Thermodynamics *t):FluxFunction(FluxParams(RealVector(2))) {
 
     thermo = t;
 }

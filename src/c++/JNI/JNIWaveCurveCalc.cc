@@ -118,9 +118,11 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc
     const AccumulationFunction * accum = &RpNumerics::getPhysics().accumulation();
 
     RarefactionCurve rc(accum, flux, boundary);
+    
+    HugoniotContinuation * hug = RpNumerics::getPhysics().getSubPhysics(0).getHugoniotContinuationMethod();
 
-    HugoniotContinuation_nDnD hug(flux, accum, boundary);
-    ShockCurve sc(&hug);
+//    HugoniotContinuation_nDnD hug(flux, accum, boundary);
+    ShockCurve sc(hug);
 
     CompositeCurve cmp(accum, flux, boundary, &sc, 0);
 
@@ -196,11 +198,11 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc
 
     if (originNumber == 11) {
 
-        wavecurvefactory.wavecurve(realVectorInput, familyNumber, timeDirection, &hug, *hwc, reason_why, s);
+        wavecurvefactory.wavecurve(realVectorInput, familyNumber, timeDirection, hug, *hwc, reason_why, s);
     }
 
     if ((originNumber == 1) || (originNumber == 2) || (originNumber == 3)) {
-        wavecurvefactory.wavecurve_from_boundary(realVectorInput, edgeNumber, familyNumber, timeDirection, &hug, *hwc, reason_why, s);
+        wavecurvefactory.wavecurve_from_boundary(realVectorInput, edgeNumber, familyNumber, timeDirection, hug, *hwc, reason_why, s);
     }
 
 
@@ -215,14 +217,14 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc
 
         inflectionCurve.curve(& RpNumerics::getPhysics().fluxFunction(), & RpNumerics::getPhysics().accumulation(), *gv, familyNumber, left_vrs);
 
-        wavecurvefactory.wavecurve_from_inflection(left_vrs, realVectorInput, familyNumber, timeDirection, &hug, *hwc, reason_why, s);
+        wavecurvefactory.wavecurve_from_inflection(left_vrs, realVectorInput, familyNumber, timeDirection, hug, *hwc, reason_why, s);
     }
 
 
     if (originNumber == 13) {
 
         WaveCurve * waveCurve = RpNumerics::getWaveCurve(curveNumber);
-        wavecurvefactory.wavecurve_from_wavecurve(*waveCurve, realVectorInput, &hug, *hwc, reason_why, s);
+        wavecurvefactory.wavecurve_from_wavecurve(*waveCurve, realVectorInput, hug, *hwc, reason_why, s);
 
     }
 

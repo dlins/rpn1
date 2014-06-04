@@ -117,6 +117,11 @@ class WaveCurve;
             }
     };
 
+//#define TESTEVAPEXTENSION
+#ifdef TESTEVAPEXTENSION
+#include "Evap_Extension.h"
+#endif
+
 class CompositeCurve {
     private:
     protected:
@@ -130,7 +135,7 @@ class CompositeCurve {
         // For integrating as a ODE.
         int family;        
         double tolerance;
-        RealVector reference_vector;
+        RealVector reference_vector, composite_reference_vector;
         double referencedeterminant; // If referencedeterminant
         
         // TODO: This should be replaced by a pointer to the rarefaction curve as a whole. A class RarefactionCurvePoints should be created
@@ -174,6 +179,10 @@ class CompositeCurve {
 //        void transition_with_explicit_bifurcation(const RealVector &rarcmp_point, double initial_time, RealVector &out, double &final_time, int &index_of_explicit_bifurcation);
 
         int normalize_with_respect_to_whom;
+
+        #ifdef TESTEVAPEXTENSION
+        Evap_Extension *evapextension;
+        #endif
     public:
         CompositeCurve(const AccumulationFunction *a, const FluxFunction *f, const Boundary *b, ShockCurve *s, Explicit_Bifurcation_Curves *ebc);
         virtual ~CompositeCurve();
@@ -196,7 +205,7 @@ class CompositeCurve {
 //                  int &reason_why,
 //                  int &edge);
 
-        int curve(const AccumulationFunction *RarAccum, const FluxFunction *RarFlux,
+        virtual int curve(const AccumulationFunction *RarAccum, const FluxFunction *RarFlux,
                   const Boundary *RarBoundary, 
                   const Curve &rarcurve,
 //                  std::vector<RealVector> &rarcurve, std::vector<double> &lambda,
@@ -227,6 +236,10 @@ class CompositeCurve {
         int transition_with_explicit_bifurcation(const ODE_Solver *odesolver, const RealVector &rarcmp_point, double init_time, RealVector &out, double &final_time);
 
 //        static int characteristic_shock_signal_event(const RealVector &where, double &diff_lambda, int *obj, int * /*not used*/);
+
+        #ifdef TESTEVAPEXTENSION
+        void set_evap_extension(Evap_Extension *e){evapextension = e; return;}
+        #endif
 
 };
 

@@ -95,7 +95,7 @@ int WaveCurveFactory::Liu_half_wavecurve(const ReferencePoint &ref,
 
             std::stringstream increase_string;
             increase_string << "Before rar. Inc. = " << increase;
-            TestTools::pause(increase_string);
+
 
             int info_rar = rarefactioncurve->curve(current_curve_initial_point,
                                                    family,
@@ -263,7 +263,7 @@ int WaveCurveFactory::Liu_half_wavecurve(const ReferencePoint &ref,
                 for (int i = 0; i < cmpcurve.curve.size(); i++) cmpcurve.back_curve_pointer[i] = rarefaction_list.back();
 
                 std::cout << "cmpcurve.back_curve_index = " << cmpcurve.back_curve_index << std::endl;
-                TestTools::pause("Composite computed, check console!");
+
                 hwc.wavecurve.push_back(cmpcurve);
 
                 future_curve_initial_point     = cmpcurve.last_point;
@@ -349,7 +349,7 @@ int WaveCurveFactory::Liu_half_wavecurve(const ReferencePoint &ref,
             std::cout << "WaveCurveFactory. shck_info = " << shck_info << ", shock_stopped_because = " << shock_stopped_because << std::endl;
 
             std::cout << "Speed at first shockpoint = " << shkcurve.speed[0] << std::endl;
-            TestTools::pause("After shock");
+
 
             shkcurve.back_curve_index = hwc.wavecurve.size() - 1;
             hwc.wavecurve.push_back(shkcurve);
@@ -460,7 +460,7 @@ int WaveCurveFactory::Liu_half_wavecurve(const ReferencePoint &ref,
                     return WAVECURVE_OK;
                 }
                 else {
-                    TestTools::pause("Non-classical shock. The code is not written.\nStopping.");
+
 
                     return WAVECURVE_OK;
                 }
@@ -591,7 +591,7 @@ int WaveCurveFactory::wavecurve_from_inflection(const std::vector<RealVector> &i
         int start_as;
 
         std::cout << "i = " << i << ", lambda = " << lambda[family] << ", e[family].r = " << e[family].r << std::endl;
-        TestTools::pause();
+
 
         if (
             (lambda[family] > e[family].r && increase == SPEED_INCREASE) ||

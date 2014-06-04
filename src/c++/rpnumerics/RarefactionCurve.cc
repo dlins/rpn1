@@ -135,20 +135,24 @@ int RarefactionCurve::initialize(const RealVector &p, int fam, const RealVector 
 // TODO: Errors can occur when initializing.
 //       Deal with it.
 int RarefactionCurve::initialize(const RealVector &p, int fam, int increase, RealVector &ref, double &dd){
+    
     int n = p.size();
 
     JetMatrix F_jet(n), G_jet(n);
     f->jet(p, F_jet, 2);
     g->jet(p, G_jet, 2);    
 
+
     DoubleMatrix F_J = F_jet.Jacobian();
     DoubleMatrix G_J = G_jet.Jacobian();
 
+    
     std::vector<DoubleMatrix> F_H = F_jet.Hessian();
     std::vector<DoubleMatrix> G_H = G_jet.Hessian();
 
     std::vector<eigenpair> e;
     Eigen::eig(n, F_J.data(), G_J.data(), e);
+
 
     double lambda = e[fam].r;
     RealVector rm(n, e[fam].vrr.data()); // Right eigenvector

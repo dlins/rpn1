@@ -76,7 +76,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_SubInflectionCurveCalc_nativeCalc(JNIE
     Accum2Comp2PhasesAdimensionalized * accumulationFunction = (Accum2Comp2PhasesAdimensionalized *) & tpcw.accumulation();
 
 
-    Thermodynamics_SuperCO2_WaterAdimensionalized * thermo = fluxFunction->getThermo();
+    Thermodynamics * thermo = fluxFunction->getThermo();
 
 
     SubinflectionTP newSubinflection(accumulationFunction->accumulationParams().component(0));

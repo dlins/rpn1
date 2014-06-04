@@ -23,7 +23,7 @@
 
 SubPhysics::SubPhysics(const FluxFunction & fluxFunction, const AccumulationFunction & accumulationFunction, const Boundary & boundary, const Space & space, const char * id, int type) : fluxFunction_((FluxFunction *) fluxFunction.clone()),
 accumulationFunction_((AccumulationFunction*) accumulationFunction.clone()),  hugoniotCurveArray_(new map<string, HugoniotCurve *>()),hugoniotArray_(new map<string, Hugoniot_Locus *>()),secondaryBifurcationArray_(new map<string, Secondary_Bifurcation_Interface *>()),
-boundary_(boundary.clone()),
+boundary_(boundary.clone()), extensionCurveArray_(new map<string, Extension *>()),
 space_(new Space(space)),
 ID_(id),
 type_(type) {
@@ -33,7 +33,7 @@ type_(type) {
 
 SubPhysics::SubPhysics(const Boundary & boundary, const Space & space, const char * name, int type) : boundary_(boundary.clone()),
 space_(new Space(space)), hugoniotCurveArray_(new map<string, HugoniotCurve *>()),hugoniotArray_(new map<string, Hugoniot_Locus *>()),secondaryBifurcationArray_(new map<string, Secondary_Bifurcation_Interface *>()),
-ID_(name),
+ID_(name),extensionCurveArray_(new map<string, Extension *>()),
 type_(type) {
     setHugoniotContinuationMethod(new HugoniotContinuation2D2D(fluxFunction_, accumulationFunction_, &getBoundary()));
     //    setShockMethod(new Shock());
@@ -100,6 +100,20 @@ HugoniotCurve * SubPhysics::getHugoniotCurve(const string & hugoniotName) {
 
 
 
+Extension * SubPhysics::getExtensionMethod(const string& methodName) {
+
+    if (extensionCurveArray_->count(methodName) == 1) {
+        return extensionCurveArray_->operator [](methodName);
+    } else {
+
+        cerr<<"Method not implemented "<<endl;
+    }
+
+}
+
+
+
+
 Secondary_Bifurcation_Interface * SubPhysics::getSecondaryBifurcationMethod(const string& methodName) {
 
     if (secondaryBifurcationArray_->count(methodName) == 1) {
@@ -112,7 +126,9 @@ Secondary_Bifurcation_Interface * SubPhysics::getSecondaryBifurcationMethod(cons
 }
 
 
-
+CompositeCurve * SubPhysics::getCompositeCurve(){
+    return compositeCurve_;
+}
 const Boundary * SubPhysics::getPreProcessedBoundary()const {
     return preProcessedBoundary_;
 }
@@ -191,6 +207,9 @@ SubPhysics::~SubPhysics() {
 
     delete viscosityMatrix_;
     delete hugoniotArray_;
+    
+    delete extensionCurveArray_;
+    delete shockCurve_;
     
 //    delete hugoniotCurveArray_;
     

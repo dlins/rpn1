@@ -1,5 +1,6 @@
 #include "CompositeCurve.h"
 #include "WaveCurve.h"
+#include "Evap_Extension.h"
 
 int CompositeCurve::composite_field(int *two_n, double *xi, double *pointpair, double *field, int *obj, double* /* Not used */){
     CompositeCurve *composite_object = (CompositeCurve*)obj;
@@ -46,6 +47,7 @@ int CompositeCurve::composite_field(int *two_n, double *xi, double *pointpair, d
     // rarefaction.
     //
     RealVector reference_vector = composite_object->reference_vector;
+    RealVector composite_reference_vector = composite_object->composite_reference_vector;
 
     JetMatrix Fm_jet(n);
     rf->jet(rarefaction_point, Fm_jet, 2);
@@ -102,7 +104,9 @@ int CompositeCurve::composite_field(int *two_n, double *xi, double *pointpair, d
     if (std::abs(det(characteristic_matrix)) < composite_object->tolerance){
         std::cout << "Composite field. det = " << det(characteristic_matrix) << std::endl;
 
-        return FIELD_ERROR; // TODO: Check this tolerance!
+        std::cout << "Characteristic matrix =\n" << characteristic_matrix << std::endl;
+
+        //return FIELD_ERROR; // TODO: Check this tolerance!
     }
 
     //
@@ -112,6 +116,8 @@ int CompositeCurve::composite_field(int *two_n, double *xi, double *pointpair, d
         std::cout << "Composite flux. info_solve = " << info_solve;
         return FIELD_ERROR;
     }
+
+    if (cf*composite_reference_vector < 0.0) cf = -cf;
 
     if (composite_object->normalize_with_respect_to_whom == NORMALIZE_WITH_RESPECT_TO_COMPOSITE){
         double inv_nrm = 1.0/norm(cf);
@@ -520,6 +526,7 @@ RealVector CompositeCurve::composite_field(const RealVector &final_point_pair){
 
 void CompositeCurve::all_eigenvalues(const RealVector &p, int family, RealVector &point_eigenvalues){
     std::vector<double> lambda;
+    cout<<"em composite curve"<<" "<<flux<<" "<<accum<<" "<<p<<endl;
     Eigen::fill_eigenvalues(flux, accum, p, lambda);
 
     point_eigenvalues.resize(lambda.size());
@@ -533,8 +540,12 @@ void CompositeCurve::add_point_to_curve(const RealVector &p, int back, const Cur
     curve.back_pointer.push_back(back);
 
     RealVector point_eigenvalues;
+    cout<<"Antes de eigen"<<endl;
     all_eigenvalues(p, family, point_eigenvalues);
 
+    cout<<"Depois de eigen"<<endl;
+    
+    
     curve.eigenvalues.push_back(point_eigenvalues);
 
 //    curve.speed.push_back(point_eigenvalues(family));
@@ -586,15 +597,90 @@ int CompositeCurve::curve(const AccumulationFunction *RarAccum, const FluxFuncti
 
     // Store the first point.
     //
+    cout<<"composite point: "<<composite_initial_point<<endl;
     add_point_to_curve(composite_initial_point, last_point_in_rarefaction, rarcurve, compositecurve);
     new_rarcurve.curve.push_back(rarcurve.curve[last_point_in_rarefaction]);
+    cout<<"Depois da 596"<<endl;
 
     // Initialize the composite curve.
     //
     int index_of_corresponding_point_in_rarefaction;
 
+    #ifdef TESTEVAPEXTENSION
+    if (where_composite_begins == COMPOSITE_BEGINS_AT_INFLECTION){
+        if (evapextension != 0){
+            int retreat = 10; //rarcurve.curve.size()/2;
+
+            int index_last_rar = rarcurve.curve.size() - 1; // TODO: This may be replaced by an index, not necessarily the last element of the rarefaction will be used.
+            RealVector rar_last_point = rarcurve.curve[index_last_rar]; // TODO: See line above.
+
+            std::cout << "rar_last_point = " << rar_last_point << std::endl;
+
+            if (rarcurve.curve.size() > retreat){
+                // Find the point beyond the inflection curve
+                int retreat_index = index_last_rar - retreat; // rarcurve.size() - retreat - 1;
+                RealVector first_backwards_rarefaction_point = rarcurve.curve[retreat_index];
+
+//                for (int i = 0; i < retreat; i++){
+//                    first_backwards_rarefaction_point = rarcurve.curve[retreat_index - i];
+
+//                    RealVector ext_p;
+//                    int info_extension = evapextension->extension(first_backwards_rarefaction_point, ext_p);
+//                    if (info_extension == EXTENSION_OK) add_point_to_curve(ext_p, retreat_index - i, rarcurve, compositecurve);
+//                    else return COMPOSITE_ERROR;
+
+//                    index_last_rar--;
+//                }
+
+//                if (!boundary->inside(first_composite_point)){
+//                    // TODO: Maybe boundary->intersection() should be used. Decide it.
+//                    std::cout << "Out was outside the domain!" << std::endl;
+//                    return COMPOSITE_ERROR_AT_BEGINNING_OUT_OF_BOUNDARY;
+//                }
+
+                // TODO: If the composite does not start at the inflection, the last valid index of the rarefaction must be passed.
+                //
+                RealVector first_composite_point;
+                int info_extension = evapextension->extension(first_backwards_rarefaction_point, first_composite_point);
+
+                std::stringstream ss;
+                ss << "Rar. = " << first_backwards_rarefaction_point << ", cmp. = " << first_composite_point;
+                TestTools::pause(ss);
+
+//                if (info_extension == EXTENSION_OK) add_point_to_curve(first_composite_point, retreat_index, rarcurve, compositecurve);
+//                else return COMPOSITE_ERROR;
+
+                reference_vector = first_backwards_rarefaction_point - rarcurve.curve[retreat_index + 1];
+                normalize(reference_vector);
+
+                composite_reference_vector = first_composite_point - rarcurve.curve[retreat_index];
+                normalize(composite_reference_vector);
+
+                for (int i = 0; i < n; i++){
+                    rarcmp_point(i)     = first_backwards_rarefaction_point(i);
+                    rarcmp_point(i + n) = first_composite_point(i);
+                }
+
+                add_point_to_curve(RealVector(n, n, rarcmp_point), retreat_index, rarcurve, compositecurve);
+
+                // The second point in the composite corresponds to this point in the rarefaction:
+                //
+                index_of_corresponding_point_in_rarefaction = index_last_rar - retreat;      
+
+                // Invoke the field on this point
+                double temp_xi = 0.0;
+                RealVector temp_field(two_n);
+                composite_field(&two_n, &temp_xi, rarcmp_point.components(), temp_field.components(), (int*)this, (double*)0);
+
+                std::cout << "The false field was: " << temp_field << std::endl;
+            }
+            else return COMPOSITE_ERROR;
+        }
+    }
+    #else
     if (where_composite_begins == COMPOSITE_BEGINS_AT_INFLECTION){
         std::cout << "CompositeCurve: COMPOSITE_BEGINS_AT_INFLECTION" << std::endl;
+        
 
         // TODO: This retreat may be insufficient for some cases. What to do: if the auxiliary shockcurve reaches the boundary,
         //       which is evidently wrong, increase the value of retreat and try again.
@@ -664,6 +750,10 @@ int CompositeCurve::curve(const AccumulationFunction *RarAccum, const FluxFuncti
             reference_vector = first_backwards_rarefaction_point - rarcurve.curve.back();
             normalize(reference_vector);
 
+            // New, composite_reference_vector added.
+            composite_reference_vector = first_composite_point - rarcurve.curve.back();
+            normalize(composite_reference_vector);
+
             for (int i = 0; i < n; i++){
                 rarcmp_point(i)     = first_backwards_rarefaction_point(i);
                 rarcmp_point(i + n) = first_composite_point(i);
@@ -678,6 +768,7 @@ int CompositeCurve::curve(const AccumulationFunction *RarAccum, const FluxFuncti
         else { // rarcurve.curve.size() > retreat
         }
     }
+    #endif
     else if (where_composite_begins == COMPOSITE_AFTER_COMPOSITE){
         std::cout << "CompositeCurve: COMPOSITE_AFTER_COMPOSITE" << std::endl;
 
@@ -685,6 +776,10 @@ int CompositeCurve::curve(const AccumulationFunction *RarAccum, const FluxFuncti
         //
         reference_vector = rarcurve.curve[rarcurve.curve.size() - 2] - rarcurve.curve[rarcurve.curve.size() - 1];
         normalize(reference_vector);
+
+        // New, composite_reference_vector added.
+        composite_reference_vector = composite_initial_point - rarcurve.curve[rarcurve.curve.size() - 1];
+        normalize(composite_reference_vector);
 
         for (int i = 0; i < n; i++){
             rarcmp_point(i)     = rarcurve.curve[last_point_in_rarefaction /*rarcurve.curve.size() - 1*/](i); //first_backwards_rarefaction_point(i);
@@ -695,6 +790,8 @@ int CompositeCurve::curve(const AccumulationFunction *RarAccum, const FluxFuncti
         //
         index_of_corresponding_point_in_rarefaction = last_point_in_rarefaction - 1;
     }
+
+
 
     // Compute the rest of the composite curve.
 
@@ -929,6 +1026,10 @@ int CompositeCurve::curve(const AccumulationFunction *RarAccum, const FluxFuncti
         //
         for (int i = 0; i < n; i++) reference_vector(i) = out(i) - rarcmp_point(i);
         normalize(reference_vector);
+
+        // New, composite_reference_vector added.
+        for (int i = 0; i < n; i++) composite_reference_vector(i) = out(n + i) - rarcmp_point(n + i);
+        normalize(composite_reference_vector);
 
         init_time = final_time;
         final_time += deltaxi;

@@ -1,6 +1,6 @@
 #include "AccumulationSinglePhaseLiquidAdimensionalized.h"
 
-AccumulationSinglePhaseLiquidAdimensionalized::AccumulationSinglePhaseLiquidAdimensionalized(const AccumulationSinglePhaseLiquidAdimensionalized &copy) : AccumulationFunction(copy.paramsVector()){
+AccumulationSinglePhaseLiquidAdimensionalized::AccumulationSinglePhaseLiquidAdimensionalized(const AccumulationSinglePhaseLiquidAdimensionalized &copy) : AccumulationFunction(copy.accumulationParams()){
 
     thermo = copy.thermo;
 }
@@ -23,7 +23,7 @@ int AccumulationSinglePhaseLiquidAdimensionalized::jet(const WaveState &w, JetMa
     if (degree < 0 || degree > 2) return -1; // ABORTED_PROCEDURE
     
     
-    double phi_=paramsVector().component(0);
+    double phi_=accumulationParams().component(0);
 
     double xc    = w(0); // s_{sigma} = sg in FracFlow2PhasesHorizontal & FracFlow2PhasesVertical
     double Theta = w(1);

@@ -39,11 +39,11 @@ tc_(thermo), flash_(flash), SubPhysics(*defaultBoundary(flash),
 
     accumulationFunction_ = new AccumulationSinglePhaseVaporAdimensionalized(phi, tc_);
 
-    setHugoniotFunction(new Hugoniot_TP());
+//    setHugoniotFunction(new Hugoniot_TP());
 
 
     
-   setHugoniotContinuationMethod(new HugoniotContinuation3D2D(fluxFunction_, accumulationFunction_, getBoundary()));
+   setHugoniotContinuationMethod(new HugoniotContinuation3D2D(fluxFunction_, accumulationFunction_, &getBoundary()));
 
     setDoubleContactFunction(new Double_Contact_TP());
 
@@ -138,10 +138,10 @@ vector<double> * TPCWVapor::getParams() {
 }
 
 TPCWVapor::TPCWVapor(const TPCWVapor & copy) :
-SubPhysics(*copy.getBoundary()->clone(), *new Space("R2", 2), "TPCWVapor", _GENERAL_ACCUMULATION_) {
+SubPhysics(*copy.getBoundary().clone(), *new Space("R2", 2), "TPCWVapor", _GENERAL_ACCUMULATION_) {
 
     setDoubleContactFunction(new Double_Contact_TP());
-    setHugoniotContinuationMethod(new HugoniotContinuation3D2D(fluxFunction_, accumulationFunction_, getBoundary()));
+    setHugoniotContinuationMethod(new HugoniotContinuation3D2D(fluxFunction_, accumulationFunction_, &getBoundary()));
 
 
 }
