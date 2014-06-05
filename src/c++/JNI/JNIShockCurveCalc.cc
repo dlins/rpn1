@@ -81,12 +81,15 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc(JNIEnv * env, jobj
     FluxFunction * fluxFunction = (FluxFunction *) & RpNumerics::getPhysics().getSubPhysics(0).fluxFunction();
     AccumulationFunction * accumulationFunction = (AccumulationFunction *) & RpNumerics::getPhysics().getSubPhysics(0).accumulation();
 
-    Boundary * tempBoundary = (Boundary *) RpNumerics::getPhysics().getSubPhysics(0).getPreProcessedBoundary();
+//    Boundary * tempBoundary = (Boundary *) RpNumerics::getPhysics().getSubPhysics(0).getPreProcessedBoundary();
 
 
-    HugoniotContinuation2D2D hc(fluxFunction, accumulationFunction, tempBoundary);
+    HugoniotContinuation * hc = RpNumerics::getPhysics().getSubPhysics(0).getHugoniotContinuationMethod();
 
-    ShockCurve shock(&hc);
+    
+    ShockCurve * shock = RpNumerics::getPhysics().getSubPhysics(0).getShockMethod();
+    
+//    ShockCurve shock(&hc);
 
 
     ReferencePoint ref(realVectorInput, fluxFunction, accumulationFunction, 0);
@@ -115,7 +118,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc(JNIEnv * env, jobj
     fluxFunction->jet(candidate, F_j, 0);
     accumulationFunction->jet(candidate, G_j, 0);
 
-    double sigma = hc.sigma(F_j.function(), G_j.function(), ref.F, ref.G); //Velocidade do choque no ponto de referencia
+    double sigma = hc->sigma(F_j.function(), G_j.function(), ref.F, ref.G); //Velocidade do choque no ponto de referencia
 
 
     RealVector direction;
@@ -129,7 +132,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc(JNIEnv * env, jobj
 
 
 
-    int shck_info = shock.curve_engine(ref, realVectorInput, direction, familyIndex,
+    int shck_info = shock->curve_engine(ref, realVectorInput, direction, familyIndex,
             SHOCKCURVE_SHOCK_CURVE,
             DONT_CHECK_EQUALITY_AT_LEFT,
             SHOCK_SIGMA_EQUALS_LAMBDA_OF_FAMILY_AT_RIGHT,
@@ -146,9 +149,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc(JNIEnv * env, jobj
 
     cout<<"Sigma em C"<<sigma<<endl;
 
-    double nativeEigenValues [dimension];
+    double nativeEigenValues [2];
 
-    for (int i = 0; i < dimension; i++) {
+    for (int i = 0; i < 2; i++) {
 
         cout<<"Tamanho de autovalores: "<<ref.e[i].r<<endl;
         nativeEigenValues[i] = ref.e[i].r;
@@ -190,7 +193,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc(JNIEnv * env, jobj
         (env)->SetDoubleArrayRegion(jTempArray, 0, tempVector.size(), dataCoords);
 
 
-        jdoubleArray jeigenValuesArray = (env)->NewDoubleArray(dimension);
+        jdoubleArray jeigenValuesArray = (env)->NewDoubleArray(2);
         RealVector eigenValue = shkcurve.eigenvalues[i];
         (env)->SetDoubleArrayRegion(jeigenValuesArray, 0, eigenValue.size(), (double *) eigenValue);
 

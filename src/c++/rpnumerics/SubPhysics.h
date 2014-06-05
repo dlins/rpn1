@@ -103,11 +103,10 @@ public:
 
     void setHugoniotContinuationMethod(HugoniotContinuation *);
 
-    void setShockMethod(ShockMethod *);
-    
+     
     CompositeCurve * getCompositeCurve();
 
-    ShockMethod * getShockMethod();
+    ShockCurve * getShockMethod();
 
     HugoniotContinuation * getHugoniotContinuationMethod();
 
