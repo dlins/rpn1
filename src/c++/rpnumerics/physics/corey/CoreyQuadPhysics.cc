@@ -11,7 +11,6 @@
  * Includes:
  */
 #include "CoreyQuadPhysics.h"
-#include "Hugoniot_Curve.h"
 #include "Double_Contact.h"
 #include "HugoniotContinuation2D2D.h"
 #include "ImplicitHugoniotCurve.h"
@@ -38,7 +37,6 @@ CoreyQuadPhysics::CoreyQuadPhysics() : SubPhysics(CoreyQuad(CoreyQuad_Params()),
     hugoniotCurveArray_->operator []("IMPLICIT") = new ImplicitHugoniotCurve(&fluxFunction(),&accumulation(), &getBoundary());
     
     setDoubleContactFunction(new Double_Contact());
-    setHugoniotFunction(new Hugoniot_Curve(&fluxFunction(), &accumulation()));
     setViscosityMatrix(new Viscosity_Matrix());
     preProcessedBoundary_ = defaultBoundary();
 
@@ -72,7 +70,6 @@ CoreyQuadPhysics::CoreyQuadPhysics(const CoreyQuadPhysics & copy) : SubPhysics(c
 
 
     setDoubleContactFunction(new Double_Contact());
-    setHugoniotFunction(new Hugoniot_Curve(&copy.fluxFunction(), &copy.accumulation()));
     setViscosityMatrix(copy.getViscosityMatrix());
     preProcessedBoundary_ = copy.getPreProcessedBoundary()->clone();
 

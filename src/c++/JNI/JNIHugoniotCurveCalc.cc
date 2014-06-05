@@ -410,14 +410,14 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
     ReferencePoint refPoint(Uref, &RpNumerics::getPhysics().fluxFunction(), &RpNumerics::getPhysics().accumulation(), 0);
 
 
-    Hugoniot_Locus *hugoniotCurve = RpNumerics::getPhysics().getSubPhysics(0).getHugoniotFunction();
+    HugoniotCurve *hugoniotCurve = RpNumerics::getPhysics().getSubPhysics(0).getHugoniotCurve("IMPLICIT");
 
 
 
 
-    hugoniotCurve->curve(gv, refPoint, 0, hugoniotPolyLineVector, transitionList);
+//    hugoniotCurve->curve(gv, refPoint, 0, hugoniotPolyLineVector, transitionList);
 
-
+  hugoniotCurve->curve(refPoint, 13, hugoniotPolyLineVector);
 
 
 

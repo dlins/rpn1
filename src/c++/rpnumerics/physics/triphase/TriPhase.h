@@ -17,7 +17,6 @@
 #include "IsoTriang2DBoundary.h"
 #include  "CapilParams.h"
 #include  "PermParams.h"
-#include "Hugoniot_Curve.h"
 #include "Double_Contact.h"
 #include "HugoniotContinuation2D2D.h"
 #include "ViscosityParams.h"

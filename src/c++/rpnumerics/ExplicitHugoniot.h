@@ -6,12 +6,12 @@
 #include "ReferencePoint.h"
 #include "Curve.h"
 #include "ParametricPlot.h"
-#include "Hugoniot_Locus.h"
+
 
 // TODO: This class only works appropiately if the accumulation is trivial.
 //       Add a check here or in the Physics to make sure.
 //
-class ExplicitHugoniot:public Hugoniot_Locus {
+class ExplicitHugoniot {
     private:
     protected:
         const Boundary *b;

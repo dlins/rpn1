@@ -404,30 +404,30 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
         myH_ = getHeight();
         myW_ = getWidth();
 
-        GeometryGraph geom = new GeometryGraph();
-        geom.markPoints(scene());
-        geom.paintComponent(g, scene(), this);
-
-        if (UIController.instance().getState() instanceof AREASELECTION_CONFIG) {        // acrescentei isso (Leandro)
-            getCastedUI().pointMarkBuffer().clear();
-            showCursorLine_ = false;
-            repaint();
-            getCastedUI().resetCursorCoords();
-        }
-
-        if (UIController.instance().getState() instanceof CLASSIFIERAGENT_CONFIG) {      // acrescentei isso (Leandro)
-            getCastedUI().pointMarkBuffer().clear();
-            showCursorLine_ = false;
-            repaint();
-            getCastedUI().resetCursorCoords();
-        }
-
-        if (UIController.instance().getState() instanceof VELOCITYAGENT_CONFIG) {        // acrescentei isso (Leandro)
-            getCastedUI().pointMarkBuffer().clear();
-            showCursorLine_ = false;
-            repaint();
-            getCastedUI().resetCursorCoords();
-        }
+//        GeometryGraph geom = new GeometryGraph();
+//        geom.markPoints(scene());
+//        geom.paintComponent(g, scene(), this);
+//
+//        if (UIController.instance().getState() instanceof AREASELECTION_CONFIG) {        // acrescentei isso (Leandro)
+//            getCastedUI().pointMarkBuffer().clear();
+//            showCursorLine_ = false;
+//            repaint();
+//            getCastedUI().resetCursorCoords();
+//        }
+//
+//        if (UIController.instance().getState() instanceof CLASSIFIERAGENT_CONFIG) {      // acrescentei isso (Leandro)
+//            getCastedUI().pointMarkBuffer().clear();
+//            showCursorLine_ = false;
+//            repaint();
+//            getCastedUI().resetCursorCoords();
+//        }
+//
+//        if (UIController.instance().getState() instanceof VELOCITYAGENT_CONFIG) {        // acrescentei isso (Leandro)
+//            getCastedUI().pointMarkBuffer().clear();
+//            showCursorLine_ = false;
+//            repaint();
+//            getCastedUI().resetCursorCoords();
+//        }
 
         //** Leandro: fim.
         //*****************************************

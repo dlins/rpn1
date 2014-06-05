@@ -84,11 +84,12 @@
             
             
             
-              <CURVECONFIGURATION name="riemannprofile">
+          
+            <CURVECONFIGURATION name="riemannprofile">
                 <CURVEPARAM name="speedrange" value="0 3"/>
+                <CURVEPARAM name="Yrange" value="0 1.0"/>
+                
             </CURVECONFIGURATION>
-
-            
             
             
             
@@ -99,7 +100,7 @@
                 <CURVEPARAM name="edge" value="0"/>
                 <CURVEPARAM name="origin" value="13"/>
                 <CURVEPARAM name="curve" value="0"/>
-                 <CURVEPARAM name="direction" value="10"/>
+                <CURVEPARAM name="direction" value="10"/>
                 <CURVEPARAM name="family" value="0"/>
                 
             </CURVECONFIGURATION>
@@ -139,7 +140,7 @@
             <CURVECONFIGURATION name="secondarybifurcation">
                 <CURVEPARAM name="edge" value="0"/>
                 <CURVEPARAM name="numberofsteps" value="128"/>
-                 <CURVEPARAM name="method" value="IMPLICIT"/>
+                <CURVEPARAM name="method" value="IMPLICIT"/>
             </CURVECONFIGURATION>
     
 

@@ -198,7 +198,7 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setMethod
         cout << nativeMethodType << " " << nativeMethodName << endl;
     }
 
-    delete RpNumerics::getPhysics().getSubPhysics(0).getHugoniotFunction();
+
 
     if (RpNumerics::getPhysics().ID().compare("CoreyQuad") == 0) {
 

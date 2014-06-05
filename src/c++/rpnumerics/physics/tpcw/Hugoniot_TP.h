@@ -2,9 +2,16 @@
 #define _HUGONIOT_TP_
 
 
-#include "Hugoniot_Locus.h"
+#include "ImplicitFunction.h"
 
-class Hugoniot_TP : public ImplicitFunction,public Hugoniot_Locus {
+#include <vector>
+#include "ColorCurve.h"
+#include "Curve.h"
+#include "ColorCurve.h"
+#include "ContourMethod.h"
+
+
+class Hugoniot_TP : public ImplicitFunction{
 private:
     RealVector Fref, Gref;
     RealVector Uref;

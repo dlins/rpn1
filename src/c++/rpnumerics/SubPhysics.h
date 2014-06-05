@@ -21,7 +21,6 @@
 #include "Space.h"
 #include  "Multid.h"
 #include "eigen.h"
-#include "Hugoniot_Locus.h"
 #include "HugoniotCurve.h"
 #include "ThreeImplicitFunctions.h"
 #include "Double_Contact_Function.h"
@@ -44,7 +43,7 @@ class SubPhysics {
 private:
 
 
-    Hugoniot_Locus * hugoniotFunction_;
+
 
     Double_Contact_Function * doubleContactFunction_;
     ShockMethod * shock_method_;
@@ -61,7 +60,6 @@ protected:
     AccumulationFunction * accumulationFunction_;
     Viscosity_Matrix * viscosityMatrix_;
     Boundary * preProcessedBoundary_;
-    std::map<string, Hugoniot_Locus *> * hugoniotArray_;
     std::map<string, HugoniotCurve *> * hugoniotCurveArray_;
     std::map<string, Extension *> * extensionCurveArray_;
     std::map<string, Secondary_Bifurcation_Interface *> * secondaryBifurcationArray_;
@@ -91,13 +89,11 @@ public:
 
     const FluxFunction & fluxFunction() const;
 
-    Hugoniot_Locus * getHugoniotFunction() const;
 
     Viscosity_Matrix * getViscosityMatrix() const;
 
     void setViscosityMatrix(Viscosity_Matrix *);
 
-    void setHugoniotFunction(Hugoniot_Locus *);
     
     HugoniotCurve * getHugoniotCurve(const string &);
 
@@ -126,8 +122,6 @@ public:
     const Boundary * getPreProcessedBoundary()const;
 
     Extension * getExtensionMethod(const string &);
-    
-    Hugoniot_Locus * getHugoniotMethod(const string &);
     
     Secondary_Bifurcation_Interface * getSecondaryBifurcationMethod(const string &);
 

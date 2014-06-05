@@ -68,7 +68,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CompositeCalc_nativeCalc(JNIEnv * env,
 
     }
 
-    int dimension = realVectorInput.size();
+    int dimension = 2;// TODO !!!!
 
     env->DeleteLocalRef(inputPhasePointArray);
 
@@ -136,9 +136,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CompositeCalc_nativeCalc(JNIEnv * env,
     Curve cmpcurve, new_rarcurve;
 
     int composite_stopped_because;
-    
-
-    cout<<"Depois da rarefacao"<<cmp<<" "<<rarcurve.curve.size()<<endl;
 
     //    int edge;
 
@@ -154,28 +151,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CompositeCalc_nativeCalc(JNIEnv * env,
             composite_stopped_because,
             edge);
     
-    
-//    Curve temprarcurve,newtemp;
-//    RealVector tempDirection;
-//    int newEdge;
-//    
-//      int info_cmp = cmp->curve(0, 0, 0,
-//            temprarcurve,
-//            temprarcurve.curve.size() - 1, temprarcurve.curve.size() - 1,
-//            0, 1e-3,
-//            COMPOSITE_BEGINS_AT_INFLECTION, // COMPOSITE_BEGINS_AT_INFLECTION or COMPOSITE_AFTER_COMPOSITE.
-//            0,
-//            newtemp,
-//            cmpcurve,
-//            tempDirection,
-//            composite_stopped_because,
-//            newEdge);
-//    
-    
-    
-    
-    
-
 
     ReferencePoint referencePoint(realVectorInput, flux, accum, 0);
 
@@ -185,7 +160,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CompositeCalc_nativeCalc(JNIEnv * env,
 
     for (int i = 0; i < dimension; i++) {
 
-        cout << "Tamanho de autovalores: " << referencePoint.e[i].r << endl;
         nativeEigenValues[i] = referencePoint.e[i].r;
 
     }
@@ -212,9 +186,10 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CompositeCalc_nativeCalc(JNIEnv * env,
     for (int i = 1; i < cmpcurve.curve.size(); i++) {
 
         RealVector tempVector = cmpcurve.curve[i];
-        //        cout<<tempVector<<endl;
 
 
+        RpNumerics::getPhysics().getSubPhysics(0).postProcess(tempVector);
+        
         double * dataCoords = tempVector;
 
         jdoubleArray jTempArray = (env)->NewDoubleArray(tempVector.size());
@@ -224,7 +199,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CompositeCalc_nativeCalc(JNIEnv * env,
         double speed = cmpcurve.speed[i];
 
         //  cmpcurve.eigenvalues //Autovalores em cada ponto da composta
-
 
 
         jdoubleArray jeigenValuesArray = (env)->NewDoubleArray(dimension);

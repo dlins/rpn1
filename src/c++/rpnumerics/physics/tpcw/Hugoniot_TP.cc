@@ -1,7 +1,7 @@
 #include <iostream>
 
 #include "Hugoniot_TP.h"
-#include "Hugoniot_Curve.h"
+
 
 
 Hugoniot_TP::Hugoniot_TP(const FluxFunction * flux, const AccumulationFunction * accum)

@@ -43,6 +43,16 @@
                 <CURVEPARAM name="family" value="0"/>
                 
             </CURVECONFIGURATION>
+            
+            
+            
+              <CURVECONFIGURATION name="riemannprofile">
+                <CURVEPARAM name="speedrange" value="0 1.0"/>
+                <CURVEPARAM name="Yrange" value="0 1.0"/>
+                
+            </CURVECONFIGURATION>
+
+            
 
 
 
@@ -64,9 +74,14 @@
                 <CURVEPARAM name="resolution" value="60 60"/>
             </CURVECONFIGURATION>
 
-            <CURVECONFIGURATION name="hugoniotcurve">
-                <CURVEPARAM name="resolution" value="20 20"/>
+            
+             <CURVECONFIGURATION name="hugoniotcurve">
+                <CURVEPARAM name="resolution" value="120 120"/>
+                <CURVEPARAM name="method" value="IMPLICIT"/>
+                <CURVEPARAM name="case" value="0"/>
+                
             </CURVECONFIGURATION>
+            
     
     
             <CURVECONFIGURATION name="rarefactionextension">
@@ -146,8 +161,8 @@
 
                 <PROJDESC name="Axis1 Axis0">
                     <VIEWPARAM name="axis" value="0 1"/>
-                    <VIEWPARAM name="vpwidth" value="400"/>
-                    <VIEWPARAM name="vpheight" value="400"/>
+                    <VIEWPARAM name="vpwidth" value="800"/>
+                    <VIEWPARAM name="vpheight" value="800"/>
                     <VIEWPARAM name="iso2equi" value="false"/>
 
                 </PROJDESC>

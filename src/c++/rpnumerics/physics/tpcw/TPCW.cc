@@ -67,7 +67,6 @@ SubPhysics(*defaultBoundary(), *new Space("R3", 3), "TPCW", _GENERAL_ACCUMULATIO
     }
 
 
-    setHugoniotFunction(new Hugoniot_TP(&fluxFunction(), &accumulation()));
     setDoubleContactFunction(new Double_Contact_TP());
 
     RealVector min(getBoundary().minimums());

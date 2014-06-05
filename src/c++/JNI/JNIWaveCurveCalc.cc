@@ -73,9 +73,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc
     jmethodID setReferencePointID = (env)->GetMethodID(classWaveCurveBranch, "setReferencePoint", "(Lrpnumerics/OrbitPoint;)V");
 
 
-
-
-
     jmethodID shockCurveConstructor = (env)->GetMethodID(shockCurveClass, "<init>", "([Lrpnumerics/OrbitPoint;II)V");
     jmethodID rarefactionOrbitConstructor = (env)->GetMethodID(classRarefactionOrbit, "<init>", "([Lrpnumerics/OrbitPoint;II)V");
     jmethodID compositeConstructor = (env)->GetMethodID(classComposite, "<init>", "([Lrpnumerics/OrbitPoint;II)V");
@@ -107,9 +104,11 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc
         realVectorInput.component(i) = input[i];
     }
 
+
+    RpNumerics::getPhysics().getSubPhysics(0).preProcess(realVectorInput);
     env->DeleteLocalRef(inputPhasePointArray);
 
-    const Boundary * boundary = &RpNumerics::getPhysics().boundary();
+    const Boundary * boundary = RpNumerics::getPhysics().getSubPhysics(0).getPreProcessedBoundary();
 
     const FluxFunction * flux = &RpNumerics::getPhysics().fluxFunction();
 
@@ -118,22 +117,24 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc
     const AccumulationFunction * accum = &RpNumerics::getPhysics().accumulation();
 
     RarefactionCurve rc(accum, flux, boundary);
-    
+
     HugoniotContinuation * hug = RpNumerics::getPhysics().getSubPhysics(0).getHugoniotContinuationMethod();
 
-//    HugoniotContinuation_nDnD hug(flux, accum, boundary);
+
     ShockCurve sc(hug);
 
-    CompositeCurve cmp(accum, flux, boundary, &sc, 0);
+
+    CompositeCurve * cmp = RpNumerics::getPhysics().getSubPhysics(0).getCompositeCurve();
+
 
     LSODE lsode;
     ODE_Solver *odesolver;
     odesolver = &lsode;
 
     int dimension = realVectorInput.size();
-    
 
-    WaveCurveFactory wavecurvefactory(accum, flux, boundary, odesolver, &rc, &sc, &cmp);
+
+    WaveCurveFactory wavecurvefactory(accum, flux, boundary, odesolver, &rc, &sc, cmp);
 
 
 
@@ -283,13 +284,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc
                 RealVector resizedVector(tempVector);
                 RpNumerics::getPhysics().getSubPhysics(0).postProcess(resizedVector);
 
-                cout << tempVector << endl;
-
-
                 double * dataCoords = resizedVector;
-
-
-
 
                 //Reading only coodinates
                 jdoubleArray jTempArray = (env)->NewDoubleArray(tempVector.size());

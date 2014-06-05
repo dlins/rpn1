@@ -526,7 +526,7 @@ RealVector CompositeCurve::composite_field(const RealVector &final_point_pair){
 
 void CompositeCurve::all_eigenvalues(const RealVector &p, int family, RealVector &point_eigenvalues){
     std::vector<double> lambda;
-    cout<<"em composite curve"<<" "<<flux<<" "<<accum<<" "<<p<<endl;
+
     Eigen::fill_eigenvalues(flux, accum, p, lambda);
 
     point_eigenvalues.resize(lambda.size());
@@ -540,12 +540,9 @@ void CompositeCurve::add_point_to_curve(const RealVector &p, int back, const Cur
     curve.back_pointer.push_back(back);
 
     RealVector point_eigenvalues;
-    cout<<"Antes de eigen"<<endl;
+
     all_eigenvalues(p, family, point_eigenvalues);
 
-    cout<<"Depois de eigen"<<endl;
-    
-    
     curve.eigenvalues.push_back(point_eigenvalues);
 
 //    curve.speed.push_back(point_eigenvalues(family));

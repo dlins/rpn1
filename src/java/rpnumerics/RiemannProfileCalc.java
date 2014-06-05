@@ -8,9 +8,11 @@ package rpnumerics;
 
 import rpn.configuration.Configuration;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import wave.util.RealVector;
 
-public class RiemannProfileCalc implements RpCalculation {
+public class RiemannProfileCalc implements RpCalculation,RpDiagramCalc {
     //
     // Constants
     //
@@ -97,5 +99,26 @@ public class RiemannProfileCalc implements RpCalculation {
 
     public RpSolution recalc(List<Area> area) throws RpException {
         throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public RpSolution createDiagramSource() {
+        try {
+            return calc();
+        } catch (RpException ex) {
+            Logger.getLogger(RiemannProfileCalc.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+    @Override
+    public RpSolution updateDiagramSource() {
+        try {
+            return calc();
+        } catch (RpException ex) {
+            Logger.getLogger(RiemannProfileCalc.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+
     }
 }
