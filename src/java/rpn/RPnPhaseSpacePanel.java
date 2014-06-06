@@ -47,10 +47,16 @@ import wave.multid.DimMismatchEx;
 import wave.multid.model.MultiGeometryImpl;
 import wave.multid.model.MultiPolygon;
 
+
+
 public class RPnPhaseSpacePanel extends JPanel implements Printable {
     //
     // Constants
     //
+
+    static public int ALWAYSONTOP_LASTINPUT_CURSOR_MODE=0;
+    static public int ALERT_LASTINPUT_CURSOR_MODE=1;
+    static public int NEVER_LASTINPUT_CURSOR_MODE=2;
 
     //*** alterei aqui  (Leandro)
     static public Color DEFAULT_BOUNDARY_COLOR = Color.gray;
@@ -84,12 +90,26 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
         return cursorLine_;
     }
 
+
+    public static void setShowLastInputCursorMode(int mode) {
+
+	LASTINPUTCURSORMODE = mode;
+    }
+
+
     //
     // Members
     //
+
+    private static int LASTINPUTCURSORMODE = ALERT_LASTINPUT_CURSOR_MODE;
+
     // a flag to say the current location is close enough...
     private boolean showLastInputCursorPosHighlight_ = false;
-    private boolean showLastInputCursorPos_ = true;
+
+    // a flag to say if last cursor pos should be displayed
+    private static boolean showLastInputCursorPos_ = true;
+
+    // the cursor orientation
     private static boolean showCursorLine_ = true;
 
     public List<MultiGeometryImpl> getConvexSelection() {
@@ -187,7 +207,7 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
         cursorLine_ = aSetCursorLine_;
     }
 
-    public boolean isShowLastInputCursorPos() {
+    public static boolean isShowLastInputCursorPos() {
         return showLastInputCursorPos_;
     }
 
@@ -195,6 +215,9 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
         return blinkLastInputCursorPos_;
     }
 
+    public static void setShowLastInputCursorPos(boolean showCursor) {
+        showLastInputCursorPos_ = showCursor;
+    }
     
     public void setShowLastInputCursorPosHighlight(boolean showCursor) {
         showLastInputCursorPosHighlight_ = showCursor;
@@ -526,11 +549,19 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
 		&& !phaseSpaceName.startsWith("Left") && !phaseSpaceName.startsWith("Right")) {
 
 
+	    Coords2D dcCoords = new Coords2D();
+	    RealVector lastValues = UIController.instance().globalInputTable().lastValues();
+            CoordsArray wcCoords = new Coords2D(lastValues.toDouble());
+            scene().getViewingTransform().viewPlaneTransform(wcCoords, dcCoords);
+
+            // CALCULATES THE LAST INPUT CURSOR
+            int xCursor = new Double(dcCoords.getX()).intValue();
+            int yCursor = new Double(dcCoords.getY()).intValue();
+
 	    if (showLastInputCursorPosHighlight_) {
 
 		g.setColor(DEFAULT_LASTINPUT_HIGHLIGHT_CURSOR_COLOR);
             	((Graphics2D) g).setStroke(DEFAULT_LASTINPUT_CURSOR_HIGHLIGHT_STROKE);
-		
             }
 	    else
 	    {
@@ -538,15 +569,14 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
             	((Graphics2D) g).setStroke(DEFAULT_LASTINPUT_CURSOR_STROKE);
             }
 
-	    Coords2D dcCoords = new Coords2D();
-	    RealVector lastValues = UIController.instance().globalInputTable().lastValues();
-            CoordsArray wcCoords = new Coords2D(lastValues.toDouble());
-            scene().getViewingTransform().viewPlaneTransform(wcCoords, dcCoords);
 
-            int xCursor = new Double(dcCoords.getX()).intValue();
-            int yCursor = new Double(dcCoords.getY()).intValue();
-            g.drawLine(xCursor, 0, xCursor, getHeight());
-            g.drawLine(0, yCursor, getWidth(), yCursor);
+            if ((LASTINPUTCURSORMODE == ALERT_LASTINPUT_CURSOR_MODE &&
+		 showLastInputCursorPosHighlight_) || 
+		(LASTINPUTCURSORMODE == ALWAYSONTOP_LASTINPUT_CURSOR_MODE)) { 
+
+              	g.drawLine(xCursor, 0, xCursor, getHeight());
+               	g.drawLine(0, yCursor, getWidth(), yCursor);
+	    }
 
 	    // returns to default values	
             g.setColor(prev);

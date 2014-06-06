@@ -41,13 +41,14 @@ public class RPnPublishProxy extends RPnMediatorProxy {
         if ((reqId == null) && (clientId == null))  {
 
                 System.out.println("preparing to publish the object instance... \n");
-                RPnPublisher publisher = new RPnPublisher(RPnNetworkStatus.trimLocalJmsPrefix(RPnNetworkStatus.RPN_COMMAND_TOPIC_NAME),true);
+                RPnPublisher publisher = null;
                 ObjectInputStream in = new ObjectInputStream(request.getInputStream());
 
                 try {
 
                     System.out.println("Will now publish the object instance... \n");
                     Object obj = in.readObject();
+		    publisher = new RPnPublisher(RPnNetworkStatus.trimLocalJmsPrefix(RPnNetworkStatus.RPN_COMMAND_TOPIC_NAME),true);
                     publisher.publish(obj);
 
                 } catch (ClassNotFoundException e) {
@@ -55,7 +56,8 @@ public class RPnPublishProxy extends RPnMediatorProxy {
                 }
 
                 in.close();
-                publisher.close();           
+		if (publisher != null)
+                	publisher.close();           
         }
 
 //            responseErrorMsg(response,WRONG_INPUT_ERROR_MSG);
