@@ -157,6 +157,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc(JNIEnv * env, jobj
         nativeEigenValues[i] = ref.e[i].r;
 
     }
+    
 
     jdoubleArray eigenValuesArray = (env)->NewDoubleArray(dimension);
 
@@ -183,7 +184,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc(JNIEnv * env, jobj
 
         RpNumerics::getPhysics().getSubPhysics(0).postProcess(tempVector);
 
-        double lambda = shkcurve.speed[i];
+//        double lambda = shkcurve.speed[i];
+        
+        double lambda = 0;
 
         //        shkcurve.eigenvalues // Autovalores em cada ponto
 

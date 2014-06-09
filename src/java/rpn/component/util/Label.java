@@ -44,15 +44,15 @@ public class Label extends GraphicsUtil {
     @Override
     public void draw(Graphics2D g) {
         
-        Font f = new Font("Arial", Font.BOLD, 15);
-        
-        Coords2D dcPoint2 = new Coords2D();
-        CoordsArray wcPoint2 = new CoordsArray((RealVector) wcObjects_.get(0));
-        getViewingTransform().viewPlaneTransform(wcPoint2, dcPoint2);
-        
-        GlyphVector v = f.createGlyphVector(g.getFontRenderContext(), (String)wcObjects_.get(1));
-        
-        g.drawGlyphVector(v, (float) dcPoint2.getX(), (float) dcPoint2.getY());
+//        Font f = new Font("Arial", Font.BOLD, 15);
+//        
+//        Coords2D dcPoint2 = new Coords2D();
+//        CoordsArray wcPoint2 = new CoordsArray((RealVector) wcObjects_.get(0));
+//        getViewingTransform().viewPlaneTransform(wcPoint2, dcPoint2);
+//        
+//        GlyphVector v = f.createGlyphVector(g.getFontRenderContext(), (String)wcObjects_.get(1));
+//        
+//        g.drawGlyphVector(v, (float) dcPoint2.getX(), (float) dcPoint2.getY());
     }
     
     @Override

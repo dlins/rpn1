@@ -121,7 +121,8 @@ public class PhaseSpacePanel2DController extends ComponentUI implements PhaseSpa
                     
 //                    System.out.println("Ponto mais proximo: "+closestPoint);
                     ViewingTransform viewingTransform = panel.scene().getViewingTransform();
-                    Coords2D wcCoords = new Coords2D(closestPoint.getElement(0), closestPoint.getElement(1));
+
+                    CoordsArray wcCoords = new CoordsArray(closestPoint);
                     Coords2D painelCoords = new Coords2D();
                     viewingTransform.viewPlaneTransform(wcCoords, painelCoords);
                    

@@ -179,7 +179,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionCurveCalc_calc(JNIEnv * env
         RealVector resizedVector(tempVector);
         RpNumerics::getPhysics().getSubPhysics(0).postProcess(resizedVector);
 
-        cout << tempVector << endl;
+//        cout << tempVector << endl;
 
 
         double * dataCoords = resizedVector;

@@ -48,10 +48,23 @@ public class ZoomPlotCommand extends RpModelPlotCommand implements RPnMenuComman
     public void execute() {
 
         List<RealVector> wcVertices = selectedArea_.getWCVertices();
+        
+        
+        for (RealVector realVector : wcVertices) {
+            
+            System.out.println(realVector);
+            
+        }
+        
+        
+        
 
         RealVector min = wcVertices.get(0);
         RealVector max = wcVertices.get(2);
         Boundary boundary = new RectBoundary(min, max);
+        
+        
+        System.out.println("boundary: " + min+" "+ max);
 
         Scene scene = phaseSpaceFrameZoom(boundary);
 
@@ -97,7 +110,7 @@ public class ZoomPlotCommand extends RpModelPlotCommand implements RPnMenuComman
 
         System.out.println("Retangular: " + clipping.isRectangular());
         Space zoomSpace = new Space("", RPNUMERICS.domainDim());
-        int[] testeArrayIndex = {0, 1};
+        int[] testeArrayIndex = {0,1};
 
         // tanto faz a meu ver a proporcao em DC...
         RPnProjDescriptor projDescriptor = new RPnProjDescriptor(zoomSpace, "", width, height, testeArrayIndex, false);
