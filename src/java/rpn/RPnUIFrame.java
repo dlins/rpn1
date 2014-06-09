@@ -72,10 +72,11 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     private JButton inputCoordsButton = new JButton("Input Coords ...");
     private JMenuItem createSVGImageMenuItem = new JMenuItem();
     private JMenuItem printMenuItem = new JMenuItem();
+
     private static RPnPhaseSpaceFrame[] frames_, auxFrames_;
+
     private RPnMenuCommand commandMenu_ = null;
     private JMenuItem networkMenuItem = new JMenuItem();
-    private JCheckBoxMenuItem showCursorMenuItem_ = new JCheckBoxMenuItem("Show Cursor Lines");
     private JToolBar toolBar_ = new JToolBar();
     private JToolBar utilitiesToolBar_ = new JToolBar();
     private JToolBar auxiliarCurvesToolBar_ = new JToolBar();
@@ -91,6 +92,11 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     private JMenuItem editMenuItem4 = new JMenuItem("Clears Classifiers");
     private JMenuItem editMenuItem5 = new JMenuItem("Starts with Black Background");
     private JMenuItem editMenuItem6 = new JMenuItem("Starts with White Background");
+
+    private JMenu cursorMenu = new JMenu("Show Last Input Cursor");
+    private JMenuItem alwaysOnCursorMenuItem = new JMenuItem("Always On");
+    private JMenuItem alertCursorMenuItem = new JMenuItem("Alert");
+    private JMenuItem neverCursorMenuItem = new JMenuItem("Never");
 
     private static FileWriter logWriter_;
 
@@ -848,31 +854,15 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
         contentPane.add(utilitiesToolBarPanel);
         getContentPane().add(statusLabel_);
-
         setPreferredSize(new Dimension(750, 850));
-
         setResizable(true);
-
         setTitle(RPNUMERICS.physicsID());
-
         fileMenu.setText("File");
-
         jMenuFileExit.setText("Exit");
 
-        showCursorMenuItem_.setSelected(true);
-
-        UIController.instance().showCursorLines(showCursorMenuItem_.isSelected());
+        UIController.instance().showCursorLines(true);
 
         KeyStroke keyStroke = KeyStroke.getKeyStroke('l');
-        showCursorMenuItem_.setAccelerator(keyStroke);
-        showCursorMenuItem_.addActionListener(
-                new java.awt.event.ActionListener() {
-
-                    public void actionPerformed(ActionEvent e) {
-                        UIController.instance().showCursorLines(showCursorMenuItem_.isSelected());
-
-                    }
-                });
 
         showMainCurvesPaneltem_.addActionListener(
                 new java.awt.event.ActionListener() {
@@ -1124,6 +1114,36 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
             }
         });
 
+        alwaysOnCursorMenuItem.addActionListener(
+                new java.awt.event.ActionListener() {
+
+                    public void actionPerformed(ActionEvent e) {
+			RPnPhaseSpacePanel.setShowLastInputCursorMode(RPnPhaseSpacePanel.ALWAYSONTOP_LASTINPUT_CURSOR_MODE);
+                        
+
+                    }
+                });
+
+        alertCursorMenuItem.addActionListener(
+                new java.awt.event.ActionListener() {
+
+                    public void actionPerformed(ActionEvent e) {
+			RPnPhaseSpacePanel.setShowLastInputCursorMode(RPnPhaseSpacePanel.ALERT_LASTINPUT_CURSOR_MODE);
+                       
+
+                    }
+                });
+
+        neverCursorMenuItem.addActionListener(
+                new java.awt.event.ActionListener() {
+
+                    public void actionPerformed(ActionEvent e) {
+			RPnPhaseSpacePanel.setShowLastInputCursorMode(RPnPhaseSpacePanel.NEVER_LASTINPUT_CURSOR_MODE);
+                      
+
+                    }
+                });
+
         fileMenu.add(saveSessionMenuItem_);
         fileMenu.add(exportMenuItem_);
         fileMenu.add(matlabExportMenuItem_);
@@ -1141,7 +1161,14 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         jMenuBar1.add(fileMenu);
         jMenuBar1.add(editMenu);
         jMenuBar1.add(viewMenu_);
-        viewMenu_.add(showCursorMenuItem_);
+
+	cursorMenu.add(alwaysOnCursorMenuItem);
+	cursorMenu.add(alertCursorMenuItem);
+	cursorMenu.add(neverCursorMenuItem);
+
+        viewMenu_.add(cursorMenu);
+        viewMenu_.addSeparator();
+
         viewMenu_.add(showMainCurvesPaneltem_);
         viewMenu_.add(showLeftCurvesPaneltem_);
         viewMenu_.add(showRightCurvesPaneltem_);
@@ -1169,7 +1196,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         editMenu.addSeparator();
 
         editMenu.add(FillPhaseSpaceCommand.instance());
-
+        editMenu.addSeparator();
     }
 
     private void shockConfigMenu() {

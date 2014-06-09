@@ -47,6 +47,8 @@ public class UIController extends ComponentUI {
     static public final Cursor WAIT_CURSOR = Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR);
     static public final Cursor DEFAULT_CURSOR = Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR);
     static public UI_ACTION_SELECTED INITSTATE = null;
+
+
     //
     // Members
     //
@@ -462,6 +464,7 @@ public class UIController extends ComponentUI {
         // state dependent
         handler_.userInputComplete(this, userInput);
     }
+
 
     /**
      * Sets the state of the application. The application works as a state
