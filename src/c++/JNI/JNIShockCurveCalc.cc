@@ -70,7 +70,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc(JNIEnv * env, jobj
 
     int dimension = realVectorInput.size();
 
-   
+    RpNumerics::getPhysics().getSubPhysics(0).preProcess(realVectorInput);
+
+
 
     if (increase == 20)
         increase = RAREFACTION_SPEED_SHOULD_INCREASE;
@@ -81,20 +83,22 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc(JNIEnv * env, jobj
     FluxFunction * fluxFunction = (FluxFunction *) & RpNumerics::getPhysics().getSubPhysics(0).fluxFunction();
     AccumulationFunction * accumulationFunction = (AccumulationFunction *) & RpNumerics::getPhysics().getSubPhysics(0).accumulation();
 
-//    Boundary * tempBoundary = (Boundary *) RpNumerics::getPhysics().getSubPhysics(0).getPreProcessedBoundary();
+    //    Boundary * tempBoundary = (Boundary *) RpNumerics::getPhysics().getSubPhysics(0).getPreProcessedBoundary();
 
 
     HugoniotContinuation * hc = RpNumerics::getPhysics().getSubPhysics(0).getHugoniotContinuationMethod();
 
-    
+
     ShockCurve * shock = RpNumerics::getPhysics().getSubPhysics(0).getShockMethod();
-    
-//    ShockCurve shock(&hc);
+
+    //    ShockCurve shock(&hc);
 
 
     ReferencePoint ref(realVectorInput, fluxFunction, accumulationFunction, 0);
 
     int n = realVectorInput.size();
+
+
     RealVector r(n);
     for (int i = 0; i < n; i++) r(i) = ref.e[familyIndex].vrr[i];
 
@@ -146,17 +150,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc(JNIEnv * env, jobj
             shock_stopped_because,
             edge);
 
-
-    cout<<"Sigma em C"<<sigma<<endl;
-
     double nativeEigenValues [2];
 
-    for (int i = 0; i < 2; i++) {
-
-        cout<<"Tamanho de autovalores: "<<ref.e[i].r<<endl;
-        nativeEigenValues[i] = ref.e[i].r;
-
-    }
     
 
     jdoubleArray eigenValuesArray = (env)->NewDoubleArray(dimension);
@@ -166,7 +161,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc(JNIEnv * env, jobj
 
     jdoubleArray refPointCoords = (env)->NewDoubleArray(dimension);
 
-    (env)->SetDoubleArrayRegion(refPointCoords, 0, dimension, (double *)ref.point);
+    (env)->SetDoubleArrayRegion(refPointCoords, 0, dimension, (double *) ref.point);
 
     jobject referenceOrbitPoint = (env)->NewObject(classOrbitPoint, orbitPointConstructor, refPointCoords, eigenValuesArray, sigma);
 
@@ -184,8 +179,10 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc(JNIEnv * env, jobj
 
         RpNumerics::getPhysics().getSubPhysics(0).postProcess(tempVector);
 
-//        double lambda = shkcurve.speed[i];
-        
+        //        cout<<tempVector<<endl;
+
+        //        double lambda = shkcurve.speed[i];
+
         double lambda = 0;
 
         //        shkcurve.eigenvalues // Autovalores em cada ponto
@@ -203,7 +200,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc(JNIEnv * env, jobj
 
         jobject orbitPoint = (env)->NewObject(classOrbitPoint, orbitPointConstructor, jTempArray, jeigenValuesArray, lambda);
 
-        
+
         (env)->SetObjectArrayElement(orbitPointArray, i, orbitPoint);
 
         env->DeleteLocalRef(jTempArray);
@@ -217,8 +214,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc(JNIEnv * env, jobj
     jobject rarefactionOrbit = (env)->NewObject(shockCurveClass, shockCurveConstructor, orbitPointArray, familyIndex, increase);
 
     env->CallVoidMethod(rarefactionOrbit, setReferencePointID, referenceOrbitPoint);
-    
-    
+
+
     //Cleaning up
 
 

@@ -52,22 +52,11 @@
                 
             </CURVECONFIGURATION>
 
+                     
+            <CURVECONFIGURATION name="derivativediscriminant">
+                <CURVEPARAM name="u" value="0"/>
+            </CURVECONFIGURATION>
             
-
-
-
-<!--            <METHOD name="Contour">
-                <METHODPARAM  name="x-resolution" value="30" />
-                <METHODPARAM  name="y-resolution" value="30" />
-
-            </METHOD>-->
-
-            <!--
-            <METHOD name="Newton">
-                <METHODPARAM  name="tolerance" value="0.001" />
-            </METHOD>-->
-
-
 
             <CURVECONFIGURATION name="bifurcationcurve">
 

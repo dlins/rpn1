@@ -33,10 +33,7 @@ using namespace std;
 
 JNIEXPORT jobject JNICALL Java_rpnumerics_SubInflectionCurveCalc_nativeCalc(JNIEnv * env, jobject obj) {
 
-    if (Debug::get_debug_level() == 5) {
-        cout << "Em subinflection nativo: " << endl;
-    }
-
+   
     jclass classPhasePoint = (env)->FindClass(PHASEPOINT_LOCATION);
 
     jclass hugoniotSegmentClass = (env)->FindClass(HUGONIOTSEGMENTCLASS_LOCATION);
@@ -83,9 +80,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_SubInflectionCurveCalc_nativeCalc(JNIE
 
     GridValues * gv = RpNumerics::getGridFactory().getGrid("bifurcation");
 
-    if (Debug::get_debug_level() == 5) {
-        cout << gv << endl;
-    }
+
+        cout <<"Phi em sub: "<<accumulationFunction->accumulationParams().component(0) << endl;
+
 
     std::vector< RealVector> outputVector;
 
