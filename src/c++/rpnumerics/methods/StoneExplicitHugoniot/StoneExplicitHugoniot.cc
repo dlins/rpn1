@@ -355,8 +355,8 @@ void StoneExplicitHugoniot::curve(GridValues & grid, ReferencePoint &ref, int ty
 
     RealVector StoneExplicitHugoniot::umbilic(StoneExplicitHugoniot *seh, double phi) {
 
-        return RealVector(2);
 
+        return RealVector(2);
     }
 
     RealVector StoneExplicitHugoniot::G_bif(StoneExplicitHugoniot *seh, double phi) {
@@ -459,8 +459,6 @@ void StoneExplicitHugoniot::curve(GridValues & grid, ReferencePoint &ref, int ty
 
         return hugxy;
     }
-
-    else {
 
     RealVector StoneExplicitHugoniot::generic(StoneExplicitHugoniot *seh, double phi) {
         //    RealVector permeability_params = seh->f->perm().params().params();
@@ -673,6 +671,5 @@ void StoneExplicitHugoniot::curve(GridValues & grid, ReferencePoint &ref, int ty
         hugxy(1) = rho*sin_phi;
 
         return hugxy;
-
     }
 
