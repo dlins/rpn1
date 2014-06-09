@@ -697,7 +697,7 @@ void HyperCube::mkfnbr(int *fnbr_, int *comb_, //fnbr_[nsface_][nsface_], comb_[
             stor[i] = 0;
         }
         if ( Debug::get_debug_level() == 5 ) {
-            cout << "Valor de n_: " << n_ << " Valor de m_: " << m_ << " Valor de nsface_: " << nsface_ << endl;
+            //cout << "Valor de n_: " << n_ << " Valor de m_: " << m_ << " Valor de nsface_: " << nsface_ << endl;
         }
 
         for (i = 0; i < m_ + 1; i++) {
@@ -926,8 +926,8 @@ int HyperCube::cubsol(int *solptr_, double *sol_, int dims_, int *sptr_, int nso
 
 
     if ( Debug::get_debug_level() == 5 ) {
-        cout << "Variaveis inicializadas no contour: " << dims_ << " " << nsoln_ << " " << dimf_ << " " << ncvert_ << " " << n_ << " " << m_ << " " << nsimp_ << " " << nsface_ << " " << nface << endl;
-        cout << "Valor de nsoln_ : " << nsoln_ <<endl;
+        //cout << "Variaveis inicializadas no contour: " << dims_ << " " << nsoln_ << " " << dimf_ << " " << ncvert_ << " " << n_ << " " << m_ << " " << nsimp_ << " " << nsface_ << " " << nface << endl;
+        //cout << "Valor de nsoln_ : " << nsoln_ <<endl;
     }
 
     return nsoln_;
@@ -978,7 +978,7 @@ int HyperCube::mksoln(double *sol_, int dims_, int *sptr_, int nsoln_,
         sptr_[indf] = -1;
         // if the indf-face is not to be considered by mksoln, skip it
         if ( Debug::get_debug_level() == 5 ) {
-            cout <<"Exstfc antes do if "<<exstfc[indf]<<" "<<nsoln_<<endl;
+            //cout <<"Exstfc antes do if "<<exstfc[indf]<<" "<<nsoln_<<endl;
             printf("Inside mksoln(): exstfc[%d] = %d\n", indf, exstfc[indf]); 
         }
         // ************************ I commented out this line (Morante, Wed 09 Feb 2011 11:17:13 PM BRST).*/
@@ -1006,16 +1006,16 @@ int HyperCube::mksoln(double *sol_, int dims_, int *sptr_, int nsoln_,
             if ( Debug::get_debug_level() == 5 ) {
                 printf("After affslv(): flag = %d\n", flag); // I commented out this line (Morante: Wed 09 Feb 2011 11:17:50 PM BRST )
                 //skip the rest if no solution ( note -- pointer initialized to 0 )
-                cout <<"Valor de flag: "<<flag<<endl;
+                //cout <<"Valor de flag: "<<flag<<endl;
                 contador++;
-                cout << "In mksoln, flag(" << contador << "/"<< nsoln_+2 << "): " << flag << endl;
+                //cout << "In mksoln, flag(" << contador << "/"<< nsoln_+2 << "): " << flag << endl;
                 for (int i = 0; i < m_; i++) {
                     for (int j = 0; j < m_+1; j++) {
-                        cout << " " << g[i*(m_+1) + j];
+                        //cout << " " << g[i*(m_+1) + j];
                     }
-                    cout << endl;
+                    //cout << endl;
                 }
-                cout << endl;
+                //cout << endl;
             }
 
  
@@ -1233,7 +1233,7 @@ int HyperCube::affslv(double *x, double *g, int m_, int *wrki) {
     //check for no solution
 
     if ( Debug::get_debug_level() == 5 ) {
-        cout << " x:" << x[0] << " " << x[1] << " " << x[2] << endl;
+        //cout << " x:" << x[0] << " " << x[1] << " " << x[2] << endl;
     }
 
     if (result != 0)

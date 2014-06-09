@@ -14,8 +14,8 @@ TriPhaseAccumulationFunction::~TriPhaseAccumulationFunction(void) {
 int TriPhaseAccumulationFunction::jet(const WaveState &w, JetMatrix &M, int degree) const {
 
 //    if ( Debug::get_debug_level() == 5 ) {
-//        cout << "Entrando em jet acc triphase: " << w.stateSpaceDim() << endl;
-//        cout << "Entrando em tamanho m: " << M.size() << endl;
+//        //cout << "Entrando em jet acc triphase: " << w.stateSpaceDim() << endl;
+//        //cout << "Entrando em tamanho m: " << M.size() << endl;
 //    }
     if (degree >= 0) {
         for (int i = 0; i < w.stateSpaceDim(); i++) M.set(i, w(i));
@@ -27,8 +27,8 @@ int TriPhaseAccumulationFunction::jet(const WaveState &w, JetMatrix &M, int degr
 //                for (int j = 0; j < w.stateSpaceDim(); j++) {
 //                    M(i, j, 0);
 //                    if ( Debug::get_debug_level() == 5 ) {
-//                        cout << "i: " << i << endl;
-//                        cout << "j: " << j << endl;
+//                        //cout << "i: " << i << endl;
+//                        //cout << "j: " << j << endl;
 //                    }
 //                }
 //

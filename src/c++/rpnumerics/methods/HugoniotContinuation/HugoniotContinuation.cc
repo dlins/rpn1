@@ -488,7 +488,7 @@ int HugoniotContinuation::curve_point(const RealVector &previous_point, double p
                                       RealVector &Hugoniot_intersection, double &sigma_between_points,
                                       RealVector &Hugoniot_direction){
                                       
-//    std::cout << "HugoniotContinuation. Entering curve_point, direction = " << direction << std::endl;
+//    std:://cout << "HugoniotContinuation. Entering curve_point, direction = " << direction << std::endl;
 
 //    // TODO: These parameters must belong to the object, and SHOULD be made public. THEY ENTER, CANT STAY HERE
 //    // This is the distance between two consecutive hyperplanes.

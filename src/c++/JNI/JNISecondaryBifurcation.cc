@@ -75,8 +75,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_SecondaryBifurcationCurveCalc_nativeCa
             rightFlux, rightAccum, *gv,
             left_vrs, right_vrs);
     if ( Debug::get_debug_level() == 5 ) {
-        cout << "left_vrs.size()  = " << left_vrs.size() << endl;
-        cout << "right_vrs.size()  = " << right_vrs.size() << endl;
+        //cout << "left_vrs.size()  = " << left_vrs.size() << endl;
+        //cout << "right_vrs.size()  = " << right_vrs.size() << endl;
     }
 
 
@@ -229,7 +229,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_SecondaryBifurcationCurveCalc_nativeCa
     
     
     if ( Debug::get_debug_level() == 5 ) {
-        cout<<"No JNI LEFT: "<<leftPmin<<" "<<rightPmax<<endl;
+        //cout<<"No JNI LEFT: "<<leftPmin<<" "<<rightPmax<<endl;
     }
 
     const Boundary * boundary = RpNumerics::getPhysics().getSubPhysics(0).getPreProcessedBoundary();
@@ -279,7 +279,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_SecondaryBifurcationCurveCalc_nativeCa
 
     
     if ( Debug::get_debug_level() == 5 ) {
-        cout<<"No JNI RIGHT: "<<leftPminR<<" "<<rightPmaxR<<endl;
+        //cout<<"No JNI RIGHT: "<<leftPminR<<" "<<rightPmaxR<<endl;
     }
     
 
@@ -304,8 +304,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_SecondaryBifurcationCurveCalc_nativeCa
             left_vrs, right_vrs);
 
     if ( Debug::get_debug_level() == 5 ) {
-        cout << "left_vrs.size()  = " << left_vrs.size() << endl;
-        cout << "right_vrs.size()  = " << right_vrs.size() << endl;
+        //cout << "left_vrs.size()  = " << left_vrs.size() << endl;
+        //cout << "right_vrs.size()  = " << right_vrs.size() << endl;
     }
 
 

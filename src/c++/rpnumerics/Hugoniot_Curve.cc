@@ -54,7 +54,7 @@ int Hugoniot_Curve::classified_curve(const FluxFunction *f, const AccumulationFu
     // ---
 
     if ( Debug::get_debug_level() == 5 ) {
-        cout << "Hugoniot: classified_curve por continuacao" << endl;
+        //cout << "Hugoniot: classified_curve por continuacao" << endl;
     }
 
     // The continuous curve is stored by Contour2D
@@ -83,7 +83,7 @@ int Hugoniot_Curve::classified_curve(const FluxFunction *f, const AccumulationFu
         colorCurve.classify_continuous_curve(curves[i],refPoint,hugoniot,testeTransitionalList);
         hugoniot_curve.push_back(hugoniot);
         if ( Debug::get_debug_level() == 5 ) {
-            cout << "Size da lista de transicao " << i  <<  "  " << testeTransitionalList.size() << endl;
+            //cout << "Size da lista de transicao " << i  <<  "  " << testeTransitionalList.size() << endl;
         }
 
         // --- Pablo/Leandro 18FEV
@@ -94,7 +94,7 @@ int Hugoniot_Curve::classified_curve(const FluxFunction *f, const AccumulationFu
     }
 
     if ( Debug::get_debug_level() == 5 ) {
-        cout << "Size da lista total " << transitionList.size() << endl;
+        //cout << "Size da lista total " << transitionList.size() << endl;
     }
 
     

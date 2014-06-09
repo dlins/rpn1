@@ -37,7 +37,7 @@ using std::vector;
 JNIEXPORT jobject JNICALL Java_rpnumerics_CompositeCalc_nativeCalc(JNIEnv * env, jobject obj, jobject initialPoint, jint increase, jint familyIndex) {
 
     if (Debug::get_debug_level() == 5) {
-        cout << "chamando JNI composite calc" << endl;
+        //cout << "chamando JNI composite calc" << endl;
     }
 
     unsigned int i;
@@ -73,7 +73,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CompositeCalc_nativeCalc(JNIEnv * env,
     std::vector<RealVector> compositeCurve;
 
     if (Debug::get_debug_level() == 5) {
-        cout << "Chamando com stone" << endl;
+        //cout << "Chamando com stone" << endl;
     }
 
     FluxFunction * flux = (FluxFunction *) RpNumerics::getPhysics().fluxFunction().clone();
@@ -83,13 +83,13 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CompositeCalc_nativeCalc(JNIEnv * env,
     Boundary * boundary = RpNumerics::getPhysics().boundary().clone();
 
     if (Debug::get_debug_level() == 5) {
-        cout << "Increase: " << increase << endl;
+        //cout << "Increase: " << increase << endl;
     }
 
     //Compute rarefaction
 
     if (Debug::get_debug_level() == 5) {
-        cout << "Increase da rarefacao: " << increase << endl;
+        //cout << "Increase da rarefacao: " << increase << endl;
     }
 
 
@@ -195,8 +195,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CompositeCalc_nativeCalc(JNIEnv * env,
 //    if (cmpcurve.curve.size() == 0)
 //        return NULL;
 
-    cout<<"Tamanho da curva composta: "<<cmpcurve.curve.size()<<endl;
-    cout <<cmpcurve.curve[0]<<endl;
+    //cout<<"Tamanho da curva composta: "<<cmpcurve.curve.size()<<endl;
+    //cout <<cmpcurve.curve[0]<<endl;
 
     //Orbit members creation
     
@@ -207,7 +207,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CompositeCalc_nativeCalc(JNIEnv * env,
     for (int i = 1; i < cmpcurve.curve.size(); i++) {
 
         RealVector tempVector = cmpcurve.curve[i];
-        cout<<tempVector<<endl;
+        //cout<<tempVector<<endl;
 
 
         double * dataCoords = tempVector;

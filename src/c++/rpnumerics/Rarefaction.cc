@@ -490,7 +490,7 @@ double Rarefaction::dirdrv(int n, const RealVector &p, const RealVector &directi
 
 
     if ( Debug::get_debug_level() == 5 ) {
-        cout <<"Ponto: "<<p<<" direcao: "<<direction<<endl;
+        //cout <<"Ponto: "<<p<<" direcao: "<<direction<<endl;
     }
 
     return dirdrv(n, &point[0], &dir[0]);
@@ -789,7 +789,7 @@ int Rarefaction::curve(const RealVector &initial_point,
     Rarefaction::type = type_of_accumulation;
     Rarefaction::family = curve_family;
     if ( Debug::get_debug_level() == 5 ) {
-        cout << "Valor de deltaxi: " << deltaxi << endl;
+        //cout << "Valor de deltaxi: " << deltaxi << endl;
     }
 
 
@@ -813,8 +813,8 @@ int Rarefaction::curve(const RealVector &initial_point,
 //    //
 //    //    
 //    if ( Debug::get_debug_level() == 5 ) {
-//        std::cout << "Test. " << test0 << " dd: " << dirdrv(2, test0, directionTest) << endl;
-//        std::cout << "Test2. " << test1 << " dd: " << dirdrv(2, test1, directionTest) << endl;
+//        std:://cout << "Test. " << test0 << " dd: " << dirdrv(2, test0, directionTest) << endl;
+//        std:://cout << "Test2. " << test1 << " dd: " << dirdrv(2, test1, directionTest) << endl;
 //    }
 //
 //
@@ -1091,7 +1091,7 @@ int Rarefaction::curve(const RealVector &initial_point,
             else 
                 if ( Debug::get_debug_level() == 5 ) {
                     printf("Last point discarded.\n");
-                    std::cout << "Rarefaction. Inflection point at: " << last_point << std::endl;
+                    std:://cout << "Rarefaction. Inflection point at: " << last_point << std::endl;
                     printf("RAREFACTION_NOT_MONOTONOUS\n");
                 }
 

@@ -33,11 +33,11 @@ WaveCurve WaveCurve::operator=(const WaveCurve &orig){
 }
 
 void WaveCurve::add(const Curve &c){
-    std::cout << "WaveCurve, will try to push back." << std::endl;
+//    std:://cout << "WaveCurve, will try to push back." << std::endl;
 
     wavecurve.push_back(c);
 
-    std::cout << "WaveCurve, successfully pushed back." << std::endl;
+//    std:://cout << "WaveCurve, successfully pushed back." << std::endl;
 
     return;
 }

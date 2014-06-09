@@ -89,7 +89,7 @@ NOTE :
 //    int forwardListSize = env->CallIntMethod(forwardList, arrayListSizeMethodID);
 //
 //    if ( Debug::get_debug_level() == 5 ) {
-//        cout << "Tamanho da lista para frente: " << forwardListSize << endl;
+//        //cout << "Tamanho da lista para frente: " << forwardListSize << endl;
 //    }
 //
 //    vector<Curve> forwardCurvesVector;
@@ -135,7 +135,7 @@ NOTE :
 //            int curveType = (env)->CallIntMethod(waveCurveOrbit, getCurveTypeMethodID);
 //
 //            if ( Debug::get_debug_level() == 5 ) {
-//                cout << "Curva para frente C: " << pointBuffer[0] << " " << pointBuffer[1] << " " << correspondingCurveIndex << " " << correspondingPointIndex << " " << curveIndex << " " << curveType << endl;
+//                //cout << "Curva para frente C: " << pointBuffer[0] << " " << pointBuffer[1] << " " << correspondingCurveIndex << " " << correspondingPointIndex << " " << curveIndex << " " << curveType << endl;
 //            }
 //
 //
@@ -156,7 +156,7 @@ NOTE :
 //    int backwardListSize = env->CallIntMethod(backwardList, arrayListSizeMethodID);
 //
 //    if ( Debug::get_debug_level() == 5 ) {
-//        cout << "Tamanho da lista para tras: " << backwardListSize << endl;
+//        //cout << "Tamanho da lista para tras: " << backwardListSize << endl;
 //    }
 //
 //
@@ -197,7 +197,7 @@ NOTE :
 //            int curveType = (env)->CallIntMethod(waveCurveOrbit, getCurveTypeMethodID);
 //
 //            if ( Debug::get_debug_level() == 5 ) {
-//                cout << "Curva para tras C: " << pointBuffer[0] << " " << pointBuffer[1] << " " << correspondingCurveIndex << " " << correspondingPointIndex << " " << curveIndex << " " << curveType << endl;
+//                //cout << "Curva para tras C: " << pointBuffer[0] << " " << pointBuffer[1] << " " << correspondingCurveIndex << " " << correspondingPointIndex << " " << curveIndex << " " << curveType << endl;
 //            }
 //
 //
@@ -218,7 +218,7 @@ NOTE :
 //    vector<RealVector> profile;
 //    
 //    if ( Debug::get_debug_level() == 5 ) {
-//        cout<<"DownLeft: "<<nativeDownLeft<<" TopRight"<<nativeTopRight<<endl;
+//        //cout<<"DownLeft: "<<nativeDownLeft<<" TopRight"<<nativeTopRight<<endl;
 //    }
 //
 //
@@ -229,7 +229,7 @@ NOTE :
 //            profile);
 //
 //    if ( Debug::get_debug_level() == 5 ) {
-//        cout << "Retorno do perfil: " << solverOutput <<" Tamanho do perfil: "<<profile.size()<< endl;
+//        //cout << "Retorno do perfil: " << solverOutput <<" Tamanho do perfil: "<<profile.size()<< endl;
 //    }
 //    
 //    if (profile.size()==0)
@@ -238,9 +238,9 @@ NOTE :
 //
 //
 //    if ( Debug::get_debug_level() == 5 ) {
-//        cout << "Coordenadas do perfil" << endl;
+//        //cout << "Coordenadas do perfil" << endl;
 //        for (int i = 0; i < profile.size(); i++) {
-//            cout << profile.at(i)(2) << " " << profile.at(i)(0) << " " << profile.at(i)(1) << endl;
+//            //cout << profile.at(i)(2) << " " << profile.at(i)(0) << " " << profile.at(i)(1) << endl;
 //        }
 //    }
 //
@@ -251,7 +251,7 @@ NOTE :
 //        RealVector tempVector = profile.at(i);
 //
 //        if ( Debug::get_debug_level() == 5 ) {
-//            cout<<tempVector<<endl;
+//            //cout<<tempVector<<endl;
 //        }
 //
 //        double * dataCoords = tempVector;

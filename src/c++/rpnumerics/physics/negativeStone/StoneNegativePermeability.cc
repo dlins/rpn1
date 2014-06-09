@@ -322,8 +322,8 @@ void StoneNegativePermeability::Diff_PermabilityOil(double sw, double so, double
                    + (1. - epsl_)*(1. - lo_) * expo_ * (expo_ - 1.) * powso2 * denko_;
 
       if ( Debug::get_debug_level() == 5 ) {
-          cout << "Dentro de StoneNegativePermeability::Diff_PermabilityOil, so = " << socno << " (" << NegativeWaterSaturation << ", " << NegativeGasSaturation << ", " << NegativeOilSaturation << "): " << ko << ", " << dko_dsw << ", " << dko_dso << ", " << d2ko_dsw2 << ", " << d2ko_dswso << ", " << d2ko_dso2 << endl;
-          cout << "Params auxiliares: " << StoneNegativeC << ", " << powso1 << ", " << powso2 << endl;
+          //cout << "Dentro de StoneNegativePermeability::Diff_PermabilityOil, so = " << socno << " (" << NegativeWaterSaturation << ", " << NegativeGasSaturation << ", " << NegativeOilSaturation << "): " << ko << ", " << dko_dsw << ", " << dko_dso << ", " << d2ko_dsw2 << ", " << d2ko_dswso << ", " << d2ko_dso2 << endl;
+          //cout << "Params auxiliares: " << StoneNegativeC << ", " << powso1 << ", " << powso2 << endl;
       }
 
     }

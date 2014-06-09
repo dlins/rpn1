@@ -118,7 +118,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ExtensionCurveCalc_nativeCalc(JNIEnv *
 
     Extension_Curve extension;
 
-    cout<<"Inside area: "<<inSideArea<<endl;
+    //cout<<"Inside area: "<<inSideArea<<endl;
 
 
     if (inSideArea==0) {

@@ -163,7 +163,7 @@ int SubinflectionTP::curve(const FluxFunction *f, const AccumulationFunction *a,
     double phi = a->accumulationParams().component(0);
 
     if ( Debug::get_debug_level() == 5 ) {
-        cout << "Valor de phi em subinflection: " << phi << endl;
+        //cout << "Valor de phi em subinflection: " << phi << endl;
     }
 
 

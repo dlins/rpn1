@@ -11,7 +11,7 @@ td(fluxFunction->getThermo()){
 
     phi=params.getPhi();
     if ( Debug::get_debug_level() == 5 ) {
-        cout << "Valor de phi em sub inf: " << phi << endl;
+        //cout << "Valor de phi em sub inf: " << phi << endl;
     }
 }
 

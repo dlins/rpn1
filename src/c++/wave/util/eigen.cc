@@ -367,7 +367,7 @@ int Eigen::eig(int n, const double *A, const double *B, int family, eigenpair &e
     std::vector<eigenpair> e;
     int info = eig(n, A, B, e);
     
-//    std::cout << "Eigen, new method. info = " << info << std::endl;
+//    std:://cout << "Eigen, new method. info = " << info << std::endl;
     print_eigen(e);
 
     if (info == 0) ep = e[family];

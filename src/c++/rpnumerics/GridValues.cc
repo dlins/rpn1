@@ -44,7 +44,7 @@ void GridValues::fill_values_on_grid(const Boundary *b,
 
         
         if ( Debug::get_debug_level() == 5 ) {
-            cout<<"Number of cells: "<<number_of_cells[0]<<" "<<number_of_cells[1]<<endl;
+            //cout<<"Number of cells: "<<number_of_cells[0]<<" "<<number_of_cells[1]<<endl;
         }
         
         grid.resize(number_of_cells[0] + 1, number_of_cells[1] + 1);

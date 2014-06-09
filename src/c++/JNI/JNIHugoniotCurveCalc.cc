@@ -86,7 +86,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
 
 
     if (Debug::get_debug_level() == 5) {
-        cout << "Parametros: " << RpNumerics::getPhysics().fluxFunction().fluxParams().params() << endl;
+        //cout << "Parametros: " << RpNumerics::getPhysics().fluxFunction().fluxParams().params() << endl;
     }
 
 
@@ -94,7 +94,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
     RealVector Uref(dimension, input);
 
     if (Debug::get_debug_level() == 5) {
-        cout << "URef " << Uref << endl;
+        //cout << "URef " << Uref << endl;
     }
 
     RpNumerics::getPhysics().getSubPhysics(0).preProcess(Uref);
@@ -106,7 +106,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
     GridValues * gv = RpNumerics::getGridFactory().getGrid("hugoniotcurve");
 
     if (Debug::get_debug_level() == 5) {
-        cout << "Resolucao: " << gv->grid_resolution << endl;
+        //cout << "Resolucao: " << gv->grid_resolution << endl;
     }
 
     vector<bool> isCircular;
@@ -125,7 +125,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
     for (int i = 0; i < transitionList.size(); i++) {
 
 //        if (Debug::get_debug_level() == 5) {
-            cout << "Ponto de transicao: " << transitionList[i] << endl;
+            //cout << "Ponto de transicao: " << transitionList[i] << endl;
 //        }
 
         jdoubleArray transPointArray = env->NewDoubleArray(dimension);
@@ -206,7 +206,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
 JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_PhasePoint_2IILwave_util_RealVector_2Lwave_util_RealVector_2
 (JNIEnv *env, jobject obj, jobject uMinus, jint xRes, jint yRes, jobject topR, jobject dwnL) {
 
-    cout << "entrando e recalc de hugoniot curve" << endl;
+    //cout << "entrando e recalc de hugoniot curve" << endl;
     jclass classPhasePoint = (env)->FindClass(PHASEPOINT_LOCATION);
 
     jclass hugoniotSegmentClass = (env)->FindClass(HUGONIOTSEGMENTCLASS_LOCATION);
@@ -327,7 +327,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
     for (int i = 0; i < transitionList.size(); i++) {
 
         if (Debug::get_debug_level() == 5) {
-            cout << "Ponto de transicao: " << transitionList[i] << endl;
+            //cout << "Ponto de transicao: " << transitionList[i] << endl;
         }
 
         jdoubleArray transPointArray = env->NewDoubleArray(dimension);

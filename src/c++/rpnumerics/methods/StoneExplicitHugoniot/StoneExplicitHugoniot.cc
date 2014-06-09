@@ -38,7 +38,7 @@ void StoneExplicitHugoniot::set_reference_point(const RealVector &ref){
 void StoneExplicitHugoniot::PolarHugoniot(void *o, double theta, RealVector &out){
 
     if ( Debug::get_debug_level() == 5 ) {
-        cout<<"Passando pelo polar"<<endl;
+        //cout<<"Passando pelo polar"<<endl;
     }
     StoneExplicitHugoniot *obj = (StoneExplicitHugoniot*)o;
     if (obj->valid_){
@@ -85,9 +85,9 @@ void StoneExplicitHugoniot::PolarHugoniot(void *o, double theta, RealVector &out
         out.component(1) = so + r*s;
     }
     else {
-        if ( Debug::get_debug_level() == 5 ) {
-            std::cout << "StoneExplicitHugoniot::PolarHugoniot: object at " << obj << " is invalid." << std::endl;
-        }
+//        if ( Debug::get_debug_level() == 5 ) {
+//            std:://cout << "StoneExplicitHugoniot::PolarHugoniot: object at " << obj << " is invalid." << std::endl;
+//        }
     }
 
     return;

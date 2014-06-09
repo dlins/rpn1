@@ -69,9 +69,9 @@ void RectBoundary::extension_curve(const FluxFunction *f, const AccumulationFunc
 
 //    Extension_Curve extension_curve;
 
-//    cout<<"Primeiro seg: "<<seg[0]<<endl;
+//    //cout<<"Primeiro seg: "<<seg[0]<<endl;
 
-//    cout <<"Ultimo seg: "<<seg[seg.size()-1]<<endl;
+//    //cout <<"Ultimo seg: "<<seg[seg.size()-1]<<endl;
 
 //    extension_curve.curve(f, a, gv, characteristic, singular, fam,
 //            seg,
@@ -105,9 +105,9 @@ void RectBoundary::extension_curve(const FluxFunction *df, const AccumulationFun
 
     Extension_Curve extension_curve;
 
-//    cout<<"Primeiro seg: "<<seg[0]<<endl;
+//    //cout<<"Primeiro seg: "<<seg[0]<<endl;
 
-//    cout <<"Ultimo seg: "<<seg[seg.size()-1]<<endl;
+//    //cout <<"Ultimo seg: "<<seg[seg.size()-1]<<endl;
 
     extension_curve.curve(df, da, cf, ca,gv, characteristic, singular, fam,
                           seg,
@@ -283,7 +283,7 @@ bool RectBoundary::inside(const RealVector &p) const {
         //        if (p(pos) < minimums()(pos) || p(pos) > maximums()(pos)) in = false;
         pos++;
     }
-    //    cout << "tamanho dentro de inside"<<in<<" "<<p.size() << endl;
+    //    //cout << "tamanho dentro de inside"<<in<<" "<<p.size() << endl;
     return in;
 
 
@@ -308,7 +308,7 @@ bool RectBoundary::inside(const RealVector &p) const {
     //        if (p(pos) < minimums()(pos) || p(pos) > maximums()(pos)) in = false;
     //        pos++;
     //    }
-    //    cout << "tamanho dentro de inside" << in << " " << p.size() << endl;
+    //    //cout << "tamanho dentro de inside" << in << " " << p.size() << endl;
     //    return in;
 }
 
@@ -326,20 +326,20 @@ bool RectBoundary::inside(const RealVector &p) const {
 
 //int RectBoundary::intersection(const RealVector &p, const RealVector &q, RealVector &r)const {
 //
-//    cout << "min" << minimums() << endl;
-//    cout << "max" << maximums() << endl;
+//    //cout << "min" << minimums() << endl;
+//    //cout << "max" << maximums() << endl;
 //
 //    if (inside(p) && inside(q)) {
 //
-//        cout << "tamanho de p " << p.size() << " q" << q.size() << " r" << r.size();
+//        //cout << "tamanho de p " << p.size() << " q" << q.size() << " r" << r.size();
 //        return 1;
 //
 //    } else if (!inside(p) && !inside(q)) {
-//        cout << "tamanho de p " << p << " q" << q << " r --------------" << r.size();
+//        //cout << "tamanho de p " << p << " q" << q << " r --------------" << r.size();
 //        return -1;
 //
 //    } else {
-//        cout << "tamanho de p " << p.size() << " q" << q.size() << " r***************" << r.size();
+//        //cout << "tamanho de p " << p.size() << " q" << q.size() << " r***************" << r.size();
 //        int n = p.size();
 //        double alpha, beta;
 //        int pos = 0;

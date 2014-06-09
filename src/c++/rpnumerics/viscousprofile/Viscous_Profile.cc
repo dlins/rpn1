@@ -58,7 +58,7 @@ void Viscous_Profile::Newton_improvement(const FluxFunction *ff, const Accumulat
     double U[2];
     for (int i = 0; i < 2; i++) U[i] = p.component(i);
     if ( Debug::get_debug_level() == 5 ) {
-        cout << "Newton_U: (" << U[0] << ", " << U[1] << ")" << endl;
+        //cout << "Newton_U: (" << U[0] << ", " << U[1] << ")" << endl;
     }
     // If this function ever comes to be vectorialized, these lines below are COMMON
     // to all points (since they deal with the ref point).
@@ -67,7 +67,7 @@ void Viscous_Profile::Newton_improvement(const FluxFunction *ff, const Accumulat
     double F_ref[2], G_ref[2];
     for (int i=0; i < 2; i++) c[i] = ref.component(i);
     if ( Debug::get_debug_level() == 5 ) {
-        cout << "Newton_R: (" << c[0] << ", " << c[1] << ")" << endl;
+        //cout << "Newton_R: (" << c[0] << ", " << c[1] << ")" << endl;
     }
     ff->fill_with_jet(2, c, 0, F_ref, 0, 0);
     aa->fill_with_jet(2, c, 0, G_ref, 0, 0);
@@ -89,7 +89,7 @@ void Viscous_Profile::Newton_improvement(const FluxFunction *ff, const Accumulat
             // The minus sign is incorporated within the parentesis
             b[i] = (F[i] - sigma * G[i]) + c[i];
             if ( Debug::get_debug_level() == 5 ) {
-                cout << "b[i] = " << b[i] << "   c[i] = " << c[i] << endl;
+                //cout << "b[i] = " << b[i] << "   c[i] = " << c[i] << endl;
             }
 
             for (int j = 0; j < 2; j++) {
@@ -109,7 +109,7 @@ void Viscous_Profile::Newton_improvement(const FluxFunction *ff, const Accumulat
         // If Newton does not converge, return the original point.
         if (fabs(det) <= (epsilon * anorm)) {
             if ( Debug::get_debug_level() == 5 ) {
-                cout << "Viscous_Profile::Newton does not converges." << endl;
+                //cout << "Viscous_Profile::Newton does not converges." << endl;
             }
             for (int i = 0; i < 2; i++) out.component(i) = p.component(i);
             return;
@@ -169,9 +169,9 @@ void Viscous_Profile::critical_points_linearization(const FluxFunction *ff, cons
     Eigen::eig(2, RH.data(), viscous.M().data(), ep);
 
     if ( Debug::get_debug_level() == 5 ) {
-        cout << "Ponto no metodo: " << cp << endl;
-        cout << "eigen0RR: " << ep[0].r << endl;
-        cout << "eigen1RR: " << ep[1].r << endl;
+        //cout << "Ponto no metodo: " << cp << endl;
+        //cout << "eigen0RR: " << ep[0].r << endl;
+        //cout << "eigen1RR: " << ep[1].r << endl;
     }
 
     //ep.push_back(e);

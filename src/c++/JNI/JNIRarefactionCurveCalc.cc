@@ -129,7 +129,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionCurveCalc_calc(JNIEnv * env
 
 
         if (Debug::get_debug_level() == 5) {
-            cout << tempVector << endl;
+            //cout << tempVector << endl;
         }
 
         double * dataCoords = tempVector;
@@ -235,8 +235,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionCurveCalc_boundaryNativeCal
 //    realVectorInput(0)=0.538996;
 //    realVectorInput(1)=0.461004;
 
-    cout << "Ponto de entrada: " << realVectorInput << " edge " << edge << " familyIndex " << familyIndex << " timedirection " << timeDirection << endl;
-    cout << " rar for itself " << RAREFACTION << " odesolver " << odesolver << " deltaxi " << deltaxi << endl;
+    //cout << "Ponto de entrada: " << realVectorInput << " edge " << edge << " familyIndex " << familyIndex << " timedirection " << timeDirection << endl;
+    //cout << " rar for itself " << RAREFACTION << " odesolver " << odesolver << " deltaxi " << deltaxi << endl;
 
     int info_rar = rc.curve_from_boundary(realVectorInput, edge,
             familyIndex,
@@ -250,12 +250,12 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionCurveCalc_boundaryNativeCal
             rar_stopped_because,
             s);
     
-    cout <<"Info rar: "<<info_rar<<endl;
+    //cout <<"Info rar: "<<info_rar<<endl;
 
-    cout << "final direction : " << final_direction << endl;
-    cout << "rar_stop : " << rar_stopped_because << endl;
+    //cout << "final direction : " << final_direction << endl;
+    //cout << "rar_stop : " << rar_stopped_because << endl;
 
-    cout << "Tamanho de rar curve: " << rarcurve.curve.size() << endl;
+    //cout << "Tamanho de rar curve: " << rarcurve.curve.size() << endl;
 
     RpNumerics::getPhysics().getSubPhysics(0).postProcess(rarcurve.curve);
     //----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -272,7 +272,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionCurveCalc_boundaryNativeCal
 
 
         if (Debug::get_debug_level() == 5) {
-            cout << tempVector << endl;
+            //cout << tempVector << endl;
         }
 
         double * dataCoords = tempVector;

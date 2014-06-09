@@ -215,7 +215,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc(JNIEnv * env,
 
                 case 3:
                 {
-                    cout<<"No shock"<<endl;
+                    //cout<<"No shock"<<endl;
                     jobject shockCurve = (env)->NewObject(shockCurveClass, shockCurveConstructor, orbitPointArray, familyIndex, timeDirection);
                     env->CallVoidMethod(shockCurve, setCurveTypeID, 3);
                     env->CallVoidMethod(waveCurveBranchForward, waveCurveAddBranch, shockCurve);
@@ -226,12 +226,12 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc(JNIEnv * env,
 
                 default:
 
-                    cout << "Tipo de curva nao conhecido !!" << endl;
+                    return NULL;
 
             }
 
         } else {
-            cout << "CURVA " << i << " VAZIA !! tipo: " << wc.type << endl;
+            //cout << "CURVA " << i << " VAZIA !! tipo: " << wc.type << endl;
         }
     }
 
@@ -251,7 +251,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc(JNIEnv * env,
 JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_boundaryNativeCalc
   (JNIEnv * env, jobject obj, jobject initialPoint, jint familyIndex, jint timeDirection,jint edge){
     
-    cout<<"Valor de edge "<<edge<<endl;
+    //cout<<"Valor de edge "<<edge<<endl;
     
     unsigned int i;
 
@@ -422,7 +422,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_boundaryNativeCalc
 
                 case 3:
                 {
-                    cout<<"No shock"<<endl;
+                    //cout<<"No shock"<<endl;
                     jobject shockCurve = (env)->NewObject(shockCurveClass, shockCurveConstructor, orbitPointArray, familyIndex, timeDirection);
                     env->CallVoidMethod(shockCurve, setCurveTypeID, 3);
                     env->CallVoidMethod(waveCurveBranchForward, waveCurveAddBranch, shockCurve);
@@ -433,12 +433,12 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_boundaryNativeCalc
 
                 default:
 
-                    cout << "Tipo de curva nao conhecido !!" << endl;
+                    return NULL;
 
             }
 
         } else {
-            cout << "CURVA " << i << " VAZIA !! tipo: " << wc.type << endl;
+            //cout << "CURVA " << i << " VAZIA !! tipo: " << wc.type << endl;
         }
     }
 

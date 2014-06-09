@@ -16,7 +16,7 @@ void Integral_Curve::integral_curve(const RealVector &init,
     
     
     if ( Debug::get_debug_level() == 5 ) {
-        cout <<"Flag: "<<RAREFACTION_SPEED_DECREASE<<" "<< RAREFACTION_AS_ENGINE_FOR_INTEGRAL_CURVE <<" "<< RAREFACTION_GENERAL_ACCUMULATION<<" "<< RAREFACTION_INITIALIZE_YES<<" "<<RAREFACTION_INITIALIZE_YES<<endl;
+        //cout <<"Flag: "<<RAREFACTION_SPEED_DECREASE<<" "<< RAREFACTION_AS_ENGINE_FOR_INTEGRAL_CURVE <<" "<< RAREFACTION_GENERAL_ACCUMULATION<<" "<< RAREFACTION_INITIALIZE_YES<<" "<<RAREFACTION_INITIALIZE_YES<<endl;
     }
 
     int info_decrease = Rarefaction::curve(init, 
@@ -150,7 +150,7 @@ void Integral_Curve::levels(const std::vector<RealVector> &integral_curve, std::
                 pos.component(k) = alpha*integral_curve[i].component(k) + beta*integral_curve[i + 1].component(k);
             }
             if ( Debug::get_debug_level() == 5 ) {
-                std::cout << "    First = " << integral_curve[i] << ", pos = " << pos << ", last = " << integral_curve[i + 1] << std::endl;
+                //cout << "    First = " << integral_curve[i] << ", pos = " << pos << ", last = " << integral_curve[i + 1] << std::endl;
             }
 
             if (lambda_last > lambda_first){
@@ -164,7 +164,7 @@ void Integral_Curve::levels(const std::vector<RealVector> &integral_curve, std::
                 }
             }
             if ( Debug::get_debug_level() == 5 ) {
-                std::cout << "    Arrow = " << ornt << std::endl;
+                //cout << "    Arrow = " << ornt << std::endl;
             }
 
             position.push_back(pos);

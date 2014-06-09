@@ -385,13 +385,13 @@ int QR(const DoubleMatrix &A, DoubleMatrix &Q, DoubleMatrix &R){
     double *TAU = new double[std::min(M, N)];
     double *WORK = new double[std::max(1, LWORK)];
 
-    DoubleMatrix B = transpose(A); std::cout << "Here. A = \n" << A << std::endl; 
+    DoubleMatrix B = transpose(A); //std:://cout << "Here. A = \n" << A << std::endl; 
 
     dgeqp3_(&M, &N, B.data(), &LDA, JPVT, TAU, WORK, &LWORK, &INFO);
 
     // Output (B is transposed!)
     //
-    R.resize(std::max(M, N), N); std::cout << "Here. B = \n" << transpose(B) << std::endl; 
+    R.resize(std::max(M, N), N); //cout << "Here. B = \n" << transpose(B) << std::endl; 
 
     for (int i = 0; i < R.rows_; i++){
         for (int j = 0; j < i; j++)       R(i, j) = 0.0;
@@ -409,9 +409,9 @@ int QR(const DoubleMatrix &A, DoubleMatrix &Q, DoubleMatrix &R){
         Q = Q*(DoubleMatrix::eye(M) - TAU[i]*v*transpose(v));
     }
 
-    std::cout << "JPVT = (";
-    for (int i = 0; i < N; i++) std::cout << " " << JPVT[i];
-    std::cout << ")" << std::endl; 
+    //cout << "JPVT = (";
+    for (int i = 0; i < N; i++) //cout << " " << JPVT[i];
+    //cout << ")" << std::endl; 
 
     delete [] WORK;
     delete [] TAU;

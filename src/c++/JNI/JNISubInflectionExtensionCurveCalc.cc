@@ -111,8 +111,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_SubInflectionExtensionCurveCalc_native
 
 
         if ( Debug::get_debug_level() == 5 ) {
-            cout << "Resolucao x " << number_of_grid_points[0] << endl;
-            cout << "Resolucao y " << number_of_grid_points[1] << endl;
+            //cout << "Resolucao x " << number_of_grid_points[0] << endl;
+            //cout << "Resolucao y " << number_of_grid_points[1] << endl;
         }
 
 
@@ -130,8 +130,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_SubInflectionExtensionCurveCalc_native
 
 
         if ( Debug::get_debug_level() == 5 ) {
-            cout << "Curve: " << curve_segments.size() << endl;
-            cout << "Domain: " << domain_segments.size() << endl;
+            //cout << "Curve: " << curve_segments.size() << endl;
+            //cout << "Domain: " << domain_segments.size() << endl;
         }
 
 
@@ -139,9 +139,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_SubInflectionExtensionCurveCalc_native
         tpcw.postProcess(domain_segments);
 
         if ( Debug::get_debug_level() == 5 ) {
-            cout << "Familia da curva" << curveFamily << endl;
-            cout << "Familia do dominio" << domainFamily << endl;
-            cout << "characteristic " << characteristicWhere << endl;
+            //cout << "Familia da curva" << curveFamily << endl;
+            //cout << "Familia do dominio" << domainFamily << endl;
+            //cout << "characteristic " << characteristicWhere << endl;
         }
 
 

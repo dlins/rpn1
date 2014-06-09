@@ -58,7 +58,7 @@ void ShockCurve::find_system_for_sigma_equal_current_lambda(const RealVector &in
     // Find dsigma_du
     //
     RealVector dsigma_du = inv_den*(diff_G*JF + diff_F*JG - 2.0*sigma*diff_G*JG);
-    //std::cout << "dsigma_du (vectorial) = " << dsigma_du << std::endl;
+    //std:://cout << "dsigma_du (vectorial) = " << dsigma_du << std::endl;
 
     //for (int j = 0; j < n; j++){
     //    dsigma_du(j) = 0.0;
@@ -71,7 +71,7 @@ void ShockCurve::find_system_for_sigma_equal_current_lambda(const RealVector &in
 //        dsigma_du(j) *= inv_den;
 //    }
     
-//    std::cout << "dsigma_du (by components) = " << dsigma_du << std::endl;
+//    std:://cout << "dsigma_du (by components) = " << dsigma_du << std::endl;
 
     // Compute nablaH's last column and H's last element:
     DoubleMatrix A = JF - sigma*JG;
@@ -104,11 +104,11 @@ void ShockCurve::find_system_for_sigma_equal_current_lambda(const RealVector &in
 //            }
 //        }
 
-        //std::cout << "Size of A =\n" << dA_dui.rows() << std::endl;
+        //std:://cout << "Size of A =\n" << dA_dui.rows() << std::endl;
 
         dA_dui = JM_F.extract_matrix_from_Hessian(i) - dsigma_du(i)*JG - sigma*JM_G.extract_matrix_from_Hessian(i);
 
-        //std::cout << "After:  dA_dui =\n" << dA_dui << std::endl;
+        //std:://cout << "After:  dA_dui =\n" << dA_dui << std::endl;
 
         nablaH(i, n - 1) = derivative_det(A, dA_dui);
     }
@@ -120,7 +120,7 @@ void ShockCurve::find_system_for_sigma_equal_current_lambda(const RealVector &in
 // this method will not detect them. Therefor, this method must be replaced by one using (sigma - lambda). The family will be needed.
 //
 int ShockCurve::find_point_for_sigma_equal_current_lambda(const RealVector &in, RealVector &out){
-    RealVector iteration_point(in);  std::cout << "Iteration point = " << iteration_point << std::endl;
+    RealVector iteration_point(in);  //cout << "Iteration point = " << iteration_point << std::endl;
 
     int max_it = 20;
     int iterations = 0;
@@ -133,12 +133,12 @@ int ShockCurve::find_point_for_sigma_equal_current_lambda(const RealVector &in, 
     while (iterations < max_it && !found_point){
         find_system_for_sigma_equal_current_lambda(iteration_point, nablaH, H);
 
-        std::cout << "Inside Newton. nablaH =\n" << nablaH << "H = " << H << std::endl;
+        //cout << "Inside Newton. nablaH =\n" << nablaH << "H = " << H << std::endl;
 
         int info_solve = solve(transpose(nablaH), H, deviation);
 
         if (info_solve == REALVECTOR_SOLVE_LINEAR_SYSTEM_ERROR){
-            std::cout << "Error in Newton. nablaH =\n" << nablaH << "H = " << H << std::endl;
+            //cout << "Error in Newton. nablaH =\n" << nablaH << "H = " << H << std::endl;
 
             return REALVECTOR_SOLVE_LINEAR_SYSTEM_ERROR;
         }
@@ -149,7 +149,7 @@ int ShockCurve::find_point_for_sigma_equal_current_lambda(const RealVector &in, 
         // computational domain.
         //
         if (!computational_domain->inside(iteration_point)){
-            std::cout << "Newton method for sigma equal current lambda: point " << iteration_point << " is off-limits!" << std::endl;
+            //cout << "Newton method for sigma equal current lambda: point " << iteration_point << " is off-limits!" << std::endl;
             return REALVECTOR_SOLVE_LINEAR_SYSTEM_ERROR;
         }
 
@@ -159,14 +159,14 @@ int ShockCurve::find_point_for_sigma_equal_current_lambda(const RealVector &in, 
     }
 
     if (found_point){
-        std::cout << "*** Newton method for sigma equal current lambda converged!\n" << "Initial point = " << in << std::endl << std::endl << std::endl;
+        //cout << "*** Newton method for sigma equal current lambda converged!\n" << "Initial point = " << in << std::endl << std::endl << std::endl;
 
         out = iteration_point;
         return SHOCKCURVE_NEWTON_CONVERGED;
     }
     else {
         
-        std::cout << "Newton method for sigma equal current lambda did not converge. Deviation = " << deviation << std::endl << std::endl << std::endl;
+        //cout << "Newton method for sigma equal current lambda did not converge. Deviation = " << deviation << std::endl << std::endl << std::endl;
 
         return SHOCKCURVE_NEWTON_DID_NOT_CONVERGE;
     }
@@ -185,7 +185,7 @@ void ShockCurve::find_system(const RealVector &in, const RealVector &rarefaction
 
 
 void ShockCurve::find_system(const RealVector &in, const ReferencePoint &reference_point, double lambda_ref, DoubleMatrix &nablaH, RealVector &H){
-//    std::cout << "find system. in = " << in << std::endl;
+//    std:://cout << "find system. in = " << in << std::endl;
 /*
     int n = in.size();
 
@@ -214,20 +214,20 @@ void ShockCurve::find_system(const RealVector &in, const ReferencePoint &referen
     JF = JM_F.Jacobian();
     JG = JM_G.Jacobian();
 
-//    std::cout << "Inside find_system.\n" << "JM_F =\n" << JM_F << "JM_G = \n" << JM_G << std::endl;
+//    std:://cout << "Inside find_system.\n" << "JM_F =\n" << JM_F << "JM_G = \n" << JM_G << std::endl;
 
-//    std::cout << "Will invoke jet_Hugoniot" << std::endl;
+//    std:://cout << "Will invoke jet_Hugoniot" << std::endl;
 
     hc->jet_Hugoniot(F, JF, G, JG, H, nablaH);
 
     // Compute sigma
     double sigma = hc->sigma(F, G);
 
-//    std::cout << "===>    Computed sigma: " << sigma << std::endl;
-//    std::cout << "===>    Fref = " << ref.F << ", Gref = " << ref.G << std::endl;
-//    std::cout << "===>      in = " << in << std::endl;
-//    std::cout << "===>       F = " <<     F << ",    G = " << G << std::endl;
-//    for (int i = 0; i < F.size(); i++) std::cout << "===>    Theoretical sigma = " << (F(i) - ref.F(i))/(G(i) - ref.G(i)) << ", component " << i << ". [F] = " << (F(i) - ref.F(i)) << ". [G] = " << (G(i) - ref.G(i)) << std::endl;
+//    std:://cout << "===>    Computed sigma: " << sigma << std::endl;
+//    std:://cout << "===>    Fref = " << ref.F << ", Gref = " << ref.G << std::endl;
+//    std:://cout << "===>      in = " << in << std::endl;
+//    std:://cout << "===>       F = " <<     F << ",    G = " << G << std::endl;
+//    for (int i = 0; i < F.size(); i++) std:://cout << "===>    Theoretical sigma = " << (F(i) - ref.F(i))/(G(i) - ref.G(i)) << ", component " << i << ". [F] = " << (F(i) - ref.F(i)) << ". [G] = " << (G(i) - ref.G(i)) << std::endl;
 
     // Print the derivative of sigma (delete later).
     {
@@ -246,7 +246,7 @@ void ShockCurve::find_system(const RealVector &in, const ReferencePoint &referen
             double sigma_next = (Fnext(i) - ref.F(i))/(Gnext(i) - ref.G(i));
             double sigma_now  = (F(i) - ref.F(i))/(G(i) - ref.G(i));
 
-//            std::cout << "    sigma\'(" << i << ") = " << (sigma_next - sigma_now)/delta << std::endl;
+//            std:://cout << "    sigma\'(" << i << ") = " << (sigma_next - sigma_now)/delta << std::endl;
         }
     }
     // Print the derivative of sigma (delete later).
@@ -288,7 +288,7 @@ int ShockCurve::find_point_for_sigma_equal_reference_lambda(const RealVector &in
     RealVector iteration_point(in);
     hc->set_reference_point(ref);
 
-//    std::cout << "Iteration point = " << iteration_point << ", reference point = " << ref.point << std::endl;
+//    std:://cout << "Iteration point = " << iteration_point << ", reference point = " << ref.point << std::endl;
 
     int max_it = 20;
     int iterations = 0;
@@ -302,18 +302,18 @@ int ShockCurve::find_point_for_sigma_equal_reference_lambda(const RealVector &in
         find_system(iteration_point, ref, lambda_ref, nablaH, H);
         //find_system(iteration_point, lambda_ref, nablaH, H);
 
-//        std::cout << "Inside Newton. nablaH =\n" << nablaH << "H = " << H << std::endl;
+//        std:://cout << "Inside Newton. nablaH =\n" << nablaH << "H = " << H << std::endl;
 
         int info_solve = solve(transpose(nablaH), H, deviation);
 
         if (info_solve == REALVECTOR_SOLVE_LINEAR_SYSTEM_ERROR){
-            std::cout << "Error in Newton. nablaH =\n" << nablaH << "H = " << H << std::endl;
+            //cout << "Error in Newton. nablaH =\n" << nablaH << "H = " << H << std::endl;
 
             return REALVECTOR_SOLVE_LINEAR_SYSTEM_ERROR;
         }
 
         iteration_point = iteration_point - deviation; // was: - deviation
-        std::cout << "Newton. Iteration = " << iterations << ", nablaH =\n" << nablaH << "det = " << det(nablaH) << ", deviation =\n   " << deviation << std::endl << "solution = " << iteration_point << std::endl;
+        //cout << "Newton. Iteration = " << iterations << ", nablaH =\n" << nablaH << "det = " << det(nablaH) << ", deviation =\n   " << deviation << std::endl << "solution = " << iteration_point << std::endl;
 
 
         // Verify that the point found by the Newton method is inside the
@@ -323,7 +323,7 @@ int ShockCurve::find_point_for_sigma_equal_reference_lambda(const RealVector &in
             // Out must be filled even if iteration_point lies outside of the domain.
             out = iteration_point;
 
-            std::cout << "Newton method within ShockCurve: point " << iteration_point << " is off-limits!" << std::endl;
+            //cout << "Newton method within ShockCurve: point " << iteration_point << " is off-limits!" << std::endl;
             return SHOCKCURVE_NEWTON_OUTSIDE_DOMAIN;
         }
 
@@ -359,7 +359,7 @@ int ShockCurve::find_point_for_sigma_equal_reference_lambda(const RealVector &in
             #endif
     }
 
-    std::cout << "*** Found_point = " << found_point << std::endl << std::endl << std::endl;
+    //cout << "*** Found_point = " << found_point << std::endl << std::endl << std::endl;
 
     if (found_point){
         out = iteration_point;
@@ -367,7 +367,7 @@ int ShockCurve::find_point_for_sigma_equal_reference_lambda(const RealVector &in
     }
     else {
         
-        std::cout << "Newton did not converge. Iterations: " << iterations << std::endl;
+        //cout << "Newton did not converge. Iterations: " << iterations << std::endl;
 
         return SHOCKCURVE_NEWTON_DID_NOT_CONVERGE;
     }
@@ -449,7 +449,7 @@ int ShockCurve::local_speed_equality(const RealVector &previous_lambda_minus_sig
                                      const RealVector &lambda_minus_sigma,          const RealVector &candidate_point,
                                      int what_family_to_use,
                                      std::vector<TransitionPointStructure> &transition_points){
-//    std::cout << "local_speed_equality: previous = " << previous_point << ", candidate = " << candidate_point << std::endl;
+//    std:://cout << "local_speed_equality: previous = " << previous_point << ", candidate = " << candidate_point << std::endl;
 
     std::vector<double> alpha;
     std::vector<int>    corresponding_family;
@@ -469,8 +469,8 @@ int ShockCurve::local_speed_equality(const RealVector &previous_lambda_minus_sig
 
         if (info == SHOCKCURVE_NEWTON_CONVERGED){
             transition_points.push_back(TransitionPointStructure(alpha[i], accurate_transition, corresponding_family[i], true));
-            std::cout << "local_speed_equality." << std::endl;
-            for (int i = 0; i < transition_points.size(); i++) std::cout << "    local = " << transition_points[i].local << std::endl;
+            //cout << "local_speed_equality." << std::endl;
+//            for (int i = 0; i < transition_points.size(); i++) //cout << "    local = " << transition_points[i].local << std::endl;
         }
         //else SHOCKCURVE_NEWTON_DID_NOT_CONVERGE;
     }
@@ -558,8 +558,8 @@ int ShockCurve::reference_speed_equality(const RealVector &previous_lambdaref_mi
 
         if (info == SHOCKCURVE_NEWTON_CONVERGED){
             transition_points.push_back(TransitionPointStructure(alpha[i], accurate_transition, corresponding_family[i], false));
-            std::cout << "reference_speed_equality." << std::endl;
-            for (int i = 0; i < transition_points.size(); i++) std::cout << "    local = " << transition_points[i].local << std::endl;
+            //cout << "reference_speed_equality." << std::endl;
+//            for (int i = 0; i < transition_points.size(); i++) //cout << "    local = " << transition_points[i].local << std::endl;
         }
         //else SHOCKCURVE_NEWTON_DID_NOT_CONVERGE;
     }
@@ -577,7 +577,7 @@ void ShockCurve::add_point(Curve &c, const RealVector &p){
     int n = p.size();
     JetMatrix Fjet(n), Gjet(n);
     
-    std::cout << "p = " << p << std::endl;
+    //cout << "p = " << p << std::endl;
 
     f->jet(p, Fjet, 1);
     g->jet(p, Gjet, 1);
@@ -590,11 +590,11 @@ void ShockCurve::add_point(Curve &c, const RealVector &p){
     //
     std::vector<eigenpair> e;
 
-//    std::cout << "Fjet = \n" << Fjet << std::endl << std::endl;
-//    std::cout << "Gjet = \n" << Gjet << std::endl << std::endl;
+//    std:://cout << "Fjet = \n" << Fjet << std::endl << std::endl;
+//    std:://cout << "Gjet = \n" << Gjet << std::endl << std::endl;
 
-//    std::cout << "Fjet.Jacobian() = \n" << Fjet.Jacobian() << std::endl << std::endl;
-//    std::cout << "Gjet.Jacobian() = \n" << Gjet.Jacobian() << std::endl << std::endl;
+//    std:://cout << "Fjet.Jacobian() = \n" << Fjet.Jacobian() << std::endl << std::endl;
+//    std:://cout << "Gjet.Jacobian() = \n" << Gjet.Jacobian() << std::endl << std::endl;
 
     if (Fjet.Jacobian().cols() == 0) exit(0);
 
@@ -660,14 +660,14 @@ int ShockCurve::call_interruption_functions(const RealVector &previous_lambdaref
             transition_current_family.push_back(transition_points[i].family);
             transition_current_found = TRANSITION_CURRENT_FOUND;
 
-            std::cout << "Added one to current." << std::endl;
+            //cout << "Added one to current." << std::endl;
         }
         else{
             transition_reference_index.push_back(n);
             transition_reference_family.push_back(transition_points[i].family);
             transition_reference_found = TRANSITION_REFERENCE_FOUND;
 
-            std::cout << "Added one to reference." << std::endl;
+            //cout << "Added one to reference." << std::endl;
         }
 
         add_point(curve, transition_points[i].point);
@@ -753,7 +753,7 @@ int ShockCurve::curve_engine(const ReferencePoint &r, const RealVector &in, cons
         double sigma_between_points;
         RealVector Hugoniot_direction;
 
-        std::cout << "Shock. Prev. point = " << previous_point << ", prev. dir. = " << previous_direction << std::endl;
+        //cout << "Shock. Prev. point = " << previous_point << ", prev. dir. = " << previous_direction << std::endl;
 
         int info_curve_point = hc->curve_point(previous_point, previous_sigma_between_points,
                                                previous_direction, 
@@ -761,8 +761,8 @@ int ShockCurve::curve_engine(const ReferencePoint &r, const RealVector &in, cons
                                                Hugoniot_intersection, sigma_between_points,
                                                Hugoniot_direction);
 
-        std::cout << "       Curr. point = " << Hugoniot_intersection << ", curr. dir. = " << Hugoniot_direction << std::endl;
-        std::cout << "       sigma_between_points = " << sigma_between_points << std::endl;
+        //cout << "       Curr. point = " << Hugoniot_intersection << ", curr. dir. = " << Hugoniot_direction << std::endl;
+        //cout << "       sigma_between_points = " << sigma_between_points << std::endl;
 
         // Update sigma_between_points
         previous_sigma_between_points = sigma_between_points;
@@ -821,7 +821,7 @@ int ShockCurve::curve_engine(const ReferencePoint &r, const RealVector &in, cons
                                                                     transition_reference_index,
                                                                     transition_reference_family,
                                                                     transition_reference_found);
-                //std::cout << "After call_interruptions. Current transitions: " << transition_current_index.size() << ", reference transitions: " << transition_reference_index.size() << std::endl;
+                //std:://cout << "After call_interruptions. Current transitions: " << transition_current_index.size() << ", reference transitions: " << transition_reference_index.size() << std::endl;
 
                 // TODO: Depending on the type of transition the curve must stop if after_transition == STOP_AFTER_TRANSITION.
                 //       Now it is simply stopping if any transition is found.
@@ -849,7 +849,7 @@ int ShockCurve::curve_engine(const ReferencePoint &r, const RealVector &in, cons
         if (shockcurve.curve.size() > 0){
             RealVector r;
             int info_intersect = b->intersection(previous_point, Hugoniot_intersection, r, edge);
-            std::cout << "Intersection: r = " << r << std::endl;
+            //cout << "Intersection: r = " << r << std::endl;
 
             // Both points are inside: carry on.
             if (info_intersect == BOUNDARY_INTERSECTION_BOTH_INSIDE){
@@ -953,7 +953,7 @@ int ShockCurve::curve(const ReferencePoint &ref,
 
     int n = ref.point.size();
 
-    std::cout << "Here" << std::endl;
+    //cout << "Here" << std::endl;
 
 //    // If the initial point lies near the coincidence curve, abort.
 //    // TODO: These lines below need to be improved.

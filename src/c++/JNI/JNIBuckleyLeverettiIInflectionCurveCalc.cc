@@ -80,7 +80,7 @@ NOTE :
 //    GridValues * gv = RpNumerics::getGridFactory().getGrid("bifurcation");
 //
 //    if ( Debug::get_debug_level() == 5 ) {
-//        cout<<gv<<endl;
+//        //cout<<gv<<endl;
 //    }
 //
 //    std::vector< RealVector> outputVector;
@@ -92,7 +92,7 @@ NOTE :
 //    
 //
 //    if ( Debug::get_debug_level() == 5 ) {
-//        cout<<"Tamanho do buck:"<<outputVector.size()<<endl;
+//        //cout<<"Tamanho do buck:"<<outputVector.size()<<endl;
 //    }
 //
 //
@@ -126,7 +126,7 @@ NOTE :
 //
 //
 //        if ( Debug::get_debug_level() == 5 ) {
-//            cout<<"Antes de criar hugoniot segment"<<endl;
+//            //cout<<"Antes de criar hugoniot segment"<<endl;
 //        }
 //        
 //        jobject realSegment = env->NewObject(realSegmentClass, realSegmentConstructor, realVectorLeftPoint, realVectorRightPoint);

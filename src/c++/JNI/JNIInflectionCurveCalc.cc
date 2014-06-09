@@ -62,7 +62,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_InflectionCurveCalc_nativeCalc__I
     GridValues * gv = RpNumerics::getGridFactory().getGrid("bifurcationcurve");
 
     RealVector res = gv->grid_resolution;
-    cout << "Resolucao: " << res << endl;
+    //cout << "Resolucao: " << res << endl;
 
     Inflection_Curve inflectionCurve;
 
@@ -102,9 +102,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_InflectionCurveCalc_nativeCalc__I
     jobject result = env->NewObject(inflectionCurveClass, inflectionCurveConstructor, segmentsArray);
 
 
-    if (Debug::get_debug_level() == 5) {
-        if (result == NULL) cout << "Eh nulo" << endl;
-    }
 
     // Limpando
     env->DeleteLocalRef(realSegmentClass);

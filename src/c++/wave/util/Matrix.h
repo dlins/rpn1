@@ -118,7 +118,7 @@ template <typename T> Matrix<T>::Matrix(int n, int m, const T *original){
 
 template <typename T> Matrix<T>::~Matrix(){
     if (vec != 0) delete [] vec;
-//    std::cout << "Matrix<T>::~Matrix()" << std::endl;
+//    std:://cout << "Matrix<T>::~Matrix()" << std::endl;
 }
 
 template <typename T> T& Matrix<T>::operator()(int i, int j){

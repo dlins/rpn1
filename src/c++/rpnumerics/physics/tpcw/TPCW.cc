@@ -47,8 +47,8 @@ SubPhysics(*defaultBoundary(), *new Space("R3", 3), "TPCW", _GENERAL_ACCUMULATIO
     accumulationFunction_ = new Accum2Comp2PhasesAdimensionalized(Accum2Comp2PhasesAdimensionalized_Params(TD, paramsVector.component(8)));
 
     if ( Debug::get_debug_level() == 5 ) {
-        cout << "Flux: " << fluxFunction_ << endl;
-        cout << "Accum: " << accumulationFunction_ << endl;
+        //cout << "Flux: " << fluxFunction_ << endl;
+        //cout << "Accum: " << accumulationFunction_ << endl;
     }
 
 
@@ -195,9 +195,9 @@ Boundary * TPCW::defaultBoundary()const {
 
 
     if ( Debug::get_debug_level() == 5 ) {
-        cout <<min.component(0)<<"<--------MIN 0"<<endl;
-        cout << min.component(1) << "<--------MIN 1" << endl;
-        cout << min.component(2) << "<--------MIN 2" << endl;
+        //cout <<min.component(0)<<"<--------MIN 0"<<endl;
+        //cout << min.component(1) << "<--------MIN 1" << endl;
+        //cout << min.component(2) << "<--------MIN 2" << endl;
     }
 
     RealVector max(3);
@@ -210,9 +210,9 @@ Boundary * TPCW::defaultBoundary()const {
 
 
     if ( Debug::get_debug_level() == 5 ) {
-        cout <<max.component(0)<<"<----------MAX 0"<<endl;
-        cout << max.component(1) << "<-------MAX 1" << endl;
-        cout << max.component(2) << "<------MAX 2" << endl;
+        //cout <<max.component(0)<<"<----------MAX 0"<<endl;
+        //cout << max.component(1) << "<-------MAX 1" << endl;
+        //cout << max.component(2) << "<------MAX 2" << endl;
     }
 
     return new RectBoundary(min, max);

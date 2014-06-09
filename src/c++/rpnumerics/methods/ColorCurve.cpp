@@ -31,21 +31,21 @@ accFunction_((AccumulationFunction *) accumulationFunction.clone()) {
     sm = std::string("-");
     sc = std::string(".");
     sz = std::string("0");
-  if ( Debug::get_debug_level() == 5 ) {
-    std::cout << "ColorCurve::ctor: f = " << &fluxFunction << ", a = " << &accumulationFunction << ", this = " << this << std::endl;
-  }
+//  if ( Debug::get_debug_level() == 5 ) {
+//    std:://cout << "ColorCurve::ctor: f = " << &fluxFunction << ", a = " << &accumulationFunction << ", this = " << this << std::endl;
+//  }
 }
 
 ColorCurve::~ColorCurve() {
-    if (Debug::get_debug_level() == 5) {
-        std::cout << "ColorCurve::dtor: this = " << this << std::endl;
-    }
+//    if (Debug::get_debug_level() == 5) {
+//        std:://cout << "ColorCurve::dtor: this = " << this << std::endl;
+//    }
     delete fluxFunction_;
     delete accFunction_;
 
-    if (Debug::get_debug_level() == 5) {
-        std::cout << "    Destroyed." << std::endl;
-    }
+//    if (Debug::get_debug_level() == 5) {
+//        std:://cout << "    Destroyed." << std::endl;
+//    }
 }
 
 /**
@@ -161,8 +161,8 @@ void ColorCurve::Left_Newton_improvement(const RealVector &input, const int type
             if ((fabs(det) <= (epsilon * anorm)) || (count > 19)) {
 
                 if (Debug::get_debug_level() == 5) {
-                    cout << "ColorCurve::Left_Newton does not converge." << endl;
-                    cout << "count = " << count << " " << input << endl;
+                    //cout << "ColorCurve::Left_Newton does not converge." << endl;
+                    //cout << "count = " << count << " " << input << endl;
                 }
                 for (int i = 0; i < dim; i++) out.component(i) = input.component(i);
                 return;
@@ -177,7 +177,7 @@ void ColorCurve::Left_Newton_improvement(const RealVector &input, const int type
 
             if (info != 0) {
                 if (Debug::get_debug_level() == 5) {
-                    cout << "ColorCurve::Left_Newton does not converge." << endl;
+                    //cout << "ColorCurve::Left_Newton does not converge." << endl;
                 }
                 for (int i = 0; i < dim; i++) out.component(i) = input.component(i);
                 return;
@@ -209,7 +209,7 @@ void ColorCurve::Right_Newton_improvement(const RealVector &input, const int typ
     //       as output. (This method pretends to refine the input.)
     if (dim > 2) {
           if ( Debug::get_debug_level() == 5 ) {
-        cout << "ColorCurve::Right_Newton was not implemented for dimension larger than two." << endl;
+        //cout << "ColorCurve::Right_Newton was not implemented for dimension larger than two." << endl;
           }
         for (int i = 0; i < dim; i++) out.component(i) = input.component(i);
         return;
@@ -317,8 +317,8 @@ void ColorCurve::Right_Newton_improvement(const RealVector &input, const int typ
 
         if ((fabs(det) <= (epsilon * anorm)) || (count > 18)) {
               if ( Debug::get_debug_level() == 5 ) {
-            cout << "ColorCurve::Right_Newton does not converge." << endl;
-            cout << "count = " << count << " " << input << endl;
+            //cout << "ColorCurve::Right_Newton does not converge." << endl;
+            //cout << "count = " << count << " " << input << endl;
               }
             for (int i = 0; i < dim; i++) out.component(i) = input.component(i);
 
@@ -502,9 +502,9 @@ int ColorCurve::complete_point(RealVector &p, double &s, std::vector<double> &ei
     //printf("                       F[0] = %2.6f, F[1] = %2.6f, Fref[0] = %2.6f, Fref[1] = %2.6ff\n", F[0], F[1], F_ref[0], F_ref[1]);
     //printf("                       G[0] = %2.6f, G[1] = %2.6f, Gref[0] = %2.6f, Gref[1] = %2.6ff\n", G[0], G[1], G_ref[0], G_ref[1]);
 
-    //cout << "Em CC::Complete_point " << p << ". num = " << num << ", den = " << den << ", speed = " << num/den << endl;
-    //cout << "                       F[0] = " << F[0] << ", F[1] = " << F[1] << ", Fref[0] = " << F_ref[0] << ", Fref[1] = " << F_ref[1] << endl;
-    //cout << "                       G[0] = " << G[0] << ", G[1] = " << F[1] << ", Gref[0] = " << G_ref[0] << ", Gref[1] = " << G_ref[1] << endl;
+    ////cout << "Em CC::Complete_point " << p << ". num = " << num << ", den = " << den << ", speed = " << num/den << endl;
+    ////cout << "                       F[0] = " << F[0] << ", F[1] = " << F[1] << ", Fref[0] = " << F_ref[0] << ", Fref[1] = " << F_ref[1] << endl;
+    ////cout << "                       G[0] = " << G[0] << ", G[1] = " << F[1] << ", Gref[0] = " << G_ref[0] << ", Gref[1] = " << G_ref[1] << endl;
 
     if (fabs(den) > 1e-20) s = num / den;
     else {

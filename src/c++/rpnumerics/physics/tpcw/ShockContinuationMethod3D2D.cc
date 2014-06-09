@@ -103,15 +103,15 @@
 //    int maxStepsNumber = 10000;
 //    
 //    if ( Debug::get_debug_level() == 5 ) {
-//        cout<<"Entrando em curve"<<endl;
+//        //cout<<"Entrando em curve"<<endl;
 //    }
 //
 //
 //    int edge=0;
 //
 //    if ( Debug::get_debug_level() == 5 ) {
-//        cout <<"Familia em curve: "<<family_<<endl;
-//        cout <<"Direction em curve: "<<direction<<endl;
+//        //cout <<"Familia em curve: "<<family_<<endl;
+//        //cout <<"Direction em curve: "<<direction<<endl;
 //    }
 //    
 //    
@@ -120,9 +120,9 @@
 //    int info = curve(family_, maxStepsNumber, direction, output, edge);
 //
 //    if ( Debug::get_debug_level() == 5 ) {
-//        cout <<"valor de info em curve: "<<info<<endl;
+//        //cout <<"valor de info em curve: "<<info<<endl;
 //        for (int i = 0; i < output.size(); i++) {
-//            cout<<"Saida do curve: "<<output.at(i)<<endl;
+//            //cout<<"Saida do curve: "<<output.at(i)<<endl;
 //        }
 //    }
 //
@@ -134,7 +134,7 @@
 ////    sorter_->classify_curve(unclassifiedCurve,input,2,11,hugoniotPolyLineVector);
 //
 ////    if ( Debug::get_debug_level() == 5 ) {
-////        cout<<"Tamanho de hugoniot polyline vector: "<< hugoniotPolyLineVector.size()<<endl;
+////        //cout<<"Tamanho de hugoniot polyline vector: "<< hugoniotPolyLineVector.size()<<endl;
 ////    }
 //
 //    //
@@ -146,9 +146,9 @@
 ////        for(int j=0;j < hugoniotPolyLineVector.at(i).vec.size()-1;j++) {
 ////            int m = (hugoniotPolyLineVector[i].vec[0].size() - dimension() - 1) / 2;
 ////            if ( Debug::get_debug_level() == 5 ) {
-////                cout << "coordenadas: " << hugoniotPolyLineVector.at(i).vec.at(j) << "----------------" << hugoniotPolyLineVector.at(i).vec.at(j + 1) << endl;
-////                cout << "coordenadas: " << hugoniotPolyLineVector.at(i).vec.at(j) << endl;
-////                cout << "velocidade: " << hugoniotPolyLineVector.at(i).vec.at(j).component(dimension() +m) << endl;
+////                //cout << "coordenadas: " << hugoniotPolyLineVector.at(i).vec.at(j) << "----------------" << hugoniotPolyLineVector.at(i).vec.at(j + 1) << endl;
+////                //cout << "coordenadas: " << hugoniotPolyLineVector.at(i).vec.at(j) << endl;
+////                //cout << "velocidade: " << hugoniotPolyLineVector.at(i).vec.at(j).component(dimension() +m) << endl;
 ////            }
 ////
 ////       }
@@ -158,7 +158,7 @@
 ////    }
 //
 ////       if ( Debug::get_debug_level() == 5 ) {
-////           cout <<"Info retornado "<<info<<endl;
+////           //cout <<"Info retornado "<<info<<endl;
 ////       }
 //
 //}
@@ -322,14 +322,14 @@
 //
 //    if ( Debug::get_debug_level() == 5 ) {
 //        printf("Valor de fluxobject %p\n",&flux_object);
-//        cout << "Tamanho em fill: " << n << endl;
+//        //cout << "Tamanho em fill: " << n << endl;
 //    }
 //
 //    double *rp = r;
 //    for (int i = 0; i < n; i++) rp[i] = in[i];
 //
 //    if ( Debug::get_debug_level() == 5 ) {
-//        cout << "Entrada em fill: " << r << endl;
+//        //cout << "Entrada em fill: " << r << endl;
 //    }
 //
 //    // Will this work? There is a const somewhere in fluxParams.
@@ -340,11 +340,11 @@
 //
 //    JetMatrix c_jet(n);
 //    if ( Debug::get_debug_level() == 5 ) {
-//        cout << "Depois da linha 296 " << c_jet.size() << endl;
+//        //cout << "Depois da linha 296 " << c_jet.size() << endl;
 //    }
 //    flux_object.jet(state_c, c_jet, degree);
 //    if ( Debug::get_debug_level() == 5 ) {
-//        cout << "Depois de flux object: " << n << endl;
+//        //cout << "Depois de flux object: " << n << endl;
 //    }
 //
 //    // Fill F
@@ -370,7 +370,7 @@
 //        }
 //    }
 //    if ( Debug::get_debug_level() == 5 ) {
-//        cout << "Dentro de fill with jet shock" << endl;
+//        //cout << "Dentro de fill with jet shock" << endl;
 //    }
 //    return;
 //}
@@ -392,15 +392,15 @@
 //    double A[n][n], B[n][n];
 //
 //    if ( Debug::get_debug_level() == 5 ) {
-//        cout << "Em  plane start"<< endl;
+//        //cout << "Em  plane start"<< endl;
 //    }
 //    fill_with_jet(shock_flux_object, n, Uref, 1, 0, &A[0][0], 0);
 //    if ( Debug::get_debug_level() == 5 ) {
-//        cout << "Depois  plane start" << endl;
+//        //cout << "Depois  plane start" << endl;
 //    }
 //    fill_with_jet(shock_accumulation_object, n, Uref, 1, 0, &B[0][0], 0); // TODO: Add "type", etc.
 //    if ( Debug::get_debug_level() == 5 ) {
-//        cout << "Depois  accum start" << endl;
+//        //cout << "Depois  accum start" << endl;
 //    }
 //    // Find the eigenpairs:
 //    // TODO: Check LAPACK's docs for the case when the number of eigenpairs is insufficient (less than the dimension of space).
@@ -409,25 +409,25 @@
 //
 //
 //    if ( Debug::get_debug_level() == 5 ) {
-//        cout <<"Valor de type:"<<type<<endl;
-//        cout<<"A: "<<endl;
+//        //cout <<"Valor de type:"<<type<<endl;
+//        //cout<<"A: "<<endl;
 //        for (int i = 0; i < n ; i++) {
 //            for (int j = 0; j < n; j++) {
-//                cout<<A[i][j]<<" ";
+//                //cout<<A[i][j]<<" ";
 //            }
-//            cout<<endl;
+//            //cout<<endl;
 //        }
 //
-//        cout<<"B: "<<endl;
+//        //cout<<"B: "<<endl;
 //        for (int i = 0; i < n ; i++) {
 //            for (int j = 0; j < n; j++) {
-//                cout<<B[i][j]<<" ";
+//                //cout<<B[i][j]<<" ";
 //            }
-//            cout<<endl;
+//            //cout<<endl;
 //        }
 //
 //        for (int i = 0; i < n ; i++) {
-//            cout <<"Uref "<<Uref[i]<<endl;
+//            //cout <<"Uref "<<Uref[i]<<endl;
 //        }
 //    }
 //
@@ -435,7 +435,7 @@
 //    if (type == _SHOCK_SIMPLE_ACCUMULATION_) info = Eigen::eig(n, &A[0][0], e);
 //    else info = Eigen::eig(n, &A[0][0], &B[0][0], e);
 //        if ( Debug::get_debug_level() == 5 ) {
-//            cout <<"Tamanho de e"<<e.size()<<endl;
+//            //cout <<"Tamanho de e"<<e.size()<<endl;
 //        }
 //
 //    // The i-th eigenvalue must be real. // The eigenvalues must be chosen carefully in the n-dimensional case.
@@ -804,7 +804,7 @@
 //
 //    /* In the first step we need to initialize the shock curve in the chosen direction */
 //    if ( Debug::get_debug_level() == 5 ) {
-//        cout<<"Inicializando com init inteiro"<<endl;
+//        //cout<<"Inicializando com init inteiro"<<endl;
 //    }
 //    double Upr[n], Upl[n]; // These are two possible initial points for the shock curve
 //    double v1[n], v2[n]; // These are the two vectors on the first plane.  (notice that we use the SAME plane for both Upr and Upl).
@@ -1071,14 +1071,14 @@
 //            out.push_back(q);
 //        } else if (info_intersect == -1) { // Both outside
 //            if ( Debug::get_debug_level() == 5 ) {
-//                cout << "No primeiro else" << endl;
+//                //cout << "No primeiro else" << endl;
 //            }
 //            return ABORTED_PROCEDURE;
 //        } else { // New point outside
 //            out.push_back(r);
 //
 //            if ( Debug::get_debug_level() == 5 ) {
-//                cout << "No segundo else" << endl;
+//                //cout << "No segundo else" << endl;
 //            }
 //            //            edge = out_edge;
 //            return ABORTED_PROCEDURE;

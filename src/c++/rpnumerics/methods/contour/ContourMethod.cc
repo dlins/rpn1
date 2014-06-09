@@ -330,9 +330,9 @@ if ( method == CONTINUATION_METHOD ) {
                                 // the sort, a list of order n is used and not the whole grid n^2.
                                 chain_list.push_back(coordinates);
                                 if ( Debug::get_debug_level() == 5 ) {
-                                    cout << "Coordinates: " << coordinates[0] << ", " << coordinates[1] << endl;
-                                    cout << "Number of chains: " << number_chains(i,j) << endl;
-                                    cout << "The first point:  " << chains(i,j)[0][0] << endl;
+                                    //cout << "Coordinates: " << coordinates[0] << ", " << coordinates[1] << endl;
+                                    //cout << "Number of chains: " << number_chains(i,j) << endl;
+                                    //cout << "The first point:  " << chains(i,j)[0][0] << endl;
                                 }
                             }
 
@@ -369,11 +369,11 @@ if ( method == CONTINUATION_METHOD ) {
     }
 
     if ( Debug::get_debug_level() == 5 ) {
-        cout << "Cells: ";
+        //cout << "Cells: ";
         for (int i = 0; i < chain_list.size(); i++) {
-           cout << number_chains(chain_list[i][0],chain_list[i][1]) << " ";
+           //cout << number_chains(chain_list[i][0],chain_list[i][1]) << " ";
         }
-        cout << endl;
+        //cout << endl;
     }
 
     // The following integers keep the path of the concatenation
@@ -450,10 +450,10 @@ if ( method == CONTINUATION_METHOD ) {
                 j_index = j_start;
                 prev = -1;
                 if ( Debug::get_debug_level() == 5 ) {
-                     cout << " :: FIZ __RESTORE__" << endl;
-                     cout << "index(" << next << "): " << i_index << ", " << j_index << endl;
-                     cout << "i: " << i_index << ", " << i_start << endl;
-                     cout << "j: " << j_index << ", " << j_start << endl;
+                     //cout << " :: FIZ __RESTORE__" << endl;
+                     //cout << "index(" << next << "): " << i_index << ", " << j_index << endl;
+                     //cout << "i: " << i_index << ", " << i_start << endl;
+                     //cout << "j: " << j_index << ", " << j_start << endl;
                 }
                 goto restore;
             }
@@ -507,34 +507,34 @@ if ( method == CONTINUATION_METHOD ) {
     // For DEBUGING, the following lines can be included instead of the two ereasing statements.
 /*
     if ( Debug::get_debug_level() == 5 ) {
-        cout << "Antes de deletar tenho: "<< endl;
+        //cout << "Antes de deletar tenho: "<< endl;
         for(int ii = 0; ii < chains(i_index,j_index).size(); ii++){
             for (int jj = 0; jj < chains(i_index,j_index)[ii].size(); jj++){
-                cout << " " << chains(i_index,j_index)[ii][jj];
+                //cout << " " << chains(i_index,j_index)[ii][jj];
             }
-            cout << endl;
+            //cout << endl;
         }
 
         chains(i_index,j_index).erase( chains(i_index,j_index).begin() + k );
         chain_edges(i_index,j_index).erase( chain_edges(i_index,j_index).begin() + k);
 
-        cout << "Depois de deletar tenho: "<< endl;
+        //cout << "Depois de deletar tenho: "<< endl;
         for(int ii = 0; ii < chains(i_index,j_index).size(); ii++){
             for (int jj = 0; jj < chains(i_index,j_index)[ii].size(); jj++){
-                cout << " " << chains(i_index,j_index)[ii][jj];
+                //cout << " " << chains(i_index,j_index)[ii][jj];
             }
-            cout << endl;
+            //cout << endl;
         }
 
         // DEBUG: Impressions
-        cout << "Finalizei com " << curves.size() << " curvas :: ::   ";
-        for (int k = 0; k < curves.size(); k++) cout << "Tamanho de " << k << " es: " << curves[k].size() << " y es circular: " << is_circular[k] << "; ";
-        cout << endl;
+        //cout << "Finalizei com " << curves.size() << " curvas :: ::   ";
+        for (int k = 0; k < curves.size(); k++) //cout << "Tamanho de " << k << " es: " << curves[k].size() << " y es circular: " << is_circular[k] << "; ";
+        //cout << endl;
 
         for (int k = 0; k < curves.size(); k++) {
-            cout << "Curva " << k << ":";
-            for (int l = 0; l < curves[k].size(); l++) cout << " " << curves[k][l];
-                cout << endl;
+            //cout << "Curva " << k << ":";
+            for (int l = 0; l < curves[k].size(); l++) //cout << " " << curves[k][l];
+                //cout << endl;
         }
 
         printf("ENDS:     Contour2D()/Continuous\n\n");
@@ -597,7 +597,7 @@ int ContourMethod::topological_sort(int i, int j) {
         }
         else if ( (edges_[1] + edges_[dime_ + 1]) == 3) {
             if ( Debug::get_debug_level() == 5 ) {
-                cout << "Ordem: 0 1 2: 3 = " << edges_[1] << " + " << edges_[dime_ + 1] << endl;
+                //cout << "Ordem: 0 1 2: 3 = " << edges_[1] << " + " << edges_[dime_ + 1] << endl;
             }
             // TODO: Podemos inferir quem eh quem
             number_chains(i,j) = 1;
@@ -619,7 +619,7 @@ int ContourMethod::topological_sort(int i, int j) {
         }
         else {
             if ( Debug::get_debug_level() == 5 ) {
-                cout << "Ordem: 1 0 2: 2 = " << edges_[1] << " + " << edges_[dime_ + 1] << endl;
+                //cout << "Ordem: 1 0 2: 2 = " << edges_[1] << " + " << edges_[dime_ + 1] << endl;
             }
             // TODO: Sabemos exatamente quem eh quem
             number_chains(i,j) = 1;
@@ -660,22 +660,22 @@ int ContourMethod::topological_sort(int i, int j) {
     /* Aqui termina o tsort */
 
     // DEBUG...
-    if ( Debug::get_debug_level() == 5 ) {
-        cout << "Impressoes para (" << i << ", " << j << "): " << number_chains(i,j) << " Chains" << endl;
-        cout << "sptr_:";
-        for (int j = 0; j < 5; j++) cout << " " << sptr_[j];
-        cout << endl << "gamb: ";
-        for (int j = 0; j < 5; j++) cout << " " << gamb[j];
-        cout << endl;
+    /*if ( Debug::get_debug_level() == 5 ) {
+        //cout << "Impressoes para (" << i << ", " << j << "): " << number_chains(i,j) << " Chains" << endl;
+        //cout << "sptr_:";
+        for (int j = 0; j < 5; j++) //cout << " " << sptr_[j];
+        //cout << endl << "gamb: ";
+        for (int j = 0; j < 5; j++) //cout << " " << gamb[j];
+        //cout << endl;
 
         for (int ii = 0; ii < number_chains(i,j); ii++) {
-            cout << " cadeia(" << ii+1 << "): ";
-            for (int jj = 0; jj < chains(i,j)[ii].size(); jj++) cout << chains(i,j)[ii][jj] << " ";
-            cout << endl;
-            cout << " finales: " << chain_edges(i,j)[ii][0] << " -- " << chain_edges(i,j)[ii][1] << endl;
+            //cout << " cadeia(" << ii+1 << "): ";
+            for (int jj = 0; jj < chains(i,j)[ii].size(); jj++) //cout << chains(i,j)[ii][jj] << " ";
+            //cout << endl;
+            //cout << " finales: " << chain_edges(i,j)[ii][0] << " -- " << chain_edges(i,j)[ii][1] << endl;
         }
-        cout << endl;
-    }
+        //cout << endl;
+    }*/
 
     return 1;
 }

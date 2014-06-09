@@ -15,7 +15,7 @@ Accum2Comp2PhasesAdimensionalized::Accum2Comp2PhasesAdimensionalized(const Accum
     TD = param.get_thermodynamics();
     phi = param.component(0);
 //    if ( Debug::get_debug_level() == 5 ) {
-//        cout <<"Valor de phi no accum2 comp: "<<phi<<endl;
+//        //cout <<"Valor de phi no accum2 comp: "<<phi<<endl;
 //    }
     reducedAccum_= new ReducedAccum2Comp2PhasesAdimensionalized(this);
 }

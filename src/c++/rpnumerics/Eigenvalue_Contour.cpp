@@ -158,7 +158,7 @@ void Eigenvalue_Contour::set_level_from_point(const FluxFunction *f, const Accum
 
 
     if ( Debug::get_debug_level() == 5 ) {
-        cout<<"Tamanho do p: "<<p.size()<<endl;
+        //cout<<"Tamanho do p: "<<p.size()<<endl;
     }
     double JF[p.size()*p.size()], JG[p.size()*p.size()];
 

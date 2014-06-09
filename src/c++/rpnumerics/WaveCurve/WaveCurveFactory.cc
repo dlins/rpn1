@@ -49,10 +49,10 @@ int WaveCurveFactory::Liu_half_wavecurve(const ReferencePoint &ref,
         RealVector current_curve_initial_point(future_curve_initial_point);
         RealVector current_curve_initial_direction(future_curve_initial_direction);
 
-        std::cout << "WaveCurveFactory, top of while cycle.\n    current_curve_initial_point = " <<  current_curve_initial_point << "\n    current_curve_initial_direction = " << current_curve_initial_direction << std::endl;
+        //cout << "WaveCurveFactory, top of while cycle.\n    current_curve_initial_point = " <<  current_curve_initial_point << "\n    current_curve_initial_direction = " << current_curve_initial_direction << std::endl;
 
         if (current_curve == RAREFACTION_CURVE){
-            std::cout << "WaveCurveFactory: entering Rarefaction." << std::endl;
+            //cout << "WaveCurveFactory: entering Rarefaction." << std::endl;
 
             double deltaxi = 1e-3;
             std::vector<RealVector> inflection_point;
@@ -102,16 +102,16 @@ int WaveCurveFactory::Liu_half_wavecurve(const ReferencePoint &ref,
                         last_point_in_rarefaction.push_back(rarcurve.curve.size() - 1);
                     }
                     else {
-                        std::cout << "WaveCurveFactory: the rarefaction claims it finished ok, but returned zero points!" << std::endl;
+                        //cout << "WaveCurveFactory: the rarefaction claims it finished ok, but returned zero points!" << std::endl;
                     }
 
-                    std::cout << "RarefactionCurve stopped at inflection. List of rarefactions:" << std::endl;
-                    for (int i = 0; i < rarefaction_list.size(); i++) std::cout << "    Rar = " << rarefaction_list[i] << ", index at rar = " << last_point_in_rarefaction[i] << std::endl;
+                    //cout << "RarefactionCurve stopped at inflection. List of rarefactions:" << std::endl;
+//                    for (int i = 0; i < rarefaction_list.size(); i++) //cout << "    Rar = " << rarefaction_list[i] << ", index at rar = " << last_point_in_rarefaction[i] << std::endl;
                 }
                 else if (rar_stopped_because == RAREFACTION_COMPLEX_EIGENVALUE_AT_FAMILY){
                     wavecurve_stopped_because = WAVECURVE_COMPLEX_EIGENVALUE_AT_FAMILY;
 
-                    std::cout << "WaveCurveFactory: exiting at Rarefaction (complex eigenvalue)." << std::endl;
+                    //cout << "WaveCurveFactory: exiting at Rarefaction (complex eigenvalue)." << std::endl;
 
                     return WAVECURVE_OK;
                 }
@@ -120,7 +120,7 @@ int WaveCurveFactory::Liu_half_wavecurve(const ReferencePoint &ref,
                     //
                     wavecurve_stopped_because = WAVECURVE_REACHED_COINCIDENCE_CURVE;
 
-                    std::cout << "WaveCurveFactory: exiting at Rarefaction (coincidence curve)." << std::endl;
+                    //cout << "WaveCurveFactory: exiting at Rarefaction (coincidence curve)." << std::endl;
 
                     return WAVECURVE_OK;
                 }
@@ -132,7 +132,7 @@ int WaveCurveFactory::Liu_half_wavecurve(const ReferencePoint &ref,
                     // There could be non-connected Composites associated with this rarefaction.
                     // In that case, something should be here.
 
-                    std::cout << "WaveCurveFactory: exiting at Rarefaction (reached boundary)." << std::endl;
+                    //cout << "WaveCurveFactory: exiting at Rarefaction (reached boundary)." << std::endl;
 
                     return WAVECURVE_OK;
                 }
@@ -152,7 +152,7 @@ int WaveCurveFactory::Liu_half_wavecurve(const ReferencePoint &ref,
                         last_point_in_rarefaction.push_back(rarcurve.curve.size() - 1);
                     }
                     else {
-                        std::cout << "WaveCurveFactory: the rarefaction claims it finished ok, but returned zero points!" << std::endl;
+                        //cout << "WaveCurveFactory: the rarefaction claims it finished ok, but returned zero points!" << std::endl;
                     }
                 }
                 // TODO: add Panters' case. lambda = 0!!!
@@ -169,11 +169,11 @@ int WaveCurveFactory::Liu_half_wavecurve(const ReferencePoint &ref,
                 return WAVECURVE_ERROR;
             }
 
-            std::cout << "WaveCurveFactory: leaving Rarefaction. Continue as: " << type[future_curve - 1] << std::endl;
+            //cout << "WaveCurveFactory: leaving Rarefaction. Continue as: " << type[future_curve - 1] << std::endl;
 
         } // if (current_curve == RAREFACTION_CURVE)
         else if (current_curve == COMPOSITE_CURVE){
-            std::cout << "WaveCurveFactory: entering Composite." << std::endl;
+            //cout << "WaveCurveFactory: entering Composite." << std::endl;
 
 //            double deltaxi = 1e-3;
             double deltaxi = 1e-3;
@@ -196,7 +196,7 @@ int WaveCurveFactory::Liu_half_wavecurve(const ReferencePoint &ref,
                                                  composite_stopped_because,
                                                  edge);
 
-            std::cout << "WaveCurveFactory, composite completed. Info = " << info_cmp << ", final_direction = " << final_direction << std::endl;
+            //cout << "WaveCurveFactory, composite completed. Info = " << info_cmp << ", final_direction = " << final_direction << std::endl;
             cmpcurve.final_direction = final_direction;
 
 //            hwc.wavecurve.push_back(cmpcurve);
@@ -212,13 +212,13 @@ int WaveCurveFactory::Liu_half_wavecurve(const ReferencePoint &ref,
                 if (composite_stopped_because == COMPOSITE_REACHED_DOUBLE_CONTACT){
                     future_curve = RAREFACTION_CURVE;
 
-                    std::cout << "WaveCurveFactory. After CompositeCurve reached a double contact." << std::endl;
+                    //cout << "WaveCurveFactory. After CompositeCurve reached a double contact." << std::endl;
 
                     last_point_in_rarefaction.back() = cmpcurve.back_pointer.back() - 1; // CHECK THIS!!!! Could be +/- 1 or something!
-                    std::cout << "    last_point_in_rarefaction.back() = " << last_point_in_rarefaction.back() << std::endl;
+                    //cout << "    last_point_in_rarefaction.back() = " << last_point_in_rarefaction.back() << std::endl;
 
                     if (last_point_in_rarefaction.back() < 0){ 
-                        std::cout << "    Error! Memory positions cannot be negative! Aborting now." << std::endl;
+                        //cout << "    Error! Memory positions cannot be negative! Aborting now." << std::endl;
                         return WAVECURVE_ERROR;
                     }
                 }
@@ -239,7 +239,7 @@ int WaveCurveFactory::Liu_half_wavecurve(const ReferencePoint &ref,
                 else if (composite_stopped_because == COMPOSITE_REACHED_BOUNDARY){
                     wavecurve_stopped_because = WAVECURVE_REACHED_BOUNDARY;
 
-                    std::cout << "WaveCurveFactory: leaving Composite (reached boundary)." << std::endl;
+                    //cout << "WaveCurveFactory: leaving Composite (reached boundary)." << std::endl;
 
                     return WAVECURVE_OK;
                 }
@@ -248,11 +248,11 @@ int WaveCurveFactory::Liu_half_wavecurve(const ReferencePoint &ref,
                 return  WAVECURVE_ERROR;
             }
 
-            std::cout << "WaveCurveFactory: leaving Composite. Continue as: " << type[future_curve - 1] << std::endl;
+            //cout << "WaveCurveFactory: leaving Composite. Continue as: " << type[future_curve - 1] << std::endl;
 
         } // if (current_curve == COMPOSITE_CURVE)
         else if (current_curve == SHOCK_CURVE){
-            std::cout << "WaveCurveFactory: entering Shock. direction = " << current_curve_initial_direction << std::endl;
+            //cout << "WaveCurveFactory: entering Shock. direction = " << current_curve_initial_direction << std::endl;
 
             Curve shkcurve; 
             std::vector<int> stop_right_index;
@@ -277,7 +277,7 @@ int WaveCurveFactory::Liu_half_wavecurve(const ReferencePoint &ref,
                                             shock_stopped_because,
                                             edge);
 
-            std::cout << "WaveCurveFactory. shck_info = " << shck_info << ", shock_stopped_because = " << shock_stopped_because << std::endl;
+            //cout << "WaveCurveFactory. shck_info = " << shck_info << ", shock_stopped_because = " << shock_stopped_because << std::endl;
 
             hwc.wavecurve.push_back(shkcurve);
 
@@ -285,13 +285,13 @@ int WaveCurveFactory::Liu_half_wavecurve(const ReferencePoint &ref,
                 future_curve_initial_point = shkcurve.last_point;
                 future_curve_initial_direction = shkcurve.final_direction;
 
-                std::cout << "WaveCurveFactory, will try to store what the Shock produced." << std::endl;
+                //cout << "WaveCurveFactory, will try to store what the Shock produced." << std::endl;
 
                 // TODO: This works sometimes, sometimes it doesn't. Why?
 //                hwc.wavecurve.push_back(shkcurve);
 //                hwc.add(shkcurve);
 
-                std::cout << "WaveCurveFactory, successfully stored what the Shock produced." << std::endl;
+                //cout << "WaveCurveFactory, successfully stored what the Shock produced." << std::endl;
 
                 // The action depends whether forwards- or backwards-wavecurves are being constructed.
 
@@ -317,15 +317,15 @@ int WaveCurveFactory::Liu_half_wavecurve(const ReferencePoint &ref,
 //                    Eigen::eig(n, F_J.Jacobian().data(), G_J.Jacobian().data(), e);
 
 //                    for (int i = 0; i < e.size(); i++) {
-//                        std::cout << "Family: " << i << std::endl;
-//                        std::cout << "    lambda = " << e[i].r << std::endl;
-//                        std::cout << "    r = " << RealVector(n, e[i].vrr.data()) << std::endl << std::endl;
+//                        std:://cout << "Family: " << i << std::endl;
+//                        std:://cout << "    lambda = " << e[i].r << std::endl;
+//                        std:://cout << "    r = " << RealVector(n, e[i].vrr.data()) << std::endl << std::endl;
 //                    }
 
 //                    TestTools::pause("Check console.");
 
-//                    std::cout << "Transitions: " << stop_current_family.size() << std::endl;
-//                    for (int i = 0; i < stop_current_family.size(); i++) std::cout << "    " << stop_current_family[i] << std::endl;
+//                    std:://cout << "Transitions: " << stop_current_family.size() << std::endl;
+//                    for (int i = 0; i < stop_current_family.size(); i++) std:://cout << "    " << stop_current_family[i] << std::endl;
 //                    TestTools::pause("Check console.");
 
                     // TODO: In the future continue calculating the Hugoniot curve that represents an inadmissible shock.
@@ -390,7 +390,7 @@ int WaveCurveFactory::Liu_half_wavecurve(const ReferencePoint &ref,
                 return WAVECURVE_ERROR;
             }
 
-            std::cout << "WaveCurveFactory: leaving Shock. Continue as: " << type[future_curve - 1] << std::endl;
+            //cout << "WaveCurveFactory: leaving Shock. Continue as: " << type[future_curve - 1] << std::endl;
 
         } // if (current_curve == SHOCK_CURVE)
     }
@@ -427,7 +427,7 @@ int WaveCurveFactory::wavecurve(const RealVector &initial_point, int family, int
     Liu_half_wavecurve(ref, initial_point, family, increase, RAREFACTION_CURVE,  initial_direction, hwc, wavecurve_stopped_because, edge);
     Liu_half_wavecurve(ref, initial_point, family, increase, SHOCK_CURVE,       -initial_direction, hwc, wavecurve_stopped_because, edge);
 
-    for (int i = 0; i < hwc.wavecurve.size(); i++) std::cout << "Curve\'s size = " << hwc.wavecurve[i].curve.size() << std::endl;
+    for (int i = 0; i < hwc.wavecurve.size(); i++) //cout << "Curve\'s size = " << hwc.wavecurve[i].curve.size() << std::endl;
 
     return WAVECURVE_OK;
 }

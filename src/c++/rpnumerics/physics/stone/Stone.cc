@@ -72,7 +72,7 @@ Boundary * Stone::defaultBoundary() const {
 
 void Stone::setParams(vector<string> params) {
 
-    cout<<"Vetor de parametros: "<<params.size()<<endl;
+    //cout<<"Vetor de parametros: "<<params.size()<<endl;
     RealVector fluxParamVector(7);
     double paramValue;
     //Flux params

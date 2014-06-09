@@ -17,9 +17,9 @@ int Thermodynamics_SuperCO2_WaterAdimensionalized::create_spline(const std::stri
     }
     std::string temp(rpnHomePath_);
     temp.append(dataPath_);
-    if ( Debug::get_debug_level() == 5 ) {
-        std::cout << "Valor de temp: " << temp << "\n";
-    }
+//    if ( Debug::get_debug_level() == 5 ) {
+//        std:://cout << "Valor de temp: " << temp << "\n";
+//    }
 
     // Open the file that contains the data needed for the creation of the spline
     FILE *fid;
@@ -100,8 +100,8 @@ h_typical_(copy.h_typical_),
 rpnHomePath_(copy.rpnHomePath_) {
 
     if ( Debug::get_debug_level() == 5 ) {
-        cout << "construtor de copia da termodinamica" << endl;
-        cout<<"No ctr de copia da thermo:" <<T_typical_<<" "<<U_typical_<<" "<<Rho_typical_<<endl;
+        //cout << "construtor de copia da termodinamica" << endl;
+        //cout<<"No ctr de copia da thermo:" <<T_typical_<<" "<<U_typical_<<" "<<Rho_typical_<<endl;
     }
     
     

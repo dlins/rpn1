@@ -67,7 +67,7 @@ void SubPhysics::setParams(vector<string> paramsVector) {
 
     for (int i = 0; i < paramsVector.size(); i++) {
         if (Debug::get_debug_level() == 5) {
-            cout << "Param " << i << " :" << paramsVector[i] << endl;
+            //cout << "Param " << i << " :" << paramsVector[i] << endl;
         }
 
     }

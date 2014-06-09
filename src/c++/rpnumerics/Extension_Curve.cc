@@ -135,13 +135,13 @@ int Extension_Curve::function_on_vertices(double *foncub, int domain_i, int doma
 //        red_shock_speed = (Y21 * X12 + Y13 * X31 + Y32 * X23) / den;
 //        }
 //        
-////        cout<<"red : "<<red_shock_speed<<endl;
+////        //cout<<"red : "<<red_shock_speed<<endl;
 
 
 //        if (characteristic_where == CHARACTERISTIC_ON_CURVE) {
 
 //            lambda = segment_lambda[kl];
-////            cout << "Valor do lambda: " << lambda << endl;
+////            //cout << "Valor do lambda: " << lambda << endl;
 
 //        } else {
 
@@ -234,8 +234,8 @@ void Extension_Curve::curve(const FluxFunction *df, const AccumulationFunction *
     gv = &g;
     oc = &original_curve;
 
-    std::cout << "Dimension of the curve: " << oc->at(0).size() << std::endl;
-    std::cout << "Characteristic: " << characteristic_where << std::endl;
+//    std:://cout << "Dimension of the curve: " << oc->at(0).size() << std::endl;
+//    std:://cout << "Characteristic: " << characteristic_where << std::endl;
 
     gv->fill_eigenpairs_on_grid(domain_ff, domain_aa);
 
@@ -245,7 +245,7 @@ void Extension_Curve::curve(const FluxFunction *df, const AccumulationFunction *
     if (gv->grid(0, 0).size() == 2) type_of_physic = &species_physic;
     else                            type_of_physic = &compositional_physic;
 
-    //std::cout << "Inside Extension Curve: gv->grid(0, 0).size() = " << gv->grid(0, 0).size() << std::endl;
+    //std:://cout << "Inside Extension Curve: gv->grid(0, 0).size() = " << gv->grid(0, 0).size() << std::endl;
 
     Contour2p5_Method::contour2p5(this, extension_on_curve, extension_on_domain);
 
@@ -300,7 +300,7 @@ void Extension_Curve::curve_out_of_subdomain(const FluxFunction *df, const Accum
     std::vector<RealVector> convex_hull_points;
     
     for (int i = 0; i < polygon.size(); i++) {
-        cout<<polygon[i]<<endl;
+        //cout<<polygon[i]<<endl;
     }
 
     
@@ -335,7 +335,7 @@ void Extension_Curve::curve_out_of_subdomain(const FluxFunction *df, const Accum
     if (gv->grid(0, 0).size() == 2) type_of_physic = &species_physic;
     else                            type_of_physic = &compositional_physic;
 
-    //std::cout << "Inside Extension Curve: gv->grid(0, 0).size() = " << gv->grid(0, 0).size() << std::endl;
+    //std:://cout << "Inside Extension Curve: gv->grid(0, 0).size() = " << gv->grid(0, 0).size() << std::endl;
 
     Contour2p5_Method::contour2p5(this, extension_on_curve, extension_on_domain);
 
@@ -397,7 +397,7 @@ void Extension_Curve::curve_in_subdomain(const FluxFunction *df, const Accumulat
 
     
     for (int i = 0; i < polygon.size(); i++) {
-        cout<<polygon[i]<<endl;
+        //cout<<polygon[i]<<endl;
     }
     
     
@@ -432,7 +432,7 @@ void Extension_Curve::curve_in_subdomain(const FluxFunction *df, const Accumulat
     if (gv->grid(0, 0).size() == 2) type_of_physic = &species_physic;
     else                            type_of_physic = &compositional_physic;
 
-    //std::cout << "Inside Extension Curve: gv->grid(0, 0).size() = " << gv->grid(0, 0).size() << std::endl;
+    //std:://cout << "Inside Extension Curve: gv->grid(0, 0).size() = " << gv->grid(0, 0).size() << std::endl;
 
     Contour2p5_Method::contour2p5(this, extension_on_curve, extension_on_domain);
 
