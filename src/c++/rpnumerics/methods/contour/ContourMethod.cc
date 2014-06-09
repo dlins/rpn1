@@ -11,7 +11,6 @@
  * Includes:
  */
 #include "ContourMethod.h"
-#include "Debug.h"
 
 /*
  * ---------------------------------------------------------------
@@ -107,9 +106,7 @@ void ContourMethod::allocate_arrays(void){
 
         is_first = false;
 
-        if ( Debug::get_debug_level() == 5 ) {
-            printf("++++++++++++++++ ContourMethod: REMEMBER TO INVOKE deallocate_arrays() AT QUIT-TIME!!!\n++++++++++++++++ DON\'T SAY I DIDN\'T WARN YOU!!!\n");
-        }
+        printf("++++++++++++++++ ContourMethod: REMEMBER TO INVOKE deallocate_arrays() AT QUIT-TIME!!!\n++++++++++++++++ DON\'T SAY I DIDN\'T WARN YOU!!!\n");
     }
 
     return;
@@ -169,9 +166,7 @@ int ContourMethod::contour2d(ImplicitFunction *impf, std::vector<RealVector> &vr
 
     GridValues *gv = impf->grid_value();
 
-    if ( Debug::get_debug_level() == 5 ) {
-        printf("BEGINS: Contour2D()\n");
-    }
+    printf("BEGINS: Contour2D()\n");
 
 //    deallocate_arrays();
     allocate_arrays();
@@ -235,8 +230,8 @@ if ( method == CONTINUATION_METHOD ) {
     */
 
     // loop over the rectangles
-    for (int i = 0; i < rows; i++) {
-        for (int j = 0; j < cols; j++) {
+    for (int i = 0; i < rows; i++) { //std::cout << "i = " << i << std::endl;
+        for (int j = 0; j < cols; j++) { //std::cout << "    j = " << j << std::endl;
             vert[0*hn + 0] = gv->grid(i + 1, j + 0).component(0); // u + du;
             vert[1*hn + 0] = gv->grid(i + 0, j + 0).component(0); // u;
             vert[2*hn + 0] = gv->grid(i + 1, j + 1).component(0); // u + du;
@@ -246,6 +241,10 @@ if ( method == CONTINUATION_METHOD ) {
             vert[1*hn + 1] = gv->grid(i + 0, j + 0).component(1); // v;
             vert[2*hn + 1] = gv->grid(i + 1, j + 1).component(1); // v + dv;
             vert[3*hn + 1] = gv->grid(i + 0, j + 1).component(1); // v + dv;
+
+            //std::cout << "    After verts" << std::endl;
+
+            //std::cout << "    cell is invalid: " << (gv->cell_type(i, j) == CELL_IS_INVALID) << std::endl;
 
             if (gv->cell_type(i, j) != CELL_IS_INVALID) {
                     if (gv->cell_type(i, j) == CELL_IS_SQUARE){
@@ -262,17 +261,22 @@ if ( method == CONTINUATION_METHOD ) {
                     zero = 0; // isso vai substituir o usso de uma variavel logica (false) TODO : --> colocar como booleano (zero --> root)
 
                     // foncub is filled here
+                    //std::cout << "    before status..." << std::endl;
                     int status = impf->function_on_square(&foncub[0][0], i, j);
+                    //std::cout << "    after status = " << status << std::endl;
                     
                     if (status != 0) {
                         refval = foncub[0][0];
                         for (int l = 1; l < 4; l++) {
                             if (l == 2 && gv->cell_type(i, j) == CELL_IS_TRIANGLE) {
-                                } else {
-                                    if (refval * foncub[0][l] < 0.0) zero = 1;
-                                }
+                            }
+                            else {
+                                if (refval * foncub[0][l] < 0.0) zero = 1;
                             }
                         }
+                    }
+
+                    //std::cout << "    zero = " << zero << std::endl;
 
                     if (zero != 0) {
                         //  solve for the current cube
@@ -329,11 +333,7 @@ if ( method == CONTINUATION_METHOD ) {
                                 // Store the coodinates of the GridValues that have solution, so after
                                 // the sort, a list of order n is used and not the whole grid n^2.
                                 chain_list.push_back(coordinates);
-                                if ( Debug::get_debug_level() == 5 ) {
-                                    //cout << "Coordinates: " << coordinates[0] << ", " << coordinates[1] << endl;
-                                    //cout << "Number of chains: " << number_chains(i,j) << endl;
-                                    //cout << "The first point:  " << chains(i,j)[0][0] << endl;
-                                }
+
                             }
 
                             // The segments are store in pairs
@@ -357,24 +357,18 @@ if ( method == CONTINUATION_METHOD ) {
                             }
                         }
                     }
+
+                    // 
             }
         }
     }
 
     if ( method == SEGMENTATION_METHOD ) {
-        if ( Debug::get_debug_level() == 5 ) {
-            printf("ENDS:     Contour2D()/For Segments\n\n");
-        }
+        printf("ENDS:     Contour2D()/For Segments\n\n");
         return 0;
     }
 
-    if ( Debug::get_debug_level() == 5 ) {
-        //cout << "Cells: ";
-        for (int i = 0; i < chain_list.size(); i++) {
-           //cout << number_chains(chain_list[i][0],chain_list[i][1]) << " ";
-        }
-        //cout << endl;
-    }
+
 
     // The following integers keep the path of the concatenation
     int prev, middle, next;
@@ -449,12 +443,7 @@ if ( method == CONTINUATION_METHOD ) {
                 i_index = i_start;
                 j_index = j_start;
                 prev = -1;
-                if ( Debug::get_debug_level() == 5 ) {
-                     //cout << " :: FIZ __RESTORE__" << endl;
-                     //cout << "index(" << next << "): " << i_index << ", " << j_index << endl;
-                     //cout << "i: " << i_index << ", " << i_start << endl;
-                     //cout << "j: " << j_index << ", " << j_start << endl;
-                }
+
                 goto restore;
             }
 
@@ -504,42 +493,6 @@ if ( method == CONTINUATION_METHOD ) {
         is_circular.push_back(circular_is);
     }
 
-    // For DEBUGING, the following lines can be included instead of the two ereasing statements.
-/*
-    if ( Debug::get_debug_level() == 5 ) {
-        //cout << "Antes de deletar tenho: "<< endl;
-        for(int ii = 0; ii < chains(i_index,j_index).size(); ii++){
-            for (int jj = 0; jj < chains(i_index,j_index)[ii].size(); jj++){
-                //cout << " " << chains(i_index,j_index)[ii][jj];
-            }
-            //cout << endl;
-        }
-
-        chains(i_index,j_index).erase( chains(i_index,j_index).begin() + k );
-        chain_edges(i_index,j_index).erase( chain_edges(i_index,j_index).begin() + k);
-
-        //cout << "Depois de deletar tenho: "<< endl;
-        for(int ii = 0; ii < chains(i_index,j_index).size(); ii++){
-            for (int jj = 0; jj < chains(i_index,j_index)[ii].size(); jj++){
-                //cout << " " << chains(i_index,j_index)[ii][jj];
-            }
-            //cout << endl;
-        }
-
-        // DEBUG: Impressions
-        //cout << "Finalizei com " << curves.size() << " curvas :: ::   ";
-        for (int k = 0; k < curves.size(); k++) //cout << "Tamanho de " << k << " es: " << curves[k].size() << " y es circular: " << is_circular[k] << "; ";
-        //cout << endl;
-
-        for (int k = 0; k < curves.size(); k++) {
-            //cout << "Curva " << k << ":";
-            for (int l = 0; l < curves[k].size(); l++) //cout << " " << curves[k][l];
-                //cout << endl;
-        }
-
-        printf("ENDS:     Contour2D()/Continuous\n\n");
-    }
-*/
 
     return 0;
 }
@@ -596,9 +549,7 @@ int ContourMethod::topological_sort(int i, int j) {
             // iminus(i,j) = iplus(i,j) = jminus(i,j) = jplus(i,j) = true;
         }
         else if ( (edges_[1] + edges_[dime_ + 1]) == 3) {
-            if ( Debug::get_debug_level() == 5 ) {
-                //cout << "Ordem: 0 1 2: 3 = " << edges_[1] << " + " << edges_[dime_ + 1] << endl;
-            }
+
             // TODO: Podemos inferir quem eh quem
             number_chains(i,j) = 1;
             chains(i,j).resize(1);
@@ -618,9 +569,7 @@ int ContourMethod::topological_sort(int i, int j) {
             chain_edges(i,j)[0][0] = gamb[0]; chain_edges(i,j)[0][1] = gamb[2];
         }
         else {
-            if ( Debug::get_debug_level() == 5 ) {
-                //cout << "Ordem: 1 0 2: 2 = " << edges_[1] << " + " << edges_[dime_ + 1] << endl;
-            }
+
             // TODO: Sabemos exatamente quem eh quem
             number_chains(i,j) = 1;
             chains(i,j).resize(1);
@@ -659,23 +608,7 @@ int ContourMethod::topological_sort(int i, int j) {
     }
     /* Aqui termina o tsort */
 
-    // DEBUG...
-    /*if ( Debug::get_debug_level() == 5 ) {
-        //cout << "Impressoes para (" << i << ", " << j << "): " << number_chains(i,j) << " Chains" << endl;
-        //cout << "sptr_:";
-        for (int j = 0; j < 5; j++) //cout << " " << sptr_[j];
-        //cout << endl << "gamb: ";
-        for (int j = 0; j < 5; j++) //cout << " " << gamb[j];
-        //cout << endl;
 
-        for (int ii = 0; ii < number_chains(i,j); ii++) {
-            //cout << " cadeia(" << ii+1 << "): ";
-            for (int jj = 0; jj < chains(i,j)[ii].size(); jj++) //cout << chains(i,j)[ii][jj] << " ";
-            //cout << endl;
-            //cout << " finales: " << chain_edges(i,j)[ii][0] << " -- " << chain_edges(i,j)[ii][1] << endl;
-        }
-        //cout << endl;
-    }*/
 
     return 1;
 }

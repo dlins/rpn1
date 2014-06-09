@@ -6,7 +6,7 @@
 #include "AccumulationFunction.h"
 #include "Accum2Comp2PhasesAdimensionalized_Params.h"
 
-#include "Thermodynamics_SuperCO2_WaterAdimensionalized.h"
+#include "Thermodynamics.h"
 
 class Accum2Comp2PhasesAdimensionalized : public AccumulationFunction {
 public:
@@ -41,7 +41,7 @@ private:
     double phi; // = 0.38;
 
     // Thermodynamics
-    Thermodynamics_SuperCO2_WaterAdimensionalized *TD;
+    Thermodynamics *TD;
     ReducedAccum2Comp2PhasesAdimensionalized * reducedAccum_;
 protected:
 

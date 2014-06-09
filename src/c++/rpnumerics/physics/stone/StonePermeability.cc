@@ -84,7 +84,7 @@ StonePermeability::~StonePermeability() {
 
 void StonePermeability::Diff_PermabilityWater(double sw, double so, double sg, double &kw, double &dkw_dsw, double &dkw_dso, double &d2kw_dsw2, double &d2kw_dswso, double &d2kw_dso2){
     double swcnw = sw - cnw_;
-    if (swcnw < 0.){ 
+    if (swcnw <= 0.){ 
         kw = 0.;
         dkw_dsw = 0.;
         dkw_dso = 0.;
@@ -115,7 +115,7 @@ void StonePermeability::Diff_PermabilityOil(double sw, double so, double sg, dou
     double kowden, dkowden_dsw, d2kowden_dsw2;
     double kogden, dkogden_dsg, d2kogden_dsg2;
 
-    if (sow < 0.){
+    if (sow <= 0.){
         kowden = 0.;
         dkowden_dsw = 0.;
         d2kowden_dsw2 = 0.;
@@ -126,7 +126,7 @@ void StonePermeability::Diff_PermabilityOil(double sw, double so, double sg, dou
         d2kowden_dsw2 = (expow_ - 2.)*(expow_ - 1.)*(1. - low_)*pow(sow, expow_ - 3.)/denkow_;
     }
 
-    if (sog < 0.){
+    if (sog <= 0.){
         kogden = 0.;
         dkogden_dsg = 0.;
         d2kogden_dsg2 = 0.;
@@ -137,7 +137,7 @@ void StonePermeability::Diff_PermabilityOil(double sw, double so, double sg, dou
         d2kogden_dsg2 = (expog_ - 2.)*(expog_ - 1.)*(1. - log_)*pow(sog, expog_ - 3.)/denkog_;
     }
 
-    if (socno < 0.){ 
+    if (socno <= 0.){ 
         ko = 0.;
         dko_dsw = 0.;
         dko_dso = 0.;
@@ -161,7 +161,7 @@ void StonePermeability::Diff_PermabilityOil(double sw, double so, double sg, dou
 
 void StonePermeability::Diff_PermabilityGas(double sw, double so, double sg, double &kg, double &dkg_dsw, double &dkg_dso, double &d2kg_dsw2, double &d2kg_dswso, double &d2kg_dso2){
     double sgcng = sg - cng_;
-    if (sgcng < 0.){
+    if (sgcng <= 0.){
         kg = 0.;
         dkg_dsw = 0.;
         dkg_dso = 0.;
@@ -186,7 +186,7 @@ void StonePermeability::Diff_PermabilityGas(double sw, double so, double sg, dou
 // Expects kowj.size() == 1.
 //
 int StonePermeability::kowden_jet(double sow, int degree, JetMatrix &kowj){
-    if (sow < 0.){
+    if (sow <= 0.){
         if (degree >= 0){
             double kowden = 0.;
             kowj.set(0, kowden);
@@ -225,7 +225,7 @@ int StonePermeability::kowden_jet(double sow, int degree, JetMatrix &kowj){
 // Expects kogj.size() == 1.
 //
 int StonePermeability::kogden_jet(double sog, int degree, JetMatrix &kogj){
-    if (sog < 0.){
+    if (sog <= 0.){
         if (degree >= 0){
             double kogden = 0.;
             kogj.set(0, kogden);
@@ -269,7 +269,7 @@ int StonePermeability::PermeabilityWater_jet(const RealVector &state, int degree
     double sg = 1.0 - sw - so;
 
     double swcnw = sw - cnw_;
-    if (swcnw < 0.){ 
+    if (swcnw <= 0.){ 
         if (degree >= 0){
             double kw = 0.;
             water.set(0, kw);
@@ -342,7 +342,7 @@ int StonePermeability::PermeabilityOil_jet(const RealVector &state, int degree, 
 
     double socno = so - cno_;
 
-    if (socno < 0.){ 
+    if (socno <= 0.){ 
         if (degree >= 0){
             double ko = 0.0;
             oil.set(0, ko);
@@ -416,7 +416,7 @@ int StonePermeability::PermeabilityGas_jet(const RealVector &state, int degree, 
 
     double sgcng = sg - cng_;
 
-    if (sgcng < 0.){ 
+    if (sgcng <= 0.){ 
         if (degree >= 0){
             double kg = 0.;
             gas.set(0, kg);

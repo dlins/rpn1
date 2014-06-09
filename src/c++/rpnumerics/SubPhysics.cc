@@ -14,6 +14,7 @@
 #include "physics/tpcw/Hugoniot_TP.h"
 #include "ThreeImplicitFunctions.h"
 #include "Debug.h"
+#include "Secondary_Bifurcation_Interface.h"
 
 /*
  * ---------------------------------------------------------------
@@ -21,21 +22,21 @@
  */
 
 SubPhysics::SubPhysics(const FluxFunction & fluxFunction, const AccumulationFunction & accumulationFunction, const Boundary & boundary, const Space & space, const char * id, int type) : fluxFunction_((FluxFunction *) fluxFunction.clone()),
-accumulationFunction_((AccumulationFunction*) accumulationFunction.clone()),
-boundary_(boundary.clone()),
+accumulationFunction_((AccumulationFunction*) accumulationFunction.clone()),  hugoniotCurveArray_(new map<string, HugoniotCurve *>()),secondaryBifurcationArray_(new map<string, Secondary_Bifurcation_Interface *>()),
+boundary_(boundary.clone()), extensionCurveArray_(new map<string, Extension *>()),
 space_(new Space(space)),
 ID_(id),
 type_(type) {
     setHugoniotContinuationMethod(new HugoniotContinuation2D2D(fluxFunction_, accumulationFunction_, &getBoundary()));
-//    setShockMethod(new Shock());
+    //    setShockMethod(new Shock());
 }
 
 SubPhysics::SubPhysics(const Boundary & boundary, const Space & space, const char * name, int type) : boundary_(boundary.clone()),
-space_(new Space(space)),
-ID_(name),
+space_(new Space(space)), hugoniotCurveArray_(new map<string, HugoniotCurve *>()),secondaryBifurcationArray_(new map<string, Secondary_Bifurcation_Interface *>()),
+ID_(name),extensionCurveArray_(new map<string, Extension *>()),
 type_(type) {
     setHugoniotContinuationMethod(new HugoniotContinuation2D2D(fluxFunction_, accumulationFunction_, &getBoundary()));
-//    setShockMethod(new Shock());
+    //    setShockMethod(new Shock());
 }
 
 const Space &SubPhysics::domain() const {
@@ -72,21 +73,57 @@ void SubPhysics::setParams(vector<string> paramsVector) {
 
     }
 
+}
+
+
+
+HugoniotCurve * SubPhysics::getHugoniotCurve(const string & hugoniotName) {
+
+    if (hugoniotCurveArray_->count(hugoniotName) == 1) {
+        return hugoniotCurveArray_->operator [](hugoniotName);
+    } else {
+
+        cerr<<"Method not implemented "<<endl;
+    }
 
 }
 
+
+
+Extension * SubPhysics::getExtensionMethod(const string& methodName) {
+
+    if (extensionCurveArray_->count(methodName) == 1) {
+        return extensionCurveArray_->operator [](methodName);
+    } else {
+
+        cerr<<"Method not implemented "<<endl;
+    }
+
+}
+
+
+
+
+Secondary_Bifurcation_Interface * SubPhysics::getSecondaryBifurcationMethod(const string& methodName) {
+
+    if (secondaryBifurcationArray_->count(methodName) == 1) {
+        return secondaryBifurcationArray_->operator [](methodName);
+    } else {
+
+        cerr<<"Method not implemented "<<endl;
+    }
+
+}
+
+
+CompositeCurve * SubPhysics::getCompositeCurve(){
+    return compositeCurve_;
+}
 const Boundary * SubPhysics::getPreProcessedBoundary()const {
     return preProcessedBoundary_;
 }
 
-Hugoniot_Locus * SubPhysics::getHugoniotFunction()const {
-    return hugoniotFunction_;
-}
 
-void SubPhysics::setHugoniotFunction(Hugoniot_Locus *hf) {
-
-    hugoniotFunction_ = hf;
-}
 
 Viscosity_Matrix * SubPhysics::getViscosityMatrix() const {
     return viscosityMatrix_;
@@ -101,12 +138,8 @@ void SubPhysics::setDoubleContactFunction(Double_Contact_Function *dcf) {
     doubleContactFunction_ = dcf;
 }
 
-void SubPhysics::setShockMethod(ShockMethod * shockMethod) {
-    shock_method_ = shockMethod;
-}
-
-ShockMethod * SubPhysics::getShockMethod() {
-    return shock_method_;
+ShockCurve * SubPhysics::getShockMethod() {
+    return shockCurve_;
 }
 
 HugoniotContinuation * SubPhysics::getHugoniotContinuationMethod() {
@@ -142,7 +175,7 @@ void SubPhysics::accumulationParams(const AccumulationParams & newAccumulationPa
 
 SubPhysics::~SubPhysics() {
 
-    delete hugoniotFunction_;
+
     delete doubleContactFunction_;
     delete space_;
 
@@ -150,9 +183,23 @@ SubPhysics::~SubPhysics() {
     delete accumulationFunction_;
     delete boundary_;
     delete preProcessedBoundary_;
-
     delete viscosityMatrix_;
 
+    delete shockCurve_;
+    
+     for (std::map<string,Extension *>::iterator it=extensionCurveArray_->begin(); it!=extensionCurveArray_->end(); ++it){
+        delete it->second ;        
+    }
+    
+    delete extensionCurveArray_;    
+    
+    
+    for (std::map<string,HugoniotCurve *>::iterator it=hugoniotCurveArray_->begin(); it!=hugoniotCurveArray_->end(); ++it){
+        delete it->second ;        
+    }
+    
+    delete hugoniotCurveArray_;
+    
 
 }
 

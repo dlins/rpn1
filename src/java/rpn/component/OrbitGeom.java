@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import rpn.component.util.GraphicsUtil;
-import rpnumerics.FundamentalCurve;
 import wave.multid.model.MultiPolyLine;
 import wave.multid.CoordsArray;
 import wave.multid.view.GeomObjView;

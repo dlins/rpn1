@@ -9,9 +9,9 @@ package rpn.ui;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
-import java.awt.Insets;
 import javax.swing.InputVerifier;
 import javax.swing.JComponent;
+import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
@@ -139,10 +139,16 @@ public class SpinButtonCreator extends UIComponentCreator {
             spinerModel.setMinimum(new Integer(1));
             spinerModel.setStepSize(new Integer(1));
             spinerModel.setValue(resolution[i]);
+            
+            
+
 
             resolutionSpinnerArray_[i] = new JSpinner(spinerModel);
 
+
+
             ((DefaultEditor) resolutionSpinnerArray_[i].getEditor()).getTextField().setEditable(true);
+            JFormattedTextField textField = ((DefaultEditor) resolutionSpinnerArray_[i].getEditor()).getTextField();//TODO Trocar a formatacao para quando for mais de 999
             ((DefaultEditor) resolutionSpinnerArray_[i].getEditor()).getTextField().setInputVerifier(new ResolutionFormatVerifier());
             ((DefaultEditor) resolutionSpinnerArray_[i].getEditor()).getTextField().getDocument().addDocumentListener(new ResolutionTextValueHandler(paramName));
 

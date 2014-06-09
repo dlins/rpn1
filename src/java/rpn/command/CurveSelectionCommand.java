@@ -13,6 +13,7 @@ import rpn.component.*;
 import rpn.controller.ui.AREASELECTION_CONFIG;
 import rpn.controller.ui.CurveSelector;
 import rpn.controller.ui.UIController;
+import rpn.message.RPnNetworkStatus;
 import wave.util.RealVector;
 
 public class CurveSelectionCommand extends RpModelPlotCommand {
@@ -26,12 +27,13 @@ public class CurveSelectionCommand extends RpModelPlotCommand {
     //
     static private CurveSelectionCommand instance_ = null;
 
+    int curveToSelect_;
 
     //
     // Constructors/Initializers
     //
     protected CurveSelectionCommand() {
-        super(DESC_TEXT,null, new JToggleButton());
+        super(DESC_TEXT, null, new JToggleButton());
     }
 
     @Override
@@ -44,11 +46,10 @@ public class CurveSelectionCommand extends RpModelPlotCommand {
         while (iterator.hasNext()) {
             RPnPhaseSpacePanel panel = iterator.next();
             RpGeometry lastGeometry = UIController.instance().getActivePhaseSpace().getLastGeometry();
-            if(lastGeometry==null){
+            if (lastGeometry == null) {
                 return;
             }
-                
-            
+
             CurveSelector curveSelector = new CurveSelector(lastGeometry);
             panel.addMouseListener(curveSelector);
             panel.addMouseMotionListener(curveSelector);
@@ -59,14 +60,25 @@ public class CurveSelectionCommand extends RpModelPlotCommand {
     @Override
     public RpGeometry createRpGeometry(RealVector[] input) {
 
-       
-        return  null;
+        return null;
 
+    }
+
+    public void setCurveToSelect(int curveToSelect_) {
+        this.curveToSelect_ = curveToSelect_;
     }
 
     @Override
     public void execute() {
 
+        RpCommand command = new RpCommand(curveToSelect_);
+        logCommand(command);
+
+        if (RPnNetworkStatus.instance().isOnline() && RPnNetworkStatus.instance().isMaster()) {
+            RPnNetworkStatus.instance().sendCommand(rpn.controller.ui.UndoActionController.instance().getLastCommand().toXML());
+        }
+
+        System.out.println("chamando execute do curves selection");
 
     }
 
@@ -77,6 +89,4 @@ public class CurveSelectionCommand extends RpModelPlotCommand {
         return instance_;
     }
 
-
-    
 }

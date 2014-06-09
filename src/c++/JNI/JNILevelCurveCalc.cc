@@ -18,19 +18,19 @@ NOTE :
  */
 
 
-#include "rpnumerics_PointLevelCalc.h"
-#include "rpnumerics_LevelCurveCalc.h"
+#include "rpnumerics_EigenValuePointLevelCalc.h"
+#include "rpnumerics_EigenValueLevelCalc.h"
 #include "JNIDefs.h"
 #include "RpNumerics.h"
 #include <vector>
 #include <iostream>
-#include "Eigenvalue_Contour.h"
+#include "CharacteristicPolynomialLevels.h"
 
 
 using std::vector;
 using namespace std;
 
-JNIEXPORT jobject JNICALL Java_rpnumerics_PointLevelCalc_calcNative(JNIEnv * env, jobject obj, jint family, jobject initialPoint) {
+JNIEXPORT jobject JNICALL Java_rpnumerics_EigenValuePointLevelCalc_calcNative(JNIEnv * env, jobject obj, jint family, jobject initialPoint) {
 
 
     jclass realVectorClass = env->FindClass(REALVECTOR_LOCATION);
@@ -39,7 +39,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_PointLevelCalc_calcNative(JNIEnv * env
 
     jclass arrayListClass = env->FindClass("java/util/ArrayList");
 
-    jclass levelCurveClass = env->FindClass(LEVELCURVE_LOCATION);
+    jclass eigenValueCurveClass = env->FindClass(EIGENVALUECURVE_LOCATION);
 
     jmethodID realVectorConstructorDoubleArray = env->GetMethodID(realVectorClass, "<init>", "([D)V");
 
@@ -49,7 +49,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_PointLevelCalc_calcNative(JNIEnv * env
     jmethodID arrayListAddMethod = env->GetMethodID(arrayListClass, "add", "(Ljava/lang/Object;)Z");
     jmethodID toDoubleMethodID = (env)->GetMethodID(realVectorClass, "toDouble", "()[D");
 
-    jmethodID levelCurveConstructor = env->GetMethodID(levelCurveClass, "<init>", "(ILjava/util/List;D)V");
+    jmethodID levelCurveConstructor = env->GetMethodID(eigenValueCurveClass, "<init>", "(ILjava/util/List;D)V");
 
 
     jobject segmentsArray = env->NewObject(arrayListClass, arrayListConstructor, NULL);
@@ -73,59 +73,29 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_PointLevelCalc_calcNative(JNIEnv * env
 
     int dimension = RpNumerics::getPhysics().domain().dim();
 
-    Eigenvalue_Contour ec;
+
 
     RpNumerics::getPhysics().getSubPhysics(0).preProcess(realVectorInput);
-    
-    if (realVectorInput.size()==3){//TODO REMOVE !!
-        realVectorInput.component(2)=1.0;
-    }
 
-    ec.set_level_from_point(& RpNumerics::getPhysics().fluxFunction(), & RpNumerics::getPhysics().accumulation(),
-            family, realVectorInput);
+    if (realVectorInput.size() == 3) {//TODO REMOVE !!
+        realVectorInput.component(2) = 1.0;
+    }
+   
 
     vector < RealVector > eigen_contours;
-    double vec_levels;
+    double level;
 
-    GridValues * gv = RpNumerics::getGridFactory().getGrid("bifurcation");
+    GridValues * gv = RpNumerics::getGridFactory().getGrid("bifurcationcurve");
+    
+    
+     CharacteristicPolynomialLevels ec;
+    
+    ec.eigenvalue_curve(& RpNumerics::getPhysics().fluxFunction(), & RpNumerics::getPhysics().accumulation(),
+                               *gv, 
+                               realVectorInput, family, 
+                               eigen_contours, level);
 
-//    ec.curve(&RpNumerics::getPhysics().fluxFunction(), &RpNumerics::getPhysics().accumulation(),
-//            *gv, eigen_contours, vec_levels);
-//    
-    
-    
-    
-    RealVector v1(2);
-    RealVector v2(2);
-    RealVector v3(2);
-    
-    v1[0]=0;
-    v1[1]=0;
-    
-    
-    
-    v2[0]=0;
-    v2[1]=1;
-    
-    v3[0]=1;
-    v3[1]=0;
-    
-    
-    
-    eigen_contours.push_back(v1);
-    eigen_contours.push_back(v2);
-    
-    eigen_contours.push_back(v2);
-    eigen_contours.push_back(v3);
-    
-    eigen_contours.push_back(v3);
-    eigen_contours.push_back(v1);
-    
-    
-    
-    
-    
-    
+
 
     if (eigen_contours.size() == 0)
         return NULL;
@@ -161,7 +131,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_PointLevelCalc_calcNative(JNIEnv * env
 
 
 
-    jobject result = env->NewObject(levelCurveClass, levelCurveConstructor, family, segmentsArray, vec_levels);
+    jobject result = env->NewObject(eigenValueCurveClass, levelCurveConstructor, family, segmentsArray, level);
 
     // Limpando
 
@@ -175,7 +145,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_PointLevelCalc_calcNative(JNIEnv * env
 
 }
 
-JNIEXPORT jobject JNICALL Java_rpnumerics_LevelCurveCalc_calcNative(JNIEnv * env, jobject obj, jint family, jdouble level) {
+JNIEXPORT jobject JNICALL Java_rpnumerics_EigenValueLevelCalc_calcNative(JNIEnv * env, jobject obj, jint family, jdouble level) {
 
 
     jclass realVectorClass = env->FindClass(REALVECTOR_LOCATION);
@@ -183,7 +153,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_LevelCurveCalc_calcNative(JNIEnv * env
     jclass realSegmentClass = env->FindClass(REALSEGMENT_LOCATION);
 
     jclass arrayListClass = env->FindClass("java/util/ArrayList");
-    jclass levelCurveClass = env->FindClass(LEVELCURVE_LOCATION);
+    jclass eigenValueCurveClass = env->FindClass(EIGENVALUECURVE_LOCATION);
 
     jmethodID realVectorConstructorDoubleArray = env->GetMethodID(realVectorClass, "<init>", "([D)V");
 
@@ -193,7 +163,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_LevelCurveCalc_calcNative(JNIEnv * env
     jmethodID arrayListAddMethod = env->GetMethodID(arrayListClass, "add", "(Ljava/lang/Object;)Z");
 
 
-    jmethodID levelCurveConstructor = env->GetMethodID(levelCurveClass, "<init>", "(ILjava/util/List;D)V");
+    jmethodID levelCurveConstructor = env->GetMethodID(eigenValueCurveClass, "<init>", "(ILjava/util/List;D)V");
 
 
     jobject segmentsArray = env->NewObject(arrayListClass, arrayListConstructor, NULL);
@@ -202,18 +172,21 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_LevelCurveCalc_calcNative(JNIEnv * env
     int dimension = RpNumerics::getPhysics().domain().dim();
 
 
-    Eigenvalue_Contour ec;
+    cout << "Chamando curva de nivel sem ponto"<<level << endl;
 
-    ec.set_level(level, family);
+
 
     vector < RealVector > eigen_contours;
 
-    double vec_levels;
+//    double vec_levels;
 
-    GridValues * gv = RpNumerics::getGridFactory().getGrid("bifurcation");
+    GridValues * gv = RpNumerics::getGridFactory().getGrid("bifurcationcurve");
 
-    ec.curve(& RpNumerics::getPhysics().fluxFunction(), & RpNumerics::getPhysics().accumulation(),
-            *gv, eigen_contours, vec_levels);
+    CharacteristicPolynomialLevels ec;
+
+    ec.eigenvalue_curve(& RpNumerics::getPhysics().fluxFunction(), & RpNumerics::getPhysics().accumulation(),
+            *gv, level, family, eigen_contours);
+
 
     if (eigen_contours.size() == 0)
         return NULL;
@@ -248,7 +221,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_LevelCurveCalc_calcNative(JNIEnv * env
 
 
 
-    jobject result = env->NewObject(levelCurveClass, levelCurveConstructor, family, segmentsArray, vec_levels);
+    jobject result = env->NewObject(eigenValueCurveClass, levelCurveConstructor, family, segmentsArray, level);
 
     // Limpando
 

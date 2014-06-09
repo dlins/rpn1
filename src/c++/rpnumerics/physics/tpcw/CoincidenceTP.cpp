@@ -1,5 +1,4 @@
 #include "CoincidenceTP.h"
-#include "Debug.h"
 
 CoincidenceTP::CoincidenceTP(const Flux2Comp2PhasesAdimensionalized *f) : fluxFunction_(f), td(f->getThermo()) {
 
@@ -13,6 +12,23 @@ double CoincidenceTP::lambdas_function(const RealVector &u) {
     fluxFunction_->getHorizontalFlux()->Diff_FracFlow2PhasesHorizontalAdimensionalized(sw, Theta, 1, m);
 
     return m.get(0, 0);
+}
+
+int CoincidenceTP::saturation_on_square(CoincidenceTP *obj, double *foncub, int i, int j){
+    double f_aux[4];
+
+    for (int l = 0; l < 2; l++) {
+        for (int k = 0; k < 2; k++) {
+            f_aux[l * 2 + k] = obj->lambdas_function(obj->gv->grid(i + l, j + k)) - obj->saturation_level;
+        }
+    }
+
+    foncub[1] = f_aux[0]; // Was: foncub[0][1]
+    foncub[0] = f_aux[2]; // Was: foncub[0][0]
+    foncub[3] = f_aux[1]; // Was: foncub[0][2]
+    foncub[2] = f_aux[3]; // Was: foncub[0][2]
+
+    return 1;
 }
 
 double CoincidenceTP::lambdae_function(const RealVector &u) {
@@ -30,49 +46,41 @@ double CoincidenceTP::lambdae_function(const RealVector &u) {
     double s = u.component(0);
 
 
-    double rhosigmac;
-    double drhosigmac_dT;
-    double d2rhosigmac_dT2;
+    JetMatrix rhosicj(1);
+    td->Rhosic_jet(Theta, 1, rhosicj);
+    double rhosigmac     = rhosicj.get(0);
+    double drhosigmac_dT = rhosicj.get(0, 0);
 
-    double rhosigmaw;
-    double drhosigmaw_dT;
-    double d2rhosigmaw_dT2;
+    JetMatrix rhosiwj(1);
+    td->Rhosiw_jet(Theta, 1, rhosiwj);
+    double rhosigmaw     = rhosiwj.get(0);
+    double drhosigmaw_dT = rhosiwj.get(0, 0);
 
-    double rhoac;
-    double drhoac_dT;
-    double d2rhoac_dT2;
+    JetMatrix rhoacj(1);
+    td->Rhoac_jet(Theta, 1, rhoacj);
+    double rhoac     = rhoacj.get(0);
+    double drhoac_dT = rhoacj.get(0, 0);
 
-    double rhoaw;
-    double drhoaw_dT;
-    double d2rhoaw_dT2;
+    JetMatrix rhoawj(1);
+    td->Rhoaw_jet(Theta, 1, rhoawj);
+    double rhoaw     = rhoawj.get(0);
+    double drhoaw_dT = rhoawj.get(0, 0);
 
-    double Ha;
-    double dHa_dT;
-    double d2Ha_dT2;
+    JetMatrix Haj(1);
+    td->AqueousEnthalpyVol_jet(Theta, 1, Haj);
+    double Ha     = Haj.get(0);
+    double dHa_dT = Haj.get(0, 0);
 
-    double Hsi;
-    double dHsi_dT;
-    double d2Hsi_dT2;
+    JetMatrix Hsij(1);
+    td->SuperCriticEnthalpyVol_jet(Theta, 1, Hsij);
+    double Hsi     = Hsij.get(0);
+    double dHsi_dT = Hsij.get(0, 0);
 
-    double Hr;
-    double dHr_dT;
-    double d2Hr_dT;
+    JetMatrix Hrj(1);
+    td->RockEnthalpyVol_jet(Theta, 1, Hrj);
+    double Hr     = Hrj.get(0);
+    double dHr_dT = Hrj.get(0, 0);
 
-    td->Diff_Rhosic(Theta, rhosigmac, drhosigmac_dT, d2rhosigmac_dT2);
-    td->Diff_Rhosiw(Theta, rhosigmaw, drhosigmaw_dT, d2rhosigmaw_dT2);
-
-    td->Diff_Rhoac(Theta, rhoac, drhoac_dT, d2rhoac_dT2);
-
-    td->Diff_Rhoaw(Theta, rhoaw, drhoaw_dT, d2rhoaw_dT2);
-
-    if ( Debug::get_debug_level() == 5 ) {
-        //cout << rhoaw << drhoaw_dT << d2rhoaw_dT2 << endl;
-    }
-
-    td->Diff_AqueousEnthalpyVol(Theta, Ha, dHa_dT, d2Ha_dT2);
-    td->Diff_SuperCriticEnthalpyVol(Theta, Hsi, dHsi_dT, d2Hsi_dT2);
-
-    td->Diff_RockEnthalpyVol(Theta, Hr, dHr_dT, d2Hr_dT);
 
     //  In this way we reproduce the artificial quantities given in Helmut's thesis numbers 3.13, 3.14, 3.15.
 
@@ -98,19 +106,12 @@ double CoincidenceTP::lambdae_function(const RealVector &u) {
     return reduced_lambdae;
 }
 
-int CoincidenceTP::function_on_square(double *foncub, int i, int j) {
+int CoincidenceTP::evaporation_on_square(CoincidenceTP *obj, double *foncub, int i, int j){
     double f_aux[4];
 
     for (int l = 0; l < 2; l++) {
         for (int k = 0; k < 2; k++) {
-            RealVector u(2);
-            u(0) = gv->grid(i + l, j + k).component(0);
-            u(1) = gv->grid(i + l, j + k).component(1);
-            //            double lambdas = lambdas_function(RealVector(3,gv->grid(i + l, j + k).components()));
-            //            double lambdae = lambdae_function(RealVector(3,gv->grid(i + l, j + k).components()));
-            double lambdas = lambdas_function(u);
-            double lambdae = lambdae_function(u);
-            f_aux[l * 2 + k] = lambdas - lambdae;
+            f_aux[l * 2 + k] = obj->lambdae_function(obj->gv->grid(i + l, j + k)) - obj->evaporation_level;
         }
     }
 
@@ -119,12 +120,56 @@ int CoincidenceTP::function_on_square(double *foncub, int i, int j) {
     foncub[3] = f_aux[1]; // Was: foncub[0][2]
     foncub[2] = f_aux[3]; // Was: foncub[0][2]
 
+    return 1;
+}
+
+//int CoincidenceTP::function_on_square(double *foncub, int i, int j) {
+//    double f_aux[4];
+
+//    for (int l = 0; l < 2; l++) {
+//        for (int k = 0; k < 2; k++) {
+//            RealVector u(2);
+//            u(0) = gv->grid(i + l, j + k).component(0);
+//            u(1) = gv->grid(i + l, j + k).component(1);
+//            //            double lambdas = lambdas_function(RealVector(3,gv->grid(i + l, j + k).components()));
+//            //            double lambdae = lambdae_function(RealVector(3,gv->grid(i + l, j + k).components()));
+//            double lambdas = lambdas_function(u);
+//            double lambdae = lambdae_function(u);
+//            f_aux[l * 2 + k] = lambdas - lambdae;
+//        }
+//    }
+
+//    foncub[1] = f_aux[0]; // Was: foncub[0][1]
+//    foncub[0] = f_aux[2]; // Was: foncub[0][0]
+//    foncub[3] = f_aux[1]; // Was: foncub[0][2]
+//    foncub[2] = f_aux[3]; // Was: foncub[0][2]
+// 
+//    return 1;
+//}
+
+int CoincidenceTP::coincidence_on_square(CoincidenceTP *obj, double *foncub, int i, int j) {
+    double f_aux[4];
+
+    for (int l = 0; l < 2; l++) {
+        for (int k = 0; k < 2; k++) {
+            double lambdas = obj->lambdas_function(obj->gv->grid(i + l, j + k));
+            double lambdae = obj->lambdae_function(obj->gv->grid(i + l, j + k));
+
+            f_aux[l * 2 + k] = lambdas - lambdae;
+        }
+    }
+
+    foncub[1] = f_aux[0]; // Was: foncub[0][1]
+    foncub[0] = f_aux[2]; // Was: foncub[0][0]
+    foncub[3] = f_aux[1]; // Was: foncub[0][2]
+    foncub[2] = f_aux[3]; // Was: foncub[0][2]
  
     return 1;
 }
 
+
 int CoincidenceTP::curve(const FluxFunction *f, const AccumulationFunction *a,
-        GridValues &g, std::vector<RealVector> &coincidence_curve) {
+                         GridValues &g, std::vector<RealVector> &coincidence_curve) {
 
     phi = a->accumulationParams().component(0);
 
@@ -133,6 +178,8 @@ int CoincidenceTP::curve(const FluxFunction *f, const AccumulationFunction *a,
 
     coincidence_curve.clear();
 
+    fos = &coincidence_on_square;
+
     int info = ContourMethod::contour2d(this, coincidence_curve);
 
     return info;
@@ -140,3 +187,29 @@ int CoincidenceTP::curve(const FluxFunction *f, const AccumulationFunction *a,
 
 CoincidenceTP::~CoincidenceTP() {
 }
+
+int CoincidenceTP::characteristic_speed_curve(const FluxFunction *f, const AccumulationFunction *a, 
+                                              GridValues &g, 
+                                              const RealVector &p, int type, 
+                                              std::vector<RealVector> &curve, double &lev){
+
+    curve.clear();
+    phi = a->accumulationParams().component(0);
+    gv = &g;
+
+    if (type == CHARACTERISTIC_SPEED_EVAPORATION){
+        fos = &evaporation_on_square;
+
+        lev = evaporation_level = lambdae_function(p);
+    }
+    else {
+        fos = &saturation_on_square;
+
+        lev = saturation_level = lambdas_function(p);
+    }
+
+    int info = ContourMethod::contour2d(this, curve);
+
+    return info;
+}
+

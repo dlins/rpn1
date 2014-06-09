@@ -1,6 +1,6 @@
 #include "Flux2Comp2PhasesAdimensionalized_Params.h"
 
-Flux2Comp2PhasesAdimensionalized_Params::Flux2Comp2PhasesAdimensionalized_Params(const RealVector & paramsVector, Thermodynamics_SuperCO2_WaterAdimensionalized * TD) : FluxParams(paramsVector),const_gravity(9.8) {
+Flux2Comp2PhasesAdimensionalized_Params::Flux2Comp2PhasesAdimensionalized_Params(const RealVector & paramsVector, Thermodynamics* TD) : FluxParams(paramsVector),const_gravity(9.8) {
     TD_ = TD;
     if (paramsVector.component(2) == 1.0) {
         has_gravity_ = true;
@@ -31,7 +31,7 @@ Flux2Comp2PhasesAdimensionalized_Params::Flux2Comp2PhasesAdimensionalized_Params
     has_horizontal_ = copy.has_horizontal_;
 }
 
-Thermodynamics_SuperCO2_WaterAdimensionalized * Flux2Comp2PhasesAdimensionalized_Params::get_thermodynamics(void) const {
+Thermodynamics * Flux2Comp2PhasesAdimensionalized_Params::get_thermodynamics(void) const {
     return TD_;
 }
 

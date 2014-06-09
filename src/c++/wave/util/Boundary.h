@@ -95,6 +95,10 @@ public:
 
     virtual RealVector side_transverse_interior(const RealVector &p, int s) const = 0;
 
+    double max_distance() const {
+        return norm(maximums() - minimums());
+    }
+
 protected:
     double epsilon;
 };

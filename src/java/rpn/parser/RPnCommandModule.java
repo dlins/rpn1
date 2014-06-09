@@ -14,7 +14,6 @@ import rpn.controller.ui.UIController;
 
 import rpnumerics.RPNUMERICS;
 
-
 import wave.util.RealVector;
 
 import org.xml.sax.SAXException;
@@ -32,7 +31,6 @@ import rpn.RPnPhaseSpaceAbstraction;
 import rpn.RPnPhaseSpaceFrame;
 import rpn.RPnPhaseSpacePanel;
 import rpn.RPnUIFrame;
-
 
 import rpn.component.RpGeomFactory;
 import rpn.component.RpGeometry;
@@ -68,10 +66,9 @@ public class RPnCommandModule {
         private int glassDrawMode_;
         private boolean creatingSelection_;
         private static RPnPhaseSpacePanel curvesPanel_;
-        private RpGeometry selectedGeometry_;
+//        private RpGeometry selectedGeometry_;
 
         public RPnCommandParser() {
-
 
             stringBuffer_ = new StringBuilder();
             isChangePhysicsParamsCommand_ = false;
@@ -82,6 +79,7 @@ public class RPnCommandModule {
 
         @Override
         public void endDocument() {
+
         }
 
         @Override
@@ -99,15 +97,12 @@ public class RPnCommandModule {
 
             }
 
-
             if (currentElement_.equals("DOMAINSELECTION")) {
 
                 realVectorList_.clear();
                 creatingSelection_ = true;
 
             }
-
-
 
             if (currentElement_.equals("RPNSESSION")) {
 
@@ -136,9 +131,7 @@ public class RPnCommandModule {
                 currentConfiguration_.setParamValue(att.getValue(0), att.getValue(1));
             }
 
-
             if (currentElement_.equals("COMMANDPARAM")) {
-
 
                 if (att.getValue("name").equals("phasespace")) {
 
@@ -174,7 +167,6 @@ public class RPnCommandModule {
 
                     } else if (currentCommand_.equalsIgnoreCase("FOCUS_GAINED")) {
 
-
                         RPnUIFrame.toggleFocusGained();
                         Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.INFO, "Window Focus changed successfuly...");
 
@@ -196,7 +188,6 @@ public class RPnCommandModule {
 
                 UIController.instance().setActivePhaseSpace(RPnDataModule.getPhaseSpace(att.getValue("phasespace")));
 
-
                 if (currentCommand_.equalsIgnoreCase("Change Flux Parameters")) {
                     currentConfiguration_ = RPNUMERICS.getConfiguration(RPNUMERICS.physicsID());
                 } else if (currentCommand_.equalsIgnoreCase("hugoniotcurve")) {
@@ -206,12 +197,24 @@ public class RPnCommandModule {
                     UIController.instance().setState(new FILE_ACTION_SELECTED(IntegralCurvePlotCommand.instance()));
                 } else if (currentCommand_.equalsIgnoreCase("wavecurve")) {
                     UIController.instance().setState(new FILE_ACTION_SELECTED(WaveCurvePlotCommand.instance()));
-                } else if (currentCommand_.equalsIgnoreCase("levelcurve")) {
+                } else if (currentCommand_.equalsIgnoreCase("eigenvaluelevel")) {
                     UIController.instance().setState(new FILE_ACTION_SELECTED(LevelCurvePlotCommand.instance()));
-                    
-                } else if (currentCommand_.equalsIgnoreCase("pointlevelcurve")) {
+
+                } else if (currentCommand_.equalsIgnoreCase("physicalboundary")) {
+                    UIController.instance().setState(new FILE_ACTION_SELECTED(PhysicalBoundaryPlotCommand.instance()));
+
+                } else if (currentCommand_.equalsIgnoreCase("eigenvaluepointlevel")) {
 
                     UIController.instance().setState(new FILE_ACTION_SELECTED(PointLevelCurvePlotCommand.instance()));
+                } else if (currentCommand_.equalsIgnoreCase("discriminantlevel")) {
+
+                    UIController.instance().setState(new FILE_ACTION_SELECTED(DiscriminantLevelCurvePlotCommand.instance()));
+                } else if (currentCommand_.equalsIgnoreCase("discriminantpointlevel")) {
+
+                    UIController.instance().setState(new FILE_ACTION_SELECTED(DiscriminantPointLevelCurvePlotCommand.instance()));
+                } else if (currentCommand_.equalsIgnoreCase("derivativediscriminantlevel")) {
+
+                    UIController.instance().setState(new FILE_ACTION_SELECTED(DerivativeDiscriminantLevelCurvePlotCommand.instance()));
                 } else if (currentCommand_.equalsIgnoreCase("compositecurve")) {
                     UIController.instance().setState(new FILE_ACTION_SELECTED(CompositePlotCommand.instance()));
                 } else if (currentCommand_.equalsIgnoreCase("rarefactioncurve")) {
@@ -241,31 +244,50 @@ public class RPnCommandModule {
                     UIController.instance().setState(new FILE_ACTION_SELECTED(SecondaryBifurcationCurveCommand.instance()));
                     SecondaryBifurcationCurveCommand.instance().execute();
 
-
                 } else if (currentCommand_.equalsIgnoreCase("extensioncurve")) {
                     UIController.instance().setState(new FILE_ACTION_SELECTED(GenericExtensionCurveCommand.instance()));
                     GenericExtensionCurveCommand.instance().execute();
 
                 } else if (currentCommand_.equalsIgnoreCase("curveselection")) {
-                    selectedGeometry_ = selectCurve(curveId_);
-                    System.out.println("Selecionando curva :"+curveId_);
-                    RPnPhaseSpaceFrame frame =(RPnPhaseSpaceFrame)RPnUIFrame.getFrame("Axis0 Axis1");
-                    GenericExtensionCurveCommand.instance().setGeometryAndPanel(selectedGeometry_, frame.phaseSpacePanel());
+                    RpGeometry selectedGeometry = pickCurve(curveId_);
+                    boolean selected = !selectedGeometry.isSelected();
+                    selectedGeometry.setSelected(selected);
+                    
+                    if(selected){
+                    UIController.instance().getSelectedGeometriesList().add(selectedGeometry);                        
+                    
+                    }
+                    else {
+                    UIController.instance().getSelectedGeometriesList().remove(selectedGeometry);
+                    }
+                    
 
+                    System.out.println("Selecionando curva :" + curveId_ + " " + selected);
+
+                    RPnDataModule.PHASESPACE.update();
+//                    RPnPhaseSpaceFrame frame = (RPnPhaseSpaceFrame) RPnUIFrame.getFrame("Axis0 Axis1");
+//                    GenericExtensionCurveCommand.instance().setGeometryAndPanel(selectedGeometry_, frame.phaseSpacePanel());
+
+                } else if (currentCommand_.equalsIgnoreCase("clear")) {
+                    ClearPhaseSpaceCommand.instance().clear();
+
+                } else if (currentCommand_.equalsIgnoreCase("velocity")) {
+                    realVectorList_.clear();
+                    creatingSelection_ = true;
 
                 }
                 
-                else if (currentCommand_.equalsIgnoreCase("clear")) {
-                   ClearPhaseSpaceCommand.instance().clear();
+                
+                else if (currentCommand_.equalsIgnoreCase("classify")) {
+                    realVectorList_.clear();
+                    creatingSelection_ = true;
 
                 }
 
-
-
-
             }
 
-            if (currentElement_.equals("REALVECTOR")) {
+            if (currentElement_.equals(
+                    "REALVECTOR")) {
 
                 stringBuffer_ = new StringBuilder();
                 stringBuffer_.append(att.getValue("coords"));
@@ -275,9 +297,7 @@ public class RPnCommandModule {
         @Override
         public void endElement(String uri, String name, String qName) throws SAXException {
 
-
             if (name.equals("CURVESELECTION")) {
-
 
                 RealVector[] coords = new RealVector[realVectorList_.size()];
 
@@ -290,11 +310,9 @@ public class RPnCommandModule {
 
                 RPnPhaseSpacePanel panel = frame.phaseSpacePanel();
 
-
-
                 AreaSelected curveSelection = new AreaSelected(coords, panel.scene().getViewingTransform(), new ViewingAttr(Color.red));
-                
-                curvesPanel_=panel;
+
+                curvesPanel_ = panel;
 
                 panel.addGraphicUtil(curveSelection);
                 panel.updateGraphicsUtil();
@@ -303,7 +321,7 @@ public class RPnCommandModule {
                 creatingSelection_ = false;
 
             }
-
+           
 
             if (name.equals("DOMAINSELECTION")) {
 
@@ -314,7 +332,6 @@ public class RPnCommandModule {
                     coords[i] = new CoordsArray(realVectorList_.get(i));
 
                 }
-
 
                 MultiPolygon polygon = new MultiPolygon(coords, new ViewingAttr(Color.green));
                 RPnPhaseSpaceFrame frame = (RPnPhaseSpaceFrame) RPnUIFrame.getFrame(RPnNetworkStatus.ACTIVATED_FRAME_TITLE);
@@ -330,19 +347,14 @@ public class RPnCommandModule {
 
             }
 
-
-
-
             if (name.equals("REALVECTOR")) {
 
                 if (creatingSelection_) {
 
                     realVectorList_.add(new RealVector(stringBuffer_.toString()));
 
-
                 } else {
                     UIController.instance().userInputComplete(new RealVector(stringBuffer_.toString()));
-
 
                     if (UIController.instance().getState() instanceof FILE_ACTION_SELECTED) {
 
@@ -371,20 +383,75 @@ public class RPnCommandModule {
                 isChangePhysicsParamsCommand_ = true;
             }
 
-
             if (name.equals("COMMAND")) {
 
+                if (currentCommand_.equals("velocity")) {
+                    
+                    System.out.println("tamanho da lista de realvector: "+realVectorList_.size());
+
+                    CoordsArray[] coords = new CoordsArray[realVectorList_.size()];
+
+                    for (int i = 0; i < realVectorList_.size(); i++) {
+
+                        System.out.println(realVectorList_.get(i));
+                        coords[i] = new CoordsArray(realVectorList_.get(i));
+
+                    }
+
+                    RpGeometry geometry = pickCurve(curveId_);
+
+                    RPnPhaseSpaceFrame frame = (RPnPhaseSpaceFrame) RPnUIFrame.getFrame(RPnNetworkStatus.ACTIVATED_FRAME_TITLE);
+
+                    RPnPhaseSpacePanel panel = frame.phaseSpacePanel();
+
+                    geometry.showSpeed(coords[0], coords[1], panel.scene().getViewingTransform());
+
+                    panel.updateGraphicsUtil();
+                    creatingSelection_=false;
+                }
+                
+                
+                 if (currentCommand_.equals("classify")) {
+
+                    CoordsArray[] coords = new CoordsArray[realVectorList_.size()];
+
+                    for (int i = 0; i < realVectorList_.size(); i++) {
+
+                        System.out.println(realVectorList_.get(i));
+                        coords[i] = new CoordsArray(realVectorList_.get(i));
+
+                    }
+
+                    RpGeometry geometry = pickCurve(curveId_);
+
+                    RPnPhaseSpaceFrame frame = (RPnPhaseSpaceFrame) RPnUIFrame.getFrame(RPnNetworkStatus.ACTIVATED_FRAME_TITLE);
+
+                    RPnPhaseSpacePanel panel = frame.phaseSpacePanel();
+
+                    geometry.showClassification(coords[0], coords[1], panel.scene().getViewingTransform());
+
+                    panel.updateGraphicsUtil();
+                    creatingSelection_=false;
+                }
+                
 
                 if (currentCommand_.equals("Curve Remove Command")) {
                     CurveRemoveCommand.instance().remove(curveId_);
                 }
 
-
-                if (currentCommand_.equals("levelcurve")) {
+                if (currentCommand_.equals("eigenvaluelevel")) {
                     LevelCurvePlotCommand.instance().execute();
                 }
-            }
 
+                if (currentCommand_.equals("discriminantlevel")) {
+                    DiscriminantLevelCurvePlotCommand.instance().execute();
+                }
+
+                if (currentCommand_.equalsIgnoreCase("derivativediscriminantlevel")) {
+                    DerivativeDiscriminantLevelCurvePlotCommand.instance().execute();
+                }
+
+            }
 
         }
 
@@ -427,23 +494,17 @@ public class RPnCommandModule {
             }
         }
 
-        private RpGeometry selectCurve(int curveID) {
+        private RpGeometry pickCurve(int curveID) {
 
-
-            System.out.println("Curve id :"+curveID);
+            System.out.println("Curve id :" + curveID);
             RPnPhaseSpaceAbstraction phaseSpace = UIController.instance().getActivePhaseSpace();
 
-
-
             Iterator geomObjIterator = phaseSpace.getGeomObjIterator();
-
-
 
             while (geomObjIterator.hasNext()) {
                 RpGeometry geometry = (RpGeometry) geomObjIterator.next();
 
                 RpGeomFactory factory = geometry.geomFactory();
-
 
                 RPnCurve curve = (RPnCurve) factory.geomSource();
 
@@ -452,18 +513,17 @@ public class RPnCommandModule {
                 }
 
             }
-            
-            System.out.println("Curva selecionada nao achada !");
+
+            System.out.println("Curve " + curveID + " not found !");
 
             return null;
-
 
         }
     }
 
     //
-    // Initializers
-    //        
+// Initializers
+//        
     /**
      * Initializes the XML parser to reload a previous session.
      */

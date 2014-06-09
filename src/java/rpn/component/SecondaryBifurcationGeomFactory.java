@@ -5,14 +5,8 @@
  */
 package rpn.component;
 
-import java.awt.Color;
 import java.util.List;
 import rpnumerics.*;
-import wave.multid.CoordsArray;
-import wave.multid.model.MultiPoint;
-import wave.multid.view.ViewingAttr;
-import wave.util.RealSegment;
-import wave.util.RealVector;
 
 public class SecondaryBifurcationGeomFactory extends BifurcationCurveGeomFactory {
 
@@ -88,26 +82,26 @@ public class SecondaryBifurcationGeomFactory extends BifurcationCurveGeomFactory
         super(calc);
     }
 
-    @Override
-    protected ViewingAttr leftViewingAttr() {
+//    @Override
+//    protected ViewingAttr leftViewingAttr() {
+//
+//        RpCalculation calc = rpCalc();
+//        if (calc instanceof StoneExplicitSecondaryBifurcationCurveCalc) {
+//            return new ViewingAttr(Color.white);
+//        }
+//
+//
+//
+//        return new ViewingAttr(Color.yellow);
+//    }
 
-        RpCalculation calc = rpCalc();
-        if (calc instanceof StoneExplicitSecondaryBifurcationCurveCalc) {
-            return new ViewingAttr(Color.white);
-        }
-
-
-
-        return new ViewingAttr(Color.yellow);
-    }
-
-    @Override
-    protected ViewingAttr rightViewingAttr() {
-        RpCalculation calc = rpCalc();
-        if (calc instanceof StoneExplicitSecondaryBifurcationCurveCalc) {
-            return new ViewingAttr(Color.white);
-        }
-
-        return new ViewingAttr(Color.magenta);
-    }
+//    @Override
+//    protected ViewingAttr rightViewingAttr() {
+//        RpCalculation calc = rpCalc();
+//        if (calc instanceof StoneExplicitSecondaryBifurcationCurveCalc) {
+//            return new ViewingAttr(Color.white);
+//        }
+//
+//        return new ViewingAttr(Color.magenta);
+//    }
 }

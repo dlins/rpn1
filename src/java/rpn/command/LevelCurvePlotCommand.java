@@ -24,7 +24,7 @@ public class LevelCurvePlotCommand extends RpModelPlotCommand {
     // Constants
     //
 
-    static public final String DESC_TEXT = "Level Curve";
+    static public final String DESC_TEXT = "Eigen Value Level";
     //
     // Members
     //
@@ -34,7 +34,7 @@ public class LevelCurvePlotCommand extends RpModelPlotCommand {
     // Constructors/Initializers
     //
     protected LevelCurvePlotCommand() {
-        super(DESC_TEXT, rpn.configuration.RPnConfig.HUGONIOT, new JToggleButton());
+        super(DESC_TEXT,null, new JToggleButton());
     }
 
     public RpGeometry createRpGeometry(RealVector[] input) {

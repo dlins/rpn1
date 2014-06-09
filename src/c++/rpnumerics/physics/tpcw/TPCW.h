@@ -19,6 +19,10 @@
 #include "Hugoniot_TP.h"
 #include "HugoniotContinuation3D2D.h"
 #include "ShockContinuationMethod3D2D.h"
+#include "Coincidence_TPCW.h"
+#include "Evap_Extension.h"
+#include "ShockCurve.h"
+#include "CompositeCurveTPCW.h"
 #include "RectBoundary.h"
 #include "Multid.h"
 
@@ -31,8 +35,9 @@
 class TPCW : public SubPhysics {
 private:
 
-    Thermodynamics_SuperCO2_WaterAdimensionalized * TD;
-   
+    Thermodynamics * TD;
+    MolarDensity * mdv_;
+    MolarDensity * mdl_;
 
 
 public:
@@ -43,24 +48,24 @@ public:
     TPCW(const RealVector &, const string &);
 
 
-    TPCW(const TPCW &);
+    //    TPCW(const TPCW &);
 
     SubPhysics * clone()const;
 
     Boundary * defaultBoundary()const;
-    
-//    void setParams(vector<string> params) ;
+
+    //    void setParams(vector<string> params) ;
 
 
     void setParams(vector<string>);
 
-    vector<double> *  getParams();
+    vector<double> * getParams();
     void preProcess(RealVector &);
     void postProcess(vector<RealVector> &);
     void postProcess(RealVector &);
 
     void boundary(const Boundary &);
-    
+
 
 
     double T2Theta(double)const;

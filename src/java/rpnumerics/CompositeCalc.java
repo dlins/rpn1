@@ -42,7 +42,7 @@ public class CompositeCalc extends WaveCurveOrbitCalc implements RpCalculation  
         if (result == null) {
             throw new RpException("Error in native layer");
         }
-        result.setReferencePoint(getStart());
+      
         return result;
     }
 

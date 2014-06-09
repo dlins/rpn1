@@ -8,13 +8,10 @@ package rpn;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.ItemSelectable;
 import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.text.NumberFormat;
@@ -40,7 +37,10 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
+import rpn.command.CurveSelectionCommand;
 import rpn.component.BifurcationCurveBranchGeom;
+import rpn.component.BifurcationCurveGeom;
+import rpn.component.BifurcationCurveGeomSide;
 import rpn.component.RpCalcBasedGeomFactory;
 import rpn.component.RpGeometry;
 import rpn.controller.ui.UIController;
@@ -48,7 +48,7 @@ import rpn.parser.RPnDataModule;
 import rpnumerics.HugoniotCurve;
 import rpnumerics.HugoniotCurveCalcND;
 import rpnumerics.OrbitCalc;
-import rpnumerics.PointLevelCalc;
+import rpnumerics.EigenValuePointLevelCalc;
 import rpnumerics.RPnCurve;
 import rpnumerics.RarefactionExtensionCalc;
 import rpnumerics.RpCalculation;
@@ -57,7 +57,7 @@ import rpnumerics.StationaryPointCalc;
 import wave.multid.model.MultiGeometry;
 import wave.util.RealVector;
 
-public class RPnCurvesList extends Observable implements ActionListener, ListSelectionListener, TableModelListener, MouseListener,ItemListener {
+public class RPnCurvesList extends Observable implements ActionListener, ListSelectionListener, TableModelListener, MouseListener {
 
     private JScrollPane tablePanel_;
     private JToolBar toolBar_;
@@ -71,7 +71,6 @@ public class RPnCurvesList extends Observable implements ActionListener, ListSel
     private List indexGeometries;
     private List<RpGeometry> geometryList_;
     private ArrayList<RpGeometry> geometriesToRemove_;
-    private int pressedRow;
 
     public RPnCurvesList(String title, RPnPhaseSpaceAbstraction phaseSpace) {
 
@@ -92,7 +91,7 @@ public class RPnCurvesList extends Observable implements ActionListener, ListSel
 
         frame_.setLocation((int) (width - (width * .55)), (int) (height - (height * .35)));
 
-        tableModel_ = new RPnCurvesTableModel();
+        tableModel_ = new RPnCurvesTableModel(phaseSpace);
         tableModel_.addTableModelListener(this);
 
         toolBar_ = new JToolBar();
@@ -152,15 +151,33 @@ public class RPnCurvesList extends Observable implements ActionListener, ListSel
         curvesTable_.getColumnModel().getColumn(2).setCellEditor(new DefaultCellEditor(new JCheckBox()));
         curvesTable_.getColumnModel().getColumn(3).setCellEditor(new DefaultCellEditor(new JCheckBox()));
 
+        JComboBox comboBox = new JComboBox();
+
+        comboBox.addItem("LEFTRIGHT");
+        comboBox.addItem("RIGHTLEFT");
+        comboBox.addItem("NONE");
+        comboBox.setSelectedIndex(2);
+
+        curvesTable_.getColumnModel().getColumn(4).setCellEditor(new DefaultCellEditor(comboBox));
+
     }
 
     public void removeGeometrySide(MultiGeometry geometry) {
-//        if (geometry instanceof BifurcationCurveGeom) {
-//            BifurcationCurveGeom bifurcationGeom = (BifurcationCurveGeom) geometry;
-//            phaseSpace_.remove(bifurcationGeom.getOtherSide());
-//            
-//        }
-//        
+
+        if (geometry instanceof BifurcationCurveGeomSide) {
+            BifurcationCurveGeomSide bifurcationGeom = (BifurcationCurveGeomSide) geometry;
+            phaseSpace_.remove(bifurcationGeom.getOtherSide());
+
+        }
+
+        if (geometry instanceof BifurcationCurveGeom) {
+            BifurcationCurveGeom branch = (BifurcationCurveGeom) geometry;
+            for (BifurcationCurveBranchGeom rpGeometry : branch.getBifurcationListGeom()) {
+                removeGeometrySide(rpGeometry);
+            }
+
+        }
+
     }
 
     //**** alteracao do metodo original para testar (Leandro)
@@ -169,19 +186,23 @@ public class RPnCurvesList extends Observable implements ActionListener, ListSel
         RealVector userInput = new RealVector(2);
         String geometryName = "Poincare";
 
+        int curveID = 1000;
         if (geometry.geomFactory() instanceof RpCalcBasedGeomFactory) {
             RpCalcBasedGeomFactory factory = (RpCalcBasedGeomFactory) geometry.geomFactory();
 
             geometryName = factory.geomSource().getClass().getSimpleName();
             RpCalculation calc = factory.rpCalc();
 
+//            RPnCurve curveToID = (RPnCurve) factory.geomSource();
+
             if (calc instanceof HugoniotCurveCalcND) {
                 HugoniotCurve curve = (HugoniotCurve) factory.geomSource();
+//                curveID = curveToID.getId();
                 userInput = curve.getXZero().getCoords();
             }
 
-            if (calc instanceof PointLevelCalc) {
-                PointLevelCalc hCalc = (PointLevelCalc) calc;
+            if (calc instanceof EigenValuePointLevelCalc) {
+                EigenValuePointLevelCalc hCalc = (EigenValuePointLevelCalc) calc;
                 userInput = hCalc.getStartPoint();
             }
 
@@ -216,23 +237,10 @@ public class RPnCurvesList extends Observable implements ActionListener, ListSel
         }
 
         data.add(userInputString);
-        data.add(geometry.viewingAttr().isVisible());
-        data.add(geometry.viewingAttr().isSelected());
+        data.add(geometry.isVisible());
+        data.add(geometry.isSelected());
 
-        JComboBox comboBox = new JComboBox();
-
-
-        comboBox.addItem("Left to Right");
-        comboBox.addItem("Right to Left");
-        comboBox.addItem("None");
-        comboBox.setSelectedIndex(2);
-        data.add("None");
-        comboBox.addItemListener(this);
-        if (!(geometry instanceof BifurcationCurveBranchGeom)) {
-            comboBox.setEnabled(false);
-        }
-
-        curvesTable_.getColumnModel().getColumn(4).setCellEditor(new DefaultCellEditor(comboBox));
+        data.add("NONE");
 
         tableModel_.addRow(data);
 
@@ -305,10 +313,10 @@ public class RPnCurvesList extends Observable implements ActionListener, ListSel
 
     }
 
+    @Override
     public void actionPerformed(ActionEvent e) {
-        
-        
-        System.out.println("Comando: "+ e.paramString());
+
+        System.out.println("Comando: " + e.paramString());
 
         if (e.getSource() instanceof JButton) {
             JButton button = (JButton) e.getSource();
@@ -357,7 +365,6 @@ public class RPnCurvesList extends Observable implements ActionListener, ListSel
             }
 
         }
-
 
     }
 
@@ -468,6 +475,12 @@ public class RPnCurvesList extends Observable implements ActionListener, ListSel
 
                     }
 
+                    RPnCurve curve = (RPnCurve) geometry.geomFactory().geomSource();
+
+                    CurveSelectionCommand.instance().setCurveToSelect(curve.getId());
+
+                    CurveSelectionCommand.instance().execute();
+
                     setChanged();
                     notifyObservers();
 
@@ -488,11 +501,6 @@ public class RPnCurvesList extends Observable implements ActionListener, ListSel
     @Override
     public void mousePressed(MouseEvent e) {
 
-        Point eventPoint = e.getPoint();
-
-        pressedRow = curvesTable_.rowAtPoint(eventPoint);
-        System.out.println("Linha selecionada" + curvesTable_.rowAtPoint(eventPoint));
-
     }
 
     @Override
@@ -510,20 +518,4 @@ public class RPnCurvesList extends Observable implements ActionListener, ListSel
 
     }
 
-    @Override
-    public void itemStateChanged(ItemEvent e) {
-        
-        if (e.getSource() instanceof JComboBox) {
-            JComboBox combo = (JComboBox) e.getSource();
-
-                BifurcationCurveBranchGeom bifurcationCurveBranchGeom = (BifurcationCurveBranchGeom) geometryList_.get(pressedRow);
-                bifurcationCurveBranchGeom.setCorrespondenceDirection(combo.getSelectedIndex());
-
-            
-        }
-
-       System.out.println("Disparando item state changed"+e.getItem());
-    }
-
-   
 }

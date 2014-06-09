@@ -63,10 +63,10 @@ public class WaveCurveOrbitGeomView extends OrbitGeomView {
 
                 if (direction.norm() != 0.0) {
 
-                    double lambda1 = points[i].getLambda();
+                    double lambda1 = points[i].getSpeed();
 
 
-                    double lambda2 = points[i + 1].getLambda();
+                    double lambda2 = points[i + 1].getSpeed();
 
 
                     if (lambda1 > lambda2) {
@@ -97,10 +97,10 @@ public class WaveCurveOrbitGeomView extends OrbitGeomView {
         // Find the integer levels of the ends of each segment
 
 
-        double lambda_first = firstPoint.getLambda();
+        double lambda_first = firstPoint.getSpeed();
 
 
-        double lambda_last = secondPoint.getLambda();
+        double lambda_last = secondPoint.getSpeed();
 
 
 

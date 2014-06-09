@@ -234,6 +234,10 @@ double norm(const RealVector &x){
     return sqrt(x*x);
 }
 
+double norm2_squared(const RealVector &x){
+    return x*x;
+}
+
 // Norm in L1.
 double norm_L1(const RealVector &x){
     double d = 0.0;
@@ -414,5 +418,63 @@ void convex_hull(std::vector<RealVector> &polygon, std::vector<RealVector> &ch){
     ch.resize(k);
 
     return;
+}
+
+RealVector project_point_onto_line_2D(const RealVector &q, const RealVector &p0, const RealVector &p1){
+    RealVector p1_minus_p0 = p1 - p0;
+
+    DoubleMatrix P(2, 2);
+    P(0, 0) = p1_minus_p0(0);
+    P(0, 1) = p1_minus_p0(1);
+    P(1, 0) = p1_minus_p0(1);
+    P(1, 1) = -p1_minus_p0(0);
+
+    RealVector b(2);
+    b(0) = q*p1_minus_p0;
+    b(1) = -p0(1)*p1_minus_p0(0) + p0(0)*p1_minus_p0(1);
+
+    RealVector p;
+    solve(P, b, p);
+
+    return p;
+}
+
+double distance_point_line_2D(const RealVector &q, const RealVector &p0, const RealVector &p1){
+    double a, b, c;
+    a = p1(1) - p0(1);
+    b = p0(0) - p1(0);
+    c = p1(0)*p0(1) - p0(0)*p1(1);
+
+    return std::abs(a*q(0) + b*q(1) + c)/sqrt(a*a + b*b);
+}
+
+bool segment_segment_intersection(const RealVector &p0, const RealVector &p1, const RealVector &q0, const RealVector &q1, RealVector &r, double &alpha, double &beta){
+    DoubleMatrix A(2, 2);
+    for (int i = 0; i < 2; i++){
+        A(i, 0) = p0(i) - p1(i);
+        A(i, 1) = q1(i) - q0(i);
+    }
+
+    RealVector b = q1 - p1;
+
+    double delta = A(0, 0)*A(1, 1) - A(0, 1)*A(1, 0);
+    if (fabs(delta) < 1e-10) {
+        return false;
+    }
+
+    alpha = (b(0)*A(1, 1) - b(1)*A(0, 1))/delta;
+    beta  = (b(1)*A(0, 0) - b(0)*A(1, 0))/delta;
+
+    r = .5*(alpha*p0 + (1.0 - alpha)*p1 + beta*q0 + (1.0 - beta)*q1);
+
+    return (alpha >= 0.0 && alpha <= 1.0) && (beta >= 0.0 && beta <= 1.0);
+}
+
+double sum(const RealVector &v){
+    double s = 0.0;
+
+    for (int i = 0; i < v.size(); i++) s += v(i);
+
+    return s;
 }
 

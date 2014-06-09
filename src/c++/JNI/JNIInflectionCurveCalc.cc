@@ -62,14 +62,39 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_InflectionCurveCalc_nativeCalc__I
     GridValues * gv = RpNumerics::getGridFactory().getGrid("bifurcationcurve");
 
     RealVector res = gv->grid_resolution;
-    //cout << "Resolucao: " << res << endl;
 
     Inflection_Curve inflectionCurve;
 
-    std::vector<RealVector> left_vrs;
+    std::vector<RealVector> curveVector;
+    std::vector<RealVector>left_vrs;
 
-    inflectionCurve.curve(& RpNumerics::getPhysics().fluxFunction(), & RpNumerics::getPhysics().accumulation(), *gv, family, left_vrs);
+    inflectionCurve.curve(& RpNumerics::getPhysics().fluxFunction(), & RpNumerics::getPhysics().accumulation(), *gv, family, curveVector);
 
+    
+    
+
+        for (int i = 0; i < curveVector.size() / 2; i++) {
+            bool invalidPoint = true;
+            for (int j = 0; j < 2; j++) {
+                RealVector point = curveVector[2 * i + j];
+                  invalidPoint = ((point(0)!=point(0)) || ((point(1)!=point(1))));
+            }
+            if (!invalidPoint) {
+                left_vrs.push_back(curveVector[2 * i]);
+                left_vrs.push_back(curveVector[2 * i + 1]);
+            }
+
+        }
+    
+    
+    
+    
+//    for (int i = 0; i < left_vrs.size(); i++) {
+//        cout<<left_vrs[i]<<endl;
+//
+//    }
+    
+    
     if (left_vrs.size() == 0)
         return NULL;
 

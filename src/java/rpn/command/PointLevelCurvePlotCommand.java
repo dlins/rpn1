@@ -15,7 +15,7 @@ public class PointLevelCurvePlotCommand extends RpModelPlotCommand {
     //
     // Constants
     //
-    static public final String DESC_TEXT = "Point Level Curve";
+    static public final String DESC_TEXT = "Eigen Value Point Level";
 
     //
     // Members
@@ -26,7 +26,7 @@ public class PointLevelCurvePlotCommand extends RpModelPlotCommand {
     // Constructors/Initializers
     //
     protected PointLevelCurvePlotCommand() {
-        super(DESC_TEXT, rpn.configuration.RPnConfig.HUGONIOT,new JToggleButton());
+        super(DESC_TEXT, null,new JToggleButton());
     }
 
     public RpGeometry createRpGeometry(RealVector[] input) {

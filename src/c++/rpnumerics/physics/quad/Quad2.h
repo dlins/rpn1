@@ -17,7 +17,6 @@
 #include "SubPhysics.h"
 #include "Quad2FluxFunction.h"
 #include "Quad2AccumulationFunction.h"
-#include "Quad2Hugoniot.h"
 #include "Quad2FluxParams.h"
 #include "RectBoundary.h"
 #include "HugoniotContinuation2D2D.h"

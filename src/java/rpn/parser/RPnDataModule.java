@@ -51,6 +51,7 @@ public class RPnDataModule {
     static public RPnPhaseSpaceAbstraction LEFTPHASESPACE = null;
     static public RPnPhaseSpaceAbstraction RIGHTPHASESPACE = null;
     static public RPnPhaseSpaceAbstraction RIEMANNPHASESPACE = null;
+    static public RPnPhaseSpaceAbstraction SPEEDGRAPHICSPHASESPACE = null;
     static public RPnPhaseSpaceAbstraction[] CHARACTERISTICSPHASESPACEARRAY = null;
     private static HashMap<String, RPnPhaseSpaceAbstraction> phaseSpaceMap_ = new HashMap<String, RPnPhaseSpaceAbstraction>();
 
@@ -59,6 +60,8 @@ public class RPnDataModule {
         phaseSpaceMap_.put(PHASESPACE.getName(), PHASESPACE);
         phaseSpaceMap_.put(LEFTPHASESPACE.getName(), LEFTPHASESPACE);
         phaseSpaceMap_.put(RIGHTPHASESPACE.getName(), RIGHTPHASESPACE);
+
+        
 
     }
 
@@ -140,6 +143,12 @@ public class RPnDataModule {
                     RPNUMERICS.domain(), new NumConfigImpl());//  RpNumerics.domain(),
             RIEMANNPHASESPACE = new RPnPhaseSpaceAbstraction("Riemann Phase Space",
                     new Space("Riemann Space", RPNUMERICS.domainDim() + 1), new NumConfigImpl());
+            
+            
+            
+              SPEEDGRAPHICSPHASESPACE = new RPnPhaseSpaceAbstraction("Speed Graphics Phase Space",
+                      new Space("Speed Graphics Space", 2), new NumConfigImpl());
+            
 
             CHARACTERISTICSPHASESPACEARRAY = new RPnPhaseSpaceAbstraction[RPNUMERICS.domainDim()];
 
@@ -152,6 +161,7 @@ public class RPnDataModule {
             phaseSpaceMap_.put(PHASESPACE.getName(), PHASESPACE);
             phaseSpaceMap_.put(LEFTPHASESPACE.getName(), LEFTPHASESPACE);
             phaseSpaceMap_.put(RIGHTPHASESPACE.getName(), RIGHTPHASESPACE);
+
 
         }
 
@@ -411,6 +421,122 @@ public class RPnDataModule {
                     RarefactionCurvePlotCommand.instance().execute(factory);
 
                 }
+<<<<<<< HEAD
+=======
+
+
+                if (curve_name_.equals(rpnumerics.ShockCurve.class.getSimpleName())) {
+
+                    ShockCurve curve = new ShockCurve(orbitPointsArray, Integer.parseInt(currentConfiguration_.getParam("family")),
+                            Integer.parseInt(currentConfiguration_.getParam("direction")));
+
+                    ShockCurveGeomFactory factory =
+                            new ShockCurveGeomFactory(RPNUMERICS.createShockCurveCalc(startPoint_, currentConfiguration_), curve);
+                    ShockCurvePlotCommand.instance().execute(factory);
+
+                }
+
+
+
+                if (curve_name_.equals(rpnumerics.CompositeCurve.class.getSimpleName())) {
+
+                    CompositeCurve curve = new CompositeCurve(orbitPointsArray, Integer.parseInt(currentConfiguration_.getParam("direction")), Integer.parseInt(currentConfiguration_.getParam("family")));
+
+                    CompositeGeomFactory factory =
+                            new CompositeGeomFactory(RPNUMERICS.createCompositeCalc(startPoint_, currentConfiguration_), curve);
+                    CompositePlotCommand.instance().execute(factory);
+
+                }
+
+
+                if (curve_name_.equals(rpnumerics.HugoniotCurve.class.getSimpleName())) {
+
+
+                    HugoniotCurve curve = new HugoniotCurve(startPoint_, hugoniotSegments_, transitionPoint_);
+                    int direction = Integer.parseInt(currentConfiguration_.getParam("direction"));
+
+                    int[] resolution = processResolution(currentConfiguration_.getParam("resolution"));
+                    
+                    //TODO Replace !!
+                    
+                    HugoniotParams params = new HugoniotParams(startPoint_, direction, resolution,"IMPLICIT");
+
+                    HugoniotCurveCalcND calc = new HugoniotCurveCalcND(params);
+
+                    HugoniotCurveGeomFactory factory = new HugoniotCurveGeomFactory(calc, curve);
+
+                    HugoniotContinuationPlotCommand.instance().execute(factory);
+
+                }
+
+                if (curve_name_.equals(rpnumerics.EigenValueCurve.class.getSimpleName())) {
+
+                    int family = Integer.parseInt(currentConfiguration_.getParam("family"));
+                    double level = Double.parseDouble(currentConfiguration_.getParam("level"));
+                    int[] resolution = processResolution(currentConfiguration_.getParam("resolution"));
+                    ContourParams params = new ContourParams(resolution);
+                    EigenValueCurve curve = new EigenValueCurve(family, realSegments_, level);
+                    CharacteristicPolynomialLevelCalc calc = null;
+                    if (startPoint_ != null) {
+
+                        calc = new EigenValuePointLevelCalc(startPoint_, family, params);
+                        LevelCurveGeomFactory factory = new LevelCurveGeomFactory(calc, curve);
+                        PointLevelCurvePlotCommand.instance().execute(factory);
+
+
+                    } else {
+                        calc = new EigenValueLevelCalc(family, level, params);
+                        LevelCurveGeomFactory factory = new LevelCurveGeomFactory(calc, curve);
+                        LevelCurvePlotCommand.instance().execute(factory);
+                    }
+
+
+
+                }
+
+                if (curve_name_.equals(rpnumerics.IntegralCurve.class.getSimpleName())) {
+                    int familyIndex = Integer.parseInt(currentConfiguration_.getParam("family"));
+                    IntegralCurve curve = new IntegralCurve(orbitPointsArray, familyIndex, inflectionPoint_);
+                    IntegralCurveCalc calc = new IntegralCurveCalc(startPoint_, familyIndex);
+                    IntegralOrbitGeomFactory factory = new IntegralOrbitGeomFactory(calc, curve);
+                    IntegralCurvePlotCommand.instance().execute(factory);
+
+                }
+                if (curve_name_.equals(rpnumerics.WaveCurve.class.getSimpleName())) {
+
+                    WaveCurveCalc calc = new WaveCurveCalc(startPoint_, Integer.parseInt(currentConfiguration_.getParam("family")),
+                            Integer.parseInt(currentConfiguration_.getParam("direction")),0,0); //TODO Ler de onde a curva esta partindo e o edge se for da fronteira
+
+                    WaveCurveGeomFactory factory = new WaveCurveGeomFactory(calc);
+
+                    WaveCurvePlotCommand.instance().execute(factory);
+
+                }
+
+
+
+                if (curve_name_.equals(rpnumerics.RarefactionExtensionCurve.class.getSimpleName())) {
+
+                    int[] resolution = processResolution(currentConfiguration_.getParam("resolution"));
+                    ContourParams params = new ContourParams(resolution);
+
+
+                    RarefactionExtensionCalc calc = new RarefactionExtensionCalc(params, startPoint_,
+                            Integer.parseInt(currentConfiguration_.getParam("direction")),
+                            Integer.parseInt(currentConfiguration_.getParam("curvefamily")),
+                            Integer.parseInt(currentConfiguration_.getParam("extensionfamily")),
+                            Integer.parseInt(currentConfiguration_.getParam("characteristic")));
+
+                    RarefactionExtensionCurve curve = new RarefactionExtensionCurve(realSegments_, realSegments_);
+                    RarefactionExtensionGeomFactory factory = new RarefactionExtensionGeomFactory(calc, curve);
+
+                    RarefactionExtensionCurvePlotCommand.instance().execute(factory);
+
+                }
+
+
+
+>>>>>>> cacheCurvaOnda
             }
         }
 

@@ -108,15 +108,7 @@ public abstract class RpModelPlotCommand extends RpModelActionCommand implements
         RpCalcBasedGeomFactory factory = (RpCalcBasedGeomFactory) geometry.geomFactory();
 
         RPnCurve curve = (RPnCurve) factory.geomSource();
-       
-
-        
-        
-        
-        
-        
-        
-        
+         
 
         curve.setId(curveID_);
         curveID_++;

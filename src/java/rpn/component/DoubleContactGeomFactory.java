@@ -21,17 +21,7 @@ public class DoubleContactGeomFactory extends BifurcationCurveGeomFactory {
         super(calc);
     }
 
-    @Override
-    protected ViewingAttr leftViewingAttr(){
-        return new ViewingAttr(Color.yellow);
-    }
-
-
-    @Override
-    protected ViewingAttr rightViewingAttr() {
-        return new ViewingAttr(Color.magenta);
-    }
-    
+  
     
     @Override
     void updateGeomSource (List<Area> areaListToRefine){

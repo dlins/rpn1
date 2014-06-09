@@ -83,6 +83,12 @@ int Inflection_Curve::curve(const FluxFunction *f, const AccumulationFunction *a
     inflection_curve.clear();
     
     g.fill_dirdrv_on_grid(f, a);
+    
+    
+    
+    
+    
+    
     if ( Debug::get_debug_level() == 5 ) {
         printf("Inflection_Curve::curve\n");
     }

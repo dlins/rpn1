@@ -14,13 +14,13 @@ import wave.util.RealVector;
 
 public class LevelCurveGeomFactory extends RpCalcBasedGeomFactory {
 
-    public LevelCurveGeomFactory(LevelCurveCalc calc) {
+    public LevelCurveGeomFactory(CharacteristicPolynomialLevelCalc calc) {
         super(calc);
 
 
     }
     
-      public LevelCurveGeomFactory(LevelCurveCalc calc,LevelCurve curve) {
+      public LevelCurveGeomFactory(CharacteristicPolynomialLevelCalc calc,EigenValueCurve curve) {
         super(calc,curve);
 
 
@@ -31,13 +31,20 @@ public class LevelCurveGeomFactory extends RpCalcBasedGeomFactory {
     // Methods
     //
     public RpGeometry createGeomFromSource() {
+        
+        Color color = Color.yellow;
+        if (geomSource() instanceof EigenValueCurve){
+            EigenValueCurve curve = (EigenValueCurve)geomSource();
+            color = selectViewingAttribute(curve.getFamily());
+        }
+        
 
-        LevelCurve curve = (LevelCurve) geomSource();
+     CharacteristicsPolynomialCurve curve = (CharacteristicsPolynomialCurve) geomSource();
         int resultSize = curve.segments().size();
         RealSegGeom[] realSegArray = new RealSegGeom[resultSize];
         for (int i = 0; i < resultSize; i++) {
             realSegArray[i] = new RealSegGeom((RealSegment) curve.segments().get(i));
-            realSegArray[i].viewingAttr().setColor(selectViewingAttribute(curve.getFamily()));
+            realSegArray[i].viewingAttr().setColor(color);
         }
         return new LevelCurveGeom(realSegArray, this);
 
@@ -95,13 +102,13 @@ public class LevelCurveGeomFactory extends RpCalcBasedGeomFactory {
         StringBuilder buffer = new StringBuilder();
 
 
-        LevelCurve geomSource = (LevelCurve) geomSource();
+        EigenValueCurve geomSource = (EigenValueCurve) geomSource();
 
 
         String curve_name = '\"' + geomSource.getClass().getSimpleName() + '\"';
         String dimension = '\"' + Integer.toString(RPNUMERICS.domainDim()) + '\"';
 
-        LevelCurveCalc levelCalc = (LevelCurveCalc) rpCalc();
+        CharacteristicPolynomialLevelCalc levelCalc = (CharacteristicPolynomialLevelCalc) rpCalc();
 
 
         //
@@ -110,9 +117,9 @@ public class LevelCurveGeomFactory extends RpCalcBasedGeomFactory {
         buffer.append("<").append(Orbit.XML_TAG).append(" curve_name=" + ' ').append(curve_name).append(' ' + " dimension=" + ' ').append(dimension);
 
 
-        if (levelCalc instanceof PointLevelCalc) {
+        if (levelCalc instanceof EigenValuePointLevelCalc) {
 
-            PointLevelCalc pointLevelCalc = (PointLevelCalc) levelCalc;
+            EigenValuePointLevelCalc pointLevelCalc = (EigenValuePointLevelCalc) levelCalc;
             RealVector startPoint = pointLevelCalc.getStartPoint();
 
             buffer.append(' ' + " startpoint=\"").append(startPoint);

@@ -94,6 +94,12 @@ public abstract class RPnConfigReader {
 
 
             RPnDataModule.init(xmlReader, configStream);
+            
+            
+            configStream.reset();
+            
+            
+            RPnInterfaceModule.init(xmlReader, configStream);
 
 
             PluginInfoParser pluginParser = new PluginInfoParser();

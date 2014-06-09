@@ -91,6 +91,7 @@ public:
  
     // Euclidean norm of a RealVector
     friend double norm(const RealVector &x);
+    friend double norm2_squared(const RealVector &x);
 
     // Norm in L1.
     friend double norm_L1(const RealVector &x);
@@ -140,6 +141,18 @@ public:
         return *this;
     }
 
+    RealVector& operator*=(double v){
+        for (int i = 0; i < size(); i++) component(i) *= v;
+
+        return *this;
+    }
+
+    RealVector& operator/=(double v){
+        for (int i = 0; i < size(); i++) component(i) /= v;
+
+        return *this;
+    }
+
     // The following methods are used when computing a convex hull in 2D and if
     // a point is inside a convex hull. The extension will use them.
 
@@ -165,6 +178,26 @@ public:
     // http://en.wikibooks.org/wiki/Algorithm_Implementation/Geometry/Convex_hull/Monotone_chain
     //
     friend void convex_hull(std::vector<RealVector> &polygon, std::vector<RealVector> &ch);
+
+    // Based on
+    //
+    //     http://cs.nyu.edu/~yap/classes/visual/03s/hw/h2/math.pdf
+    //
+    friend RealVector project_point_onto_line_2D(const RealVector &q, const RealVector &p0, const RealVector &p1);
+
+    // Based on
+    //
+    //     http://en.wikipedia.org/wiki/Distance_from_a_point_to_a_line
+    //
+    friend double distance_point_line_2D(const RealVector &q, const RealVector &p0, const RealVector &p1);
+
+    // r = alpha*p0 + (1.0 - alpha)*p1 = beta*q0 + (1.0 - beta)*q1.
+    //
+    friend bool segment_segment_intersection(const RealVector &p0, const RealVector &p1, const RealVector &q0, const RealVector &q1, RealVector &r, double &alpha, double &beta);
+
+    // Sum of all the elements of a vector.
+    //
+    friend double sum(const RealVector &v);
 };
 
 // Extract rows and columns of a DoubleMatrix and return them as RealVectors.

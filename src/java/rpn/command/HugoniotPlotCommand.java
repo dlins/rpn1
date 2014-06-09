@@ -7,6 +7,7 @@ package rpn.command;
 
 import javax.swing.JToggleButton;
 import rpn.component.*;
+import rpn.configuration.CurveConfiguration;
 import rpnumerics.*;
 import wave.util.RealVector;
 
@@ -29,7 +30,11 @@ public class HugoniotPlotCommand extends RpModelPlotCommand {
     }
 
     public RpGeometry createRpGeometry(RealVector[] input) {
-        HugoniotCurveGeomFactory factory = new HugoniotCurveGeomFactory(RPNUMERICS.createHugoniotCalc(input[0]));
+        
+        
+        HugoniotCurveCalcND hugoniotCurveCalcND = new HugoniotCurveCalcND(new PhasePoint(input[0]),(CurveConfiguration) RPNUMERICS.getConfiguration("hugoniotcurve"));
+        
+        HugoniotCurveGeomFactory factory = new HugoniotCurveGeomFactory(hugoniotCurveCalcND);
         return factory.geom();
     }
 

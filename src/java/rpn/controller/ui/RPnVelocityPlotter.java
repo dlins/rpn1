@@ -7,9 +7,14 @@ package rpn.controller.ui;
 
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import rpn.RPnPhaseSpacePanel;
+import rpn.command.GenericExtensionCurveCommand;
+import rpn.command.RpCommand;
 import rpn.component.RpGeometry;
+import rpn.component.util.GraphicsUtil;
+import rpn.message.RPnNetworkStatus;
 import rpn.parser.RPnDataModule;
 import rpnumerics.RPnCurve;
 import rpnumerics.RPNUMERICS;
@@ -68,8 +73,8 @@ public class RPnVelocityPlotter extends RPn2DMouseController {
             for (int i=0; i < dim; i++) {
                 newValue.setElement(i, coordsWC.getElement(i));
             }
-
             geometry_=RPnDataModule.PHASESPACE.findClosestGeometry(newValue);
+            
             RPnCurve curve = (RPnCurve) (geometry_.geomFactory().geomSource());
             RealVector closestPoint = curve.findClosestPoint(newValue);
 
@@ -81,6 +86,26 @@ public class RPnVelocityPlotter extends RPn2DMouseController {
             
         }
         else {
+            Iterator<GraphicsUtil> annotationIterator = geometry_.getAnnotationIterator();
+            
+            GraphicsUtil lastAnnotation=null;
+            while (annotationIterator.hasNext()) {
+               lastAnnotation = annotationIterator.next();
+                
+            }
+             RPnCurve curve = (RPnCurve)            geometry_.geomFactory().geomSource();
+            RpCommand command = new RpCommand(lastAnnotation.toXML(),"velocity",curve.getId());
+
+            GenericExtensionCurveCommand.instance().logCommand(command);
+
+
+            if (RPnNetworkStatus.instance().isOnline() && RPnNetworkStatus.instance().isMaster()) {
+                RPnNetworkStatus.instance().sendCommand(rpn.controller.ui.UndoActionController.instance().getLastCommand().toXML());
+            }
+            
+            
+            
+            
             addLine_ = false;
         }
 

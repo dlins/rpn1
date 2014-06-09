@@ -145,7 +145,8 @@ public class RadioGroupCreator extends UIComponentCreator {
                 currentOrbitDirection_ = Orbit.BACKWARD_DIR;
             }
 
-            RPNUMERICS.setParamValue("fundamentalcurve", "direction", String.valueOf(currentOrbitDirection_));
+            RPNUMERICS.setParamValue(configuration_.getName(), "direction", String.valueOf(currentOrbitDirection_));
+
         }
     }
     

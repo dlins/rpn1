@@ -13,8 +13,10 @@ import java.util.Observer;
 import javax.swing.JToggleButton;
 import rpn.RPnPhaseSpaceAbstraction;
 import rpn.RPnPhaseSpacePanel;
+import rpn.component.BifurcationCurveGeom;
 import rpn.component.RpCalcBasedGeomFactory;
 import rpn.component.RpGeometry;
+import rpn.component.SegmentedCurveGeom;
 import rpn.controller.ui.RPnAdjustedSelectionPlotter;
 import rpn.controller.ui.AREASELECTION_CONFIG;
 import rpn.controller.ui.UIController;
@@ -93,35 +95,18 @@ public class AdjustedSelectionPlotCommand extends RpModelPlotCommand implements 
 
     @Override
     public void update(Observable o, Object arg) {
-        
-        
          List<RpGeometry> selectedGeometriesList = UIController.instance().getSelectedGeometriesList();
         if (selectedGeometriesList.size()==1){
+    
+            RpGeometry geometry = selectedGeometriesList.get(0);
             
-            setEnabled(true);
+             if ((geometry instanceof SegmentedCurveGeom) || (geometry instanceof BifurcationCurveGeom) ){
+                 setEnabled(true);                 
+             }
         }
         else {
             setEnabled(false);
         }
-        
-        
-        
-        
-//        if (arg != null) {
-//            List<RpGeometry> geometryList = ((List<RpGeometry>) arg);
-//            if (geometryList.isEmpty() || geometryList.size() != 1) {
-//                setEnabled(false);
-//                CurveRefineCommand.instance().setEnabled(false);
-//            } else {
-//
-//                if (geometryList.get(0) instanceof SegmentedCurveGeom || geometryList.get(0) instanceof BifurcationCurveGeom) {    // -----
-//                    setEnabled(true);
-//                } else {
-//                    setEnabled(false);
-//                    CurveRefineCommand.instance().setEnabled(false);
-//                }
-//            }
-//
-//        }
+           
     }
 }

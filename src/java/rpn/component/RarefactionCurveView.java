@@ -83,8 +83,8 @@ public class RarefactionCurveView extends WaveCurveOrbitGeomView{
 
                 if (direction.norm() != 0.0) {
 
-                    double lambda1 = points[i].getLambda();
-                    double lambda2 = points[i + 1].getLambda();
+                    double lambda1 = points[i].getSpeed();
+                    double lambda2 = points[i + 1].getSpeed();
 
                     if (lambda1 > lambda2) {
                         direction.negate();

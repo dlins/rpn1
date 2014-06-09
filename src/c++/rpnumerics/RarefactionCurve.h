@@ -23,6 +23,7 @@
 #define RAREFACTION_INITIALIZE                   50
 #define RAREFACTION_DONT_INITIALIZE              51
 
+#include "Coincidence.h"
 #include "ODE_Solver.h"
 #include "Bisection.h"
 #include "FluxFunction.h"
@@ -32,6 +33,8 @@
 #include "eigen.h"
 
 #include <complex> // To handle complex eigenpairs.
+
+
 
 class WaveCurveFactory;
 
@@ -44,28 +47,24 @@ class RarefactionCurve {
 
         const ODE_Solver           *s;
 
+        const Coincidence          *coincidence_object;
+
         int family;
         RealVector reference_vector;
 
         double directional_derivative(const RealVector &p, int fam, const RealVector &ref);
-
-        int initialize(const RealVector &p, int family, const RealVector &direction, RealVector &ref, double &dd);
-
-        // Move it to WaveCurveFactory.
-        int initialize(const RealVector &p, int family, int increase, RealVector &ref, double &dd);
 
         void all_eigenvalues(const RealVector &p, int fam, std::vector<std::complex<double> > &lambda);
         void all_eigenvalues(const RealVector &p, int fam, RealVector &lambda);
 
         void add_point_to_curve(const RealVector &p, Curve &curve);
 
-        #ifdef TEST
-            Canvas *canvas;
-            CanvasMenuScroll *scroll;
-        #endif
+     
     public:
         RarefactionCurve(const AccumulationFunction *gg, const FluxFunction *ff, const Boundary *bb);
         ~RarefactionCurve();
+
+        void set_coincidence(const Coincidence *c){coincidence_object = c; return;}
 
         int curve(const RealVector &initial_point,
                   int curve_family,
@@ -100,6 +99,9 @@ class RarefactionCurve {
 
         static int elliptic_region_signal_event_2D2D(const RealVector & where, double &discriminant, int *signal_object, int * /* reference_direction */);
         static int elliptic_region_signal_event_3D2D(const RealVector & where, double &discriminant, int *signal_object, int * /* reference_direction */);
+
+        int initialize(const RealVector &p, int family, const RealVector &direction, RealVector &ref, double &dd);
+        int initialize(const RealVector &p, int family, int increase, RealVector &ref, double &dd);
 
         friend class WaveCurveFactory;
         friend class ShockCurve;

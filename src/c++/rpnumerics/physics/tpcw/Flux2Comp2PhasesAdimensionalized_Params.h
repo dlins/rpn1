@@ -4,9 +4,7 @@
 #include "FluxParams.h"
 #include <iostream>
 
-#include "Thermodynamics_SuperCO2_WaterAdimensionalized.h"
-//#include "FracFlow2PhasesHorizontalAdimensionalized.h"
-//#include "FracFlow2PhasesVerticalAdimensionalized.h"
+#include "Thermodynamics.h"
 
 
 using namespace std;
@@ -18,18 +16,18 @@ private:
     const double const_gravity; //= 9.8;
     bool has_gravity_, has_horizontal_;
 
-    Thermodynamics_SuperCO2_WaterAdimensionalized *TD_;
+    Thermodynamics *TD_;
 
 protected:
 public:
 
 
-    Flux2Comp2PhasesAdimensionalized_Params(const RealVector &,Thermodynamics_SuperCO2_WaterAdimensionalized *);
+    Flux2Comp2PhasesAdimensionalized_Params(const RealVector &,Thermodynamics *);
 
     Flux2Comp2PhasesAdimensionalized_Params(double abs_perm, double sin_beta, double const_gravity,
             bool has_gravity,
             bool has_horizontal,
-            Thermodynamics_SuperCO2_WaterAdimensionalized * TD);
+            Thermodynamics * TD);
 
 
     Flux2Comp2PhasesAdimensionalized_Params(const Flux2Comp2PhasesAdimensionalized_Params &);
@@ -38,7 +36,7 @@ public:
 
     virtual ~Flux2Comp2PhasesAdimensionalized_Params();
 
-    Thermodynamics_SuperCO2_WaterAdimensionalized * get_thermodynamics(void) const;
+    Thermodynamics * get_thermodynamics(void) const;
 
     bool has_gravity(void) const;
     bool has_horizontal(void) const;

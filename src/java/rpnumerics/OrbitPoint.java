@@ -20,24 +20,39 @@ public final class OrbitPoint extends PhasePoint {
     private double lambda_;
     private int correspondingPointIndex_;
     private int correspondingCurveIndex_;
+    private double [] eigenValues_;
 
     //
     // Constructor
     //
     public OrbitPoint(OrbitPoint copy) {
         super(copy.getCoords());
-        lambda_ = copy.getLambda();
+        lambda_ = copy.getSpeed();
     }
 
     public OrbitPoint(RealVector pCoords, double pTime) {
         super(pCoords);
         lambda_ = pTime;
     }
+    
+    
+    public OrbitPoint(RealVector pCoords, double [] eigenValues,double pTime) {
+        super(pCoords);
+        lambda_ = pTime;
+        eigenValues_=eigenValues;
+    }
 
     public OrbitPoint(RealVector pCoords) {
         this(pCoords, DEFAULT_TIME);
     }
+    
+    public OrbitPoint(double[] coords, double [] eigenValues,double lambda) {
 
+        super(new RealVector(coords));
+        lambda_ = lambda;
+        eigenValues_=eigenValues;
+    }
+    
     public OrbitPoint(double[] coords, double lambda) {
 
         super(new RealVector(coords));
@@ -49,6 +64,13 @@ public final class OrbitPoint extends PhasePoint {
         lambda_ = coords[coords.length - 1];
     }
 
+    public double[] getEigenValues() {
+        return eigenValues_;
+    }
+
+    
+    
+    
     public OrbitPoint(PhasePoint pPoint) {
         this(pPoint.getCoords());
     }
@@ -90,7 +112,7 @@ public final class OrbitPoint extends PhasePoint {
     //
     // Accessors/Mutators
     //
-    public double getLambda() {
+    public double getSpeed() {
         return lambda_;
     }
 
@@ -121,7 +143,7 @@ public final class OrbitPoint extends PhasePoint {
     public String toXML() {
 
         StringBuilder buffer = new StringBuilder();
-        buffer.append("<ORBITPOINT lambda=\"").append(getLambda()).append('\"' + " coords=\"").append(getCoords().toString()).append("\"/>\n");
+        buffer.append("<ORBITPOINT lambda=\"").append(getSpeed()).append('\"' + " coords=\"").append(getCoords().toString()).append("\"/>\n");
         
 
 
