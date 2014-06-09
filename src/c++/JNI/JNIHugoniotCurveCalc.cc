@@ -82,7 +82,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
 
     //    jstring methodParam = 
 
-    cout << "Aqui" << endl;
+    //cout << "Aqui" << endl;
 
     jstring javaMethodName = (jstring) env->CallObjectMethod(configuration, getParamMethodID, env->NewStringUTF("method"));
 
@@ -92,7 +92,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
     string methodName(env->GetStringUTFChars(javaMethodName, NULL));
     string caseName(env->GetStringUTFChars(javaCaseName, NULL));
 
-    cout << "Method pego no JNI: " << methodName << endl;
+    //cout << "Method pego no JNI: " << methodName << endl;
 
     //Input point
 
@@ -121,18 +121,18 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
 
     ReferencePoint refPoint(Uref, &RpNumerics::getPhysics().fluxFunction(), &RpNumerics::getPhysics().accumulation(), 0);
 
-    cout << "flux :" << RpNumerics::getPhysics().fluxFunction().fluxParams().params() << " " << &RpNumerics::getPhysics().accumulation() << endl;
+    //cout << "flux :" << RpNumerics::getPhysics().fluxFunction().fluxParams().params() << " " << &RpNumerics::getPhysics().accumulation() << endl;
 
     int caseFlag;
     std::stringstream stream(caseName);
 
     stream >> caseFlag;
 
-    cout << "Caso pego no JNI: " << caseFlag << endl;
+    //cout << "Caso pego no JNI: " << caseFlag << endl;
 
-    cout << "Ponto clicado: " << Uref << endl;
+    //cout << "Ponto clicado: " << Uref << endl;
 
-    cout << "Tipo do metodo c++" << hugoniotCurve->implemented_method() << endl;
+    //cout << "Tipo do metodo c++" << hugoniotCurve->implemented_method() << endl;
 
 
     if (hugoniotCurve-> implemented_method() == IMPLICIT_HUGONIOT) {
@@ -154,7 +154,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
     //    for (int i = 0; i < transitionList.size(); i++) {
     //
     //        //        if (Debug::get_debug_level() == 5) {
-    //        cout << "Ponto de transicao: " << transitionList[i] << endl;
+    //        //cout << "Ponto de transicao: " << transitionList[i] << endl;
     //        //        }
     //
     //        jdoubleArray transPointArray = env->NewDoubleArray(dimension);
@@ -176,7 +176,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
 
     //     for (int i = 0; i < vectorCurve.size(); i++) {
     //
-    //         cout<<"Tamanho do vetor de curves " <<vectorCurve[i].curve.size()<<endl;
+    //         //cout<<"Tamanho do vetor de curves " <<vectorCurve[i].curve.size()<<endl;
     //         
     //
     //        for (unsigned int j = 0; j < vectorCurve[i].curve.size()-1; j++) {
@@ -301,7 +301,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
 JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_PhasePoint_2IILwave_util_RealVector_2Lwave_util_RealVector_2
 (JNIEnv *env, jobject obj, jobject uMinus, jint xRes, jint yRes, jobject topR, jobject dwnL) {
 
-    //cout << "entrando e recalc de hugoniot curve" << endl;
+    ////cout << "entrando e recalc de hugoniot curve" << endl;
     jclass classPhasePoint = (env)->FindClass(PHASEPOINT_LOCATION);
 
     jclass hugoniotSegmentClass = (env)->FindClass(HUGONIOTSEGMENTCLASS_LOCATION);
@@ -421,7 +421,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
     //    for (int i = 0; i < transitionList.size(); i++) {
     //
     //        if (Debug::get_debug_level() == 5) {
-    //            cout << "Ponto de transicao: " << transitionList[i] << endl;
+    //            //cout << "Ponto de transicao: " << transitionList[i] << endl;
     //        }
     //
     //        jdoubleArray transPointArray = env->NewDoubleArray(dimension);

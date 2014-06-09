@@ -117,8 +117,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RiemannProfileCalc_nativeCalc
     env->GetIntArrayRegion(waveCurveIDArray, 0, waveCurves, nativeWaveCurvesIDArray);
 
 
-    cout << "ID da curva 0 " << nativeWaveCurvesIDArray[0] << endl;
-    cout << "ID da curva 1 " << nativeWaveCurvesIDArray[1] << endl;
+    //cout << "ID da curva 0 " << nativeWaveCurvesIDArray[0] << endl;
+    //cout << "ID da curva 1 " << nativeWaveCurvesIDArray[1] << endl;
 
 
 
@@ -126,8 +126,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RiemannProfileCalc_nativeCalc
     const WaveCurve * waveCurve2 = RpNumerics::getWaveCurve(nativeWaveCurvesIDArray[1]);
 
 
-    cout << "Curva 0 " << waveCurve1 << endl;
-    cout << "Curva 1 " << waveCurve2 << endl;
+    //cout << "Curva 0 " << waveCurve1 << endl;
+    //cout << "Curva 1 " << waveCurve2 << endl;
 
 
 
@@ -138,7 +138,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RiemannProfileCalc_nativeCalc
     int subPoint1;
     int subPoint2;
 
-    cout << "Chamando Sol de Riemann" << endl;
+    //cout << "Chamando Sol de Riemann" << endl;
 
     
         nativeDownLeft.resize(3);
@@ -152,7 +152,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RiemannProfileCalc_nativeCalc
 
 
 
-    cout << nativeDownLeft << " " << nativeTopRight << endl;
+    //cout << nativeDownLeft << " " << nativeTopRight << endl;
 
 
 
@@ -185,7 +185,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RiemannProfileCalc_nativeCalc
 
 
     if (Debug::get_debug_level() == 5) {
-        cout << "DownLeft: " << nativeDownLeft << " TopRight" << nativeTopRight << endl;
+        //cout << "DownLeft: " << nativeDownLeft << " TopRight" << nativeTopRight << endl;
     }
 
 
@@ -196,13 +196,13 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RiemannProfileCalc_nativeCalc
         return NULL;
 
 
-    //    cout << "Coordenadas do perfil" << endl;
+    //    //cout << "Coordenadas do perfil" << endl;
     //    for (int i = 0; i < profile.size(); i++) {
-    //        cout  << profile.at(i)(0) << " " << profile.at(i)(1) << endl;
+    //        //cout  << profile.at(i)(0) << " " << profile.at(i)(1) << endl;
     //    }
     //    for (int i = 0; i < speedVector.size(); i++) {
     //
-    //        cout  << speedVector.at(i)<< endl;
+    //        //cout  << speedVector.at(i)<< endl;
     //
     //    }
 
@@ -236,7 +236,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RiemannProfileCalc_nativeCalc
             //        tempVector.resize(dimension + 1);
             //        tempVector[dimension] = speedVector[i];
 
-//            cout << profileCoords << endl;
+//            //cout << profileCoords << endl;
 
 
 
@@ -297,7 +297,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RiemannProfileCalc_nativeCalc
     //        tempVector.resize(dimension + 1);
     //        tempVector[dimension] = speedVector[i];
     //
-    //        cout << tempVector << endl;
+    //        //cout << tempVector << endl;
     //
     //
     //        double * dataCoords = tempVector;
@@ -371,16 +371,16 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RiemannProfileCalc_nativeAllProfileCal
 
 
 
-    cout << "ID da curva 0 " << firstWaveCurveID << endl;
-    cout << "ID da curva 1 " << secondWaveCurveID << endl;
+    //cout << "ID da curva 0 " << firstWaveCurveID << endl;
+    //cout << "ID da curva 1 " << secondWaveCurveID << endl;
 
 
     const WaveCurve * waveCurve1 = RpNumerics::getWaveCurve(firstWaveCurveID);
     const WaveCurve * waveCurve2 = RpNumerics::getWaveCurve(secondWaveCurveID);
 
 
-    cout << "Curva 0 " << waveCurve1 << endl;
-    cout << "Curva 1 " << waveCurve2 << endl;
+    //cout << "Curva 0 " << waveCurve1 << endl;
+    //cout << "Curva 1 " << waveCurve2 << endl;
 
 
     jdoubleArray inputPhasePointArray = (jdoubleArray) (env)->CallObjectMethod(secondWaveCurveRefPoint, toDoubleMethodID);
@@ -411,7 +411,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RiemannProfileCalc_nativeAllProfileCal
 
 
 
-    cout << "Ponto sobre a segunda curva de onda: " << nativePointOnSecondWaveCurve << endl;
+    //cout << "Ponto sobre a segunda curva de onda: " << nativePointOnSecondWaveCurve << endl;
 
     int firstWaveCurveSubIndex;
     int firstWaveCurveSegmentIndex;
@@ -440,13 +440,13 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RiemannProfileCalc_nativeAllProfileCal
         return NULL;
 
 
-    cout << "Coordenadas do perfil" << endl;
+    //cout << "Coordenadas do perfil" << endl;
     for (int i = 0; i < profile.size(); i++) {
-        cout << profile.at(i)(0) << " " << profile.at(i)(1) << endl;
+        //cout << profile.at(i)(0) << " " << profile.at(i)(1) << endl;
     }
     for (int i = 0; i < speedVector.size(); i++) {
 
-        cout << speedVector.at(i) << endl;
+        //cout << speedVector.at(i) << endl;
 
     }
 
@@ -461,7 +461,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RiemannProfileCalc_nativeAllProfileCal
 
 
         if (Debug::get_debug_level() == 5) {
-            cout << tempVector << endl;
+            //cout << tempVector << endl;
         }
 
         double * dataCoords = tempVector;

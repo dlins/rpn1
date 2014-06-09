@@ -75,17 +75,17 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_SecondaryBifurcationCurveCalc_nativeCa
 
     string secondaryBifurcationMethodName(env->GetStringUTFChars(methodName, NULL));
 
-    cout << "Nome do metodo em JNI: " << secondaryBifurcationMethodName << endl;
+    //cout << "Nome do metodo em JNI: " << secondaryBifurcationMethodName << endl;
     
-    cout<<"Grid values: "<<gv<<endl;
+    //cout<<"Grid values: "<<gv<<endl;
     
-    cout<<"Flux esq: "<<leftFlux<<endl;
+    //cout<<"Flux esq: "<<leftFlux<<endl;
     
-    cout<<"Flux dir: "<<rightFlux<<endl;
+    //cout<<"Flux dir: "<<rightFlux<<endl;
     
-    cout<<"Accum esq:"<<leftAccum<<endl;
+    //cout<<"Accum esq:"<<leftAccum<<endl;
     
-    cout<<"Accum dir:"<<rightAccum<<endl;
+    //cout<<"Accum dir:"<<rightAccum<<endl;
     
     
 //        
@@ -155,8 +155,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_SecondaryBifurcationCurveCalc_nativeCa
 
 
 //    if (Debug::get_debug_level() == 5) {
-        cout << "left_vrs.size()  = " << left_vrs.size() << endl;
-        cout << "right_vrs.size()  = " << right_vrs.size() << endl;
+        //cout << "left_vrs.size()  = " << left_vrs.size() << endl;
+        //cout << "right_vrs.size()  = " << right_vrs.size() << endl;
 //    }
 
 

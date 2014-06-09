@@ -269,7 +269,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_DerivativeDiscriminantLevelCurveCalc_c
     GridValues * gv = RpNumerics::getGridFactory().getGrid("bifurcation");
     
     
-    cout<<"Valor de u: "<<u<<endl;
+    //cout<<"Valor de u: "<<u<<endl;
     
     
    ec.derivative_discriminant_curve(&RpNumerics::getPhysics().fluxFunction(), &RpNumerics::getPhysics().accumulation(),

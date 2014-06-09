@@ -179,7 +179,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc(JNIEnv * env, jobj
 
         RpNumerics::getPhysics().getSubPhysics(0).postProcess(tempVector);
 
-        //        cout<<tempVector<<endl;
+        //        //cout<<tempVector<<endl;
 
         //        double lambda = shkcurve.speed[i];
 

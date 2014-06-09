@@ -34,7 +34,7 @@ using namespace std;
 JNIEXPORT jobject JNICALL Java_rpnumerics_CoincidenceCurveCalc_nativeCalc(JNIEnv * env, jobject obj) {
 
     if ( Debug::get_debug_level() == 5 ) {
-        //cout << "Em coincidence nativo: " << endl;
+        ////cout << "Em coincidence nativo: " << endl;
     }
 
     jclass classPhasePoint = (env)->FindClass(PHASEPOINT_LOCATION);
@@ -82,7 +82,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CoincidenceCurveCalc_nativeCalc(JNIEnv
 
 
     if ( Debug::get_debug_level() == 5 ) {
-        //cout<<"Tamanho da curva de coincidencia: "<<outputVector.size() <<endl;
+        ////cout<<"Tamanho da curva de coincidencia: "<<outputVector.size() <<endl;
     }
 
     for (int i = 0; i < outputVector.size() / 2; i++) {

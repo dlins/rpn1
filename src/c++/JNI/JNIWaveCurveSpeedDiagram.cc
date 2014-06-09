@@ -119,7 +119,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurve_nativeDiagramCalc
 
             jobject realVector = env->NewObject(realVectorClass, realVectorConstructorDoubleArray, speedArray);
 
-            //            cout << arclength_reference_eigenvalues[i].curve.at(j) << endl;
+            //            //cout << arclength_reference_eigenvalues[i].curve.at(j) << endl;
 
             env->CallObjectMethod(speedLinePartList, arrayListAddMethod, realVector);
 
@@ -174,7 +174,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurve_nativeDiagramCalc
 
                 jobject realVector = env->NewObject(realVectorClass, realVectorConstructorDoubleArray, speedArray);
 
-                //            cout << arclength_speed[i].curve.at(j) << endl;
+                //            //cout << arclength_speed[i].curve.at(j) << endl;
 
                 env->CallObjectMethod(speedLinePartList, arrayListAddMethod, realVector);
 

@@ -108,7 +108,7 @@ JNIEXPORT void JNICALL Java_rpnumerics_viscousprofile_ViscousProfileData_updateS
 
     if ( Debug::get_debug_level() == 5 ) {
         for (int i = 0; i < sPointList->size(); i++) {
-            //cout << sPointList->at(i)->coords() << " " << sPointList->at(i)->type() << endl;
+            ////cout << sPointList->at(i)->coords() << " " << sPointList->at(i)->type() << endl;
         }
     }
 

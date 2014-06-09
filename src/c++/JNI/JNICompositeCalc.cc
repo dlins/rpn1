@@ -37,7 +37,7 @@ using std::vector;
 JNIEXPORT jobject JNICALL Java_rpnumerics_CompositeCalc_nativeCalc(JNIEnv * env, jobject obj, jobject initialPoint, jint increase, jint familyIndex) {
 
     if (Debug::get_debug_level() == 5) {
-        //cout << "chamando JNI composite calc" << endl;
+        ////cout << "chamando JNI composite calc" << endl;
     }
 
     unsigned int i;
@@ -78,7 +78,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CompositeCalc_nativeCalc(JNIEnv * env,
     std::vector<RealVector> compositeCurve;
 
     if (Debug::get_debug_level() == 5) {
-        //cout << "Chamando com stone" << endl;
+        ////cout << "Chamando com stone" << endl;
     }
 
     const FluxFunction * flux = &RpNumerics::getPhysics().fluxFunction();

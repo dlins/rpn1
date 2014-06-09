@@ -72,7 +72,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_PhysicalBoundaryCalc_calcNative
     int tamanho = left_vrs.size();
 
     if ( Debug::get_debug_level() == 5 ) {
-        //cout << "Tamanho do vetor de pontos: " << tamanho << endl;
+        ////cout << "Tamanho do vetor de pontos: " << tamanho << endl;
     }
 
     if (left_vrs.size()==0)
@@ -85,8 +85,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_PhysicalBoundaryCalc_calcNative
 
 
 //
-//            //cout << "Ponto: " << 2*i << left_vrs[2 * i] << endl;
-//            //cout << "Ponto: " << 2*i+1 << left_vrs[2 * i +1] << endl;
+//            ////cout << "Ponto: " << 2*i << left_vrs[2 * i] << endl;
+//            ////cout << "Ponto: " << 2*i+1 << left_vrs[2 * i +1] << endl;
 
 
 

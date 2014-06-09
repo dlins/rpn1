@@ -65,7 +65,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionExtensionCalc_nativeCalc(JN
 //
 //    RealVector inputPoint(dimension, input);
 //    if ( Debug::get_debug_level() == 5 ) {
-//        //cout << inputPoint << endl;
+//        ////cout << inputPoint << endl;
 //    }
 //
 //    jobject leftSegmentsArray = env->NewObject(arrayListClass, arrayListConstructor, NULL);

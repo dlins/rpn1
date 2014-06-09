@@ -90,7 +90,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_InflectionCurveCalc_nativeCalc__I
     
     
 //    for (int i = 0; i < left_vrs.size(); i++) {
-//        cout<<left_vrs[i]<<endl;
+//        //cout<<left_vrs[i]<<endl;
 //
 //    }
     

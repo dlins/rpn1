@@ -41,7 +41,7 @@ using std::vector;
 JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveRRegionsCalc_nativeCalc
 (JNIEnv * env, jobject obj, jint waveCurveID) {
 
-    cout<<"No JNI RRegions"<<endl;
+    //cout<<"No JNI RRegions"<<endl;
 
     unsigned int i;
 
@@ -101,7 +101,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveRRegionsCalc_nativeCalc
 
     const FluxFunction * flux = &RpNumerics::getPhysics().fluxFunction();
 
-    cout << "Parametros na chamada: " << flux->fluxParams().params() << endl;
+    //cout << "Parametros na chamada: " << flux->fluxParams().params() << endl;
 
     const AccumulationFunction * accum = &RpNumerics::getPhysics().accumulation();
 
@@ -121,9 +121,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveRRegionsCalc_nativeCalc
     vector<WaveCurve> waveCurveVector;
 
 
-    cout<<"Antes de waveCurve: "<<waveCurveID<<endl;
+    //cout<<"Antes de waveCurve: "<<waveCurveID<<endl;
     const WaveCurve * waveCurve = RpNumerics::getWaveCurve(waveCurveID);
-    cout<<"Depois de waveCurve"<<endl;
+    //cout<<"Depois de waveCurve"<<endl;
 
     WaveCurveFactory wavecurvefactory(accum, flux, boundary, odesolver, &rc, &sc, &cmp);
 
@@ -221,7 +221,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveRRegionsCalc_nativeCalc
 
                     case 3:
                     {
-                        cout << "No shock" << endl;
+                        //cout << "No shock" << endl;
                         jobject shockCurve = (env)->NewObject(shockCurveClass, shockCurveConstructor, orbitPointArray,nativeWaveCurve.family, nativeWaveCurve.increase);
                         env->CallVoidMethod(shockCurve, setCurveTypeID, 3);
                         env->CallVoidMethod(waveCurveBranchForward, waveCurveAddBranch, shockCurve);
@@ -232,12 +232,12 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveRRegionsCalc_nativeCalc
 
                     default:
 
-                        cout << "Tipo de curva nao conhecido !!" << endl;
+                        return NULL;//cout << "Tipo de curva nao conhecido !!" << endl;
 
                 }
 
             } else {
-                cout << "CURVA " << i << " VAZIA !! tipo: " << wc.type << endl;
+                //cout << "CURVA " << i << " VAZIA !! tipo: " << wc.type << endl;
             }
         }
 

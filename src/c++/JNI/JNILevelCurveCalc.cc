@@ -172,7 +172,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_EigenValueLevelCalc_calcNative(JNIEnv 
     int dimension = RpNumerics::getPhysics().domain().dim();
 
 
-    cout << "Chamando curva de nivel sem ponto"<<level << endl;
+    //cout << "Chamando curva de nivel sem ponto"<<level << endl;
 
 
 
