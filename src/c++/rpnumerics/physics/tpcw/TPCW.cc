@@ -234,6 +234,18 @@ Boundary * TPCW::defaultBoundary()const {
     //    min.component(2) = TD->u2U(0);
     min.component(2) = 0 * 4.22e-3;
 
+    
+    RealVector max(3);
+
+    max.component(0) = 1.0;
+
+    max.component(1) = 450;
+    //    max.component(2) = TD->u2U(2 * 4.22e-5);
+    max.component(2) = 2 * 4.22e-3; // The 
+    
+    
+    
+
     return new RectBoundary(min, max);
 
 }

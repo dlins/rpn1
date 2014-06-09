@@ -40,23 +40,6 @@ accFunction_((AccumulationFunction *) accumulationFunction.clone()) {
     sm = std::string("-");
     sc = std::string(".");
     sz = std::string("0");
-<<<<<<< HEAD
-//  if ( Debug::get_debug_level() == 5 ) {
-//    std:://cout << "ColorCurve::ctor: f = " << &fluxFunction << ", a = " << &accumulationFunction << ", this = " << this << std::endl;
-//  }
-}
-
-ColorCurve::~ColorCurve() {
-//    if (Debug::get_debug_level() == 5) {
-//        std:://cout << "ColorCurve::dtor: this = " << this << std::endl;
-//    }
-    delete fluxFunction_;
-    delete accFunction_;
-
-//    if (Debug::get_debug_level() == 5) {
-//        std:://cout << "    Destroyed." << std::endl;
-//    }
-=======
 
     vm = v;
 }
@@ -64,7 +47,6 @@ ColorCurve::~ColorCurve() {
 ColorCurve::~ColorCurve() {
     delete fluxFunction_;
     delete accFunction_;
->>>>>>> cacheCurvaOnda
 }
 
 /**
@@ -459,21 +441,12 @@ void ColorCurve::classify_segment_with_data(
         for (int k = 0; k < noi; k++) {
             signature += rttemp[k];
 
-<<<<<<< HEAD
-                if (Debug::get_debug_level() == 5) {
-                    //cout << "ColorCurve::Left_Newton does not converge." << endl;
-                    //cout << "count = " << count << " " << input << endl;
-                }
-                for (int i = 0; i < dim; i++) out.component(i) = input.component(i);
-                return;
-=======
             // When the new point is closed the old point, this is removed from list. The signature
             // is the adding of both.
             distance = 0.0;
             for (int j = 0; j < dim; j++) {
                 d_temp = r[index].component(j) - rtemp[k].component(j);
                 distance += d_temp * d_temp;
->>>>>>> cacheCurvaOnda
             }
             if (distance < epsilon) continue;
             // This index is usefull for the distance above.
@@ -483,15 +456,6 @@ void ColorCurve::classify_segment_with_data(
             transition_list.push_back(rtemp[k]);
             cout << "transition_list.size() ::: " << transition_list.size() << endl;
 
-<<<<<<< HEAD
-            if (info != 0) {
-                if (Debug::get_debug_level() == 5) {
-                    //cout << "ColorCurve::Left_Newton does not converge." << endl;
-                }
-                for (int i = 0; i < dim; i++) out.component(i) = input.component(i);
-                return;
-            }
-=======
             // TODO: Antigamente era um complete_point
             classify_point(rtemp[k], r_p, eigenvalue_r, sigttemp[k]);
             r.push_back(rtemp[k]);
@@ -527,7 +491,6 @@ void ColorCurve::classify_segment_with_data(
             hpl.speed[0] = hpl.speed[1];
             for (int j = 0; j < dim; j++) hpl.point[0].component(j) = hpl.point[1].component(j);
             for (int j = 0; j < fam; j++) hpl.eigenvalue[0].component(j) = hpl.eigenvalue[1].component(j);
->>>>>>> cacheCurvaOnda
         }
 
         // This are the signature and type for the last HugoniotPolyLine:
@@ -548,25 +511,9 @@ void ColorCurve::classify_segment_with_data(
 // The classify_segment_with_data method will be call, here the values are filled.
 //
 
-<<<<<<< HEAD
-void ColorCurve::Right_Newton_improvement(const RealVector &input, const int type, RealVector &out) {
-    int dim = input.size();
-    out.resize(dim);
-
-    // TODO: For dimension larger than 2, the implementation is missing. The input point is returned
-    //       as output. (This method pretends to refine the input.)
-    if (dim > 2) {
-          if ( Debug::get_debug_level() == 5 ) {
-        //cout << "ColorCurve::Right_Newton was not implemented for dimension larger than two." << endl;
-          }
-        for (int i = 0; i < dim; i++) out.component(i) = input.component(i);
-        return;
-    }
-=======
 void ColorCurve::classify_segment(RealVector &p, RealVector &q,
         std::vector<HugoniotPolyLine> &classified_curve,
         std::vector<RealVector> &transition_list) {
->>>>>>> cacheCurvaOnda
 
     double s_p, s_q;
     std::vector<double> eigenvalue_p, eigenvalue_q;
@@ -632,17 +579,8 @@ int ColorCurve::interpolate(const RealVector &p, double &s_p,
     if (abs_ineq == 0) return INTERPOLATION_ERROR;
     int increase = (type_p - type_q < 0 ? 1 : -1);
 
-<<<<<<< HEAD
-        if ((fabs(det) <= (epsilon * anorm)) || (count > 18)) {
-              if ( Debug::get_debug_level() == 5 ) {
-            //cout << "ColorCurve::Right_Newton does not converge." << endl;
-            //cout << "count = " << count << " " << input << endl;
-              }
-            for (int i = 0; i < dim; i++) out.component(i) = input.component(i);
-=======
     int dim = p.size();
     int fam = eigenvalue_p.size();
->>>>>>> cacheCurvaOnda
 
     double fp, fq; // f(p), f(q), the function whose zero is to be found
     std::vector<double> alpha;
@@ -1337,9 +1275,9 @@ int ColorCurve::complete_point(RealVector &p, double &s, std::vector<double> &ei
     //printf("                       F[0] = %2.6f, F[1] = %2.6f, Fref[0] = %2.6f, Fref[1] = %2.6ff\n", F[0], F[1], F_ref[0], F_ref[1]);
     //printf("                       G[0] = %2.6f, G[1] = %2.6f, Gref[0] = %2.6f, Gref[1] = %2.6ff\n", G[0], G[1], G_ref[0], G_ref[1]);
 
-    ////cout << "Em CC::Complete_point " << p << ". num = " << num << ", den = " << den << ", speed = " << num/den << endl;
-    ////cout << "                       F[0] = " << F[0] << ", F[1] = " << F[1] << ", Fref[0] = " << F_ref[0] << ", Fref[1] = " << F_ref[1] << endl;
-    ////cout << "                       G[0] = " << G[0] << ", G[1] = " << F[1] << ", Gref[0] = " << G_ref[0] << ", Gref[1] = " << G_ref[1] << endl;
+    //cout << "Em CC::Complete_point " << p << ". num = " << num << ", den = " << den << ", speed = " << num/den << endl;
+    //cout << "                       F[0] = " << F[0] << ", F[1] = " << F[1] << ", Fref[0] = " << F_ref[0] << ", Fref[1] = " << F_ref[1] << endl;
+    //cout << "                       G[0] = " << G[0] << ", G[1] = " << F[1] << ", Gref[0] = " << G_ref[0] << ", Gref[1] = " << G_ref[1] << endl;
 
     if (fabs(den) > 1e-20) s = num / den;
     else {

@@ -24,6 +24,7 @@ NOTE :
 #include <vector>
 #include <iostream>
 #include "Debug.h"
+#include "ImplicitHugoniotCurve.h"
 
 
 using std::vector;
