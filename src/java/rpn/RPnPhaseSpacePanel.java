@@ -64,12 +64,12 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
     static public Color DEFAULT_LASTINPUT_CURSOR_COLOR = Color.yellow;
     static public Color DEFAULT_LASTINPUT_HIGHLIGHT_CURSOR_COLOR = Color.white;
 
-    static float[] DEFAULT_LASTINPUT_CURSOR_DASH = { 5F, 5 };  
+    static float[] DEFAULT_LASTINPUT_CURSOR_DASH = { 15F, 25 };  
+    static float[] DEFAULT_LASTINPUT_CURSOR_HIGHLIGHT_DASH = { 5F, 5 };  
 
-    static Stroke DEFAULT_LASTINPUT_CURSOR_STROKE = new BasicStroke( 1.1F, BasicStroke.CAP_SQUARE,  
-		BasicStroke.JOIN_MITER, 3F, DEFAULT_LASTINPUT_CURSOR_DASH, 0F );  
-    static Stroke DEFAULT_LASTINPUT_CURSOR_HIGHLIGHT_STROKE = new BasicStroke( 2.2F, BasicStroke.CAP_SQUARE,  
-		BasicStroke.JOIN_MITER, 3F, DEFAULT_LASTINPUT_CURSOR_DASH, 0F );  
+    static Stroke DEFAULT_LASTINPUT_CURSOR_STROKE = new BasicStroke( .1F, BasicStroke.CAP_SQUARE,  
+		BasicStroke.JOIN_MITER, 3F, DEFAULT_LASTINPUT_CURSOR_DASH, 3F );  
+    static Stroke DEFAULT_LASTINPUT_CURSOR_HIGHLIGHT_STROKE = new BasicStroke( 2.2F, BasicStroke.CAP_SQUARE,BasicStroke.JOIN_MITER, 3F, DEFAULT_LASTINPUT_CURSOR_HIGHLIGHT_DASH, 0F );  
 
     public static int myH_;                                          //** declarei isso    (Leandro)
     public static int myW_;                                          //** declarei isso    (Leandro)
