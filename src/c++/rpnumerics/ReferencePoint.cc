@@ -49,23 +49,23 @@ void ReferencePoint::fill_point(const RealVector &p,
     if (ff != 0) ff->fill_with_jet(p.size(), temp.components(), 1, F.components(), JF.data(), 0);
     if (gg != 0) gg->fill_with_jet(p.size(), temp.components(), 1, G.components(), JG.data(), 0);
 
-    if (Debug::get_debug_level() == 5) {
-        std::cout << "ReferencePoint::fill_point(): flux & accum" << std::endl;
-    }
+//    if (Debug::get_debug_level() == 5) {
+//        std:://cout << "ReferencePoint::fill_point(): flux & accum" << std::endl;
+//    }
 
 
     // Fill eigenpairs at point
     if (ff != 0 && gg != 0) Eigen::eig(p.size(), JF.data(), JG.data(), e);
-    if (Debug::get_debug_level() == 5) {
-        std::cout << "ReferencePoint::fill_point(): eigenpairs" << std::endl;
-    }
+//    if (Debug::get_debug_level() == 5) {
+//        std:://cout << "ReferencePoint::fill_point(): eigenpairs" << std::endl;
+//    }
 
 
     // Fill viscosity matrix at point. Notice that this works only for degree = 0 so far. See Viscosity_Matrix::fill_viscous_matrix().
     if (vv != 0) vv->fill_viscous_matrix(p, B, 0);
-    if (Debug::get_debug_level() == 5) {
-        std::cout << "ReferencePoint::fill_point(): viscous matrix" << std::endl;
-    }
+//    if (Debug::get_debug_level() == 5) {
+//        std:://cout << "ReferencePoint::fill_point(): viscous matrix" << std::endl;
+//    }
     return;
 }
 

@@ -168,7 +168,7 @@ RealVector Three_Phase_Boundary::intersect(RealVector &p1, RealVector &p2) const
 ////    return Boundary::intersection(p, q, r, w);
 //    if (inside(p) && inside(q)) return 1;
 //    if (!inside(p) && !inside(q)) {
-//        cout << "Both outside, should abort" << endl;
+//        //cout << "Both outside, should abort" << endl;
 //        return -1;
 //    } else {
 //        RealVector pin(2), pout(2);
@@ -438,10 +438,10 @@ RealVector Three_Phase_Boundary::side_transverse_interior(const RealVector &p, i
 //
 //
 //     if ((x >= minimums().component(0)) && (y >= minimums().component(1)) && (x + y <=  maximums().component(0)+minimums().component(1)+0.00000001)) {
-////        cout << "(" << x << ", " << y << ") is INSIDE" << endl;
+////        //cout << "(" << x << ", " << y << ") is INSIDE" << endl;
 //        return true;
 //    } else {
-////       cout << "(" << x << ", " << y << ") is OUTSIDE" << endl;
+////       //cout << "(" << x << ", " << y << ") is OUTSIDE" << endl;
 //        return false;
 //    }
 //
@@ -450,10 +450,10 @@ RealVector Three_Phase_Boundary::side_transverse_interior(const RealVector &p, i
 ////
 ////
 ////    if ((x >= 0.) && (y >= 0.) && (x + y <= 1.)) {
-//////        cout << "(" << x << ", " << y << ") is INSIDE" << endl;
+//////        //cout << "(" << x << ", " << y << ") is INSIDE" << endl;
 ////        return true;
 ////    } else {
-//////        cout << "(" << x << ", " << y << ") is OUTSIDE" << endl;
+//////        //cout << "(" << x << ", " << y << ") is OUTSIDE" << endl;
 ////        return false;
 //
 //// 1.0000000001 is a kludge, in an ideal world it should be 1.0.
@@ -464,10 +464,10 @@ RealVector Three_Phase_Boundary::side_transverse_interior(const RealVector &p, i
 //
 //
 //     if ((x >= minimums().component(0)) && (y >= minimums().component(1)) && (x + y <=  maximums().component(0)+minimums().component(1)+0.00000001)) {
-////        cout << "(" << x << ", " << y << ") is INSIDE" << endl;
+////        //cout << "(" << x << ", " << y << ") is INSIDE" << endl;
 //        return true;
 //    } else {
-////       cout << "(" << x << ", " << y << ") is OUTSIDE" << endl;
+////       //cout << "(" << x << ", " << y << ") is OUTSIDE" << endl;
 //        return false;
 //    }
 //
@@ -476,10 +476,10 @@ RealVector Three_Phase_Boundary::side_transverse_interior(const RealVector &p, i
 //
 ////
 ////    if ((x >= 0.) && (y >= 0.) && (x + y <= 1.)) {
-//////        cout << "(" << x << ", " << y << ") is INSIDE" << endl;
+//////        //cout << "(" << x << ", " << y << ") is INSIDE" << endl;
 ////        return true;
 ////    } else {
-//////        cout << "(" << x << ", " << y << ") is OUTSIDE" << endl;
+//////        //cout << "(" << x << ", " << y << ") is OUTSIDE" << endl;
 ////        return false;
 ////    }
 //

@@ -36,7 +36,7 @@ public class RarefactionCurvePlotCommand extends RpModelPlotCommand {
 
                 PhysicalBoundary physicalBoundary = (PhysicalBoundary) curve;
                 
-                int edge = physicalBoundary.edgeSelection(oPoint);
+                int edge = physicalBoundary.getEdge(oPoint);
                 
                 factory = new RarefactionCurveGeomFactory(RPNUMERICS.createRarefactionCalc(oPoint, edge));
 

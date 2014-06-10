@@ -11,6 +11,7 @@
 class Boundary;
 
 #include "Matrix.h"
+#include "DoubleMatrix.h"
 
 // The definitions below will help the Contour to decide whether a cell is to be
 // processed (and if so, how) or not.
@@ -26,6 +27,12 @@ class Boundary;
 #ifndef CELL_IS_SQUARE
 #define CELL_IS_SQUARE 2
 #endif
+
+#define UP    10
+#define LEFT  11
+#define DOWN  12
+#define RIGHT 13
+#define NONE  14
 
 class GridValues {
     private:
@@ -48,8 +55,11 @@ class GridValues {
         Matrix<RealVector>               G_on_grid;                  // Accumulation
         bool                             functions_on_grid_computed; // Already computed?
 
-        Matrix< Matrix<double> >         JF_on_grid;                 // Jacobians of the flux
-        Matrix< Matrix<double> >         JG_on_grid;                 // Jacobians of the accumulation
+//        Matrix< Matrix<double> >         JF_on_grid;                 // Jacobians of the flux
+//        Matrix< Matrix<double> >         JG_on_grid;                 // Jacobians of the accumulation
+
+        Matrix<DoubleMatrix>             JF_on_grid;                 // Jacobians of the flux
+        Matrix<DoubleMatrix>             JG_on_grid;                 // Jacobians of the accumulation
         bool                             Jacobians_on_grid_computed; // Already computed?
 
         Matrix< std::vector<double> >    dd;                         // Directional derivatives
@@ -60,6 +70,8 @@ class GridValues {
         Matrix<bool>                     cell_is_real;               // Is the whole cell real or complex?
         bool                             e_computed;                 // Already computed?
 
+        // TODO:
+        // Replace (or complement) the use of cell_is_real by (with) a Matrix of discriminants.
 
         RealVector grid_resolution;                                  //Number of cells
 
@@ -96,6 +108,10 @@ class GridValues {
         // Fill the directional derivatives.
         //
         void fill_dirdrv_on_grid(const FluxFunction *ff, const AccumulationFunction *aa);
+
+        bool inside(const RealVector &p);
+
+        bool cell(const RealVector &p, int &row, int &col);
 };
 
 #endif // _GRIDVALUES_

@@ -7,13 +7,12 @@
 package rpnumerics;
 
 import rpn.configuration.Configuration;
-import java.util.ArrayList;
 import java.util.List;
-import rpn.configuration.CommandConfiguration;
-import rpn.configuration.ConfigurationProfile;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import wave.util.RealVector;
 
-public class RiemannProfileCalc implements RpCalculation {
+public class RiemannProfileCalc implements RpCalculation,RpDiagramCalc {
     //
     // Constants
     //
@@ -25,59 +24,35 @@ public class RiemannProfileCalc implements RpCalculation {
     private List<FundamentalCurve> forwardList_;
     private List<FundamentalCurve> backwardList_;
     private Configuration configuration_;
+    private int[] waveCurvesID_;
+    private RealVector pointOnSecondWaveCurve_;
+    private RealVector referencePointOfFirstWaveCurve_;
+
+    int firstWaveCurveID_;
+    int secondWaveCurveID_;
+
+    private final boolean isAllProfile_;
 
     //
     // Constructors/Initializers
     //
-    public RiemannProfileCalc(Area area, WaveCurve forwardCurve, WaveCurve backwardCurve) {
+    public RiemannProfileCalc(WaveCurve firstWaveCurve, WaveCurve secondWaveCurve, RealVector pointOnSecondWaveCurve) {
 
-        area_ = area;
-        List<WaveCurveBranch> forwardBranch = forwardCurve.getBranchsList();
-        forwardList_ = new ArrayList<FundamentalCurve>();
+        firstWaveCurveID_ = firstWaveCurve.getId();
+        secondWaveCurveID_ = secondWaveCurve.getId();
 
-        for (WaveCurveBranch waveCurveBranch : forwardBranch) {
+        pointOnSecondWaveCurve_ = pointOnSecondWaveCurve;
+        referencePointOfFirstWaveCurve_ = firstWaveCurve.getReferencePoint().getCoords();
 
+        isAllProfile_ = true;
 
-            for (WaveCurveBranch waveCurveBranch2 : waveCurveBranch.getBranchsList()) {
+    }
 
-                FundamentalCurve orbit = (FundamentalCurve) waveCurveBranch2;
+    public RiemannProfileCalc(Area selectedArea, int[] waveCurvesID) {
+        area_ = selectedArea;
+        waveCurvesID_ = waveCurvesID;
 
-                forwardList_.add(orbit);
-
-            }
-
-        }
-
-        List<WaveCurveBranch> backwardBranch = backwardCurve.getBranchsList();
-
-        backwardList_ = new ArrayList<FundamentalCurve>();
-
-        for (WaveCurveBranch waveCurveBranch : backwardBranch) {
-
-
-            for (WaveCurveBranch waveCurveBranch2 : waveCurveBranch.getBranchsList()) {
-
-                FundamentalCurve orbit = (FundamentalCurve) waveCurveBranch2;
-
-                backwardList_.add(orbit);
-
-            }
-
-        }
-
-
-
-        String className = getClass().getSimpleName().toLowerCase();
-
-        String curveName = className.replace("calc", "");
-
-        configuration_ = new CommandConfiguration(curveName);
-
-        configuration_.setParamValue("forwardwavecurve", String.valueOf(forwardCurve.getId()));
-        configuration_.setParamValue("backwardwavecurve", String.valueOf(backwardCurve.getId()));
-
-
-
+        isAllProfile_ = false;
     }
 
     //
@@ -93,21 +68,30 @@ public class RiemannProfileCalc implements RpCalculation {
 
     public RpSolution calc() throws RpException {
 
-        RealVector pmin = area_.getDownLeft();
-        RealVector pmax = area_.getTopRight();
+        RpSolution result = null;
 
+        if (isAllProfile_) {
+            
+            result= nativeAllProfileCalc(firstWaveCurveID_, secondWaveCurveID_, referencePointOfFirstWaveCurve_, pointOnSecondWaveCurve_);
 
-        RpSolution result = nativeCalc(pmin, pmax, forwardList_, backwardList_);
+        } else {
+            RealVector pmin = area_.getDownLeft();
+            RealVector pmax = area_.getTopRight();
+
+           result= nativeCalc(pmin, pmax, waveCurvesID_);
+
+        }
 
         if (result == null) {
             throw new RpException("Error in native layer");
         }
 
-
         return result;
     }
 
-    private native RpSolution nativeCalc(RealVector pmin, RealVector pmax, List<FundamentalCurve> forwardWaveCurve, List<FundamentalCurve> backwardWaveCurve) throws RpException;
+    private native RpSolution nativeCalc(RealVector pmin, RealVector pmax, int[] waveCurveIdArray) throws RpException;
+
+    private native RpSolution nativeAllProfileCalc(int firstWaveCurveID, int secondWaveCurveID, RealVector firstWaveCurveRefPoint, RealVector pointOnSecondWaveCurve) throws RpException;
 
     public RpSolution recalc(Area area) throws RpException {
         throw new UnsupportedOperationException("Not supported yet.");
@@ -115,5 +99,26 @@ public class RiemannProfileCalc implements RpCalculation {
 
     public RpSolution recalc(List<Area> area) throws RpException {
         throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public RpSolution createDiagramSource() {
+        try {
+            return calc();
+        } catch (RpException ex) {
+            Logger.getLogger(RiemannProfileCalc.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+    @Override
+    public RpSolution updateDiagramSource() {
+        try {
+            return calc();
+        } catch (RpException ex) {
+            Logger.getLogger(RiemannProfileCalc.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+
     }
 }

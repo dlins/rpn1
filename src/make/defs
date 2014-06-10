@@ -16,11 +16,11 @@ CC = cc
 CPP = cc -E
 else
 #CC = gcc -ansi -Wall
-CC = gcc -Wall -fPIC
+CC = gcc -Wall -fPIC 
 CPP = gcc -E
 endif
 CFLAGS =
-CPPFLAGS =
+CPPFLAGS = -fopenmp
 COMPILE.c = $(CC) $(CFLAGS) $(CPPFLAGS) $(DEBUGFLAG) -c
 LINK.c = $(CC) $(CFLAGS) $(DEBUGFLAG) $(LDFLAGS)
 ifeq ($(RPGNU),)
@@ -62,7 +62,7 @@ else
 CCC = CC
 endif
 else
-CCC = g++ -Wall -fPIC -Wno-deprecated -fopenmp
+CCC = g++  -fPIC -fopenmp -Wno-deprecated
 endif
 ifeq ($(RPHOSTTYPE),solaris)
 # The -D_XOPEN_SOURCE flag is needed if __SUNPRO_CC == 0x540

@@ -1,5 +1,4 @@
 #include "Quad2.h"
-#include "Hugoniot_Curve.h"
 #include "Double_Contact.h"
 
 Quad2::Quad2(const Quad2FluxParams & params) : SubPhysics(*defaultBoundary(), *new Space("R2", 2), "QuadraticR2", _SIMPLE_ACCUMULATION_) {
@@ -10,7 +9,6 @@ Quad2::Quad2(const Quad2FluxParams & params) : SubPhysics(*defaultBoundary(), *n
     DEFAULT_SIGMA = "-.021";
     DEFAULT_XZERO = ".13 .07";
 
-    setHugoniotFunction(new Hugoniot_Curve());
     setDoubleContactFunction(new Double_Contact());
     setViscosityMatrix(new Viscosity_Matrix());
     preProcessedBoundary_ = defaultBoundary();
@@ -46,7 +44,6 @@ SubPhysics * Quad2::clone()const {
 Quad2::Quad2(const Quad2 & copy) : SubPhysics(copy.fluxFunction(), copy.accumulation(), copy.getBoundary(), *new Space("R2", 2), "QuadraticR2", _SIMPLE_ACCUMULATION_) {
 
 
-    setHugoniotFunction(new Hugoniot_Curve());
     setDoubleContactFunction(new Double_Contact());
     setViscosityMatrix(copy.getViscosityMatrix());
     preProcessedBoundary_ = copy.getPreProcessedBoundary()->clone();

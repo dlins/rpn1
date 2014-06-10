@@ -222,7 +222,7 @@ void Bifurcation_CurveTPCW::fill_with_jet(RpFunction *flux_object, int n, double
     JetMatrix c_jet(n);
 
     if ( Debug::get_debug_level() == 5 ) {
-        if (flux_object==NULL)cout<<"Nulo !"<<endl;
+        if (flux_object==NULL);//cout<<"Nulo !"<<endl;
     }
 
     flux_object->jet(state_c, c_jet, degree);

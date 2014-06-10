@@ -140,7 +140,7 @@ public class PhaseSpacePanel2DController extends ComponentUI implements PhaseSpa
 
                 panel.setCursorPos(new Point(xCursorPos, yCursorPos));
 
-                //1 curva selecionada. Usar o ponto mais proximo como entrada (Apenas 2D)
+                //Selected curve . Closest point as input (only 2D)
                 if (UIController.instance().getSelectedGeometriesList().size() == 1) {
                     Coords2D dcCoords = new Coords2D(xCursorPos, yCursorPos);
                     CoordsArray coordsWC = new CoordsArray(new Space("", rpnumerics.RPNUMERICS.domainDim()));
@@ -149,6 +149,8 @@ public class PhaseSpacePanel2DController extends ComponentUI implements PhaseSpa
                     RealVector wcCoordsVector = new RealVector(coordsWC.getCoords());
                     RpGeomFactory geomFactory = UIController.instance().getSelectedGeometriesList().get(0).geomFactory();
                     RPnCurve curve = (RPnCurve) geomFactory.geomSource();
+                    
+//                    System.out.println("Curve mais proxima: "+curve);
                     RealVector closestPoint = curve.findClosestPoint(wcCoordsVector);
                     for (int i = 0; i < closestPoint.getSize(); i++) {
                         UIController.instance().globalInputTable().setElement(i, closestPoint.getElement(i));
@@ -156,7 +158,8 @@ public class PhaseSpacePanel2DController extends ComponentUI implements PhaseSpa
 
 //                    System.out.println("Ponto mais proximo: "+closestPoint);
                     ViewingTransform viewingTransform = panel.scene().getViewingTransform();
-                    Coords2D wcCoords = new Coords2D(closestPoint.getElement(0), closestPoint.getElement(1));
+
+                    CoordsArray wcCoords = new CoordsArray(closestPoint);
                     Coords2D painelCoords = new Coords2D();
                     viewingTransform.viewPlaneTransform(wcCoords, painelCoords);
 

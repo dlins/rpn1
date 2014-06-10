@@ -56,8 +56,11 @@ Physics * RpNumerics::physics_ = NULL;
 GridValuesFactory * RpNumerics::gridValuesFactory_ = NULL;
 
 vector<StationaryPoint *> * RpNumerics::stationaryPointVector_ = NULL;
+map<int, WaveCurve *> * RpNumerics::waveCurveMap_ = NULL;
 
 double RpNumerics::sigma = 0;
+
+int RpNumerics::curveCounter = 0;
 
 /*
  * Class:     rpnumerics_RPNUMERICS
@@ -75,11 +78,10 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setRPnHome
 
     Physics::setRPnHome(rpnHomeString);
 
-    if ( Debug::get_debug_level() == 5 ) {
-        cout << "RPn home path in physics: " << Physics::getRPnHome() << endl;
+
     }
 
-}
+
 
 /*
  * Class:     rpnumerics_RPNUMERICS
@@ -190,53 +192,6 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setMethod
     string nativeMethodType(env->GetStringUTFChars(methodType, NULL));
     string nativeMethodName(env->GetStringUTFChars(methodName, NULL));
 
-
-    if ( Debug::get_debug_level() == 5 ) {
-        cout << nativeMethodType << " " << nativeMethodName << endl;
-    }
-
-    delete RpNumerics::getPhysics().getSubPhysics(0).getHugoniotFunction();
-
-    if (RpNumerics::getPhysics().ID().compare("CoreyQuad") == 0) {
-
-        if (nativeMethodType.compare("hugoniotmethod") == 0) {
-
-
-            if (nativeMethodName.compare("explicit")==0) {
-
-                RpNumerics::getPhysics().getSubPhysics(0).setHugoniotFunction(new StoneHugoniot());
-
-            }
-            else {
-                RpNumerics::getPhysics().getSubPhysics(0).setHugoniotFunction(new Hugoniot_Curve());
-            }
-
-        }
-
-    }
-
-
-    if (RpNumerics::getPhysics().ID().compare("QuadraticR2") == 0) {
-        
-        if ( Debug::get_debug_level() == 5 ) {
-            cout <<"Nome do metodo: "<<nativeMethodName<<endl;
-        }
-
-        if (nativeMethodType.compare("hugoniotmethod")==0) {
-
-            if (nativeMethodName.compare("explicit")==0) {
-                RpNumerics::getPhysics().getSubPhysics(0).setHugoniotFunction(new Quad2Hugoniot());
-            } else {
-                RpNumerics::getPhysics().getSubPhysics(0).setHugoniotFunction(new Hugoniot_Curve());
-            }
-
-
-        }
-
-
-    }
-
-
 }
 
 /*
@@ -319,20 +274,14 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setResolution
     }
 
     const char * gridNameNative = env->GetStringUTFChars(gridName, NULL);
-    
+
     GridValues * grid = RpNumerics::getGridFactory().getGrid(string(gridNameNative));
 
 
-    if ( Debug::get_debug_level() == 5 ) {
-        cout <<"Nome do grid: "<<gridNameNative<<endl;
-    }
-    
+
+
     const Boundary * boundary = RpNumerics::getPhysics().getSubPhysics(0).getPreProcessedBoundary();
 
-
-
-
-        cout << "Chamando set Grid" << gridNameNative << endl;
 
 
     grid->set_grid(boundary, boundary->minimums(), boundary->maximums(), newResolutionVector);
@@ -418,10 +367,7 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setBoundary
         RectBoundary nativeBoundary(minNativeRealVector, maxNativeRealVector);
         RpNumerics::getPhysics().boundary(nativeBoundary);
 
-        if ( Debug::get_debug_level() == 5 ) {
-            cout << "Min nativo: " << nativeBoundary.minimums() << endl;
-            cout << "Max nativo: " << nativeBoundary.maximums() << endl;
-        }
+
 
     }
 
@@ -432,9 +378,6 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setBoundary
         RealVector maxNativeRealVector(maxSize, maxNativeArray);
 
 
-       
-            cout << "O tipo eh isotriang boundary" << minNativeRealVector << " " << maxNativeRealVector << endl;
-       
 
 
         Three_Phase_Boundary triangBoundary(minNativeRealVector, maxNativeRealVector);
@@ -481,8 +424,10 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_clean(JNIEnv * env, jclass cls
 }
 
 void RpNumerics::clean() {
-
+    delete gridValuesFactory_;
+    delete stationaryPointVector_;
     delete physics_;
+
 }
 
 /* Class:     rpnumerics_RPNUMERICS
@@ -528,9 +473,7 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_initNative(JNIEnv * env, jclas
     if (physicsID == NULL) {
         return; /* OutOfMemoryError already thrown */
     }
-    if ( Debug::get_debug_level() == 5 ) {
-        cout << "Construindo a fisica: " << physicsID << endl;
-    }
+
     RpNumerics::setPhysics(Physics(physicsID));
 
 
@@ -608,9 +551,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RPNUMERICS_boundary(JNIEnv * env, jcla
         const RectBoundary & rectBoundary = (RectBoundary &) boundary;
         int boundaryDimension = rectBoundary.minimums().size();
 
-        if ( Debug::get_debug_level() == 5 ) {
-            cout <<"Min: "<<rectBoundary.minimums()<<" Max: "<<rectBoundary.maximums()<<endl;
-        }
+
 
         double minimum [boundaryDimension];
         double maximum [boundaryDimension];
@@ -698,12 +639,16 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RPNUMERICS_boundary(JNIEnv * env, jcla
 
 
     }
-    if ( Debug::get_debug_level() == 5 ) {
-        cout << "Boundary not defined" << endl;
-    }
+    
+}
 
-    return NULL;
 
+JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_clearCurvesCache(JNIEnv * env, jclass cls) {
+    RpNumerics::clearCurveMap();
+}
+
+JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_removeCurve(JNIEnv * env, jclass cls, jint curveID) {
+    RpNumerics::removeCurve(curveID);
 }
 
 

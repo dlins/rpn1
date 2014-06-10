@@ -66,7 +66,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_EllipticBoundaryCalc_nativeCalc
 
 
     if ( Debug::get_debug_level() == 5 ) {
-        cout << "left_vrs.size()  = " << left_vrs.size() << endl;
+        ////cout << "left_vrs.size()  = " << left_vrs.size() << endl;
     }
 
     if (left_vrs.size() == 0)return NULL;

@@ -20,7 +20,6 @@ public class BifurcationCurveSideView extends GeomObjView {
         super(abstractGeom, transf, viewAttr);
 
     }
-   
 
     //Original update method
     public void update() {
@@ -32,30 +31,30 @@ public class BifurcationCurveSideView extends GeomObjView {
             Iterator<BifurcationCurveBranchGeom> iterator = side.iterator();
             while (iterator.hasNext()) {
                 BifurcationCurveGeomSide bifurcationCurveBranchGeom = (BifurcationCurveGeomSide) iterator.next();
-               try {
+                try {
                     List<MultiPolyLine> segList = bifurcationCurveBranchGeom.getSegList();
                     for (int i = 0; i < segList.size(); i++) {
-                       MultiPolyLine multiPolyLine = segList.get(i);
-                       viewList_.add(multiPolyLine.createView(getViewingTransform()));                       
-                   }
+                        MultiPolyLine multiPolyLine = segList.get(i);
+                        viewList_.add(multiPolyLine.createView(getViewingTransform()));
+                    }
 
-            } catch (DimMismatchEx dex) {
-                dex.printStackTrace();
-            } 
-                
+                } catch (DimMismatchEx dex) {
+                    dex.printStackTrace();
+                }
+
             }
-            
+
         }
     }
-    
-     @Override
-    public void draw(Graphics2D g){
-        
+
+    @Override
+    public void draw(Graphics2D g) {
+
         super.draw(g);
-        
-        BifurcationCurveGeomSide bifurcationGeomSide = (BifurcationCurveGeomSide)getAbstractGeom();
-        
-         Iterator<GraphicsUtil> annotationIterator = bifurcationGeomSide.getAnnotationIterator();
+
+        BifurcationCurveGeomSide bifurcationGeomSide = (BifurcationCurveGeomSide) getAbstractGeom();
+
+        Iterator<GraphicsUtil> annotationIterator = bifurcationGeomSide.getAnnotationIterator();
 
         while (annotationIterator.hasNext()) {
             GraphicsUtil graphicsUtil = annotationIterator.next();
@@ -65,10 +64,7 @@ public class BifurcationCurveSideView extends GeomObjView {
             graphicsUtil.draw(g);
 
         }
-        
+
     }
-    
-    
-    
-    
+
 }

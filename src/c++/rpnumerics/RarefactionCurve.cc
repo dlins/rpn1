@@ -4,6 +4,8 @@ RarefactionCurve::RarefactionCurve(const AccumulationFunction *gg, const FluxFun
     f = ff;
     g = gg;
     b = bb;
+
+    coincidence_object = 0;
 }
 
 RarefactionCurve::~RarefactionCurve(){
@@ -18,7 +20,7 @@ int RarefactionCurve::field(int *neq, double *xi, double *in, double *out, int *
     //
     RealVector point(*neq, in);
     if (!rar->b->inside(point)){
-        //std::cout << "Field. point = " << point << " is OUTSIDE!" << std::endl;
+        //std:://cout << "Field. point = " << point << " is OUTSIDE!" << std::endl;
 
         return FIELD_POINT_OUTSIDE_DOMAIN;
     }
@@ -64,7 +66,7 @@ int RarefactionCurve::Jacobian_field(){
 //    //
 //    RealVector point(*neq, in);
 //    if (!rar->b->inside(point)){
-//        std::cout << "RarefactionCurve\'s field\'s Jacobian. point = " << point << " is OUTSIDE!" << std::endl;
+//        std:://cout << "RarefactionCurve\'s field\'s Jacobian. point = " << point << " is OUTSIDE!" << std::endl;
 
 //        return JACOBIAN_FIELD_POINT_OUTSIDE_DOMAIN;
 //    }
@@ -101,12 +103,12 @@ double RarefactionCurve::directional_derivative(const RealVector &p, int fam, co
     std::vector<DoubleMatrix> F_H = F_jet.Hessian();
     std::vector<DoubleMatrix> G_H = G_jet.Hessian();
 
-    std::vector<eigenpair> e;
+    std::vector<eigenpair> e; 
     Eigen::eig(n, F_J.data(), G_J.data(), e);
 
-    double lambda = e[family].r;
-    RealVector rm(n, e[family].vrr.data()); // Right eigenvector
-    RealVector lm(n, e[family].vlr.data()); // Left  eigenvector
+    double lambda = e[fam].r; 
+    RealVector rm(n, e[fam].vrr.data()); // Right eigenvector
+    RealVector lm(n, e[fam].vlr.data()); // Left  eigenvector
 
     // Verify that rm points in the right direction.
     // Since rm will be used below, it is necessary that this change is permanent.
@@ -117,6 +119,8 @@ double RarefactionCurve::directional_derivative(const RealVector &p, int fam, co
 
     for (int i = 0; i < F_H.size(); i++) h(i) = rm*((F_H[i] - lambda*G_H[i])*rm);
     
+//    std::cout << "At dirdrv. lm*h = " << lm*h << ", lm*(G_J*rm) = " << lm*(G_J*rm) << std::endl;
+
     return (lm*h)/(lm*(G_J*rm));
 }
 
@@ -131,20 +135,24 @@ int RarefactionCurve::initialize(const RealVector &p, int fam, const RealVector 
 // TODO: Errors can occur when initializing.
 //       Deal with it.
 int RarefactionCurve::initialize(const RealVector &p, int fam, int increase, RealVector &ref, double &dd){
+    
     int n = p.size();
 
     JetMatrix F_jet(n), G_jet(n);
     f->jet(p, F_jet, 2);
     g->jet(p, G_jet, 2);    
 
+
     DoubleMatrix F_J = F_jet.Jacobian();
     DoubleMatrix G_J = G_jet.Jacobian();
 
+    
     std::vector<DoubleMatrix> F_H = F_jet.Hessian();
     std::vector<DoubleMatrix> G_H = G_jet.Hessian();
 
     std::vector<eigenpair> e;
     Eigen::eig(n, F_J.data(), G_J.data(), e);
+
 
     double lambda = e[fam].r;
     RealVector rm(n, e[fam].vrr.data()); // Right eigenvector
@@ -275,7 +283,7 @@ int RarefactionCurve::curve(const RealVector &initial_point,
 
     // Verify that initial_point is inside the boundary
     if (!b->inside(initial_point)){
-        std::cout << "RarefactionCurve: The initial point " << initial_point << " is outside the domain! Aborting..." << std::endl; 
+        //cout << "RarefactionCurve: The initial point " << initial_point << " is outside the domain! Aborting..." << std::endl; 
 
         return RAREFACTION_ERROR;
     }
@@ -285,6 +293,7 @@ int RarefactionCurve::curve(const RealVector &initial_point,
     rarcurve.clear();
     rarcurve.type = RAREFACTION_CURVE;
     rarcurve.family = curve_family;
+    rarcurve.increase = increase;
 
     inflection_points.clear();
 
@@ -308,7 +317,7 @@ int RarefactionCurve::curve(const RealVector &initial_point,
     }
 
     if (info_initialize == RAREFACTION_INIT_ERROR){
-        std::cout << "RarefactionCurve: The initialization failed. Aborting..." << std::endl; 
+        //cout << "RarefactionCurve: The initialization failed. Aborting..." << std::endl; 
 
         return RAREFACTION_ERROR;
     }
@@ -331,6 +340,16 @@ int RarefactionCurve::curve(const RealVector &initial_point,
     RealVector point(initial_point);
     RealVector next_point;
 
+    // Coincidence
+    double old_lambda_diff;
+    if (coincidence_object != 0){
+        std::cout << "Will check coincidence before while." << std::endl;
+
+        old_lambda_diff = coincidence_object->lambda_diff(initial_point);
+
+        std::cout << "    Done. lambda_diff = " << old_lambda_diff << std::endl;
+    }
+
     while (true){
         int info_odesolver = odesolver->integrate_step(&RarefactionCurve::field, 
                                                       (int*)this, 0 /*double *function_data*/,
@@ -338,13 +357,13 @@ int RarefactionCurve::curve(const RealVector &initial_point,
                                                       next_xi, next_point);
 
         if (info_odesolver == ODE_SOLVER_ERROR){
-            std::cout << "RarefactionCurve: The solver failed to find the next point (Error = " << info_odesolver << "). Aborting..." << std::endl; 
+            //cout << "RarefactionCurve: The solver failed to find the next point (Error = " << info_odesolver << "). Aborting..." << std::endl; 
 
             return RAREFACTION_ERROR;
         }
 
         if (info_odesolver == ODE_SOLVER_POINT_OUTSIDE_DOMAIN){
-            std::cout << "RarefactionCurve: The solver passed a point outside the domain to the field (Error = " << info_odesolver << "). Aborting..." << std::endl; 
+            //cout << "RarefactionCurve: The solver passed a point outside the domain to the field (Error = " << info_odesolver << "). Aborting..." << std::endl; 
 
             return RAREFACTION_ERROR;
         }
@@ -373,40 +392,42 @@ int RarefactionCurve::curve(const RealVector &initial_point,
             return RAREFACTION_OK;
         }
 
+//        // Has the rarefaction curve reached the coincidence? 
+//        //     
+//        if (coincidence_object != 0){
+//            double current_lambda_diff = coincidence_object->lambda_diff(next_point); // lambda_s - lambda_e
+//            if (current_lambda_diff*old_lambda_diff < 0.0){
+//                add_point_to_curve(next_point, rarcurve);
+
+//                std::cout << "The rarefaction reached the Coincidence. Leaving..." << std::endl;
+
+//                return RAREFACTION_OK;
+
+////                // Coincidence reached. Get away from the coincidence locus and carry on with the same family.
+////                RealVector next_dir = next_point - old_point;
+////                next_point = next_point + 2.0*next_dir;
+//            }
+//            else {
+//                old_lambda_diff = current_lambda_diff;
+//            }
+//        }
+
         // Has the rarefaction curve reached an inflection? 
         // Update the directional derivative first.
         //
+        // At least in the case of TPCW we have found that, upon reaching the coincidence,
+        // the inflection is incorrectly detected instead (the sign of the directional derivative changes
+        // even though lambda is monotone). There is no simple method to avoid this problem.
+        // Right now what the user will have to do is start from a different point.
+        //
+        // For the record: the proposed method was: if dirdrv*old_dirdrv < 0.0 then 
+        // set a flag and track lambda for a few steps in the future, to check if the inflection
+        // was really found.
+        // 
         dirdrv = directional_derivative(next_point, family, reference_vector);
 
         #ifdef TEST
-        {
-            std::vector<RealVector> v;
-            v.push_back(next_point);
-
-            std::vector<std::string> s;
-            std::stringstream ss;
-//            ss << dirdrv;
-            ss << rarcurve.curve.size() - 1;
-            s.push_back(ss.str());
-
-//            Curve2D *rar_point_for_canvas = new Curve2D(v, 1.0, 0.0, 0.0, s, CURVE2D_MARKERS | CURVE2D_INDICES);
-
-//            canvas->add(rar_point_for_canvas);
-//            scroll->add(ss.str().c_str(), canvas, rar_point_for_canvas);
-
-            std::cout << "Index = " << rarcurve.curve.size() - 1 << std::endl;
-
-            std::vector<eigenpair> e;
-            Eigen::eig(next_point, f, g, e);
-
-            int n = next_point.size();
-
-            std::cout << "    dirdrv   = " << dirdrv << std::endl;
-            std::cout << "    lambda 0 = " << e[0].r << std::endl;
-            std::cout << "    lambda 1 = " << e[1].r << std::endl;
-            std::cout << "    eigenvector 0 = " << RealVector(n, e[0].vrr.data()) << std::endl;
-            std::cout << "    eigenvector 1 = " << RealVector(n, e[1].vrr.data()) << std::endl;
-        }
+       
         #endif
 
         if (dirdrv*previous_dirdrv < 0.0){
@@ -426,25 +447,25 @@ int RarefactionCurve::curve(const RealVector &initial_point,
                                                              &inflection_signal_event, (int*)this, (int*)0);
 
             if (info_bisection == BISECTION_FUNCTION_ERROR){
-                std::cout << "An error was reported by the signal function when called by Bisection. Leaving..." << std::endl;
+                //cout << "An error was reported by the signal function when called by Bisection. Leaving..." << std::endl;
 
                 rarcurve.reason_to_stop = RAREFACTION_ERROR;
                 return RAREFACTION_ERROR;
             }
             else if (info_bisection == BISECTION_EQUAL_SIGN){
-                std::cout << "Bisection detected that the signal event function has the same sign in both points. Leaving..." << std::endl;
+                //cout << "Bisection detected that the signal event function has the same sign in both points. Leaving..." << std::endl;
 
                 rarcurve.reason_to_stop = RAREFACTION_ERROR;
                 return RAREFACTION_ERROR;
             }
             else if (info_bisection == BISECTION_CONVERGENCE_ERROR){
-                std::cout << "Bisection did not converge when computing the inflection. Leaving..." << std::endl;
+                //cout << "Bisection did not converge when computing the inflection. Leaving..." << std::endl;
 
                 rarcurve.reason_to_stop = RAREFACTION_ERROR;
                 return RAREFACTION_ERROR;
             }
             else {
-                std::cout << "Bisection converged when computing the inflection." << std::endl;
+                //cout << "Bisection converged when computing the inflection." << std::endl;
 
                 add_point_to_curve(p_c, rarcurve);
 
@@ -469,8 +490,6 @@ int RarefactionCurve::curve(const RealVector &initial_point,
         
         }
 
-//        // Has the rarefaction curve reached the coincidence? 
-//        //           
 //        RealVector point_eigenvalues;
 //        all_eigenvalues(next_point, family, point_eigenvalues);
 
@@ -509,51 +528,7 @@ int RarefactionCurve::curve(const RealVector &initial_point,
     }
 }
 
-//int RarefactionCurve::curve_from_boundary(const RealVector &initial_point, int side, 
-//                  int curve_family,
-//                  int increase,
-//                  int type_of_rarefaction, // For itself or as engine for integral curve.
-//                  const ODE_Solver *odesolver, // Should it be another one for the Bisection? Can it really be const? If so, how to use initialize()?
-//                  double deltaxi,
-//                  Curve &rarcurve,
-//                  std::vector<RealVector> &inflection_points, // Will these survive/be added to the Curve class?
-//                  RealVector &final_direction,
-//                  int &reason_why, // Similar to Composite.
-//                  int &edge){
 
-//    // Points to the interior of the domain from side s.
-//    //
-//    RealVector to_interior = b->side_transverse_interior(initial_point, side);
-
-//    std::cout << "to_interior = " << to_interior << std::endl;
-
-//    // Initialize.
-//    //
-//    RealVector initial_direction;
-//    double dd;
-
-//    int info_initialize = initialize(initial_point, curve_family, increase, initial_direction, dd);
-
-//    std::cout << "info_initialize = " << info_initialize << std::endl;
-//    std::cout << "dd = " << dd << ", initial_direction = " << initial_direction << std::endl;
-
-//    if (info_initialize == RAREFACTION_INIT_ERROR) return RAREFACTION_ERROR;
-
-//    std::cout << "initial_direction*to_interior = " << initial_direction*to_interior << std::endl;
-
-//    // The rarefaction will be computed only if it can be computed from the boundary towards the interior
-//    // of the domain (according to the requested value of increase).
-//    // 
-//    if (initial_direction*to_interior < 0.0) return RAREFACTION_ERROR;
-
-//    int info = curve(initial_point, curve_family, increase, 
-//                     type_of_rarefaction, RAREFACTION_DONT_INITIALIZE, 
-//                     &initial_direction, odesolver, deltaxi,
-//                     rarcurve, inflection_points, final_direction, 
-//                     reason_why, edge);
-
-//    return info;
-//}
 
 int RarefactionCurve::curve_from_boundary(const RealVector &initial_point, int side, 
                   int curve_family,
@@ -571,6 +546,7 @@ int RarefactionCurve::curve_from_boundary(const RealVector &initial_point, int s
     //
     RealVector to_interior = b->side_transverse_interior(initial_point, side);
 
+    std::cout << "to_interior = " << to_interior << std::endl;
 
     // Find a point inside the domain, close to the initial point.
     //
@@ -606,9 +582,7 @@ int RarefactionCurve::curve_from_boundary(const RealVector &initial_point, int s
         double dd;
 
         initialize(inner_point, curve_family, increase, temp, dd);
-//        std::cout << "dd = " << dd << ", temp = " << temp << std::endl;
-//
-//        std::cout << "initial_direction = " << initial_direction << std::endl;
+
     }
     else return RAREFACTION_ERROR;
 

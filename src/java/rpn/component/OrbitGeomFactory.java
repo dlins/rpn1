@@ -32,6 +32,11 @@ public class OrbitGeomFactory extends RpCalcBasedGeomFactory {
     public OrbitGeomFactory(OrbitCalc calc,Orbit orbit) {
         super(calc,orbit);
     }
+    
+    public OrbitGeomFactory(OrbitCalc calc,WaveCurve orbit) {
+        super(calc,orbit);
+    }
+    
     //
     // Accessors/Mutators
     //

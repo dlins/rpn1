@@ -105,6 +105,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     private static RPnPhaseSpaceFrame[] riemannFrames_;
     private static List<RPnPhaseSpaceFrame> characteristicsFrames_ = new ArrayList<RPnPhaseSpaceFrame>();
     private JPanel utilitiesToolBarPanel = new JPanel();
+    private List<AbstractButton> mainButtonsToolBarList_ = new ArrayList<AbstractButton>();
 
     public RPnUIFrame(RPnMenuCommand command) {
 
@@ -169,6 +170,9 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         auxiliarCurvesToolBar_.add(PointLevelCurvePlotCommand.instance().getContainer());
         auxiliarCurvesToolBar_.add(LevelCurvePlotCommand.instance().getContainer());
         auxiliarCurvesToolBar_.add(PhysicalBoundaryPlotCommand.instance().getContainer());
+        auxiliarCurvesToolBar_.add(DiscriminantLevelCurvePlotCommand.instance().getContainer());
+        auxiliarCurvesToolBar_.add(DiscriminantPointLevelCurvePlotCommand.instance().getContainer());
+        auxiliarCurvesToolBar_.add(DerivativeDiscriminantLevelCurvePlotCommand.instance().getContainer());
 
     }
 
@@ -187,6 +191,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         toolBar_.add(RarefactionExtensionCurvePlotCommand.instance().getContainer());
         toolBar_.add(HugoniotContinuationPlotCommand.instance().getContainer());
         toolBar_.add(RarefactionExtensionCurvePlotCommand.instance().getContainer());
+        toolBar_.add(WaveCurveRRegionsPlotCommand.instance().getContainer());
 
         toolBar_.add(DoubleContactCommand.instance().getContainer());
         toolBar_.add(BoundaryExtensionCurveCommand.instance().getContainer());
@@ -194,7 +199,6 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         toolBar_.add(HysteresisPlotCommand.instance().getContainer());
 
         toolBar_.add(EnvelopeCurveCommand.instance().getContainer());
-        toolBar_.add(StoneSecondaryBifurcationCurveCommand.instance().getContainer());
 
         toolBar_.add(BuckleyLeverettiInflectionCommand.instance().getContainer());
         toolBar_.add(CoincidencePlotCommand.instance().getContainer());
@@ -235,11 +239,15 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
         utilitiesToolBar_.add(ZoomingAreaCommand.instance().getContainer());
         utilitiesToolBar_.add(BifurcationCorrespondenceCommand.instance().getContainer());
+        utilitiesToolBar_.add(WaveCurveSpeedPlotCommand.instance().getContainer());
     }
 
     private void createRiemmanProblemToolBar() {
         toolBar_.setLayout(new GridLayout(1, 2));
         toolBar_.add(RiemannProfileCommand.instance().getContainer());
+        toolBar_.add(RiemannAllProfileCommand.instance().getContainer());
+        
+        
         toolBar_.add(WaveCurvePlotCommand.instance().getContainer());
     }
 
@@ -259,6 +267,13 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
                 rarefactionConfigMenu();
                 toolBar_.removeAll();
+
+//                for (AbstractButton button : mainButtonsToolBarList_) {
+//                    
+//                    toolBar_.add(button);
+//                    
+//                }
+//                
                 createCurvesTooBar();
                 toolBar_.revalidate();
             }
@@ -474,6 +489,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
             }
         }
 
+        System.out.println("Limites de riemann: " + profileMin + profileMax);
         RectBoundary boundary = new RectBoundary(profileMin, profileMax);
         Space riemanProfileSpace = new Space("RiemannProfileSpace", RPNUMERICS.domainDim() + 1);
         riemannFrames_ = new RPnRiemannFrame[RPNUMERICS.domainDim()];
@@ -580,11 +596,19 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         ArrayList<RPnPhaseSpaceAbstraction> leftPhaseSpaceArray = new ArrayList<RPnPhaseSpaceAbstraction>();
         ArrayList<RPnPhaseSpaceAbstraction> rightPhaseSpaceArray = new ArrayList<RPnPhaseSpaceAbstraction>();
 
+        ArrayList<RPnPhaseSpaceAbstraction> centerPhaseSpaceArray = new ArrayList<RPnPhaseSpaceAbstraction>();
+
+        centerPhaseSpaceArray.add(RPnDataModule.RIGHTPHASESPACE);
+        centerPhaseSpaceArray.add(RPnDataModule.LEFTPHASESPACE);
+
         leftPhaseSpaceArray.add(RPnDataModule.RIGHTPHASESPACE);
         rightPhaseSpaceArray.add(RPnDataModule.LEFTPHASESPACE);
 
         RPnPhaseSpaceManager.instance().register(RPnDataModule.LEFTPHASESPACE, leftPhaseSpaceArray);
         RPnPhaseSpaceManager.instance().register(RPnDataModule.RIGHTPHASESPACE, rightPhaseSpaceArray);
+
+        RPnPhaseSpaceManager.instance().register(RPnDataModule.PHASESPACE, centerPhaseSpaceArray);
+
     }
 
     private void associatePhaseSpacesAndCurvesList() {
@@ -617,6 +641,10 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         leftCurvesList.addObserver(RiemannProfileCommand.instance());
         rightCurvesList.addObserver(RiemannProfileCommand.instance());
 
+        curvesList.addObserver(WaveCurveSpeedPlotCommand.instance());
+        leftCurvesList.addObserver(WaveCurveSpeedPlotCommand.instance());
+        rightCurvesList.addObserver(WaveCurveSpeedPlotCommand.instance());
+
         curvesList.addObserver(DomainSelectionCommand.instance());
         leftCurvesList.addObserver(DomainSelectionCommand.instance());
         rightCurvesList.addObserver(DomainSelectionCommand.instance());
@@ -629,9 +657,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         leftCurvesList.addObserver(EnableLRPhaseSpaceCommand.instance());
         rightCurvesList.addObserver(EnableLRPhaseSpaceCommand.instance());
 
-        curvesList.addObserver(DomainSelectionCommand.instance());
-        leftCurvesList.addObserver(DomainSelectionCommand.instance());
-        rightCurvesList.addObserver(DomainSelectionCommand.instance());
+       
 
         curvesList.update();
 //        leftCurvesList.update();
@@ -1484,6 +1510,10 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 //        } catch (IOException ex) {
 //            ex.printStackTrace();
 //        }                                
+    }
+
+    void setMainToolBarButtons(List<AbstractButton> mainToolBar) {
+        mainButtonsToolBarList_.addAll(mainToolBar);
     }
 
     private class ConfigAction implements Action {

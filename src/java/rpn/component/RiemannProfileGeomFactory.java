@@ -6,11 +6,8 @@
 package rpn.component;
 
 import java.awt.Color;
-import rpn.controller.OrbitController;
-import rpn.controller.RpController;
 import rpnumerics.*;
 import wave.multid.view.ViewingAttr;
-import wave.util.RealVector;
 
 public class RiemannProfileGeomFactory extends RpCalcBasedGeomFactory {
     //

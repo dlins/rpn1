@@ -136,7 +136,7 @@ vector<double> * NegativeStone::getParams() {
 }
 
 NegativeStone::NegativeStone() : SubPhysics(StoneNegativeFluxFunction(StoneParams(), StoneNegativePermParams()), StoneAccumulation(), *defaultBoundary(), Multid::PLANE, "StoneNegative", _SIMPLE_ACCUMULATION_) {
-    setHugoniotFunction(new Hugoniot_Curve());
+
     setDoubleContactFunction(new Double_Contact());
     setViscosityMatrix(new Viscosity_Matrix());
     preProcessedBoundary_ = defaultBoundary();
@@ -144,7 +144,6 @@ NegativeStone::NegativeStone() : SubPhysics(StoneNegativeFluxFunction(StoneParam
 }
 
 NegativeStone::NegativeStone(const NegativeStone & copy) : SubPhysics(copy.fluxFunction(), copy.accumulation(), copy.getBoundary(), Multid::PLANE, "StoneNegative", _SIMPLE_ACCUMULATION_) {
-    setHugoniotFunction(new Hugoniot_Curve());
     setDoubleContactFunction(new Double_Contact());
     setViscosityMatrix(copy.getViscosityMatrix());
     preProcessedBoundary_ = copy.getPreProcessedBoundary()->clone();

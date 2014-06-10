@@ -81,20 +81,20 @@ public class AreaSelected extends GraphicsUtil {
 
         if (!id_.isEmpty()) {
         
-            RealVector upperLeftVertice = getWCVertices().get(3);
-            Coords2D dcSelectionPoint = new Coords2D(0, 0);
-            CoordsArray wcSelectionPoint = new CoordsArray(upperLeftVertice);
-
-            getViewingTransform().viewPlaneTransform(wcSelectionPoint, dcSelectionPoint);
-                        
-            dcSelectionPoint.setElement(0, dcSelectionPoint.getX()+20);
-            dcSelectionPoint.setElement(1, dcSelectionPoint.getY()+20);
-            
-            Font f = new Font("Arial", Font.BOLD, 15);
-
-            GlyphVector v = f.createGlyphVector(g.getFontRenderContext(), id_);
-
-            g.drawGlyphVector(v,(float) dcSelectionPoint.getX(), (float) dcSelectionPoint.getY());
+//            RealVector upperLeftVertice = getWCVertices().get(3);
+//            Coords2D dcSelectionPoint = new Coords2D(0, 0);
+//            CoordsArray wcSelectionPoint = new CoordsArray(upperLeftVertice);
+//
+//            getViewingTransform().viewPlaneTransform(wcSelectionPoint, dcSelectionPoint);
+//                        
+//            dcSelectionPoint.setElement(0, dcSelectionPoint.getX()+20);
+//            dcSelectionPoint.setElement(1, dcSelectionPoint.getY()+20);
+//            
+//            Font f = new Font("Arial", Font.BOLD, 15);
+//
+//            GlyphVector v = f.createGlyphVector(g.getFontRenderContext(), id_);
+//
+//            g.drawGlyphVector(v,(float) dcSelectionPoint.getX(), (float) dcSelectionPoint.getY());
         }
 
         Stroke previousStroke = g.getStroke();

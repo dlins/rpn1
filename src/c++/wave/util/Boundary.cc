@@ -7,8 +7,7 @@ Boundary::~Boundary() {
 int Boundary::intersection(const RealVector &p, const RealVector &q, RealVector &r, int &w) const {
     w = -1;
 
-    std::cout << "Boundary. p = " << p << ", q = " << q << std::endl;
-    std::cout << "inside(p) = " << inside(p) << ", inside(q) = " << inside(q) << std::endl;
+
 
 
     if      ( inside(p) &&  inside(q)) return BOUNDARY_INTERSECTION_BOTH_INSIDE;

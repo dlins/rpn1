@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.geom.GeneralPath;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
@@ -17,7 +16,6 @@ import wave.multid.model.MultiGeometryImpl;
 import wave.multid.view.ViewingTransform;
 import wave.multid.DimMismatchEx;
 import wave.multid.model.MultiPoint;
-import wave.multid.view.GeomObjView;
 import wave.multid.view.PointMark;
 import wave.multid.view.ViewingAttr;
 
@@ -32,8 +30,7 @@ public class WaveCurveView extends WaveCurveOrbitGeomView {
     @Override
     public Shape createShape() {
 
-        List<GeomObjView> objView = new ArrayList<GeomObjView>();
-
+      
         List<WaveCurveBranchGeom> branchGeomList = ((WaveCurveGeom) getAbstractGeom()).getOrbitGeom();
 
         GeneralPath gPath = new GeneralPath(GeneralPath.WIND_EVEN_ODD);

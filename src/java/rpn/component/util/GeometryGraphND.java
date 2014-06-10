@@ -219,40 +219,40 @@ public class GeometryGraphND {
 
     public void lightTest(int ind) {       //*** ALterei BifurcationCurveGeom
 
-        Iterator<RpGeometry> geomList = RPnDataModule.LEFTPHASESPACE.getGeomObjIterator();
-
-        Color color = null;
-        Color otherColor = null;
-
-        if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals(RPnDataModule.RIGHTPHASESPACE.getName())) {
-            geomList = RPnDataModule.LEFTPHASESPACE.getGeomObjIterator();
-            color = Color.yellow;
-            otherColor = Color.magenta;
-        }
-        if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals(RPnDataModule.LEFTPHASESPACE.getName()))  {
-            geomList = RPnDataModule.RIGHTPHASESPACE.getGeomObjIterator();
-            color = Color.magenta;
-            otherColor = Color.yellow;
-        }
-
-
-        int i = 0;
-        while (geomList.hasNext()) {
-            MultiGeometry geometry = geomList.next();
-            
-            if (geometry instanceof BifurcationCurveGeom) {
-                BifurcationCurveGeom bifurcGeom = (BifurcationCurveGeom) geometry;
-                Iterator it = bifurcGeom.getRealSegIterator();
-                while(it.hasNext()) {
-                    RealSegGeom geom = (RealSegGeom) it.next();
-                    if ((GeometryGraph.count%2) == 0) geom.viewingAttr().setColor(color);
-                    if (i == ind  &&  (GeometryGraph.count%2) == 1) geom.viewingAttr().setColor(otherColor);
-                    i++;
-                }
-
-            }
-
-        }
+//        Iterator<RpGeometry> geomList = RPnDataModule.LEFTPHASESPACE.getGeomObjIterator();
+//
+//        Color color = null;
+//        Color otherColor = null;
+//
+//        if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals(RPnDataModule.RIGHTPHASESPACE.getName())) {
+//            geomList = RPnDataModule.LEFTPHASESPACE.getGeomObjIterator();
+//            color = Color.yellow;
+//            otherColor = Color.magenta;
+//        }
+//        if (RPnPhaseSpaceAbstraction.namePhaseSpace.equals(RPnDataModule.LEFTPHASESPACE.getName()))  {
+//            geomList = RPnDataModule.RIGHTPHASESPACE.getGeomObjIterator();
+//            color = Color.magenta;
+//            otherColor = Color.yellow;
+//        }
+//
+//
+//        int i = 0;
+//        while (geomList.hasNext()) {
+//            MultiGeometry geometry = geomList.next();
+//            
+//            if (geometry instanceof BifurcationCurveGeom) {
+//                BifurcationCurveGeom bifurcGeom = (BifurcationCurveGeom) geometry;
+//                Iterator it = bifurcGeom.getRealSegIterator();
+//                while(it.hasNext()) {
+//                    RealSegGeom geom = (RealSegGeom) it.next();
+//                    if ((GeometryGraph.count%2) == 0) geom.viewingAttr().setColor(color);
+//                    if (i == ind  &&  (GeometryGraph.count%2) == 1) geom.viewingAttr().setColor(otherColor);
+//                    i++;
+//                }
+//
+//            }
+//
+//        }
 
         
     }

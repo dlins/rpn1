@@ -17,6 +17,7 @@ import java.util.Set;
 import rpn.configuration.BoundaryConfiguration;
 import rpn.configuration.RPnConfig;
 import rpn.configuration.ConfigurationProfile;
+import rpn.configuration.CurveConfiguration;
 import rpn.configuration.PhysicsConfiguration;
 import rpn.parser.RPnDataModule;
 import wave.multid.CoordsArray;
@@ -52,13 +53,11 @@ public class RPNUMERICS {
             initNative(physicsID);
 
             //Processing configuration data
-
             ConfigurationProfile physicsProfile = RPnConfig.getActivePhysicsProfile();
 
             HashMap<String, Configuration> configurationList = RPnConfig.createConfigurationList(physicsProfile);
 
             Configuration physicsConfiguration = new PhysicsConfiguration(physicsProfile, configurationList);
-
 
 //            //Accumulation function
 //
@@ -88,14 +87,10 @@ public class RPNUMERICS {
 //
 //                physicsConfiguration.addConfiguration("accumulationfunction", accumlationFunctionConfiguration);
 //            }
-
             //Flux function
-
             Configuration fluxFunctionConfig = physicsConfiguration.getConfiguration("fluxfunction");
 
-
             String[] paramsArray = new String[fluxFunctionConfig.getParamsSize()];
-
 
             for (int i = 0; i < fluxFunctionConfig.getParamsSize(); i++) {
 
@@ -105,16 +100,11 @@ public class RPNUMERICS {
 
             setParams(paramsArray);
 
-
             RPnConfig.addProfile(physicsID, physicsProfile);
-
-
 
             ConfigurationProfile boundaryProfile = physicsProfile.getConfigurationProfile(ConfigurationProfile.BOUNDARY);
 
-            if (boundaryProfile != null) { //Catching boundary from input file
-
-                //Catching boundary from input file
+            if (boundaryProfile != null) { //Reading boundary from input file
 
                 Configuration boundaryConfiguration = new BoundaryConfiguration(boundaryProfile);
 
@@ -122,13 +112,11 @@ public class RPNUMERICS {
                     setBoundary(new RectBoundary(boundaryConfiguration.getParam("limits")));
                 }
 
-
                 if (boundaryConfiguration.getName().equals("Three_Phase_Boundary")) {
                     setBoundary(new IsoTriang2DBoundary(boundaryConfiguration.getParam("limits")));
                 }
 
                 //            System.out.println("Limits : " + boundaryConfiguration.getParam("limits"));
-
             } else {//            System.out.println("Limits : " + boundaryConfiguration.getParam("limits"));
 
                 Boundary boundary = boundary();
@@ -153,9 +141,7 @@ public class RPNUMERICS {
                 Configuration boundaryConfiguration = new BoundaryConfiguration(defaultBoundaryProfile);
                 physicsConfiguration.addConfiguration(boundaryConfiguration.getName(), boundaryConfiguration);
 
-
             }
-
 
             configMap_.put(physicsID, physicsConfiguration);
             errorControl_ = new RpErrorControl(boundary());
@@ -166,7 +152,6 @@ public class RPNUMERICS {
 
     public static Set<String> getConfigurationNames() {
         return configMap_.keySet();
-
 
     }
 
@@ -197,7 +182,6 @@ public class RPNUMERICS {
     public static Configuration getConfiguration(String configurationName) {
         return configMap_.get(configurationName);
 
-
     }
 
     public static void setParamValue(String methodName, String paramName, String paramValue) {
@@ -210,7 +194,6 @@ public class RPNUMERICS {
     public static int getConfigurationSize() {
         return configMap_.size();
 
-
     }
 
     private static ArrayList<Configuration> sortConfigurations() {
@@ -218,48 +201,34 @@ public class RPNUMERICS {
         ArrayList<Configuration> curveConfiguration = new ArrayList<Configuration>();
         ArrayList<Configuration> returnedConfigurationArray = new ArrayList<Configuration>();
 
-
         Set<Entry<String, Configuration>> configurationSet = configMap_.entrySet();
-
-
 
         for (Entry<String, Configuration> configurationEntry : configurationSet) {
 
-
-
             if (configurationEntry.getValue().getType().equalsIgnoreCase(ConfigurationProfile.METHOD)) {
                 methodConfiguration.add(configurationEntry.getValue());
-
 
             }
 
             if (configurationEntry.getValue().getType().equalsIgnoreCase(ConfigurationProfile.CURVECONFIGURATION)) {
                 curveConfiguration.add(configurationEntry.getValue());
 
-
             }
             if (configurationEntry.getValue().getType().equalsIgnoreCase(ConfigurationProfile.PHYSICS_PROFILE)) {
                 returnedConfigurationArray.add(configurationEntry.getValue());
 
-
             }
-
 
         }
 
         returnedConfigurationArray.addAll(methodConfiguration);
         returnedConfigurationArray.addAll(curveConfiguration);
 
-
-
         return returnedConfigurationArray;
-
-
 
     }
 
     public static String toXML() {
-
 
         StringBuilder buffer = new StringBuilder();
 
@@ -292,7 +261,9 @@ public class RPNUMERICS {
 
         Integer direction = new Integer(getParamValue("fundamentalcurve", "direction"));
 
-        HugoniotParams params = new HugoniotParams(new PhasePoint(input), direction, resolution);
+        String methodName = HugoniotCurveCalcND.HugoniotMethods.valueOf(getParamValue("hugoniotcurve", "method")).name();
+
+        HugoniotParams params = new HugoniotParams(new PhasePoint(input), direction, resolution, methodName);
 
         return new HugoniotCurveCalcND(params);
     }
@@ -309,32 +280,37 @@ public class RPNUMERICS {
 
     public static EllipticBoundaryCalc createEllipticBoundaryCalc(Configuration configuration) {
 
-
         int[] resolution = RPnDataModule.processResolution(configuration.getParam("resolution"));
 
         return new EllipticBoundaryCalc(new ContourParams(resolution));
 
-
-
     }
-    
-    public static WaveCurveCalc createBoundaryWaveCurve (OrbitPoint orbitPoint,int edge){
+
+    public static WaveCurveOrbitCalc createInflectionWaveCurveCalc(OrbitPoint oPoint, int family) {
+
         Integer direction = new Integer(getParamValue("fundamentalcurve", "direction"));
-        return new WaveCurveCalc(orbitPoint, Integer.parseInt(getParamValue("fundamentalcurve", "family")), direction,edge);
+        return new WaveCurveCalc(oPoint, family, direction, WaveCurveCalc.INFLECTION, 0);
+
     }
+
+    public static WaveCurveCalc createBoundaryWaveCurveCalc(OrbitPoint orbitPoint, int origin, int edge) {
+        Integer direction = new Integer(getParamValue("fundamentalcurve", "direction"));
+        return new WaveCurveCalc(orbitPoint, Integer.parseInt(getParamValue("fundamentalcurve", "family")), direction, WaveCurveCalc.BOUNDARY, edge);
+    }
+
+   
 
     public static RarefactionCurveCalc createRarefactionCalc(OrbitPoint orbitPoint) {
         Integer direction = new Integer(getParamValue("fundamentalcurve", "direction"));
         return new RarefactionCurveCalc(orbitPoint, Integer.parseInt(getParamValue("fundamentalcurve", "family")), direction);
 
     }
-    
-     public static RarefactionCurveCalc createRarefactionCalc(OrbitPoint orbitPoint,int edge) {
+
+    public static RarefactionCurveCalc createRarefactionCalc(OrbitPoint orbitPoint, int edge) {
         Integer direction = new Integer(getParamValue("fundamentalcurve", "direction"));
-        return new RarefactionCurveCalc(orbitPoint, Integer.parseInt(getParamValue("fundamentalcurve", "family")), direction,edge);
+        return new RarefactionCurveCalc(orbitPoint, Integer.parseInt(getParamValue("fundamentalcurve", "family")), direction, edge);
 
     }
-    
 
     public static DoubleContactCurveCalc createDoubleContactCurveCalc(Configuration configuration) {
 
@@ -351,7 +327,6 @@ public class RPNUMERICS {
 
     public static EllipticBoundaryExtensionCalc createEllipticExtensionCalc(Configuration configuration) {
 
-
         int[] resolution = RPnDataModule.processResolution(configuration.getParam("resolution"));
 
         int family = new Integer(configuration.getParam("family"));
@@ -360,35 +335,29 @@ public class RPNUMERICS {
 
         return new EllipticBoundaryExtensionCalc(new ContourParams(resolution), characteristicWhere, family);
 
-
-
     }
 
     public static SecondaryBifurcationCurveCalc createSecondaryBifurcationCurveCalc(Configuration configuration) {
 
         int[] resolution = RPnDataModule.processResolution(configuration.getParam("resolution"));
 
+        String methodName = HugoniotCurveCalcND.HugoniotMethods.valueOf(configuration.getParam("method")).name();
+
         ContourParams params = new ContourParams(resolution);
+        
+        int edge = Integer.parseInt(configuration.getParam("edge"));
 
-        return new SecondaryBifurcationCurveCalc(params);
-
-    }
-
-    public static WaveCurveCalc createWaveCurveCalc(OrbitPoint orbitPoint) {
-        Integer direction = new Integer(getParamValue("fundamentalcurve", "direction"));
-        return new WaveCurveCalc(orbitPoint, Integer.parseInt(getParamValue("fundamentalcurve", "family")), direction);
+        return new SecondaryBifurcationCurveCalc(params, methodName,edge);
 
     }
 
-    public static LevelCurveCalc createPointLevelCurveCalc(RealVector orbitPoint) {
-
-
+    public static CharacteristicPolynomialLevelCalc createPointLevelCurveCalc(RealVector orbitPoint) {
 
         int[] resolution = RPnDataModule.processResolution(getParamValue("hugoniotcurve", "resolution"));
 
         int family = new Integer(getParamValue("levelcurve", "family"));
 
-        return new PointLevelCalc(orbitPoint, family, new ContourParams(resolution));
+        return new EigenValuePointLevelCalc(orbitPoint, family, new ContourParams(resolution));
 
     }
 
@@ -411,16 +380,14 @@ public class RPNUMERICS {
         int family = new Integer(getParamValue("extensioncurve", "family"));
         int characteristic = new Integer(getParamValue("extensioncurve", "characteristic"));
         boolean singular = new Boolean(getParamValue("extensioncurve", "singular"));
-        
 
         int insideArea;
 
         ArrayList<RealVector> realVectorList = new ArrayList<RealVector>();
 
         if (areaSelected == null) {
-            insideArea=1;
-        }
-        else {
+            insideArea = 1;
+        } else {
             insideArea = new Integer(getParamValue("extensioncurve", "domain"));
             for (int i = 0; i < areaSelected.length; i++) {
                 realVectorList.add(new RealVector(areaSelected[i].getCoords()));
@@ -429,13 +396,11 @@ public class RPNUMERICS {
 
         }
 
-
         return new ExtensionCurveCalc(new ContourParams(resolution), segments, realVectorList, family, characteristic, singular, insideArea);
 
     }
 
     public static BoundaryExtensionCurveCalc createBoundaryExtensionCurveCalc(Configuration configuration) {
-
 
         int[] resolution = RPnDataModule.processResolution(configuration.getParam("resolution"));
 
@@ -452,10 +417,10 @@ public class RPNUMERICS {
         return new BoundaryExtensionCurveCalc(params, edgeResolution, family, edge, characteristic);
     }
 
-    //public ExtensionCurveCalc(ContourParams contourParams, List<RealSegment> list, int extensionFamily, int characteristicDomain, boolean singular) {
+
     public static EnvelopeCurveCalc createEnvelopeCurveCalc() {
 
-        int[] resolution = RPnDataModule.processResolution(getParamValue("envelopecurve", "resolution"));
+        int[] resolution = RPnDataModule.processResolution(getParamValue("extensioncurve", "resolution"));
         int whereIsConstant = new Integer(getParamValue("envelopecurve", "edge"));
         int numberOfSteps = new Integer(getParamValue("envelopecurve", "numberofsteps"));
 
@@ -476,13 +441,36 @@ public class RPNUMERICS {
 
     }
 
-    public static LevelCurveCalc createLevelCurveCalc(double level) {
+    public static CharacteristicPolynomialLevelCalc createLevelCurveCalc(double level) {
 
-        int[] resolution = RPnDataModule.processResolution(getParamValue("hugoniotcurve", "resolution"));
+        int[] resolution = RPnDataModule.processResolution(getParamValue("bifurcationcurve", "resolution"));
 
         int family = new Integer(getParamValue("levelcurve", "family"));
 
-        return new LevelCurveCalc(family, level, new ContourParams(resolution));
+        return new EigenValueLevelCalc(family, level, new ContourParams(resolution));
+
+    }
+
+    public static CharacteristicPolynomialLevelCalc createDiscriminantLevelCurveCalc(Double level) {
+
+        int[] resolution = RPnDataModule.processResolution(getParamValue("bifurcationcurve", "resolution"));
+
+        return new DiscriminantLevelCurveCalc(level, new ContourParams(resolution));
+
+    }
+
+    public static CharacteristicPolynomialLevelCalc createDiscriminantPointLevelCurveCalc(RealVector realVector) {
+
+        int[] resolution = RPnDataModule.processResolution(getParamValue("bifurcationcurve", "resolution"));
+
+        return new DiscriminantPointLevelCalc(realVector, new ContourParams(resolution));
+
+    }
+
+    public static CharacteristicPolynomialLevelCalc createDerivativeDiscriminantLevelCurveCalc() {
+        int[] resolution = RPnDataModule.processResolution(getParamValue("bifurcationcurve", "resolution"));
+        int u = Integer.parseInt(getParamValue("derivativediscriminant", "u"));
+        return new DerivativeDiscriminantLevelCurveCalc(u, new ContourParams(resolution));
 
     }
 
@@ -522,17 +510,13 @@ public class RPNUMERICS {
 
     public static EllipticBoundaryCalc createEllipticBoundaryCalc() {
 
-
         int[] resolution = RPnDataModule.processResolution(getParamValue("ellipticboundary", "resolution"));
 
         return new EllipticBoundaryCalc(new ContourParams(resolution));
 
-
-
     }
 
     public static EllipticBoundaryExtensionCalc createEllipticExtensionCalc() {
-
 
         int[] resolution = RPnDataModule.processResolution(getParamValue("ellipticextension", "resolution"));
 
@@ -541,8 +525,6 @@ public class RPNUMERICS {
         int characteristicWhere = new Integer(getParamValue("ellipticextension", "characteristicwhere"));
 
         return new EllipticBoundaryExtensionCalc(new ContourParams(resolution), characteristicWhere, family);
-
-
 
     }
 
@@ -588,35 +570,31 @@ public class RPNUMERICS {
         return new DoubleContactCurveCalc(params, curveFamily, domainFamily);
 
     }
-    
-    
-    
-    
-     public static SecondaryBifurcationCurveCalc createStoneSecondaryBifurcationCurveCalc() {
 
-        int[] resolution = RPnDataModule.processResolution(getParamValue("bifurcationcurve", "resolution"));
-
-        int edgeresolution = new Integer (getParamValue("explicitsecondarybifurcation", "numberofsteps"));
-        int edge =  new Integer (getParamValue("explicitsecondarybifurcation", "edge"));
-
-        ContourParams params = new ContourParams(resolution);
-
-        return new StoneExplicitSecondaryBifurcationCurveCalc(params, edge, edgeresolution);
-
-    }
-    
-    
-
+//    public static SecondaryBifurcationCurveCalc createStoneSecondaryBifurcationCurveCalc() {
+//
+//        int[] resolution = RPnDataModule.processResolution(getParamValue("bifurcationcurve", "resolution"));
+//
+//        int edgeresolution = new Integer(getParamValue("explicitsecondarybifurcation", "numberofsteps"));
+//        int edge = new Integer(getParamValue("explicitsecondarybifurcation", "edge"));
+//
+//        ContourParams params = new ContourParams(resolution);
+//
+//        return new StoneExplicitSecondaryBifurcationCurveCalc(params, edge, edgeresolution);
+//
+//    }
     public static SecondaryBifurcationCurveCalc createSecondaryBifurcationCurveCalc() {
 
         //int[] resolution = RPnDataModule.processResolution(getParamValue("inflectioncurve", "resolution"));
-
         int[] resolution = RPnDataModule.processResolution(getParamValue("doublecontactcurve", "resolution"));
-
 
         ContourParams params = new ContourParams(resolution);
 
-        return new SecondaryBifurcationCurveCalc(params);
+        String methodName = HugoniotCurveCalcND.HugoniotMethods.valueOf(getParamValue("secondarybifurcation", "method")).name();
+         
+        int edge = Integer.parseInt(getParamValue("secondarybifurcation", "edge"));
+
+        return new SecondaryBifurcationCurveCalc(params, methodName,edge);
 
     }
 
@@ -628,7 +606,6 @@ public class RPNUMERICS {
     }
 
     public static CoincidenceExtensionCurveCalc createCoincidenceExtensionCurveCalc() {
-
 
         int xResolution = new Integer(getConfiguration("Contour").getParam("x-resolution"));
         int yResolution = new Integer(getConfiguration("Contour").getParam("y-resolution"));
@@ -642,11 +619,9 @@ public class RPNUMERICS {
 
         int characteristicWhere = new Integer(getParamValue("extensioncurve", "characteristicwhere"));
 
-
         System.out.println("Coincidence Extension Resolution Java:" + xResolution + " " + yResolution);
 
         return new CoincidenceExtensionCurveCalc(params, new Integer(getParamValue("extensioncurve", "curvefamily")), new Integer(getParamValue("extensioncurve", "domainfamily")), characteristicWhere);
-
 
     }
 
@@ -666,17 +641,13 @@ public class RPNUMERICS {
         Integer direction = new Integer(getParamValue("fundamentalcurve", "direction"));
         return new CompositeCalc(initialPoint, Integer.parseInt(getParamValue("fundamentalcurve", "family")), direction);
 
-
     }
-    
-    
-    public static CompositeCalc createCompositeCalc(OrbitPoint initialPoint,Configuration configuration) {
+
+    public static CompositeCalc createCompositeCalc(OrbitPoint initialPoint, Configuration configuration) {
         Integer direction = new Integer(configuration.getParam("direction"));
         return new CompositeCalc(initialPoint, new Integer(configuration.getParam("family")), direction);
 
-
     }
-
 
     public static BoundaryExtensionCurveCalc createBoundaryExtensionCurveCalc() {
 
@@ -692,15 +663,12 @@ public class RPNUMERICS {
 
         return new BoundaryExtensionCurveCalc(params, edgeResolution, new Integer(getParamValue("boundaryextensioncurve", "family")), edge, characteristic);
 
-
     }
 
     public static SubInflectionExtensionCurveCalc createSubInflectionExtensionCurveCalc() {
 
-
         int xResolution = new Integer(getConfiguration("Contour").getParam("x-resolution"));
         int yResolution = new Integer(getConfiguration("Contour").getParam("y-resolution"));
-
 
         int[] resolution = new int[2];
 
@@ -713,15 +681,11 @@ public class RPNUMERICS {
 
         System.out.println("Resolucao em Java:" + xResolution + " " + yResolution);
 
-
         return new SubInflectionExtensionCurveCalc(params, new Integer(getParamValue("extensioncurve", "curvefamily")), new Integer(getParamValue("extensioncurve", "domainfamily")), characteristicWhere);
 
-
-
     }
-    
-    
-   public static ShockCurveCalc createShockCurveCalc(OrbitPoint orbitPoint,int edge) {
+
+    public static ShockCurveCalc createShockCurveCalc(OrbitPoint orbitPoint, int edge) {
 
         Integer family = new Integer(getParamValue("fundamentalcurve", "family"));
         Double tolerance = new Double(getParamValue("Newton", "tolerance"));
@@ -729,11 +693,9 @@ public class RPNUMERICS {
         Integer direction = new Integer(getParamValue("fundamentalcurve", "direction"));
         return new ShockCurveCalc(orbitPoint, family, direction, tolerance);
 
-
     }
-    
-    
-     public static ShockCurveCalc createShockCurveCalc(OrbitPoint orbitPoint,Configuration shockConfiguration) {
+
+    public static ShockCurveCalc createShockCurveCalc(OrbitPoint orbitPoint, Configuration shockConfiguration) {
 
         Integer family = new Integer(shockConfiguration.getParam("family"));
         Double tolerance = 0.001;//TODO : Esperar a nova inteface do choque com tolerancia ???
@@ -741,18 +703,15 @@ public class RPNUMERICS {
         Integer direction = new Integer(shockConfiguration.getParam("direction"));
         return new ShockCurveCalc(orbitPoint, family, direction, tolerance);
 
-
     }
-
 
     public static ShockCurveCalc createShockCurveCalc(OrbitPoint orbitPoint) {
 
         Integer family = new Integer(getParamValue("fundamentalcurve", "family"));
-        Double tolerance = new Double(getParamValue("Newton", "tolerance"));
+//        Double tolerance = new Double(getParamValue("Newton", "tolerance"));//TODO REMOVE ??
 
         Integer direction = new Integer(getParamValue("fundamentalcurve", "direction"));
-        return new ShockCurveCalc(orbitPoint, family, direction, tolerance);
-
+        return new ShockCurveCalc(orbitPoint, family, direction, 0.01);
 
     }
 
@@ -760,7 +719,6 @@ public class RPNUMERICS {
         ContourCurveCalc bifurcationCurveCalc = null;
 
         return bifurcationCurveCalc;
-
 
     }
 
@@ -779,7 +737,6 @@ public class RPNUMERICS {
 
         return null;
 
-
     }
 
     public static RarefactionExtensionCalc createRarefactionExtensionCalc(OrbitPoint orbitPoint) {
@@ -796,15 +753,12 @@ public class RPNUMERICS {
 
         return new RarefactionExtensionCalc(new ContourParams(resolution), orbitPoint, direction, curveFamily, extensionFamily, characteristicDomain);
 
-
     }
 
     public static ShockFlow createShockFlow(ShockFlowParams shockFlowParams) {
         ShockFlow flow = new ShockFlow(shockFlowParams, new FluxFunction(getFluxParams()));
 
-
         return flow;
-
 
     }
 
@@ -821,7 +775,6 @@ public class RPNUMERICS {
 
             double dist = 1E10;    //***Melhorar criterio
             double dist2 = 0.;
-
 
             for (RealVector realVector : eqPoints) {
                 dist2 = realVector.distance(uPlus);
@@ -846,7 +799,6 @@ public class RPNUMERICS {
             double dist = 1E10;    //***Melhorar criterio
             double dist2 = 0.;
 
-
             for (RealVector realVector : eqPoints) {
                 dist2 = realVector.distance(uPlus);
                 if (dist2 < dist) {
@@ -869,19 +821,13 @@ public class RPNUMERICS {
 
         Configuration physicsConfiguration = configMap_.get(physicsID());
 
-
-
         for (int i = 0; i
                 < fluxParams.getParams().getSize(); i++) {
 
             physicsConfiguration.setParamOrder("param" + "i", i);
             physicsConfiguration.setParamValue("param" + i, fluxParams.getElement(i) + "");
 
-
-
-
         }
-
 
     }
 
@@ -889,14 +835,12 @@ public class RPNUMERICS {
 
         odeSolver_ = new Rk4BPMethod(
                 new Rk4BPProfile(new FlowVectorField(flow),
-                errorControl().eps(),
-                errorControl().ode().maxStateStepLength(),
-                boundary(), errorControl().ode().getScale(),
-                errorControl().ode().maxNumberOfSteps()));
-
+                        errorControl().eps(),
+                        errorControl().ode().maxStateStepLength(),
+                        boundary(), errorControl().ode().getScale(),
+                        errorControl().ode().maxNumberOfSteps()));
 
         return odeSolver_;
-
 
     }
     //
@@ -906,12 +850,10 @@ public class RPNUMERICS {
     public static ViscousProfileData getViscousProfileData() {
         return shockProfile_;
 
-
     }
 
     public static BifurcationProfile getBifurcationProfile() {
         return bifurcationProfile_;
-
 
     }
 
@@ -924,7 +866,6 @@ public class RPNUMERICS {
     static public final RpErrorControl errorControl() {
         return errorControl_;
 
-
     }
 
     /**
@@ -935,7 +876,6 @@ public class RPNUMERICS {
     static public final SimplexPoincareSection pSection() {
         return ((Rk4BPProfile) odeSolver_.getProfile()).getPoincareSection();
 
-
     }
 
     /**
@@ -945,7 +885,6 @@ public class RPNUMERICS {
      */
     static public final ODESolver odeSolver() {
         return odeSolver_;
-
 
     }
 
@@ -963,7 +902,6 @@ public class RPNUMERICS {
 
         for (int i = 0; i < fluxFunctionConfig.getParamsSize(); i++) {
 
-
             paramsArray[i] = fluxFunctionConfig.getParam(i);
 
         }
@@ -976,7 +914,6 @@ public class RPNUMERICS {
             previousParamArray[i] = String.valueOf(previousParams.getElement(i));
 
         }
-
 
         getViscousProfileData().setPreviousSigma(getViscousProfileData().getSigma());
         getViscousProfileData().setPreviousXZero(getViscousProfileData().getXZero());
@@ -1011,6 +948,10 @@ public class RPNUMERICS {
     public static native int domainDim();
 
     public static native Space domain();
+    
+    public static native void clearCurvesCache();
+    
+    public static native void removeCurve(int curveID);
 
     private static native void setFluxParams(FluxParams fluxParams);
 

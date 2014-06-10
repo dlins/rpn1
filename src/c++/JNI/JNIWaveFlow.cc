@@ -168,7 +168,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveFlow_fluxDeriv(JNIEnv * env, jobje
 //
 //        if ( Debug::get_debug_level() == 5 ) {
 //            for (int i = 0; i < xzeroLength; i++) {
-//                cout << "XZero: " << nativeXZeroArray [i] << "\n";
+//                ////cout << "XZero: " << nativeXZeroArray [i] << "\n";
 //            }
 //        }
 //
@@ -264,7 +264,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveFlow_fluxDeriv2(JNIEnv * env, jobj
 //
 //        if ( Debug::get_debug_level() == 5 ) {
 //            for (int i = 0; i < xzeroLength; i++) {
-//                cout << "XZero: " << nativeXZeroArray [i] << "\n";
+//                ////cout << "XZero: " << nativeXZeroArray [i] << "\n";
 //            }
 //        }
 //

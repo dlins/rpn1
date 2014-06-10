@@ -58,7 +58,7 @@
 //    }
 //
 //    if ( Debug::get_debug_level() == 5 ) {
-//        for (int i = 0; i < be_segments.size(); i++) std::cout << "be_segments[" << i << "] = " << be_segments[i] << std::endl;
+//        for (int i = 0; i < be_segments.size(); i++) std:://cout << "be_segments[" << i << "] = " << be_segments[i] << std::endl;
 //    }
 //
 //    // Compute the extension curve for the rarefaction

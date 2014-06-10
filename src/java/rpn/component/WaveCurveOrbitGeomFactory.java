@@ -10,6 +10,7 @@ import rpnumerics.FundamentalCurve;
 import rpnumerics.Orbit;
 import rpnumerics.OrbitPoint;
 import rpnumerics.RPNUMERICS;
+import rpnumerics.WaveCurve;
 import rpnumerics.WaveCurveOrbitCalc;
 import wave.multid.view.ViewingAttr;
 
@@ -28,8 +29,8 @@ public class WaveCurveOrbitGeomFactory extends OrbitGeomFactory {
         super(calc);
     }
 
-    public WaveCurveOrbitGeomFactory(WaveCurveOrbitCalc calc,Orbit curve) {
-        super(calc,curve);
+    public WaveCurveOrbitGeomFactory(WaveCurveOrbitCalc calc, Orbit curve) {
+        super(calc, curve);
     }
     //
     // Accessors/Mutators
@@ -37,13 +38,13 @@ public class WaveCurveOrbitGeomFactory extends OrbitGeomFactory {
     //
     // Methods
     //
-    
 
-
-
+    public WaveCurveOrbitGeomFactory(WaveCurveOrbitCalc calc, WaveCurve curve) {
+        super(calc, curve);
+    }
 
     @Override
-      protected ViewingAttr selectViewingAttr() {
+    protected ViewingAttr selectViewingAttr() {
         int family = (((FundamentalCurve) this.geomSource()).getFamilyIndex());//TODO REMOVE
 
         if (family == 1) {
@@ -53,33 +54,28 @@ public class WaveCurveOrbitGeomFactory extends OrbitGeomFactory {
             return new ViewingAttr(Color.blue);
         }
 
-
         return null;
 
-      }
-    
-    
-    
-    @Override
-     public String toXML() {
+    }
 
+    @Override
+    public String toXML() {
 
         StringBuilder buffer = new StringBuilder();
-        
 
-        FundamentalCurve  geomSource = (FundamentalCurve) geomSource();
-        OrbitPoint  referencePoint = geomSource.getReferencePoint();
+        FundamentalCurve geomSource = (FundamentalCurve) geomSource();
+        OrbitPoint referencePoint = geomSource.getReferencePoint();
 
         String curve_name = '\"' + geomSource.getClass().getSimpleName() + '\"';
-        String dimension = '\"' + Integer.toString(RPNUMERICS.domainDim())  + '\"';
-        
+        String dimension = '\"' + Integer.toString(RPNUMERICS.domainDim()) + '\"';
+
         WaveCurveOrbitCalc orbitCalc = (WaveCurveOrbitCalc) rpCalc();
 
         //
         // PRINTS OUT THE CURVE ATTS
         //
-        buffer.append("<").append(Orbit.XML_TAG).append(" curve_name=" + ' ').append(curve_name).append(' ' + " dimension=" + ' ').append(dimension).append(' ' + " startpoint=\"").append(referencePoint.getCoords()).append('\"' +
-                        " format_desc=\"1 segment per row\">" + "\n");
+        buffer.append("<").append(Orbit.XML_TAG).append(" curve_name=" + ' ').append(curve_name).append(' ' + " dimension=" + ' ').append(dimension).append(' ' + " startpoint=\"").append(referencePoint.getCoords()).append('\"'
+                + " format_desc=\"1 segment per row\">" + "\n");
 
         //
         // PRINTS OUT THE CONFIGURATION INFORMATION
@@ -96,5 +92,5 @@ public class WaveCurveOrbitGeomFactory extends OrbitGeomFactory {
         return buffer.toString();
 
     }
-    
+
 }

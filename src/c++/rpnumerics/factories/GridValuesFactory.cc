@@ -31,7 +31,7 @@ GridValues * GridValuesFactory::getGrid(const string & gridName) {
     
 
     if ( Debug::get_debug_level() == 5 ) {
-        cout<<"Nome do grid: "<<gridName<<endl;
+        //cout<<"Nome do grid: "<<gridName<<endl;
     }
     
     if (gridArray_->count(gridName) == 1) {

@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import rpn.RPnUIFrame;
+import rpn.component.ClosestDistanceCalculator;
 import wave.util.RealSegment;
 import wave.util.RealVector;
 
@@ -174,12 +175,13 @@ public class FundamentalCurve extends Orbit implements WaveCurveBranch, RpSoluti
     @Override
     public double getSpeed(OrbitPoint point) {
         
+
         
         int segmentIndex = findClosestSegment(new RealVector(point.getCoords()));
 
         OrbitPoint curvePoint = points_.get(segmentIndex);
         
-        return curvePoint.getLambda();
+        return curvePoint.getSpeed();
     }
 
 

@@ -294,9 +294,9 @@ bool Contour2x2_Method::filhcub4(ThreeImplicitFunctions *timpf,
     //        if (!timpf->function_on_cell(val, ir, jr, 2, 2)) return false;
     if ( Debug::get_debug_level() == 5 ) {
         if ( (refval[0]*val[0] < 0.0) && (refval[1]*val[1] < 0.0) && (refval[2]*val[2] < 0.0) ) {
-            cout << endl;
-            cout << "***** Sufficient (" << ir << ", " << jr << "): " << refval[0] << " " << refval[1] << " " << refval[2] << " *****" << endl;
-            cout << "                 (" << ir << ", " << jr << "): " << val[0]    << " " << val[1]    << " " << val[2] << endl;
+            //cout << endl;
+            //cout << "***** Sufficient (" << ir << ", " << jr << "): " << refval[0] << " " << refval[1] << " " << refval[2] << " *****" << endl;
+            //cout << "                 (" << ir << ", " << jr << "): " << val[0]    << " " << val[1]    << " " << val[2] << endl;
         }
     }
     // END DEBUG
@@ -318,11 +318,11 @@ void Contour2x2_Method::filedg4(Matrix<double> &sol_, Matrix<int> &edges_, int n
     int segmentos = 0;
     if ( Debug::get_debug_level() == 5 ) {
         if (nedges_ > 0) {
-            cout << "For " << nedges_ << " nedges (" << il << ", " << jl << ", " << ir << ", " << jr << ") : " << endl;
+            //cout << "For " << nedges_ << " nedges (" << il << ", " << jl << ", " << ir << ", " << jr << ") : " << endl;
             for(int i = 0; i < nedges_; i++){
-                cout << edges_(0, i) << " " << edges_(1, i) << " :: ";
+                //cout << edges_(0, i) << " " << edges_(1, i) << " :: ";
             }
-            cout << endl;
+            //cout << endl;
         }
     }
     // } (1/2) The second part of DEBUG is not always necessary */
@@ -391,9 +391,9 @@ void Contour2x2_Method::filedg4(Matrix<double> &sol_, Matrix<int> &edges_, int n
 
     }
 
-    if ( Debug::get_debug_level() == 5 ) {
-        if(nedges_ > 0) cout << "Apos gambiarras, temos " << segmentos << "/" << nedges_ << " segmentos" << endl;
-    }
+//    if ( Debug::get_debug_level() == 5 ) {
+//        if(nedges_ > 0) //cout << "Apos gambiarras, temos " << segmentos << "/" << nedges_ << " segmentos" << endl;
+//    }
 
     return;
 }

@@ -29,15 +29,15 @@ int Bisection::bisection_method(const double &t_in,  const RealVector &p_in,
     double f_b;
     int info_f_b = (*signal_event)(p_b, f_b, signal_event_object, signal_event_data);
 
-    std::cout << "Bisection. After signal_event." << std::endl;
+//    std:://cout << "Bisection. After signal_event." << std::endl;
 
     if (info_f_a == BISECTION_FUNCTION_ERROR || 
         info_f_b == BISECTION_FUNCTION_ERROR){
         c_t = t_fin;
         p_c = p_fin;
 
-        std::cout << "c_t = " << c_t << std::endl;
-        std::cout << "p_c = " << p_c << std::endl;
+        //cout << "c_t = " << c_t << std::endl;
+        //cout << "p_c = " << p_c << std::endl;
 
         return BISECTION_FUNCTION_ERROR;
     }
@@ -46,9 +46,9 @@ int Bisection::bisection_method(const double &t_in,  const RealVector &p_in,
         c_t = t_fin;
         p_c = p_fin;
 
-        std::cout << "c_t = " << c_t << std::endl;
-        std::cout << "p_c = " << p_c << std::endl;
-        std::cout << "Bisection, equal sign: f_a = " << f_a << ", f_b = " << f_b << std::endl;
+        //cout << "c_t = " << c_t << std::endl;
+        //cout << "p_c = " << p_c << std::endl;
+        //cout << "Bisection, equal sign: f_a = " << f_a << ", f_b = " << f_b << std::endl;
 
 
         return BISECTION_EQUAL_SIGN;
@@ -70,7 +70,7 @@ int Bisection::bisection_method(const double &t_in,  const RealVector &p_in,
         return BISECTION_CONVERGENCE_OK;
     }
 
-    std::cout << "Bisection. Proceed with the iterations." << std::endl;
+    //cout << "Bisection. Proceed with the iterations." << std::endl;
 
     double tol = epsilon*(std::abs(t_fin - t_in));
     int max_count = 50;
@@ -83,8 +83,8 @@ int Bisection::bisection_method(const double &t_in,  const RealVector &p_in,
     std::cout.precision(10);
 
     while (fabs(c_old - c_t) > tol && count <= max_count){
-//        std::cout << "c_old = " << c_old << ", c = " << c << ", fabs(c_old - c) = " << fabs(c_old - c) << std::endl;
-//        std::cout << "    a = " << a << ",f(a) = " << f_a << ", b = " << b << ", f(b) = " << f_b<< std::endl << std::endl;
+//        std:://cout << "c_old = " << c_old << ", c = " << c << ", fabs(c_old - c) = " << fabs(c_old - c) << std::endl;
+//        std:://cout << "    a = " << a << ",f(a) = " << f_a << ", b = " << b << ", f(b) = " << f_b<< std::endl << std::endl;
 
         c_old = c_t;
 
@@ -121,10 +121,10 @@ int Bisection::bisection_method(const double &t_in,  const RealVector &p_in,
 
         count++;
 
-        std::cout << "Bisection. It. = " << count << ", p_a = " << p_a << ", p_c = " << p_c << ", p_b = "  << p_b << std::endl;
+        //cout << "Bisection. It. = " << count << ", p_a = " << p_a << ", p_c = " << p_c << ", p_b = "  << p_b << std::endl;
     }
 
-    std::cout << "RF. count = " << count << std::endl;
+    //cout << "RF. count = " << count << std::endl;
 
     // Biased to the right.
     p_c = p_b;

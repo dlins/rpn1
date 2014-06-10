@@ -37,7 +37,7 @@ void RPnPluginManager::unload(RpnPlugin * plugin, const string pluginType) {
         PluginService service(dirPath);
 
         if ( Debug::get_debug_level() == 5 ) {
-            cout << "Unload Lib: " << dirPath << "\n";
+            //cout << "Unload Lib: " << dirPath << "\n";
         }
 
 

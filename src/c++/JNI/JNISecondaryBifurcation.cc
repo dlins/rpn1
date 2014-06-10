@@ -20,6 +20,8 @@ NOTE :
 
 #include "rpnumerics_SecondaryBifurcationCurveCalc.h"
 #include "Secondary_Bifurcation.h"
+#include "Secondary_Bifurcation_Interface.h"
+#include "Stone_Explicit_Bifurcation_Curves.h"
 #include "JNIDefs.h"
 #include "RpNumerics.h"
 #include "Debug.h"
@@ -29,8 +31,9 @@ NOTE :
 using std::vector;
 using namespace std;
 
-JNIEXPORT jobject JNICALL Java_rpnumerics_SecondaryBifurcationCurveCalc_nativeCalc__
-  (JNIEnv * env, jobject obj){
+JNIEXPORT jobject JNICALL Java_rpnumerics_SecondaryBifurcationCurveCalc_nativeCalc__Ljava_lang_String_2I
+(JNIEnv * env, jobject obj, jstring methodName, jint edge) {
+
 
 
     jclass classPhasePoint = (env)->FindClass(PHASEPOINT_LOCATION);
@@ -41,7 +44,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_SecondaryBifurcationCurveCalc_nativeCa
 
     jclass arrayListClass = env->FindClass("java/util/ArrayList");
 
-    jclass hysteresisCurveClass = env->FindClass(SECONDARY_BIFURCATION_LOCATION);
+    jclass secondaryBifurcationCurveClass = env->FindClass(SECONDARY_BIFURCATION_LOCATION);
 
     jmethodID toDoubleMethodID = (env)->GetMethodID(classPhasePoint, "toDouble", "()[D");
     jmethodID realVectorConstructorDoubleArray = env->GetMethodID(realVectorClass, "<init>", "([D)V");
@@ -49,7 +52,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_SecondaryBifurcationCurveCalc_nativeCa
 
     jmethodID arrayListConstructor = env->GetMethodID(arrayListClass, "<init>", "()V");
     jmethodID arrayListAddMethod = env->GetMethodID(arrayListClass, "add", "(Ljava/lang/Object;)Z");
-    jmethodID hysteresisCurveConstructor = env->GetMethodID(hysteresisCurveClass, "<init>", "(Ljava/util/List;Ljava/util/List;)V");
+    jmethodID hysteresisCurveConstructor = env->GetMethodID(secondaryBifurcationCurveClass, "<init>", "(Ljava/util/List;Ljava/util/List;)V");
 
     int dimension = RpNumerics::getPhysics().domain().dim();
     //int dimension = 2;
@@ -65,19 +68,97 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_SecondaryBifurcationCurveCalc_nativeCa
     const AccumulationFunction * leftAccum = &RpNumerics::getPhysics().accumulation();
 
     const FluxFunction * rightFlux = leftFlux;
-    const AccumulationFunction * rightAccum = rightAccum;
+    const AccumulationFunction * rightAccum = leftAccum;
 
     GridValues * gv = RpNumerics::getGridFactory().getGrid("doublecontactcurve");
 
-    Secondary_Bifurcation sb;
 
-    sb.curve(leftFlux, leftAccum, *gv,
-            rightFlux, rightAccum, *gv,
-            left_vrs, right_vrs);
-    if ( Debug::get_debug_level() == 5 ) {
-        cout << "left_vrs.size()  = " << left_vrs.size() << endl;
-        cout << "right_vrs.size()  = " << right_vrs.size() << endl;
+    string secondaryBifurcationMethodName(env->GetStringUTFChars(methodName, NULL));
+
+    //cout << "Nome do metodo em JNI: " << secondaryBifurcationMethodName << endl;
+    
+    //cout<<"Grid values: "<<gv<<endl;
+    
+    //cout<<"Flux esq: "<<leftFlux<<endl;
+    
+    //cout<<"Flux dir: "<<rightFlux<<endl;
+    
+    //cout<<"Accum esq:"<<leftAccum<<endl;
+    
+    //cout<<"Accum dir:"<<rightAccum<<endl;
+    
+    
+//        
+//    Secondary_Bifurcation_Interface *secondaryBifurcation = RpNumerics::getPhysics().getSubPhysics(0).getSecondaryBifurcationMethod(secondaryBifurcationMethodName);
+//    
+//    
+//    secondaryBifurcation ->setLeftGrid(gv);
+//    secondaryBifurcation ->setRightGrid(gv);
+//    
+//    secondaryBifurcation->setEdge(edge);
+//    
+//    
+//    secondaryBifurcation->bifurcationCurve(left_vrs,right_vrs);
+
+    
+
+    if (secondaryBifurcationMethodName.compare("IMPLICIT") == 0) {
+
+        Secondary_Bifurcation sb;
+
+        sb.curve(leftFlux, leftAccum, *gv,
+                rightFlux, rightAccum, *gv,
+                left_vrs, right_vrs);
+
     }
+
+    if (secondaryBifurcationMethodName.compare("STONE") == 0) {
+        
+        RealVector flux_params = leftFlux->fluxParams().params();
+
+        double muw = flux_params(3);
+        double muo = flux_params(4);
+        double mug = flux_params(5);
+
+        double sum_mu = muw + muo + mug;
+
+
+        RealVector umbp(2);
+        umbp(0) = muw / sum_mu;
+        umbp(1) = muo / sum_mu;
+
+
+        jdoubleArray umbilicArray = env->NewDoubleArray(dimension);
+
+        double * umbilicCoords = (double *) umbp;
+
+        env->SetDoubleArrayRegion(umbilicArray, 0, dimension, umbilicCoords);
+
+        jobject umbilicPointVector = env->NewObject(realVectorClass, realVectorConstructorDoubleArray, umbilicArray);
+
+        int numberOfSteps = 128;
+
+//        Stone_Explicit_Bifurcation_Curves sebc((StoneFluxFunction*) leftFlux);
+//
+//        sebc.sec_bif_correspondence(edge, numberOfSteps, left_vrs, right_vrs);
+
+
+
+
+
+
+    }
+
+
+
+
+
+
+//    if (Debug::get_debug_level() == 5) {
+        //cout << "left_vrs.size()  = " << left_vrs.size() << endl;
+        //cout << "right_vrs.size()  = " << right_vrs.size() << endl;
+//    }
+
 
 
     if (left_vrs.size() == 0 || right_vrs.size() == 0)return NULL;
@@ -133,20 +214,17 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_SecondaryBifurcationCurveCalc_nativeCa
     }
 
 
-    jobject result = env->NewObject(hysteresisCurveClass, hysteresisCurveConstructor, leftSegmentsArray, rightSegmentsArray);
+    jobject result = env->NewObject(secondaryBifurcationCurveClass, hysteresisCurveConstructor, leftSegmentsArray, rightSegmentsArray);
 
 
     return result;
 
 }
 
-
-
-
 JNIEXPORT jobject JNICALL Java_rpnumerics_SecondaryBifurcationCurveCalc_nativeCalc__Ljava_util_List_2
-  (JNIEnv * env, jobject obj, jobject areasList){
-    
-    
+(JNIEnv * env, jobject obj, jobject areasList) {
+
+
     jclass classPhasePoint = (env)->FindClass(PHASEPOINT_LOCATION);
 
     jclass realVectorClass = env->FindClass(REALVECTOR_LOCATION);
@@ -154,23 +232,23 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_SecondaryBifurcationCurveCalc_nativeCa
     jclass realSegmentClass = env->FindClass(REALSEGMENT_LOCATION);
 
     jclass arrayListClass = env->FindClass("java/util/ArrayList");
-    
+
     jclass classList = env->FindClass("java/util/List");
 
     jclass hysteresisCurveClass = env->FindClass(SECONDARY_BIFURCATION_LOCATION);
-    
-    
+
+
     jclass areaClass = env->FindClass(AREA_LOCATION);
-    
+
     jmethodID listGetMethodID = env->GetMethodID(classList, "get", "(I)Ljava/lang/Object;");
-    
+
     jmethodID areaGetResolutionMethodID = env->GetMethodID(areaClass, "getResolution", "()Lwave/util/RealVector;");
-    
-    
+
+
     jmethodID downLeftMethodID = env->GetMethodID(areaClass, "getDownLeft", "()Lwave/util/RealVector;");
     jmethodID topRightMethodID = env->GetMethodID(areaClass, "getTopRight", "()Lwave/util/RealVector;");
 
-    
+
     jmethodID toDoubleMethodID = (env)->GetMethodID(classPhasePoint, "toDouble", "()[D");
     jmethodID realVectorConstructorDoubleArray = env->GetMethodID(realVectorClass, "<init>", "([D)V");
     jmethodID realSegmentConstructor = (env)->GetMethodID(realSegmentClass, "<init>", "(Lwave/util/RealVector;Lwave/util/RealVector;)V");
@@ -184,10 +262,10 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_SecondaryBifurcationCurveCalc_nativeCa
 
     jobject leftSegmentsArray = env->NewObject(arrayListClass, arrayListConstructor, NULL);
     jobject rightSegmentsArray = env->NewObject(arrayListClass, arrayListConstructor, NULL);
-    
-    
-    
-      //LEFT GRID VALUES
+
+
+
+    //LEFT GRID VALUES
 
 
     jobject leftArea = env->CallObjectMethod(areasList, listGetMethodID, 0);
@@ -225,12 +303,11 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_SecondaryBifurcationCurveCalc_nativeCa
 
     RealVector leftPmin(2, downLeftBuffer);
     RealVector rightPmax(2, topRightBuffer);
+
+
+
+   
     
-    
-    
-    if ( Debug::get_debug_level() == 5 ) {
-        cout<<"No JNI LEFT: "<<leftPmin<<" "<<rightPmax<<endl;
-    }
 
     const Boundary * boundary = RpNumerics::getPhysics().getSubPhysics(0).getPreProcessedBoundary();
 
@@ -277,11 +354,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_SecondaryBifurcationCurveCalc_nativeCa
     RealVector rightPmaxR(2, topRightBuffer);
 
 
+
     
-    if ( Debug::get_debug_level() == 5 ) {
-        cout<<"No JNI RIGHT: "<<leftPminR<<" "<<rightPmaxR<<endl;
-    }
-    
+
 
     GridValues rightGridValues(boundary, leftPminR, rightPmaxR, rightResolution);
 
@@ -296,17 +371,19 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_SecondaryBifurcationCurveCalc_nativeCa
     const FluxFunction * rightFlux = leftFlux;
     const AccumulationFunction * rightAccum = leftAccum;
 
+    
 
-    Secondary_Bifurcation sb;
 
-    sb.curve(leftFlux, leftAccum, leftGridValues,
-            rightFlux, rightAccum, rightGridValues,
-            left_vrs, right_vrs);
 
-    if ( Debug::get_debug_level() == 5 ) {
-        cout << "left_vrs.size()  = " << left_vrs.size() << endl;
-        cout << "right_vrs.size()  = " << right_vrs.size() << endl;
-    }
+//    Secondary_Bifurcation sb;
+//
+//    sb.curve(leftFlux, leftAccum, leftGridValues,
+//            rightFlux, rightAccum, rightGridValues,
+//            left_vrs, right_vrs);
+
+
+   
+    
 
 
     if (left_vrs.size() == 0 || right_vrs.size() == 0)return NULL;
@@ -366,9 +443,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_SecondaryBifurcationCurveCalc_nativeCa
 
 
     return result;
-    
-    
-    
+
+
+
 }
 
 

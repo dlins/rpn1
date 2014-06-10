@@ -95,7 +95,7 @@
 //    std::vector<std::vector<std::vector<RealVector> > > characteristics;
 //
 //    if ( Debug::get_debug_level() == 5 ) {
-//        cout <<"Sampling: "<<samplingRate<<endl;
+//        ////cout <<"Sampling: "<<samplingRate<<endl;
 //    }
 //    
 //    RiemannSolver::characteristics(fluxFunction, accumulationFunction, riemannProfileVector,0.45, samplingRate, characteristics);
@@ -152,14 +152,14 @@
 //                env->SetObjectArrayElement(lineCoordsArray, k, linePointPhasePoint);
 //
 //                if ( Debug::get_debug_level() == 5 ) {
-//                    cout << linePoint << endl;
+//                    ////cout << linePoint << endl;
 //                }
 //
 //            }
 //
 //            env->CallObjectMethod(familyLinesList, arrayListAddMethod, lineCoordsArray);
 //            if ( Debug::get_debug_level() == 5 ) {
-//                cout << "Fim da linha: " << j << endl;
+//                ////cout << "Fim da linha: " << j << endl;
 //            }
 //
 //        }
@@ -167,7 +167,7 @@
 //        env->CallObjectMethod(characteristicsList, arrayListAddMethod, familyLinesList);
 //
 //        if ( Debug::get_debug_level() == 5 ) {
-//            cout << "Fim da familia: " << i << endl;
+//            ////cout << "Fim da familia: " << i << endl;
 //        }
 //
 //    }

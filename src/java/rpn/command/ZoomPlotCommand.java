@@ -48,50 +48,14 @@ public class ZoomPlotCommand extends RpModelPlotCommand implements RPnMenuComman
 
         List<RealVector> wcVertices = selectedArea_.getWCVertices();
         
-// TODO
-        
-        // A area selecionada eh quadrada em coordenadas do dispositivo. Em coordenadas do mundo ela eh um paralelogramo.
-        // Entao , deveria existir um  ClippedShape na forma de paralelogramo para que a regiao preta no painel apareca corretamente.
-        
-//        RealVector zeroPoint = selectedArea_.getWCVertices().get(0);
-//
-//        RealVector[] zoomArea = new RealVector[4];
-//        int i = 0;
-//        for (RealVector testeCoordsL : selectedArea_.getWCVertices()) {
-//
-//            RealVector transVertice = new RealVector(2);
-//
-//            transVertice.sub(testeCoordsL, zeroPoint);
-//
-//            System.out.println(testeCoordsL);
-//
-//            zoomArea[i] = transVertice;
-//            i++;
-//
-//        }
-//
-//        CoordsArray wcCoords0 = new Coords2D();
-//        CoordsArray wcCoords2 = new Coords2D();
-//
-//        Coords2D dcCoords0 = new Coords2D(selectedArea_.getDCVertices().get(0).toDouble());
-//        Coords2D dcCoords2 = new Coords2D(selectedArea_.getDCVertices().get(2).toDouble());
-//
-//        originalPanel_.scene().getViewingTransform().dcInverseTransform(dcCoords0, wcCoords0);
-//        originalPanel_.scene().getViewingTransform().dcInverseTransform(dcCoords2, wcCoords2);
-//
-//        CoordsArray wcCoords1 = new Coords2D();
-//        CoordsArray wcCoords3 = new Coords2D();
-//
-//        Coords2D dcCoords1 = new Coords2D(selectedArea_.getDCVertices().get(1).toDouble());
-//        Coords2D dcCoords3 = new Coords2D(selectedArea_.getDCVertices().get(3).toDouble());
-//
-//        originalPanel_.scene().getViewingTransform().dcInverseTransform(dcCoords1, wcCoords1);
-//        originalPanel_.scene().getViewingTransform().dcInverseTransform(dcCoords3, wcCoords3);
 
         RealVector min = wcVertices.get(0);
         RealVector max = wcVertices.get(2);
 
         Boundary boundary = new RectBoundary(min, max);
+        
+        
+        System.out.println("boundary: " + min+" "+ max);
 
         Scene scene = phaseSpaceFrameZoom(boundary);
 
@@ -138,6 +102,7 @@ public class ZoomPlotCommand extends RpModelPlotCommand implements RPnMenuComman
 
 
         Space zoomSpace = new Space("", RPNUMERICS.domainDim());
+
         int[] testeArrayIndex = originalPanel_.scene().getViewingTransform().projectionMap().getCompIndexes();
 
         boolean iso2Equi = !(RPNUMERICS.boundary() instanceof RectBoundary);

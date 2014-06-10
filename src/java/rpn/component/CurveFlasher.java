@@ -4,7 +4,6 @@
  */
 package rpn.component;
 
-import java.util.Timer;
 import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -17,7 +16,7 @@ import rpn.controller.ui.UIController;
 public class CurveFlasher extends TimerTask {
 
    private RpGeometry geometry_;
-   private boolean visibleOrNot_;
+
 
     public CurveFlasher(RpGeometry rpGeometry) {
         geometry_ = rpGeometry;

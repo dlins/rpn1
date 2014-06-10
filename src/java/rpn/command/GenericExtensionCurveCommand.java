@@ -6,32 +6,18 @@ package rpn.command;
 
 import java.awt.Polygon;
 import java.awt.event.ActionEvent;
-import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import javax.swing.JButton;
 import javax.swing.JMenuItem;
-import rpn.RPnPhaseSpaceAbstraction;
 import rpn.RPnPhaseSpacePanel;
-import static rpn.command.BifurcationPlotCommand.DESC_TEXT;
-import static rpn.command.RpModelPlotCommand.curveID_;
-import rpn.component.BifurcationCurveBranchGeom;
 import rpn.component.BifurcationCurveGeomFactory;
-import rpn.component.BifurcationCurveGeomSide;
-import rpn.component.InflectionCurveGeom;
-import rpn.component.InflectionCurveGeomFactory;
 import rpn.component.RpCalcBasedGeomFactory;
 import rpn.component.RpGeomFactory;
 import rpn.component.RpGeometry;
 import rpn.component.util.AreaSelected;
 import rpn.controller.ui.UIController;
-import rpn.message.RPnNetworkStatus;
-import rpn.parser.RPnDataModule;
-import rpnumerics.ContourParams;
 import rpnumerics.ExtensionCurveCalc;
-import rpnumerics.InflectionCurve;
-import rpnumerics.InflectionCurveCalc;
 import rpnumerics.RPnCurve;
 import wave.multid.Coords2D;
 import wave.multid.CoordsArray;
@@ -143,11 +129,7 @@ public class GenericExtensionCurveCommand extends BifurcationPlotCommand {
             }
             
             segments = segmentsIntoArea(selectedGeometry, indexToRemove);
-            
-            InflectionCurve testeCurve = new InflectionCurve(segments);
-            InflectionCurveCalc testeCalc = new InflectionCurveCalc(new ContourParams(), 0);
-            InflectionCurveGeomFactory testeFactory = new InflectionCurveGeomFactory(testeCalc, testeCurve);
-            RPnDataModule.PHASESPACE.join(testeFactory.geom());
+
         }
         
         if (!imageSelection_.isEmpty()) {

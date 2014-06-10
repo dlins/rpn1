@@ -281,7 +281,7 @@
 //                                        p, subc1, subc1_point, subc2, subc2_point);
 //    
 //    if ( Debug::get_debug_level() == 5 ) {
-//        cout <<"Intersecao:"<<found<<endl;
+//        //cout <<"Intersecao:"<<found<<endl;
 //    }
 //
 //    if (found == WAVE_CURVE_INTERSECTION_NOT_FOUND) return RIEMANNSOLVER_ERROR;

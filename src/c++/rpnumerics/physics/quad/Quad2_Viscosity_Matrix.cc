@@ -29,9 +29,9 @@ f2(viscosityElements(2)), g2(viscosityElements(3)) {
 
 void Quad2_Viscosity_Matrix::fill_viscous_matrix(const RealVector &p, ViscosityJetMatrix &m, int degree) {
     if (degree >= 0) {
-        if ( Debug::get_debug_level() == 5 ) {
-            std::cout<<"Preenchendo em quad2 v matrix"<<std::endl;
-        }
+//        if ( Debug::get_debug_level() == 5 ) {
+//            std:://cout<<"Preenchendo em quad2 v matrix"<<std::endl;
+//        }
         m.M()(0, 0) = f1;
         m.M()(0, 1) = g1;
         m.M()(1, 0) = f2;

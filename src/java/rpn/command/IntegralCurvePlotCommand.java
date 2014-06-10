@@ -20,8 +20,6 @@ public class IntegralCurvePlotCommand extends RpModelPlotCommand {
 
     public RpGeometry createRpGeometry(RealVector[] input) {
 
-        System.out.println("Entrei no createRpGeometry de Integral");
-
         OrbitPoint oPoint = new OrbitPoint(input[input.length - 1]);
 
         IntegralCurveCalc calc = RPNUMERICS.createIntegralCurveCalc(oPoint);

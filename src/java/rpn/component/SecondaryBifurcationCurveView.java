@@ -8,7 +8,6 @@ package rpn.component;
 import java.awt.Graphics2D;
 import wave.multid.view.*;
 import wave.multid.DimMismatchEx;
-import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import wave.multid.model.MultiPoint;

@@ -18,11 +18,10 @@
 #include "IsoTriang2DBoundary.h"
 #include "StoneAccumulation.h"
 #include "ShockMethod.h"
-#include "Hugoniot_Curve.h"
 #include "Double_Contact.h"
 //#include "Shock.h"
-
-
+#include "Stone_Explicit_Bifurcation_Curves.h"
+#include "StoneFluxFunction.h"
 
 /*
  * ---------------------------------------------------------------
@@ -34,7 +33,7 @@ class CoreyQuadPhysics:public SubPhysics {
 
 private:
  Boundary * defaultBoundary() const;
-
+Stone_Explicit_Bifurcation_Curves * stoneExplicitBifurcation_;
 
 public:
 

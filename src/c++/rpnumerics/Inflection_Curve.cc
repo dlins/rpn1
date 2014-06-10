@@ -83,6 +83,12 @@ int Inflection_Curve::curve(const FluxFunction *f, const AccumulationFunction *a
     inflection_curve.clear();
     
     g.fill_dirdrv_on_grid(f, a);
+    
+    
+    
+    
+    
+    
     if ( Debug::get_debug_level() == 5 ) {
         printf("Inflection_Curve::curve\n");
     }
@@ -95,7 +101,7 @@ int Inflection_Curve::curve(const FluxFunction *f, const AccumulationFunction *a
     
 
     if ( Debug::get_debug_level() == 5 ) {
-        cout<<"Tamanho da inflexao " <<inflection_curve.size()<<endl;
+        //cout<<"Tamanho da inflexao " <<inflection_curve.size()<<endl;
     }
 
     return info;

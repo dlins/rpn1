@@ -23,6 +23,9 @@
 #define HESSIANMATRIX_LOCATION                "wave/util/HessianMatrix"
 #define REALSEGMENT_LOCATION                  "wave/util/RealSegment"
 #define AREA_LOCATION                         "rpnumerics/Area"
+#define CONFIGURATION_LOCATION                "rpn/configuration/Configuration"
+#define DIAGRAM_LOCATION                      "rpnumerics/Diagram"
+#define DIAGRAMLINE_LOCATION                  "rpnumerics/DiagramLine"
 
 
 
@@ -34,12 +37,15 @@
 #define RAREFACTIONCURVE_LOCATION             "rpnumerics/RarefactionCurve"
 #define SHOCKCURVE_LOCATION                   "rpnumerics/ShockCurve"
 #define INTEGRALCURVE_LOCATION                "rpnumerics/IntegralCurve"
-#define LEVELCURVE_LOCATION                   "rpnumerics/LevelCurve"
+#define EIGENVALUECURVE_LOCATION              "rpnumerics/EigenValueCurve"
+#define CHARACTERISTICSPOLYCURVE_LOCATION     "rpnumerics/CharacteristicsPolynomialCurve"
+
 #define ELLIPTICBOUNDARY_LOCATION             "rpnumerics/EllipticBoundary"
 #define ELLIPTICEXTENSIONBOUNDARY_LOCATION    "rpnumerics/EllipticBoundaryExtension"
 #define ENVELOPECURVE_LOCATION                "rpnumerics/EnvelopeCurve"
 #define PHYSICALBOUNDARY_LOCATION             "rpnumerics/PhysicalBoundary"
 #define WAVECURVE_LOCATION                    "rpnumerics/WaveCurve"
+#define WAVECURVERREGIONS_LOCATION            "rpnumerics/WaveCurveRRegions"
 #define WAVECURVEORBIT_LOCATION               "rpnumerics/FundamentalCurve"
 #define RIEMANNPROFILE_LOCATION               "rpnumerics/RiemannProfile"
 #define CHARACTERISTICSCURVE_LOCATION         "rpnumerics/CharacteristicsCurve"
@@ -76,9 +82,11 @@
 #define INFLECTIONCURVE_LOCATION              "rpnumerics/InflectionCurve"
 #define HYSTERESISCURVE_LOCATION              "rpnumerics/HysteresisCurve"
 #define RAREFACTIONEXTENSIONCURVE_LOCATION    "rpnumerics/RarefactionExtensionCurve"
+#define WAVECURVEBRANCH_LOCATION              "rpnumerics/WaveCurveBranch"
 
 
 #define NUMERICSPROFILE_LOCATION              "rpnumerics/RPNumericsProfile"
 #define RPNUMERICS_LOCATION                   "rpnumerics/RPNUMERICS"
+#define RPNCURVE_LOCATION                     "rpnumerics/RPnCurve"
 #endif	/* _JNIDEFS_H */
 

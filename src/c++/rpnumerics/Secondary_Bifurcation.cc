@@ -14,30 +14,39 @@
  *
  * Notice that it is mandatory to say that the curve is "singular" because the primary bifurction
  * also satisfies the same loci.
-**/
+ **/
 
-bool Secondary_Bifurcation::function_on_cell(double *val, int ir, int jr, int kl, int kr){
+bool Secondary_Bifurcation::function_on_cell(double *val, int ir, int jr, int kl, int kr) {
     int domain_i, domain_j;
 
-    if      (kr == 0) {domain_i = ir;     domain_j = jr;}
-    else if (kr == 1) {domain_i = ir + 1; domain_j = jr;}
-    else if (kr == 2) {domain_i = ir + 1; domain_j = jr + 1;}
-    else if (kr == 3) {domain_i = ir;     domain_j = jr + 1;}
+    if (kr == 0) {
+        domain_i = ir;
+        domain_j = jr;
+    } else if (kr == 1) {
+        domain_i = ir + 1;
+        domain_j = jr;
+    } else if (kr == 2) {
+        domain_i = ir + 1;
+        domain_j = jr + 1;
+    } else if (kr == 3) {
+        domain_i = ir;
+        domain_j = jr + 1;
+    }
 
     double f1 = gv_right->F_on_grid(domain_i, domain_j).component(0);
     double f2 = gv_right->F_on_grid(domain_i, domain_j).component(1);
     double g1 = gv_right->G_on_grid(domain_i, domain_j).component(0);
     double g2 = gv_right->G_on_grid(domain_i, domain_j).component(1);
 
-    double df11 = gv_right->JF_on_grid(domain_i, domain_j)(0,0);
-    double df12 = gv_right->JF_on_grid(domain_i, domain_j)(0,1);
-    double df21 = gv_right->JF_on_grid(domain_i, domain_j)(1,0);
-    double df22 = gv_right->JF_on_grid(domain_i, domain_j)(1,1);
+    double df11 = gv_right->JF_on_grid(domain_i, domain_j)(0, 0);
+    double df12 = gv_right->JF_on_grid(domain_i, domain_j)(0, 1);
+    double df21 = gv_right->JF_on_grid(domain_i, domain_j)(1, 0);
+    double df22 = gv_right->JF_on_grid(domain_i, domain_j)(1, 1);
 
-    double dg11 = gv_right->JG_on_grid(domain_i, domain_j)(0,0);
-    double dg12 = gv_right->JG_on_grid(domain_i, domain_j)(0,1);
-    double dg21 = gv_right->JG_on_grid(domain_i, domain_j)(1,0);
-    double dg22 = gv_right->JG_on_grid(domain_i, domain_j)(1,1);
+    double dg11 = gv_right->JG_on_grid(domain_i, domain_j)(0, 0);
+    double dg12 = gv_right->JG_on_grid(domain_i, domain_j)(0, 1);
+    double dg21 = gv_right->JG_on_grid(domain_i, domain_j)(1, 0);
+    double dg22 = gv_right->JG_on_grid(domain_i, domain_j)(1, 1);
 
     double Df1 = f1 - flux_left(0, kl);
     double Df2 = f2 - flux_left(1, kl);
@@ -48,7 +57,7 @@ bool Secondary_Bifurcation::function_on_cell(double *val, int ir, int jr, int kl
     val[0] = Df1 * Dg2 - Df2 * Dg1;
     val[1] = df11 * Dg2 + Df1 * dg21 - df21 * Dg1 - Df2 * dg11;
     val[2] = df12 * Dg2 + Df1 * dg22 - df22 * Dg1 - Df2 * dg12;
-    
+
     return true;
 }
 
@@ -66,17 +75,27 @@ bool Secondary_Bifurcation::function_on_cell(double *val, int ir, int jr, int kl
 //     2 = (i + 1, j + 1),
 //     3 = (i, j + 1).
 //
+
 bool Secondary_Bifurcation::prepare_cell(int i, int j) {
     int domain_i, domain_j;
 
-    for (int kr = 0; kr < 4; kr++){
-        if      (kr == 0) {domain_i = i;     domain_j = j;}
-        else if (kr == 1) {domain_i = i + 1; domain_j = j;}
-        else if (kr == 2) {domain_i = i + 1; domain_j = j + 1;}
-        else if (kr == 3) {domain_i = i;     domain_j = j + 1;}
+    for (int kr = 0; kr < 4; kr++) {
+        if (kr == 0) {
+            domain_i = i;
+            domain_j = j;
+        } else if (kr == 1) {
+            domain_i = i + 1;
+            domain_j = j;
+        } else if (kr == 2) {
+            domain_i = i + 1;
+            domain_j = j + 1;
+        } else if (kr == 3) {
+            domain_i = i;
+            domain_j = j + 1;
+        }
 
-        flux_left(0, kr)  = gv_left->F_on_grid(domain_i, domain_j).component(0);
-        flux_left(1, kr)  = gv_left->F_on_grid(domain_i, domain_j).component(1);
+        flux_left(0, kr) = gv_left->F_on_grid(domain_i, domain_j).component(0);
+        flux_left(1, kr) = gv_left->F_on_grid(domain_i, domain_j).component(1);
 
         accum_left(0, kr) = gv_left->G_on_grid(domain_i, domain_j).component(0);
         accum_left(1, kr) = gv_left->G_on_grid(domain_i, domain_j).component(1);
@@ -86,8 +105,8 @@ bool Secondary_Bifurcation::prepare_cell(int i, int j) {
 }
 
 void Secondary_Bifurcation::curve(const FluxFunction *lf, const AccumulationFunction *la, GridValues &lg,
-                           const FluxFunction *rf, const AccumulationFunction *ra, GridValues &rg,
-                           std::vector<RealVector> &left_curve, std::vector<RealVector> &right_curve){
+        const FluxFunction *rf, const AccumulationFunction *ra, GridValues &rg,
+        std::vector<RealVector> &left_curve, std::vector<RealVector> &right_curve) {
     lff = lf;
     laa = la;
     gv_left = &lg;
@@ -99,11 +118,16 @@ void Secondary_Bifurcation::curve(const FluxFunction *lf, const AccumulationFunc
     gv_left->fill_Jacobians_on_grid(lff, laa);
     gv_right->fill_Jacobians_on_grid(rff, raa);
 
-    left_curve.clear(); 
-    right_curve.clear(); 
+    left_curve.clear();
+    right_curve.clear();
 
     Contour2x2_Method::curve2x2(this, left_curve, right_curve);
 
     return;
 }
 
+int Secondary_Bifurcation::bifurcationCurve(std::vector<RealVector> & left_curve, std::vector<RealVector> & right_curve) {
+
+    curve(lff, laa, *leftGrid_, rff, raa, *rightGrid_, left_curve, right_curve);
+
+}

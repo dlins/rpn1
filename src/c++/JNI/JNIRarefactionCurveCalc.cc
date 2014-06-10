@@ -38,10 +38,13 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionCurveCalc_calc(JNIEnv * env
 
     jclass classOrbitPoint = (env)->FindClass(ORBITPOINT_LOCATION);
     jclass classRarefactionOrbit = (env)->FindClass(RAREFACTIONCURVE_LOCATION);
+    jclass classWaveCurveBranch = (env)->FindClass(WAVECURVEBRANCH_LOCATION);
 
     jmethodID rarefactionOrbitConstructor = (env)->GetMethodID(classRarefactionOrbit, "<init>", "([Lrpnumerics/OrbitPoint;II)V");
-    jmethodID orbitPointConstructor = (env)->GetMethodID(classOrbitPoint, "<init>", "([DD)V");
+    jmethodID orbitPointConstructor = (env)->GetMethodID(classOrbitPoint, "<init>", "([D[DD)V");
     jmethodID toDoubleMethodID = (env)->GetMethodID(classOrbitPoint, "toDouble", "()[D");
+
+    jmethodID setReferencePointID = (env)->GetMethodID(classWaveCurveBranch, "setReferencePoint", "(Lrpnumerics/OrbitPoint;)V");
 
     //Input processing
     jdoubleArray inputPhasePointArray = (jdoubleArray) (env)->CallObjectMethod(initialPoint, toDoubleMethodID);
@@ -66,19 +69,35 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionCurveCalc_calc(JNIEnv * env
 
 
     const Boundary * tempBoundary = RpNumerics::getPhysics().getSubPhysics(0).getPreProcessedBoundary();
+    
+    
+    //cout<<tempBoundary->minimums()<<endl;
+    //cout<<tempBoundary->maximums()<<endl;
 
     //    double deltaxi = 1e-3; // This is the original value (Rodrigo/ Panters)
 
 
+    int dimension = 2; //realVectorInput.size();
+
+
+    //cout << "Ponto de entrada: " << realVectorInput << endl;
 
 
     const FluxFunction * flux = &RpNumerics::getPhysics().fluxFunction();
     const AccumulationFunction * accum = &RpNumerics::getPhysics().accumulation();
 
 
+
+    //cout << "Fluxo: " << flux << endl;
+    //cout << "Accum: " << accum << endl;
+
+
     vector<RealVector> inflectionPoints;
 
     RpNumerics::getPhysics().getSubPhysics(0).preProcess(realVectorInput);
+    
+    
+    //cout << "Ponto de entrada apos pos process: " << realVectorInput << endl;
 
     RarefactionCurve rc(accum, flux, tempBoundary);
 
@@ -111,10 +130,33 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionCurveCalc_calc(JNIEnv * env
             edge);
 
 
+    ReferencePoint referencePoint(realVectorInput, flux, accum, 0);
+
+    double lambda = referencePoint.e[familyIndex].r;
+
+    double nativeEigenValues [dimension];
+
+    for (int i = 0; i < dimension; i++) {
+
+        nativeEigenValues[i] = referencePoint.e[i].r;
+
+    }
+
+    jdoubleArray eigenValuesArray = (env)->NewDoubleArray(dimension);
+
+    (env)->SetDoubleArrayRegion(eigenValuesArray, 0, dimension, nativeEigenValues);
+
+
+    jdoubleArray refPointCoords = (env)->NewDoubleArray(dimension);
+
+    (env)->SetDoubleArrayRegion(refPointCoords, 0, dimension, input);
+
+    jobject referenceOrbitPoint = (env)->NewObject(classOrbitPoint, orbitPointConstructor, refPointCoords, eigenValuesArray, lambda);
 
 
 
-    RpNumerics::getPhysics().getSubPhysics(0).postProcess(coords);
+
+
     //----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
     //Orbit members creation
@@ -127,20 +169,38 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionCurveCalc_calc(JNIEnv * env
 
         double lambda = rarcurve.speed[i];
 
+        //        for (int k = 0; k < rarcurve.eigenvalues[i].size(); k++) {
+        //            //cout << " i: " << i << " " << rarcurve.eigenvalues[i][k] << endl;
+        //
+        //        }
 
-        if (Debug::get_debug_level() == 5) {
-            cout << tempVector << endl;
-        }
 
-        double * dataCoords = tempVector;
+        //        double * dataCoords = tempVector;
 
-        //Reading only coodinates
+        RealVector resizedVector(tempVector);
+        RpNumerics::getPhysics().getSubPhysics(0).postProcess(resizedVector);
+
+//        //cout << tempVector << endl;
+
+
+        double * dataCoords = resizedVector;
+
+
+
         jdoubleArray jTempArray = (env)->NewDoubleArray(tempVector.size());
 
         (env)->SetDoubleArrayRegion(jTempArray, 0, tempVector.size(), dataCoords);
 
-        //Lambda is the last component.
-        jobject orbitPoint = (env)->NewObject(classOrbitPoint, orbitPointConstructor, jTempArray, lambda);
+
+
+        jdoubleArray jeigenValuesArray = (env)->NewDoubleArray(dimension);
+        RealVector eigenValue = rarcurve.eigenvalues[i];
+
+
+
+        (env)->SetDoubleArrayRegion(jeigenValuesArray, 0, eigenValue.size(), (double *) eigenValue);
+
+        jobject orbitPoint = (env)->NewObject(classOrbitPoint, orbitPointConstructor, jTempArray, jeigenValuesArray, lambda);
 
         (env)->SetObjectArrayElement(orbitPointArray, i, orbitPoint);
 
@@ -153,6 +213,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionCurveCalc_calc(JNIEnv * env
     //Building the orbit
 
     jobject rarefactionOrbit = (env)->NewObject(classRarefactionOrbit, rarefactionOrbitConstructor, orbitPointArray, familyIndex, timeDirection);
+
+    env->CallVoidMethod(rarefactionOrbit, setReferencePointID, referenceOrbitPoint);
 
 
     //Cleaning up
@@ -205,10 +267,10 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionCurveCalc_boundaryNativeCal
 
     env->DeleteLocalRef(inputPhasePointArray);
 
-//    vector <RealVector> coords;
+    //    vector <RealVector> coords;
 
     const Boundary * tempBoundary = RpNumerics::getPhysics().getSubPhysics(0).getPreProcessedBoundary();
-    
+
     const FluxFunction * flux = &RpNumerics::getPhysics().fluxFunction();
     const AccumulationFunction * accum = &RpNumerics::getPhysics().accumulation();
 
@@ -231,12 +293,12 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionCurveCalc_boundaryNativeCal
     ODE_Solver *odesolver;
 
     odesolver = &lsode;
-    
-//    realVectorInput(0)=0.538996;
-//    realVectorInput(1)=0.461004;
 
-    cout << "Ponto de entrada: " << realVectorInput << " edge " << edge << " familyIndex " << familyIndex << " timedirection " << timeDirection << endl;
-    cout << " rar for itself " << RAREFACTION << " odesolver " << odesolver << " deltaxi " << deltaxi << endl;
+    //    realVectorInput(0)=0.538996;
+    //    realVectorInput(1)=0.461004;
+
+    ////cout << "Ponto de entrada: " << realVectorInput << " edge " << edge << " familyIndex " << familyIndex << " timedirection " << timeDirection << endl;
+    ////cout << " rar for itself " << RAREFACTION << " odesolver " << odesolver << " deltaxi " << deltaxi << endl;
 
     int info_rar = rc.curve_from_boundary(realVectorInput, edge,
             familyIndex,
@@ -249,13 +311,12 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionCurveCalc_boundaryNativeCal
             final_direction,
             rar_stopped_because,
             s);
-    
-    cout <<"Info rar: "<<info_rar<<endl;
 
-    cout << "final direction : " << final_direction << endl;
-    cout << "rar_stop : " << rar_stopped_because << endl;
 
-    cout << "Tamanho de rar curve: " << rarcurve.curve.size() << endl;
+    ////cout << "final direction : " << final_direction << endl;
+    ////cout << "rar_stop : " << rar_stopped_because << endl;
+
+    ////cout << "Tamanho de rar curve: " << rarcurve.curve.size() << endl;
 
     RpNumerics::getPhysics().getSubPhysics(0).postProcess(rarcurve.curve);
     //----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -272,7 +333,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionCurveCalc_boundaryNativeCal
 
 
         if (Debug::get_debug_level() == 5) {
-            cout << tempVector << endl;
+            ////cout << tempVector << endl;
         }
 
         double * dataCoords = tempVector;

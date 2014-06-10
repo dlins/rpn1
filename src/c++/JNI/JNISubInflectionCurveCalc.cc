@@ -33,9 +33,6 @@ using namespace std;
 
 JNIEXPORT jobject JNICALL Java_rpnumerics_SubInflectionCurveCalc_nativeCalc(JNIEnv * env, jobject obj) {
 
-    if (Debug::get_debug_level() == 5) {
-        cout << "Em subinflection nativo: " << endl;
-    }
 
     jclass classPhasePoint = (env)->FindClass(PHASEPOINT_LOCATION);
 
@@ -76,16 +73,14 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_SubInflectionCurveCalc_nativeCalc(JNIE
     Accum2Comp2PhasesAdimensionalized * accumulationFunction = (Accum2Comp2PhasesAdimensionalized *) & tpcw.accumulation();
 
 
-    Thermodynamics_SuperCO2_WaterAdimensionalized * thermo = fluxFunction->getThermo();
+    Thermodynamics * thermo = fluxFunction->getThermo();
 
 
     SubinflectionTP newSubinflection(accumulationFunction->accumulationParams().component(0));
 
     GridValues * gv = RpNumerics::getGridFactory().getGrid("bifurcation");
 
-    if (Debug::get_debug_level() == 5) {
-        cout << gv << endl;
-    }
+
 
     std::vector< RealVector> outputVector;
 

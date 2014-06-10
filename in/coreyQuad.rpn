@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <!DOCTYPE rpnconfiguration >
 <RPNSESSION id="1234">
- <PHASESPACE name="Phase Space">
-    <RPNCONFIGURATION>
-    <PHYSICS name="CoreyQuad">
+    <PHASESPACE name="Phase Space">
+        <RPNCONFIGURATION>
+            <PHYSICS name="CoreyQuad">
                 <PHYSICSCONFIG name="fluxfunction">
                     <PHYSICSPARAM name="grw" position="0" value ="0.0" />
                     <PHYSICSPARAM name="grg" position="1" value ="0.0" />
@@ -22,9 +22,37 @@
                 <METHODPARAM  name="tolerance" value="0.001" />
             </METHOD>
 
-            <CURVECONFIGURATION name="hugoniotcurve">
-                <CURVEPARAM name="resolution" value="250 250"/>
+            
+            
+             <CURVECONFIGURATION name="hugoniotcurve">
+                <CURVEPARAM name="resolution" value="120 120"/>
+                <CURVEPARAM name="method" value="COREY"/>
+                <CURVEPARAM name="case" value="0"/>
+                
             </CURVECONFIGURATION>
+            
+            
+               
+
+
+            <CURVECONFIGURATION name="wavecurve">
+                <CURVEPARAM name="edge" value="0"/>
+                <CURVEPARAM name="origin" value="13"/>
+                <CURVEPARAM name="curve" value="0"/>
+                 <CURVEPARAM name="direction" value="10"/>
+                <CURVEPARAM name="family" value="0"/>
+                
+            </CURVECONFIGURATION>
+
+            
+            
+            
+            <CURVECONFIGURATION name="bifurcationcurve">
+
+                <CURVEPARAM name="resolution" value="60 60"/>
+            </CURVECONFIGURATION>
+    
+    
 
             <CURVECONFIGURATION name="ellipticboundary">
                 <CURVEPARAM name="resolution" value="128 128"/>
@@ -50,27 +78,50 @@
             </CURVECONFIGURATION>
 
 
-            <CURVECONFIGURATION name="levelcurve">
-                <CURVEPARAM name="family" value="0"/>
+            <CURVECONFIGURATION name="rarefactionextension">
+                <CURVEPARAM name="curvefamily" value="0"/>
                 <CURVEPARAM name="resolution" value="128 128"/>
-                <CURVEPARAM name="levels" value="0.1 0.2 0.5"/>
-
+                <CURVEPARAM name="extensionfamily" value="1"/>
+                <CURVEPARAM name="characteristic" value="1"/>
+                <CURVEPARAM name="direction" value="20"/>
+        
             </CURVECONFIGURATION>
 
 
-<<<<<<< HEAD
-    <CURVECONFIGURATION name="doublecontactcurve">
-        <CURVEPARAM name="curvefamily" value="1"/>
-        <CURVEPARAM name="domainfamily" value="1"/>
-        <CURVEPARAM name="resolution" value="30 30"/>
-    </CURVECONFIGURATION>
-=======
+       
+            
+            
+            <CURVECONFIGURATION name="levelcurve">
+                <CURVEPARAM name="family" value="0"/>
+                <CURVEPARAM name="level" value="0.1"/>
+
+            </CURVECONFIGURATION>
+
+            
+            
+              
+            <CURVECONFIGURATION name="derivativediscriminant">
+                <CURVEPARAM name="u" value="0"/>
+            </CURVECONFIGURATION>
+            
+
+
+
             <CURVECONFIGURATION name="doublecontactcurve">
                 <CURVEPARAM name="curvefamily" value="1"/>
                 <CURVEPARAM name="domainfamily" value="1"/>
                 <CURVEPARAM name="resolution" value="60 60"/>
             </CURVECONFIGURATION>
->>>>>>> b534e68b19e6831710f42e3cd6a6513d38a6f3f1
+            
+            
+            
+              <CURVECONFIGURATION name="secondarybifurcation">
+                <CURVEPARAM name="edge" value="0"/>
+                <CURVEPARAM name="numberofsteps" value="128"/>
+                 <CURVEPARAM name="method" value="IMPLICIT"/>
+            </CURVECONFIGURATION>
+    
+
 
 
             <CURVECONFIGURATION name="hysteresiscurve">

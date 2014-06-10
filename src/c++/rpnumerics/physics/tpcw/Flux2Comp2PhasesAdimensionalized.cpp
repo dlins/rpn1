@@ -1,12 +1,9 @@
 #include "Flux2Comp2PhasesAdimensionalized.h"
-#include "Debug.h"
 
 Flux2Comp2PhasesAdimensionalized::Flux2Comp2PhasesAdimensionalized(const Flux2Comp2PhasesAdimensionalized &a) : FluxFunction(a.FluxFunction::fluxParams()) {
 
     //    const Flux2Comp2PhasesAdimensionalized_Params & fluxParams = (const Flux2Comp2PhasesAdimensionalized_Params &) a.fluxParams();
-    if ( Debug::get_debug_level() == 5 ) {
-        cout << "Construtor de copia de Flux2CompPhasesAdimensionalized "<<a.FluxFunction::fluxParams().params() << endl;
-    }
+
 
 
     TD = a.TD;
@@ -28,9 +25,7 @@ Flux2Comp2PhasesAdimensionalized::Flux2Comp2PhasesAdimensionalized(const Flux2Co
 
 Flux2Comp2PhasesAdimensionalized::Flux2Comp2PhasesAdimensionalized(const Flux2Comp2PhasesAdimensionalized_Params &param) : FluxFunction(param) {
 
-    if ( Debug::get_debug_level() == 5 ) {
-        cout << "Parametros de fluxo: " << param.params()<< endl;
-    }
+
 
     abs_perm = param.component(0);
     sin_beta = param.component(1);
@@ -73,9 +68,7 @@ void Flux2Comp2PhasesAdimensionalized::fluxParams(const FluxParams & param) {
 
     FluxFunction::fluxParams(param);
 
-    if ( Debug::get_debug_level() == 5 ) {
-        cout <<"Setando parametros de fluxo: "<<endl;
-    }
+
 
 
     if (param.component(2) == 1.0) {
@@ -103,9 +96,6 @@ void Flux2Comp2PhasesAdimensionalized::fluxParams(const FluxParams & param) {
 
     grav = abs_perm * sin_beta*const_gravity;
 
-    if ( Debug::get_debug_level() == 5 ) {
-        cout <<abs_perm<<" "<< sin_beta<<" "<<has_gravity<<" "<<has_horizontal<<" "<< cnw<<" "<<cng<<" "<<expw<<" "<<expg<<endl;
-    }
 
 
 }
@@ -115,109 +105,71 @@ int Flux2Comp2PhasesAdimensionalized::ReducedFlux2Comp2PhasesAdimensionalized::j
     double Theta = w(1);
 
     // Some auxiliary variables
-    double Hr, d_Hr, d2_Hr;
-    fluxComplete_->TD->Diff_RockEnthalpyVol(Theta, Hr, d_Hr, d2_Hr);
-    double Ha, d_Ha, d2_Ha;
-    fluxComplete_->TD->Diff_AqueousEnthalpyVol(Theta, Ha, d_Ha, d2_Ha);
-    double Hsi, d_Hsi, d2_Hsi;
-    fluxComplete_->TD->Diff_SuperCriticEnthalpyVol(Theta, Hsi, d_Hsi, d2_Hsi);
+    JetMatrix Hrj(1);
+    fluxComplete_->TD->RockEnthalpyVol_jet(Theta, degree, Hrj);
 
-    double rhosic, d_rhosic, d2_rhosic;
-    fluxComplete_->TD->Diff_Rhosic(Theta, rhosic, d_rhosic, d2_rhosic);
+    JetMatrix Haj(1);
+    fluxComplete_->TD->AqueousEnthalpyVol_jet(Theta, degree, Haj);
 
-    double rhosiw, d_rhosiw, d2_rhosiw;
-    fluxComplete_->TD->Diff_Rhosiw(Theta, rhosiw, d_rhosiw, d2_rhosiw);
+    JetMatrix Hsij(1);
+    fluxComplete_->TD->SuperCriticEnthalpyVol_jet(Theta, degree, Hsij);
 
-    double rhoac, d_rhoac, d2_rhoac;
-    fluxComplete_->TD->Diff_Rhoac(Theta, rhoac, d_rhoac, d2_rhoac);
+    JetMatrix rhosicj(1);
+    fluxComplete_->TD->Rhosic_jet(Theta, degree, rhosicj);
 
-    double rhoaw, d_rhoaw, d2_rhoaw;
-    fluxComplete_->TD->Diff_Rhoaw(Theta, rhoaw, d_rhoaw, d2_rhoaw);
+    JetMatrix rhosiwj(1);
+    fluxComplete_->TD->Rhosiw_jet(Theta, degree, rhosiwj);
 
-    // Output
-    double out0 = 0.0, out1 = 0.0, out2 = 0.0;
+    JetMatrix rhoacj(1);
+    fluxComplete_->TD->Rhoac_jet(Theta, degree, rhoacj);
 
-    double out00 = 0.0, out01 = 0.0;
-    double out10 = 0.0, out11 = 0.0;
-    double out20 = 0.0, out21 = 0.0;
+    JetMatrix rhoawj(1);
+    fluxComplete_->TD->Rhoaw_jet(Theta, degree, rhoawj);
 
-    double out000 = 0.0, out001 = 0.0;
-    double out010 = 0.0, out011 = 0.0;
-
-    double out100 = 0.0, out101 = 0.0;
-    double out110 = 0.0, out111 = 0.0;
-
-    double out200 = 0.0, out201 = 0.0;
-    double out210 = 0.0, out211 = 0.0;
-
-
-    double f, df_ds, df_dTheta, d2f_ds2, d2f_dsdTheta, d2f_dThetads, d2f_dTheta2; // f=f_{sigma}, s=s_{sigma}
-
+    // Fractional Flow Function.
     JetMatrix horizontal(2);
-
     fluxComplete_->FH->Diff_FracFlow2PhasesHorizontalAdimensionalized(1. - s, Theta, degree, horizontal);
 
-
-    // Here we recover the values of the Fractional Flow Function.
-
     if (degree >= 0) {
-        f = horizontal.get(0);
-        if (degree >= 1) {
-            df_ds = horizontal.get(0, 0);
-            df_dTheta = horizontal.get(0, 1);
-            if (degree >= 2) {
-                d2f_ds2 = horizontal.get(0, 0, 0);
-                d2f_dsdTheta = horizontal.get(0, 0, 1);
-                d2f_dThetads = horizontal.get(0, 1, 0);
-                d2f_dTheta2 = horizontal.get(0, 1, 1);
-            }
-        }
-    }
+        double Hr     = Hrj.get(0);
+        double Ha     = Haj.get(0);
+        double Hsi    = Hsij.get(0);
+        double rhosic = rhosicj.get(0);
+        double rhosiw = rhosiwj.get(0);
+        double rhoac  = rhoacj.get(0);
+        double rhoaw  = rhoawj.get(0);
 
-    if (degree >= 0) {
-        out0 = (rhosic * f + rhoac * (1.0 - f));
-        out1 = (rhosiw * f + rhoaw * (1.0 - f));
-        out2 = (Hsi * f + Ha * (1.0 - f));
+        double f = horizontal.get(0);
 
-        if (degree >= 1) {
-            out00 = (rhosic - rhoac) * df_ds;
-            out01 = (d_rhosic * f + d_rhoac * (1.0 - f) + (rhosic - rhoac) * df_dTheta);
+        double out0 = (rhosic * f + rhoac * (1.0 - f));
+        double out1 = (rhosiw * f + rhoaw * (1.0 - f));
+        double out2 = (Hsi * f + Ha * (1.0 - f));
 
-            out10 = (rhosiw - rhoaw) * df_ds;
-            out11 = (d_rhosiw * f + d_rhoaw * (1.0 - f) + (rhosiw - rhoaw) * df_dTheta);
-
-            out20 = (Hsi - Ha) * df_ds;
-            out21 = (d_Hsi * f + d_Ha * (1.0 - f) + (Hsi - Ha) * df_dTheta);
-
-            if (degree >= 2) {
-                out000 = (rhosic - rhoac) * d2f_ds2;
-                out001 = ((d_rhosic - d_rhoac) * df_ds + (rhosic - rhoac) * d2f_dsdTheta);
-
-                out010 = out001; // Mixed partial
-                out011 = (d2_rhosic * f + d2_rhoac * (1.0 - f) + 2 * (d_rhosic - d_rhoac) * df_dTheta + (rhosic - rhoac) * d2f_dTheta2);
-
-                out100 = (rhosiw - rhoaw) * d2f_ds2;
-                out101 = ((d_rhosiw - d_rhoaw) * df_ds + (rhosiw - rhoaw) * d2f_dsdTheta);
-
-                out110 = out101; // Mixed partial
-                out111 = (d2_rhosiw * f + d2_rhoaw * (1.0 - f) + 2 * (d_rhosiw - d_rhoaw) * df_dTheta + (rhosiw - rhoaw) * d2f_dTheta2);
-
-                out200 = (Hsi - Ha) * d2f_ds2;
-                out201 = ((d_Hsi - d_Ha) * df_ds + (Hsi - Ha) * d2f_dsdTheta);
-
-                out210 = out201; // Mixed partial
-                out211 = (d2_Hsi * f + d2_Ha * (1.0 - f) + 2 * (d_Hsi - d_Ha) * df_dTheta + (Hsi - Ha) * d2f_dTheta2);
-
-            }
-        }
-    }
-
-    if (degree >= 0) {
         m.set(0, out0);
         m.set(1, out1);
         m.set(2, out2);
 
         if (degree >= 1) {
+            double d_Hr     = Hrj.get(0, 0);
+            double d_Ha     = Haj.get(0, 0);
+            double d_Hsi    = Hsij.get(0, 0);
+            double d_rhosic = rhosicj.get(0, 0);
+            double d_rhosiw = rhosiwj.get(0, 0);
+            double d_rhoac  = rhoacj.get(0, 0);
+            double d_rhoaw  = rhoawj.get(0, 0);
+
+            double df_ds     = horizontal.get(0, 0);
+            double df_dTheta = horizontal.get(0, 1);
+
+            double out00 = (rhosic - rhoac) * df_ds;
+            double out01 = (d_rhosic * f + d_rhoac * (1.0 - f) + (rhosic - rhoac) * df_dTheta);
+
+            double out10 = (rhosiw - rhoaw) * df_ds;
+            double out11 = (d_rhosiw * f + d_rhoaw * (1.0 - f) + (rhosiw - rhoaw) * df_dTheta);
+
+            double out20 = (Hsi - Ha) * df_ds;
+            double out21 = (d_Hsi * f + d_Ha * (1.0 - f) + (Hsi - Ha) * df_dTheta);
+
             m.set(0, 0, out00);
             m.set(0, 1, out01);
 
@@ -228,6 +180,37 @@ int Flux2Comp2PhasesAdimensionalized::ReducedFlux2Comp2PhasesAdimensionalized::j
             m.set(2, 1, out21);
 
             if (degree >= 2) {
+                double d2_Hr     = Hrj.get(0, 0, 0);
+                double d2_Ha     = Haj.get(0, 0, 0);
+                double d2_Hsi    = Hsij.get(0, 0, 0);
+                double d2_rhosic = rhosicj.get(0, 0, 0);
+                double d2_rhosiw = rhosiwj.get(0, 0, 0);
+                double d2_rhoac  = rhoacj.get(0, 0, 0);
+                double d2_rhoaw  = rhoawj.get(0, 0, 0);
+
+                double d2f_ds2      = horizontal.get(0, 0, 0);
+                double d2f_dsdTheta = horizontal.get(0, 0, 1);
+                double d2f_dThetads = horizontal.get(0, 1, 0);
+                double d2f_dTheta2  = horizontal.get(0, 1, 1);
+
+                double out000 = (rhosic - rhoac) * d2f_ds2;
+                double out001 = ((d_rhosic - d_rhoac) * df_ds + (rhosic - rhoac) * d2f_dsdTheta);
+
+                double out010 = out001; // Mixed partial
+                double out011 = (d2_rhosic * f + d2_rhoac * (1.0 - f) + 2 * (d_rhosic - d_rhoac) * df_dTheta + (rhosic - rhoac) * d2f_dTheta2);
+
+                double out100 = (rhosiw - rhoaw) * d2f_ds2;
+                double out101 = ((d_rhosiw - d_rhoaw) * df_ds + (rhosiw - rhoaw) * d2f_dsdTheta);
+
+                double out110 = out101; // Mixed partial
+                double out111 = (d2_rhosiw * f + d2_rhoaw * (1.0 - f) + 2 * (d_rhosiw - d_rhoaw) * df_dTheta + (rhosiw - rhoaw) * d2f_dTheta2);
+
+                double out200 = (Hsi - Ha) * d2f_ds2;
+                double out201 = ((d_Hsi - d_Ha) * df_ds + (Hsi - Ha) * d2f_dsdTheta);
+
+                double out210 = out201; // Mixed partial
+                double out211 = (d2_Hsi * f + d2_Ha * (1.0 - f) + 2 * (d_Hsi - d_Ha) * df_dTheta + (Hsi - Ha) * d2f_dTheta2);
+
                 m.set(0, 0, 0, out000);
                 m.set(0, 0, 1, out001);
                 m.set(0, 1, 0, out010);
@@ -242,6 +225,7 @@ int Flux2Comp2PhasesAdimensionalized::ReducedFlux2Comp2PhasesAdimensionalized::j
                 m.set(2, 0, 1, out201);
                 m.set(2, 1, 0, out210);
                 m.set(2, 1, 1, out211);
+
             }
         }
     }
@@ -270,41 +254,59 @@ RpFunction * Flux2Comp2PhasesAdimensionalized::ReducedFlux2Comp2PhasesAdimension
 }
 
 int Flux2Comp2PhasesAdimensionalized::jet(const WaveState &w, JetMatrix &m, int degree) const {
-    
-    
     double s = w(0); // s_{sigma} = sg in FracFlow2PhasesHorizontal & FracFlow2PhasesVertical
     double Theta = w(1);
     double U = w(2);
-//    double U=1.0;
+    
+   
+    
 
-    if ( Debug::get_debug_level() == 5 ) {
-        cout <<"s: "<<s<<" Theta:"<<Theta<<" U:"<<U<<endl;
-    }
-
-    // Recovering the U_typical_
-    //    double U_typical_=TD->U_typical();
+    JetMatrix Hrj(1);
+    TD->RockEnthalpyVol_jet(Theta, degree, Hrj);
 
 
-    // Some auxiliary variables
-    double Hr, d_Hr, d2_Hr;
-    TD->Diff_RockEnthalpyVol(Theta, Hr, d_Hr, d2_Hr);
+    JetMatrix Haj(1);
+    TD->AqueousEnthalpyVol_jet(Theta, degree, Haj);
 
-    double Ha, d_Ha, d2_Ha;
-    TD->Diff_AqueousEnthalpyVol(Theta, Ha, d_Ha, d2_Ha);
-    double Hsi, d_Hsi, d2_Hsi;
-    TD->Diff_SuperCriticEnthalpyVol(Theta, Hsi, d_Hsi, d2_Hsi);
+    JetMatrix Hsij(1);
+    TD->SuperCriticEnthalpyVol_jet(Theta, degree, Hsij);
 
-    double rhosic, d_rhosic, d2_rhosic;
-    TD->Diff_Rhosic(Theta, rhosic, d_rhosic, d2_rhosic);
+    JetMatrix rhosicj(1);
+    TD->Rhosic_jet(Theta, degree, rhosicj);
 
-    double rhosiw, d_rhosiw, d2_rhosiw;
-    TD->Diff_Rhosiw(Theta, rhosiw, d_rhosiw, d2_rhosiw);
+    JetMatrix rhosiwj(1);
+    TD->Rhosiw_jet(Theta, degree, rhosiwj);
 
-    double rhoac, d_rhoac, d2_rhoac;
-    TD->Diff_Rhoac(Theta, rhoac, d_rhoac, d2_rhoac);
+    JetMatrix rhoacj(1);
+    TD->Rhoac_jet(Theta, degree, rhoacj);
 
-    double rhoaw, d_rhoaw, d2_rhoaw;
-    TD->Diff_Rhoaw(Theta, rhoaw, d_rhoaw, d2_rhoaw);
+    JetMatrix rhoawj(1);
+    TD->Rhoaw_jet(Theta, degree, rhoawj);
+
+    // Fill here, since below will be more complicated.
+    double Hr     = Hrj.get(0);
+    double Ha     = Haj.get(0);
+    double Hsi    = Hsij.get(0);
+    double rhosic = rhosicj.get(0);
+    double rhosiw = rhosiwj.get(0);
+    double rhoac  = rhoacj.get(0);
+    double rhoaw  = rhoawj.get(0);
+
+    double d_Hr     = Hrj.get(0, 0);
+    double d_Ha     = Haj.get(0, 0);
+    double d_Hsi    = Hsij.get(0, 0);
+    double d_rhosic = rhosicj.get(0, 0);
+    double d_rhosiw = rhosiwj.get(0, 0);
+    double d_rhoac  = rhoacj.get(0, 0);
+    double d_rhoaw  = rhoawj.get(0, 0);
+
+    double d2_Hr     = Hrj.get(0, 0, 0);
+    double d2_Ha     = Haj.get(0, 0, 0);
+    double d2_Hsi    = Hsij.get(0, 0, 0);
+    double d2_rhosic = rhosicj.get(0, 0, 0);
+    double d2_rhosiw = rhosiwj.get(0, 0, 0);
+    double d2_rhoac  = rhoacj.get(0, 0, 0);
+    double d2_rhoaw  = rhoawj.get(0, 0, 0);
 
     // Output
     double out0 = 0.0, out1 = 0.0, out2 = 0.0;
@@ -326,9 +328,7 @@ int Flux2Comp2PhasesAdimensionalized::jet(const WaveState &w, JetMatrix &m, int 
     double out220 = 0.0, out221 = 0.0, out222 = 0.0;
 
     // Begin of pure horizontal
-    if ( Debug::get_debug_level() == 5 ) {
-        cout <<"aqui"<<endl;
-    }
+
     if (has_horizontal) {
 
         double f, df_ds, df_dTheta, d2f_ds2, d2f_dsdTheta, d2f_dThetads, d2f_dTheta2; // f=f_{sigma}, s=s_{sigma}
@@ -555,13 +555,11 @@ int Flux2Comp2PhasesAdimensionalized::jet(const WaveState &w, JetMatrix &m, int 
             m.set(2, 1, out21);
             m.set(2, 2, out22);
 
-            if ( Debug::get_debug_level() == 5 ) {
-                        for (int i = 0; i < 3; i++){
-                            for (int j = 0; j < 3; j++){
-                                printf("ff(%d, %d) = %g\n", i, j, m.get(i, j));
-                            }
-                        }
-	    }
+            //            for (int i = 0; i < 3; i++){
+            //                for (int j = 0; j < 3; j++){
+            //                    printf("ff(%d, %d) = %g\n", i, j, m(i, j));
+            //                }
+            //            }
 
             if (degree >= 2) {
                 m.set(0, 0, 0, out000);
@@ -600,7 +598,7 @@ int Flux2Comp2PhasesAdimensionalized::jet(const WaveState &w, JetMatrix &m, int 
     return 2; //SUCCESSFUL_PROCEDURE;
 }
 
-Thermodynamics_SuperCO2_WaterAdimensionalized * Flux2Comp2PhasesAdimensionalized::getThermo() const {
+Thermodynamics * Flux2Comp2PhasesAdimensionalized::getThermo() const {
     return TD;
 }
 
@@ -623,12 +621,6 @@ int Flux2Comp2PhasesAdimensionalized::FracFlow2PhasesHorizontalAdimensionalized:
 
 
     double T = fluxComplete_->TD->Theta2T(Theta);
-
-    if ( Debug::get_debug_level() == 5 ) {
-        cout << "T em flux H: " << T << endl;
-        cout << "Theta em flux H: " << Theta << endl;
-        cout <<"Valor de sw: "<<sw<<endl;
-    }
 
     //    double T = Flux2Comp2PhasesAdimensionalized::getThermo()->Theta2T(Theta);
 
@@ -682,30 +674,6 @@ int Flux2Comp2PhasesAdimensionalized::FracFlow2PhasesHorizontalAdimensionalized:
     //--------------------------------------------------------------------
 
     //
-    if ( Debug::get_debug_level() == 5 ) {
-        cout << T << " " << nuw << " " << dnuw_dT << " " << d2nuw_dT2 << endl;
-        cout << nug << " " << dnug_dT << " " << d2nug_dT2 << " " << endl;
-        cout << muw << " " << dmuw_dT << " " << d2muw_dT2 << " " << endl;
-        cout << mug << " " << dmug_dT << " " << d2mug_dT2 << " " << endl;
-    }
-
-
-
-
-
-
-
-
-    //--------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
 
     // Before evaluating proper
     if (sw < fluxComplete_->cnw) {

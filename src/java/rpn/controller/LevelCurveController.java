@@ -10,7 +10,8 @@ import rpn.component.LevelCurveGeomFactory;
 import rpn.component.RpGeomFactory;
 import rpn.command.ChangeFluxParamsCommand;
 import rpn.command.DragPlotCommand;
-import rpnumerics.PointLevelCalc;
+import rpnumerics.DiscriminantPointLevelCalc;
+import rpnumerics.EigenValuePointLevelCalc;
 import rpnumerics.RpCalculation;
 import wave.util.RealVector;
 
@@ -31,7 +32,7 @@ public class LevelCurveController extends RpCalcController {
     @Override
     public void uninstall(RpGeomFactory geom) {
         super.uninstall(geom);
-        factory_=null;
+        factory_ = null;
 
     }
 
@@ -39,8 +40,6 @@ public class LevelCurveController extends RpCalcController {
     protected void register() {
         DragPlotCommand.instance().addPropertyChangeListener(this);
         ChangeFluxParamsCommand.instance().addPropertyChangeListener(this);
-
-
 
     }
 
@@ -54,18 +53,28 @@ public class LevelCurveController extends RpCalcController {
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
 
-
         RpCalculation calc = factory_.rpCalc();
-        if (evt.getSource() instanceof DragPlotCommand && calc instanceof PointLevelCalc) {
+        if (evt.getSource() instanceof DragPlotCommand) {
 
+            if (calc instanceof EigenValuePointLevelCalc) {
 
-            ((PointLevelCalc) factory_.rpCalc()).setStartPoint((RealVector) evt.getNewValue());
-            factory_.updateGeom();
-            return;
+                ((EigenValuePointLevelCalc) factory_.rpCalc()).setStartPoint((RealVector) evt.getNewValue());
+                factory_.updateGeom();
+                return;
+            }
+            
+            
+             if (calc instanceof DiscriminantPointLevelCalc) {
+
+                ((DiscriminantPointLevelCalc) factory_.rpCalc()).setStartPoint((RealVector) evt.getNewValue());
+                factory_.updateGeom();
+                return;
+            }
+            
+            
+
+            super.propertyChange(evt);
+
         }
-
-        super.propertyChange(evt);
-
-
     }
 }

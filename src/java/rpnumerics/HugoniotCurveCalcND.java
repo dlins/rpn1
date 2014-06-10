@@ -5,10 +5,12 @@
  */
 package rpnumerics;
 
-
 import java.util.List;
+import rpn.configuration.Configuration;
 
 import rpn.configuration.CurveConfiguration;
+import rpn.parser.RPnDataModule;
+import static rpnumerics.RPNUMERICS.getParamValue;
 
 import wave.util.RealVector;
 import wave.util.RealMatrix2;
@@ -26,21 +28,42 @@ public class HugoniotCurveCalcND extends ContourCurveCalc implements HugoniotCur
     public HugoniotCurveCalcND(HugoniotParams params) {
         super(params);
 
-        
-        CurveConfiguration  config  = (CurveConfiguration)RPNUMERICS.getConfiguration("fundamentalcurve");
-        
-        configuration_= config.clone();
-        
-        String [] parameterToKeep  = {"direction"};
-        
+        CurveConfiguration config = (CurveConfiguration) RPNUMERICS.getConfiguration("fundamentalcurve");
+
+        configuration_ = config.clone();
+
+        String[] parameterToKeep = {"direction"};
+
         configuration_.keepParameters(parameterToKeep);
         configuration_.setParamValue("resolution", RPNUMERICS.getParamValue("hugoniotcurve", "resolution"));
 
     }
+
+    public HugoniotCurveCalcND(PhasePoint input, CurveConfiguration hugoniotConfiguration) {
+
+        super(createHugoniotParams(input, hugoniotConfiguration));
+
+        configuration_ = hugoniotConfiguration.clone();
+
+    }
+
+    private static HugoniotParams createHugoniotParams(PhasePoint input, Configuration config) {
+
+        int[] resolution = RPnDataModule.processResolution(getParamValue("hugoniotcurve", "resolution"));
+
+        Integer direction = new Integer(getParamValue("fundamentalcurve", "direction"));
+
+        String methodName = HugoniotCurveCalcND.HugoniotMethods.valueOf(getParamValue("hugoniotcurve", "method")).name();
+
+        HugoniotParams params = new HugoniotParams(new PhasePoint(input), direction, resolution, methodName);
+
+        return params;
+
+    }
+
     //
     // Accessors/Mutators
     //
-
     public void uMinusChangeNotify(PhasePoint uMinus) {
 
         setUMinus(uMinus);
@@ -67,7 +90,6 @@ public class HugoniotCurveCalcND extends ContourCurveCalc implements HugoniotCur
 //        return new PhasePoint(hugoniotParams_.getFMinus());
         return null;
 
-
     }
 
     /**
@@ -84,11 +106,10 @@ public class HugoniotCurveCalcND extends ContourCurveCalc implements HugoniotCur
     public RpSolution calc() throws RpException {
 
         HugoniotCurve result;
-
-        result = (HugoniotCurve) calc(((HugoniotParams) getParams()).getXZero());
+        String methodName = ((HugoniotParams) getParams()).getMethodName();
+        result = (HugoniotCurve) calc(((HugoniotParams) getParams()).getXZero(), configuration_);
 
         result.setDirection(((HugoniotParams) getParams()).getDirection());
-
 
         return result;
 
@@ -100,13 +121,11 @@ public class HugoniotCurveCalcND extends ContourCurveCalc implements HugoniotCur
         return calc();
     }
 
-    
     @Override
     public RpSolution recalc(List<Area> areaList) throws RpException {
 
         System.out.println("Entrou neste recalc(area)");
         Area area = areaList.get(0);
-        
 
         HugoniotCurve result;
         result = (HugoniotCurve) calc(((HugoniotParams) getParams()).getXZero(), (int) area.getResolution().getElement(0), (int) area.getResolution().getElement(1), area.getTopRight(), area.getDownLeft());
@@ -123,8 +142,18 @@ public class HugoniotCurveCalcND extends ContourCurveCalc implements HugoniotCur
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    private native RpSolution calc(PhasePoint initialpoint) throws RpException;
-    
+    private native RpSolution calc(PhasePoint initialpoint, Configuration configuration) throws RpException;
+
     //TODO : How to find the correct number of transition points after curve refinement??
     private native RpSolution calc(PhasePoint initialpoint, int xRes_, int yRes_, RealVector topR, RealVector dwnL) throws RpException;
+
+    public enum HugoniotMethods {
+        COREY,
+        IMPLICIT,
+        QUAD2,
+        STONE,
+        TESTE;
+
+    }
+
 }

@@ -16,13 +16,12 @@ import java.util.Iterator;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Timer;
+import rpn.command.CurveSelectionCommand;
 import rpn.component.util.GeometryGraphND;
 import rpn.controller.ui.UIController;
 import rpn.controller.ui.UserInputTable;
 import wave.multid.model.MultiGeometry;
-import wave.multid.model.MultiPolyLine;
 import wave.util.RealVector;
-import rpn.parser.RPnDataModule;
 
 public class RPnPhaseSpaceAbstraction extends AbstractScene implements Observer {
     //
@@ -57,7 +56,6 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene implements Observer 
         selectedGeometries_ = new ArrayList<RpGeometry>();
 
 //        flasher_ = new CurveFlasher();
-
     }
 
     //
@@ -111,7 +109,9 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene implements Observer 
     }
 
     public RpGeometry getLastGeometry() {
-        if(geomList_.isEmpty())return null;
+        if (geomList_.isEmpty()) {
+            return null;
+        }
         return (RpGeometry) super.geomList_.get(super.geomList_.size() - 1);
     }
 
@@ -121,16 +121,14 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene implements Observer 
             return;
         }
         super.join(geom);
-       
+
         for (Iterator<RpGeometry> it = selectedGeometries_.iterator(); it.hasNext();) {
             Object obj = it.next();
-            
-            RpGeometry geometry =(RpGeometry)obj;
+
+            RpGeometry geometry = (RpGeometry) obj;
             geometry.setVisible(true);
         }
-        
-        
-        
+
         notifyState();
 
     }
@@ -158,19 +156,19 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene implements Observer 
 
         ((RpGeometry) geom).geomFactory().getUI().uninstall(((RpGeometry) geom).geomFactory());
         selectedGeometries_.remove((RpGeometry) geom);
-        
-        
+
+        RPnCurve curve = (RPnCurve) ((RpGeometry) geom).geomFactory().geomSource();
+
+        RPNUMERICS.removeCurve(curve.getId());
 
         super.remove(geom);
         for (Iterator<RpGeometry> it = selectedGeometries_.iterator(); it.hasNext();) {
             Object obj = it.next();
-            
-            RpGeometry geometry =(RpGeometry)obj;
+
+            RpGeometry geometry = (RpGeometry) obj;
             geometry.setVisible(true);
         }
-                
-        
-        
+
         notifyState();
 
     }
@@ -179,8 +177,6 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene implements Observer 
     public String toString() {
         return getName() + " " + getSpace().toString() + " " + state_.toString();
     }
-
-    
 
     public UserInputTable getUserInputTable() {
         return userInputTable_;
@@ -208,7 +204,6 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene implements Observer 
 //        if (namePhaseSpace.equals(RPnDataModule.LEFTPHASESPACE.getName())) {
 //            geomList = RPnDataModule.LEFTPHASESPACE.getGeomObjIterator();
 //        }
-
         while (geomListIterator.hasNext()) {
             RpGeometry geom = (RpGeometry) geomListIterator.next();
 
@@ -218,60 +213,58 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene implements Observer 
 //                        || (namePhaseSpace.equals(RPnDataModule.LEFTPHASESPACE.getName()) && geom != RPnDataModule.LEFTPHASESPACE.getLastGeometry())) {
 
 //                    if (geom.viewingAttr().hasHighLight() && !(geom instanceof StationaryPointGeom)) {
-                        RpGeomFactory factory = geom.geomFactory();
+                RpGeomFactory factory = geom.geomFactory();
 
-                        RPnCurve curve = (RPnCurve) factory.geomSource();
-                        curve.findClosestSegment(targetPoint);
+                RPnCurve curve = (RPnCurve) factory.geomSource();
+                curve.findClosestSegment(targetPoint);
 
-                        distancia = curve.distancia;
+                distancia = curve.distancia;
 
-                        if (distminCurve >= distancia) {
-                            distminCurve = distancia;
-                            closestCurve = k;
-                            closestGeometry_ = geom;
-                        }
+                if (distminCurve >= distancia) {
+                    distminCurve = distancia;
+                    closestCurve = k;
+                    closestGeometry_ = geom;
+                }
 
 //                    }
 //                }
-
             }
 
             if (GeometryGraphND.onCurve == 0) {
 //                if (geom.viewingAttr().hasHighLight() && !(geom instanceof StationaryPointGeom) && !(geom instanceof PoincareSectionGeom)) {
 
-                    RpGeomFactory factory = geom.geomFactory();
-                    RPnCurve curve = (RPnCurve) factory.geomSource();
+                RpGeomFactory factory = geom.geomFactory();
+                RPnCurve curve = (RPnCurve) factory.geomSource();
 
-                    // -----------------------------------
-                    if (curve instanceof SegmentedCurve && !(curve instanceof PhysicalBoundary)) {
-                        RpCalcBasedGeomFactory geomFactory = (RpCalcBasedGeomFactory) factory;
-                        RpCalculation calc = geomFactory.rpCalc();
-                        ContourCurveCalc curveCalc = (ContourCurveCalc) calc;
-                        listResolution.add(curveCalc.getParams().getResolution());
-                    } else {
-                        listResolution.add(new int[]{0, 0});
-
-                    }
-                    // ---------------------------------------------------------------
-
-                    curve.findClosestSegment(targetPoint);
-
-                    distancia = curve.distancia;
-
-                    if (distminCurve >= distancia) {
-                        distminCurve = distancia;
-                        closestCurve = k;
-                        closestGeometry_ = geom;
-                    }
-
-                } // ----------------------------------- Evita erro quando no PhaseDiagram
-                else {
+                // -----------------------------------
+                if (curve instanceof SegmentedCurve && !(curve instanceof PhysicalBoundary)) {
+                    RpCalcBasedGeomFactory geomFactory = (RpCalcBasedGeomFactory) factory;
+                    RpCalculation calc = geomFactory.rpCalc();
+                    ContourCurveCalc curveCalc = (ContourCurveCalc) calc;
+                    listResolution.add(curveCalc.getParams().getResolution());
+                } else {
                     listResolution.add(new int[]{0, 0});
+
                 }
+                // ---------------------------------------------------------------
+
+                curve.findClosestSegment(targetPoint);
+
+                distancia = curve.distancia;
+
+                if (distminCurve >= distancia) {
+                    distminCurve = distancia;
+                    closestCurve = k;
+                    closestGeometry_ = geom;
+                }
+
+            } // ----------------------------------- Evita erro quando no PhaseDiagram
+            else {
+                listResolution.add(new int[]{0, 0});
+            }
                 // -----------------------------------
 
 //            }
-
             k++;
 
         }
@@ -280,13 +273,12 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene implements Observer 
         return closestGeometry_;
     }
 
-   
     @Override
     public void update() {
 
         Iterator geomList = getGeomObjIterator();
-        List removeList =
-                new ArrayList();
+        List removeList
+                = new ArrayList();
         List joinList = new ArrayList();
         while (geomList.hasNext()) {
             RpGeometry geom = (RpGeometry) geomList.next();
@@ -310,27 +302,6 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene implements Observer 
 
         }
         notifyState();
-    }
-
-    // overwriting so we don't remove the last Hugoniot
-    @Override
-    public void clear() {
-
-        ArrayList deleteList = new ArrayList();
-
-        Iterator geomList = getGeomObjIterator();
-        while (geomList.hasNext()) {
-            RpGeometry geom = (RpGeometry) geomList.next();
-
-            deleteList.add(geom);
-
-        }
-        for (int i = 0; i < deleteList.size(); i++) {
-            delete((RpGeometry) deleteList.get(i));
-        }
-
-        notifyState();
-
     }
 
     public RpGeometry getSelectedGeom() {
@@ -396,13 +367,13 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene implements Observer 
     }
 
     private void notifyState() {
-        for (RPnCurvesList curvesFrame : curvesListFrames_) {
-            curvesFrame.update();
+        for (RPnCurvesList curvesListFrame : curvesListFrames_) {
+            curvesListFrame.update();
         }
 
     }
-    
-    public void updateCurveSelection(){
+
+    public void updateCurveSelection() {
 
         for (Object object : geomList_) {
             RpGeometry rpGeometry = (RpGeometry) object;
@@ -413,22 +384,28 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene implements Observer 
                     CurveFlasher flasher = new CurveFlasher(rpGeometry);
                     timer.schedule(flasher, 0, 1000);
 
-                } 
-            }else {
-                if (!rpGeometry.isSelected()){
-                    selectedGeometries_.remove(rpGeometry);
-                    
                 }
-                
+            } else {
+                if (!rpGeometry.isSelected()) {
+                    selectedGeometries_.remove(rpGeometry);
+
+                }
+
             }
+            
+
+         
+            
+            
 
         }
+
+
     }
 
     @Override
     public void update(Observable o, Object arg) {
 
-       
         updateCurveSelection();
         UIController.instance().panelsUpdate();
     }

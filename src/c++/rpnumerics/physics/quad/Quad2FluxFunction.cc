@@ -54,8 +54,8 @@ Quad2FluxFunction::~Quad2FluxFunction(void) {
 //    for (int i = 0; i < spaceDim; i++)
 //        output(i, res[i]);
 //    if ( Debug::get_debug_level() == 5 ) {
-//        cout << "Valor da entrada: "<<x(0)<<" "<<x(1)<<endl;
-//        cout << "Valor da funcao matricial: "<< res[0]<< " " <<res[1] <<endl;
+//        //cout << "Valor da entrada: "<<x(0)<<" "<<x(1)<<endl;
+//        //cout << "Valor da funcao matricial: "<< res[0]<< " " <<res[1] <<endl;
 //    }
 //    
 //
@@ -113,11 +113,11 @@ int Quad2FluxFunction::jet(const WaveState & x, JetMatrix & y, int degree = 2) c
     e1 = params.component(4);
 
 //    if ( Debug::get_debug_level() == 5 ) {
-//                cout << "a1 0: " << a1 << "\n";
-//                cout << "b1 1: " << b1 << "\n";
-//                cout << "c1 2: " << c1 << "\n";
-//                cout << "d1 3: " << d1 << "\n";
-//                cout << "e1 4: " << e1 << "\n";
+//                //cout << "a1 0: " << a1 << "\n";
+//                //cout << "b1 1: " << b1 << "\n";
+//                //cout << "c1 2: " << c1 << "\n";
+//                //cout << "d1 3: " << d1 << "\n";
+//                //cout << "e1 4: " << e1 << "\n";
 //    }
 
     a2 = params.component(5);
@@ -128,11 +128,11 @@ int Quad2FluxFunction::jet(const WaveState & x, JetMatrix & y, int degree = 2) c
 
 
 //    if ( Debug::get_debug_level() == 5 ) {
-//                cout << "a2 5: " << a2 << "\n";
-//                cout << "b2 6: " << b2 << "\n";
-//                cout << "c2 7: " << c2 << "\n";
-//                cout << "d2 8: " << d2 << "\n";
-//                cout << "e2 9: " << e2 << "\n";
+//                //cout << "a2 5: " << a2 << "\n";
+//                //cout << "b2 6: " << b2 << "\n";
+//                //cout << "c2 7: " << c2 << "\n";
+//                //cout << "d2 8: " << d2 << "\n";
+//                //cout << "e2 9: " << e2 << "\n";
 //    }
     
 
@@ -141,7 +141,7 @@ int Quad2FluxFunction::jet(const WaveState & x, JetMatrix & y, int degree = 2) c
 
 
 //    if ( Debug::get_debug_level() == 5 ) {
-//        cout <<"Valor da entrada: "<<u<<" "<<v<<" "<<endl;
+//        //cout <<"Valor da entrada: "<<u<<" "<<v<<" "<<endl;
 //    }
 
     //    
@@ -171,7 +171,7 @@ int Quad2FluxFunction::jet(const WaveState & x, JetMatrix & y, int degree = 2) c
 
 
 //    if ( Debug::get_debug_level() == 5 ) {
-//        cout << "f (C++): " << y.get(0) << " "<< y.get(1)<<"\n";
+//        //cout << "f (C++): " << y.get(0) << " "<< y.get(1)<<"\n";
 //    }
 
 

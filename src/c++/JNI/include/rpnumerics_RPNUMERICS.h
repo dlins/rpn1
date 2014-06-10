@@ -129,6 +129,22 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RPNUMERICS_domain
 
 /*
  * Class:     rpnumerics_RPNUMERICS
+ * Method:    clearCurvesCache
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_clearCurvesCache
+  (JNIEnv *, jclass);
+
+/*
+ * Class:     rpnumerics_RPNUMERICS
+ * Method:    removeCurve
+ * Signature: (I)V
+ */
+JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_removeCurve
+  (JNIEnv *, jclass, jint);
+
+/*
+ * Class:     rpnumerics_RPNUMERICS
  * Method:    setFluxParams
  * Signature: (Lrpnumerics/FluxParams;)V
  */

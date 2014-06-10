@@ -5,9 +5,6 @@
  */
 package rpn.parser;
 
-import java.net.MalformedURLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.xml.sax.Attributes;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
@@ -25,8 +22,6 @@ import wave.util.RealVector;
 import wave.util.RealSegment;
 
 import java.io.*;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Vector;
 import java.util.HashMap;
@@ -37,20 +32,20 @@ import java.util.Set;
 
 import org.xml.sax.ContentHandler;
 import org.xml.sax.XMLReader;
-import org.xml.sax.helpers.XMLReaderFactory;
 import rpn.component.RpGeomFactory;
-import rpn.message.RPnNetworkStatus;
 
-/** With this class the calculus made in a previous session can be reloaded. A previous state can be reloaded reading a XML file that is used by this class */
+/**
+ * With this class the calculus made in a previous session can be reloaded. A
+ * previous state can be reloaded reading a XML file that is used by this class
+ */
 public class RPnDataModule {
 
     static public String XML_TAG = "RPNDATA";
-    static public String BATCHDATA_XML_TAG = "BATCH_DATA";
-    
     static public RPnPhaseSpaceAbstraction PHASESPACE = null;
     static public RPnPhaseSpaceAbstraction LEFTPHASESPACE = null;
     static public RPnPhaseSpaceAbstraction RIGHTPHASESPACE = null;
     static public RPnPhaseSpaceAbstraction RIEMANNPHASESPACE = null;
+    static public RPnPhaseSpaceAbstraction SPEEDGRAPHICSPHASESPACE = null;
     static public RPnPhaseSpaceAbstraction[] CHARACTERISTICSPHASESPACEARRAY = null;
     private static HashMap<String, RPnPhaseSpaceAbstraction> phaseSpaceMap_ = new HashMap<String, RPnPhaseSpaceAbstraction>();
 
@@ -59,6 +54,8 @@ public class RPnDataModule {
         phaseSpaceMap_.put(PHASESPACE.getName(), PHASESPACE);
         phaseSpaceMap_.put(LEFTPHASESPACE.getName(), LEFTPHASESPACE);
         phaseSpaceMap_.put(RIGHTPHASESPACE.getName(), RIGHTPHASESPACE);
+
+        
 
     }
 
@@ -108,7 +105,7 @@ public class RPnDataModule {
 
         private String currentElement_;
         private Attributes currentElementAtt_;
-        private Vector curveSegments_ = new Vector();
+        private ArrayList<RealSegment> curveSegments_ = new ArrayList<RealSegment>();
         private StringBuilder stringBuffer_ = new StringBuilder();
         private String dimension_;
         private String curve_name_;
@@ -120,7 +117,15 @@ public class RPnDataModule {
 //        private Vector curveSegmentsCoords_;
         private ArrayList<RealSegment> leftSegmentsCoords_;
         private ArrayList<RealSegment> rightSegmentsCoords_;
+        private ArrayList<HugoniotSegment> hugoniotSegments_;
         private boolean isLeft_;
+        private ArrayList<RealSegment> realSegments_;
+        private boolean isBifuraction_, isTransitionPoints_;
+        private boolean isInflectionPoints_;
+        private ArrayList<RealVector> inflectionPoint_;
+        private ArrayList<RealVector> transitionPoint_;
+        private String subCurveType_;
+        private WaveCurve waveCurve_;
 
         public RPnDataParser() {
 
@@ -140,6 +145,12 @@ public class RPnDataModule {
                     RPNUMERICS.domain(), new NumConfigImpl());//  RpNumerics.domain(),
             RIEMANNPHASESPACE = new RPnPhaseSpaceAbstraction("Riemann Phase Space",
                     new Space("Riemann Space", RPNUMERICS.domainDim() + 1), new NumConfigImpl());
+            
+            
+            
+              SPEEDGRAPHICSPHASESPACE = new RPnPhaseSpaceAbstraction("Speed Graphics Phase Space",
+                      new Space("Speed Graphics Space", 2), new NumConfigImpl());
+            
 
             CHARACTERISTICSPHASESPACEARRAY = new RPnPhaseSpaceAbstraction[RPNUMERICS.domainDim()];
 
@@ -152,6 +163,7 @@ public class RPnDataModule {
             phaseSpaceMap_.put(PHASESPACE.getName(), PHASESPACE);
             phaseSpaceMap_.put(LEFTPHASESPACE.getName(), LEFTPHASESPACE);
             phaseSpaceMap_.put(RIGHTPHASESPACE.getName(), RIGHTPHASESPACE);
+
 
         }
 
@@ -173,51 +185,26 @@ public class RPnDataModule {
 
                 RPnCommandModule.RPnCommandParser.selectPhaseSpace(att.getValue("phasespace"));
 
-            } else if (currentElement_.equals(BATCHDATA_XML_TAG)) {
-
-                String batch_id = att.getValue("batchid");
-                String fullURL = new String("http://" + RPnNetworkStatus.SERVERNAME + "/data/rpnbatch_" + batch_id + ".rpn");
-
-                URL rpnMediatorURL;
-
-                try {
-
-                    rpnMediatorURL = new URL(fullURL);
-
-                    URLConnection rpnMediatorConn;
-
-                    rpnMediatorConn = rpnMediatorURL.openConnection();
-                    BufferedReader buffReader = new BufferedReader(new InputStreamReader(rpnMediatorConn.getInputStream()));
-
-                    XMLReader parser = XMLReaderFactory.createXMLReader();
-
-                    parser.setContentHandler(this);
-
-                    Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.INFO, "Batch data parsing started... ");
-                    parser.parse(new InputSource(buffReader));
-                    Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.INFO, "Batch data parsing finished successfully... ");
-
-                } catch (MalformedURLException ex) {
-                    Logger.getLogger(RPnDataModule.class.getName()).log(Level.SEVERE, null, ex);
-
-
-                } catch (IOException ex) {
-                    Logger.getLogger(RPnDataModule.class.getName()).log(Level.SEVERE, null, ex);
-                }
-       
             } else if (currentElement_.equals(BifurcationCurve.XML_TAG)) {
-                
                 leftSegmentsCoords_ = new ArrayList<RealSegment>();
                 rightSegmentsCoords_ = new ArrayList<RealSegment>();
                 dimension_ = att.getValue("dimension");
                 curve_name_ = att.getValue("curve_name");
                 isLeft_ = true;
+                isBifuraction_ = true;
 
             } else if (currentElement_.equals(RPnCurve.XML_TAG)) {
-
+                hugoniotSegments_ = new ArrayList<HugoniotSegment>();
+                realSegments_ = new ArrayList<RealSegment>();
                 orbitPoints_ = new Vector();
                 curve_name_ = att.getValue("curve_name");
-                startPoint_ = new OrbitPoint(new RealVector(att.getValue("startpoint")));
+
+                if (att.getValue("startpoint") != null) {
+                    startPoint_ = new OrbitPoint(new RealVector(att.getValue("startpoint")));
+                }
+
+
+                isBifuraction_ = false;
 
             } else if (currentElement_.equals("CURVECONFIGURATION")) {
 
@@ -228,26 +215,75 @@ public class RPnDataModule {
                 String data_1 = att.getValue("coords_1").trim();
                 String data_2 = att.getValue("coords_2").trim();
 
-                int dimension = Integer.parseInt(dimension_);
+
 
                 if ((data_1.length() != 0) && (data_2.length() != 0)) {
 
                     RealVector p1 = new RealVector(data_1);
                     RealVector p2 = new RealVector(data_2);
-                    
-                    if (isLeft_) {
+                    if (isBifuraction_) {
+                        if (isLeft_) {
 
-                        leftSegmentsCoords_.add(new RealSegment(p1, p2));
+                            leftSegmentsCoords_.add(new RealSegment(p1, p2));
+                        } else {
+
+                            rightSegmentsCoords_.add(new RealSegment(p1, p2));
+                        }
+
                     } else {
-
-                        rightSegmentsCoords_.add(new RealSegment(p1, p2));
+                        realSegments_.add(new RealSegment(p1, p2));
                     }
 
 
                 }
 
+            } else if (currentElement_.equals("HUGONIOTSEG")) {
+
+                RealVector coords_1 = new RealVector(att.getValue("coords_1"));
+                RealVector coords_2 = new RealVector(att.getValue("coords_2"));
+
+                double leftSigma = Double.parseDouble(att.getValue("leftsigma"));
+                double rightSigma = Double.parseDouble(att.getValue("rightsigma"));
+
+                RealVector leftRealVector = new RealVector(att.getValue("leftlambda"));
+                RealVector rightRealVector = new RealVector(att.getValue("rightlambda"));
+
+                double[] leftLambda = leftRealVector.toDouble();
+                double[] rightLambda = rightRealVector.toDouble();
+                int type = Integer.parseInt(att.getValue("type"));
+                String signature = att.getValue("signature");
+
+
+                HugoniotSegment hugoniotSegment = new HugoniotSegment(coords_1,
+                        leftSigma, coords_2, rightSigma, leftLambda[0], leftLambda[1],
+                        rightLambda[0], rightLambda[1], type, signature);
+
+
+                hugoniotSegments_.add(hugoniotSegment);
+
+
+
+            } else if (currentElement_.equals("TRANSITIONPOINTS")) {
+                isTransitionPoints_ = true;
+                transitionPoint_ = new ArrayList<RealVector>();
+            } else if (currentElement_.equals("INFLECTIONPOINTS")) {
+                isInflectionPoints_ = true;
+                inflectionPoint_ = new ArrayList<RealVector>();
+            } else if (curve_name_ != null) {
+                if (curve_name_.equals(rpnumerics.WaveCurve.class.getSimpleName())) {
+
+                    int family = Integer.parseInt(currentConfiguration_.getParam("family"));
+                    int direction = Integer.parseInt(currentConfiguration_.getParam("direction"));
+                    waveCurve_ = new WaveCurve(family, direction);
+
+                }
+
             }
 
+            if (currentElement_.equals("SUBCURVE")) {
+
+                subCurveType_ = att.getValue("name");
+            }
             if (currentElement_.equals("ORBITPOINT")) {
 
                 String coords_s = att.getValue("coords").trim();
@@ -256,7 +292,18 @@ public class RPnDataModule {
                 RealVector coords = new RealVector(coords_s);
                 double lambda = Double.parseDouble(lambda_s);
 
-                orbitPoints_.add(new OrbitPoint(coords, lambda));
+                OrbitPoint orbitPoint = new OrbitPoint(coords, lambda);
+
+                if (isInflectionPoints_) {
+
+                    inflectionPoint_.add(orbitPoint.getCoords());
+                } else if (isTransitionPoints_) {
+                    transitionPoint_.add(orbitPoint.getCoords());
+                } else {
+                    orbitPoints_.add(orbitPoint);
+                }
+
+
             }
 
 
@@ -272,11 +319,50 @@ public class RPnDataModule {
 
             currentElement_ = name;
 
-            if(currentElement_.equals(BifurcationCurve.LEFT_TAG)){
-                isLeft_=false;
+            if (currentElement_.equals(BifurcationCurve.LEFT_TAG)) {
+                isLeft_ = false;
             }
-                
-            
+            if (currentElement_.equals("TRANSITIONPOINTS")) {
+                isTransitionPoints_ = false;
+            }
+
+            if (currentElement_.equals("INFLECTIONPOINTS")) {
+                isInflectionPoints_ = false;
+            }
+
+            if (currentElement_.equals("SUBCURVE")) {
+                OrbitPoint[] orbitPointsArray = new OrbitPoint[orbitPoints_.size()];
+
+                for (int i = 0; i < orbitPoints_.size(); i++) {
+                    orbitPointsArray[i] = (OrbitPoint) orbitPoints_.elementAt(i);
+                }
+
+
+
+                if (subCurveType_.equals(rpnumerics.RarefactionCurve.class.getSimpleName())) {
+
+                    RarefactionCurve curve = new RarefactionCurve(orbitPointsArray,
+                            Integer.parseInt(currentConfiguration_.getParam("family")),
+                            Integer.parseInt(currentConfiguration_.getParam("direction")));
+                    waveCurve_.add(curve);
+
+
+                } else if (subCurveType_.equals(rpnumerics.ShockCurve.class.getSimpleName())) {
+
+                    ShockCurve curve = new ShockCurve(orbitPointsArray, Integer.parseInt(currentConfiguration_.getParam("family")),
+                            Integer.parseInt(currentConfiguration_.getParam("direction")));
+                    waveCurve_.add(curve);
+
+                } else if (subCurveType_.equals(rpnumerics.CompositeCurve.class.getSimpleName())) {
+
+                    CompositeCurve curve = new CompositeCurve(orbitPointsArray, Integer.parseInt(currentConfiguration_.getParam("direction")), Integer.parseInt(currentConfiguration_.getParam("family")));
+                    waveCurve_.add(curve);
+                }
+                orbitPoints_.clear();
+            }
+
+
+
             if (currentElement_.equals(BifurcationCurve.XML_TAG)) {
 
 
@@ -289,7 +375,7 @@ public class RPnDataModule {
 
                 } else if (curve_name_.equals(rpnumerics.DoubleContactCurve.class.getSimpleName())) {
 
-                    DoubleContactCurve curve = new DoubleContactCurve(leftSegmentsCoords_,rightSegmentsCoords_);
+                    DoubleContactCurve curve = new DoubleContactCurve(leftSegmentsCoords_, rightSegmentsCoords_);
                     DoubleContactGeomFactory factory =
                             new DoubleContactGeomFactory(RPNUMERICS.createDoubleContactCurveCalc(currentConfiguration_), curve);
                     DoubleContactCommand.instance().execute(factory);
@@ -307,10 +393,10 @@ public class RPnDataModule {
 
                 if (curve_name_.equals(rpnumerics.EnvelopeCurve.class.getSimpleName())) {
 
-                    EnvelopeCurve curve = new EnvelopeCurve(leftSegmentsCoords_,rightSegmentsCoords_);
+                    EnvelopeCurve curve = new EnvelopeCurve(leftSegmentsCoords_, rightSegmentsCoords_);
                     EnvelopeGeomFactory factory =
                             new EnvelopeGeomFactory(RPNUMERICS.createEnvelopeCurveCalc(currentConfiguration_), curve);
-                    CoincidencePlotCommand.instance().execute(factory);
+                    EnvelopeCurveCommand.instance().execute(factory);
 
                 }
 
@@ -318,9 +404,17 @@ public class RPnDataModule {
 
                 if (curve_name_.equals(rpnumerics.CoincidenceCurve.class.getSimpleName())) {
 
-                    CoincidenceCurve curve = new CoincidenceCurve(curveSegments_);//TODO Use Hugoniot segments list
+                     int resolution[] = processResolution(currentConfiguration_.getParam("resolution"));
+                    ContourParams params = new ContourParams(resolution);
+                    
+                    
+                    CoincidenceCurve curve = new CoincidenceCurve(leftSegmentsCoords_);
+
+
+                    CoincidenceCurveCalc calc = new CoincidenceCurveCalc(params);
+
                     CoincidenceCurveGeomFactory factory =
-                            new CoincidenceCurveGeomFactory(RPNUMERICS.createCoincidenceExtensionCurveCalc(currentConfiguration_), curve);
+                            new CoincidenceCurveGeomFactory(calc, curve);
                     CoincidencePlotCommand.instance().execute(factory);
 
                 }
@@ -328,25 +422,25 @@ public class RPnDataModule {
 
                 if (curve_name_.equals(rpnumerics.SecondaryBifurcationCurve.class.getSimpleName())) {
 
-                    SecondaryBifurcationCurve curve = new SecondaryBifurcationCurve(leftSegmentsCoords_,rightSegmentsCoords_);
+                    SecondaryBifurcationCurve curve = new SecondaryBifurcationCurve(leftSegmentsCoords_, rightSegmentsCoords_);
                     SecondaryBifurcationGeomFactory factory =
                             new SecondaryBifurcationGeomFactory(RPNUMERICS.createSecondaryBifurcationCurveCalc(currentConfiguration_), curve);
-                    CoincidencePlotCommand.instance().execute(factory);
+                    SecondaryBifurcationCurveCommand.instance().execute(factory);
 
                 }
 
                 if (curve_name_.equals(rpnumerics.BoundaryExtensionCurve.class.getSimpleName())) {
 
-                    BoundaryExtensionCurve curve = new BoundaryExtensionCurve(leftSegmentsCoords_,rightSegmentsCoords_);
+                    BoundaryExtensionCurve curve = new BoundaryExtensionCurve(leftSegmentsCoords_, rightSegmentsCoords_);
                     BoundaryExtensionCurveGeomFactory factory =
                             new BoundaryExtensionCurveGeomFactory(RPNUMERICS.createBoundaryExtensionCurveCalc(currentConfiguration_), curve);
-                    EllipticBoundaryExtensionCommand.instance().execute(factory);
+                    BoundaryExtensionCurveCommand.instance().execute(factory);
 
                 }
 
                 if (curve_name_.equals(rpnumerics.HysteresisCurve.class.getSimpleName())) {
 
-                    HysteresisCurve curve = new HysteresisCurve(leftSegmentsCoords_,rightSegmentsCoords_);
+                    HysteresisCurve curve = new HysteresisCurve(leftSegmentsCoords_, rightSegmentsCoords_);
                     HysteresisCurveGeomFactory factory =
                             new HysteresisCurveGeomFactory(RPNUMERICS.createHysteresisCurveCalc(currentConfiguration_), curve);
                     HysteresisPlotCommand.instance().execute(factory);
@@ -363,34 +457,36 @@ public class RPnDataModule {
                 }
 
 
-                /*              TODO : THIS ELEMENT IS MISSING IN THE RPNUMERICS...
-                
+
+
                 if (curve_name_.equals(rpnumerics.BuckleyLeverettInflectionCurve.class.getSimpleName())) {
-                
-                
-                BuckleyLeverettInflectionCurve curve = new BuckleyLeverettInflectionCurve(curveSegments_);
-                BuckleyLeverettinInflectionCurveGeomFactory factory =
-                new BuckleyLeverettinInflectionCurveGeomFactory(RPNUMERICS.createBuckleyLeverettinInflectionCurveCalc(currentConfiguration_), curve);
-                BuckleyLeverettInflectionCurveCommand.instance().execute(factory);
-                
+
+                    int resolution[] = processResolution(currentConfiguration_.getParam("resolution"));
+                    ContourParams params = new ContourParams(resolution);
+                    BuckleyLeverettInflectionCurve curve = new BuckleyLeverettInflectionCurve(leftSegmentsCoords_);
+                    BuckleyLeverettinCurveGeomFactory factory = new BuckleyLeverettinCurveGeomFactory(new BuckleyLeverettinInflectionCurveCalc(params), curve);
+                    BuckleyLeverettiInflectionCommand.instance().execute(factory);
+
                 }
-                
-                
-                
-                TODO : IS THIS THE SAME AS A SUBINFLECTIONEXTENSION ???
-                 *
-                
+
+
+
+
                 if (curve_name_.equals(rpnumerics.SubInflectionCurve.class.getSimpleName())) {
-                
-                
-                SubInflectionCurve curve = new SubInflectionCurve(curveSegments_);
-                SubInflectionCurveGeomFactory factory =
-                new SubInflectionCurveGeomFactory(RPNUMERICS.createSubInflectionCurveCalc(currentConfiguration_), curve);
-                SubInflectionPlotCommand.instance().execute(factory);
-                
+
+
+                    SubInflectionCurve curve = new SubInflectionCurve(leftSegmentsCoords_);
+                    int resolution[] = processResolution(currentConfiguration_.getParam("resolution"));
+                    ContourParams params = new ContourParams(resolution);
+                    SubInflectionCurveGeomFactory factory =
+                            new SubInflectionCurveGeomFactory(new SubInflectionCurveCalc(params), curve);
+                    SubInflectionPlotCommand.instance().execute(factory);
+
                 }
-                
-                 */
+
+
+
+
 
 
             } else if (currentElement_.equals(RPnCurve.XML_TAG)) {
@@ -400,6 +496,9 @@ public class RPnDataModule {
                 for (int i = 0; i < orbitPoints_.size(); i++) {
                     orbitPointsArray[i] = (OrbitPoint) orbitPoints_.elementAt(i);
                 }
+
+
+
 
                 if (curve_name_.equals(rpnumerics.RarefactionCurve.class.getSimpleName())) {
 
@@ -411,6 +510,119 @@ public class RPnDataModule {
                     RarefactionCurvePlotCommand.instance().execute(factory);
 
                 }
+
+
+                if (curve_name_.equals(rpnumerics.ShockCurve.class.getSimpleName())) {
+
+                    ShockCurve curve = new ShockCurve(orbitPointsArray, Integer.parseInt(currentConfiguration_.getParam("family")),
+                            Integer.parseInt(currentConfiguration_.getParam("direction")));
+
+                    ShockCurveGeomFactory factory =
+                            new ShockCurveGeomFactory(RPNUMERICS.createShockCurveCalc(startPoint_, currentConfiguration_), curve);
+                    ShockCurvePlotCommand.instance().execute(factory);
+
+                }
+
+
+
+                if (curve_name_.equals(rpnumerics.CompositeCurve.class.getSimpleName())) {
+
+                    CompositeCurve curve = new CompositeCurve(orbitPointsArray, Integer.parseInt(currentConfiguration_.getParam("direction")), Integer.parseInt(currentConfiguration_.getParam("family")));
+
+                    CompositeGeomFactory factory =
+                            new CompositeGeomFactory(RPNUMERICS.createCompositeCalc(startPoint_, currentConfiguration_), curve);
+                    CompositePlotCommand.instance().execute(factory);
+
+                }
+
+
+                if (curve_name_.equals(rpnumerics.HugoniotCurve.class.getSimpleName())) {
+
+
+                    HugoniotCurve curve = new HugoniotCurve(startPoint_, hugoniotSegments_, transitionPoint_);
+                    int direction = Integer.parseInt(currentConfiguration_.getParam("direction"));
+
+                    int[] resolution = processResolution(currentConfiguration_.getParam("resolution"));
+                    
+                    //TODO Replace !!
+                    
+                    HugoniotParams params = new HugoniotParams(startPoint_, direction, resolution,"IMPLICIT");
+
+                    HugoniotCurveCalcND calc = new HugoniotCurveCalcND(params);
+
+                    HugoniotCurveGeomFactory factory = new HugoniotCurveGeomFactory(calc, curve);
+
+                    HugoniotContinuationPlotCommand.instance().execute(factory);
+
+                }
+
+                if (curve_name_.equals(rpnumerics.EigenValueCurve.class.getSimpleName())) {
+
+                    int family = Integer.parseInt(currentConfiguration_.getParam("family"));
+                    double level = Double.parseDouble(currentConfiguration_.getParam("level"));
+                    int[] resolution = processResolution(currentConfiguration_.getParam("resolution"));
+                    ContourParams params = new ContourParams(resolution);
+                    EigenValueCurve curve = new EigenValueCurve(family, realSegments_, level);
+                    CharacteristicPolynomialLevelCalc calc = null;
+                    if (startPoint_ != null) {
+
+                        calc = new EigenValuePointLevelCalc(startPoint_, family, params);
+                        LevelCurveGeomFactory factory = new LevelCurveGeomFactory(calc, curve);
+                        PointLevelCurvePlotCommand.instance().execute(factory);
+
+
+                    } else {
+                        calc = new EigenValueLevelCalc(family, level, params);
+                        LevelCurveGeomFactory factory = new LevelCurveGeomFactory(calc, curve);
+                        LevelCurvePlotCommand.instance().execute(factory);
+                    }
+
+
+
+                }
+
+                if (curve_name_.equals(rpnumerics.IntegralCurve.class.getSimpleName())) {
+                    int familyIndex = Integer.parseInt(currentConfiguration_.getParam("family"));
+                    IntegralCurve curve = new IntegralCurve(orbitPointsArray, familyIndex, inflectionPoint_);
+                    IntegralCurveCalc calc = new IntegralCurveCalc(startPoint_, familyIndex);
+                    IntegralOrbitGeomFactory factory = new IntegralOrbitGeomFactory(calc, curve);
+                    IntegralCurvePlotCommand.instance().execute(factory);
+
+                }
+                if (curve_name_.equals(rpnumerics.WaveCurve.class.getSimpleName())) {
+
+                    WaveCurveCalc calc = new WaveCurveCalc(startPoint_, Integer.parseInt(currentConfiguration_.getParam("family")),
+                            Integer.parseInt(currentConfiguration_.getParam("direction")),0,0); //TODO Ler de onde a curva esta partindo e o edge se for da fronteira
+
+                    WaveCurveGeomFactory factory = new WaveCurveGeomFactory(calc);
+
+                    WaveCurvePlotCommand.instance().execute(factory);
+
+                }
+
+
+
+                if (curve_name_.equals(rpnumerics.RarefactionExtensionCurve.class.getSimpleName())) {
+
+                    int[] resolution = processResolution(currentConfiguration_.getParam("resolution"));
+                    ContourParams params = new ContourParams(resolution);
+
+
+                    RarefactionExtensionCalc calc = new RarefactionExtensionCalc(params, startPoint_,
+                            Integer.parseInt(currentConfiguration_.getParam("direction")),
+                            Integer.parseInt(currentConfiguration_.getParam("curvefamily")),
+                            Integer.parseInt(currentConfiguration_.getParam("extensionfamily")),
+                            Integer.parseInt(currentConfiguration_.getParam("characteristic")));
+
+                    RarefactionExtensionCurve curve = new RarefactionExtensionCurve(realSegments_, realSegments_);
+                    RarefactionExtensionGeomFactory factory = new RarefactionExtensionGeomFactory(calc, curve);
+
+                    RarefactionExtensionCurvePlotCommand.instance().execute(factory);
+
+                }
+
+
+
             }
         }
 
@@ -439,7 +651,9 @@ public class RPnDataModule {
     //
     // Initializers
     //
-    /** Initializes the XML parser to reload a previous session. */
+    /**
+     * Initializes the XML parser to reload a previous session.
+     */
     public static void init(XMLReader parser, String configFile) {
         try {
             parser.setContentHandler(new RPnDataParser());
@@ -453,7 +667,9 @@ public class RPnDataModule {
         }
     }
 
-    /** Initializes the XML parser to reload a previous session. */
+    /**
+     * Initializes the XML parser to reload a previous session.
+     */
     public static void init(XMLReader parser, InputStream configFileStream) {
         try {
             parser.setContentHandler(new RPnDataParser());
@@ -477,7 +693,9 @@ public class RPnDataModule {
     //
     // Methods
     //
-    /** Writes the data of actual session into a XML file. */
+    /**
+     * Writes the data of actual session into a XML file.
+     */
     static public void matlabExport(FileWriter writer) throws java.io.IOException {
 
         Iterator<RpGeometry> iterator = PHASESPACE.getGeomObjIterator();

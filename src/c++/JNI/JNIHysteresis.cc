@@ -69,15 +69,15 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HysteresisCurveCalc_nativeCalc__I
     const AccumulationFunction * accumulationFunction = &RpNumerics::getPhysics().accumulation();
 
 
-    GridValues * gv = RpNumerics::getGridFactory().getGrid("bifurcation");
+    GridValues * gv = RpNumerics::getGridFactory().getGrid("bifurcationcurve");
 
 
     int dimension = RpNumerics::getPhysics().domain().dim();
 
     if ( Debug::get_debug_level() == 5 ) {
-        cout << "Familia " << domainFamily << endl;
-        cout <<"FluxFunction "<<fluxFunction<<endl;
-        cout <<"AccumuationFunction "<<accumulationFunction<<endl;
+        ////cout << "Familia " << domainFamily << endl;
+        ////cout <<"FluxFunction "<<fluxFunction<<endl;
+        ////cout <<"AccumuationFunction "<<accumulationFunction<<endl;
     }
     
     
@@ -93,8 +93,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HysteresisCurveCalc_nativeCalc__I
 
 
     if ( Debug::get_debug_level() == 5 ) {
-        cout << "Tamanho da histerese curve : " << curve_segments.size() << endl;
-        cout << "Tamanho da histerese domain: " << domain_segments.size() << endl;
+        ////cout << "Tamanho da histerese curve : " << curve_segments.size() << endl;
+        ////cout << "Tamanho da histerese domain: " << domain_segments.size() << endl;
     }
     for (unsigned int i = 0; i < curve_segments.size() / 2; i++) {
 
@@ -164,7 +164,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HysteresisCurveCalc_nativeCalc__IIILwa
 (JNIEnv * env, jobject obj, jint family, jint xRes, jint yRes, jobject topR, jobject dwnL) {
 
     if ( Debug::get_debug_level() == 5 ) {
-        cout<<"Chamando JNI Refinamento"<<endl;
+        ////cout<<"Chamando JNI Refinamento"<<endl;
     }
 
     jclass realVectorClass = env->FindClass(REALVECTOR_LOCATION);
@@ -238,7 +238,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HysteresisCurveCalc_nativeCalc__IIILwa
     const FluxFunction * fluxFunction = &RpNumerics::getPhysics().fluxFunction();
     const AccumulationFunction * accumulationFunction = &RpNumerics::getPhysics().accumulation();
     if ( Debug::get_debug_level() == 5 ) {
-        cout << "Familia " << family << endl;
+        ////cout << "Familia " << family << endl;
     }
 
     Hysteresis::curve(fluxFunction, accumulationFunction, gv, 0,
@@ -252,8 +252,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HysteresisCurveCalc_nativeCalc__IIILwa
     if (curve_segments.size() == 0 || domain_segments.size() == 0)return NULL;
 
     if ( Debug::get_debug_level() == 5 ) {
-        cout << "Tamanho da histerese curve : " << curve_segments.size() << endl;
-        cout << "Tamanho da histerese domain: " << domain_segments.size() << endl;
+        ////cout << "Tamanho da histerese curve : " << curve_segments.size() << endl;
+        ////cout << "Tamanho da histerese domain: " << domain_segments.size() << endl;
     }
 
     for (unsigned int i = 0; i < curve_segments.size() / 2; i++) {

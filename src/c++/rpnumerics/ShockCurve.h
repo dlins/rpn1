@@ -27,21 +27,25 @@
 #define SHOCKCURVE_NEWTON_OUTSIDE_DOMAIN 4
 #endif
 
+#define SHOCK_SPEED_SHOULD_INCREASE RAREFACTION_SPEED_SHOULD_DECREASE
+#define SHOCK_SPEED_SHOULD_DECREASE RAREFACTION_SPEED_SHOULD_INCREASE
+
 // Types of curves.
 //
 #ifndef SHOCKCURVE_TOTAL_CLASSIFICATION
-#define SHOCKCURVE_TOTAL_CLASSIFICATION 10
+#define SHOCKCURVE_TOTAL_CLASSIFICATION 20
 #endif
 
 #ifndef SHOCKCURVE_SHOCK_CURVE
-#define SHOCKCURVE_SHOCK_CURVE 11
+#define SHOCKCURVE_SHOCK_CURVE 21
 #endif
 
 // Subtypes of curves.
 //
 #define DONT_CHECK_EQUALITY_AT_LEFT                                      100
-#define SHOCK_SIGMA_EQUALS_LAMBDA_OF_FAMILY_AT_LEFT        101 // lambda(Uref)[family] == sigma.
-#define SHOCK_SIGMA_EQUALS_LAMBDA_OF_SOME_FAMILY_AT_LEFT   102 // lambda(Uref)[:]      == sigma.
+#define SHOCK_SIGMA_EQUALS_LAMBDA_OF_FAMILY_AT_LEFT             101 // lambda(Uref)[family]              == sigma.
+#define SHOCK_SIGMA_EQUALS_LAMBDA_OF_SOME_FAMILY_AT_LEFT        102 // lambda(Uref)[:]                   == sigma.
+#define SHOCK_SIGMA_EQUALS_LAMBDA_OF_OTHER_FAMILY_AT_LEFT_ONCE  103 // lambda(Uref)[: such that !family] == sigma. // WE STOPPED HERE. Morante
 
 #define DONT_CHECK_EQUALITY_AT_RIGHT                                     200
 #define SHOCK_SIGMA_EQUALS_LAMBDA_OF_FAMILY_AT_RIGHT       201 // lambda(Uright)[family] == sigma.
@@ -58,7 +62,7 @@
 #define SHOCK_COMPLEX_EIGENVALUE_AT_FAMILY                               305
 #define SHOCK_REACHED_BOUNDARY                                           306
 
-// For test purposes only. DELETE LATER
+//// For test purposes only. DELETE LATER
 //#define USECANVAS
 //
 //#ifdef USECANVAS
@@ -82,6 +86,7 @@
 //
 #define USE_ALL_FAMILIES                           8
 #define USE_CURRENT_FAMILY                         9
+#define USE_CURRENT_FAMILY_AND_NEIGHBOURS         10 // TODO: Use it!
 
 #define TRANSITION_FOUND                          20
 #define TRANSITION_CURRENT_FOUND                  21
@@ -98,6 +103,8 @@ class TransitionPointStructure {
         RealVector point;
         int family;
         bool local; // True if local, false if reference.
+
+        // TODO: Add a boolen field to specify if (lambda - sigma) increases or decreases at each transition.
 
         TransitionPointStructure(double a, const RealVector &p, int f, bool l){
             alpha  = a;
@@ -147,6 +154,24 @@ class ShockCurvePoints {
 
         int family;
         ReferencePoint ref;
+};
+
+class ExtensionPoint {
+    public:
+        RealVector point;
+        int        index_of_extended_point;
+
+        ExtensionPoint(const RealVector &p){
+            point = p;
+            index_of_extended_point = -1; // Default: this point is not an extension.
+        }
+
+        ExtensionPoint(const RealVector &p, int i){
+            point = p;
+            index_of_extended_point = i;
+        }
+
+        ~ExtensionPoint(){}
 };
 
 class ShockCurve {
@@ -278,6 +303,13 @@ class ShockCurve {
         virtual void set_reference_point(const ReferencePoint &r){ref = r; return;}
 
         virtual int find_point_for_sigma_equal_reference_lambda(const RealVector &in, double lambda_ref, RealVector &out);
+
+        virtual void Bethe_Wendroff_extension(const Curve &curve, const std::vector<int> &transition_current_index, const std::vector<int> &transition_current_family, const Curve &curve_where_extension_is_to_be_found, 
+                                              std::vector<RealVector> &curve_with_extension, std::vector<int> &corresponding_Bethe_Wendroff);
+
+        virtual void Bethe_Wendroff_extension(const Curve &curve, 
+                                              const std::vector<int> &transition_current_index, 
+                                              std::vector<ExtensionPoint> &curve_with_extension);
 
         HugoniotContinuation * get_HugoniotContinuation(){return hc;}
 

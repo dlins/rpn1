@@ -62,8 +62,6 @@ public class RarefactionCurveCalc extends WaveCurveOrbitCalc implements RpCalcul
         }
 
         
-        result.setReferencePoint(getStart());
-        
         return result;
 
     }

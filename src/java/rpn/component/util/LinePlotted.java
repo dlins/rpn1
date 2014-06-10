@@ -12,6 +12,7 @@ import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.font.GlyphVector;
 import java.awt.geom.Line2D;
+import java.awt.geom.Path2D;
 import java.awt.geom.Path2D.Double;
 import java.text.NumberFormat;
 import java.util.List;
@@ -96,9 +97,27 @@ public class LinePlotted extends GraphicsUtil {
     }
 
     @Override
-    public Double getWCObject() {
-        return null;
+    public Path2D.Double getWCObject() {
+
+       return (Double) wcObjects_;
+        
     }
+    
+    
+    
+     public String toXML() {
+
+        StringBuilder buffer = new StringBuilder();
+
+        for (int i = 0; i < wcObjects_.size()-1; i++) {
+            buffer.append(((RealVector)wcObjects_.get(i)).toXML());
+        }
+
+        return buffer.toString();
+
+    }
+    
+    
 
     private String formatter(String toFormat) {
 
@@ -119,5 +138,7 @@ public class LinePlotted extends GraphicsUtil {
         
 
     }
+
+ 
 
 }
