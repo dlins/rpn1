@@ -24,6 +24,7 @@ NOTE :
 #include <vector>
 #include <iostream>
 #include "Debug.h"
+#include "Hugoniot_TP.h"
 #include "ImplicitHugoniotCurve.h"
 
 
@@ -112,7 +113,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
     RpNumerics::getPhysics().getSubPhysics(0).preProcess(Uref);
 
 
-    HugoniotCurve *hugoniotCurve = RpNumerics::getPhysics().getSubPhysics(0).getHugoniotCurve(methodName);
+
 
 
     vector<RealVector> transitionList;
@@ -135,111 +136,35 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
     //cout << "Tipo do metodo c++" << hugoniotCurve->implemented_method() << endl;
 
 
-    if (hugoniotCurve-> implemented_method() == IMPLICIT_HUGONIOT) {
-        ImplicitHugoniotCurve * implicitMetod = (ImplicitHugoniotCurve*) hugoniotCurve;
+    string physicsID(RpNumerics::getPhysics().getSubPhysics(0).ID());
+    if (physicsID.compare("TPCW") == 0) {
+        
+        GridValues * gv = RpNumerics::getGridFactory().getGrid("hugoniotcurve");
+        Hugoniot_TP hugoniotCurve(&RpNumerics::getPhysics().fluxFunction(), &RpNumerics::getPhysics().accumulation());
+        hugoniotCurve.curve(*gv,refPoint,0, hugoniotPolyLineVector, transitionList);
+   
+    } else {
+       
+        HugoniotCurve *hugoniotCurve = RpNumerics::getPhysics().getSubPhysics(0).getHugoniotCurve(methodName);
+
+        if (hugoniotCurve-> implemented_method() == IMPLICIT_HUGONIOT) {
+            ImplicitHugoniotCurve * implicitMetod = (ImplicitHugoniotCurve*) hugoniotCurve;
 
 
-        implicitMetod->set_grid(RpNumerics::getGridFactory().getGrid("hugoniotcurve"));
+            implicitMetod->set_grid(RpNumerics::getGridFactory().getGrid("hugoniotcurve"));
+
+        }
+
+        hugoniotCurve->curve(refPoint, caseFlag, hugoniotPolyLineVector);
 
     }
 
-    hugoniotCurve->curve(refPoint, caseFlag, hugoniotPolyLineVector);
 
 
-    //    hugoniotCurve->curve(*gv, refPoint, caseFlag,  hugoniotPolyLineVector, transitionList);
+
 
 
     jobject transitionArray = env->NewObject(arrayListClass, arrayListConstructor, NULL);
-
-    //    for (int i = 0; i < transitionList.size(); i++) {
-    //
-    //        //        if (Debug::get_debug_level() == 5) {
-    //        //cout << "Ponto de transicao: " << transitionList[i] << endl;
-    //        //        }
-    //
-    //        jdoubleArray transPointArray = env->NewDoubleArray(dimension);
-    //        double * leftCoords = (double *) transitionList[i];
-    //
-    //        env->SetDoubleArrayRegion(transPointArray, 0, dimension, leftCoords);
-    //
-    //        jobject transPointrealVector = env->NewObject(realVectorClass, realVectorConstructorDoubleArray, transPointArray);
-    //
-    //        env->CallObjectMethod(transitionArray, arrayListAddMethod, transPointrealVector);
-    //
-    //
-    //    }
-
-
-
-
-
-
-    //     for (int i = 0; i < vectorCurve.size(); i++) {
-    //
-    //         //cout<<"Tamanho do vetor de curves " <<vectorCurve[i].curve.size()<<endl;
-    //         
-    //
-    //        for (unsigned int j = 0; j < vectorCurve[i].curve.size()-1; j++) {
-    //
-    //            
-    //            
-    //            if (j > 200)
-    //                
-    //                break;
-    //
-    //            jdoubleArray eigenValRLeft = env->NewDoubleArray(dimension);
-    //            jdoubleArray eigenValRRight = env->NewDoubleArray(dimension);
-    //
-    ////            RpNumerics::getPhysics().getSubPhysics(0).postProcess(hugoniotPolyLineVector[i].point[j]);
-    ////            RpNumerics::getPhysics().getSubPhysics(0).postProcess(hugoniotPolyLineVector[i].point[j + 1]);
-    //
-    //            double * leftCoords = (double *) vectorCurve[i].curve[j];
-    //            double * rightCoords = (double *) vectorCurve[i].curve[j+1];
-    //
-    //            env->SetDoubleArrayRegion(eigenValRLeft, 0, dimension, leftCoords);
-    //            env->SetDoubleArrayRegion(eigenValRRight, 0, dimension, rightCoords);
-    //
-    //            //Construindo left e right points
-    //            jobject realVectorLeftPoint = env->NewObject(realVectorClass, realVectorConstructorDoubleArray, eigenValRLeft);
-    //            jobject realVectorRightPoint = env->NewObject(realVectorClass, realVectorConstructorDoubleArray, eigenValRRight);
-    //
-    //            env->DeleteLocalRef(eigenValRLeft);
-    //            env->DeleteLocalRef(eigenValRRight);
-    //
-    //            int pointType = 0;//hugoniotPolyLineVector[i].type[j];
-    //
-    //            string signature = "NAN";//hugoniotPolyLineVector[i].signature[j];
-    //
-    //
-    //            double leftSigma = 0;//hugoniotPolyLineVector[i].speed[j];
-    //            double rightSigma = 0;//hugoniotPolyLineVector[i].speed[j + 1];
-    //
-    //            double leftLambda1 = 0;//hugoniotPolyLineVector[i].eigenvalue[j].component(0);
-    //            double leftLambda2 = 0;//hugoniotPolyLineVector[i].eigenvalue[j].component(1);
-    //
-    //            double rightLambda1 = 0;//hugoniotPolyLineVector[i].eigenvalue[j + 1].component(0);
-    //            double rightLambda2 = 0;//hugoniotPolyLineVector[i].eigenvalue[j + 1].component(1);
-    //
-    //
-    //            jobject hugoniotSegment = env->NewObject(hugoniotSegmentClass, hugoniotSegmentConstructor, realVectorLeftPoint, leftSigma, realVectorRightPoint, rightSigma, leftLambda1, leftLambda2, rightLambda1, rightLambda2, pointType, env->NewStringUTF(signature.c_str()));
-    //            env->CallObjectMethod(segmentsArray, arrayListAddMethod, hugoniotSegment);
-    //
-    //        }
-    //
-    //
-    //    
-    //    
-    //    
-    //    
-    //     }
-    //    
-    //    
-
-
-
-
-
-
 
 
     for (int i = 0; i < hugoniotPolyLineVector.size(); i++) {
@@ -409,9 +334,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
 
 
 
-//    hugoniotCurve->curve(gv, refPoint, 0, hugoniotPolyLineVector, transitionList);
+    //    hugoniotCurve->curve(gv, refPoint, 0, hugoniotPolyLineVector, transitionList);
 
-  hugoniotCurve->curve(refPoint, 13, hugoniotPolyLineVector);
+    hugoniotCurve->curve(refPoint, 13, hugoniotPolyLineVector);
 
 
 
