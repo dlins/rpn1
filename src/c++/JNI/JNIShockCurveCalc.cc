@@ -181,9 +181,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc(JNIEnv * env, jobj
 
         //        //cout<<tempVector<<endl;
 
-        //        double lambda = shkcurve.speed[i];
+        double lambda = shkcurve.speed[i];
 
-        double lambda = 0;
+//        double lambda = 0;
 
         //        shkcurve.eigenvalues // Autovalores em cada ponto
 
