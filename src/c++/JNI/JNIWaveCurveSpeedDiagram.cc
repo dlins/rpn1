@@ -51,16 +51,12 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurve_nativeDiagramCalc
 
     int dimension = 2;
 
-
     std::vector<Curve> arclength_speed, arclength_eigenvalues;
     std::vector<Curve> arclength_reference_eigenvalues;
 
-
     const WaveCurve * waveCurve = RpNumerics::getWaveCurve(curveID);
-
-
+   
     waveCurve->speed_map(arclength_speed, arclength_eigenvalues, arclength_reference_eigenvalues);
-
 
     jobject diagramLinesList = env->NewObject(arrayListClass, arrayListConstructor, NULL);
 
@@ -87,7 +83,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurve_nativeDiagramCalc
         env->CallObjectMethod(speedLine, setTypeMethodID, i, partType);
 
 
-//        env->CallObjectMethod(speedLineList, arrayListAddMethod, speedLinePartList);
+        //        env->CallObjectMethod(speedLineList, arrayListAddMethod, speedLinePartList);
 
     }
 
@@ -95,7 +91,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurve_nativeDiagramCalc
     //    jobject speedLine = env->NewObject(diagramLineClass, diagramLineConstructor, speedLineList);
 
 
-        env->CallObjectMethod(diagramLinesList, arrayListAddMethod, speedLine);
+    env->CallObjectMethod(diagramLinesList, arrayListAddMethod, speedLine);
 
 
     //
@@ -107,7 +103,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurve_nativeDiagramCalc
 
         jobject eigenLine = env->NewObject(diagramLineClass, diagramLineDefaultConstructor, NULL);
 
-//        jobject linePartsList = env->NewObject(arrayListClass, arrayListConstructor, NULL);
+        //        jobject linePartsList = env->NewObject(arrayListClass, arrayListConstructor, NULL);
 
         jobject speedLinePartList = env->NewObject(arrayListClass, arrayListConstructor, NULL);
 
@@ -126,7 +122,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurve_nativeDiagramCalc
 
         }
 
-        env->CallObjectMethod(eigenLine, setTypeMethodID, 0, 0);// Pq nao passa duas vezes ??
+        env->CallObjectMethod(eigenLine, setTypeMethodID, 0, 0); // Pq nao passa duas vezes ??
         env->CallObjectMethod(eigenLine, setTypeMethodID, 1, 1);
 
         //        env->CallObjectMethod(linePartsList, arrayListAddMethod, speedLinePartList);
@@ -149,8 +145,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurve_nativeDiagramCalc
 
 
         jobject eigenLine = env->NewObject(diagramLineClass, diagramLineDefaultConstructor, NULL);
-        
-//        jobject eigenLineList = env->NewObject(arrayListClass, arrayListConstructor, NULL); //EIGEN VALUES 
+
+        //        jobject eigenLineList = env->NewObject(arrayListClass, arrayListConstructor, NULL); //EIGEN VALUES 
 
 
         for (int i = 0; i < arclength_eigenvalues.size(); i++) { //Quantidade de subcurvas da curva de onda
@@ -180,15 +176,15 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurve_nativeDiagramCalc
 
 
             }
-            
-            env->CallObjectMethod(eigenLine, setTypeMethodID, i, arclength_eigenvalues[i].type);// Pq nao passa duas vezes ??
+
+            env->CallObjectMethod(eigenLine, setTypeMethodID, i, arclength_eigenvalues[i].type); // Pq nao passa duas vezes ??
             env->CallObjectMethod(eigenLine, addPartMethodID, speedLinePartList);
 
-//            env->CallObjectMethod(eigenLineList, arrayListAddMethod, speedLinePartList);
+            //            env->CallObjectMethod(eigenLineList, arrayListAddMethod, speedLinePartList);
 
         }
 
-//        jobject eigenLine = env->NewObject(diagramLineClass, diagramLineConstructor, eigenLineList);
+        //        jobject eigenLine = env->NewObject(diagramLineClass, diagramLineConstructor, eigenLineList);
 
         env->CallObjectMethod(diagramLinesList, arrayListAddMethod, eigenLine);
 
