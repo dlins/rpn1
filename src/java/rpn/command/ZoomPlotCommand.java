@@ -47,15 +47,11 @@ public class ZoomPlotCommand extends RpModelPlotCommand implements RPnMenuComman
     public void execute() {
 
         List<RealVector> wcVertices = selectedArea_.getWCVertices();
+
+        RealVector min = wcVertices.get(3);
+        RealVector max = wcVertices.get(1);
         
-
-        RealVector min = wcVertices.get(0);
-        RealVector max = wcVertices.get(2);
-
         Boundary boundary = new RectBoundary(min, max);
-        
-        
-        System.out.println("boundary: " + min+" "+ max);
 
         Scene scene = phaseSpaceFrameZoom(boundary);
 
@@ -80,6 +76,19 @@ public class ZoomPlotCommand extends RpModelPlotCommand implements RPnMenuComman
 
         zoomFrame.phaseSpacePanel().setBackground(Color.black);
 
+        Iterator<RPnPhaseSpacePanel> installedPanelsIterator = UIController.instance().getInstalledPanelsIterator();
+        
+        while (installedPanelsIterator.hasNext()) {
+            RPnPhaseSpacePanel rPnPhaseSpacePanel = installedPanelsIterator.next();
+            rPnPhaseSpacePanel.getCastedUI().resetCursorCoords();
+            
+        }
+        UIController.instance().globalInputTable().reset();
+        
+        
+        
+        
+
     }
 
     public void setAreaAndPanel(AreaSelected area, RPnPhaseSpacePanel panel) {
@@ -88,10 +97,10 @@ public class ZoomPlotCommand extends RpModelPlotCommand implements RPnMenuComman
 
     }
 
-    @Override
-    public void actionPerformed(ActionEvent event) {
-
-    }
+//    @Override
+//    public void actionPerformed(ActionEvent event) {
+//
+//    }
 
     public Scene phaseSpaceFrameZoom(Boundary boundary) {
 

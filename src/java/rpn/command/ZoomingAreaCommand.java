@@ -16,6 +16,7 @@ import rpn.component.BifurcationCurveGeom;
 import rpn.component.RpGeometry;
 import rpn.component.SegmentedCurveGeom;
 import rpn.controller.ui.AREASELECTION_CONFIG;
+import rpn.controller.ui.RPnSelectionPlotter;
 import rpn.controller.ui.UIController;
 import rpn.controller.ui.ZoomingSquare;
 import wave.util.RealVector;
@@ -39,6 +40,8 @@ public class ZoomingAreaCommand extends RpModelPlotCommand implements Observer {
         while (iterator.hasNext()) {
             RPnPhaseSpacePanel panel = iterator.next();
             ZoomingSquare boxPlotter = new ZoomingSquare(panel.scene());
+    
+            
             panel.addMouseListener(boxPlotter);
             panel.addMouseMotionListener(boxPlotter);
         }

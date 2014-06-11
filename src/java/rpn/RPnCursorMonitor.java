@@ -38,6 +38,7 @@ public class RPnCursorMonitor extends JLabel {
         // MouseMotion Adapter response
         //
 
+        @Override
         public void mouseMoved(MouseEvent e) {
             RPnPhaseSpacePanel scenePane = (RPnPhaseSpacePanel) e.getComponent();
             updateCursorPos(scenePane, e.getPoint());
@@ -68,14 +69,14 @@ public class RPnCursorMonitor extends JLabel {
         }
         transf.dcInverseTransform(dcMousePos, wcMousePos);
         // we are working with PLANE
-        setText(pos.getX()+" "+pos.getY()+"/" +createCoordsString(wcMousePos, transf.projectionMap()));
+        setText(createCoordsString(wcMousePos, transf.projectionMap()));
     }
 
     protected String createCoordsString(CoordsArray wcCoords, ProjectionMap projMap) {
-        StringBuffer formattedCoord = new StringBuffer();
+        StringBuilder formattedCoord = new StringBuilder();
         formattedCoord.append("(");
         for (int i = 0; i < projMap.getCodomain().getDim(); i++) {
-            formattedCoord.append(" " + formatter_.format(wcCoords.getElement(projMap.getCompIndexes()[i])));
+            formattedCoord.append(" ").append(formatter_.format(wcCoords.getElement(projMap.getCompIndexes()[i])));
         }
         formattedCoord.append(" )");
         return formattedCoord.toString();
