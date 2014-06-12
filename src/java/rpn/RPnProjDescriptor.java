@@ -5,20 +5,18 @@
  */
 package rpn;
 
-import java.awt.Point;
 import wave.multid.view.Viewing2DTransform;
 import wave.multid.view.Viewing3DTransform;
 import wave.multid.view.ViewingTransform;
+import wave.multid.view.Iso2EquiTransform;
 import wave.multid.Space;
 import wave.multid.Multid;
 import wave.multid.graphs.ClippedShape;
-
-import wave.multid.graphs.MirrorTransform;
 import wave.multid.graphs.ViewPlane;
 import wave.multid.graphs.dcViewport;
 import wave.multid.graphs.wcWindow;
 import wave.multid.map.ProjectionMap;
-import wave.multid.view.Iso2EquiTransform;
+
 
 public class RPnProjDescriptor {
     //
@@ -33,12 +31,9 @@ public class RPnProjDescriptor {
     private String label_;
     // as we have only one transformation for now
     private boolean iso2equi_;
-    private boolean mirrored_;
-    private  int subPhysicsIndex_;
 
-    public RPnProjDescriptor(Space domain, int subPhysicsIndex,String label, Point origin, int w, int h, int[] projIndices, boolean iso2equi,boolean mirrored) {
-
-        viewport_ = new dcViewport(origin, w, h);
+    public RPnProjDescriptor(Space domain, String label, int w, int h, int[] projIndices, boolean iso2equi) {
+        viewport_ = new dcViewport(w, h);
         Space projSpace = null;
         if (projIndices.length == 2) {
             projSpace = Multid.PLANE;
@@ -47,30 +42,11 @@ public class RPnProjDescriptor {
         } else {
             throw new IllegalArgumentException("Invalid projection dim...");
         }
-
-
-        mirrored_ = mirrored;
-        
-        subPhysicsIndex_=subPhysicsIndex;
-
-
         projMap_ = new ProjectionMap(domain, projSpace, projIndices);
         label_ = label;
         iso2equi_ = iso2equi;
 
     }
-
-    public RPnProjDescriptor(Space domain, String label, int w, int h, int[] projIndices, boolean iso2equi,boolean mirrored) {
-
-        this(domain, 0,label, new Point(), w, h, projIndices, iso2equi,mirrored);
-
-    }
-
-    public int getSubPhysicsIndex() {
-        return subPhysicsIndex_;
-    }
-    
-    
 
     public dcViewport viewport() {
         return viewport_;
@@ -89,32 +65,21 @@ public class RPnProjDescriptor {
     }
 
     public ViewingTransform createTransform(ClippedShape clipping) {
+        
+        
         wcWindow window = clipping.createWindow(projMap_);
-
         ViewPlane viewPlane = new ViewPlane(viewport_, window);
-
         if (projMap_.getCodomain().equals(Multid.PLANE)) {
-
-            if (isMirrored()) {
-                return new MirrorTransform(projMap_, viewPlane);
+            if (!iso2equi_) {
+                return new Viewing2DTransform(projMap_, viewPlane);
+            } else {
+                return new Iso2EquiTransform(projMap_, viewPlane);
             }
-
-            if (iso2equi_) {
-               return new Iso2EquiTransform(projMap_, viewPlane);
-            }
-            
-            
-            return new Viewing2DTransform(projMap_, viewPlane);
-            
         } else // 3D by default we will get the minimum Z coord proj plane
         {
             return new Viewing3DTransform(projMap_, viewPlane,
                     new double[]{0., 0., 0.}, clipping.getMinimums().getElement(projMap_.getCompIndexes()[2]));
         }
-    }
-
-    public boolean isMirrored() {
-        return mirrored_;
     }
 
     public String toXML() {
