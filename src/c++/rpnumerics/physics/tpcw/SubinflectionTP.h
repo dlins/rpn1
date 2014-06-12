@@ -10,14 +10,12 @@
 #include "ContourMethod.h"
 #include "GridValues.h"
 
-//#include "Thermodynamics_Common.h"
 #include "Thermodynamics.h"
 #include "Flux2Comp2PhasesAdimensionalized.h"
 #include "Accum2Comp2PhasesAdimensionalized.h"
 
 class SubinflectionTP : public ImplicitFunction {
 private:
-//    const Thermodynamics_Common *td;
     const Thermodynamics *td;
     Flux2Comp2PhasesAdimensionalized::FracFlow2PhasesHorizontalAdimensionalized * fluxFunction_;
 
