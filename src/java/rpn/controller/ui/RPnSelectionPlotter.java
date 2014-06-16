@@ -15,6 +15,7 @@ import java.util.List;
 import rpn.RPnPhaseSpacePanel;
 import rpn.command.GenericExtensionCurveCommand;
 import rpn.command.RpCommand;
+import rpn.command.ZoomPlotCommand;
 import rpn.component.util.AreaSelected;
 import rpn.component.util.GraphicsUtil;
 import rpn.message.RPnNetworkStatus;
@@ -76,6 +77,21 @@ public class RPnSelectionPlotter extends RPn2DMouseController {
             RpCommand command = new RpCommand(graphicsUtil.toXML());
 
             GenericExtensionCurveCommand.instance().logCommand(command);
+            
+            
+            //TESTE
+            
+         
+
+            graphicsUtil.setID(String.valueOf(panel.getGraphicsUtil().size() - 1));
+
+            ZoomPlotCommand.instance().setAreaAndPanel((AreaSelected) graphicsUtil, panel);
+
+            ZoomPlotCommand.instance().execute();
+
+
+
+            
 
 
             if (RPnNetworkStatus.instance().isOnline() && RPnNetworkStatus.instance().isMaster()) {

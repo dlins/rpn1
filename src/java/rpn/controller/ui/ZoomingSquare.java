@@ -47,7 +47,9 @@ public class ZoomingSquare extends RPn2DMouseController {
         if (addRectangle_) {
             RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) me.getSource();
 
-            Path2D.Double selectionPath = plotCenteredWCArea(cursorPos_, me, viewingTransform_);
+//            Path2D.Double selectionPath = plotCenteredWCArea(cursorPos_, me, viewingTransform_);
+            
+            Path2D.Double selectionPath = plotWCSquareArea(cursorPos_, me, viewingTransform_);
 
             List<Object> wcObjList = new ArrayList();
 

@@ -76,7 +76,7 @@ public class CurvesConfig extends UI_ACTION_SELECTED {
         PhysicalBoundaryPlotCommand.instance().setEnabled(true);
         RiemannProfileCommand.instance().setEnabled(false);
         WaveCurvePlotCommand.instance().setEnabled(true);
-        WaveCurveRRegionsPlotCommand.instance().setEnabled(true);
+        WaveCurveRRegionsPlotCommand.instance().setEnabled(false);
         CurveRefineCommand.instance().setEnabled(false);
         ChooseAreaCommand.instance().setEnabled(true);
         ImageSelectionCommand.instance().setEnabled(true);

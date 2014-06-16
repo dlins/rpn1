@@ -1,12 +1,20 @@
 package rpn.command;
 
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JButton;
+import rpn.RPnPhaseSpacePanel;
 import rpn.component.RpGeometry;
+import rpn.component.WaveCurveGeom;
 import rpn.component.WaveCurveGeomFactory;
+import rpn.controller.ui.RPn2DMouseController;
 import rpn.controller.ui.UIController;
 import rpnumerics.RPnCurve;
 import rpnumerics.RpException;
@@ -28,60 +36,45 @@ public class WaveCurveRRegionsPlotCommand extends RpModelPlotCommand {
     @Override
     public RpGeometry createRpGeometry(RealVector[] input) {
 
-       
         return null;
 
     }
-    
-    
-     @Override
+
+    @Override
     public void actionPerformed(ActionEvent event) {
 
         execute();
     }
-    
-    
-     public void execute() {
+
+    public void execute() {
         RpGeometry geometry = UIController.instance().getSelectedGeometriesList().get(0);
-        
-        
-         RPnCurve curve = (RPnCurve)geometry.geomFactory().geomSource();
-         
-         WaveCurveRRegionsCalc calc = new WaveCurveRRegionsCalc(curve.getId());
-         try {
-             WaveCurveRRegions rRegions = (WaveCurveRRegions) calc.calc();
+
+        RPnCurve curve = (RPnCurve) geometry.geomFactory().geomSource();
+
+        WaveCurveRRegionsCalc calc = new WaveCurveRRegionsCalc(curve.getId());
+        try {
+            WaveCurveRRegions rRegions = (WaveCurveRRegions) calc.calc();
             Iterator<WaveCurve> curvesIterator = rRegions.getCurvesIterator();
-            int index=0;
-             while (curvesIterator.hasNext()) {
-                 
-                 
-                 WaveCurve waveCurve = (WaveCurve)curvesIterator.next();
-                 WaveCurveGeomFactory factory = new WaveCurveGeomFactory(calc,waveCurve,index );
-                 
-                 UIController.instance().getActivePhaseSpace().join(factory.geom());
-                 
-                 
-                 waveCurve.setId(curveID_);
-                 curveID_++;
-                 
-                 index++;
-                 
-                 
-                 
-             }
-            
-            
-             
-             
+            int index = 0;
+            while (curvesIterator.hasNext()) {
+
+                WaveCurve waveCurve = (WaveCurve) curvesIterator.next();
+                WaveCurveGeomFactory factory = new WaveCurveGeomFactory(calc, waveCurve, index);
+
+                UIController.instance().getActivePhaseSpace().join(factory.geom());
+
+                waveCurve.setId(curveID_);
+                curveID_++;
+
+                index++;
+
+            }
+
         } catch (RpException ex) {
             Logger.getLogger(WaveCurveRRegionsPlotCommand.class.getName()).log(Level.SEVERE, null, ex);
         }
-         
-         
-     }
-    
-    
-    
+
+    }
 
     static public WaveCurveRRegionsPlotCommand instance() {
         if (instance_ == null) {
@@ -89,4 +82,22 @@ public class WaveCurveRRegionsPlotCommand extends RpModelPlotCommand {
         }
         return instance_;
     }
+
+    @Override
+    public void update(Observable o, Object arg) {
+
+        List<RpGeometry> geometryList = UIController.instance().getSelectedGeometriesList();
+       
+        if (geometryList != null) {
+       
+            if ((geometryList.size() == 1) && (geometryList.get(0) instanceof WaveCurveGeom)) {
+                setEnabled(true);
+            } else {
+                setEnabled(false);
+            }
+
+        }
+
+    }
+
 }
