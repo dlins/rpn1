@@ -35,61 +35,75 @@
 #define THREE_PHASE_EXTENDED_BOUNDARY_SG 2
 
 class Three_Phase_Boundary : public Boundary {
-    protected:
-        RealVector *pmin, *pmax;
+protected:
+    RealVector *pmin, *pmax;
 
-        RealVector * A_;
-        RealVector * B_;
-        RealVector * C_;
+    RealVector * A_;
+    RealVector * B_;
+    RealVector * C_;
 
-        // This number is given as (pmax(0) + pmax(1))/2.0 + 0.000001, where 0.000001 is a trick for
-        // the usage in HyperCube sons.
-        // TODO: If the kluge "+ 0.000001" changes in end_edge, it must change also in edge_segments.
-        //
-        double end_edge;
+    // This number is given as (pmax(0) + pmax(1))/2.0 + 0.000001, where 0.000001 is a trick for
+    // the usage in HyperCube sons.
+    // TODO: If the kluge "+ 0.000001" changes in end_edge, it must change also in edge_segments.
+    //
+    double end_edge;
 
-    public:
-        Three_Phase_Boundary();
-        Three_Phase_Boundary(const RealVector &ppmin, const RealVector &ppmax);
-        Three_Phase_Boundary(const Three_Phase_Boundary &original);
-        ~Three_Phase_Boundary();
+    virtual int edge_segments(int where_constant, int number_of_steps, std::vector<RealVector> &seg);
 
-        bool inside(const RealVector &p) const;
-        bool inside(const double *p) const;
+public:
+    Three_Phase_Boundary();
+    Three_Phase_Boundary(const RealVector &ppmin, const RealVector &ppmax);
+    Three_Phase_Boundary(const Three_Phase_Boundary &original);
+    ~Three_Phase_Boundary();
 
-        Boundary* clone() const;
+    bool inside(const RealVector &p) const;
+    bool inside(const double *p) const;
 
-        const RealVector& minimums(void) const;
-        const RealVector& maximums(void) const;
+    Boundary* clone() const;
 
-        RealVector intersect(RealVector &p1, RealVector &p2) const;
+    const RealVector& minimums(void) const;
+    const RealVector& maximums(void) const;
 
-        void extension_curve(const FluxFunction *f, const AccumulationFunction *a,
-                             GridValues &gv,
-                             int where_constant, int number_of_steps, bool singular,
-                             int fam, int characteristic,
-                             std::vector<RealVector> &c, std::vector<RealVector> &d);
+    RealVector intersect(RealVector &p1, RealVector &p2) const;
+//    int intersection(const RealVector &p, const RealVector &q, RealVector &r, int &w) const;
 
-        void envelope_curve(const FluxFunction *f, const AccumulationFunction *a,
-                            GridValues &gv,
-                            int where_constant, int number_of_steps, bool singular,
-                            std::vector<RealVector> &c, std::vector<RealVector> &d);
 
-        // Overload of the equivalent method in the base class.
-        //
-        void physical_boundary(std::vector<std::vector<RealVector> > &pb) const;
 
-        const char* boundaryType() const;
 
-        const RealVector & getA()const;
-        const RealVector & getB()const;
-        const RealVector & getC()const;
 
-        RealVector side_transverse_interior(const RealVector &p, int s) const;
+    void extension_curve(const FluxFunction *f, const AccumulationFunction *a,
+            GridValues &gv,
+            int where_constant, int number_of_steps, bool singular,
+            int fam, int characteristic,
+            std::vector<RealVector> &c, std::vector<RealVector> &d);
 
-        void list_of_sides(std::vector<int> &where_constant_codes, std::vector<std::string> &where_constant_names) const;
-        void edge_segments(int where_constant, int number_of_steps, std::vector<RealVector> &seg) const;
+
+    void envelope_curve(const FluxFunction *f, const AccumulationFunction *a,
+            GridValues &gv,
+            int where_constant, int number_of_steps, bool singular,
+            std::vector<RealVector> &c, std::vector<RealVector> &d);
+
+
+
+
+
+    void physical_boundary(std::vector<RealVector> &);
+
+
+    const char* boundaryType() const;
+
+    const RealVector & getA()const;
+    const RealVector & getB()const;
+    const RealVector & getC()const;
+
+    RealVector side_transverse_interior(const RealVector &p, int s) const;
+
 };
+
+
+
+
+
 
 inline const RealVector & Three_Phase_Boundary::getA()const {
     return *A_;
@@ -102,5 +116,7 @@ inline const RealVector & Three_Phase_Boundary::getB()const {
 inline const RealVector & Three_Phase_Boundary::getC()const {
     return *C_;
 }
+
+
 
 #endif //! _IsoTriang2DBoundary_H

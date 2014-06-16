@@ -399,39 +399,6 @@ void Utilities::pick_point_from_wavecurve(const WaveCurve &wavecurve, const Real
     return;
 }
 
-// Created specifically for the Injection_to_Side case (Freddie's).
-//
-void Utilities::pick_last_point_from_wavecurve(const WaveCurve &wavecurve, const RealVector &p, 
-                                               int &curve_index, int &segment_index_in_curve, RealVector &closest_point, double &speed){
-
-    double min_distance = std::numeric_limits<double>::infinity();
-
-    for (int i = 0; i < wavecurve.wavecurve.size(); i++){
-        double distance = norm(p - wavecurve.wavecurve[i].curve.back());
-
-        if (distance < min_distance){
-            min_distance = distance;
-
-            curve_index = i;
-
-            // The last point in the curve. It will be decremented later on.
-            //
-            segment_index_in_curve = wavecurve.wavecurve[i].curve.size() - 1;
-        }
-    }
-
-    // At least one point will be rejected now (the last one).
-    //
-    closest_point = wavecurve.wavecurve[curve_index].curve[segment_index_in_curve];
-    while (norm(wavecurve.wavecurve[curve_index].curve.back() - closest_point) < 1e-4){
-        segment_index_in_curve--;
-        closest_point = wavecurve.wavecurve[curve_index].curve[segment_index_in_curve];
-        speed = wavecurve.wavecurve[curve_index].speed[segment_index_in_curve];
-    }
-
-    return;
-}
-
 void Utilities::regularly_sampled_segment(const RealVector &p, const RealVector &q, int n, Curve &curve){
     curve.curve.clear();
 

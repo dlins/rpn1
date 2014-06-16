@@ -44,19 +44,6 @@ accFunction_((AccumulationFunction *) accumulationFunction.clone()) {
     vm = v;
 }
 
-ColorCurve::ColorCurve(const FluxFunction & fluxFunction,
-        const AccumulationFunction & accumulationFunction) :
-fluxFunction_((FluxFunction *) fluxFunction.clone()),
-accFunction_((AccumulationFunction *) accumulationFunction.clone()) {
-    sp = std::string("+");
-    sm = std::string("-");
-    sc = std::string(".");
-    sz = std::string("0");
-
-    vm = 0;
-}
-
-
 ColorCurve::~ColorCurve() {
     delete fluxFunction_;
     delete accFunction_;

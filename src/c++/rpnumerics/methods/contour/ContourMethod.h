@@ -106,12 +106,6 @@ public:
             std::vector< std::deque <RealVector> > &curves,
             std::vector <bool> &is_circular,
             const int method);
-
-    static int contour2d(ImplicitFunction *impf, int min_row, int max_row, int min_col, int max_col,
-                         std::vector<RealVector> &vrs,
-                         std::vector< std::deque <RealVector> > &curves,
-                         std::vector <bool> &is_circular,
-                         const int method);
 };
 
 #endif //! _HugoniotContourMethod_H

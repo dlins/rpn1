@@ -1,3 +1,5 @@
+#include <vector>
+
 #include "Extension_Curve.h"
 
 int Extension_Curve::species_physic(Extension_Curve *ec, double *foncub, int domain_i, int domain_j, int kl){
@@ -133,13 +135,13 @@ int Extension_Curve::function_on_vertices(double *foncub, int domain_i, int doma
 //        red_shock_speed = (Y21 * X12 + Y13 * X31 + Y32 * X23) / den;
 //        }
 //        
-////        cout<<"red : "<<red_shock_speed<<endl;
+////        //cout<<"red : "<<red_shock_speed<<endl;
 
 
 //        if (characteristic_where == CHARACTERISTIC_ON_CURVE) {
 
 //            lambda = segment_lambda[kl];
-////            cout << "Valor do lambda: " << lambda << endl;
+////            //cout << "Valor do lambda: " << lambda << endl;
 
 //        } else {
 
@@ -158,115 +160,37 @@ int Extension_Curve::function_on_vertices(double *foncub, int domain_i, int doma
     return info;
 }
 
-bool Extension_Curve::valid_point(int i, double &lambda, RealVector &F, RealVector &G){
+bool Extension_Curve::valid_segment(int i) {
     if (oc == 0) return false;
 
     double epsilon = 1e-7;
 
     int dim = oc->at(i).size();
 
-    WaveState w(oc->at(i));
-
-    JetMatrix fjm(dim);
-    JetMatrix ajm(dim);
-
-    curve_ff->jet(w, fjm, 1);
-    curve_aa->jet(w, ajm, 1);
+    double F[dim], G[dim], JF[dim][dim], JG[dim][dim];
 
     std::vector<eigenpair> e;
 
-    Eigen::eig(dim, fjm.Jacobian().data(), ajm.Jacobian().data(), e);
+    for (int j = 0; j < 2; j++) {
+        curve_ff->fill_with_jet(dim, oc->at(i + j).components(), 1, F, &JF[0][0], 0);
+        curve_aa->fill_with_jet(dim, oc->at(i + j).components(), 1, G, &JG[0][0], 0);
 
-    if (characteristic_where == CHARACTERISTIC_ON_CURVE) {
-        if (fabs(e[family].i) > epsilon) return false;
+        e.clear();
+        Eigen::eig(dim, &JF[0][0], &JG[0][0], e);
+
+        if (characteristic_where == CHARACTERISTIC_ON_CURVE) {
+            if (fabs(e[family].i) > epsilon) return false;
+            segment_lambda.component(j) = e[family].r;
+        }
+        //        else {
+        //
+        //        }
+        for (int k = 0; k < dim; k++) {
+            segment_flux(k, j) = F[k];
+            segment_accum(k, j) = G[k];
+        }
+
     }
-
-    lambda = e[family].r;
-
-    F = fjm.function();
-    G = ajm.function();
-
-    return true;
-}
-
-//bool Extension_Curve::valid_segment(int i) {
-//    int dim = oc->at(i).size();
-
-//    RealVector F, G;
-
-//    for (int j = 0; j < 2; j++){
-//        if (!valid_point(i + j, segment_lambda(j), F, G)) return false;
-//        else {
-//            for (int k = 0; k < dim; k++) {
-//                segment_flux(k, j)  = F(k);
-//                segment_accum(k, j) = G(k);
-//            }            
-//        }
-//    } 
-
-//    return true;
-
-////    if (oc == 0) return false;
-
-////    double epsilon = 1e-7;
-
-////    int dim = oc->at(i).size();
-
-////    double F[dim], G[dim], JF[dim][dim], JG[dim][dim];
-
-////    std::vector<eigenpair> e;
-
-////    for (int j = 0; j < 2; j++) { /* * */
-////        curve_ff->fill_with_jet(dim, oc->at(i + j).components(), 1, F, &JF[0][0], 0);
-////        curve_aa->fill_with_jet(dim, oc->at(i + j).components(), 1, G, &JG[0][0], 0);
-
-////        e.clear();
-////        Eigen::eig(dim, &JF[0][0], &JG[0][0], e);
-
-////        if (characteristic_where == CHARACTERISTIC_ON_CURVE) {
-////            if (fabs(e[family].i) > epsilon) return false;
-////            segment_lambda.component(j) = e[family].r;
-////        }
-////        //        else {
-////        //
-////        //        }
-////        for (int k = 0; k < dim; k++) {
-////            segment_flux(k, j) = F[k];
-////            segment_accum(k, j) = G[k];
-////        }
-
-////    }
-
-////    return true;
-//}
-
-// To be used when the curve is given as a sequence of points.
-bool Extension_Curve::valid_segment(int i) {
-    // This comes from the previous iteration.
-    //
-    if (!point_is_valid) return false;
-
-    // The magnitudes at the first point of the segment were already computed.
-    // Find the magnitudes at the second point of the segment, update. 
-    //
-    int dim = oc->at(i).size();
-
-    segment_lambda(0) = segment_lambda(1);
-
-    for (int k = 0; k < dim; k++) {
-        segment_flux(k, 0)  = segment_flux(k, 1);
-        segment_accum(k, 0) = segment_accum(k, 1);
-    }
-
-    RealVector F, G;
-    point_is_valid = valid_point(i + 1, segment_lambda(1), F, G);
-
-    for (int k = 0; k < dim; k++) {
-        segment_flux(k, 1)  = F(k);
-        segment_accum(k, 1) = G(k);
-    }
-
-    if (!point_is_valid) return false;
 
     return true;
 }
@@ -296,8 +220,6 @@ void Extension_Curve::curve(const FluxFunction *df, const AccumulationFunction *
                             std::vector<RealVector> &extension_on_curve,
                             std::vector<RealVector> &extension_on_domain){
 
-    curve_is_continuous = false;
-
     domain_ff = df;
     domain_aa = da;
 
@@ -312,8 +234,8 @@ void Extension_Curve::curve(const FluxFunction *df, const AccumulationFunction *
     gv = &g;
     oc = &original_curve;
 
-    std::cout << "Dimension of the curve: " << oc->at(0).size() << std::endl;
-    std::cout << "Characteristic: " << characteristic_where << std::endl;
+//    std:://cout << "Dimension of the curve: " << oc->at(0).size() << std::endl;
+//    std:://cout << "Characteristic: " << characteristic_where << std::endl;
 
     gv->fill_eigenpairs_on_grid(domain_ff, domain_aa);
 
@@ -323,65 +245,9 @@ void Extension_Curve::curve(const FluxFunction *df, const AccumulationFunction *
     if (gv->grid(0, 0).size() == 2) type_of_physic = &species_physic;
     else                            type_of_physic = &compositional_physic;
 
-    //std::cout << "Inside Extension Curve: gv->grid(0, 0).size() = " << gv->grid(0, 0).size() << std::endl;
+    //std:://cout << "Inside Extension Curve: gv->grid(0, 0).size() = " << gv->grid(0, 0).size() << std::endl;
 
     Contour2p5_Method::contour2p5(this, extension_on_curve, extension_on_domain);
-
-    return;
-}
-
-void Extension_Curve::extension_of_curve(const FluxFunction *df, const AccumulationFunction *da, // Over the domain
-                                         const FluxFunction *cf, const AccumulationFunction *ca, // Over the curve 
-                                         GridValues &g, int where_is_characteristic,
-                                         bool is_singular, int fam,  
-                                         std::vector<RealVector> &original_curve,
-                                         std::vector<RealVector> &extension_on_curve,
-                                         std::vector<RealVector> &extension_on_domain){
-
-    domain_ff = df;
-    domain_aa = da;
-
-    curve_ff = cf;
-    curve_aa = ca;
-
-    family = fam;
-
-    characteristic_where = where_is_characteristic;
-    singular = is_singular;
-
-    gv = &g;
-    oc = &original_curve;
-
-    std::cout << "Dimension of the curve: " << oc->at(0).size() << std::endl;
-    std::cout << "Characteristic: " << characteristic_where << std::endl;
-
-    gv->fill_eigenpairs_on_grid(domain_ff, domain_aa);
-
-    extension_on_curve.clear();
-    extension_on_domain.clear();
-
-    if (gv->grid(0, 0).size() == 2) type_of_physic = &species_physic;
-    else                            type_of_physic = &compositional_physic;
-
-    //std::cout << "Inside Extension Curve: gv->grid(0, 0).size() = " << gv->grid(0, 0).size() << std::endl;
-
-    // Prepare the first point of the curve.
-    curve_is_continuous = true;
-
-    {
-        int dim = oc->at(0).size();
-
-        RealVector F, G;
-        point_is_valid = valid_point(0, segment_lambda(1), F, G);
-
-        for (int k = 0; k < dim; k++) {
-            segment_flux(k, 1)  = F(k);
-            segment_accum(k, 1) = G(k);
-        }
-    }
-    // Prepare the first point of the curve.
-
-    Contour2p5_Method::contour2p5_for_curve(this, extension_on_curve, extension_on_domain);
 
     return;
 }
@@ -411,8 +277,6 @@ void Extension_Curve::curve_out_of_subdomain(const FluxFunction *df, const Accum
                                              std::vector<RealVector> &extension_on_curve,
                                              std::vector<RealVector> &extension_on_domain){
 
-    curve_is_continuous = false;
-
     domain_ff = df;
     domain_aa = da;
 
@@ -431,7 +295,15 @@ void Extension_Curve::curve_out_of_subdomain(const FluxFunction *df, const Accum
 
     //  Find the convex hull of the polygon.
     //
+    
+
     std::vector<RealVector> convex_hull_points;
+    
+    for (int i = 0; i < polygon.size(); i++) {
+        //cout<<polygon[i]<<endl;
+    }
+
+    
     convex_hull(polygon, convex_hull_points);
 
     // Copy of the cells, later it will be used to restore it.
@@ -463,7 +335,7 @@ void Extension_Curve::curve_out_of_subdomain(const FluxFunction *df, const Accum
     if (gv->grid(0, 0).size() == 2) type_of_physic = &species_physic;
     else                            type_of_physic = &compositional_physic;
 
-    //std::cout << "Inside Extension Curve: gv->grid(0, 0).size() = " << gv->grid(0, 0).size() << std::endl;
+    //std:://cout << "Inside Extension Curve: gv->grid(0, 0).size() = " << gv->grid(0, 0).size() << std::endl;
 
     Contour2p5_Method::contour2p5(this, extension_on_curve, extension_on_domain);
 
@@ -502,8 +374,6 @@ void Extension_Curve::curve_in_subdomain(const FluxFunction *df, const Accumulat
                                          std::vector<RealVector> &extension_on_curve,
                                          std::vector<RealVector> &extension_on_domain){
 
-    curve_is_continuous = false;
-
     domain_ff = df;
     domain_aa = da;
 
@@ -523,6 +393,14 @@ void Extension_Curve::curve_in_subdomain(const FluxFunction *df, const Accumulat
     //  Find the convex hull of the polygon.
     //
     std::vector<RealVector> convex_hull_points;
+    
+
+    
+    for (int i = 0; i < polygon.size(); i++) {
+        //cout<<polygon[i]<<endl;
+    }
+    
+    
     convex_hull(polygon, convex_hull_points);
 
     // Copy of the cells, later it will be used to restore it.
@@ -554,7 +432,7 @@ void Extension_Curve::curve_in_subdomain(const FluxFunction *df, const Accumulat
     if (gv->grid(0, 0).size() == 2) type_of_physic = &species_physic;
     else                            type_of_physic = &compositional_physic;
 
-    //std::cout << "Inside Extension Curve: gv->grid(0, 0).size() = " << gv->grid(0, 0).size() << std::endl;
+    //std:://cout << "Inside Extension Curve: gv->grid(0, 0).size() = " << gv->grid(0, 0).size() << std::endl;
 
     Contour2p5_Method::contour2p5(this, extension_on_curve, extension_on_domain);
 

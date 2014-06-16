@@ -69,9 +69,9 @@ void RectBoundary::extension_curve(const FluxFunction *f, const AccumulationFunc
 
 //    Extension_Curve extension_curve;
 
-//    cout<<"Primeiro seg: "<<seg[0]<<endl;
+//    //cout<<"Primeiro seg: "<<seg[0]<<endl;
 
-//    cout <<"Ultimo seg: "<<seg[seg.size()-1]<<endl;
+//    //cout <<"Ultimo seg: "<<seg[seg.size()-1]<<endl;
 
 //    extension_curve.curve(f, a, gv, characteristic, singular, fam,
 //            seg,
@@ -105,9 +105,9 @@ void RectBoundary::extension_curve(const FluxFunction *df, const AccumulationFun
 
     Extension_Curve extension_curve;
 
-//    cout<<"Primeiro seg: "<<seg[0]<<endl;
+//    //cout<<"Primeiro seg: "<<seg[0]<<endl;
 
-//    cout <<"Ultimo seg: "<<seg[seg.size()-1]<<endl;
+//    //cout <<"Ultimo seg: "<<seg[seg.size()-1]<<endl;
 
     extension_curve.curve(df, da, cf, ca,gv, characteristic, singular, fam,
                           seg,
@@ -200,23 +200,23 @@ int RectBoundary::edge_segments(int where_constant, int number_of_steps, const R
 //
 //}
 
-//void RectBoundary::physical_boundary(std::vector<RealVector> &side) {
-//    RealVector p(2);
+void RectBoundary::physical_boundary(std::vector<RealVector> &side) {
+    RealVector p(2);
 
-//    p(0) = minimums_->component(0); p(1) = minimums_->component(1);
-//    side.push_back(p);
+    p(0) = minimums_->component(0); p(1) = minimums_->component(1);
+    side.push_back(p);
 
-//    p(0) = minimums_->component(0); p(1) = maximums_->component(1);
-//    side.push_back(p);    
+    p(0) = minimums_->component(0); p(1) = maximums_->component(1);
+    side.push_back(p);    
 
-//    p(0) = maximums_->component(0); p(1) = maximums_->component(1);
-//    side.push_back(p);    
+    p(0) = maximums_->component(0); p(1) = maximums_->component(1);
+    side.push_back(p);    
 
-//    p(0) = maximums_->component(0); p(1) = minimums_->component(1);
-//    side.push_back(p);        
+    p(0) = maximums_->component(0); p(1) = minimums_->component(1);
+    side.push_back(p);        
 
-//    return;
-//}
+    return;
+}
 
 RectBoundary::RectBoundary(const RealVector & minimums, const RealVector & maximums)
 : minimums_(new RealVector(minimums)),
@@ -283,7 +283,7 @@ bool RectBoundary::inside(const RealVector &p) const {
         //        if (p(pos) < minimums()(pos) || p(pos) > maximums()(pos)) in = false;
         pos++;
     }
-    //    cout << "tamanho dentro de inside"<<in<<" "<<p.size() << endl;
+    //    //cout << "tamanho dentro de inside"<<in<<" "<<p.size() << endl;
     return in;
 
 
@@ -308,7 +308,7 @@ bool RectBoundary::inside(const RealVector &p) const {
     //        if (p(pos) < minimums()(pos) || p(pos) > maximums()(pos)) in = false;
     //        pos++;
     //    }
-    //    cout << "tamanho dentro de inside" << in << " " << p.size() << endl;
+    //    //cout << "tamanho dentro de inside" << in << " " << p.size() << endl;
     //    return in;
 }
 
@@ -326,20 +326,20 @@ bool RectBoundary::inside(const RealVector &p) const {
 
 //int RectBoundary::intersection(const RealVector &p, const RealVector &q, RealVector &r)const {
 //
-//    cout << "min" << minimums() << endl;
-//    cout << "max" << maximums() << endl;
+//    //cout << "min" << minimums() << endl;
+//    //cout << "max" << maximums() << endl;
 //
 //    if (inside(p) && inside(q)) {
 //
-//        cout << "tamanho de p " << p.size() << " q" << q.size() << " r" << r.size();
+//        //cout << "tamanho de p " << p.size() << " q" << q.size() << " r" << r.size();
 //        return 1;
 //
 //    } else if (!inside(p) && !inside(q)) {
-//        cout << "tamanho de p " << p << " q" << q << " r --------------" << r.size();
+//        //cout << "tamanho de p " << p << " q" << q << " r --------------" << r.size();
 //        return -1;
 //
 //    } else {
-//        cout << "tamanho de p " << p.size() << " q" << q.size() << " r***************" << r.size();
+//        //cout << "tamanho de p " << p.size() << " q" << q.size() << " r***************" << r.size();
 //        int n = p.size();
 //        double alpha, beta;
 //        int pos = 0;
@@ -491,98 +491,5 @@ RealVector RectBoundary::side_transverse_interior(const RealVector &p, int s) co
     }
 
     return v;
-}
-
-void RectBoundary::edge_segments(int where_constant, int number_of_steps, std::vector<RealVector> &seg) const {
-    seg.clear();
-
-    RealVector p(2), q(2);
-
-    if (where_constant == RECT_BOUNDARY_SG_ZERO){
-        p    = *minimums_;
-
-        q(0) = minimums_->component(0);
-        q(1) = maximums_->component(1);
-    }
-    else if (where_constant == RECT_BOUNDARY_SG_ONE){
-        p(0) = maximums_->component(0);
-        p(1) = minimums_->component(1);
-
-        q    = *maximums_;
-    }
-    else if (where_constant == RECT_BOUNDARY_THETA_MIN){
-        p    = *minimums_;
-
-        q(0) = maximums_->component(0);
-        q(1) = minimums_->component(1);
-    }
-    else {
-        p(0) = minimums_->component(0);
-        p(1) = maximums_->component(1);
-
-        q    = *maximums_;
-    }
-
-    segmented_line(p, q, number_of_steps, seg);
-
-    return;
-}
-
-void RectBoundary::list_of_sides(std::vector<int> &where_constant_codes, std::vector<std::string> &where_constant_names) const {
-    where_constant_codes.clear();
-    where_constant_names.clear();
-
-    where_constant_codes.push_back(RECT_BOUNDARY_SG_ZERO);
-    where_constant_names.push_back(std::string("SG zero"));
-
-    where_constant_codes.push_back(RECT_BOUNDARY_SG_ONE);
-    where_constant_names.push_back(std::string("SG one"));
-
-    where_constant_codes.push_back(RECT_BOUNDARY_THETA_MIN);
-    where_constant_names.push_back(std::string("Theta min"));
-
-    where_constant_codes.push_back(RECT_BOUNDARY_THETA_MAX);
-    where_constant_names.push_back(std::string("Theta max"));
-
-    return;
-}
-
-void RectBoundary::physical_boundary(std::vector<std::vector<RealVector> > &pb) const {
-    pb.clear();
-
-    std::vector<RealVector> temp(2);
-    temp[0].resize(2);
-    temp[1].resize(2);
-
-    //
-    temp[0] = *minimums_;
-
-    temp[1](0) = minimums_->component(0);
-    temp[1](1)= maximums_->component(1);
-
-    pb.push_back(temp);
-
-    //
-    temp[0](0) = maximums_->component(0);
-    temp[0](1) = minimums_->component(1);
-
-    temp[1] = *maximums_;
-    pb.push_back(temp);
-
-    //
-    temp[0] = *minimums_;
-
-    temp[1](0) = maximums_->component(0);
-    temp[1](1) = minimums_->component(1);
-    pb.push_back(temp);
-
-    //
-    temp[0](0) = minimums_->component(0);
-    temp[0](1) = maximums_->component(1);
-
-    temp[1] = maximums_;
-    pb.push_back(temp);
-
-    return;
 }
 

@@ -11,20 +11,11 @@ class ImplicitFunction {
     protected:
         GridValues *gv;
 
-        DoubleMatrix implicit_function_on_vertices;
     public:
         ImplicitFunction(){gv = 0;}
         virtual ~ImplicitFunction(){}
 
-//        virtual int function_on_square(double *foncub, int i, int j) = 0;
-        virtual int function_on_square(double *foncub, int i, int j){
-            foncub[0] = implicit_function_on_vertices(i + 1, j    );
-            foncub[1] = implicit_function_on_vertices(i    , j    );
-            foncub[2] = implicit_function_on_vertices(i + 1, j + 1);
-            foncub[3] = implicit_function_on_vertices(i    , j + 1);
-
-            return 1;
-        }
+        virtual int function_on_square(double *foncub, int i, int j) = 0;
 
         // If available, the linear interpolation provided by hcube will be
         // completed here.

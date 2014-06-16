@@ -74,10 +74,6 @@ double * PointND::components(void){
     return data;
 }
 
-double * PointND::components(void) const {
-    return data;
-}
-
 // Assignment
 PointND PointND::operator=(const PointND &orig){
     // Avoid self-assignment
@@ -171,7 +167,7 @@ PointND operator-(const PointND &x, const PointND &y){
     return temp;
 }
 
-bool PointND::intersect(const BoxND &b) const {
+bool PointND::intersect(const BoxND &b){
     bool intersection = true;
     int i = 0;
 

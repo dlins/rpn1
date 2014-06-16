@@ -19,11 +19,9 @@ import javax.swing.JButton;
 import rpn.RPnDesktopPlotter;
 import rpn.RPnMenuCommand;
 import rpn.RPnPhaseSpaceAbstraction;
-import rpn.RPnPhaseSpaceFrame;
 import rpn.RPnPhaseSpacePanel;
 import rpn.RPnProjDescriptor;
 import rpn.RPnRiemannFrame;
-import rpn.RPnUIFrame;
 import rpn.component.*;
 import rpn.component.CharacteristicsCurveGeomFactory;
 import rpn.component.util.AreaSelected;
@@ -33,7 +31,6 @@ import rpn.parser.RPnDataModule;
 import rpnumerics.*;
 import wave.multid.DimMismatchEx;
 import wave.multid.Space;
-import wave.util.Boundary;
 import wave.util.RealVector;
 import wave.util.RectBoundary;
 
@@ -80,13 +77,11 @@ public class RiemannProfileCommand extends RpModelPlotCommand implements Observe
     @Override
     public void update(Observable o, Object arg) {
 
-//        if (!UIController.instance().getSelectedGeometriesList().isEmpty()) {
-        boolean enable = checkCurvesForRiemmanProfile(UIController.instance().getSelectedGeometriesList());
 
+        boolean enable = checkCurvesForRiemmanProfile(UIController.instance().getSelectedGeometriesList());
         setEnabled(enable);
         DomainSelectionCommand.instance().setEnabled(!UIController.instance().getSelectedGeometriesList().isEmpty());
 
-//        }
     }
 
     private void updateSpeedGraphicsFrame(RealVector profileMin, RealVector profileMax) {

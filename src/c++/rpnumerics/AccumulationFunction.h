@@ -38,7 +38,7 @@ public:
     
     void accumulationParams(const AccumulationParams & params);
     
-    const AccumulationParams & accumulationParams(void) const;
+     AccumulationParams & accumulationParams(void) const;
     
 };
 inline void AccumulationFunction::accumulationParams(const AccumulationParams & params){
@@ -49,7 +49,7 @@ inline void AccumulationFunction::accumulationParams(const AccumulationParams & 
     
 }
 
-inline const AccumulationParams & AccumulationFunction::accumulationParams(void) const  {return *params_;}
+inline AccumulationParams & AccumulationFunction::accumulationParams(void) const  {return *params_;}
 
 inline AccumulationFunction::AccumulationFunction(const AccumulationParams & params) :	params_(new AccumulationParams(params)){}
 

@@ -44,11 +44,6 @@ class Utilities {
         static void pick_point_from_wavecurve(const WaveCurve &wavecurve, const RealVector &p, 
                                               int &curve_index, int &segment_index_in_curve, RealVector &closest_point, double &speed);
 
-        // Created specifically for the Injection_to_Side case (Freddie's).
-        //
-        static void pick_last_point_from_wavecurve(const WaveCurve &wavecurve, const RealVector &p, 
-                                                   int &curve_index, int &segment_index_in_curve, RealVector &closest_point, double &speed);
-
         static int find_point_on_level_curve(void *obj, double (*function_for_bisection)(void*, const RealVector &), const RealVector &p, const RealVector &q0, RealVector &point_on_level_curve);
 
         // Subdivide a segment with vertices p and q in a Curve with (n + 1) vertices.

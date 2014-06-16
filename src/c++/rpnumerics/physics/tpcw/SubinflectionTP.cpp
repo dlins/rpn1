@@ -185,15 +185,10 @@ int SubinflectionTP::function_on_square(double *foncub, int i, int j) {
 int SubinflectionTP::curve(const FluxFunction *f, const AccumulationFunction *a,
         GridValues &g, std::vector<RealVector> &subinflection_curve) {
 
-
-
     Flux2Comp2PhasesAdimensionalized * fluxAdimensional = (Flux2Comp2PhasesAdimensionalized *) f;
     fluxFunction_ = fluxAdimensional->getHorizontalFlux();
 
     double phi = a->accumulationParams().component(0);
-
-    cout << "Valor de phi em subinflection: " << phi << endl;
-
 
     td = fluxAdimensional->getThermo();
 

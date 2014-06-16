@@ -42,26 +42,22 @@
  * @ingroup rpnumerics
  */
 class RpFunction {
-    protected:
-        int Ceqs, vars; // Number of conserved variables and equations.
     
-    public:
-        virtual ~RpFunction();
-        virtual RpFunction * clone() const = 0;
+public:
+   
+    virtual ~RpFunction(void);
+    /*! virtual constructor
+     */
+   
+    virtual RpFunction * clone() const = 0;
     
-        /*! m coordinates function evaluation at u
-         *this is the nth derivative calculation that might be available or not
-         */
+    /*! m coordinates function evaluation at u
+     *this is the nth derivative calculation that might be available or not
+     */
 
-        virtual int jet(const WaveState &u, JetMatrix &m, int degree) const = 0;
-        int jet(const RealVector &u, JetMatrix &m, int degree){
-            return jet(WaveState(u), m, degree);
-        }
+    virtual int jet(const WaveState &u, JetMatrix &m, int degree) const = 0;
 
-        virtual void fill_with_jet(int n, const double *in, int degree, double *F, double *J, double *H) const;
-
-        virtual int number_of_conservation_equations() const {return Ceqs;};
-        virtual int number_of_variables() const {return vars;};
+    void fill_with_jet(int n, const double *in, int degree, double *F, double *J, double *H) const;
 };
 
 

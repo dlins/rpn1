@@ -30,15 +30,6 @@ protected:
     static int compositional_physic(Extension_Curve*, double*, int, int, int);
 
     int (*type_of_physic)(Extension_Curve*, double*, int, int, int);
-
-    // If the curve is given as a sequence of points the member below should be set to true.
-    // If the curve is given as segments the member below should be set to false.
-    //
-    bool curve_is_continuous;
-
-    bool valid_point(int i, double &lambda, RealVector &F, RealVector &G);
-
-    bool point_is_valid;
 public:
     // TODO: Maybe this class could be formed by purely static. In that case the ctor() may be useless.
     // The convenience of this approach is to be discussed sometime.
@@ -78,17 +69,6 @@ public:
                std::vector<RealVector> &original_curve,
                std::vector<RealVector> &extension_on_curve,
                std::vector<RealVector> &extension_on_domain);
-
-    // Curve given as consecutive points //
-    // Generic version
-    void extension_of_curve(const FluxFunction *df, const AccumulationFunction *da, // Over the domain
-               const FluxFunction *cf, const AccumulationFunction *ca, // Over the curve 
-               GridValues &g, int where_is_characteristic,
-               bool is_singular, int fam,  
-               std::vector<RealVector> &original_curve,
-               std::vector<RealVector> &extension_on_curve,
-               std::vector<RealVector> &extension_on_domain);
-    // Curve given as consecutive points //
 
     // In all the domain //
 

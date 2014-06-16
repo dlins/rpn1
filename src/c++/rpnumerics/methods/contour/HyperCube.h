@@ -71,8 +71,7 @@ private:
     /*  TODO Parece ser que nao temos como fazer essa mensagem de erro funcionar.
     void setFaceArray(int[] [] altFace) {
         //Check sizes
-
-    /*
+     * 
      * This routine creates the standard hypercube vertices (in cvert_),
      * the basic simplex vertices (in bsvert_), and the permutations of 1, 2, ..., n_  (in permutations).
      */

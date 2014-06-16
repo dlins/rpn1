@@ -6,9 +6,9 @@
 class BoxND {
     private:
     protected:
-        double max(double x, double y) const {return (x > y) ? x : y;}
-        double min(double x, double y) const {return (x < y) ? x : y;}
-        double abs(double x) const {return (x > 0.0) ? x : (-x);}
+        double max(double x, double y){return (x > y) ? x : y;}
+        double min(double x, double y){return (x < y) ? x : y;}
+        double abs(double x){return (x > 0.0) ? x : (-x);}
     public:
         PointND pmin, pmax;
 
@@ -20,7 +20,7 @@ class BoxND {
 
         ~BoxND();
 
-        bool intersect(const BoxND &b) const ;
+        bool intersect(const BoxND &b);
 };
 
 #endif // _BOXND_

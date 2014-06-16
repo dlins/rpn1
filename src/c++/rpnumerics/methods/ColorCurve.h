@@ -100,7 +100,6 @@ protected:
 public:
 
     ColorCurve(const FluxFunction &, const AccumulationFunction &, const Viscosity_Matrix*);
-    ColorCurve(const FluxFunction &, const AccumulationFunction &);
     virtual ~ColorCurve();
 
     void classify_segmented_curve(std::vector<RealVector> &original, const ReferencePoint &ref,
