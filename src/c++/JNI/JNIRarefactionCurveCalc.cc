@@ -114,7 +114,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionCurveCalc_calc(JNIEnv * env
     ODE_Solver *odesolver;
 
     odesolver = &lsode;
-
+    
     int info_rar = rc.curve(realVectorInput,
             familyIndex,
             timeDirection,
