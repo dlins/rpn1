@@ -71,38 +71,21 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc(JNIEnv * env, jobj
     int dimension = realVectorInput.size();
 
     RpNumerics::getPhysics().getSubPhysics(0).preProcess(realVectorInput);
-
-
-
-    if (increase == 20)
-        increase = RAREFACTION_SPEED_SHOULD_INCREASE;
-
-    if (increase == 22)
-        increase = RAREFACTION_SPEED_SHOULD_DECREASE;
+    
 
     FluxFunction * fluxFunction = (FluxFunction *) & RpNumerics::getPhysics().getSubPhysics(0).fluxFunction();
     AccumulationFunction * accumulationFunction = (AccumulationFunction *) & RpNumerics::getPhysics().getSubPhysics(0).accumulation();
 
-    //    Boundary * tempBoundary = (Boundary *) RpNumerics::getPhysics().getSubPhysics(0).getPreProcessedBoundary();
-
-
     HugoniotContinuation * hc = RpNumerics::getPhysics().getSubPhysics(0).getHugoniotContinuationMethod();
 
-
     ShockCurve * shock = RpNumerics::getPhysics().getSubPhysics(0).getShockMethod();
-
-    //    ShockCurve shock(&hc);
-
 
     ReferencePoint ref(realVectorInput, fluxFunction, accumulationFunction, 0);
 
     int n = realVectorInput.size();
 
-
     RealVector r(n);
     for (int i = 0; i < n; i++) r(i) = ref.e[familyIndex].vrr[i];
-
-
 
     Curve shkcurve;
 
@@ -112,7 +95,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc(JNIEnv * env, jobj
     std::vector<int> stop_reference_family;
 
     int shock_stopped_because;
-
 
     int edge;
 
@@ -151,8 +133,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc(JNIEnv * env, jobj
             edge);
 
     double nativeEigenValues [2];
-
-    
 
     jdoubleArray eigenValuesArray = (env)->NewDoubleArray(dimension);
 
