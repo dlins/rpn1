@@ -3,9 +3,8 @@
 
 #include "ThreeImplicitFunctions.h"
 #include "Contour2x2_Method.h"
-#include "Secondary_Bifurcation_Interface.h"
 
-class Secondary_Bifurcation : public ThreeImplicitFunctions, public Secondary_Bifurcation_Interface {
+class Secondary_Bifurcation : public ThreeImplicitFunctions {
     private:
     protected:
         Matrix<double> flux_left, accum_left;
@@ -17,29 +16,9 @@ class Secondary_Bifurcation : public ThreeImplicitFunctions, public Secondary_Bi
         const AccumulationFunction *raa;
 
     public:
-        
-        
         Secondary_Bifurcation(){
             gv_left = gv_right = 0;
-            
-            flux_left.resize(2, 4);
-            accum_left.resize(2, 4);
 
-            singular = true;
-        }
-        
-        
-        Secondary_Bifurcation(const FluxFunction  *leftFlux, const AccumulationFunction  * leftAccum, const FluxFunction  * rightFlux, const AccumulationFunction * rightAccum){
-//            gv_left = gv_right = 0;
-
-            lff=leftFlux;
-            laa=leftAccum;
-            rff=rightFlux;
-            raa= rightAccum;
-            
-            
-            
-            
             flux_left.resize(2, 4);
             accum_left.resize(2, 4);
 
@@ -55,10 +34,6 @@ class Secondary_Bifurcation : public ThreeImplicitFunctions, public Secondary_Bi
         void curve(const FluxFunction *lf, const AccumulationFunction *la, GridValues &lg,
                    const FluxFunction *rf, const AccumulationFunction *ra, GridValues &rg,
                    std::vector<RealVector> &left_curve, std::vector<RealVector> &right_curve);
-        
-        
-        
-         int bifurcationCurve(std::vector<RealVector> &,std::vector<RealVector> &) ;
 };
 
 #endif // _SECONDARY_BIFURCATION_

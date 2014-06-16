@@ -1,6 +1,5 @@
 #include "ContourMethod.h"
 #include "Inflection_Curve.h"
-#include "Debug.h"
 
 int Inflection_Curve::function_on_square(double *foncub, int i, int j) {
     int is_square = gv->cell_type(i, j);
@@ -82,16 +81,7 @@ int Inflection_Curve::curve(const FluxFunction *f, const AccumulationFunction *a
                             
     inflection_curve.clear();
     
-    g.fill_dirdrv_on_grid(f, a);
-    
-    
-    
-    
-    
-    
-    if ( Debug::get_debug_level() == 5 ) {
-        printf("Inflection_Curve::curve\n");
-    }
+    g.fill_dirdrv_on_grid(f, a);printf("Inflection_Curve::curve\n");
     gv = &g;
 
     // family MUST be a member of Inflection_Curve
@@ -99,10 +89,7 @@ int Inflection_Curve::curve(const FluxFunction *f, const AccumulationFunction *a
 
     int info = ContourMethod::contour2d(this, inflection_curve);
     
-
-    if ( Debug::get_debug_level() == 5 ) {
-        //cout<<"Tamanho da inflexao " <<inflection_curve.size()<<endl;
-    }
+    cout<<"Tamanho da inflexao " <<inflection_curve.size()<<endl;
 
     return info;
 }

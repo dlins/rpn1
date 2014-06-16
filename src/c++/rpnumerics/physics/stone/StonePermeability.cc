@@ -325,6 +325,48 @@ int StonePermeability::PermeabilityWater_jet(const RealVector &state, int degree
     return degree;
 }
 
+void StonePermeability::reduced_permeability(const RealVector &state, RealVector &rp) const {
+    double sw = state.component(0);
+    double so = state.component(1);
+    double sg = 1.0 - sw - so;
+
+    rp.resize(3);
+
+    // Water.
+    //
+    double swcnw = sw - cnw_;
+
+    if (swcnw <= 0.) rp(0) = 0.0;
+    else             rp(0) = (lw_ + (1. - lw_)*pow(swcnw, expw_ - 1.))/denkw_;
+
+    // Oil.
+    //
+    double socno = so - cno_;
+
+    double sow = 1. - sw - cno_;
+    double sog = 1. - sg - cno_;
+
+    double kowden;
+    double kogden;
+
+    if (sow <= 0.) kowden = 0.;
+    else           kowden = (low_ + (1. - low_)*pow(sow, expow_ - 1.))/denkow_;
+
+    if (sog <= 0.) kogden = 0.;
+    else           kogden = (log_ + (1. - log_)*pow(sog, expog_ - 1.))/denkog_;
+
+    if (socno <= 0.) rp(1) = 0.0;
+    else             rp(1) = (1. - cno_)*kogden*kowden*epsl_ + (1. - epsl_)*pow(socno, expo_ - 1);
+
+    // Gas.
+    //
+    double sgcng = sg - cng_;
+    if (sgcng <= 0.) rp(2) = 0.;
+    else             rp(2) = (lg_ + (1. - lg_)*pow(sgcng, expg_ - 1.))/denkg_;
+
+    return;
+}
+
 // Expects that w.size() == 2.
 //
 int StonePermeability::PermeabilityOil_jet(const RealVector &state, int degree, JetMatrix &oil){

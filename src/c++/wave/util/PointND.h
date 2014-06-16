@@ -32,6 +32,7 @@ class PointND {
 
         // Access to data pointer
         double * components(void);
+        double * components(void) const;
 
         // Assignment
         PointND operator=(const PointND &orig);
@@ -64,7 +65,7 @@ class PointND {
         friend PointND operator-(const PointND &x, const PointND &y);
 
         // Intersection with a box
-        bool intersect(const BoxND &b);
+        bool intersect(const BoxND &b) const ;
 };
 
 #endif // _POINTND_

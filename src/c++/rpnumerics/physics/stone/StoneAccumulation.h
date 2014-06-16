@@ -8,7 +8,6 @@ class StoneAccumulation : public AccumulationFunction {
     protected:
     public:
         StoneAccumulation();
-        StoneAccumulation(const StoneAccumulation&);
         ~StoneAccumulation();
 
         int jet(const WaveState &w, JetMatrix &m, int degree) const;

@@ -19,9 +19,6 @@
 
 
 
-StonePermParams::StonePermParams(const RealVector & params):comp(new RealVector(params)){
-    
-}
 
 StonePermParams::StonePermParams(double expw, double expg, double expo,
                                  double expow, double expog,

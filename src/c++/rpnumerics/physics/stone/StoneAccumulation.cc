@@ -31,16 +31,6 @@ int StoneAccumulation::jet(const WaveState &w, JetMatrix &m, int degree) const {
     return 2;
 }
 
-
-StoneAccumulation::StoneAccumulation(const StoneAccumulation &copy):AccumulationFunction(copy.accumulationParams()){
-
-
-
-}
-
-
-
-
 RpFunction * StoneAccumulation::clone() const {
     return new StoneAccumulation(*this);
 }

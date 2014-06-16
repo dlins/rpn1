@@ -11,7 +11,6 @@
  * Includes:
  */
 #include "HyperCube.h"
-#include "Debug.h"
 /*
  * ---------------------------------------------------------------
  * Definitions:
@@ -22,9 +21,7 @@
  */
 int HyperCube::factorial(int n) {
     if (n < 0 || n > 7) {
-        if ( Debug::get_debug_level() == 5 ) {
-            printf("Error when computing the factorial. n = %d. Will abort now.\n", n);
-        }
+        printf("Error when computing the factorial. n = %d. Will abort now.\n", n);
         return ERROR;
     }
     if (n == 0) return 1;
@@ -108,29 +105,21 @@ void HyperCube::Eval_dimf(int *dimFACE) {
 //    int nsimp_ = factorial(n_);
 //
 //    if (n_ < m_) {
-//        if ( Debug::get_debug_level() == 5 ) {
-//            printf("Error simplex dimension exceeds geometric dimension.\n");
-//        }
+//        printf("Error simplex dimension exceeds geometric dimension.\n");
 //        return ERROR;
 //    }
 //
 //    if (n_ < 2 || m_ < 0) {
-//        if ( Debug::get_debug_level() == 5 ) {
-//            printf("Error, simplex dimension is not valid.\n");
-//        }
+//        printf("Error, simplex dimension is not valid.\n");
 //        return ERROR;
 //    }
 //    if (n_ > 6 || m_ > 5) {
-//        if ( Debug::get_debug_level() == 5 ) {
-//            printf("Error, the matrix needs to be bigger (n = %d, m = %d).\n", n_, m_);
-//        }
+//        printf("Error, the matrix needs to be bigger (n = %d, m = %d).\n", n_, m_);
 //        return ERROR;
 //    }
 //
 //    if (nsimp_ == 0) {
-//        if ( Debug::get_debug_level() == 5 ) {
-//            printf("Error, dimension exceeds range\n");
-//        }
+//        printf("Error, dimension exceeds range\n");
 //        return ERROR;
 //    }
 //    //    int dimf_ = dimFACE(n_, m_); // dimFACE(n_); // TODO Falta configurar dimFACE
@@ -146,9 +135,7 @@ void HyperCube::Eval_dimf(int *dimFACE) {
 //
 //    //inicializing arrays dimensions
 //    int nsface_ = mkcomb(&comb_[0][0], n_ + 1, m_ + 1);
-//    if ( Debug::get_debug_level() == 5 ) {
-//        printf("nsface vale: %d\n", nsface_);
-//    }
+//    printf("nsface vale: %d\n", nsface_);
 //
 //    int fnbr_[nsface_][nsface_];
 //
@@ -159,9 +146,7 @@ void HyperCube::Eval_dimf(int *dimFACE) {
 //    int dimf_ = dimFACE[n_ - 2][m_]; // The matrix dimFACE ranges for
 //
 //    if (dimf_ == ERROR) {
-//        if ( Debug::get_debug_level() == 5 ) {
-//            printf("Error, simplices dimensions out of range.\n");
-//        }
+//        printf("Error, simplices dimensions out of range.\n");
 //        return ERROR;
 //    }
 //
@@ -183,9 +168,7 @@ void HyperCube::Eval_dimf(int *dimFACE) {
 //    /*** In java mkface was a subroutine, here is between the code, if need it it is commented latter. ***/
 //    int nface_ = mkface(&face_[0][0], &facptr_[0][0], &fnbr_[0][0], dimf_, nsimp_, n_, m_, nsface_,
 //            &bsvert_[0][0], &comb_[0][0], &perm_[0][0], &storn_[0], &storm_[0]);
-//    if ( Debug::get_debug_level() == 5 ) {
-//        printf("nface vale: %d e dimf vale: %d\n", nface_, dimf_);
-//    }
+//    printf("nface vale: %d e dimf vale: %d\n", nface_, dimf_);
 //
 //
 //    //compute the neighbor array
@@ -205,19 +188,16 @@ void HyperCube::Eval_dimf(int *dimFACE) {
 //                        nsface_, dimf_, nsimp_, m_, n_,
 //                        &bsvert_[0][0], &comb_[0][0], &perm_[0][0], &storm_[0]);
 //        if (nface_ == ERROR) {
-//            if ( Debug::get_debug_level() == 5 ) {
-//                printf("Error, dimensions do not match. Increase dimf_.\n");
-//            }
+//            printf("Error, dimensions do not match. Increase dimf_.\n");
 //            return ERROR;
 //        }
 //     */
 //    /*** Here the mkface ends, but needs ***/
 //
 //
-//    if ( Debug::get_debug_level() == 5 ) {
-//        printf("nface_ = %d, dimf_ = %d\n", nface_, dimf_);
+//    //    printf("nface_ = %d, dimf_ = %d\n", nface_, dimf_);
 //
-//        int ni, nj;
+//    /*    int ni, nj;
 //        printf("face_[%d][%d] = \n", m_+1, dimf_);
 //        for (ni = 0; ni < m_ + 1; ni++) {
 //            for (nj = 0; nj < dimf_; nj++) {
@@ -225,8 +205,7 @@ void HyperCube::Eval_dimf(int *dimFACE) {
 //            }
 //            printf("\n");
 //        }
-//    }
-//     
+//     */
 //
 //    //Fim do debug
 //    //Global variable initialization TODO: NOTAR QUE ESTAVAM EMBAIXO
@@ -446,9 +425,7 @@ void HyperCube::mkcube(double *cvert_, // cvert_[ncvert_][n_]
  */
 void HyperCube::mkperm(int *perm_, // perm_[n_][nsimp_]
         int n_, int nsimp_) {
-    if ( Debug::get_debug_level() == 5 ) {
-        printf("Inside mkperm. n = %d, nsimp = %d\n", n_, nsimp_);
-    }
+    //printf("Inside mkperm. n = %d, nsimp = %d\n", n_, nsimp_);
     int i, j, k, kmfact, nfact, l, shift;
     // initialize
     //    nfact = 0;
@@ -502,18 +479,12 @@ int HyperCube::mkface(int *face_, int *facptr_, int *fnbr_, // face_[m_ + 1][dim
         int *bsvert_, int *comb_, // bsvert_[n_ + 1][n_], comb_[numberOfCombinations][m_ + 1]
         int *perm_, int *storn_, int *storm_) {// perm[], storn[n_ + 1], storm[m_ + 1]
     int i, j;
-    if ( Debug::get_debug_level() == 5 ) {
-        printf("Entering: mkfcfp()\n");   // I commented out this line (Morante: Wed 09 Feb 2011 11:17:50 PM BRST )
-    }
+    //printf("Entering: mkfcfp()\n");   // I commented out this line (Morante: Wed 09 Feb 2011 11:17:50 PM BRST )
     int nface_ = mkfcfp(face_, facptr_, nsface_, dimf_, nsimp_, m_, n_, bsvert_, comb_, perm_, storm_);
-    if ( Debug::get_debug_level() == 5 ) {
-        printf("Aqui nface vale: %d\n", nface_);
-    }
+    //printf("Aqui nface vale: %d\n", nface_);
 
     if (nface_ == 0) {
-        if ( Debug::get_debug_level() == 5 ) {
-            printf("Error, dimensions do not match. Increase dimf_.\n");
-        }
+        printf("Error, dimensions do not match. Increase dimf_.\n");
         return ERROR;
     }
     //compute the neighbor array
@@ -527,7 +498,6 @@ int HyperCube::mkface(int *face_, int *facptr_, int *fnbr_, // face_[m_ + 1][dim
             fnbr_[j * nsface_ + i] = 0;
         }
     }
-    //writes on fnbr_
     mkfnbr(fnbr_, comb_, n_, m_, nsface_, storn_);
 
     return nface_;
@@ -572,53 +542,39 @@ int HyperCube::mkfcfp(int *face_, int *facptr_, // face_[m_ + 1][dimf_], facptr_
 
     //loop over all faces to create  face_  and  facptr_
     int nface_ = 0;
-    if ( Debug::get_debug_level() == 5 ) {
-        printf("nsimp_ = %d, nsface_ = %d, m_ = %d, n_ = %d\n", nsimp_, nsface_, m_, n_);
-    }
+    //printf("nsimp_ = %d, nsface_ = %d, m_ = %d, n_ = %d\n", nsimp_, nsface_, m_, n_);
     for (p = 0; p < nsimp_; p++) {
         for (c = 0; c < nsface_; c++) {
             //set indices for each vertex
             for (v = 0; v < m_ + 1; v++) {
                 index = 0;
                 for (i = 0; i < n_; i++) {
-                    if ( Debug::get_debug_level() == 5 ) {
-                        printf("c = %d, m_ = %d, v = %d. c * (m_ + 1) + v = %d.\n\n", c, m_, v, c * (m_ + 1) + v);
-                        printf("n_ = %d, comb_[%d] = %d, n_*comb[%d] = %d.\n\n", n_, c * (m_ + 1) + v, comb_[c * (m_ + 1) + v], c * (m_ + 1) + v, comb_[c * (m_ + 1) + v] * n_);
-                        printf("i = %d, nsimp_ = %d, p = %d, i * nsimp_ + p = %d, perm_[%d] = %d\n\n", i, nsimp_, p, i*nsimp_ + p, i*nsimp_ + p, perm_[i * nsimp_ + p]);
-                        printf("bsvert_[%d] = %d\n\n", comb_[c * (m_ + 1) + v] * n_ + perm_[i * nsimp_ + p], bsvert_[comb_[c * (m_ + 1) + v] * n_ + perm_[i * nsimp_ + p]]);
-                    }
+                    //printf("c = %d, m_ = %d, v = %d. c * (m_ + 1) + v = %d.\n\n", c, m_, v, c * (m_ + 1) + v);
+                    //printf("n_ = %d, comb_[%d] = %d, n_*comb[%d] = %d.\n\n", n_, c * (m_ + 1) + v, comb_[c * (m_ + 1) + v], c * (m_ + 1) + v, comb_[c * (m_ + 1) + v] * n_);
+                    //printf("i = %d, nsimp_ = %d, p = %d, i * nsimp_ + p = %d, perm_[%d] = %d\n\n", i, nsimp_, p, i*nsimp_ + p, i*nsimp_ + p, perm_[i * nsimp_ + p]);
+                    //printf("bsvert_[%d] = %d\n\n", comb_[c * (m_ + 1) + v] * n_ + perm_[i * nsimp_ + p], bsvert_[comb_[c * (m_ + 1) + v] * n_ + perm_[i * nsimp_ + p]]);
                     index = 2 * index + bsvert_[comb_[c * (m_ + 1) + v] * n_ + perm_[i * nsimp_ + p]];
                 }
                 stor[v] = index;
             }
             //store the face_ if it is distinct
             if (nface_ > 0) {
-                if ( Debug::get_debug_level() == 5 ) {
-                    printf("Posit antes %d.", posit);
-                }
+                //printf("Posit antes %d.", posit);
                 //posit = search(stor, face_, m_ + 1, dimf_);
                 posit = search(stor, face_, m_ + 1, nface_, dimf_);
-                if ( Debug::get_debug_level() == 5 ) {
-                    printf("Pase por search, posit = %d, nface = %d\n", posit, nface_);
-                }
+                //printf("Pase por search, posit = %d, nface = %d\n", posit, nface_);
             } else {
-                if ( Debug::get_debug_level() == 5 ) {
-                    printf("Pasamos por posit con %d\n", nface_);
-                }
+                //printf("Pasamos por posit con %d\n", nface_);
                 posit = -1;
             }
             if (posit == -1) {
                 nface_ = nface_ + 1;
                 if (dimf_ < nface_) {
-                    if ( Debug::get_debug_level() == 5 ) {
-                        printf("Error the dimension for matrix face is small. [posit = -1].\n");
-                    }
+                    printf("Error the dimension for matrix face is small. [posit = -1].\n");
                     return ERROR;
                 }
 
-                if ( Debug::get_debug_level() == 5 ) {
-                    printf("    posit = %d. dimf_ = %d. nface_ = %d\n", posit, dimf_, nface_);
-                }
+                //printf("    posit = %d. dimf_ = %d. nface_ = %d\n", posit, dimf_, nface_);
 
                 for (i = 0; i < m_ + 1; i++) {
                     face_[i * dimf_ + (nface_ - 1)] = stor[i];
@@ -626,24 +582,16 @@ int HyperCube::mkfcfp(int *face_, int *facptr_, // face_[m_ + 1][dimf_], facptr_
 
                 posit = nface_ - 1;
 
-                if ( Debug::get_debug_level() == 5 ) {
-                    printf("    After for cycle: posit = %d.\n", posit);
-                }
+                //printf("    After for cycle: posit = %d.\n", posit);
             }
             //set the pointer to the current face_
-            if ( Debug::get_debug_level() == 5 ) {
-                printf("p = %d, nsface_ = %d, c = %d, p * nsface_ + c = %d\n", p, nsface_, c, p * nsface_ + c);
-            }
+            //printf("p = %d, nsface_ = %d, c = %d, p * nsface_ + c = %d\n", p, nsface_, c, p * nsface_ + c);
             facptr_[p * nsface_ + c] = posit;
-            if ( Debug::get_debug_level() == 5 ) {
-                printf("After facptr = ...\n");
-            }
+            //printf("After facptr = ...\n");
         }
     }
-    if ( Debug::get_debug_level() == 5 ) {
-        printf("Inside mkfcfp(): nface is %d\n", nface_);
-        printf("dimf_ is %d\n", dimf_);
-    }
+    //printf("Inside mkfcfp(): nface is %d\n", nface_);
+    //printf("dimf_ is %d\n", dimf_);
     return nface_;
 }
 
@@ -696,9 +644,7 @@ void HyperCube::mkfnbr(int *fnbr_, int *comb_, //fnbr_[nsface_][nsface_], comb_[
         for (i = 0; i < n_ + 1; i++) {
             stor[i] = 0;
         }
-        if ( Debug::get_debug_level() == 5 ) {
-            //cout << "Valor de n_: " << n_ << " Valor de m_: " << m_ << " Valor de nsface_: " << nsface_ << endl;
-        }
+        cout << "Valor de n_: " << n_ << " Valor de m_: " << m_ << " Valor de nsface_: " << nsface_ << endl;
 
         for (i = 0; i < m_ + 1; i++) {
             stor[comb_[nf * (m_ + 1) + i]] = 1;
@@ -909,26 +855,20 @@ int HyperCube::cubsol(int *solptr_, double *sol_, int dims_, int *sptr_, int nso
     //local variables
     //double sol_[n_][dims_];
     //find the solution on each face (define  nsoln_)
-    if ( Debug::get_debug_level() == 5 ) {
-        printf("Entering: mksoln(), nface = %d\n", nface); // I commented out this line (Morante: Wed 09 Feb 2011 11:17:50 PM BRST )
-    }
+//    printf("Entering: mksoln(), nface = %d\n", nface); // I commented out this line (Morante: Wed 09 Feb 2011 11:17:50 PM BRST )
     nsoln_ = mksoln(sol_, dims_, sptr_, nsoln_, foncub,
             exstfc, face, dimf_, cvert, ncvert_, n_, m_, nface,
             u, g, x, wrki);
     //create the list of solutions for the simplices
-    if ( Debug::get_debug_level() == 5 ) {
-         printf("Entering: smpptr()\n");   // I commented out this line (Morante: Wed 09 Feb 2011 11:17:50 PM BRST )
-    }
+    // printf("Entering: smpptr()\n");   // I commented out this line (Morante: Wed 09 Feb 2011 11:17:50 PM BRST )
     smpptr(solptr_, sptr_, facptr_, nsimp_, nsface_);
     //solptr[nsimp_,nsface_]
     // facptr_[nsimp_][nsface_];
     // sptr_[nface_]????;
 
 
-    if ( Debug::get_debug_level() == 5 ) {
-        //cout << "Variaveis inicializadas no contour: " << dims_ << " " << nsoln_ << " " << dimf_ << " " << ncvert_ << " " << n_ << " " << m_ << " " << nsimp_ << " " << nsface_ << " " << nface << endl;
-        //cout << "Valor de nsoln_ : " << nsoln_ <<endl;
-    }
+    //    cout << "Variaveis inicializadas no contour: " << dims_ << " " << nsoln_ << " " << dimf_ << " " << ncvert_ << " " << n_ << " " << m_ << " " << nsimp_ << " " << nsface_ << " " << nface << endl;
+    //    cout << "Valor de nsoln_ : " << nsoln_ <<endl;
 
     return nsoln_;
 }
@@ -939,21 +879,17 @@ int HyperCube::cubsol(int *solptr_, double *sol_, int dims_, int *sptr_, int nso
  * @param exstfc Bit array indicating which faces in array "face" are really to be considered by cubsol.
  * Dimension of exstfc should be nface
  */
-int HyperCube::mksoln(double *sol_, int dims_, int *sptr_, int nsoln_, 
-        double *foncub, int *exstfc, int *face, int dimf_, double *cvert, 
-        int ncvert_, int n_, int m_, int nface, double *u, double *g, double *x, int *wrki) 
-{
-
-    /* //TODO: Ver incongruencia entre sol_[n_][dims] e solution[n_][m_],
-    aqui o java usaba solution, mas embaixo era preenchido sol_, e parece
-    que deveria ser sol_[n_][dims], foi o que eu fiz.
-    // I/O: (double sol_[n_][dims], int dims_, int sptr[nface_], int nsoln_,
-    double foncub[m_][ncvert_], int ncvert_,
-    //       int exstfc[nface], int face[m_ + 1][dimf_], int dimf_, 
-    double cvert[ncvert_][n_], int n_, int m_,
-    //       int nface, double u[n_][m_ + 1], double g[m_][m_+1],
-    double gx[m_], double x[m_], int wrki[m_]) */
-    int contador = 0;
+int HyperCube::mksoln(double *sol_, int dims_, int *sptr_, int nsoln_, double *foncub, int *exstfc, int *face, int dimf_, double *cvert, int ncvert_, int n_, int m_, int nface, double *u, double *g, double *x, int *wrki) {
+																																/* //TODO: Ver incongruencia entre sol_[n_][dims] e solution[n_][m_],
+																																 aqui o java usaba solution, mas embaixo era preenchido sol_, e parece
+																																	que deveria ser sol_[n_][dims], foi o que eu fiz.
+																																		    // I/O: (double sol_[n_][dims], int dims_, int sptr[nface_], int nsoln_,
+																																	 double foncub[m_][ncvert_], int ncvert_,
+																																	    //       int exstfc[nface], int face[m_ + 1][dimf_], int dimf_, 
+																																		double cvert[ncvert_][n_], int n_, int m_,
+																																		    //       int nface, double u[n_][m_ + 1], double g[m_][m_+1],
+																																		 double gx[m_], double x[m_], int wrki[m_]) */
+//int contador = 0;
     //local variables
     int flag, i, j, indf, k, v;
 //    double g0[m_];
@@ -963,69 +899,56 @@ int HyperCube::mksoln(double *sol_, int dims_, int *sptr_, int nsoln_,
     for (i = 0; i < dims_; i++) {
         for (j = 0; j < n_; j++) soltemp_[i][j] = -999;
     }
-    /*
-    if ( Debug::get_debug_level() == 5 ) {
-        printf("dims_ = %d, n_ = %d, nface = %d\n, nsoln_ =%d, dimf_ = %d, m_ =%d,
-    }
-    nface = %d", dims_, n_, nface, nsoln_, dimf_, m_, nface); 
-    */
+																																	/*
+																																	    //printf("dims_ = %d, n_ = %d, nface = %d\n, nsoln_ =%d, dimf_ = %d, m_ =%d,
+ 																																	nface = %d", dims_, n_, nface, nsoln_, dimf_, m_, nface); */
     // loop over the faces to find each solution (if there is one)
     nsoln_ = -1;
     for (indf = 0; indf < nface; indf++) {
-        if ( Debug::get_debug_level() == 5 ) {
-            printf("Inside mksoln(): indf = %d, nface = %d\n", indf, nface); 
-        }
+																																		/*       // printf("Inside mksoln(): indf = %d, nface = %d\n", indf, nface); 
+																														// ************************ I commented out this line (Morante, Wed 09 Feb 2011 11:17:13 PM BRST). */
         sptr_[indf] = -1;
-        // if the indf-face is not to be considered by mksoln, skip it
-        if ( Debug::get_debug_level() == 5 ) {
-            //cout <<"Exstfc antes do if "<<exstfc[indf]<<" "<<nsoln_<<endl;
-            printf("Inside mksoln(): exstfc[%d] = %d\n", indf, exstfc[indf]); 
-        }
-        // ************************ I commented out this line (Morante, Wed 09 Feb 2011 11:17:13 PM BRST).*/
+																															/* //if the indf-face is not to be considered by mksoln, skip it
+																											        //        cout <<"Exstfc antes do if "<<exstfc[indf]<<" "<<nsoln_<<endl;
+																											        //         printf("Inside mksoln(): exstfc[%d] = %d\n", indf, exstfc[indf]); 
+																											// ************************ I commented out this line (Morante, Wed 09 Feb 2011 11:17:13 PM BRST).*/
         if (exstfc[indf] != 0) {
             //set the function values  at the face vertices
             for (k = 0; k < m_ + 1; k++) {
-                // nao sei se abaixo eh k ou k+1
+																																	                // nao sei se abaixo eh k ou k+1
                 v = face[(k) * dimf_ + indf];
                 for (i = 0; i < m_; i++) {
                     g[i * (m_ + 1) + k] = foncub[i * ncvert_ + v];
-                    //gtemp[i][k] = g[i * (m_ + 1) + k];
-                    //if ( Debug::get_debug_level() == 5 ) {
-                    //    printf("v: %d, indf: %d, k: %d, gtemp(i,k): %f\n", v, indf, k, gtemp[i][k]);
-                    //}
-                    //putmf("FONCUBdentro", foncub, m_, ncvert_);
+//                    gtemp[i][k] = g[i * (m_ + 1) + k];
+																									                    //printf("v: %d, indf: %d, k: %d, gtemp(i,k): %f\n", v, indf, k, gtemp[i][k]);
+                    																												//putmf("FONCUBdentro", foncub, m_, ncvert_);
                 }
             }
 
-            //            putmf("gtemp", &gtemp[0][0], m_, m_ + 1);
-            //            putmf("gaqui", g, m_, m_ + 1);
+																														//            putmf("gtemp", &gtemp[0][0], m_, m_ + 1);
+																																	//            putmf("gaqui", g, m_, m_ + 1);
             //call the affine solver to solve in the standard simplex
-            // writes on x, g
             flag = affslv(x, g, m_, wrki);
 
-            if ( Debug::get_debug_level() == 5 ) {
-                printf("After affslv(): flag = %d\n", flag); // I commented out this line (Morante: Wed 09 Feb 2011 11:17:50 PM BRST )
-                //skip the rest if no solution ( note -- pointer initialized to 0 )
-                //cout <<"Valor de flag: "<<flag<<endl;
-                contador++;
-                //cout << "In mksoln, flag(" << contador << "/"<< nsoln_+2 << "): " << flag << endl;
-                for (int i = 0; i < m_; i++) {
-                    for (int j = 0; j < m_+1; j++) {
-                        //cout << " " << g[i*(m_+1) + j];
-                    }
-                    //cout << endl;
-                }
-                //cout << endl;
-            }
+																								            // printf("After affslv(): flag = %d\n", flag); // I commented out this line (Morante: Wed 09 Feb 2011 11:17:50 PM BRST )
+																										            //skip the rest if no solution ( note -- pointer initialized to 0 )
+																											            //            cout <<"Valor de flag: "<<flag<<endl;
+//contador++;
+//cout << "In mksoln, flag(" << contador << "/"<< nsoln_+2 << "): " << flag << endl;
+//for (int i = 0; i < m_; i++) {
+//    for (int j = 0; j < m_+1; j++) {
+//        cout << " " << g[i*(m_+1) + j];
+//    }
+//    cout << endl;
+//}
+//    cout << endl;
 
  
             if (flag == 0) {
                 //set the pointer to the solution
                 nsoln_ = nsoln_ + 1;
                 if (dims_ < nsoln_) {
-                    if ( Debug::get_debug_level() == 5 ) {
-                        printf("Error: Insuficient allocated memory for dims in mksoln routine");
-                    }
+                    printf("Error: Insuficient allocated memory for dims in mksoln routine");
                     return 1;
                     //TODO.... Uma tabela vai ser precisa para isto.... (?)
                     //         Nao ha como saber qual o valor inicial de dims_
@@ -1034,34 +957,27 @@ int HyperCube::mksoln(double *sol_, int dims_, int *sptr_, int nsoln_,
                                             sol_[j] = (double[]) doubleArray(sol_[j]);
                                         } */
                 }
-                if ( Debug::get_debug_level() == 5 ) {
-                     printf("Inside mksol(): indf = %d, nsoln_ = %d\n", indf, nsoln_); // I commented out this line (Morante: Wed 09 Feb 2011 11:17:50 PM BRST )
-                }
+                // printf("Inside mksol(): indf = %d, nsoln_ = %d\n", indf, nsoln_); // I commented out this line (Morante: Wed 09 Feb 2011 11:17:50 PM BRST )
                 sptr_[indf] = nsoln_;
-                if ( Debug::get_debug_level() == 5 ) {
-                    printf("sptr= %d\n", sptr_[indf]);
-                    printf("indf= %d\n", indf);
-                    printf("nsoln= %d\n", nsoln_);
-                }
+																										                //                printf("sptr= %d\n", sptr_[indf]);
+																											                //                printf("indf= %d\n", indf);
+																									                //                printf("nsoln= %d\n", nsoln_);
 
                 //set the face vertices
                 for (k = 0; k < m_ + 1; k++) {
-                    v = face[k * dimf_ + indf];
-                    if ( Debug::get_debug_level() == 5 ) {
-                        printf("v,k,dims %d %d %d\n", v, k, dims_);
-                    }
+                    v = face[k * dimf_ + indf];																				 //printf("v,k,dims %d %d %d\n", v, k, dims_);
                     for (i = 0; i < n_; i++) {
-                        //TODO: Prestar atencao com a ordem a direita, no cvert!!
+																							                        //TODO: Prestar atencao com a ordem a direita, no cvert!!
                         u[i * (m_ + 1) + k] = cvert[(v) * n_ + i];
-                        if ( Debug::get_debug_level() == 5 ) {
-                            printf("v: %d, indf: %d, k: %d, u(i,k): %f\n", v, indf, k, u[i * (m_ + 1) + k]);
-                        }
+																					                        //                        printf("v: %d, indf: %d, k: %d, u(i,k): %f\n", v, indf, k, u[i * (m_ + 1) + k]);
                     }
                 }
-                // soltemp_ eh definida como a trnasposta de sol_
+
+																														                // soltemp_ eh definida como a trnasposta de sol_
                 //transform the solution back from the standard simplex
+
                 afftrn(&soltemp_[nsoln_][0], u, x, n_, m_);
-                //afftrn (sol_[nsoln_*dims_ + 0], u, x, n_, m_);
+																												                //afftrn (sol_[nsoln_*dims_ + 0], u, x, n_, m_);
             }
         }
     }
@@ -1232,9 +1148,7 @@ int HyperCube::affslv(double *x, double *g, int m_, int *wrki) {
     result = solver(m_, &gt[0][0], g0, x); //TODO: De incluir ipiv[n] aqui deve entrar ", wrki);"
     //check for no solution
 
-    if ( Debug::get_debug_level() == 5 ) {
-        //cout << " x:" << x[0] << " " << x[1] << " " << x[2] << endl;
-    }
+//cout << " x:" << x[0] << " " << x[1] << " " << x[2] << endl;
 
     if (result != 0)
         return result;
@@ -1272,14 +1186,10 @@ int HyperCube::affslv(double *x, double *g, int m_, int *wrki) {
 void HyperCube::afftrn(double *solution, double *u, double *x, int n_, int m_) {
     // solution[n_], u[n_][m_ + 1], x[m_], n_, m_
     int i, k;
-    if ( Debug::get_debug_level() == 5 ) {
-        printf("Entrando en afftrn\n");
-    }
+    //    printf("Entrando en afftrn\n");
     for (i = 0; i < n_; i++) {
-        if ( Debug::get_debug_level() == 5 ) {
-            printf("solution[%d] = %f\n", i, solution[i]);
-            printf("u[%d*(m_ + 1) + 0] = %f\n", i, u[i * (m_ + 1) + 0]);
-        }
+        //        printf("solution[%d] = %f\n", i, solution[i]);
+        //        printf("u[%d*(m_ + 1) + 0] = %f\n", i, u[i * (m_ + 1) + 0]);
         solution[i] = u[i * (m_ + 1) + 0];
         for (k = 0; k < m_; k++) {
             solution[i] += (u[i * (m_ + 1) + (k + 1)] - u[i * (m_ + 1) + 0]) * x[k];
@@ -1383,9 +1293,7 @@ void HyperCube::smpptr(int *solptr_, int *sptr_, int *facptr, int nsimp_, int ns
     for (ns = 0; ns < nsimp_; ns++) {
         for (nf = 0; nf < nsface_; nf++) {
             solptr_[ns * nsface_ + nf] = sptr_[facptr[ns * nsface_ + nf]];
-            if ( Debug::get_debug_level() == 5 ) {
-                printf("Inside smpptr(): nsface = %d, solptr[%d][%d] = %d\n", nsface_, ns, nf, solptr_[nf]); // I commented out this line (Morante: Wed 09 Feb 2011 11:20:26 PM BRST).
-            }
+            // printf("Inside smpptr(): nsface = %d, solptr[%d][%d] = %d\n", nsface_, ns, nf, solptr_[nf]); // I commented out this line (Morante: Wed 09 Feb 2011 11:20:26 PM BRST).
         }
     }
     return;
@@ -1457,7 +1365,7 @@ int HyperCube::mkedge(int *edges_, int dime_, int nedges_, int *smpedg_, int *so
         smpedg_[ns * 2 + 0] = nedges_ + 1;
         //determine which neighboring faces have a solution edge
         for (i = 0; i < nsface_ - 1; i++) {
-                // printf("ns = %d, nsface_ = %d, i = %d\n", ns, nsface_, i);  // I commented out this line (Morante: Wed 09 Feb 2011 11:17:50 PM BRST )
+            // printf("ns = %d, nsface_ = %d, i = %d\n", ns, nsface_, i);  // I commented out this line (Morante: Wed 09 Feb 2011 11:17:50 PM BRST )
             spi = solptr_[ns * nsface_ + i]; // printf("spi = %d\n", spi);  // I commented out this line (Morante: Wed 09 Feb 2011 11:17:50 PM BRST )
             if (spi != -1) {
                 for (j = i + 1; j < nsface_; j++) {
@@ -1466,9 +1374,7 @@ int HyperCube::mkedge(int *edges_, int dime_, int nedges_, int *smpedg_, int *so
                         spj = solptr_[ns * nsface_ + j]; // printf("spj = %d\n", spj);   // I commented out this line (Morante: Wed 09 Feb 2011 11:17:50 PM BRST )
                         if (spj != -1) {
                             if (dime_ < nedges_ + 1) {
-                                if ( Debug::get_debug_level() == 5 ) {
-                                    printf("Error: Insuficient allocated memory for dime in mkedge routine");
-                                }
+                                printf("Error: Insuficient allocated memory for dime in mkedge routine");
                                 smpedg_[ns * 2 + 1] = nedges_;
                                 return 1;
                             }
@@ -1658,16 +1564,12 @@ label40:
 
                             //found an edge
                             if (dime_ < nedges_ + 1) {
-                                if ( Debug::get_debug_level() == 5 ) {
-                                    printf("Error: Insuficient allocated memory for dime in mklevl routine");
-                                }
+                                printf("Error: Insuficient allocated memory for dime in mklevl routine");
                                 smpedg_[ns * 2 + 1 ] = nedges_;
                                 return 1;
                             }
                             nedges_ = nedges_ + 1;
-                            if ( Debug::get_debug_level() == 5 ) {
-                                printf("PASAMOS POR AQUI CON spi, spj = %d, %d", spi, spj);
-                            }
+                            //printf("PASAMOS POR AQUI CON spi, spj = %d, %d", spi, spj);
                             edges_[0 * dime_ + nedges_] = spi;
                             edges_[1 * dime_ + nedges_] = spj;
                         }
@@ -1693,9 +1595,7 @@ label60:
 void HyperCube::putmf(const char *name, double *matrix_, int k1_, int k2_) {
     int i, j, auxtemp = 0;
     int IndFirst = 0, IndLast;
-    if ( Debug::get_debug_level() == 5 ) {
-        printf("DOUBLE ARRAY -- \t %s[%d, %d]:\n", name, k1_, k2_);
-    }
+    printf("DOUBLE ARRAY -- \t %s[%d, %d]:\n", name, k1_, k2_);
 
     if (k1_ > k2_) {
         auxtemp = k1_;
@@ -1708,40 +1608,28 @@ void HyperCube::putmf(const char *name, double *matrix_, int k1_, int k2_) {
     do {
         if (IndLast - IndFirst > 8) IndLast = IndFirst + 8;
 
-        if ( Debug::get_debug_level() == 5 ) {
-            for (j = IndFirst; j < IndLast; j++) printf("%9d \t", j);
-            printf("\n");
+        for (j = IndFirst; j < IndLast; j++) printf("%9d \t", j);
+        printf("\n");
 
-            for (j = IndFirst; j < IndLast; j++) printf("----------\t");
-            printf("\n");
-        }
+        for (j = IndFirst; j < IndLast; j++) printf("----------\t");
+        printf("\n");
 
         if (auxtemp == 0) {
             for (i = 0; i < k1_; i++) {
                 for (j = IndFirst; j < IndLast - 1; j++) {
-                    if ( Debug::get_debug_level() == 5 ) {
-                        printf("% 3.2E    \t", matrix_[i * k2_ + j]);
-                    }
+                    printf("% 3.2E    \t", matrix_[i * k2_ + j]);
                 }
-                if ( Debug::get_debug_level() == 5 ) {
-                    printf("% 3.2E\n", matrix_[i * k2_ + IndLast - 1]);
-                }
+                printf("% 3.2E\n", matrix_[i * k2_ + IndLast - 1]);
             }
         } else {
             for (i = 0; i < k1_; i++) {
                 for (j = IndFirst; j < IndLast - 1; j++) {
-                    if ( Debug::get_debug_level() == 5 ) {
-                        printf("% 3.2E    \t", matrix_[i + j * k1_]);
-                    }
+                    printf("% 3.2E    \t", matrix_[i + j * k1_]);
                 }
-                if ( Debug::get_debug_level() == 5 ) {
-                    printf("% 3.2E\n", matrix_[i + (IndLast - 1) * k1_]);
-                }
+                printf("% 3.2E\n", matrix_[i + (IndLast - 1) * k1_]);
             }
         }
-        if ( Debug::get_debug_level() == 5 ) {
-            printf("\n");
-        }
+        printf("\n");
 
         IndFirst = IndLast;
         IndLast = k2_;
@@ -1775,9 +1663,7 @@ void HyperCube::putmf2(const char *name, double *matrix_, int k1_, int k2_, int 
 void HyperCube::putmi(const char *name, int *matrix_, int k1_, int k2_) {
     int i, j, auxtemp = 0;
     int IndFirst = 0, IndLast;
-    if ( Debug::get_debug_level() == 5 ) {
-        printf("INTEGER ARRAY -- \t %s[%d, %d]:\n", name, k1_, k2_);
-    }
+    printf("INTEGER ARRAY -- \t %s[%d, %d]:\n", name, k1_, k2_);
 
     if (k1_ > k2_) {
         auxtemp = k1_;
@@ -1790,40 +1676,28 @@ void HyperCube::putmi(const char *name, int *matrix_, int k1_, int k2_) {
     do {
         if (IndLast - IndFirst > 30) IndLast = IndFirst + 30;
 
-        if ( Debug::get_debug_level() == 5 ) {
-            for (j = IndFirst; j < IndLast; j++) printf("%3d ", j);
-            printf("\n");
+        for (j = IndFirst; j < IndLast; j++) printf("%3d ", j);
+        printf("\n");
 
-            for (j = IndFirst; j < IndLast; j++) printf("--- ");
-            printf("\n");
-        }
+        for (j = IndFirst; j < IndLast; j++) printf("--- ");
+        printf("\n");
 
         if (auxtemp == 0) {
             for (i = 0; i < k1_; i++) {
                 for (j = IndFirst; j < IndLast; j++) {
-                    if ( Debug::get_debug_level() == 5 ) {
-                        printf("%3d ", matrix_[i * k2_ + j]);
-                    }
+                    printf("%3d ", matrix_[i * k2_ + j]);
                 }
-                if ( Debug::get_debug_level() == 5 ) {
-                    printf("\n");
-                }
+                printf("\n");
             }
         } else {
             for (i = 0; i < k1_; i++) {
                 for (j = IndFirst; j < IndLast; j++) {
-                    if ( Debug::get_debug_level() == 5 ) {
-                        printf("%3d ", matrix_[i + j * k1_]);
-                    }
+                    printf("%3d ", matrix_[i + j * k1_]);
                 }
-                if ( Debug::get_debug_level() == 5 ) {
-                    printf("\n");
-                }
+                printf("\n");
             }
         }
-        if ( Debug::get_debug_level() == 5 ) {
-            printf("\n");
-        }
+        printf("\n");
 
         IndFirst = IndLast;
         IndLast = k2_;
@@ -1874,9 +1748,7 @@ void HyperCube::putmi2(const char *name, int *matrix_, int k1_, int k2_, int kma
 //            if (spi != 0){
 //                if (solcnt == 0){
 //                    if (dimv <= nvertt){
-//                        if ( Debug::get_debug_level() == 5 ) {
-//                            printf("Error in mkpoly: insufficient dimv");
-//                        }
+//                        printf("Error in mkpoly: insufficient dimv");
 //                        return 2;
 //                    }
 //                    nvertt++;
@@ -1895,9 +1767,7 @@ void HyperCube::putmi2(const char *name, int *matrix_, int k1_, int k2_, int kma
 //                    spi = solptr_[ns*nsface_+i];
 //                    if (spi != 0 && fnbr_[i*nsface_ + cur] != 0){
 //                        if (dimv <= nvertt){
-//                            if ( Debug::get_debug_level() == 5 ) {
-//                                printf("Error in mkpoly: increase dimv");
-//                            }
+//                            printf("Error in mkpoly: increase dimv");
 //                            return 2;
 //                        }
 //                        nvertt++;
@@ -1909,17 +1779,13 @@ void HyperCube::putmi2(const char *name, int *matrix_, int k1_, int k2_, int kma
 //                }
 //
 //                // error:polygon closed too soon
-//                if ( Debug::get_debug_level() == 5 ) {
-//                    printf("Error in mkpoly: partial polygon");
-//                }
+//                printf("Error in mkpoly: partial polygon");
 //                goto label200;
 //                label140:;
 //            }
 //
 //            if (dimp_ <= npolys){
-//                if ( Debug::get_debug_level() == 5 ) {
-//                    printf("Error in mkpoly: insufficient dimp");
-//                }
+//                printf("Error in mkpoly: insufficient dimp");
 //                return 1;
 //            }
 //            npolys++;
@@ -1938,9 +1804,7 @@ void HyperCube::putmi2(const char *name, int *matrix_, int k1_, int k2_, int kma
 //void putmi(const char *name, int *matrix_, int k1_, int k2_) {
 //    int i, j, auxtemp = 0;
 //    int IndFirst = 0, IndLast;
-//    if ( Debug::get_debug_level() == 5 ) {
-//        printf("INTEGER ARRAY -- \t %s[%d, %d]:\n", name, k1_, k2_);
-//    }
+//    printf("INTEGER ARRAY -- \t %s[%d, %d]:\n", name, k1_, k2_);
 //
 //    if (k1_ > k2_) {
 //	auxtemp = k1_;
@@ -1953,40 +1817,28 @@ void HyperCube::putmi2(const char *name, int *matrix_, int k1_, int k2_, int kma
 //    do {
 //        if (IndLast - IndFirst > 30) IndLast = IndFirst + 30;
 //
-//        if ( Debug::get_debug_level() == 5 ) {
-//            for (j = IndFirst; j < IndLast; j++) printf("%3d ", j);
-//            printf("\n");
+//        for (j = IndFirst; j < IndLast; j++) printf("%3d ", j);
+//        printf("\n");
 //
-//            for (j = IndFirst; j < IndLast; j++) printf("--- ");
-//            printf("\n");
-//        }
+//        for (j = IndFirst; j < IndLast; j++) printf("--- ");
+//        printf("\n");
 //
 //        if (auxtemp == 0) {
 //            for (i = 0; i < k1_; i++) {
 //                for (j = IndFirst; j < IndLast; j++) {
-//                    if ( Debug::get_debug_level() == 5 ) {
-//                        printf("%3d ", matrix_[i*k2_ + j]);
-//                    }
+//                    printf("%3d ", matrix_[i*k2_ + j]);
 //                }
-//                if ( Debug::get_debug_level() == 5 ) {
-//                    printf("\n");
-//                }
+//                printf("\n");
 //            }
 //        } else {
 //            for (i = 0; i < k1_; i++) {
 //                for (j = IndFirst; j < IndLast; j++) {
-//                    if ( Debug::get_debug_level() == 5 ) {
-//                        printf("%3d ", matrix_[i + j*k1_]);
-//                    }
+//                    printf("%3d ", matrix_[i + j*k1_]);
 //                }
-//                if ( Debug::get_debug_level() == 5 ) {
-//                    printf("\n");
-//                }
+//                printf("\n");
 //            }
 //        }
-//        if ( Debug::get_debug_level() == 5 ) {
-//            printf("\n");
-//        }
+//        printf("\n");
 //
 //	IndFirst = IndLast;
 //        IndLast = k2_;
@@ -2017,9 +1869,7 @@ void HyperCube::putmi2(const char *name, int *matrix_, int k1_, int k2_, int kma
 //void putmf(const char *name, double *matrix_, int k1_, int k2_) {
 //    int i, j, auxtemp = 0;
 //    int IndFirst = 0, IndLast;
-//    if ( Debug::get_debug_level() == 5 ) {
-//        printf("DOUBLE ARRAY -- \t %s[%d, %d]:\n", name, k1_, k2_);
-//    }
+//    printf("DOUBLE ARRAY -- \t %s[%d, %d]:\n", name, k1_, k2_);
 //
 //    if (k1_ > k2_) {
 //	auxtemp = k1_;
@@ -2032,40 +1882,28 @@ void HyperCube::putmi2(const char *name, int *matrix_, int k1_, int k2_, int kma
 //    do {
 //        if (IndLast - IndFirst > 8) IndLast = IndFirst + 8;
 //
-//        if ( Debug::get_debug_level() == 5 ) {
-//            for (j = IndFirst; j < IndLast; j++) printf("%9d \t", j);
-//            printf("\n");
+//        for (j = IndFirst; j < IndLast; j++) printf("%9d \t", j);
+//        printf("\n");
 //
-//            for (j = IndFirst; j < IndLast; j++) printf("----------\t");
-//            printf("\n");
-//        }
+//        for (j = IndFirst; j < IndLast; j++) printf("----------\t");
+//        printf("\n");
 //
 //        if (auxtemp == 0) {
 //            for (i = 0; i < k1_; i++) {
 //                for (j = IndFirst; j < IndLast - 1; j++) {
-//                    if ( Debug::get_debug_level() == 5 ) {
-//                        printf("% 3.2E    \t", matrix_[i*k2_ + j]);
-//                    }
+//                    printf("% 3.2E    \t", matrix_[i*k2_ + j]);
 //                }
-//                if ( Debug::get_debug_level() == 5 ) {
-//                    printf("% 3.2E\n", matrix_[i*k2_ + IndLast - 1]);
-//                }
+//                printf("% 3.2E\n", matrix_[i*k2_ + IndLast - 1]);
 //            }
 //        } else {
 //            for (i = 0; i < k1_; i++) {
 //                for (j = IndFirst; j < IndLast - 1; j++) {
-//                    if ( Debug::get_debug_level() == 5 ) {
-//                        printf("% 3.2E    \t", matrix_[i + j*k1_]);
-//                    }
+//                    printf("% 3.2E    \t", matrix_[i + j*k1_]);
 //                }
-//                if ( Debug::get_debug_level() == 5 ) {
-//                    printf("% 3.2E\n", matrix_[i + (IndLast - 1)*k1_]);
-//                }
+//                printf("% 3.2E\n", matrix_[i + (IndLast - 1)*k1_]);
 //            }
 //        }
-//        if ( Debug::get_debug_level() == 5 ) {
-//            printf("\n");
-//        }
+//        printf("\n");
 //
 //	IndFirst = IndLast;
 //        IndLast = k2_;

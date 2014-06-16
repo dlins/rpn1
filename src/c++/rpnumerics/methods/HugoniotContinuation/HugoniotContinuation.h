@@ -147,6 +147,8 @@ class HugoniotContinuation {
         // virtual void jet_Hugoniot(const RealVector &p, RealVector &H, DoubleMatrix &nablaH) = 0; // Is no more.
 
         // F, JF, G and JG must be computed before entering here.
+        // TODO: Pass a flag to tell if it must compute H or H and nablaH.
+        //
         virtual void jet_Hugoniot(const RealVector &F, const DoubleMatrix &JF, 
                                   const RealVector &G, const DoubleMatrix &JG, 
                                   RealVector &H, DoubleMatrix &nablaH) = 0;  
@@ -191,6 +193,9 @@ class HugoniotContinuation {
                                  RealVector &final_direction, std::vector<RealVector> &shockcurve, int &edge);
 
         virtual int curve(std::vector< std::vector<RealVector> > &curve);
+        virtual int disconnected_curve(const RealVector &point_on_edge, int entry_edge, std::vector<RealVector> &curve, int &edge);
+        virtual int all_curves(std::vector< std::vector<RealVector> > &curves, std::vector<int> &edges);
+        virtual int connected_curve(std::vector< std::vector<RealVector> > &curves, std::vector<int> &edges);
 
         virtual const FluxFunction         * flux()         const {return f;}
         virtual const AccumulationFunction * accumulation() const {return g;}
@@ -204,6 +209,16 @@ class HugoniotContinuation {
             max_default_step_size_ = 100.0*default_step_size_;
             return;
         }
+
+        // TODO: Move the code below to a Stone-something ASAP.
+        void hugoniot_on_side(double p, int side, double &RHv, double &RHv_prime);
+        int Newton_on_side(double init_p, int side, double &p);
+
+        bool find_a_point_on_a_side(int side, RealVector &p);
+        bool find_a_point_on_a_side(int side, 
+                                                  const std::vector<RealVector> &side_points,
+                                                  const std::vector<bool> &use_this_segment,
+                                                  RealVector &p);
 };
 
 #endif // _HUGONIOTCONTINUATION_

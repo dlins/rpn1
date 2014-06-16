@@ -33,7 +33,7 @@ BoxND::~BoxND(){
 // Verify that the distance between the centers of the boxes is less
 // than the sum of the "radii" for each dimension.
 //
-bool BoxND::intersect(const BoxND &b){
+bool BoxND::intersect(const BoxND &b) const {
     int n = pmin.size();
 
     PointND bpmin = b.pmin, bpmax = b.pmax;

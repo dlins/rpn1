@@ -4,7 +4,11 @@
 #include "FluxParams.h"
 #include <iostream>
 
+//#include "Thermodynamics.h"
 #include "Thermodynamics.h"
+
+//#include "FracFlow2PhasesHorizontalAdimensionalized.h"
+//#include "FracFlow2PhasesVerticalAdimensionalized.h"
 
 
 using namespace std;
@@ -22,12 +26,12 @@ protected:
 public:
 
 
-    Flux2Comp2PhasesAdimensionalized_Params(const RealVector &,Thermodynamics *);
+    Flux2Comp2PhasesAdimensionalized_Params(const RealVector &, Thermodynamics *);
 
-    Flux2Comp2PhasesAdimensionalized_Params(double abs_perm, double sin_beta, double const_gravity,
-            bool has_gravity,
-            bool has_horizontal,
-            Thermodynamics * TD);
+//    Flux2Comp2PhasesAdimensionalized_Params(double abs_perm, double sin_beta, const double const_gravity,
+//            bool has_gravity,
+//            bool has_horizontal,
+//            Thermodynamics * TD);
 
 
     Flux2Comp2PhasesAdimensionalized_Params(const Flux2Comp2PhasesAdimensionalized_Params &);

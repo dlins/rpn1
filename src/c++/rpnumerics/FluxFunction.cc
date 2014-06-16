@@ -1,5 +1,7 @@
 #include "FluxFunction.h"
 
+FluxFunction::FluxFunction() : params_(0){}
+
 FluxFunction::FluxFunction(const FluxParams & params):params_(new FluxParams(params)){}
 
 FluxFunction::~FluxFunction(void) {

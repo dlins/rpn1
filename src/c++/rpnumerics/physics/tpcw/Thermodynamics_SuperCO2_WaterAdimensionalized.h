@@ -85,13 +85,8 @@ public:
     double hsigmaC(double)const;
     void Diff_hsigmaC(double, double&, double&, double&)const;
 
-    double Cr(void)const;
 
-    double Cw_specific(void)const;
 
-    void setTtypical(double);
-    void setRhoTypical(double);
-    void UTypical (double);
 
     void inv_muw(double T, double &nuw, double &dnuw_dT, double &d2nuw_dT2)const; // Water viscosity
     void muw(double T, double &muw, double &dmuw_dT, double &d2muw_dT2); // Water viscosity
@@ -99,21 +94,31 @@ public:
     void inv_mug(double T, double &nug, double &dnug_dT, double &d2nug_dT2)const; // Gas   viscosity
     void mug(double T, double &mug, double &dmug_dT, double &d2mug_dT2)const; // Gas   viscosity
 
+
+
+
+
+
+
+    void setTtypical(double);
+    void setRhoTypical(double);
+    void UTypical (double);
+
+
+
+    double Cr(void)const;
+    double Cw_specific(void)const;
     // Convert from Theta to T (dimensionless -> dimensioned)
     double Theta2T(double)const;
-
     // Convert from T to Theta (dimensioned -> dimensionless)
     double T2Theta(double)const;
-
     // Convert from U to u (dimensionless -> dimensioned)
     double U2u(double)const;
-
     // Convert from u to U (dimensioned -> dimensionless)
     double u2U(double)const;
-
     double T_typical(void)const;
-
     double U_typical(void)const;
+
 };
 
 #endif // _THERMODYNAMICS_SUPERCO2_WATERADIMENSIONALIZED_

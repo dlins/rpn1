@@ -17,7 +17,7 @@ class HyperOctree {
     protected:
         BoxND box_;        
 
-        int level_, maxlevel_, maxsize_;
+        unsigned long level_, maxlevel_, maxsize_;
 
         HyperOctree<T> *father_;
         std::vector<HyperOctree<T>*> sons_;
@@ -40,9 +40,9 @@ class HyperOctree {
 
         // The engine for the structure.
         //
-        std::string structure(std::string &path, std::string &s);
+        std::string structure(std::string &path, std::string &s) const ;
     public:
-        HyperOctree(const BoxND &b, int maxlevel = 3, int maxsize = 100);
+        HyperOctree(const BoxND &b, unsigned long maxlevel = 3, unsigned long maxsize = 100);
         HyperOctree(const HyperOctree<T> *orig);
         HyperOctree(const HyperOctree<T> &orig);
 
@@ -52,23 +52,28 @@ class HyperOctree {
         void remove(T* obj);
         void clear();
 
-        void within_box(const BoxND &b, std::set<T*> &list);
-        void within_box(const BoxND &b, std::vector<T*> &list);
+        void within_box(const BoxND &b, std::set<T*> &list) const;
+        void within_box(const BoxND &b, std::vector<T*> &list) const;
 
-        int number_of_objects(void);
+        unsigned long number_of_objects(void) const;
 
-        std::string structure();
+        std::string structure() const;
 
-        void boxes(std::vector<BoxND> &boxes_of_nodes, std::vector<BoxND> &boxes_of_leaves);
+        void boxes(std::vector<BoxND> &boxes_of_nodes, std::vector<BoxND> &boxes_of_leaves) const;
+
+        void leaves_intersected_by_object(T *object, std::vector<BoxND> &boxes) const;
+
+        void within_leaves_intersected_by_object(T *object, std::set<T*> &list) const;
+        void within_leaves_intersected_by_object(T *object, std::vector<T*> &list) const;
 };
 
-// Subdivide a box into 2^space_dimension sub-boxes.
+// Subdivide a box unsigned longo 2^space_dimension sub-boxes.
 //
 template <typename T>
 void HyperOctree<T>::subdivide_box(BoxND &b, std::vector<BoxND> &vb){
     vb.clear();
 
-    int n = b.pmin.size();
+    unsigned long n = b.pmin.size();
 
     PointND ppmin(n), ppmax(n);
     double mid = .5*(b.pmin.component(0) + b.pmax.component(0));
@@ -84,7 +89,7 @@ void HyperOctree<T>::subdivide_box(BoxND &b, std::vector<BoxND> &vb){
     }
     else {
         PointND tpmin(n - 1), tpmax(n - 1);
-        for (int i = 1; i < n; i++){
+        for (unsigned long i = 1; i < n; i++){
             tpmin.component(i - 1) = b.pmin.component(i);
             tpmax.component(i - 1) = b.pmax.component(i);
         }
@@ -93,8 +98,8 @@ void HyperOctree<T>::subdivide_box(BoxND &b, std::vector<BoxND> &vb){
         std::vector<BoxND> tvb;
         subdivide_box(tb, tvb);
 
-        for (int i = 0; i < tvb.size(); i++){
-            for (int j = 1; j < n; j++){
+        for (unsigned long i = 0; i < tvb.size(); i++){
+            for (unsigned long j = 1; j < n; j++){
                 ppmin.component(j) = tvb[i].pmin.component(j - 1);
                 ppmax.component(j) = tvb[i].pmax.component(j - 1);
             }
@@ -135,7 +140,7 @@ bool HyperOctree<T>::recover_list(std::set<T*> &list){
     // If node
     else {
         bool valid = true;
-        int i = 0;
+        unsigned long i = 0;
 
         while (valid && i < sons_.size()){
             valid = sons_[i]->recover_list(list);
@@ -147,7 +152,7 @@ bool HyperOctree<T>::recover_list(std::set<T*> &list){
 }
 
 template <typename T>
-HyperOctree<T>::HyperOctree(const BoxND &b, int maxlevel, int maxsize) :  
+HyperOctree<T>::HyperOctree(const BoxND &b, unsigned long maxlevel, unsigned long maxsize) :  
                             box_(b), maxlevel_(maxlevel), maxsize_(maxsize), level_(0), father_(0){
 }
 
@@ -159,7 +164,7 @@ void HyperOctree<T>::copy(const HyperOctree<T> *orig){
     }
     else {
         sons_.resize(orig->sons_.size());
-        for (int i = 0; i < orig->sons_.size(); i++){
+        for (unsigned long i = 0; i < orig->sons_.size(); i++){
              HyperOctree *temp = new HyperOctree(orig->sons_[i]);
              temp->father_ = this;
              temp->level_ = level_ + 1;
@@ -211,7 +216,7 @@ void HyperOctree<T>::add(T* obj){
                 subdivide_box(box_, vb);
 
                 // Create the sons... 
-                for (int i = 0; i < vb.size(); i++){
+                for (unsigned long i = 0; i < vb.size(); i++){
                     HyperOctree *temp = new HyperOctree(vb[i], maxlevel_, maxsize_);
                     temp->level_ = level_ + 1;
                     temp->father_ = this;
@@ -229,7 +234,7 @@ void HyperOctree<T>::add(T* obj){
         }
         // If node
         else {
-            for (int i = 0; i < sons_.size(); i++) sons_[i]->add(obj);
+            for (unsigned long i = 0; i < sons_.size(); i++) sons_[i]->add(obj);
         }
     }
 
@@ -245,10 +250,10 @@ void HyperOctree<T>::remove(T* obj){
         }
         // If node
         else {
-            for (int i = 0; i < sons_.size(); i++) sons_[i]->remove(obj);
+            for (unsigned long i = 0; i < sons_.size(); i++) sons_[i]->remove(obj);
 
             if (recover_list(data_)){
-                for (int i = 0; i < sons_.size(); i++) delete sons_[i];
+                for (unsigned long i = 0; i < sons_.size(); i++) delete sons_[i];
                 sons_.clear();
             }
             else data_.clear();
@@ -262,12 +267,12 @@ template <typename T>
 void HyperOctree<T>::clear(void){
     data_.clear();
 
-    for (int i = 0; i < sons_.size(); i++) delete sons_[i];
+    for (unsigned long i = 0; i < sons_.size(); i++) delete sons_[i];
     sons_.clear();
 }
 
 template <typename T>
-void HyperOctree<T>::within_box(const BoxND &b, std::set<T*> &list){
+void HyperOctree<T>::within_box(const BoxND &b, std::set<T*> &list) const {
     if (father_ == 0) list.clear();
 
     if (box_.intersect(b)){
@@ -278,7 +283,7 @@ void HyperOctree<T>::within_box(const BoxND &b, std::set<T*> &list){
         }
         // If node:
         else {
-            for (int i = 0; i < sons_.size(); i++) sons_[i]->within_box(b, list);
+            for (unsigned long i = 0; i < sons_.size(); i++) sons_[i]->within_box(b, list);
         }
     }
 
@@ -286,27 +291,27 @@ void HyperOctree<T>::within_box(const BoxND &b, std::set<T*> &list){
 }
 
 template <typename T>
-void HyperOctree<T>::within_box(const BoxND &b, std::vector<T*> &list){
+void HyperOctree<T>::within_box(const BoxND &b, std::vector<T*> &list) const {
     std::set<T*> list_set;
     within_box(b, list_set);
 
     list.resize(list_set.size());
 
-    typename std::set<T*>::iterator it; int i;
+    typename std::set<T*>::iterator it; unsigned long i;
     for (it = list_set.begin(), i = 0; it != list_set.end(); it++, i++) list[i] = *it;
 
     return;
 }
 
 template <typename T>
-int HyperOctree<T>::number_of_objects(void){
-    int n = 0;
+unsigned long HyperOctree<T>::number_of_objects(void) const {
+    unsigned long n = 0;
 
     // If leaf:
     if (sons_.size() == 0) n = data_.size();
     // If node:
     else {
-        for (int i = 0; i < sons_.size(); i++) n += sons_[i]->number_of_objects();
+        for (unsigned long i = 0; i < sons_.size(); i++) n += sons_[i]->number_of_objects();
     }
 
     return n;
@@ -315,11 +320,11 @@ int HyperOctree<T>::number_of_objects(void){
 // Protected, engine.
 //
 template <typename T>
-std::string HyperOctree<T>::structure(std::string &path, std::string &s){
+std::string HyperOctree<T>::structure(std::string &path, std::string &s) const {
     // Update the path
     std::string this_path(path);
     if (father_ != 0){
-        int i = 0; bool found = false;
+        unsigned long i = 0; bool found = false;
         while (this != father_->sons_[i]) i++;
 
         std::stringstream sspath;
@@ -361,7 +366,7 @@ std::string HyperOctree<T>::structure(std::string &path, std::string &s){
     else {
         //str += "\n@";
         next += "  |";
-        for (int i = 0; i < sons_.size(); i++) str += sons_[i]->structure(this_path, next);
+        for (unsigned long i = 0; i < sons_.size(); i++) str += sons_[i]->structure(this_path, next);
     }
 
     if (father_ != 0 && this != father_->sons_[father_->sons_.size() - 1]) str += "\n "; //str += "\n" + next + "\n*";
@@ -369,10 +374,10 @@ std::string HyperOctree<T>::structure(std::string &path, std::string &s){
     return str;    
 }
 
-// Public interface.
+// Public unsigned longerface.
 //
 template <typename T>
-std::string HyperOctree<T>::structure(){
+std::string HyperOctree<T>::structure() const {
     std::string path("0");
     std::string s("");
 
@@ -380,7 +385,7 @@ std::string HyperOctree<T>::structure(){
 }
 
 template <typename T>
-void HyperOctree<T>::boxes(std::vector<BoxND> &boxes_of_nodes, std::vector<BoxND> &boxes_of_leaves){
+void HyperOctree<T>::boxes(std::vector<BoxND> &boxes_of_nodes, std::vector<BoxND> &boxes_of_leaves) const {
     if (father_ == 0){
         boxes_of_nodes.clear();
         boxes_of_leaves.clear();
@@ -389,8 +394,54 @@ void HyperOctree<T>::boxes(std::vector<BoxND> &boxes_of_nodes, std::vector<BoxND
     if (sons_.size() == 0) boxes_of_leaves.push_back(box_);
     else {
         boxes_of_nodes.push_back(box_);
-        for (int i = 0; i < sons_.size(); i++) sons_[i]->boxes(boxes_of_nodes, boxes_of_leaves);
+        for (unsigned long i = 0; i < sons_.size(); i++) sons_[i]->boxes(boxes_of_nodes, boxes_of_leaves);
     }
+
+    return;
+}
+
+template <typename T>
+void HyperOctree<T>::leaves_intersected_by_object(T *object, std::vector<BoxND> &boxes) const {
+    if (father_ == 0) boxes.clear();
+
+    if (object->intersect(box_)){
+        if (sons_.size() == 0) boxes.push_back(box_);
+        else {
+            for (unsigned long i = 0; i < sons_.size(); i++) sons_[i]->leaves_intersected_by_object(object, boxes);
+        }
+    }
+
+    return;
+}
+
+template <typename T>
+void HyperOctree<T>::within_leaves_intersected_by_object(T *object, std::set<T*> &list) const {
+    if (father_ == 0) list.clear();
+
+    if (object->intersect(box_)){
+        // If leaf:
+        if (sons_.size() == 0){
+            typename std::set<T*>::iterator it;
+            for (it = data_.begin(); it != data_.end(); it++) list.insert(*it);
+        }
+        // If node:
+        else {
+            for (unsigned long i = 0; i < sons_.size(); i++) sons_[i]->within_leaves_intersected_by_object(object, list);
+        }
+    }
+
+    return;
+}
+
+template <typename T>
+void HyperOctree<T>::within_leaves_intersected_by_object(T *object, std::vector<T*> &list) const {
+    std::set<T*> list_set;
+    within_leaves_intersected_by_object(object, list_set);
+
+    list.resize(list_set.size());
+
+    typename std::set<T*>::iterator it; unsigned long i;
+    for (it = list_set.begin(), i = 0; it != list_set.end(); it++, i++) list[i] = *it;
 
     return;
 }

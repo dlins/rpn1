@@ -19,7 +19,6 @@
 
 StoneFluxFunction::StoneFluxFunction(const StoneParams & params, const StonePermParams & permParams ) : FluxFunction(FluxParams(params.params())), perm_(new StonePermeability(permParams)) {
 
-    
     grw = params.component(0);
     grg = params.component(1);
     gro = params.component(2);
@@ -29,7 +28,6 @@ StoneFluxFunction::StoneFluxFunction(const StoneParams & params, const StonePerm
     muo = params.component(5);
 
     vel = params.component(6);
-
 }
 
 
@@ -52,15 +50,6 @@ RpFunction * StoneFluxFunction::clone() const {
 
 StoneFluxFunction::~StoneFluxFunction() {
     delete perm_;
-}
-
-void StoneFluxFunction::setPermParams(const StonePermParams & permParams) {
-
-    delete perm_;
-
-    perm_=new StonePermeability(permParams);
-
-
 }
 
 int StoneFluxFunction::jet(const WaveState &w, JetMatrix &m, int degree) const {
@@ -104,8 +93,6 @@ int StoneFluxFunction::jet(const WaveState &w, JetMatrix &m, int degree) const {
            double ld2kw_dso2= d2kw_dso2/ muw;
 
            double ld2ko_dsw2= d2ko_dsw2/ muo;
-           
-//           cout<<"d2ko_dsw2: "<<d2ko_dsw2<<endl;
            double ld2ko_dswso= d2ko_dswso/ muo;
            double ld2ko_dso2= d2ko_dso2/ muo; // Was:           double ld2ko_dso2= d2kw_dso2/ muo;
 
@@ -122,11 +109,6 @@ int StoneFluxFunction::jet(const WaveState &w, JetMatrix &m, int degree) const {
            double dtwdsw = ldko_dsw*(grw - gro) + (grw - grg)*ldkg_dsw;
 
            double ld2k_dsw2= ld2kw_dsw2 + ld2ko_dsw2 + ld2kg_dsw2; 
-           
-//           cout<<ld2kw_dsw2 << ld2ko_dsw2 << ld2kg_dsw2<<endl;
-//           cout<<"Resultado: "<<ld2k_dsw2<<endl;
-           
-           
            double ld2k_dswso= ld2kw_dswso + ld2ko_dswso + ld2kg_dswso;
            double ld2k_dso2= ld2kw_dso2 + ld2ko_dso2 + ld2kg_dso2;
 
@@ -147,20 +129,13 @@ int StoneFluxFunction::jet(const WaveState &w, JetMatrix &m, int degree) const {
                double zggww =( ( lk * ld2ko_dsw2 - lko * ld2k_dsw2 ) / lk  -  2. * ldk_dsw * zgodsw )/ lk;
                double zggwo =( ( lk * ld2ko_dswso - lko * ld2k_dswso ) / lk  -  (ldk_dsw * zgodso + zgodsw * ldk_dso) ) / lk;
                double zggoo =( ( lk * ld2ko_dso2 - lko * ld2k_dso2 ) / lk  -  2. * ldk_dso * zgodso )/ lk;
-               
-
+          
                double dtwdww = ld2ko_dsw2*(grw - gro) + (grw - grg)*ld2kg_dsw2;
                double dtwdwo = ld2ko_dswso*(grw - gro) + (grw - grg)*ld2kg_dswso;
                double dtwdoo = ld2ko_dso2*(grw - gro) + (grw - grg)*ld2kg_dso2;
                double dtodww = ld2kw_dsw2*(gro - grw) + (gro - grg)*ld2kg_dsw2;
                double dtodwo = (gro - grg)*ld2kg_dswso;
                double dtodoo = (gro - grg)*ld2kg_dso2;
-               
-               
-               
-//               //cout << dtwdww <<" "<<dtwdwo << " "<< dtwdoo <<" "<< dtodww <<" "<<dtodwo <<" "<< dtodoo<<endl;
-               
-                       
 
                m.set(0, 0, 0, zgfww*tw + 2.*zgwdsw*dtwdsw + (lkw/lk)*dtwdww); // d2fw_dsw2;
                m.set(0, 0, 1, zgfwo*tw + zgwdsw*dtwdso + zgwdso*dtwdsw + (lkw/lk)*dtwdwo); // d2fw_dswso;
@@ -171,8 +146,6 @@ int StoneFluxFunction::jet(const WaveState &w, JetMatrix &m, int degree) const {
                m.set(1, 0, 1, zggwo*to + zgodso*dtodsw + zgodsw*dtodso + (lko/lk)*dtodwo); // d2fo_dswso;
                m.set(1, 1, 0, m.get(1, 0, 1)); // d2fo_dsosw;
                m.set(1, 1, 1, zggoo*to + 2.*zgodso*dtodso + (lko/lk)*dtodoo); // d2fo_dso2;
-               
-               
 
             }
         }

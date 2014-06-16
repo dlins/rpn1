@@ -41,12 +41,11 @@ class StonePermeability{
         int kowden_jet(double sow, int degree, JetMatrix &kowj);
         int kogden_jet(double sog, int degree, JetMatrix &kogj);
     public:
-    
         StonePermeability(const StonePermParams & params);
         StonePermeability(const StonePermeability & );
         virtual ~StonePermeability();
     
-        const StonePermParams & params() const ;
+        const StonePermParams & params() const;
 
         void Diff_PermabilityWater(double, double, double, double&, double&, double&, double&, double&, double&);
         void Diff_PermabilityOil(double, double, double, double&, double&, double&, double&, double&, double&);
@@ -56,6 +55,7 @@ class StonePermeability{
         int PermeabilityOil_jet(const RealVector &state, int degree, JetMatrix &oil);
         int PermeabilityGas_jet(const RealVector &state, int degree, JetMatrix &gas);
 
+        void reduced_permeability(const RealVector &state, RealVector &rp) const;
 };
 
 

@@ -44,6 +44,19 @@ accFunction_((AccumulationFunction *) accumulationFunction.clone()) {
     vm = v;
 }
 
+ColorCurve::ColorCurve(const FluxFunction & fluxFunction,
+        const AccumulationFunction & accumulationFunction) :
+fluxFunction_((FluxFunction *) fluxFunction.clone()),
+accFunction_((AccumulationFunction *) accumulationFunction.clone()) {
+    sp = std::string("+");
+    sm = std::string("-");
+    sc = std::string(".");
+    sz = std::string("0");
+
+    vm = 0;
+}
+
+
 ColorCurve::~ColorCurve() {
     delete fluxFunction_;
     delete accFunction_;
@@ -419,7 +432,7 @@ void ColorCurve::classify_segment_with_data(
                 RealVector out;
                 //                if (zerotype < fam) Left_Newton_improvement(rtemp[i], zerotype, out);
                 //                else Right_Newton_improvement(rtemp[i], zerotype - fam, out);
-//                cout << "Quem eh out : " << out << endl;
+                cout << "Quem eh out : " << out << endl;
                 //                rtemp[i] = out;
             }
         }
@@ -454,7 +467,7 @@ void ColorCurve::classify_segment_with_data(
 
             // If not removed, the transition list increases
             transition_list.push_back(rtemp[k]);
-//            cout << "transition_list.size() ::: " << transition_list.size() << endl;
+            cout << "transition_list.size() ::: " << transition_list.size() << endl;
 
             // TODO: Antigamente era um complete_point
             classify_point(rtemp[k], r_p, eigenvalue_r, sigttemp[k]);

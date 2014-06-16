@@ -2,7 +2,6 @@
 #include <vector>
 
 #include "Thermodynamics_SuperCO2_WaterAdimensionalized.h"
-#include "Debug.h"
 using namespace std;
 
 // Generate a spline
@@ -12,14 +11,10 @@ using namespace std;
 std::string Thermodynamics_SuperCO2_WaterAdimensionalized::dataPath_ = std::string("/src/c++/rpnumerics/physics/tpcw/");
 
 int Thermodynamics_SuperCO2_WaterAdimensionalized::create_spline(const std::string& name, const char *verify, double P, spline1dinterpolant &spline) {
-    if ( Debug::get_debug_level() == 5 ) {
-        printf("Dentro de create spline\n");
-    }
+    //    printf("Dentro de create spline\n");
     std::string temp(rpnHomePath_);
-    temp.append(dataPath_);
-//    if ( Debug::get_debug_level() == 5 ) {
-//        std:://cout << "Valor de temp: " << temp << "\n";
-//    }
+    //temp.append(dataPath_);
+    //    std::cout << "Valor de temp: " << temp << "\n";
 
     // Open the file that contains the data needed for the creation of the spline
     FILE *fid;
@@ -37,6 +32,7 @@ int Thermodynamics_SuperCO2_WaterAdimensionalized::create_spline(const std::stri
     fscanf(fid, "%lf", &Ptest);
 
     if (strcmp(name_variable, verify) != 0 || Ptest != P) {
+        printf("For %s: P = %f, should be %f\n", temp.c_str(), P, Ptest);
         fclose(fid);
         return SPLINE_ERROR;
     }
@@ -99,10 +95,9 @@ U_typical_(copy.U_typical_),
 h_typical_(copy.h_typical_),
 rpnHomePath_(copy.rpnHomePath_) {
 
-    if ( Debug::get_debug_level() == 5 ) {
-        //cout << "construtor de copia da termodinamica" << endl;
-        //cout<<"No ctr de copia da thermo:" <<T_typical_<<" "<<U_typical_<<" "<<Rho_typical_<<endl;
-    }
+    cout << "construtor de copia da termodinamica" << endl;
+    
+    cout<<"No ctr de copia da thermo:" <<T_typical_<<" "<<U_typical_<<" "<<Rho_typical_<<endl;
     
     
     // Generate the splines
@@ -156,7 +151,7 @@ b4(-2.17342e9),
 b5(1.86935e11),
 Tref_rock(273.15),
 Tref_water(274.3775),
-P(100.9),
+P(100.9e5),
 rhoW_const(998.2),
 Rock_Cr(2.029e6),
 Water_Cw_specific(4297.),
@@ -177,7 +172,7 @@ rpnHomePath_(rpnHomePath) {
     info_hsigmaC = create_spline("hsigmaC_spline.txt", "hsigmaC", P, hsigmaC_);
 
 
-
+    std::cout << "Status: " << status_after_init() << std::endl;
 
 }
 // DTOR (Destructor)

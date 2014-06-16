@@ -23,8 +23,6 @@
 //#define NO_ZERO_ON_CUBE 2
 //#endif
 
-struct context;
-
 class Contour2x2_Method {
     private:
         int dimension;
@@ -32,38 +30,47 @@ class Contour2x2_Method {
         static bool is_first;
 
         static HyperCube hc;
-        static const int hn;
-        static const int hm;
-        static int nsface_, nface_;
-        //, nsoln_, nedges_;
-        static const int dims_;
-        static const int dime_;
-        static const int dimf_;
-        static const int ncvert_;
-        static const int dncv;  // TODO, ver si no es ncvert.
-        static const int nsimp_;
+        static int hn;
+        static int hm;
+        static int nsface_, nface_, nsoln_, nedges_;
+        static int dims_;
+        static int dime_;
+        static int dimf_;
+        static int ncvert_;
+        static int dncv;  // TODO, ver si no es ncvert.
+        static int nsimp_;
 
-        static const int numberOfCombinations;
+        static int numberOfCombinations;
 
-        //global
-        static Matrix<int>    fnbr_;
+        static int *storn_;
+        static int *storm_;
+
         static Matrix<double> cvert_;
+        static Matrix<double> vert;
+        static Matrix<int>    bsvert_;
+        static Matrix<int>    perm_;
+        static Matrix<int>    comb_; 
+        static Matrix<double> foncub;
+        static Matrix<int>    fnbr_;
+
         static Matrix<int>    facptr_;
         static Matrix<int>    face_;
-        static int *index;
-        static int *usevrt; // TODO, ver si es necesario, sino, matar [dncv]
+
+        static Matrix<double> cpp_sol;
+        static Matrix<int>    solptr_;
+        static Matrix<int>    cpp_edges_;
+        static Matrix<int>    smpedg_;
+
+        static int *exstfc;
+        static int *sptr_;
 
         static int tsimp;
         static int tface;
 
+        static int *index;
+        static int *usevrt; // TODO, ver si es necesario, sino, matar [dncv]
 
         static void allocate_arrays(void);
-        // 
-        static void process_cell( context *cnt, ThreeImplicitFunctions *timpf, int il, int jl, int ir, int jr);
-        static void process_cell( ThreeImplicitFunctions *timpf, int il, int jl, int ir, int jr,
-                                 std::vector<RealVector> &left_vrs,   // on_domain
-                                 std::vector<RealVector> &right_vrs); // on_curve
-        //
     protected:
         static double ul0, vl0, ur0, vr0;
         static double dul, dvl, dur, dvr;

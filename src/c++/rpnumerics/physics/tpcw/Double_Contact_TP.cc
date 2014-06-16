@@ -1,5 +1,4 @@
 #include "Double_Contact_TP.h"
-#include "Debug.h"
 
 bool Double_Contact_TP::function_on_cell(double *val, int ir, int jr, int kl, int kr) {
     int domain_i, domain_j;
@@ -111,9 +110,7 @@ bool Double_Contact_TP::function_on_cell(double *val, int ir, int jr, int kl, in
 
 
 
-    if ( Debug::get_debug_level() == 5 ) {
-        //cout<<"den: "<<den<<endl;
-    }
+    //    cout<<"den: "<<den<<endl;
 
     // Output
     val[0] = Hmatrix[0][0] * (Hmatrix[1][1] * Hmatrix[2][2] - Hmatrix[1][2] * Hmatrix[2][1])
@@ -122,9 +119,7 @@ bool Double_Contact_TP::function_on_cell(double *val, int ir, int jr, int kl, in
     val[1] = (red_shock_speed - lambda_left[kl]);
     val[2] = (red_shock_speed - lambda_right);
 
-    if ( Debug::get_debug_level() == 5 ) {
-        //cout<<"val: "<<val[0]<<" "<<val[1]<<" "<<val[2]<<endl;
-    }
+    //    cout<<"val: "<<val[0]<<" "<<val[1]<<" "<<val[2]<<endl;
     /* * */
 
     return true;
@@ -194,16 +189,21 @@ void Double_Contact_TP::curve(const FluxFunction *lf, const AccumulationFunction
 
 
 
-    if ( Debug::get_debug_level() == 5 ) {
-        //cout << "Flux TP: " << lf << endl;
-        //cout << "Accum TP: " << la << endl;
-        //cout << "Flux TP: " << rf << endl;
-        //cout << "Accum TP: " << ra << endl;
-        //cout << "Grid r" << rg << endl;
-        //cout << "Grid l" << lg << endl;
-        //cout << "Fam l" << lfam << endl;
-        //cout << "Fam r" << rfam << endl;
-    }
+    cout << "Flux TP: " << lf << endl;
+    cout << "Accum TP: " << la << endl;
+
+
+
+    cout << "Flux TP: " << rf << endl;
+    cout << "Accum TP: " << ra << endl;
+
+
+
+    cout << "Grid r" << rg << endl;
+    cout << "Grid l" << lg << endl;
+
+    cout << "Fam l" << lfam << endl;
+    cout << "Fam r" << rfam << endl;
 
 
     lff = lf;

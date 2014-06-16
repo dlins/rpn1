@@ -13,7 +13,6 @@ Accum2Comp2PhasesAdimensionalized::Accum2Comp2PhasesAdimensionalized(const Accum
 Accum2Comp2PhasesAdimensionalized::Accum2Comp2PhasesAdimensionalized(const Accum2Comp2PhasesAdimensionalized_Params &param):AccumulationFunction(param) {
     TD = param.get_thermodynamics();
     phi = param.component(0);
-
     reducedAccum_= new ReducedAccum2Comp2PhasesAdimensionalized(this);
 }
 

@@ -1,13 +1,77 @@
 #include "GridValues.h"
 #include "Boundary.h"
 
-
+GridValues* GridValues::first_  = 0;
+GridValues* GridValues::last_   = 0;
+GridValues* GridValues::active_ = 0;
 
 GridValues::GridValues(const Boundary *b, 
                        const RealVector &pmin, const RealVector &pmax,
                        const std::vector<int> &number_of_cells){
 
     set_grid(b, pmin, pmax, number_of_cells);
+
+    if (first_ == 0){
+        active_ = this;
+        first_  = this;
+    }
+
+    if (last_ != 0){
+        last_->next_ = this;
+    }
+
+    // In any case:
+    //
+    prev_ = last_;
+
+    next_ = 0;
+}
+
+GridValues::~GridValues(){
+    if (next_ != 0) next_->prev_ = prev_;
+    if (prev_ != 0) prev_->next_ = next_;
+
+    if (this == first_) first_ = next_;
+    if (this == last_) last_ = prev_;
+
+    if (this == active_){
+        if      (prev_ != 0) active_ = prev_;
+        else if (next_ != 0) active_ = next_;
+        else                 active_ = 0;
+    }
+}
+
+void GridValues::active(GridValues *g){
+    active_ = g;
+    return;
+}
+
+GridValues* GridValues::active(){
+    return active_;
+}
+
+GridValues* GridValues::first(){
+    return first_;
+}
+
+GridValues* GridValues::last(){
+    return last_;
+}
+
+GridValues* GridValues::next(){
+    return next_;
+}
+
+GridValues* GridValues::prev(){
+    return prev_;
+}
+
+const GridValues* GridValues::next() const {
+    return next_;
+}
+
+const GridValues* GridValues::prev() const {
+    return prev_;
 }
 
 // Set the grid.
@@ -37,6 +101,9 @@ void GridValues::fill_values_on_grid(const Boundary *b,
 
         grid_resolution.resize(dim);
         for (int i = 0; i < dim; i++) grid_resolution.component(i) = (fabs(pmax.component(i) - pmin.component(i))) / (double) (number_of_cells[i]);
+
+        
+        cout<<"Number of cells: "<<number_of_cells[0]<<" "<<number_of_cells[1]<<endl;
         
         grid.resize(number_of_cells[0] + 1, number_of_cells[1] + 1);
 
@@ -125,6 +192,13 @@ void GridValues::fill_functions_on_grid(const FluxFunction *ff, const Accumulati
                 ff->fill_with_jet(dim, grid(i).components(), 0, F_on_grid(i).components(), 0, 0);
                 aa->fill_with_jet(dim, grid(i).components(), 0, G_on_grid(i).components(), 0, 0);
             }
+//            // When using a GPU the copy of this grid will be used, so fill it with non-sense.
+//            else {
+//                for (int j = 0; j < dim; j++){
+//                    F_on_grid(i).component(j) = 0.0;
+//                    G_on_grid(i).component(j) = 0.0;
+//                }
+//            }
         }
 
         functions_on_grid_computed = true;
@@ -168,6 +242,16 @@ void GridValues::fill_Jacobians_on_grid(const FluxFunction *ff, const Accumulati
 
                     ff->fill_with_jet(dim, grid(i).components(), 1, F_on_grid(i).components(), JF_on_grid(i).data(), 0);
                     aa->fill_with_jet(dim, grid(i).components(), 1, G_on_grid(i).components(), JG_on_grid(i).data(), 0);
+                }
+            }
+            // When using a GPU the copy of this grid will be used, so fill it with non-sense.
+            else {
+                JF_on_grid(i).resize(dim, dim);
+                JG_on_grid(i).resize(dim, dim);//printf("GridValues::fill_Jacobians_on_grid. point inside, i = %d\n", i);
+
+                for (int j = 0; j < dim*dim; j++){
+                    JF_on_grid(i).data()[j] = 0.0;
+                    JG_on_grid(i).data()[j] = 0.0;
                 }
             }
         }
@@ -228,6 +312,19 @@ void GridValues::fill_eigenpairs_on_grid(const FluxFunction *ff, const Accumulat
                 for (int j = 0; j < 2; j++) {
                     if (fabs(etemp[j].i) < epsilon) eig_is_real(i)[j] = true; // TODO: Comparacoes devem ser feitas com valores relativos, nao absolutos
                     else eig_is_real(i)[j] = false;
+                }
+            }
+            // When using a GPU the copy of this grid will be used, so fill it with non-sense.
+            else {
+                int max_size = grid(0, 0).size();
+                e(i).resize(max_size);
+                for (int j = 0; j < max_size; j++) e(i)[j] = eigenpair(max_size);
+
+                // Decide if the eigenvalues are real or complex
+                //eig_is_real(i).clear();
+                eig_is_real(i).resize(2);
+                for (int j = 0; j < 2; j++) {
+                    eig_is_real(i)[j] = true;
                 }
             }
             

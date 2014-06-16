@@ -54,6 +54,23 @@ extern "C" void dggev_(const char*, const char*,  // JOBVL, JOBVR
 /* Struct to hold an eigenpair. */
 struct eigenpair {
     public:
+        eigenpair(){
+        }
+
+        eigenpair(int n){
+            r = 0.0;
+            i = 0.0;
+
+            vlr.resize(n);
+            vli.resize(n);
+            vrr.resize(n);
+            vri.resize(n);
+
+            for (int i = 0; i < n; i++){
+                vlr[i] = vli[i] = vrr[i] = vri[i] = 0.0;
+            }
+        }
+
         double r;           // Real part of the eigenvalue
         double i;           // Imaginary part of the eigenvalue
 

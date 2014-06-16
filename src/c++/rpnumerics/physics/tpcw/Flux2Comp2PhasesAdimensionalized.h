@@ -5,7 +5,6 @@
 #include <stdlib.h>
 #include "FluxFunction.h"
 
-#include "Thermodynamics.h"
 #include "Flux2Comp2PhasesAdimensionalized_Params.h"
 
 #define FLUX2COMP2PHASESADIMENSIONALIZED_PURE_GRAVITY    0
@@ -70,15 +69,7 @@ public:
 
     void fluxParams(const FluxParams &);
 
-    // Horrible solution. This has to change.
-    //
-    double get_cnw() const {return cnw;}
-    double get_cng() const {return cng;}
-    double get_expw() const {return expw;}
-    double get_expg() const {return expg;}
 
-    const FracFlow2PhasesHorizontalAdimensionalized* get_horizontal_flux(){return FH;}
-    const FracFlow2PhasesVerticalAdimensionalized*   get_vertical_flux(){return FV;}
 private:
 
 
@@ -93,9 +84,12 @@ private:
     double expw;
     double expg;
 
+
     // Thermodynamics
 
     Thermodynamics *TD;
+
+
 
     // FracFlows
     FracFlow2PhasesHorizontalAdimensionalized *FH;
@@ -106,6 +100,16 @@ private:
 
 
     double T_typical_;
+
+
+
+
+
+
+
+
+
+
 
 };
 

@@ -26,6 +26,7 @@ int CoreyQuad::jet(const WaveState &w, JetMatrix &m, int degree) const {
     double mug = fluxParams().component(4);
     double muo = fluxParams().component(5);
 
+    // TODO: Maybe this parameter should be always 1 (one) in the absence of gravity.
     double vel = fluxParams().component(6);
 
 //    double krw_p = fluxParams().component(7);
@@ -68,7 +69,7 @@ int CoreyQuad::jet(const WaveState &w, JetMatrix &m, int degree) const {
 //    }
 //    else {
 //        double denkw = krw_p/((1. - CN)*(1. - CN));
-        kw         = sw * sw;
+        kw         = sw * sw; // swcnw*swcnw
         dkw_dsw    = 2. * sw;
         dkw_dso    = 0.;
 

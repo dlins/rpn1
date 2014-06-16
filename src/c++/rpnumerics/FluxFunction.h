@@ -30,6 +30,8 @@ public:
     /*! @brief Creates a flux function with flux parameters
      * @param params  Flux parameters
      */ 
+
+    FluxFunction();
     
     FluxFunction(const FluxParams & params);
    

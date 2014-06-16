@@ -1,5 +1,4 @@
 #include "Contour2p5_Method.h"
-#include "Debug.h"
 
 // Static variables are defined here:
 //
@@ -88,10 +87,8 @@ void Contour2p5_Method::allocate_arrays(void){
 
         is_first = false;
 
-        if ( Debug::get_debug_level() == 5 ) {
-            printf("++++++++++++++++ Contour2p5_Method: REMEMBER TO INVOKE deallocate_arrays() AT QUIT-TIME!!!\n++++++++++++++++ DON\'T SAY I DIDN\'T WARN YOU!!!\n");
-            printf("    After allocating arrays, nsface_ = %d, nface_ =  %d\n", nsface_, nface_);
-        }
+        printf("++++++++++++++++ Contour2p5_Method: REMEMBER TO INVOKE deallocate_arrays() AT QUIT-TIME!!!\n++++++++++++++++ DON\'T SAY I DIDN\'T WARN YOU!!!\n");
+        printf("    After allocating arrays, nsface_ = %d, nface_ =  %d\n", nsface_, nface_);
     }
 
     return;
@@ -111,13 +108,12 @@ void Contour2p5_Method::deallocate_arrays(void){
         is_first = true;
     }
 
-    if ( Debug::get_debug_level() == 5 ) {
-        printf("++++++++++++++++ Contour2p5_Method: arrays deallocated. ++++++++++++++++\n");
-    }
+    printf("++++++++++++++++ Contour2p5_Method: arrays deallocated. ++++++++++++++++\n");
 
     return;
 }
 
+/* HERE */
 void Contour2p5_Method::contour2p5(TwoImplicitFunctions *timpf, std::vector<RealVector> &curve_vrs, std::vector<RealVector> &domain_vrs){
     allocate_arrays();
 
@@ -132,10 +128,27 @@ void Contour2p5_Method::contour2p5(TwoImplicitFunctions *timpf, std::vector<Real
     return;
 }
 
+void Contour2p5_Method::contour2p5_for_curve(TwoImplicitFunctions *timpf, std::vector<RealVector> &curve_vrs, std::vector<RealVector> &domain_vrs){
+    allocate_arrays();
+
+    curve_vrs.clear();
+    domain_vrs.clear();
+
+    for (int i = 0; i < timpf->segment_value()->size() - 1; i++) {
+        if ( !timpf->valid_segment(i) ) continue;
+        curve2p5(timpf, i, curve_vrs, domain_vrs);
+    }
+    
+    return;
+}
+
+// TODO: Each point is being extended twice: it belongs to two segments.
+//       This situation should be remedied, by extending not a segment, but a point individually.
+//
 void Contour2p5_Method::curve2p5(TwoImplicitFunctions *timpf, int current_segment_index, 
                                  std::vector<RealVector> &curve_vrs, 
                                  std::vector<RealVector> &domain_vrs){
-
+                                 
     // Get the current segment, etc.
     //
     GridValues *gv = timpf->grid_value();
@@ -144,8 +157,9 @@ void Contour2p5_Method::curve2p5(TwoImplicitFunctions *timpf, int current_segmen
     std::vector<RealVector> current_segment;
     current_segment.resize(2);
     for (int j = 0; j < 2; j++){
-        current_segment[j].resize(2);
-        for (int k = 0; k < 2; k++) current_segment[j].component(k) = segments->at(current_segment_index + j).component(k);
+        //current_segment[j].resize(2);
+        //for (int k = 0; k < 2; k++) current_segment[j].component(k) = segments->at(current_segment_index + j).component(k);
+        current_segment[j] = segments->at(current_segment_index + j);
     }
 
     // Get the current coordinates to be used later.

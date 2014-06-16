@@ -5,9 +5,9 @@ Accum2Comp2PhasesAdimensionalized_Params::Accum2Comp2PhasesAdimensionalized_Para
     TD_ = TD;
 }
 
-//Accum2Comp2PhasesAdimensionalized_Params::Accum2Comp2PhasesAdimensionalized_Params(const Accum2Comp2PhasesAdimensionalized_Params & copy):AccumulationParams(copy.params()){
-//    TD_= copy.get_thermodynamics();
-//}
+Accum2Comp2PhasesAdimensionalized_Params::Accum2Comp2PhasesAdimensionalized_Params(const Accum2Comp2PhasesAdimensionalized_Params & copy):AccumulationParams(copy.params()){
+    TD_= copy.get_thermodynamics();
+}
 
 
 Accum2Comp2PhasesAdimensionalized_Params::~Accum2Comp2PhasesAdimensionalized_Params(){
