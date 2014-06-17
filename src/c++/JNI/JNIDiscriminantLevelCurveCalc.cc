@@ -72,6 +72,13 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_DiscriminantPointLevelCalc_calcNative(
 
     }
 
+    string id =RpNumerics::getPhysics().getSubPhysics(0).ID();
+
+    if (id.compare("TPCW")==0 || id.compare("Quad2")){
+        return NULL;
+        
+    }
+    
 
     int dimension = RpNumerics::getPhysics().domain().dim();
 
@@ -166,7 +173,14 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_DiscriminantLevelCurveCalc_calcNative(
 
     jobject segmentsArray = env->NewObject(arrayListClass, arrayListConstructor, NULL);
 
+    string id =RpNumerics::getPhysics().getSubPhysics(0).ID();
 
+
+    if (id.compare("TPCW")==0 || id.compare("Quad2")){
+        return NULL;
+        
+    }
+    
 
     
     int dimension = RpNumerics::getPhysics().domain().dim();
@@ -257,6 +271,15 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_DerivativeDiscriminantLevelCurveCalc_c
 
 
     jobject segmentsArray = env->NewObject(arrayListClass, arrayListConstructor, NULL);
+    
+    
+    string id =RpNumerics::getPhysics().getSubPhysics(0).ID();
+    
+     if (id.compare("TPCW")==0 || id.compare("Quad2")){
+        return NULL;
+        
+    }
+    
 
     int dimension = RpNumerics::getPhysics().domain().dim();
 
