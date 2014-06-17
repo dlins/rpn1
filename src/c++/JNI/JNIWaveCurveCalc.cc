@@ -112,7 +112,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc
 
     const FluxFunction * flux = &RpNumerics::getPhysics().fluxFunction();
 
-    //cout << "Parametros na chamada: " << flux->fluxParams().params() << endl;
+    cout << "Parametros na chamada: " << flux->fluxParams().params() << endl;
 
     const AccumulationFunction * accum = &RpNumerics::getPhysics().accumulation();
 
@@ -181,15 +181,15 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc
     streamFamily >> familyNumber;
 
 
-    //cout << "Valor de origin" << originNumber << endl;
+    cout << "Valor de origin" << originNumber << endl;
 
-    //cout << "Ponto entrado: " << realVectorInput << endl;
+    cout << "Ponto entrado: " << realVectorInput << endl;
 
 
-    //cout << "Curve index: " << curveNumber << endl;
-    //cout << "Direcao: " << timeDirection << endl;
-    //cout << "Family" << familyNumber << endl;
-    //cout << "Edge" << edgeNumber << endl;
+    cout << "Curve index: " << curveNumber << endl;
+    cout << "Direcao: " << timeDirection << endl;
+    cout << "Family" << familyNumber << endl;
+    cout << "Edge" << edgeNumber << endl;
 
 
     WaveCurve * hwc = new WaveCurve();

@@ -82,7 +82,8 @@ void GridValuesFactory::invalidateGrids() {
         factoryElement-> dd_computed = false;
         factoryElement->e_computed = false;
 
-   
+        
+      
     }
 
 

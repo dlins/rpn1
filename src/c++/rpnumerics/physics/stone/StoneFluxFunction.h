@@ -32,9 +32,9 @@ class StoneFluxFunction : public FluxFunction {
 private:
     StonePermeability * perm_;
 
-    double grw, grg, gro;
-    double muw, mug, muo;
-    double vel;
+//    double grw, grg, gro;
+//    double muw, mug, muo;
+//    double vel;
 
 public:
 

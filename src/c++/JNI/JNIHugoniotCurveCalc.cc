@@ -122,7 +122,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
 
     ReferencePoint refPoint(Uref, &RpNumerics::getPhysics().fluxFunction(), &RpNumerics::getPhysics().accumulation(), 0);
 
-    //cout << "flux :" << RpNumerics::getPhysics().fluxFunction().fluxParams().params() << " " << &RpNumerics::getPhysics().accumulation() << endl;
+//    cout << "flux :" << RpNumerics::getPhysics().fluxFunction().fluxParams().params() << " " << &RpNumerics::getPhysics().accumulation() << endl;
 
     int caseFlag;
     std::stringstream stream(caseName);
