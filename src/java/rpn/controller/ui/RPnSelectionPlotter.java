@@ -82,13 +82,13 @@ public class RPnSelectionPlotter extends RPn2DMouseController {
             //TESTE
             
          
-
-            graphicsUtil.setID(String.valueOf(panel.getGraphicsUtil().size() - 1));
-
-            ZoomPlotCommand.instance().setAreaAndPanel((AreaSelected) graphicsUtil, panel);
-
-            ZoomPlotCommand.instance().execute();
-
+//
+//            graphicsUtil.setID(String.valueOf(panel.getGraphicsUtil().size() - 1));
+//
+//            ZoomPlotCommand.instance().setAreaAndPanel((AreaSelected) graphicsUtil, panel);
+//
+//            ZoomPlotCommand.instance().execute();
+//
 
 
             

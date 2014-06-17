@@ -140,11 +140,13 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RiemannProfileCalc_nativeCalc
 
     //cout << "Chamando Sol de Riemann" << endl;
 
-    
+    if (RpNumerics::getPhysics().domain().dim() == 3) {
         nativeDownLeft.resize(3);
         nativeDownLeft.component(2) = 1.0;
         nativeTopRight.resize(3);
         nativeTopRight.component(2) = 1.0;
+
+    }
 
 
     RpNumerics::getPhysics().getSubPhysics(0).preProcess(nativeDownLeft);
@@ -152,7 +154,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RiemannProfileCalc_nativeCalc
 
 
 
-    //cout << nativeDownLeft << " " << nativeTopRight << endl;
+    cout << nativeDownLeft << " " << nativeTopRight << endl;
 
 
 
@@ -236,7 +238,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RiemannProfileCalc_nativeCalc
             //        tempVector.resize(dimension + 1);
             //        tempVector[dimension] = speedVector[i];
 
-//            //cout << profileCoords << endl;
+            //            //cout << profileCoords << endl;
 
 
 
