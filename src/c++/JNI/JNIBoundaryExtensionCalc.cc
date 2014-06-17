@@ -77,7 +77,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_BoundaryExtensionCurveCalc_nativeCalc
     const FluxFunction * flux = &RpNumerics::getPhysics().fluxFunction();
     const AccumulationFunction * accum = &RpNumerics::getPhysics().accumulation();
 
-    GridValues * gv = RpNumerics::getGridFactory().getGrid("bifurcation");
+    GridValues * gv = RpNumerics::getGridFactory().getGrid("bifurcationcurve");
 
     physicsBoundary->extension_curve(flux, accum, *gv, edge, edgeResolution, true, domainFamily, characteristicWhere, curve_segments, domain_segments);
 
