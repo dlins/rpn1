@@ -104,7 +104,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc
         realVectorInput.component(i) = input[i];
     }
 
-
+  
     RpNumerics::getPhysics().getSubPhysics(0).preProcess(realVectorInput);
     env->DeleteLocalRef(inputPhasePointArray);
 
@@ -112,21 +112,18 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc
 
     const FluxFunction * flux = &RpNumerics::getPhysics().fluxFunction();
 
-    cout << "Parametros na chamada: " << flux->fluxParams().params() << endl;
+//    cout << "Parametros na chamada: " << flux->fluxParams().params() << endl;
 
     const AccumulationFunction * accum = &RpNumerics::getPhysics().accumulation();
 
     RarefactionCurve rc(accum, flux, boundary);
 
     HugoniotContinuation * hug = RpNumerics::getPhysics().getSubPhysics(0).getHugoniotContinuationMethod();
-
-
-    ShockCurve sc(hug);
-
-
+    
+    ShockCurve * shock = RpNumerics::getPhysics().getSubPhysics(0).getShockMethod();
+    
     CompositeCurve * cmp = RpNumerics::getPhysics().getSubPhysics(0).getCompositeCurve();
-
-
+    
     LSODE lsode;
     ODE_Solver *odesolver;
     odesolver = &lsode;
@@ -134,7 +131,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc
     int dimension = realVectorInput.size();
 
 
-    WaveCurveFactory wavecurvefactory(accum, flux, boundary, odesolver, &rc, &sc, cmp);
+    WaveCurveFactory wavecurvefactory(accum, flux, boundary, odesolver, &rc, shock, cmp);
 
 
 
@@ -180,16 +177,16 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc
     std::stringstream streamFamily(family);
     streamFamily >> familyNumber;
 
-
-    cout << "Valor de origin" << originNumber << endl;
-
-    cout << "Ponto entrado: " << realVectorInput << endl;
-
-
-    cout << "Curve index: " << curveNumber << endl;
-    cout << "Direcao: " << timeDirection << endl;
-    cout << "Family" << familyNumber << endl;
-    cout << "Edge" << edgeNumber << endl;
+//
+//    cout << "Valor de origin" << originNumber << endl;
+//
+//    cout << "Ponto entrado: " << realVectorInput << endl;
+//
+//
+//    cout << "Curve index: " << curveNumber << endl;
+//    cout << "Direcao: " << timeDirection << endl;
+//    cout << "Family" << familyNumber << endl;
+//    cout << "Edge" << edgeNumber << endl;
 
 
     WaveCurve * hwc = new WaveCurve();

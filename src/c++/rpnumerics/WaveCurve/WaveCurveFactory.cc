@@ -111,7 +111,7 @@ int WaveCurveFactory::Liu_half_wavecurve(const ReferencePoint &ref,
                                                    rar_stopped_because,
                                                    edge);
 //            ofstream rar_file("rar.txt", );
-
+            cout<<"Tamanho da rarefacao: "<<rarcurve.curve.size()<<endl;
 
             // Update the back pointers.
             //
@@ -235,7 +235,7 @@ int WaveCurveFactory::Liu_half_wavecurve(const ReferencePoint &ref,
             RealVector final_direction;
 
             int composite_stopped_because;
-
+        
             int info_cmp = compositecurve->curve(g, f, b,
                                                  hwc.wavecurve[rarefaction_list.back()],
                                                  hwc.wavecurve[rarefaction_list.back()].curve[last_point_in_rarefaction.back()],

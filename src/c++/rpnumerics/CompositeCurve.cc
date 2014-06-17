@@ -558,7 +558,7 @@ int CompositeCurve::curve(const AccumulationFunction *RarAccum, const FluxFuncti
                           RealVector &final_direction,
                           int &reason_why,
                           int &edge){
-
+    cout<<"Em composite 561"<<endl;
     normalize_with_respect_to_whom = NORMALIZE_WITH_RESPECT_TO_RAREFACTION;
     compute_first_determinant = true;
     cmp_deltaxi = deltaxi;
@@ -585,12 +585,16 @@ int CompositeCurve::curve(const AccumulationFunction *RarAccum, const FluxFuncti
     rarboundary = RarBoundary;
 
     RealVector rarcmp_point(two_n);
+    
+
 
     // Store the first point.
     //
 
     add_point_to_curve(composite_initial_point, last_point_in_rarefaction, rarcurve, compositecurve);
     new_rarcurve.curve.push_back(rarcurve.curve[last_point_in_rarefaction]);
+
+    
 
 
     // Initialize the composite curve.
