@@ -106,6 +106,7 @@ vector<int> GridValuesFactory::getDefaultGridResolution(const string & gridName)
     if (gridName.compare("doublecontactcurve") == 0) {
         noc[0] = 30;
         noc[1] = 30;
+        
     }
 
     if (gridName.compare("bifurcationcurve") == 0) {

@@ -35,6 +35,12 @@ CoreyQuadPhysics::CoreyQuadPhysics() : SubPhysics(CoreyQuad(CoreyQuad_Params()),
    cout<<"sebc antes: "<<stoneExplicitBifurcation<<endl;
     hugoniotCurveArray_->operator []("COREY") = new CoreyQuadExplicitHugoniotCurve((CoreyQuad *) & fluxFunction(),&accumulation(), stoneExplicitBifurcation, &getBoundary());
     hugoniotCurveArray_->operator []("IMPLICIT") = new ImplicitHugoniotCurve(&fluxFunction(),&accumulation(), &getBoundary());
+    compositeCurve_ = new CompositeCurve(accumulationFunction_, fluxFunction_, &getBoundary(), shockCurve_, 0);
+    
+    
+     hugoniot_continuation_method_ = new HugoniotContinuation2D2D(&fluxFunction(), &accumulation(), &getBoundary());
+
+    shockCurve_ = new ShockCurve(getHugoniotContinuationMethod());
     
     setDoubleContactFunction(new Double_Contact());
     setViscosityMatrix(new Viscosity_Matrix());
@@ -60,14 +66,16 @@ CoreyQuadPhysics::CoreyQuadPhysics(const CoreyQuadPhysics & copy) : SubPhysics(c
    Stone_Explicit_Bifurcation_Curves * stoneExplicitBifurcation = new Stone_Explicit_Bifurcation_Curves(stoneFluxFunction);
 
     
-    
+     hugoniot_continuation_method_ = new HugoniotContinuation2D2D(&fluxFunction(), &accumulation(), &getBoundary());
+
+    shockCurve_ = new ShockCurve(getHugoniotContinuationMethod());
     hugoniotCurveArray_->operator []("COREY") = new CoreyQuadExplicitHugoniotCurve((CoreyQuad *) & fluxFunction(), &copy.accumulation(),stoneExplicitBifurcation, &getBoundary());
 
     hugoniotCurveArray_->operator []("IMPLICIT") = new ImplicitHugoniotCurve(&fluxFunction(),&accumulation(), &getBoundary());
     
 
 
-
+    compositeCurve_ = new CompositeCurve(accumulationFunction_, fluxFunction_, &getBoundary(), shockCurve_, 0);
 
     setDoubleContactFunction(new Double_Contact());
     setViscosityMatrix(copy.getViscosityMatrix());

@@ -30,8 +30,7 @@ void GridValues::set_grid(const Boundary *b,
 void GridValues::fill_values_on_grid(const Boundary *b, 
                                      const RealVector &pmin, const RealVector &pmax,
                                      const std::vector<int> &number_of_cells){
-    
-    cout<<"Chamando fill_values_on_grid"<<endl;
+
     if (!grid_computed){
         int dim = pmin.size();
 
