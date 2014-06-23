@@ -111,7 +111,6 @@ int WaveCurveFactory::Liu_half_wavecurve(const ReferencePoint &ref,
                                                    rar_stopped_because,
                                                    edge);
 //            ofstream rar_file("rar.txt", );
-            cout<<"Tamanho da rarefacao: "<<rarcurve.curve.size()<<endl;
 
             // Update the back pointers.
             //

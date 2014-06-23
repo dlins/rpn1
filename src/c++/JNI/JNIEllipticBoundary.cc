@@ -57,7 +57,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_EllipticBoundaryCalc_nativeCalc
     // Storage space for the segments:
     std::vector<RealVector> left_vrs;
 
-    GridValues * gv = RpNumerics::getGridFactory().getGrid("bifurcation");
+    GridValues * gv = RpNumerics::getGridFactory().getGrid("bifurcationcurve");
 
     Elliptic_Boundary ellipticBoundary;
 

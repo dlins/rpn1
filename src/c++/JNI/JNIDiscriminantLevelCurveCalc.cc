@@ -289,7 +289,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_DerivativeDiscriminantLevelCurveCalc_c
 
     vector<double>vec_levels;
 
-    GridValues * gv = RpNumerics::getGridFactory().getGrid("bifurcation");
+    GridValues * gv = RpNumerics::getGridFactory().getGrid("bifurcationcurve");
     
     
     //cout<<"Valor de u: "<<u<<endl;

@@ -122,7 +122,7 @@ public abstract class RpModelPlotCommand extends RpModelActionCommand implements
 
         logCommand(new RpCommand(event_, inputArray));
 
-        RPnDataModule.PHASESPACE.join(geometry);
+        RPnDataModule.PHASESPACE.plot(geometry);
 
         if (RPnNetworkStatus.instance().isOnline() && RPnNetworkStatus.instance().isMaster()) {
             RPnNetworkStatus.instance().sendCommand(rpn.controller.ui.UndoActionController.instance().getLastCommand().toXML());

@@ -64,7 +64,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_EnvelopeCurveCalc_nativeCalc
     const FluxFunction * flux = &RpNumerics::getPhysics().fluxFunction();
     const AccumulationFunction * accum = &RpNumerics::getPhysics().accumulation();
 
-    GridValues * gv = RpNumerics::getGridFactory().getGrid("bifurcation");
+    GridValues * gv = RpNumerics::getGridFactory().getGrid("bifurcationcurve");
 
     if ( Debug::get_debug_level() == 5 ) {
         ////cout << "constant : " << where_constant << endl;

@@ -76,7 +76,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_BuckleyLeverettinInflectionCurveCalc_n
     Accum2Comp2PhasesAdimensionalized * accumulationFunction = (Accum2Comp2PhasesAdimensionalized *) & tpcw.accumulation();
 
 
-    GridValues * gv = RpNumerics::getGridFactory().getGrid("bifurcation");
+    GridValues * gv = RpNumerics::getGridFactory().getGrid("bifurcationcurve");
 
     if ( Debug::get_debug_level() == 5 ) {
         //cout<<gv<<endl;

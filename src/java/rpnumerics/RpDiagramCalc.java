@@ -13,8 +13,8 @@ package rpnumerics;
 public interface RpDiagramCalc {
     
     
-    public RpSolution createDiagramSource();
+    public RpSolution createDiagramSource() throws RpException;
 
-    public RpSolution updateDiagramSource();
+    public RpSolution updateDiagramSource() throws RpException;
     
 }

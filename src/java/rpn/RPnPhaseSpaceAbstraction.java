@@ -16,7 +16,6 @@ import java.util.Iterator;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Timer;
-import rpn.command.CurveSelectionCommand;
 import rpn.component.util.GeometryGraphND;
 import rpn.controller.ui.UIController;
 import rpn.controller.ui.UserInputTable;

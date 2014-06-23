@@ -58,10 +58,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RiemannProfileCalc_nativeCalc
 
 
 
-
-
-
-
     jmethodID arrayListConstructor = env->GetMethodID(arrayListClass, "<init>", "()V");
 
     jmethodID getCorrespondingCurveIndexMethodID = (env)->GetMethodID(classOrbitPoint, "getCorrespondingCurveIndex", "()I");
@@ -153,19 +149,27 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RiemannProfileCalc_nativeCalc
     RpNumerics::getPhysics().getSubPhysics(0).preProcess(nativeTopRight);
 
 
+//    nativeDownLeft.component(0)=0.404143;
+//    nativeDownLeft.component(1)= 0.211145;
+//    
+//    nativeTopRight.component(0)=0.624427;
+//    nativeTopRight.component(1)=0.386;
+    
+    
 
-    cout << nativeDownLeft << " " << nativeTopRight << endl;
+    cout<<"AREA: " << nativeDownLeft << " " << nativeTopRight << endl;
 
-
-
-
-
-
+    
 
     int intersectionCode = WaveCurveFactory::intersection(*waveCurve1, *waveCurve2, nativeDownLeft, nativeTopRight,
             intersectionPoint, subcurve1, subPoint1, subcurve2, subPoint2);
-
-
+    
+    
+       if (intersectionCode == WAVE_CURVE_INTERSECTION_NOT_FOUND){
+           cout<<"Intersection not found !"<<endl;
+           return NULL;
+       }
+    
 
     RiemannProblem riemanProblem;
 
@@ -175,15 +179,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RiemannProfileCalc_nativeCalc
     riemanProblem.profile(*waveCurve1, subcurve1, subPoint1, 0,
             *waveCurve2, subcurve2, subPoint2, 1,
             profile, speedVector);
-
-
-    //    riemanProblem.all_increase_profile(*waveCurve1, subcurve1, subPoint1, 0,
-    //            *waveCurve2, subcurve2, subPoint2, 1,
-    //            profile, speedVector);
-
-
-
-
 
 
     if (Debug::get_debug_level() == 5) {
@@ -197,16 +192,16 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RiemannProfileCalc_nativeCalc
     if (profile.size() == 0)
         return NULL;
 
-
-    //    //cout << "Coordenadas do perfil" << endl;
-    //    for (int i = 0; i < profile.size(); i++) {
-    //        //cout  << profile.at(i)(0) << " " << profile.at(i)(1) << endl;
-    //    }
-    //    for (int i = 0; i < speedVector.size(); i++) {
     //
-    //        //cout  << speedVector.at(i)<< endl;
-    //
-    //    }
+    //        cout << "Coordenadas do perfil" << endl;
+    //        for (int i = 0; i < profile.size(); i++) {
+    //            cout  << profile.at(i)(0) << " " << profile.at(i)(1) << endl;
+    //        }
+    //        for (int i = 0; i < speedVector.size(); i++) {
+    //    
+    //            cout  << speedVector.at(i)<< endl;
+    //    
+    //        }
 
 
 
@@ -344,7 +339,35 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RiemannProfileCalc_nativeAllProfileCal
     jclass classRiemannProfile = (env)->FindClass(RIEMANNPROFILE_LOCATION);
 
 
-    jclass arrayListClass = env->FindClass("java/util/List");
+
+
+    jclass arrayListClass = env->FindClass("java/util/ArrayList");
+
+    jclass diagramClass = env->FindClass(DIAGRAM_LOCATION);
+    jclass diagramLineClass = env->FindClass(DIAGRAMLINE_LOCATION);
+
+
+    jmethodID diagramConstructor = env->GetMethodID(diagramClass, "<init>", "(Ljava/util/List;)V");
+    jmethodID diagramLineConstructor = env->GetMethodID(diagramLineClass, "<init>", "(Ljava/util/List;)V");
+
+    jmethodID diagramLineDefaultConstructor = env->GetMethodID(diagramLineClass, "<init>", "()V");
+
+    jmethodID addPartMethodID = env->GetMethodID(diagramLineClass, "addPart", "(Ljava/util/List;)V");
+
+
+    jmethodID setTypeMethodID = env->GetMethodID(diagramLineClass, "setType", "(II)V");
+
+    jmethodID arrayListAddMethod = env->GetMethodID(arrayListClass, "add", "(Ljava/lang/Object;)Z");
+
+
+
+
+    jmethodID arrayListConstructor = env->GetMethodID(arrayListClass, "<init>", "()V");
+    
+    jmethodID realVectorConstructorDoubleArray = env->GetMethodID(realVectorClass, "<init>", "([D)V");
+
+
+
 
     jmethodID getCorrespondingCurveIndexMethodID = (env)->GetMethodID(classOrbitPoint, "getCorrespondingCurveIndex", "()I");
 
@@ -438,56 +461,122 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RiemannProfileCalc_nativeAllProfileCal
             profile, speedVector);
 
 
-    if (profile.size() == 0)
-        return NULL;
 
 
-    //cout << "Coordenadas do perfil" << endl;
-    for (int i = 0; i < profile.size(); i++) {
-        //cout << profile.at(i)(0) << " " << profile.at(i)(1) << endl;
-    }
-    for (int i = 0; i < speedVector.size(); i++) {
-
-        //cout << speedVector.at(i) << endl;
-
-    }
+    int numberOfLines = profile.at(0).size();
 
 
-    jobjectArray orbitPointArray = (jobjectArray) (env)->NewObjectArray(profile.size(), classOrbitPoint, NULL);
-    for (int i = 0; i < profile.size(); i++) {
-
-        RealVector tempVector = profile.at(i);
-        tempVector.resize(3);
-        tempVector[2] = speedVector[i];
+    jobject diagramLinesList = env->NewObject(arrayListClass, arrayListConstructor, NULL); //Linhas do diagrama
 
 
+    for (int i = 0; i < numberOfLines; i++) {
 
-        if (Debug::get_debug_level() == 5) {
-            //cout << tempVector << endl;
+        jobject speedLine = env->NewObject(diagramLineClass, diagramLineDefaultConstructor, NULL);
+
+        jobject speedLinePartList = env->NewObject(arrayListClass, arrayListConstructor, NULL);
+
+        for (int j = 0; j < profile.size(); j++) {
+
+
+            RealVector profileCoords(2);
+
+            profileCoords.component(0) = speedVector[j];
+            profileCoords.component(1) = profile[j].component(i);
+
+            //        RealVector tempVector = profile.at(i);
+            //        tempVector.resize(dimension + 1);
+            //        tempVector[dimension] = speedVector[i];
+
+            //            //cout << profileCoords << endl;
+
+
+
+            jdoubleArray speedArray = env->NewDoubleArray(dimension);
+            env->SetDoubleArrayRegion(speedArray, 0, dimension, (double *) profileCoords);
+            jobject realVector = env->NewObject(realVectorClass, realVectorConstructorDoubleArray, speedArray);
+            env->CallObjectMethod(speedLinePartList, arrayListAddMethod, realVector);
+
+
         }
 
-        double * dataCoords = tempVector;
 
-        //Reading only coodinates
-        jdoubleArray jTempArray = (env)->NewDoubleArray(tempVector.size());
-
-        (env)->SetDoubleArrayRegion(jTempArray, 0, dimension, dataCoords);
-
-        //Lambda is the last component.
-        jobject orbitPoint = (env)->NewObject(classOrbitPoint, orbitPointConstructor, jTempArray);
-        env->CallVoidMethod(orbitPoint, setLambdaID, speedVector[i]);
+        env->CallObjectMethod(speedLine, addPartMethodID, speedLinePartList);
+        env->CallObjectMethod(speedLine, setTypeMethodID, 0, i); //Setando o tipo 
+        env->CallObjectMethod(diagramLinesList, arrayListAddMethod, speedLine);
 
 
-        (env)->SetObjectArrayElement(orbitPointArray, i, orbitPoint);
+
+
 
 
     }
 
-    jobject riemannProfile = (env)->NewObject(classRiemannProfile, riemannProfileConstructorID, orbitPointArray);
+
+    jobject diagram = (env)->NewObject(diagramClass, diagramConstructor, diagramLinesList);
 
 
-    return riemannProfile;
+    return diagram;
 
+
+
+
+
+
+
+
+    //
+    //
+    //
+    //        if (profile.size() == 0)
+    //            return NULL;
+    //
+    //
+    //        //cout << "Coordenadas do perfil" << endl;
+    //        for (int i = 0; i < profile.size(); i++) {
+    //            //cout << profile.at(i)(0) << " " << profile.at(i)(1) << endl;
+    //        }
+    //        for (int i = 0; i < speedVector.size(); i++) {
+    //
+    //            //cout << speedVector.at(i) << endl;
+    //
+    //        }
+    //
+    //
+    //        jobjectArray orbitPointArray = (jobjectArray) (env)->NewObjectArray(profile.size(), classOrbitPoint, NULL);
+    //        for (int i = 0; i < profile.size(); i++) {
+    //
+    //            RealVector tempVector = profile.at(i);
+    //            tempVector.resize(3);
+    //            tempVector[2] = speedVector[i];
+    //
+    //
+    //
+    //            if (Debug::get_debug_level() == 5) {
+    //                //cout << tempVector << endl;
+    //            }
+    //
+    //            double * dataCoords = tempVector;
+    //
+    //            //Reading only coodinates
+    //            jdoubleArray jTempArray = (env)->NewDoubleArray(tempVector.size());
+    //
+    //            (env)->SetDoubleArrayRegion(jTempArray, 0, dimension, dataCoords);
+    //
+    //            //Lambda is the last component.
+    //            jobject orbitPoint = (env)->NewObject(classOrbitPoint, orbitPointConstructor, jTempArray);
+    //            env->CallVoidMethod(orbitPoint, setLambdaID, speedVector[i]);
+    //
+    //
+    //            (env)->SetObjectArrayElement(orbitPointArray, i, orbitPoint);
+    //
+    //
+    //        }
+    //
+    //        jobject riemannProfile = (env)->NewObject(classRiemannProfile, riemannProfileConstructorID, orbitPointArray);
+    //
+    //
+    //        return riemannProfile;
+    //
 
 
 

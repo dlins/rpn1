@@ -78,7 +78,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_SubInflectionCurveCalc_nativeCalc(JNIE
 
     SubinflectionTP newSubinflection(accumulationFunction->accumulationParams().component(0));
 
-    GridValues * gv = RpNumerics::getGridFactory().getGrid("bifurcation");
+    GridValues * gv = RpNumerics::getGridFactory().getGrid("bifurcationcurve");
 
 
 

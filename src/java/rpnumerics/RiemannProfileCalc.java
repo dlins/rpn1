@@ -12,7 +12,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import wave.util.RealVector;
 
-public class RiemannProfileCalc implements RpCalculation,RpDiagramCalc {
+public class RiemannProfileCalc implements RpCalculation, RpDiagramCalc {
     //
     // Constants
     //
@@ -71,19 +71,19 @@ public class RiemannProfileCalc implements RpCalculation,RpDiagramCalc {
         RpSolution result = null;
 
         if (isAllProfile_) {
-            
-            result= nativeAllProfileCalc(firstWaveCurveID_, secondWaveCurveID_, referencePointOfFirstWaveCurve_, pointOnSecondWaveCurve_);
+
+            result = nativeAllProfileCalc(firstWaveCurveID_, secondWaveCurveID_, referencePointOfFirstWaveCurve_, pointOnSecondWaveCurve_);
 
         } else {
             RealVector pmin = area_.getDownLeft();
             RealVector pmax = area_.getTopRight();
 
-           result= nativeCalc(pmin, pmax, waveCurvesID_);
+            result = nativeCalc(pmin, pmax, waveCurvesID_);
 
         }
 
         if (result == null) {
-            throw new RpException("Error in native layer");
+            throw new RpException("Intersection not found");
         }
 
         return result;
@@ -102,23 +102,16 @@ public class RiemannProfileCalc implements RpCalculation,RpDiagramCalc {
     }
 
     @Override
-    public RpSolution createDiagramSource() {
-        try {
-            return calc();
-        } catch (RpException ex) {
-            Logger.getLogger(RiemannProfileCalc.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return null;
+    public RpSolution createDiagramSource() throws RpException {
+
+        return calc();
+
     }
 
     @Override
-    public RpSolution updateDiagramSource() {
-        try {
-            return calc();
-        } catch (RpException ex) {
-            Logger.getLogger(RiemannProfileCalc.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return null;
+    public RpSolution updateDiagramSource() throws RpException {
+
+        return calc();
 
     }
 }

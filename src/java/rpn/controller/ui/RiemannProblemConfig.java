@@ -20,6 +20,7 @@ import rpn.command.SecondaryBifurcationCurveCommand;
 
 import rpn.command.SubInflectionExtensionCurveCommand;
 import rpn.command.SubInflectionPlotCommand;
+import rpn.controller.phasespace.riemannprofile.RiemannProfileState;
 
 import wave.util.RealVector;
 
@@ -41,6 +42,8 @@ public class RiemannProblemConfig extends UI_ACTION_SELECTED {
         EllipticBoundaryExtensionCommand.instance().setEnabled(true);
         EnvelopeCurveCommand.instance().setEnabled(true);
         SecondaryBifurcationCurveCommand.instance().setEnabled(true);
+        
+        UIController.instance().getActivePhaseSpace().changeState(new RiemannProfileState());
 
     }
 

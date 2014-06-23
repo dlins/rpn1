@@ -12,18 +12,15 @@ import java.util.Observer;
 import javax.swing.JToggleButton;
 import rpn.RPnPhaseSpaceAbstraction;
 import rpn.RPnPhaseSpacePanel;
-import rpn.component.RpGeomFactory;
 import rpn.component.RpGeometry;
 import rpn.controller.ui.AREASELECTION_CONFIG;
 import rpn.controller.ui.RPnSelectionPlotter;
 import rpn.controller.ui.UIController;
-import rpn.message.RPnNetworkStatus;
-import rpnumerics.RPnCurve;
 import wave.util.RealVector;
 
 public class DomainSelectionCommand extends RpModelPlotCommand implements Observer {
 
-    static public final String DESC_TEXT = "Extension Domain Selection";
+    static public final String DESC_TEXT = "Domain Selection";
     static private DomainSelectionCommand instance_ = null;
 
     private DomainSelectionCommand() {

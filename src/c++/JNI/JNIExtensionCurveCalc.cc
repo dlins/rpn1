@@ -112,7 +112,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ExtensionCurveCalc_nativeCalc(JNIEnv *
     const FluxFunction * fluxFunction = &RpNumerics::getPhysics().fluxFunction();
     const AccumulationFunction * accumFunction = &RpNumerics::getPhysics().accumulation();
 
-    GridValues * gv = RpNumerics::getGridFactory().getGrid("bifurcation");
+    GridValues * gv = RpNumerics::getGridFactory().getGrid("bifurcationcurve");
 
 
 

@@ -9,11 +9,15 @@ import java.awt.Color;
 import java.util.ArrayList;
 import rpnumerics.RpDiagramCalc;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import rpn.RPnDesktopPlotter;
 import rpn.controller.RpCalcController;
 import rpn.controller.RpController;
 import rpnumerics.Area;
 import rpnumerics.Diagram;
 import rpnumerics.DiagramLine;
+import rpnumerics.RpException;
 import rpnumerics.RpSolution;
 import wave.multid.CoordsArray;
 import wave.multid.model.MultiPolyLine;
@@ -33,23 +37,36 @@ public final class RpDiagramFactory implements RpGeomFactory {
     private RpController ui_;
 
     public RpDiagramFactory(RpDiagramCalc calc) {
-        calc_ = calc;
-        geom_ = createDiagramFromSource();
-        isGeomOutOfDate_ = false;
+        try {
+            calc_ = calc;
+            geom_ = createDiagramFromSource();
+            isGeomOutOfDate_ = false;
 
-        geomSource_ = calc.createDiagramSource();
+            geomSource_ = calc.createDiagramSource();
+        } catch (RpException ex) {
+            RPnDesktopPlotter.showCalcExceptionDialog(ex);
+        }
     }
 
     @Override
     public void updateGeom() {
-        geomSource_ = calc_.updateDiagramSource();
-        geom_ = createDiagramFromSource();
-        isGeomOutOfDate_ = true;
+        try {
+            geomSource_ = calc_.updateDiagramSource();
+            geom_ = createDiagramFromSource();
+            isGeomOutOfDate_ = true;
+
+        } catch (RpException ex) {
+            RPnDesktopPlotter.showCalcExceptionDialog(ex);
+
+        }
     }
 
-    public RpGeometry createDiagramFromSource() {
+    public RpGeometry createDiagramFromSource() throws RpException {
 
-        Diagram solution = (Diagram) calc_.createDiagramSource();
+        Diagram solution = null;
+
+        solution = (Diagram) calc_.createDiagramSource();
+
         ArrayList<MultiPolyLine> diagramLinesList = new ArrayList<MultiPolyLine>();
         List<DiagramLine> linesList = solution.getLines();
 
@@ -57,14 +74,13 @@ public final class RpDiagramFactory implements RpGeomFactory {
             List<List<RealVector>> lineCoords = line.getCoords();
 
             int index = 0;
-            System.out.println("Quatidade de partes: "+ line.getCoords().size());
+            System.out.println("Quatidade de partes: " + line.getCoords().size());
             for (List<RealVector> linePart : lineCoords) {
                 CoordsArray[] diagramCoords = MultidAdapter.converseRealVectorListToCoordsArray(linePart);
                 MultiPolyLine diagramLine = new MultiPolyLine(diagramCoords, new ViewingAttr(Color.white));
                 System.out.println(line);
-                int type  = line.getType(index);
-                
-                
+                int type = line.getType(index);
+
                 diagramLine.viewingAttr().setColor(colorChooser(type));
                 diagramLinesList.add(diagramLine);
                 index++;
@@ -78,10 +94,8 @@ public final class RpDiagramFactory implements RpGeomFactory {
         return diagramGeom;
 
     }
-    
-    
-    
-     private Color colorChooser(int index) {
+
+    private Color colorChooser(int index) {
 
         switch (index) {
 
@@ -107,20 +121,6 @@ public final class RpDiagramFactory implements RpGeomFactory {
         }
 
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
 
     @Override
     public void updateGeom(List<Area> area, List<Integer> segmentsToRemove) {

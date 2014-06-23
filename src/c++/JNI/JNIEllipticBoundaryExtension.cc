@@ -58,7 +58,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_EllipticBoundaryExtensionCalc_nativeCa
     // Storage space for the segments:
 
 
-    GridValues * gv = RpNumerics::getGridFactory().getGrid("bifurcation");
+    GridValues * gv = RpNumerics::getGridFactory().getGrid("bifurcationcurve");
 
     EllipticExtension ellipticBoundaryExtension;
 
