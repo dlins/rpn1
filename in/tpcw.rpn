@@ -94,7 +94,7 @@
 
                 <CURVEPARAM name="family" value="1"/>
                 <CURVEPARAM name="edge" value="0"/>
-                <CURVEPARAM name="edgeresolution" value="32"/>
+                <CURVEPARAM name="edgeres" value="32"/>
                 <CURVEPARAM name="resolution" value="32 32"/>
                 <CURVEPARAM name="characteristicwhere" value="1"/>
 

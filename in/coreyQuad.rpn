@@ -133,7 +133,7 @@
 
                 <CURVEPARAM name="family" value="1"/>
                 <CURVEPARAM name="edge" value="0"/>
-                <CURVEPARAM name="edgeresolution" value="128"/>
+                <CURVEPARAM name="edgeres" value="128"/>
                 <CURVEPARAM name="resolution" value="128 128"/>
                 <CURVEPARAM name="characteristicwhere" value="1"/>
 

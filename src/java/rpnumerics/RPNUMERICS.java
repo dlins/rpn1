@@ -657,7 +657,7 @@ public class RPNUMERICS {
 
         int edge = new Integer(getParamValue("boundaryextensioncurve", "edge"));
 
-        int edgeResolution = new Integer(getParamValue("boundaryextensioncurve", "edgeresolution"));
+        int edgeResolution = new Integer(getParamValue("boundaryextensioncurve", "edgeres"));
 
         int characteristic = new Integer(getParamValue("boundaryextensioncurve", "characteristicwhere"));
 
