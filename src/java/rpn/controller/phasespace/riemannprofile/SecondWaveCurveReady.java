@@ -1,61 +1,37 @@
 package rpn.controller.phasespace.riemannprofile;
 
-import rpn.RPnPhaseSpaceAbstraction;
+import rpn.command.DomainSelectionCommand;
+import rpn.command.RiemannProfileCommand;
 import rpn.component.RpGeometry;
 import rpn.component.WaveCurveGeom;
+import rpn.component.util.GraphicsUtil;
 import rpnumerics.Orbit;
 import rpnumerics.WaveCurve;
-import wave.util.RealVector;
 
 public class SecondWaveCurveReady extends FirstWaveCurveReady {
 
-    private WaveCurveGeom secondWaveCurve_;
+    private final WaveCurveGeom secondWaveCurve_;
 
-    public SecondWaveCurveReady(WaveCurveGeom firstWaveCurve) {
-        super(firstWaveCurve);
+    SecondWaveCurveReady(WaveCurveGeom firstWaveCurve_, WaveCurveGeom secondWaveCurve) {
+        super(firstWaveCurve_);
 
-    }
+        secondWaveCurve_ = secondWaveCurve;
 
-    @Override
-    public void plot(RPnPhaseSpaceAbstraction phaseSpace, RpGeometry geom) {
-
-        phaseSpace.join(geom);
-
-        if (geom instanceof WaveCurveGeom) {
-
-            WaveCurveGeom secondWaveCurveGeom = (WaveCurveGeom) geom;
-
-            secondWaveCurve_ = (WaveCurveGeom) geom;
-
-            WaveCurve firstWaveCurveSource = (WaveCurve) getFirstWaveCurve().geomFactory().geomSource();
-
-            WaveCurve secondWaveCurveSource = (WaveCurve) secondWaveCurveGeom.geomFactory().geomSource();
-            
-            if(checkStandartRiemmanProfileState(firstWaveCurveSource, secondWaveCurveSource)){
-                phaseSpace.changeState(new StandartRiemannProfileState(getFirstWaveCurve(),secondWaveCurve_));
-                
-            }
-
-
-
-        }
+        DomainSelectionCommand.instance().setEnabled(true);
 
     }
 
     @Override
-    public void delete(RPnPhaseSpaceAbstraction phaseSpace, RpGeometry geom) {
-        // TODO Implement this method
+    public void add(RpGeometry geom) {
 
     }
 
     @Override
-    public void select(RPnPhaseSpaceAbstraction phaseSpace, RealVector coords) {
-        // TODO Implement this method
+    public void select(GraphicsUtil area) {
 
-    }
+        StandartRiemannProfileState standardState = new StandartRiemannProfileState(getFirstWaveCurve(), secondWaveCurve_, area);
+        RiemannProfileCommand.instance().changeState(standardState);
 
-    public WaveCurveGeom getSecondWaveCurve() {
-        return secondWaveCurve_;
     }
 
     private boolean checkStandartRiemmanProfileState(WaveCurve firstWaveCurve, WaveCurve secondWaveCurve) {
@@ -77,4 +53,6 @@ public class SecondWaveCurveReady extends FirstWaveCurveReady {
 
         return false;
     }
+
+
 }

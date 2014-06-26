@@ -207,11 +207,27 @@ public class DiagramGeom extends MultiGeometryImpl implements RpGeometry {
 
     @Override
     public boolean isVisible() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
+        boolean isVisible=false;
+         for (MultiPolyLine graphicsUtil : diagramsList_) {
+
+            isVisible=graphicsUtil.isVisible();
+        }
+         
+         return isVisible;
+       
     }
 
     @Override
     public boolean isSelected() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
+          boolean isSelected=false;
+         for (MultiPolyLine graphicsUtil : diagramsList_) {
+
+            isSelected=graphicsUtil.isSelected();
+        }
+         
+         return isSelected;
+                
     }
 }

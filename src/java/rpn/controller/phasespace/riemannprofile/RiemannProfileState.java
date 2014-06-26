@@ -1,43 +1,39 @@
 package rpn.controller.phasespace.riemannprofile;
 
-import rpn.RPnPhaseSpaceAbstraction;
 
 import rpn.component.RpGeometry;
 import rpn.component.WaveCurveGeom;
+import rpn.component.util.GraphicsUtil;
 
-import rpn.controller.phasespace.PhaseSpaceState;
 
-import wave.util.RealVector;
 
-public class RiemannProfileState implements PhaseSpaceState {
+public interface  RiemannProfileState  {
+    
 
-    @Override
-    public void plot(RPnPhaseSpaceAbstraction phaseSpace, RpGeometry geom) {
+    public void add(RpGeometry geom);
+    
+//    public void add(RpGeometry geom) {
+//        
+//        if (geom instanceof WaveCurveGeom) {
+//
+//            firstWaveCurve_ = (WaveCurveGeom) geom;
+//            
+//            WaveCurve firstWaveCurveSource = (WaveCurve) firstWaveCurve_.geomFactory().geomSource();
+//            
+//            if(firstWaveCurveSource.getDirection()==Orbit.FORWARD_DIR && firstWaveCurveSource.getFamily()==0){
+//
+//                FirstWaveCurveReady firstWaveCurveState = new FirstWaveCurveReady(firstWaveCurve_);
+////                RPnDataModule.RIEMANNPHASESPACE.changeState(firstWaveCurveState);
+//                
+//            }
+//        }
+//
+//    }
 
-        phaseSpace.join(geom);
-        
-        if (geom instanceof WaveCurveGeom) {
 
-            WaveCurveGeom firstWaveCurve = (WaveCurveGeom) geom;
-            
-            FirstWaveCurveReady firstWaveCurveState = new FirstWaveCurveReady(firstWaveCurve);
-            
-            phaseSpace.changeState(firstWaveCurveState);
-            
+    
+    public void remove(RpGeometry geom);
 
-        }
 
-    }
-
-    @Override
-    public void delete(RPnPhaseSpaceAbstraction phaseSpace, RpGeometry geom) {
-        // TODO Implement this method
-
-    }
-
-    @Override
-    public void select(RPnPhaseSpaceAbstraction phaseSpace, RealVector coords) {
-        // TODO Implement this method
-
-    }
+    public void select(GraphicsUtil area) ;
 }

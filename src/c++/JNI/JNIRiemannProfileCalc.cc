@@ -113,8 +113,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RiemannProfileCalc_nativeCalc
     env->GetIntArrayRegion(waveCurveIDArray, 0, waveCurves, nativeWaveCurvesIDArray);
 
 
-    //cout << "ID da curva 0 " << nativeWaveCurvesIDArray[0] << endl;
-    //cout << "ID da curva 1 " << nativeWaveCurvesIDArray[1] << endl;
+    cout << "ID da curva 0 " << nativeWaveCurvesIDArray[0] << endl;
+    cout << "ID da curva 1 " << nativeWaveCurvesIDArray[1] << endl;
 
 
 
@@ -122,8 +122,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RiemannProfileCalc_nativeCalc
     const WaveCurve * waveCurve2 = RpNumerics::getWaveCurve(nativeWaveCurvesIDArray[1]);
 
 
-    //cout << "Curva 0 " << waveCurve1 << endl;
-    //cout << "Curva 1 " << waveCurve2 << endl;
+    cout << "Curva 0 " << waveCurve1 << endl;
+    cout << "Curva 1 " << waveCurve2 << endl;
 
 
 
@@ -134,7 +134,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RiemannProfileCalc_nativeCalc
     int subPoint1;
     int subPoint2;
 
-    //cout << "Chamando Sol de Riemann" << endl;
+   
 
     if (RpNumerics::getPhysics().domain().dim() == 3) {
         nativeDownLeft.resize(3);
@@ -149,12 +149,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RiemannProfileCalc_nativeCalc
     RpNumerics::getPhysics().getSubPhysics(0).preProcess(nativeTopRight);
 
 
-//    nativeDownLeft.component(0)=0.404143;
-//    nativeDownLeft.component(1)= 0.211145;
-//    
-//    nativeTopRight.component(0)=0.624427;
-//    nativeTopRight.component(1)=0.386;
-    
     
 
     cout<<"AREA: " << nativeDownLeft << " " << nativeTopRight << endl;
@@ -180,15 +174,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RiemannProfileCalc_nativeCalc
             *waveCurve2, subcurve2, subPoint2, 1,
             profile, speedVector);
 
-
-    if (Debug::get_debug_level() == 5) {
-        //cout << "DownLeft: " << nativeDownLeft << " TopRight" << nativeTopRight << endl;
-    }
-
-
-
-
-
     if (profile.size() == 0)
         return NULL;
 
@@ -203,9 +188,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RiemannProfileCalc_nativeCalc
     //    
     //        }
 
-
-
-    //    jobjectArray orbitPointArray = (jobjectArray) (env)->NewObjectArray(profile.size(), classOrbitPoint, NULL);
 
 
 
@@ -229,13 +211,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RiemannProfileCalc_nativeCalc
             profileCoords.component(0) = speedVector[j];
             profileCoords.component(1) = profile[j].component(i);
 
-            //        RealVector tempVector = profile.at(i);
-            //        tempVector.resize(dimension + 1);
-            //        tempVector[dimension] = speedVector[i];
-
-            //            //cout << profileCoords << endl;
-
-
 
             jdoubleArray speedArray = env->NewDoubleArray(dimension);
             env->SetDoubleArrayRegion(speedArray, 0, dimension, (double *) profileCoords);
@@ -249,24 +224,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RiemannProfileCalc_nativeCalc
         env->CallObjectMethod(speedLine, addPartMethodID, speedLinePartList);
         env->CallObjectMethod(speedLine, setTypeMethodID, 0, i); //Setando o tipo 
         env->CallObjectMethod(diagramLinesList, arrayListAddMethod, speedLine);
-
-
-
-
-
-        //        double * dataCoords = tempVector;
-        //
-        //        //Reading only coodinates
-        //        jdoubleArray jTempArray = (env)->NewDoubleArray(tempVector.size());
-        //
-        //        (env)->SetDoubleArrayRegion(jTempArray, 0, dimension, dataCoords);
-        //
-        //        //Lambda is the last component.
-        //        jobject orbitPoint = (env)->NewObject(classOrbitPoint, orbitPointConstructor, jTempArray, 0);
-        //        env->CallVoidMethod(orbitPoint, setLambdaID, speedVector[i]);
-        //
-        //
-        //        (env)->SetObjectArrayElement(orbitPointArray, i, orbitPoint);
 
 
     }
@@ -375,7 +332,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RiemannProfileCalc_nativeAllProfileCal
 
 
     jmethodID getCorrespondingPointMethodID = (env)->GetMethodID(classOrbitPoint, "getCorrespondingPointIndex", "()I");
-    jmethodID getLambdaID = (env)->GetMethodID(classOrbitPoint, "getLambda", "()D");
+//    jmethodID getLambdaID = (env)->GetMethodID(classOrbitPoint, "getLambda", "()D");
 
     jmethodID getCurveTypeMethodID = (env)->GetMethodID(classWaveCurveOrbit, "getCurveType", "()I");
     jmethodID getCurveIndexMethodID = (env)->GetMethodID(classWaveCurveOrbit, "getCurveIndex", "()I");
@@ -396,16 +353,16 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RiemannProfileCalc_nativeAllProfileCal
 
 
 
-    //cout << "ID da curva 0 " << firstWaveCurveID << endl;
-    //cout << "ID da curva 1 " << secondWaveCurveID << endl;
+    cout << "ID da curva 0 " << firstWaveCurveID << endl;
+    cout << "ID da curva 1 " << secondWaveCurveID << endl;
 
 
     const WaveCurve * waveCurve1 = RpNumerics::getWaveCurve(firstWaveCurveID);
     const WaveCurve * waveCurve2 = RpNumerics::getWaveCurve(secondWaveCurveID);
 
 
-    //cout << "Curva 0 " << waveCurve1 << endl;
-    //cout << "Curva 1 " << waveCurve2 << endl;
+    cout << "Curva 0 " << waveCurve1 << endl;
+    cout << "Curva 1 " << waveCurve2 << endl;
 
 
     jdoubleArray inputPhasePointArray = (jdoubleArray) (env)->CallObjectMethod(secondWaveCurveRefPoint, toDoubleMethodID);
@@ -436,7 +393,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RiemannProfileCalc_nativeAllProfileCal
 
 
 
-    //cout << "Ponto sobre a segunda curva de onda: " << nativePointOnSecondWaveCurve << endl;
+    cout << "Ponto sobre a segunda curva de onda: " << nativePointOnSecondWaveCurve << endl;
 
     int firstWaveCurveSubIndex;
     int firstWaveCurveSegmentIndex;
@@ -457,7 +414,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RiemannProfileCalc_nativeAllProfileCal
     vector<double> speedVector;
 
     rp.all_increase_profile(*waveCurve1, firstWaveCurveSubIndex, firstWaveCurveSegmentIndex, 0,
-            waveCurve2, secondWaveCurveSubIndex, secondWaveCurveSegmentIndex, 1,
+            *waveCurve2, secondWaveCurveSubIndex, secondWaveCurveSegmentIndex, 1,
             profile, speedVector);
 
 

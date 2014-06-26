@@ -8,18 +8,13 @@
 package rpn.component.util;
 
 import java.awt.BasicStroke;
-import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Shape;
-import java.awt.font.GlyphVector;
 import java.awt.geom.Path2D.Double;
 import java.util.List;
 import rpn.RPnPhaseSpacePanel;
-import wave.multid.Coords2D;
-import wave.multid.CoordsArray;
 import wave.multid.view.ViewingAttr;
 import wave.multid.view.ViewingTransform;
-import wave.util.RealVector;
 
 public class Label extends GraphicsUtil {
     

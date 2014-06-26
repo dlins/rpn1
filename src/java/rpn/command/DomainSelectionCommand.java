@@ -6,7 +6,6 @@ package rpn.command;
 
 import java.awt.event.ActionEvent;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 import javax.swing.JToggleButton;
@@ -72,27 +71,27 @@ public class DomainSelectionCommand extends RpModelPlotCommand implements Observ
     public void update(Observable o, Object arg) {
         
 
-        if (!UIController.instance().getSelectedGeometriesList().isEmpty()) {
-            
-            
-            List<RpGeometry> geometryList = UIController.instance().getSelectedGeometriesList();
-//            if (geometryList.size() != 1) {
-//                setEnabled(false);
-//                getContainer().setSelected(false);
-//                GenericExtensionCurveCommand.instance().setEnabled(false);
+//        if (!UIController.instance().getSelectedGeometriesList().isEmpty()) {
+//            
+//            
+//            List<RpGeometry> geometryList = UIController.instance().getSelectedGeometriesList();
+////            if (geometryList.size() != 1) {
+////                setEnabled(false);
+////                getContainer().setSelected(false);
+////                GenericExtensionCurveCommand.instance().setEnabled(false);
+////
+////            } else {
+//                setEnabled(true);
+//                GenericExtensionCurveCommand.instance().setEnabled(true);
+////
+////                if (RPnNetworkStatus.instance().isOnline() && RPnNetworkStatus.instance().isMaster()) {
+////                    RpGeomFactory factory = geometryList.get(0).geomFactory();
+////                    RPnCurve curve = (RPnCurve) factory.geomSource();
+////                    RpCommand command = new RpCommand(curve.getId());
+////                    RPnNetworkStatus.instance().sendCommand(command.toXML());
+////                }
 //
-//            } else {
-                setEnabled(true);
-                GenericExtensionCurveCommand.instance().setEnabled(true);
-//
-//                if (RPnNetworkStatus.instance().isOnline() && RPnNetworkStatus.instance().isMaster()) {
-//                    RpGeomFactory factory = geometryList.get(0).geomFactory();
-//                    RPnCurve curve = (RPnCurve) factory.geomSource();
-//                    RpCommand command = new RpCommand(curve.getId());
-//                    RPnNetworkStatus.instance().sendCommand(command.toXML());
-//                }
-
-//            }
+////            }
 
             
             
@@ -103,16 +102,16 @@ public class DomainSelectionCommand extends RpModelPlotCommand implements Observ
             
             
             
-            
-            
-            
-            
-        } else {
-            setEnabled(false);
-            getContainer().setSelected(false);
-            GenericExtensionCurveCommand.instance().setEnabled(false);
-            ImageSelectionCommand.instance().getContainer().setSelected(false);
-            ImageSelectionCommand.instance().setEnabled(false);
-        }
+//            
+//            
+//            
+//            
+//        } else {
+//            setEnabled(false);
+//            getContainer().setSelected(false);
+//            GenericExtensionCurveCommand.instance().setEnabled(false);
+//            ImageSelectionCommand.instance().getContainer().setSelected(false);
+//            ImageSelectionCommand.instance().setEnabled(false);
+//        }
     }
 }

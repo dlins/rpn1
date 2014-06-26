@@ -33,8 +33,11 @@ public class RPnRiemannFrame extends RPnPhaseSpaceFrame {
     public RPnRiemannFrame(Scene scene, RPnMenuCommand command) {
 
         super(scene,command);
-        enableEvents(AWTEvent.WINDOW_EVENT_MASK);
-        enableEvents(AWTEvent.COMPONENT_EVENT_MASK);
+        
+        disableEvents(AWTEvent.WINDOW_EVENT_MASK);
+        disableEvents(AWTEvent.COMPONENT_EVENT_MASK);
+//        enableEvents(AWTEvent.WINDOW_EVENT_MASK);
+//        enableEvents(AWTEvent.COMPONENT_EVENT_MASK);
         //	enableEvents(AWTEvent.FOCUS_EVENT_MASK);
         commandMenu_ = command;
         try {
@@ -81,26 +84,26 @@ public class RPnRiemannFrame extends RPnPhaseSpaceFrame {
     }
     //Overridden so we can exit when window is closed
 
-    @Override
-    protected void processWindowEvent(WindowEvent e) {
-        if (e.getID() == WindowEvent.WINDOW_CLOSING) {
-            RPnPhaseSpaceAbstraction abstractGeom = (RPnPhaseSpaceAbstraction) phaseSpacePanel.scene().getAbstractGeom();
-            abstractGeom.clear();
-            dispose();
-        }
-    }
-
-    @Override
-    protected void processComponentEvent(ComponentEvent e) {
-
-        if (e.getID() == ComponentEvent.COMPONENT_SHOWN) {
-
-            if (frameSize_ == null) {
-                frameSize_ = getSize();
-            }
-        }
-
-    }
+//    @Override
+//    protected void processWindowEvent(WindowEvent e) {
+//        if (e.getID() == WindowEvent.WINDOW_CLOSING) {
+//            RPnPhaseSpaceAbstraction abstractGeom = (RPnPhaseSpaceAbstraction) phaseSpacePanel.scene().getAbstractGeom();
+//            abstractGeom.clear();
+//            dispose();
+//        }
+//    }
+//
+//    @Override
+//    protected void processComponentEvent(ComponentEvent e) {
+//
+//        if (e.getID() == ComponentEvent.COMPONENT_SHOWN) {
+//
+//            if (frameSize_ == null) {
+//                frameSize_ = getSize();
+//            }
+//        }
+//
+//    }
 
    
     public RPnPhaseSpacePanel phaseSpacePanel() {

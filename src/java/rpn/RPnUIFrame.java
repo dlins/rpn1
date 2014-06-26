@@ -173,6 +173,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         auxiliarCurvesToolBar_.add(DiscriminantLevelCurvePlotCommand.instance().getContainer());
         auxiliarCurvesToolBar_.add(DiscriminantPointLevelCurvePlotCommand.instance().getContainer());
         auxiliarCurvesToolBar_.add(DerivativeDiscriminantLevelCurvePlotCommand.instance().getContainer());
+        auxiliarCurvesToolBar_.add(PointMarkCommand.instance().getContainer());
 
     }
 
@@ -245,9 +246,6 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     private void createRiemmanProblemToolBar() {
         toolBar_.setLayout(new GridLayout(1, 2));
         toolBar_.add(RiemannProfileCommand.instance().getContainer());
-        toolBar_.add(RiemannAllProfileCommand.instance().getContainer());
-        
-        
         toolBar_.add(WaveCurvePlotCommand.instance().getContainer());
     }
 
@@ -1579,6 +1577,8 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
             }
             if (riemannRadioButton_.isSelected()) {
                 newState = new RiemannProblemConfig();
+                
+                
 //                curvesConfigPanel_.propertyChange(new PropertyChangeEvent(this, "family", "", "bifurcationcurve"));
 //                curvesConfigPanel_.propertyChange(new PropertyChangeEvent(this, "direction", "", "bifurcationcurve"));
             }

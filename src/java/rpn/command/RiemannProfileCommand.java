@@ -25,16 +25,20 @@ import rpn.RPnRiemannFrame;
 import rpn.component.*;
 import rpn.component.CharacteristicsCurveGeomFactory;
 import rpn.component.util.AreaSelected;
+import rpn.controller.phasespace.riemannprofile.RiemannProfileReady;
+import rpn.controller.phasespace.riemannprofile.RiemannProfileState;
+import rpn.controller.phasespace.riemannprofile.RiemannProfileWaitState;
 import rpn.controller.ui.UIController;
 import rpn.controller.ui.UI_ACTION_SELECTED;
 import rpn.parser.RPnDataModule;
 import rpnumerics.*;
 import wave.multid.DimMismatchEx;
 import wave.multid.Space;
+import wave.multid.model.MultiGeometry;
 import wave.util.RealVector;
 import wave.util.RectBoundary;
 
-public class RiemannProfileCommand extends RpModelPlotCommand implements Observer, RPnMenuCommand, WindowListener {
+public class RiemannProfileCommand extends RpModelPlotCommand implements RPnMenuCommand, WindowListener {
     //
     // Constants
     //
@@ -44,8 +48,8 @@ public class RiemannProfileCommand extends RpModelPlotCommand implements Observe
     // Members
     //
     static private RiemannProfileCommand instance_ = null;
-    private WaveCurve waveCurveForward_;
-    private WaveCurve waveCurveBackward_;
+
+    private RiemannProfileState state_;
 
     private RPnRiemannFrame speedGraphicsFrame_;
 
@@ -54,6 +58,7 @@ public class RiemannProfileCommand extends RpModelPlotCommand implements Observe
     //
     protected RiemannProfileCommand() {
         super(DESC_TEXT, rpn.configuration.RPnConfig.HUGONIOT, new JButton());
+        state_ = new RiemannProfileWaitState();
     }
 
     @Override
@@ -70,19 +75,17 @@ public class RiemannProfileCommand extends RpModelPlotCommand implements Observe
     static public RiemannProfileCommand instance() {
         if (instance_ == null) {
             instance_ = new RiemannProfileCommand();
+
         }
         return instance_;
     }
 
-    @Override
-    public void update(Observable o, Object arg) {
-
-
-//        boolean enable = checkCurvesForRiemmanProfile(UIController.instance().getSelectedGeometriesList());
-//        setEnabled(enable);
-//        DomainSelectionCommand.instance().setEnabled(!UIController.instance().getSelectedGeometriesList().isEmpty());
+    public RiemannProfileState getState() {
+        return state_;
 
     }
+
+   
 
     private void updateSpeedGraphicsFrame(RealVector profileMin, RealVector profileMax) {
 
@@ -96,70 +99,36 @@ public class RiemannProfileCommand extends RpModelPlotCommand implements Observe
         wave.multid.view.ViewingTransform riemanTesteTransform = projDescriptor.createTransform(clipping);
 
         try {
-            wave.multid.view.Scene riemannScene = RPnDataModule.SPEEDGRAPHICSPHASESPACE.createScene(riemanTesteTransform, new wave.multid.view.ViewingAttr(Color.black));
+            wave.multid.view.Scene riemannScene = RPnDataModule.RIEMANNPHASESPACE.createScene(riemanTesteTransform, new wave.multid.view.ViewingAttr(Color.black));
             speedGraphicsFrame_ = new RPnRiemannFrame(riemannScene, this);
             speedGraphicsFrame_.addWindowListener(this);
+
+            speedGraphicsFrame_.pack();
+            speedGraphicsFrame_.setVisible(true);
 
         } catch (DimMismatchEx ex) {
             ex.printStackTrace();
         }
-        speedGraphicsFrame_.pack();
-        speedGraphicsFrame_.setVisible(true);
 
     }
 
     @Override
     public void execute() {
-        
-        
-        
-        UIController.instance().getActivePhaseSpace().plot(null);
-        
-//
-////        selectedCurves = UIController.instance().getSelectedGeometriesList();
-//        Iterator<RPnPhaseSpacePanel> panelsIterator = UIController.instance().getInstalledPanelsIterator();
-//        while (panelsIterator.hasNext()) {
-//            RPnPhaseSpacePanel rPnPhaseSpacePanel = panelsIterator.next();
-//
-//            for (AreaSelected sArea : rPnPhaseSpacePanel.getSelectedAreas()) {
-//                Area selectedArea = new Area(sArea);
-//
-//                int[] waveCurvesID = new int[2];
-//                waveCurvesID[0] = waveCurveForward_.getId();
-//                waveCurvesID[1] = waveCurveBackward_.getId();
-//                RiemannProfileCalc rc = new RiemannProfileCalc(selectedArea, waveCurvesID);
-//
-//                RPnDataModule.RIEMANNPHASESPACE.clear();
-//
-//                String Xlimits[] = RPNUMERICS.getParamValue("riemannprofile", "speedrange").split(" ");
-//        
-//        
-//                String Ylimits[] = RPNUMERICS.getParamValue("riemannprofile", "Yrange").split(" ");
-//
-//                
-//                
-//
-//                RealVector min = new RealVector(Xlimits[0]+" "+Ylimits[0]);
-//                RealVector max = new RealVector(Xlimits[1]+" "+Ylimits[1]);
-//
-//                RpDiagramFactory factory = new RpDiagramFactory(rc);
-//                DiagramGeom geom = (DiagramGeom) factory.geom();
-//                
-//
-//
-//                RPnDataModule.SPEEDGRAPHICSPHASESPACE.join(geom);
-//
-//                updateSpeedGraphicsFrame(min, max);
-//
-//            }
-//
-//        }
-//
-//        firePropertyChange("Riemann Profile Added", "oldValue",
-//                "newValue");
+
+        RiemannProfileReady state = (RiemannProfileReady) state_;
+
+        String Xlimits[] = RPNUMERICS.getParamValue("riemannprofile", "speedrange").split(" ");
+
+        String Ylimits[] = RPNUMERICS.getParamValue("riemannprofile", "Yrange").split(" ");
+
+        RealVector min = new RealVector(Xlimits[0] + " " + Ylimits[0]);
+        RealVector max = new RealVector(Xlimits[1] + " " + Ylimits[1]);
+
+        RPnDataModule.RIEMANNPHASESPACE.join(state.calcProfile());
+
+        updateSpeedGraphicsFrame(min, max);
 
     }
-
 
     private void plotCharacteristics(int charFamily, RiemannProfile riemannProfile) {
 
@@ -170,7 +139,6 @@ public class RiemannProfileCommand extends RpModelPlotCommand implements Observe
             RealVector charXAxis = createCharacteristicAbscissa(charFamily, charCurve);
             RealVector charMinRealVector = new RealVector(charXAxis.getElement(0) + " " + 0);
             RealVector charMaxRealVector = new RealVector(charXAxis.getElement(1) + " " + 0.45);
-
 
             RPnDesktopPlotter.getUIFrame().updateCharacteristicsFrames(charFamily, charMinRealVector, charMaxRealVector);
 
@@ -213,34 +181,6 @@ public class RiemannProfileCommand extends RpModelPlotCommand implements Observe
 
     }
 
-    private boolean checkCurvesForRiemmanProfile(List<RpGeometry> selectedCurves) {
-
-        if (selectedCurves.size() != 2) {
-            return false;
-        }
-
-        boolean waveCurveForward0 = false;
-        boolean waveCurveBackward1 = false;
-
-        for (RpGeometry geometry : selectedCurves) {
-            if (geometry instanceof WaveCurveGeom) {
-                WaveCurveGeom waveCurveGeom = (WaveCurveGeom) geometry;
-                WaveCurve waveCurve = (WaveCurve) waveCurveGeom.geomFactory().geomSource();
-                if (waveCurve.getFamily() == 0 && waveCurve.getDirection() == Orbit.WAVECURVE_FORWARD) {
-                    instance_.waveCurveForward_ = waveCurve;
-                    waveCurveForward0 = true;
-                }
-                if (waveCurve.getFamily() == 1 && waveCurve.getDirection() == Orbit.WAVECURVE_BACKWARD) {
-                    instance_.waveCurveBackward_ = waveCurve;
-                    waveCurveBackward1 = true;
-                }
-            }
-        }
-
-        return (waveCurveForward0 && waveCurveBackward1);
-
-    }
-
     private List<AreaSelected> processIntersectionAreas(List<List<AreaSelected>> intersectionAreasList) {
 
         if (intersectionAreasList.get(0).size() > intersectionAreasList.get(1).size()) {
@@ -255,8 +195,16 @@ public class RiemannProfileCommand extends RpModelPlotCommand implements Observe
 
     @Override
     public void finalizeApplication() {
+        DomainSelectionCommand.instance().getContainer().setSelected(false);
+        DomainSelectionCommand.instance().setEnabled(false);
+        RiemannProfileCommand.instance().setEnabled(false);
+        state_ = new RiemannProfileWaitState();
+        UIController.instance().resetCursor();
+        UIController.instance().globalInputTable().reset();
 
-        System.out.println("Chamando finalize");
+        speedGraphicsFrame_.dispose();
+
+
 
     }
 
@@ -268,20 +216,38 @@ public class RiemannProfileCommand extends RpModelPlotCommand implements Observe
     @Override
     public void windowOpened(WindowEvent e) {
 
+
     }
 
     @Override
     public void windowClosing(WindowEvent e) {
-        System.out.println("chamando closing");
-        RPnDataModule.SPEEDGRAPHICSPHASESPACE.clear();
+
+        RPnDataModule.RIEMANNPHASESPACE.clear();
+        RPnPhaseSpaceAbstraction activePhaseSpace = UIController.instance().getActivePhaseSpace();
+
+        RiemannProfileReady state = (RiemannProfileReady) state_;
+
+        activePhaseSpace.remove((MultiGeometry) state.getFirstWaveCurve());
+        activePhaseSpace.remove((MultiGeometry) state.getSecondWaveCurve());
+        Iterator<RPnPhaseSpacePanel> installedPanelsIterator = UIController.instance().getInstalledPanelsIterator();
+
+        while (installedPanelsIterator.hasNext()) {
+            RPnPhaseSpacePanel rPnPhaseSpacePanel = installedPanelsIterator.next();
+
+            rPnPhaseSpacePanel.clearAreaSelection();
+            rPnPhaseSpacePanel.clearPointSelection();
+
+        }
+
+        activePhaseSpace.update();
+      
+
     }
 
     @Override
     public void windowClosed(WindowEvent e) {
-        System.out.println("chamando closed");
 
-        RPnDataModule.SPEEDGRAPHICSPHASESPACE.clear();
-        speedGraphicsFrame_.dispose();
+
     }
 
     @Override
@@ -301,6 +267,12 @@ public class RiemannProfileCommand extends RpModelPlotCommand implements Observe
 
     @Override
     public void windowDeactivated(WindowEvent e) {
+
+    }
+
+    public void changeState(RiemannProfileState newState) {
+
+        state_ = newState;
 
     }
 
