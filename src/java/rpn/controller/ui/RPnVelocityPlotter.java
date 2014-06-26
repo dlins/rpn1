@@ -23,9 +23,8 @@ import wave.multid.CoordsArray;
 import wave.multid.Space;
 import wave.util.RealVector;
 
-
 public class RPnVelocityPlotter extends RPn2DMouseController {
-    
+
     private RealVector cursorPos_;
 
     private boolean addLine_ = false;
@@ -33,11 +32,9 @@ public class RPnVelocityPlotter extends RPn2DMouseController {
     private static RPnVelocityPlotter instance_;
     private RpGeometry geometry_;
 
-    
-
     public void mouseMoved(MouseEvent me) {
 
-        if(addLine_) {
+        if (addLine_) {
 
             RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) me.getSource();
 
@@ -55,14 +52,12 @@ public class RPnVelocityPlotter extends RPn2DMouseController {
         UIController.instance().globalInputTable().reset();
     }
 
-
     public void mousePressed(MouseEvent me) {
         listaEquil.clear();
 
         RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) me.getSource();
 
-        if(addLine_ == false) {
-
+        if (addLine_ == false) {
 
             int dim = RPNUMERICS.domainDim();
             Coords2D coordsDC = new Coords2D(me.getX(), me.getY());
@@ -70,55 +65,46 @@ public class RPnVelocityPlotter extends RPn2DMouseController {
             panel.scene().getViewingTransform().dcInverseTransform(coordsDC, coordsWC);
 
             RealVector newValue = new RealVector(dim);
-            for (int i=0; i < dim; i++) {
+            for (int i = 0; i < dim; i++) {
                 newValue.setElement(i, coordsWC.getElement(i));
             }
-            geometry_=RPnDataModule.PHASESPACE.findClosestGeometry(newValue);
-            
+            geometry_ = RPnDataModule.PHASESPACE.findClosestGeometry(newValue);
+
             RPnCurve curve = (RPnCurve) (geometry_.geomFactory().geomSource());
             RealVector closestPoint = curve.findClosestPoint(newValue);
 
-            cursorPos_=closestPoint;
+            cursorPos_ = closestPoint;
             geometry_.showSpeed(new CoordsArray(cursorPos_), new CoordsArray(cursorPos_), panel.scene().getViewingTransform());
-            
+
             addLine_ = true;
 
-            
-        }
-        else {
+        } else {
             Iterator<GraphicsUtil> annotationIterator = geometry_.getAnnotationIterator();
-            
-            GraphicsUtil lastAnnotation=null;
+
+            GraphicsUtil lastAnnotation = null;
             while (annotationIterator.hasNext()) {
-               lastAnnotation = annotationIterator.next();
-                
+                lastAnnotation = annotationIterator.next();
+
             }
-             RPnCurve curve = (RPnCurve)            geometry_.geomFactory().geomSource();
-            RpCommand command = new RpCommand(lastAnnotation.toXML(),"velocity",curve.getId());
-
-            GenericExtensionCurveCommand.instance().logCommand(command);
-
+            if (lastAnnotation != null) {
+                RPnCurve curve = (RPnCurve) geometry_.geomFactory().geomSource();
+                RpCommand command = new RpCommand(lastAnnotation.toXML(), "velocity", curve.getId());
+                GenericExtensionCurveCommand.instance().logCommand(command);
+            }
 
             if (RPnNetworkStatus.instance().isOnline() && RPnNetworkStatus.instance().isMaster()) {
                 RPnNetworkStatus.instance().sendCommand(rpn.controller.ui.UndoActionController.instance().getLastCommand().toXML());
             }
-            
-            
-            
-            
+
             addLine_ = false;
         }
 
         UIController.instance().globalInputTable().reset();
     }
 
-
     public void mouseDragged(MouseEvent me) {
 
     }
-
-
-
 
     public void mouseClicked(MouseEvent e) {
     }
@@ -135,14 +121,11 @@ public class RPnVelocityPlotter extends RPn2DMouseController {
 
     }
 
-
     public static RPnVelocityPlotter instance() {
         if (instance_ == null) {
             instance_ = new RPnVelocityPlotter();
         }
         return instance_;
     }
-
-
 
 }
