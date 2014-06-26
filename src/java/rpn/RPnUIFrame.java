@@ -129,9 +129,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
             associatePhaseSpacesAndCurvesList();
 
             addPropertyChangeListener(this);
-
-            RiemannProfileCommand.instance().addPropertyChangeListener(this);
-
+       
             UndoActionController.createInstance();
 
             if (commandMenu_ instanceof RPnAppletPlotter) { // Selecting itens to disable in Applet
@@ -173,7 +171,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         auxiliarCurvesToolBar_.add(DiscriminantLevelCurvePlotCommand.instance().getContainer());
         auxiliarCurvesToolBar_.add(DiscriminantPointLevelCurvePlotCommand.instance().getContainer());
         auxiliarCurvesToolBar_.add(DerivativeDiscriminantLevelCurvePlotCommand.instance().getContainer());
-        auxiliarCurvesToolBar_.add(PointMarkCommand.instance().getContainer());
+
 
     }
 
@@ -245,6 +243,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
 
     private void createRiemmanProblemToolBar() {
         toolBar_.setLayout(new GridLayout(1, 2));
+        toolBar_.add(RiemannResetCommand.instance().getContainer());
         toolBar_.add(RiemannProfileCommand.instance().getContainer());
         toolBar_.add(WaveCurvePlotCommand.instance().getContainer());
     }
