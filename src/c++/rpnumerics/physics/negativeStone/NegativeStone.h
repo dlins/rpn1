@@ -22,6 +22,8 @@
 #include "StoneAccumulation.h"
 #include "HugoniotContinuation2D2D.h"
 #include "Double_Contact.h"
+#include "rpnumerics/Secondary_Bifurcation.h"
+#include "rpnumerics/ImplicitHugoniotCurve.h"
 //#include "Shock.h"
 
 /*

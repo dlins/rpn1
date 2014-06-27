@@ -21,7 +21,24 @@
 Boundary * NegativeStone::defaultBoundary() const {
 
 
-    return new Three_Phase_Boundary();
+//    return new Three_Phase_Boundary();
+
+
+
+        RealVector pmin(2);
+    
+        pmin.component(0) = -1;
+        pmin.component(1) = 0;
+    
+        RealVector pmax(2);
+    
+        pmax.component(0) = 1.0;
+        pmax.component(1) = 1.0;
+
+    
+    
+return     new Three_Phase_Boundary (pmin,pmax);
+    
     //    RealVector pmin(2);
     //
     //    pmin.component(0) = 0;
@@ -136,7 +153,12 @@ vector<double> * NegativeStone::getParams() {
 }
 
 NegativeStone::NegativeStone() : SubPhysics(StoneNegativeFluxFunction(StoneParams(), StoneNegativePermParams()), StoneAccumulation(), *defaultBoundary(), Multid::PLANE, "StoneNegative", _SIMPLE_ACCUMULATION_) {
+    hugoniotCurveArray_->operator []("IMPLICIT") = new ImplicitHugoniotCurve(fluxFunction_, accumulationFunction_, &getBoundary());
+    hugoniot_continuation_method_ = new HugoniotContinuation2D2D(&fluxFunction(), &accumulation(), &getBoundary());
+    shockCurve_ = new ShockCurve(hugoniot_continuation_method_);
+    compositeCurve_ = new CompositeCurve(accumulationFunction_, fluxFunction_, &getBoundary(), shockCurve_, 0);
 
+  
     setDoubleContactFunction(new Double_Contact());
     setViscosityMatrix(new Viscosity_Matrix());
     preProcessedBoundary_ = defaultBoundary();
@@ -144,6 +166,12 @@ NegativeStone::NegativeStone() : SubPhysics(StoneNegativeFluxFunction(StoneParam
 }
 
 NegativeStone::NegativeStone(const NegativeStone & copy) : SubPhysics(copy.fluxFunction(), copy.accumulation(), copy.getBoundary(), Multid::PLANE, "StoneNegative", _SIMPLE_ACCUMULATION_) {
+    hugoniotCurveArray_->operator []("IMPLICIT") = new ImplicitHugoniotCurve(fluxFunction_, accumulationFunction_, &getBoundary());
+    hugoniot_continuation_method_ = new HugoniotContinuation2D2D(&fluxFunction(), &accumulation(), &getBoundary());
+    shockCurve_ = new ShockCurve(hugoniot_continuation_method_);
+    compositeCurve_ = new CompositeCurve(accumulationFunction_, fluxFunction_, &getBoundary(), shockCurve_, 0);
+
+
     setDoubleContactFunction(new Double_Contact());
     setViscosityMatrix(copy.getViscosityMatrix());
     preProcessedBoundary_ = copy.getPreProcessedBoundary()->clone();
