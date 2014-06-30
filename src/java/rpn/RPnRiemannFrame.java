@@ -62,10 +62,10 @@ public class RPnRiemannFrame extends RPnPhaseSpaceFrame {
         jPanel3.setBackground(Color.gray);
         jPanel4.setBackground(Color.gray);
         contentPane.setBackground(Color.gray);
-        setTitle(" Riemann Phase Space Frame - "
-                + new Integer(((PhaseSpacePanelController) phaseSpacePanel.getCastedUI()).getAbsIndex()).intValue() + ','
-                + new Integer(((PhaseSpacePanelController) phaseSpacePanel.getCastedUI()).getOrdIndex()).intValue());
-        phaseSpacePanel.addMouseMotionListener(coordsField.getMouseMotionController());
+//        setTitle(" Riemann Phase Space Frame - "
+//                + new Integer(((PhaseSpacePanelController) phaseSpacePanel.getCastedUI()).getAbsIndex()).intValue() + ','
+//                + new Integer(((PhaseSpacePanelController) phaseSpacePanel.getCastedUI()).getOrdIndex()).intValue());
+//        phaseSpacePanel.addMouseMotionListener(coordsField.getMouseMotionController());
         statusPanel.setBackground(Color.gray);
         statusPanel.setBorder(BorderFactory.createEtchedBorder());
         statusPanel.setLayout(borderLayout2);
@@ -82,28 +82,7 @@ public class RPnRiemannFrame extends RPnPhaseSpaceFrame {
 
 
     }
-    //Overridden so we can exit when window is closed
-
-//    @Override
-//    protected void processWindowEvent(WindowEvent e) {
-//        if (e.getID() == WindowEvent.WINDOW_CLOSING) {
-//            RPnPhaseSpaceAbstraction abstractGeom = (RPnPhaseSpaceAbstraction) phaseSpacePanel.scene().getAbstractGeom();
-//            abstractGeom.clear();
-//            dispose();
-//        }
-//    }
-//
-//    @Override
-//    protected void processComponentEvent(ComponentEvent e) {
-//
-//        if (e.getID() == ComponentEvent.COMPONENT_SHOWN) {
-//
-//            if (frameSize_ == null) {
-//                frameSize_ = getSize();
-//            }
-//        }
-//
-//    }
+    
 
    
     public RPnPhaseSpacePanel phaseSpacePanel() {

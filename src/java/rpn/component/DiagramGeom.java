@@ -8,8 +8,11 @@ package rpn.component;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import rpn.component.util.GraphicsUtil;
+import rpn.component.util.Label;
+import rpn.component.util.LinePlotted;
 import rpnumerics.Diagram;
 import rpnumerics.DiagramLine;
 import wave.multid.model.MultiPolyLine;
@@ -197,6 +200,19 @@ public class DiagramGeom extends MultiGeometryImpl implements RpGeometry {
 
     @Override
     public void showSpeed(CoordsArray curvePoint, CoordsArray wcPoint, ViewingTransform transform) {
+        
+        
+        List<Object> lineElements = new ArrayList<Object>();
+        
+        lineElements.add(new RealVector(curvePoint.getCoords()));
+        lineElements.add(new RealVector (wcPoint.getCoords()));
+        lineElements.add("Teste");
+        
+        
+        
+        
+        LinePlotted speed = new LinePlotted(lineElements, transform, new ViewingAttr(Color.white));
+        addAnnotation(speed);
 
     }
 

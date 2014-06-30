@@ -128,6 +128,13 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
     //
     // Constructors
     //
+    
+     public RPnPhaseSpacePanel(){
+         
+     }
+    
+    
+    
     public RPnPhaseSpacePanel(Scene scene) {
 
         scene_ = scene;
