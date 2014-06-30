@@ -107,11 +107,8 @@ public abstract class RpCalcBasedGeomFactory implements RpGeomFactory {
     public abstract RpGeometry createGeomFromSource();
 
     public void updateGeom() {
-//        System.out.println("Estou no updateGeom() sem area ... ");
+
         try {
-//            geomSource_=null;
-//            geom_=null;
-//            System.gc();
             geomSource_ = calc_.recalc();
             geom_ = createGeomFromSource();
             isGeomOutOfDate_ = true;

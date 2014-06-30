@@ -11,7 +11,7 @@ import java.util.List;
 import javax.swing.AbstractButton;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import rpn.RPnPhaseSpaceAbstraction;
+import rpn.RPnDesktopPlotter;
 import rpn.component.*;
 import rpn.controller.ui.RiemannProblemConfig;
 import rpn.controller.ui.UIController;
@@ -66,7 +66,11 @@ public class BifurcationPlotCommand extends RpModelPlotCommand {
     @Override
     public void execute(RpGeomFactory factory) {
 
-        super.execute(factory);
+
+        
+        try{
+            
+            super.execute(factory);
         
         BifurcationCurveGeomFactory bifurcationFactory = (BifurcationCurveGeomFactory)factory;
         
@@ -76,6 +80,16 @@ public class BifurcationPlotCommand extends RpModelPlotCommand {
 
         RPnDataModule.LEFTPHASESPACE.join(bifurcationListGeom.get(0));
         RPnDataModule.RIGHTPHASESPACE.join(bifurcationListGeom.get(1));
+        
+        
+        
+         } catch (NullPointerException rex) {
+            RPnDesktopPlotter.showCalcExceptionDialog(new RpException("Error in native layer"));
+
+        }
+
+        
+        
  
     }
 

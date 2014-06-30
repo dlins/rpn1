@@ -82,6 +82,12 @@
     
     
     
+    
+            <CURVECONFIGURATION name="hysteresiscurve">
+                <CURVEPARAM name="family" value="0"/>
+                <CURVEPARAM name="resolution" value="128 128"/>
+            </CURVECONFIGURATION>
+    
 
             <CURVECONFIGURATION name="inflectioncurve">
                 <CURVEPARAM name="resolution" value="128 128"/>

@@ -23,12 +23,14 @@ import java.util.Iterator;
 import java.util.Observable;
 import java.util.Observer;
 import javax.swing.AbstractButton;
+import rpn.RPnDesktopPlotter;
 import rpn.RPnPhaseSpacePanel;
 import rpn.component.RpCalcBasedGeomFactory;
 import rpn.component.RpGeomFactory;
 import rpn.controller.ui.*;
 import rpnumerics.RPnCurve;
 import rpn.message.RPnNetworkStatus;
+import rpnumerics.RpException;
 
 public abstract class RpModelPlotCommand extends RpModelActionCommand implements Observer {
 
@@ -40,25 +42,22 @@ public abstract class RpModelPlotCommand extends RpModelActionCommand implements
         super(shortDesc, icon);
         button_ = button;
         button_.setAction(this);
-        
-        String [] descriptionArray = shortDesc.split(" ");
-        
-        
+
+        String[] descriptionArray = shortDesc.split(" ");
+
         StringBuilder buttonCaption = new StringBuilder();
-        
+
         buttonCaption.append("<html>");
-        
+
         for (String string : descriptionArray) {
             buttonCaption.append(string);
             buttonCaption.append("<br>");
-            
+
         }
         buttonCaption.append("</html>");
-        
+
         button_.setText(buttonCaption.toString());
-        
-        
-        
+
 //        button_.setFont(rpn.RPnConfigReader.MODELPLOT_BUTTON_FONT);
 //
 //        AffineTransform fontTransform = new AffineTransform();
@@ -66,15 +65,13 @@ public abstract class RpModelPlotCommand extends RpModelActionCommand implements
 //        fontTransform.scale(1.5, 1.5);
 //        Font newFont = button_.getFont().deriveFont(fontTransform);
 //        button_.setFont(newFont);
-
         button_.setToolTipText(shortDesc);
 
         putValue(Action.SHORT_DESCRIPTION, shortDesc);
         setEnabled(false);
 
-
     }
-    
+
     public RpModelPlotCommand(String shortDesc, ImageIcon icon) {
 
         super(shortDesc, icon);
@@ -82,24 +79,19 @@ public abstract class RpModelPlotCommand extends RpModelActionCommand implements
         putValue(Action.SHORT_DESCRIPTION, shortDesc);
         setEnabled(false);
 
-
     }
-    
 
     public void execute() {
 
         //RealVector[] userInputList = UIController.instance().userInputList();
         RealVector[] userInputList = new RealVector[1];
 
-	// TODO : retornar o codigo acima... mvera.
-	userInputList[0] = UIController.instance().globalInputTable().values();
-
+        // TODO : retornar o codigo acima... mvera.
+        userInputList[0] = UIController.instance().globalInputTable().values();
 
         Iterator oldValue = UIController.instance().getActivePhaseSpace().getGeomObjIterator();
 
         RpGeometry geometry = createRpGeometry(userInputList);
-
-
 
         if (geometry == null) {
             return;
@@ -108,7 +100,6 @@ public abstract class RpModelPlotCommand extends RpModelActionCommand implements
         RpCalcBasedGeomFactory factory = (RpCalcBasedGeomFactory) geometry.geomFactory();
 
         RPnCurve curve = (RPnCurve) factory.geomSource();
-         
 
         curve.setId(curveID_);
         curveID_++;
@@ -132,26 +123,32 @@ public abstract class RpModelPlotCommand extends RpModelActionCommand implements
 
     public void execute(RpGeomFactory factory) {
 
-        RPnCurve curve = (RPnCurve) factory.geomSource();
+            RPnCurve curve = null;
+            curve = (RPnCurve) factory.geomSource();
+            
+            if (curve==null)return;
+            
 
-        curve.setId(curveID_);
-        curveID_++;
+            curve.setId(curveID_);
+            curveID_++;
 
-        Iterator oldValue = RPnDataModule.PHASESPACE.getGeomObjIterator();
+            Iterator oldValue = RPnDataModule.PHASESPACE.getGeomObjIterator();
 
-        PropertyChangeEvent event = new PropertyChangeEvent(this,
-                UIController.instance().getActivePhaseSpace().getName(),
-                oldValue,
-                factory.geom());
+            PropertyChangeEvent event = new PropertyChangeEvent(this,
+                    UIController.instance().getActivePhaseSpace().getName(),
+                    oldValue,
+                    factory.geom());
 
-        ArrayList<RealVector> emptyInput = new ArrayList<RealVector>();
-        logCommand(new RpCommand(event, emptyInput));
+            ArrayList<RealVector> emptyInput = new ArrayList<RealVector>();
+            logCommand(new RpCommand(event, emptyInput));
 
-        RPnDataModule.PHASESPACE.join(factory.geom());
+            RPnDataModule.PHASESPACE.join(factory.geom());
 
-        if (RPnNetworkStatus.instance().isOnline() && RPnNetworkStatus.instance().isMaster()) {
-            RPnNetworkStatus.instance().sendCommand(rpn.controller.ui.UndoActionController.instance().getLastCommand().toXML());
-        }
+            if (RPnNetworkStatus.instance().isOnline() && RPnNetworkStatus.instance().isMaster()) {
+                RPnNetworkStatus.instance().sendCommand(rpn.controller.ui.UndoActionController.instance().getLastCommand().toXML());
+            }
+
+
     }
 
     public void unexecute() {
@@ -167,13 +164,13 @@ public abstract class RpModelPlotCommand extends RpModelActionCommand implements
     @Override
     public void actionPerformed(ActionEvent event) {
 
-	super.actionPerformed(event);
+        super.actionPerformed(event);
 
-	if (UIController.instance().globalInputTable().isComplete()) {
+        if (UIController.instance().globalInputTable().isComplete()) {
 
-		execute();
-		UIController.instance().panelsUpdate();
-	}
+            execute();
+            UIController.instance().panelsUpdate();
+        }
 
     }
 
@@ -190,12 +187,9 @@ public abstract class RpModelPlotCommand extends RpModelActionCommand implements
     @Override
     public void update(Observable o, Object arg) {
 
-
-
         Iterator<RPnPhaseSpacePanel> iterator = UIController.instance().getInstalledPanelsIterator();
         while (iterator.hasNext()) {
             RPnPhaseSpacePanel panel = iterator.next();
-
 
             MouseMotionListener[] mouseMotionArray = (MouseMotionListener[]) panel.getListeners(MouseMotionListener.class);
             MouseListener[] mouseListenerArray = (MouseListener[]) panel.getListeners(MouseListener.class);

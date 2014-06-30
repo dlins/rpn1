@@ -88,8 +88,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_DoubleContactCurveCalc_nativeCalc__II
         ////cout << "right_vrs.size()  = " << right_vrs.size() << endl;
     }
 
-
-
+    
     if (left_vrs.size() == 0 || right_vrs.size() == 0)return NULL;
 
 

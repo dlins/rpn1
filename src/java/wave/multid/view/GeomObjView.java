@@ -28,6 +28,7 @@ public abstract class GeomObjView {
         setViewingTransform(transf);
         setViewingAttr(viewAttr);
         viewList_ = new ArrayList();
+        viewAttr_=viewAttr;
         update();
 
     }

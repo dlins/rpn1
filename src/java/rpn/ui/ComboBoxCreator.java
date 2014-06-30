@@ -10,6 +10,8 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -65,18 +67,7 @@ public class ComboBoxCreator extends UIComponentCreator {
 
         JComboBox comboBox = new JComboBox(paramsValues.keySet().toArray());
 
-        Set<Entry<String, String>> entrySet = paramsValues.entrySet();
-        
-        
-        for (Entry<String, String> entry : entrySet) {
-            
-            if (entry.getValue().equals("1")){
-                comboBox.setSelectedItem(entry.getKey());
-            }
-            
-        }
-
-        comboBox.addActionListener(new ComboEventHandler());
+        comboBox.addItemListener(new ComboEventHandler());
 
         gridConstraints.gridy = 0;
         gridConstraints.gridx = 0;
@@ -87,16 +78,33 @@ public class ComboBoxCreator extends UIComponentCreator {
         gridConstraints.gridx = 0;
         
         panel_.add(comboBox,gridConstraints);
+        int charFlag = new Integer(configuration_.getParam(configurationParameter_));
+        
+        
+        comboBox.setSelectedItem(chooseCharacteristic(charFlag));
 
         
         return panel_;
 
     }
+    
+    
+    private String chooseCharacteristic(int charFlag){
+        
+        
+        if(charFlag==0)
+            return "on curve";
+      else
+            return "on domain";
+        
+    }
 
-    private class ComboEventHandler implements ActionListener {
+    private class ComboEventHandler implements ItemListener {
 
-        public void actionPerformed(ActionEvent e) {
+      
 
+        public void itemStateChanged(ItemEvent e) {
+            
             JComboBox combo = (JComboBox) e.getSource();
 
 
@@ -107,16 +115,11 @@ public class ComboBoxCreator extends UIComponentCreator {
                 RPNUMERICS.setParamValue(configuration_.getName(), configurationParameter_, "0");
             }
             
-            else if(selectedItem.equals("on domain")){
+            if(selectedItem.equals("on domain")){
                 RPNUMERICS.setParamValue(configuration_.getName(), configurationParameter_, "1");
             }
-            else {
-                RPNUMERICS.setParamValue(configuration_.getName(), configurationParameter_, selectedItem);                
-            }
-            
-
-
            
         }
+          
     }
 }
