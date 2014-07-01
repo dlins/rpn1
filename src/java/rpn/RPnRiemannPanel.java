@@ -8,8 +8,6 @@ package rpn;
 import java.awt.event.MouseEvent;
 import wave.multid.view.*;
 import java.awt.Graphics2D;
-import java.awt.Stroke;
-import java.awt.BasicStroke;
 import java.awt.print.Printable;
 import java.awt.Graphics;
 import java.awt.Point;
@@ -25,16 +23,15 @@ import java.util.Iterator;
 import java.util.List;
 import rpn.component.ClosestDistanceCalculator;
 import rpn.component.DiagramGeom;
-import rpn.component.RpDiagramFactory;
 import rpn.parser.RPnDataModule;
 import rpnumerics.Diagram;
 import rpnumerics.DiagramLine;
+import wave.multid.Coords2D;
 import wave.multid.CoordsArray;
+import wave.multid.Space;
 import wave.multid.graphs.ViewPlane;
 import wave.multid.graphs.dcViewport;
 import wave.multid.graphs.wcWindow;
-import wave.multid.model.AbstractPathIterator;
-import wave.multid.model.MultiPolyLine;
 import wave.util.RealVector;
 
 public class RPnRiemannPanel extends RPnPhaseSpacePanel implements Printable {
@@ -93,38 +90,56 @@ public class RPnRiemannPanel extends RPnPhaseSpacePanel implements Printable {
             trackLine_ = new Line2D.Double(cursorPos_.x, 0, cursorPos_.x, getHeight());
             Iterator geomObjIterator = RPnDataModule.RIEMANNPHASESPACE.getGeomObjIterator();
             
+            ViewingTransform transform = scene_.getViewingTransform();
+            
             
             while (geomObjIterator.hasNext()) {
                 DiagramGeom diagram = (DiagramGeom) geomObjIterator.next();
                 
+                Coords2D cursorPoint = new Coords2D(cursorPos_.getX(),cursorPos_.getY());
                 
-                Diagram diagramSource =  (Diagram) diagram.geomFactory().geomSource();
-                List<DiagramLine> lines = diagramSource.getLines();
+                CoordsArray  cursorWC = new CoordsArray(new Space("", 2));
                 
-                for (DiagramLine diagramLine : lines) {
-
-                    RealVector point = new RealVector(2);
-                    point.setElement(0, me.getX());
-                    point.setElement(1, me.getY());
-                    ClosestDistanceCalculator closestCalculator = new ClosestDistanceCalculator(diagramLine.getSegments(), point);
-                 
+                transform.dcInverseTransform(cursorPoint, cursorWC);
+            
+//                System.out.println("coordenada x:  " + cursorWC.getCoords()[0]);
+                
+                RealVector point = diagram.getPointByIndex(0, cursorWC.getCoords()[0]);
+              
+//                System.out.println("PointOnLine" + point);
+//                
+//                
+//                Diagram diagramSource =  (Diagram) diagram.geomFactory().geomSource();
+//                List<DiagramLine> lines = diagramSource.getLines();
+//                
+//                for (DiagramLine diagramLine : lines) {
+//
+//                    RealVector point = new RealVector(2);
+//                    point.setElement(0, me.getX());
+//                    point.setElement(1, me.getY());
+//                    ClosestDistanceCalculator closestCalculator = new ClosestDistanceCalculator(diagramLine.getSegments(), point);
+//                 
                     
-                    System.out.println("PointOnLine" + closestCalculator.getClosestPoint());
+                
                     
-                    CoordsArray pointOnLine = new CoordsArray(closestCalculator.getClosestPoint());
-                    
-                    diagram.showSpeed(pointOnLine, new CoordsArray(point), scene_.getViewingTransform());
+//                    CoordsArray pointOnLine = new CoordsArray(closestCalculator.getClosestPoint());
+//                    
+//                    diagram.showSpeed(pointOnLine, new CoordsArray(point), scene_.getViewingTransform());
                     
                     
                 }
                 
                 
                 
-            }
-            
-            
-            
-            
+//            }
+//            Iterator geometries = scene_.geometries();
+//            
+//            while (geometries.hasNext()) {
+//                GeomObjView object = (GeomObjView) geometries.next();
+//                
+//
+//                
+//            }
             
             
             

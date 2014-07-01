@@ -8,7 +8,6 @@ package wave.util;
 import javax.vecmath.GVector;
 import java.text.NumberFormat;
 import java.text.DecimalFormat;
-import java.text.ParsePosition;
 import java.util.Locale;
 
 public class RealVector extends GVector {
