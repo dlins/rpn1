@@ -75,7 +75,7 @@ class Contour2p5_Method {
         static void curve2p5(TwoImplicitFunctions *timpf, int current_segment_index, 
                              std::vector<RealVector> &curve_vrs, 
                              std::vector<RealVector> &domain_vrs);
-                                 
+                             
         static void filedg3(Matrix<double> &sol_, Matrix<int> &edges_,
                             int nedges_, const RealVector &grid_resolution,
                             const std::vector<RealVector> &segment,
@@ -88,6 +88,8 @@ class Contour2p5_Method {
         static void deallocate_arrays(void);
 
         static void contour2p5(TwoImplicitFunctions *timpf, std::vector<RealVector> &curve_vrs, std::vector<RealVector> &domain_vrs);
+        
+        static void contour2p5_for_curve(TwoImplicitFunctions *timpf, std::vector<RealVector> &curve_vrs, std::vector<RealVector> &domain_vrs);
 };
 
 #endif // _CONTOUR2P5_METHOD_

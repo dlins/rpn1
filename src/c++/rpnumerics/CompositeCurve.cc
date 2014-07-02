@@ -1,6 +1,6 @@
 #include "CompositeCurve.h"
 #include "WaveCurve.h"
-#include "Evap_Extension.h"
+#include "TPCW_Evap_Extension.h"
 
 int CompositeCurve::composite_field(int *two_n, double *xi, double *pointpair, double *field, int *obj, double* /* Not used */){
     CompositeCurve *composite_object = (CompositeCurve*)obj;

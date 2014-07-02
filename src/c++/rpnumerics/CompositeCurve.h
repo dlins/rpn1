@@ -181,7 +181,7 @@ class CompositeCurve {
         int normalize_with_respect_to_whom;
 
         #ifdef TESTEVAPEXTENSION
-        Evap_Extension *evapextension;
+        TPCW_Evap_Extension *evapextension;
         #endif
     public:
         CompositeCurve(const AccumulationFunction *a, const FluxFunction *f, const Boundary *b, ShockCurve *s, Explicit_Bifurcation_Curves *ebc);
@@ -238,7 +238,7 @@ class CompositeCurve {
 //        static int characteristic_shock_signal_event(const RealVector &where, double &diff_lambda, int *obj, int * /*not used*/);
 
         #ifdef TESTEVAPEXTENSION
-        void set_evap_extension(Evap_Extension *e){evapextension = e; return;}
+        void set_evap_extension(TPCW_Evap_Extension *e){evapextension = e; return;}
         #endif
 
 };

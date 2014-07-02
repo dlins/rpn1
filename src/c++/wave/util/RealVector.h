@@ -177,7 +177,7 @@ public:
     //
     // http://en.wikibooks.org/wiki/Algorithm_Implementation/Geometry/Convex_hull/Monotone_chain
     //
-    friend void convex_hull(std::vector<RealVector> &polygon, std::vector<RealVector> &ch);
+    friend void convex_hull(const std::vector<RealVector> &original_polygon, std::vector<RealVector> &ch);
 
     // Based on
     //
@@ -194,6 +194,12 @@ public:
     // r = alpha*p0 + (1.0 - alpha)*p1 = beta*q0 + (1.0 - beta)*q1.
     //
     friend bool segment_segment_intersection(const RealVector &p0, const RealVector &p1, const RealVector &q0, const RealVector &q1, RealVector &r, double &alpha, double &beta);
+
+    // Point inside a non-convex polygon. Based on:
+    //
+    //    http://alienryderflex.com/polygon/
+    //
+    friend bool inside_non_convex_polygon(const std::vector<RealVector> &polygon, const RealVector &point); 
 
     // Sum of all the elements of a vector.
     //

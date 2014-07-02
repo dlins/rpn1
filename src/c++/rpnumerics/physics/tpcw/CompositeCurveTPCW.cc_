@@ -1,6 +1,6 @@
 #include "CompositeCurveTPCW.h"
 
-CompositeCurveTPCW::CompositeCurveTPCW(const AccumulationFunction *a, const FluxFunction *f, const Boundary *b, ShockCurve *s, Explicit_Bifurcation_Curves *ebc, Evap_Extension *ee) : CompositeCurve(a,f, b, s, ebc), evapextension(ee) {
+CompositeCurveTPCW::CompositeCurveTPCW(const AccumulationFunction *a, const FluxFunction *f, const Boundary *b, ShockCurve *s, Explicit_Bifurcation_Curves *ebc, TPCW_Evap_Extension *ee) : CompositeCurve(a,f, b, s, ebc), evapextension(ee) {
     cout<<"no construtor"<<this<<endl;
 }
 

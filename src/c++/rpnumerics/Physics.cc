@@ -117,17 +117,17 @@ Physics::Physics(const string & physicsID) : physicsVector_(new vector<SubPhysic
 
 }
 
-Physics::Physics(const vector<SubPhysics> & inputPhysicsVector, const Boundary & boundary, const string & id) : physicsVector_(new vector<SubPhysics*>()), boundary_(boundary.clone()), ID_(new string(id)) {
+//Physics::Physics(const vector<SubPhysics> & inputPhysicsVector, const Boundary & boundary, const string & id) : physicsVector_(new vector<SubPhysics*>()), boundary_(boundary.clone()), ID_(new string(id)) {
 
-    for (unsigned int i = 0; i < inputPhysicsVector.size(); i++) {
+//    for (unsigned int i = 0; i < inputPhysicsVector.size(); i++) {
 
-        physicsVector_->push_back((SubPhysics *) inputPhysicsVector.at(i).clone());
+//        physicsVector_->push_back((SubPhysics *) inputPhysicsVector.at(i).clone());
 
-    }
+//    }
 
 
 
-}
+//}
 
 Physics::Physics(const Physics & physics) : physicsVector_(new vector<SubPhysics*>()), boundary_(physics.boundary().clone()), ID_(new string(physics.ID())), space_(new Space(physics.domain())){
 

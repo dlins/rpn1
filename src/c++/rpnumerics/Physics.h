@@ -50,7 +50,7 @@ private:
 public:
 
     Physics(const string &);
-    Physics(const vector<SubPhysics> &, const Boundary &, const string &);
+//    Physics(const vector<SubPhysics> &, const Boundary &, const string &);
     Physics(const Physics &);
 
     virtual ~Physics();

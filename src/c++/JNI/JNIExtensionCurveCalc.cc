@@ -16,6 +16,7 @@
 #include "JNIDefs.h"
 #include "Stone.h"
 #include "StoneAccumulation.h"
+#include "Implicit_Extension_Curve.h"
 #include "RectBoundary.h"
 #include "Debug.h"
 #include <vector>
@@ -116,7 +117,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ExtensionCurveCalc_nativeCalc(JNIEnv *
 
 
 
-    Extension_Curve extension;
+    Implicit_Extension_Curve extension;
 
     ////cout<<"Inside area: "<<inSideArea<<endl;
 

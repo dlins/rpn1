@@ -396,7 +396,9 @@ bool inside_convex_polygon(const std::vector<RealVector> &polygon, const RealVec
 //
 // http://en.wikibooks.org/wiki/Algorithm_Implementation/Geometry/Convex_hull/Monotone_chain
 //
-void convex_hull(std::vector<RealVector> &polygon, std::vector<RealVector> &ch){
+void convex_hull(const std::vector<RealVector> &original_polygon, std::vector<RealVector> &ch){
+    std::vector<RealVector> polygon = original_polygon;
+
     int n = polygon.size(), k = 0;
     ch.resize(2*n);
  
@@ -468,6 +470,27 @@ bool segment_segment_intersection(const RealVector &p0, const RealVector &p1, co
     r = .5*(alpha*p0 + (1.0 - alpha)*p1 + beta*q0 + (1.0 - beta)*q1);
 
     return (alpha >= 0.0 && alpha <= 1.0) && (beta >= 0.0 && beta <= 1.0);
+}
+
+bool inside_non_convex_polygon(const std::vector<RealVector> &polygon, const RealVector &point){
+    int j = polygon.size() - 1;
+    bool oddNodes = false;
+
+    double x = point(0);
+    double y = point(1);
+
+    for (int i = 0; i < polygon.size(); i++) {
+        if ((polygon[i](1) < y && polygon[j](1) >= y || 
+             polygon[j](1) < y && polygon[i](1) >= y)
+            && 
+            (polygon[i](0) <= x || polygon[j](0) <= x)
+           ) {
+            oddNodes ^= (polygon[i](0) + (y - polygon[i](1))/(polygon[j](1) - polygon[i](1))*(polygon[j](0) - polygon[i](0)) < x); 
+        }
+        j = i;
+    }
+
+    return oddNodes;
 }
 
 double sum(const RealVector &v){

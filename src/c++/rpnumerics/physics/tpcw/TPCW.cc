@@ -80,7 +80,8 @@ SubPhysics(*defaultBoundary(), *new Space("R3", 3), "TPCW", _GENERAL_ACCUMULATIO
     
     Coincidence_TPCW * c = new Coincidence_TPCW((const Flux2Comp2PhasesAdimensionalized *) fluxFunction_, (Accum2Comp2PhasesAdimensionalized *) accumulationFunction_);
 
-    Evap_Extension *ee = new Evap_Extension((const Flux2Comp2PhasesAdimensionalized *) fluxFunction_, c);
+    TPCW_Evap_Extension *ee = new TPCW_Evap_Extension((const Flux2Comp2PhasesAdimensionalized *) fluxFunction_, c);
+    TPCW_IntSat_Extension *ii = new TPCW_IntSat_Extension((const Flux2Comp2PhasesAdimensionalized *) fluxFunction_);
 
     preProcessedBoundary_ = new RectBoundary(min, max);
 
@@ -89,8 +90,7 @@ SubPhysics(*defaultBoundary(), *new Space("R3", 3), "TPCW", _GENERAL_ACCUMULATIO
     shockCurve_ = new ShockCurve(hugoniot_continuation_method_);
 
     compositeCurve_ = new CompositeCurveTPCW(accumulationFunction_, fluxFunction_, preProcessedBoundary_,
-            shockCurve_, 0, ee);
-
+            shockCurve_, 0, ee, ii);
 
     extensionCurveArray_->operator [](ee->name()) = ee;
 
