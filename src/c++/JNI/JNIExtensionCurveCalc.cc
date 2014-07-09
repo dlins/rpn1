@@ -119,39 +119,128 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ExtensionCurveCalc_nativeCalc(JNIEnv *
 
     Implicit_Extension_Curve extension;
 
-    ////cout<<"Inside area: "<<inSideArea<<endl;
+
+    cout << "Flux: " << fluxFunction << endl;
+    cout << "Accum: " << accumFunction << endl;
 
 
-    if (inSideArea==0) {
+
+    extension.prepare_extension(fluxFunction, accumFunction, fluxFunction, accumFunction, gv, characteristicWhere, singular, family);
+
+
+    cout << "Inside area: " << inSideArea << endl;
+    cout << "Characteristic: " << characteristicWhere << endl;
+    cout << "Singular: " << singular << endl;
+    cout << "Family: " << family << endl;
+    cout << "Original curve: " << original_curve.size() << endl;
+
+
+//
+//    for (int i = 0; i < original_curve.size(); i++) {
+//
+//
+//        cout << "Ponto: " << original_curve[i] << endl;
+//
+//
+//    }
 
 
 
-        extension.curve_in_subdomain(fluxFunction, accumFunction, *gv, areaVertices, characteristicWhere, singular, family,
+    //
+    //
+    //
+    //        extension.curve_in_subdomain(fluxFunction, accumFunction, *gv, areaVertices, characteristicWhere, singular, family,
+    //                original_curve, curve_segments, domain_segments);
+    //
+    //
+    //
+    //
+    //    } else if(inSideArea ==-1) {
+    //
+    //
+    //        extension.curve_out_of_subdomain(fluxFunction, accumFunction, *gv, areaVertices, characteristicWhere, singular, family,
+    //                original_curve, curve_segments, domain_segments);
+    //
+    //
+    //
+    //    }
+
+    //    else if (inSideArea==1){
+
+
+    if (inSideArea == 0) {
+        extension.extension_of_curve(fluxFunction, accumFunction, fluxFunction, accumFunction, *gv, characteristicWhere, singular, family,
                 original_curve, curve_segments, domain_segments);
 
+    } else {
+        
+        
+        cout<<"Chamando com imagem selecionada"<<endl;
 
 
-
-    } else if(inSideArea ==-1) {
-
-
-        extension.curve_out_of_subdomain(fluxFunction, accumFunction, *gv, areaVertices, characteristicWhere, singular, family,
+        extension.curve_in_subdomain(fluxFunction, accumFunction, *gv,areaVertices,characteristicWhere, singular, family,
                 original_curve, curve_segments, domain_segments);
-
-
 
     }
 
-    else if (inSideArea==1){
-        
-          extension.curve(fluxFunction, accumFunction, *gv, characteristicWhere, singular, family,
-                original_curve, curve_segments, domain_segments);
 
 
-        
-    }
+    //    
+    //    RealVector w(2);
+    //    RealVector o(2);
+    //    RealVector g(2);
+    //    
+    //    w(0)=1.0;
+    //    w(1)=0.0;
+    //    
+    //    o(0)=0.0;
+    //    o(1)=1.0;
+    //    
+    //    g(0)=0.0;
+    //    g(1)=0.0;
+    //    
+    //
+    //    
+    //    
+    //    vector<RealVector> domain_polygon;
+    //    vector<RealVector> image_polygon;
+    //    vector<RealVector> ext_curve;
+    //
+    //
+    //    domain_polygon.push_back(w);
+    //    domain_polygon.push_back(o);
+    //    domain_polygon.push_back(g);
+    //    
+    //    
+    //    image_polygon=domain_polygon;
+    //
+    //
+    //    
+    //    extension.extension_curve(original_curve, domain_polygon, image_polygon, ext_curve);
+    //    
+
+    //    if(characteristicWhere==1 ){
+    //        domain_segments = ext_curve;
+    //        curve_segments=original_curve;
+    //    }
+    //    else {
+    //        curve_segments=ext_curve;
+    //        domain_segments=original_curve;
+    //    }
 
 
+    //    
+    //        
+    //          extension.curve(fluxFunction, accumFunction, *gv, characteristicWhere, singular, family,
+    //                original_curve, curve_segments, domain_segments);
+
+
+
+    //    }
+
+
+
+    cout << "Curva: " << curve_segments.size() << " Dominio: " << domain_segments.size() << endl;
 
     if (curve_segments.size() == 0 || domain_segments.size() == 0) {
 

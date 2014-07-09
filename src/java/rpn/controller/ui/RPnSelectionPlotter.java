@@ -77,23 +77,9 @@ public class RPnSelectionPlotter extends RPn2DMouseController {
             RpCommand command = new RpCommand(graphicsUtil.toXML());
 
             GenericExtensionCurveCommand.instance().logCommand(command);
+            GenericExtensionCurveCommand.instance().getState().select(graphicsUtil);
             
-            
-            //TESTE
-            
-         
-//
-//            graphicsUtil.setID(String.valueOf(panel.getGraphicsUtil().size() - 1));
-//
-//            ZoomPlotCommand.instance().setAreaAndPanel((AreaSelected) graphicsUtil, panel);
-//
-//            ZoomPlotCommand.instance().execute();
-//
-
-
-            
-
-
+        
             if (RPnNetworkStatus.instance().isOnline() && RPnNetworkStatus.instance().isMaster()) {
                 RPnNetworkStatus.instance().sendCommand(rpn.controller.ui.UndoActionController.instance().getLastCommand().toXML());
             }

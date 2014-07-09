@@ -18,16 +18,24 @@ import javax.swing.JPanel;
 public class RPnConfigurationFrame extends JFrame {
 
     private final JPanel checkBoxPanel_;
+    
+    private static RPnCurvesConfigPanel configPanel_;
 
     public RPnConfigurationFrame(String title) throws HeadlessException {
         super(title);
         getContentPane().setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
-        getContentPane().add(new RPnCurvesConfigPanel().getContainer());
+        
+        configPanel_ = new RPnCurvesConfigPanel();
+        getContentPane().add(configPanel_.getContainer());
         checkBoxPanel_ = new JPanel();
         createMainBoundarySelectionPanel();
         getContentPane().add(checkBoxPanel_);
         setUIFramePosition();
 
+    }
+    
+    public static void setFocus(String panelName){
+        configPanel_.setFocus(panelName);
     }
 
     private void createMainBoundarySelectionPanel() {

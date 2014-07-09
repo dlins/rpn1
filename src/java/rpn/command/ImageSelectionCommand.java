@@ -30,6 +30,10 @@ public class ImageSelectionCommand extends RpModelPlotCommand implements Observe
 //    @Override
     public void actionPerformed(ActionEvent event) {
         RPnGenericSelectionPlotter boxPlotter = new RPnGenericSelectionPlotter();
+        
+//         RPnSelectionPlotter boxPlotter = new RPnSelectionPlotter();
+        
+//        GenericSelectionPlotter boxPlotter = new RPnGenericSelectionPlotter();
 
         UIController.instance().setState(new AREASELECTION_CONFIG(this));
 

@@ -6,12 +6,10 @@
 package rpn.component.util;
 
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Polygon;
 import java.awt.Shape;
 import java.awt.Stroke;
-import java.awt.font.GlyphVector;
 import java.awt.geom.Path2D;
 import java.awt.geom.PathIterator;
 import java.util.ArrayList;
@@ -21,9 +19,16 @@ import wave.multid.CoordsArray;
 import wave.multid.view.ViewingAttr;
 import wave.multid.view.ViewingTransform;
 import rpnumerics.RPNUMERICS;
+import wave.multid.model.MultiPolygon;
 import wave.util.RealVector;
 
 public class AreaSelected extends GraphicsUtil {
+    
+    
+    
+    public AreaSelected (MultiPolygon polygon, ViewingTransform viewingTransform, ViewingAttr viewingAttr){
+        this(createVerticesList(polygon.extractVertices()),viewingTransform,viewingAttr);
+    }
 
     
 
@@ -39,6 +44,42 @@ public class AreaSelected extends GraphicsUtil {
         
 
     }
+    
+    
+     private static RealVector [] createVerticesList(CoordsArray [] coordsArray){
+        
+       RealVector [] verticesList = new RealVector[coordsArray.length];
+        
+        for (int i = 0; i < coordsArray.length; i++) {
+            CoordsArray coordsArray1 = coordsArray[i];
+            
+            RealVector vertex = new RealVector(coordsArray1.getCoords());
+            verticesList[i]=(vertex);
+            
+        }
+        
+        
+        return verticesList;
+        
+    }
+    
+    
+//    private static List<Object> createVerticesList(CoordsArray [] coordsArray){
+//        
+//        List<Object> verticesList = new ArrayList<Object>();
+//        
+//        for (int i = 0; i < coordsArray.length; i++) {
+//            CoordsArray coordsArray1 = coordsArray[i];
+//            
+//            RealVector vertex = new RealVector(coordsArray1.getCoords());
+//            verticesList.add(vertex);
+//            
+//        }
+//        
+//        
+//        return verticesList;
+//        
+//    }
 
     @Override
     public Shape createShape() {
@@ -144,14 +185,17 @@ public class AreaSelected extends GraphicsUtil {
         Path2D.Double selectionPath = new Path2D.Double();
 
         ArrayList<Object> wcList = new ArrayList<Object>();
-
-        selectionPath.moveTo(vertices[0].getElement(0), vertices[0].getElement(1));
-
-        selectionPath.lineTo(vertices[1].getElement(0), vertices[1].getElement(1));
-
-        selectionPath.lineTo(vertices[2].getElement(0), vertices[2].getElement(1));
-
-        selectionPath.lineTo(vertices[3].getElement(0), vertices[3].getElement(1));
+             
+        for (int i = 0; i < vertices.length; i++) {
+            if(i==0){
+                selectionPath.moveTo(vertices[0].getElement(0), vertices[0].getElement(1));
+                   
+            }
+            else {
+                selectionPath.lineTo(vertices[i].getElement(0), vertices[i].getElement(1));
+            }
+            
+        }
 
         selectionPath.closePath();
 

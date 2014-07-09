@@ -244,6 +244,7 @@ bool Implicit_Extension_Curve::valid_point(int i, double &lambda, RealVector &F,
 bool Implicit_Extension_Curve::valid_segment(int i) {
     // This comes from the previous iteration.
     //
+
     if (!point_is_valid) return false;
 
     // The magnitudes at the first point of the segment were already computed.
@@ -311,6 +312,8 @@ void Implicit_Extension_Curve::curve(const FluxFunction *df, const AccumulationF
 
     gv = &g;
     oc = &original_curve;
+    
+    cout<<"Original curve: "<<original_curve.size()<<endl;
 
     std::cout << "Dimension of the curve: " << oc->at(0).size() << std::endl;
     std::cout << "Characteristic: " << characteristic_where << std::endl;
@@ -323,9 +326,28 @@ void Implicit_Extension_Curve::curve(const FluxFunction *df, const AccumulationF
     if (gv->grid(0, 0).size() == 2) type_of_physic = &species_physic;
     else                            type_of_physic = &compositional_physic;
 
-    //std::cout << "Inside Extension Curve: gv->grid(0, 0).size() = " << gv->grid(0, 0).size() << std::endl;
+    std::cout << "Inside Extension Curve: gv->grid(0, 0).size() = " << gv->grid(0, 0).size() << std::endl;
+    
+    
+    // Prepare the first point of the curve.
+    curve_is_continuous = true;
+
+    {
+        int dim = oc->at(0).size();
+
+        RealVector F, G;
+        point_is_valid = valid_point(0, segment_lambda(1), F, G);
+
+        for (int k = 0; k < dim; k++) {
+            segment_flux(k, 1)  = F(k);
+            segment_accum(k, 1) = G(k);
+        }
+    }
+    // Prepare the first point of the curve.
 
     Contour2p5_Method::contour2p5(this, extension_on_curve, extension_on_domain);
+    
+    cout<<"em implicit: "<<extension_on_curve.size()<<" "<<extension_on_domain.size()<<endl;
 
     return;
 }
@@ -464,6 +486,23 @@ void Implicit_Extension_Curve::curve_out_of_subdomain(const FluxFunction *df, co
     else                            type_of_physic = &compositional_physic;
 
     //std::cout << "Inside Extension Curve: gv->grid(0, 0).size() = " << gv->grid(0, 0).size() << std::endl;
+    
+    
+    // Prepare the first point of the curve.
+    curve_is_continuous = true;
+
+    {
+        int dim = oc->at(0).size();
+
+        RealVector F, G;
+        point_is_valid = valid_point(0, segment_lambda(1), F, G);
+
+        for (int k = 0; k < dim; k++) {
+            segment_flux(k, 1)  = F(k);
+            segment_accum(k, 1) = G(k);
+        }
+    }
+    // Prepare the first point of the curve.
 
     Contour2p5_Method::contour2p5(this, extension_on_curve, extension_on_domain);
 
@@ -517,7 +556,6 @@ void Implicit_Extension_Curve::curve_in_subdomain(const FluxFunction *df, const 
 
     gv = &g;
     oc = &original_curve;
-
     gv->fill_eigenpairs_on_grid(domain_ff, domain_aa);
 
     //  Find the convex hull of the polygon.
@@ -555,6 +593,23 @@ void Implicit_Extension_Curve::curve_in_subdomain(const FluxFunction *df, const 
     else                            type_of_physic = &compositional_physic;
 
     //std::cout << "Inside Extension Curve: gv->grid(0, 0).size() = " << gv->grid(0, 0).size() << std::endl;
+    
+    
+    // Prepare the first point of the curve.
+    curve_is_continuous = true;
+
+    {
+        int dim = oc->at(0).size();
+
+        RealVector F, G;
+        point_is_valid = valid_point(0, segment_lambda(1), F, G);
+
+        for (int k = 0; k < dim; k++) {
+            segment_flux(k, 1)  = F(k);
+            segment_accum(k, 1) = G(k);
+        }
+    }
+    // Prepare the first point of the curve.
 
     Contour2p5_Method::contour2p5(this, extension_on_curve, extension_on_domain);
 
@@ -641,6 +696,8 @@ void Implicit_Extension_Curve::extension_curve(const std::vector<RealVector> &cu
     std::vector<RealVector> domain_convex_polygon;
     convex_hull(domain_polygon, domain_convex_polygon);
 
+    for (int i = 0; i < domain_convex_polygon.size(); i++) std::cout << domain_convex_polygon[i] << std::endl;
+
     // Create a copy of the curve to be extended, but only the segments within the specified domain.
     //
     std::vector<RealVector> curve_in_domain;
@@ -697,6 +754,23 @@ void Implicit_Extension_Curve::extension_curve(const std::vector<RealVector> &cu
     std::vector<RealVector> extension_on_curve, extension_on_domain;
 
     oc = &curve_in_domain;
+    
+    // Prepare the first point of the curve.
+    curve_is_continuous = false;
+
+    {
+        int dim = oc->at(0).size();
+
+        RealVector F, G;
+        point_is_valid = valid_point(0, segment_lambda(1), F, G);
+
+        for (int k = 0; k < dim; k++) {
+            segment_flux(k, 1)  = F(k);
+            segment_accum(k, 1) = G(k);
+        }
+    }
+    // Prepare the first point of the curve.
+
     Contour2p5_Method::contour2p5(this, extension_on_curve, extension_on_domain);
 
     if (image_convex_polygon.size() > 2){
@@ -704,8 +778,7 @@ void Implicit_Extension_Curve::extension_curve(const std::vector<RealVector> &cu
         gv->cell_type = cell_type_copy;
     }
 
-    if (characteristic_where == CHARACTERISTIC_ON_CURVE) ext_curve = extension_on_curve;
-    else                                                 ext_curve = extension_on_domain;
+    ext_curve = extension_on_domain;
 
     return;
 }

@@ -14,19 +14,20 @@ import rpn.command.DoubleContactCommand;
 import rpn.command.BoundaryExtensionCurveCommand;
 import rpn.command.EllipticBoundaryExtensionCommand;
 import rpn.command.EnvelopeCurveCommand;
+import rpn.command.GenericExtensionCurveCommand;
 import rpn.command.HysteresisPlotCommand;
 import rpn.command.InflectionPlotCommand;
 import rpn.command.SecondaryBifurcationCurveCommand;
 
 import rpn.command.SubInflectionExtensionCurveCommand;
 import rpn.command.SubInflectionPlotCommand;
-
+import rpn.controller.phasespace.extensions.ExtensionCalcWaitState;
 
 import wave.util.RealVector;
 
-public class RiemannProblemConfig extends UI_ACTION_SELECTED {
+public class ExtensionCurvesConfig extends UI_ACTION_SELECTED {
 
-    public RiemannProblemConfig() {
+    public ExtensionCurvesConfig() {
 
         super(BifurcationPlotCommand.instance());
         CoincidencePlotCommand.instance().setEnabled(true);
@@ -43,7 +44,7 @@ public class RiemannProblemConfig extends UI_ACTION_SELECTED {
         EnvelopeCurveCommand.instance().setEnabled(true);
         SecondaryBifurcationCurveCommand.instance().setEnabled(true);
         
-//        UIController.instance().getActivePhaseSpace().changeState(new RiemannProfileState());
+//        GenericExtensionCurveCommand.instance().setState(new ExtensionCalcWaitState());
 
     }
 

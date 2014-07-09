@@ -15,6 +15,7 @@ import java.util.Vector;
 import rpn.RPnPhaseSpacePanel;
 import rpn.command.GenericExtensionCurveCommand;
 import rpn.command.RpCommand;
+import rpn.component.util.AreaSelected;
 import rpn.message.RPnNetworkStatus;
 import wave.multid.Coords2D;
 import wave.multid.CoordsArray;
@@ -125,6 +126,9 @@ public class RPnGenericSelectionPlotter extends RPn2DMouseController {
             RpCommand command = new RpCommand(((MultiPolygon) convexPolygon).toXML());
 
             GenericExtensionCurveCommand.instance().logCommand(command);
+            
+            
+            GenericExtensionCurveCommand.instance().getState().select(new AreaSelected(multiPolygon,  panel.scene().getViewingTransform(),convexPolygon.viewingAttr()));
 
 
             if (RPnNetworkStatus.instance().isOnline() && RPnNetworkStatus.instance().isMaster()) {

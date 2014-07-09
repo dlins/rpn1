@@ -7,7 +7,6 @@ package rpn.controller.ui;
 
 import rpn.command.AnnotationSelectionCommand;
 import rpn.command.AreaSelectionCommand;
-import rpn.command.DomainSelectionCommand;
 import rpn.command.BoundaryExtensionCurveCommand;
 import rpn.command.BuckleyLeverettiInflectionCommand;
 import rpn.command.ChangeFluxParamsCommand;
@@ -26,7 +25,6 @@ import rpn.command.DoubleContactCommand;
 import rpn.command.EllipticBoundaryCommand;
 import rpn.command.EllipticBoundaryExtensionCommand;
 import rpn.command.EnvelopeCurveCommand;
-import rpn.command.ImageSelectionCommand;
 import rpn.command.HugoniotContinuationPlotCommand;
 import rpn.command.HugoniotPlotCommand;
 import rpn.command.HysteresisPlotCommand;
@@ -79,7 +77,7 @@ public class CurvesConfig extends UI_ACTION_SELECTED {
         WaveCurveRRegionsPlotCommand.instance().setEnabled(false);
         CurveRefineCommand.instance().setEnabled(false);
         ChooseAreaCommand.instance().setEnabled(true);
-        ImageSelectionCommand.instance().setEnabled(true);
+//        ImageSelectionCommand.instance().setEnabled(true);
         CurveSelectionCommand.instance().setEnabled(true);
        
         ZoomPlotCommand.instance().setEnabled(true);

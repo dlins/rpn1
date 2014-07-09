@@ -13,7 +13,6 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.Observable;
 import java.util.Observer;
@@ -21,7 +20,6 @@ import java.util.Set;
 import javax.swing.*;
 import rpn.command.ChangeDirectionCommand;
 import rpn.configuration.Configuration;
-import rpn.ui.ComboBoxCreator;
 import rpn.ui.UIComponentCreator;
 import rpnumerics.Orbit;
 import rpnumerics.RPNUMERICS;
@@ -39,16 +37,23 @@ public class RPnCurvesConfigPanel extends Observable implements PropertyChangeLi
     private JButton okButton_;
     private JPanel mainPainel_;
     private OrbitDirectionListener orbitDirectionListener_;
+    private HashMap <String,Component> componentMap_;
 
     public RPnCurvesConfigPanel() {
 
         addObserver(ChangeDirectionCommand.instance());
         mainPainel_ = new JPanel();
+        componentMap_ = new HashMap<String, Component>();
         methodsPanel_ = new JPanel();
         curvesTabbedPanel_ = new JTabbedPane();
         directionButtonGroup_ = new ButtonGroup();
         buildPanel();
 
+    }
+    
+    public void setFocus(String panelName){
+        curvesTabbedPanel_.setSelectedComponent(componentMap_.get(panelName));
+        
     }
 
     private void buildPanel() {
@@ -60,6 +65,7 @@ public class RPnCurvesConfigPanel extends Observable implements PropertyChangeLi
 
         HashMap<String, Configuration> configMap = RPNUMERICS.getConfigurations();
         curvesTabbedPanel_.setTabLayoutPolicy(JTabbedPane.WRAP_TAB_LAYOUT);
+
 
         Set<Entry<String, Configuration>> configSet = configMap.entrySet();
 
@@ -90,6 +96,7 @@ public class RPnCurvesConfigPanel extends Observable implements PropertyChangeLi
 
                 if (paramsPanel.getComponentCount() > 0) {
                     curvesTabbedPanel_.addTab(config.getName(), paramsPanel);
+                    componentMap_.put(config.getName(), paramsPanel);
                 }
 
             }

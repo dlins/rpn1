@@ -5,10 +5,8 @@
  */
 package rpn.command;
 
-import java.awt.Font;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-import java.awt.geom.AffineTransform;
 import java.awt.event.ActionEvent;
 import java.util.Arrays;
 import javax.swing.event.ChangeEvent;
@@ -23,14 +21,12 @@ import java.util.Iterator;
 import java.util.Observable;
 import java.util.Observer;
 import javax.swing.AbstractButton;
-import rpn.RPnDesktopPlotter;
 import rpn.RPnPhaseSpacePanel;
 import rpn.component.RpCalcBasedGeomFactory;
 import rpn.component.RpGeomFactory;
 import rpn.controller.ui.*;
 import rpnumerics.RPnCurve;
 import rpn.message.RPnNetworkStatus;
-import rpnumerics.RpException;
 
 public abstract class RpModelPlotCommand extends RpModelActionCommand implements Observer {
 
@@ -115,6 +111,8 @@ public abstract class RpModelPlotCommand extends RpModelActionCommand implements
 
         RPnDataModule.PHASESPACE.plot(geometry);
 
+        GenericExtensionCurveCommand.instance().getState().setCurve(geometry);
+
         if (RPnNetworkStatus.instance().isOnline() && RPnNetworkStatus.instance().isMaster()) {
             RPnNetworkStatus.instance().sendCommand(rpn.controller.ui.UndoActionController.instance().getLastCommand().toXML());
         }
@@ -143,6 +141,8 @@ public abstract class RpModelPlotCommand extends RpModelActionCommand implements
             logCommand(new RpCommand(event, emptyInput));
 
             RPnDataModule.PHASESPACE.join(factory.geom());
+            
+            GenericExtensionCurveCommand.instance().getState().setCurve(factory.geom());
 
             if (RPnNetworkStatus.instance().isOnline() && RPnNetworkStatus.instance().isMaster()) {
                 RPnNetworkStatus.instance().sendCommand(rpn.controller.ui.UndoActionController.instance().getLastCommand().toXML());

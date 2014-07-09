@@ -20,10 +20,10 @@ class Implicit_Extension_Curve : public Extension, public TwoImplicitFunctions {
 private:
 protected:
     int characteristic_where, family;
-    
+
     Matrix<double> segment_flux, segment_accum;
     RealVector segment_lambda;
-    
+
     const FluxFunction *domain_ff, *curve_ff;
     const AccumulationFunction *domain_aa, *curve_aa;
 
@@ -43,19 +43,21 @@ protected:
 public:
     // TODO: Maybe this class could be formed by purely static. In that case the ctor() may be useless.
     // The convenience of this approach is to be discussed sometime.
-    Implicit_Extension_Curve() : Extension(), TwoImplicitFunctions(){
+
+    Implicit_Extension_Curve() : Extension(), TwoImplicitFunctions() {
         gv = 0;
         oc = 0;
         singular = true;
-        
+
         segment_flux.resize(3, 2);
         segment_accum.resize(3, 2);
-        
+
         segment_lambda.resize(3);
         family = 0;
     }
-    
-    ~Implicit_Extension_Curve(){}
+
+    ~Implicit_Extension_Curve() {
+    }
 
     bool valid_segment(int i);
 
@@ -66,31 +68,31 @@ public:
     // In all the domain //
 
     // Simplified version        
-    void curve(const FluxFunction *f, const AccumulationFunction *a, 
-               GridValues &g, int where_is_characteristic,
-               bool is_singular, int fam,
-               std::vector<RealVector> &original_curve,
-               std::vector<RealVector> &extension_on_curve,
-               std::vector<RealVector> &extension_on_domain);
+    void curve(const FluxFunction *f, const AccumulationFunction *a,
+            GridValues &g, int where_is_characteristic,
+            bool is_singular, int fam,
+            std::vector<RealVector> &original_curve,
+            std::vector<RealVector> &extension_on_curve,
+            std::vector<RealVector> &extension_on_domain);
 
     // Generic version
     void curve(const FluxFunction *df, const AccumulationFunction *da, // Over the domain
-               const FluxFunction *cf, const AccumulationFunction *ca, // Over the curve 
-               GridValues &g, int where_is_characteristic,
-               bool is_singular, int fam,  
-               std::vector<RealVector> &original_curve,
-               std::vector<RealVector> &extension_on_curve,
-               std::vector<RealVector> &extension_on_domain);
+            const FluxFunction *cf, const AccumulationFunction *ca, // Over the curve 
+            GridValues &g, int where_is_characteristic,
+            bool is_singular, int fam,
+            std::vector<RealVector> &original_curve,
+            std::vector<RealVector> &extension_on_curve,
+            std::vector<RealVector> &extension_on_domain);
 
     // Curve given as consecutive points //
     // Generic version
     void extension_of_curve(const FluxFunction *df, const AccumulationFunction *da, // Over the domain
-               const FluxFunction *cf, const AccumulationFunction *ca, // Over the curve 
-               GridValues &g, int where_is_characteristic,
-               bool is_singular, int fam,  
-               std::vector<RealVector> &original_curve,
-               std::vector<RealVector> &extension_on_curve,
-               std::vector<RealVector> &extension_on_domain);
+            const FluxFunction *cf, const AccumulationFunction *ca, // Over the curve 
+            GridValues &g, int where_is_characteristic,
+            bool is_singular, int fam,
+            std::vector<RealVector> &original_curve,
+            std::vector<RealVector> &extension_on_curve,
+            std::vector<RealVector> &extension_on_domain);
     // Curve given as consecutive points //
 
     // In all the domain //
@@ -100,22 +102,22 @@ public:
 
     // Simplified version
     void curve_out_of_subdomain(const FluxFunction *f, const AccumulationFunction *a,
-                                GridValues &g, std::vector<RealVector> &polygon,
-                                int where_is_characteristic,
-                                bool is_singular, int fam,  
-                                std::vector<RealVector> &original_curve,
-                                std::vector<RealVector> &extension_on_curve,
-                                std::vector<RealVector> &extension_on_domain);
+            GridValues &g, std::vector<RealVector> &polygon,
+            int where_is_characteristic,
+            bool is_singular, int fam,
+            std::vector<RealVector> &original_curve,
+            std::vector<RealVector> &extension_on_curve,
+            std::vector<RealVector> &extension_on_domain);
 
     // Generic version
     void curve_out_of_subdomain(const FluxFunction *df, const AccumulationFunction *da, // Over the domain
-                                const FluxFunction *cf, const AccumulationFunction *ca, // Over the curve 
-                                GridValues &g, std::vector<RealVector> &polygon,
-                                int where_is_characteristic,
-                                bool is_singular, int fam,  
-                                std::vector<RealVector> &original_curve,
-                                std::vector<RealVector> &extension_on_curve,
-                                std::vector<RealVector> &extension_on_domain);
+            const FluxFunction *cf, const AccumulationFunction *ca, // Over the curve 
+            GridValues &g, std::vector<RealVector> &polygon,
+            int where_is_characteristic,
+            bool is_singular, int fam,
+            std::vector<RealVector> &original_curve,
+            std::vector<RealVector> &extension_on_curve,
+            std::vector<RealVector> &extension_on_domain);
 
     // Out of a subdomain //
 
@@ -123,22 +125,22 @@ public:
 
     // Simplified version
     void curve_in_subdomain(const FluxFunction *f, const AccumulationFunction *a,
-                                GridValues &g, std::vector<RealVector> &polygon,
-                                int where_is_characteristic,
-                                bool is_singular, int fam,  
-                                std::vector<RealVector> &original_curve,
-                                std::vector<RealVector> &extension_on_curve,
-                                std::vector<RealVector> &extension_on_domain);
+            GridValues &g, std::vector<RealVector> &polygon,
+            int where_is_characteristic,
+            bool is_singular, int fam,
+            std::vector<RealVector> &original_curve,
+            std::vector<RealVector> &extension_on_curve,
+            std::vector<RealVector> &extension_on_domain);
 
     // Generic version
     void curve_in_subdomain(const FluxFunction *df, const AccumulationFunction *da, // Over the domain
-                                const FluxFunction *cf, const AccumulationFunction *ca, // Over the curve 
-                                GridValues &g, std::vector<RealVector> &polygon,
-                                int where_is_characteristic,
-                                bool is_singular, int fam,  
-                                std::vector<RealVector> &original_curve,
-                                std::vector<RealVector> &extension_on_curve,
-                                std::vector<RealVector> &extension_on_domain);
+            const FluxFunction *cf, const AccumulationFunction *ca, // Over the curve 
+            GridValues &g, std::vector<RealVector> &polygon,
+            int where_is_characteristic,
+            bool is_singular, int fam,
+            std::vector<RealVector> &original_curve,
+            std::vector<RealVector> &extension_on_curve,
+            std::vector<RealVector> &extension_on_domain);
 
     // Only in a subdomain //
 
@@ -159,11 +161,21 @@ public:
     // TODO: This method is marked for deletion as soon as the SubPhysics class gains
     //       the hability to return a working grid.
     //
-    void prepare_extension(GridValues *g, int where_is_characteristic, bool is_singular, int fam){
+
+    void prepare_extension(const FluxFunction *df, const AccumulationFunction *da, // Over the domain
+                           const FluxFunction *cf, const AccumulationFunction *ca, GridValues *g, int where_is_characteristic, bool is_singular, int fam) {
         gv = g;
 
-        characteristic_where = where_is_characteristic;
+        domain_ff = df;
+        domain_aa = da;
+
+        curve_ff = cf;
+        curve_aa = ca;
         
+        gv->fill_eigenpairs_on_grid(domain_ff, domain_aa);
+
+        characteristic_where = where_is_characteristic;
+
         singular = is_singular;
 
         family = fam;
@@ -171,23 +183,23 @@ public:
         return;
     }
 
-    void extension_curve(const Curve &curve, 
-                         void *fdo, bool (*fd)(void*, const RealVector&), 
-                         void *fio, bool (*fi)(void*, const RealVector&), 
-                         std::vector<Curve> &ext_curve);
+    void extension_curve(const Curve &curve,
+            void *fdo, bool (*fd)(void*, const RealVector&),
+            void *fio, bool (*fi)(void*, const RealVector&),
+            std::vector<Curve> &ext_curve);
 
-    void extension_curve(const std::vector<RealVector> &curve, 
-                         const std::vector<RealVector> &domain_polygon,
-                         const std::vector<RealVector> &image_polygon,
-                         std::vector<RealVector> &ext_curve);
+    void extension_curve(const std::vector<RealVector> &curve,
+            const std::vector<RealVector> &domain_polygon,
+            const std::vector<RealVector> &image_polygon,
+            std::vector<RealVector> &ext_curve);
 
     // This method simply invokes the bass class' method. 
     // In other words, so far, it does not need to be in this class.
     //
-    void extension_curve(const Curve &curve, 
-                         const std::vector<RealVector> &domain_polygon,
-                         const std::vector<RealVector> &image_polygon,
-                         Curve &ext_curve);
+    void extension_curve(const Curve &curve,
+            const std::vector<RealVector> &domain_polygon,
+            const std::vector<RealVector> &image_polygon,
+            Curve &ext_curve);
 };
 
 #endif // _IMPLICIT_EXTENSION_CURVE_

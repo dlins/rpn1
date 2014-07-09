@@ -75,7 +75,7 @@ public abstract class GraphicsUtil {
         return viewAttr_;
     }
 
-    protected ViewingTransform getViewingTransform() {
+    public ViewingTransform getViewingTransform() {
         return viewingTransform_;
     }
 
