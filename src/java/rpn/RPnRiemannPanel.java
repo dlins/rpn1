@@ -104,7 +104,7 @@ public class RPnRiemannPanel extends RPnPhaseSpacePanel implements Printable {
             
 //                System.out.println("coordenada x:  " + cursorWC.getCoords()[0]);
                 
-                RealVector point = diagram.getPointByIndex(0, cursorWC.getCoords()[0]);
+//                RealVector point = diagram.getPointByIndex(0, cursorWC.getCoords()[0]);
               
 //                System.out.println("PointOnLine" + point);
 //                
@@ -219,8 +219,8 @@ public class RPnRiemannPanel extends RPnPhaseSpacePanel implements Printable {
             scene().draw((Graphics2D) g);
         }
 
-        g.setColor(Color.red);
-        g.drawLine((int) trackLine_.x1, (int) trackLine_.y1, (int) trackLine_.x2, (int) trackLine_.y2);
+//        g.setColor(Color.red);
+//        g.drawLine((int) trackLine_.x1, (int) trackLine_.y1, (int) trackLine_.x2, (int) trackLine_.y2);
 
     }
 

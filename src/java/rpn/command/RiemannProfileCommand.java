@@ -9,17 +9,13 @@ import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Observable;
-import java.util.Observer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JButton;
 import rpn.RPnDesktopPlotter;
 import rpn.RPnMenuCommand;
 import rpn.RPnPhaseSpaceAbstraction;
-import rpn.RPnPhaseSpacePanel;
 import rpn.RPnProjDescriptor;
 import rpn.RPnRiemannFrame;
 import rpn.component.*;
@@ -34,7 +30,6 @@ import rpn.parser.RPnDataModule;
 import rpnumerics.*;
 import wave.multid.DimMismatchEx;
 import wave.multid.Space;
-import wave.multid.model.MultiGeometry;
 import wave.util.RealVector;
 import wave.util.RectBoundary;
 
@@ -101,9 +96,8 @@ public class RiemannProfileCommand extends RpModelPlotCommand implements RPnMenu
         try {
             wave.multid.view.Scene riemannScene = RPnDataModule.RIEMANNPHASESPACE.createScene(riemanTesteTransform, new wave.multid.view.ViewingAttr(Color.black));
             speedGraphicsFrame_ = new RPnRiemannFrame(riemannScene, this);
+    
             speedGraphicsFrame_.addWindowListener(this);
-
-            speedGraphicsFrame_.pack();
             speedGraphicsFrame_.setVisible(true);
 
         } catch (DimMismatchEx ex) {
@@ -125,6 +119,7 @@ public class RiemannProfileCommand extends RpModelPlotCommand implements RPnMenu
         RealVector max = new RealVector(Xlimits[1] + " " + Ylimits[1]);
 
         RPnDataModule.RIEMANNPHASESPACE.join(state.calcProfile());
+
 
         updateSpeedGraphicsFrame(min, max);
 
@@ -223,24 +218,10 @@ public class RiemannProfileCommand extends RpModelPlotCommand implements RPnMenu
     public void windowClosing(WindowEvent e) {
 
         RPnDataModule.RIEMANNPHASESPACE.clear();
-        RPnPhaseSpaceAbstraction activePhaseSpace = UIController.instance().getActivePhaseSpace();
+        
+        
+        RiemannResetCommand.instance().execute();
 
-        RiemannProfileReady state = (RiemannProfileReady) state_;
-
-        activePhaseSpace.remove((MultiGeometry) state.getFirstWaveCurve());
-        activePhaseSpace.remove((MultiGeometry) state.getSecondWaveCurve());
-        Iterator<RPnPhaseSpacePanel> installedPanelsIterator = UIController.instance().getInstalledPanelsIterator();
-
-        while (installedPanelsIterator.hasNext()) {
-            RPnPhaseSpacePanel rPnPhaseSpacePanel = installedPanelsIterator.next();
-
-            rPnPhaseSpacePanel.clearAreaSelection();
-            rPnPhaseSpacePanel.clearPointSelection();
-
-        }
-
-        activePhaseSpace.update();
-      
 
     }
 

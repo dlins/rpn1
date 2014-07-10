@@ -122,7 +122,7 @@ inline void RpNumerics::clearCurveMap() {
 
 inline void RpNumerics::removeCurve(int curveID) {
 
-    cout <<"Vou tentar destruir curve: "<<curveID<<endl;
+
     if (waveCurveMap_->count(curveID) == 1) {
         delete waveCurveMap_->at(curveID);
         waveCurveMap_->erase(curveID);

@@ -153,9 +153,6 @@ public class DiagramGeom extends MultiGeometryImpl implements RpGeometry {
         for (int i = 0; i < segments.size(); i++) {
             RealSegment realSegment = segments.get(i);
             
-            System.out.println("Ponto no metodo: " + realSegment.p1());
-            System.out.println("X: "+x);
-            
             if(realSegment.p1().getElement(0)==x){
                 return realSegment.p1();                
             }

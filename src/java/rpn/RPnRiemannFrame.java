@@ -5,14 +5,10 @@
  */
 package rpn;
 
-import rpn.controller.PhaseSpacePanelController;
 import wave.multid.view.Scene;
 
 import java.awt.*;
-import java.awt.event.*;
 import javax.swing.*;
-import java.util.*;
-import wave.multid.model.AbstractGeomObj;
 
 public class RPnRiemannFrame extends RPnPhaseSpaceFrame {
 
@@ -28,7 +24,7 @@ public class RPnRiemannFrame extends RPnPhaseSpaceFrame {
     BorderLayout borderLayout2 = new BorderLayout();
     RPnMenuCommand commandMenu_ = null;
     private Dimension frameSize_ = null;
-
+    private RPnRiemannCursorMonitor cursorMonitor_;
     //    int sliderValue_;
     public RPnRiemannFrame(Scene scene, RPnMenuCommand command) {
 
@@ -42,6 +38,8 @@ public class RPnRiemannFrame extends RPnPhaseSpaceFrame {
         commandMenu_ = command;
         try {
             phaseSpacePanel = new RPnRiemannPanel(scene);
+            cursorMonitor_= new RPnRiemannCursorMonitor();
+            phaseSpacePanel.addMouseMotionListener(cursorMonitor_.getMouseMotionController());
 
             jbInit();
         } catch (Exception e) {
@@ -69,14 +67,16 @@ public class RPnRiemannFrame extends RPnPhaseSpaceFrame {
         statusPanel.setBackground(Color.gray);
         statusPanel.setBorder(BorderFactory.createEtchedBorder());
         statusPanel.setLayout(borderLayout2);
-        coordsField.setText("50:50");
+//        coordsField.setText("50:50");
         contentPane.add(phaseSpacePanel, BorderLayout.CENTER);
         contentPane.add(statusPanel, BorderLayout.SOUTH);
         contentPane.add(jPanel2, BorderLayout.WEST);
         contentPane.add(jPanel3, BorderLayout.EAST);
         contentPane.add(jPanel4, BorderLayout.NORTH);
-        statusPanel.add(coordsField, BorderLayout.EAST);
+//        statusPanel.add(coordsField, BorderLayout.EAST);
         statusPanel.add(jPanel5, BorderLayout.SOUTH);
+        statusPanel.add(cursorMonitor_);
+        setSize(400,400);
 
         setFocusable(true);
 
