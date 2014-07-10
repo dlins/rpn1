@@ -57,49 +57,6 @@ public class DomainSelectionCommand extends RpModelPlotCommand implements Observ
 
     @Override
     public void update(Observable o, Object arg) {
-        
-//
-//        if (!UIController.instance().getSelectedGeometriesList().isEmpty()) {
-//            
-//            
-//            List<RpGeometry> geometryList = UIController.instance().getSelectedGeometriesList();
-////            if (geometryList.size() != 1) {
-////                setEnabled(false);
-////                getContainer().setSelected(false);
-////                GenericExtensionCurveCommand.instance().setEnabled(false);
-////
-////            } else {
-//                setEnabled(true);
-//                GenericExtensionCurveCommand.instance().setEnabled(true);
-////
-////                if (RPnNetworkStatus.instance().isOnline() && RPnNetworkStatus.instance().isMaster()) {
-////                    RpGeomFactory factory = geometryList.get(0).geomFactory();
-////                    RPnCurve curve = (RPnCurve) factory.geomSource();
-////                    RpCommand command = new RpCommand(curve.getId());
-////                    RPnNetworkStatus.instance().sendCommand(command.toXML());
-////                }
-//
-////            }
-//
-//            
-//            
-//            
-//            
-//            
-//            
-//            
-//            
-//            
-//            
-//            
-//            
-//            
-//        } else {
-//            setEnabled(false);
-//            getContainer().setSelected(false);
-//            GenericExtensionCurveCommand.instance().setEnabled(false);
-//            ImageSelectionCommand.instance().getContainer().setSelected(false);
-//            ImageSelectionCommand.instance().setEnabled(false);
-//        }
+ 
     }
 }

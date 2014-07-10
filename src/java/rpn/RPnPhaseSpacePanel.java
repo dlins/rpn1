@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.batik.dom.GenericDOMImplementation;
@@ -30,6 +31,7 @@ import org.apache.batik.svggen.SVGGraphics2D;
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
 import rpn.command.GenericExtensionCurveCommand;
+import rpn.command.RiemannProfileCommand;
 import rpn.command.RpCommand;
 import rpn.component.util.AreaSelected;
 import rpn.component.util.LinePlotted;
@@ -55,7 +57,7 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
     //*** alterei aqui  (Leandro)
     static public Color DEFAULT_BOUNDARY_COLOR = Color.gray;
     static public Color DEFAULT_BACKGROUND_COLOR = Color.black;
-    static public Color DEFAULT_POINTMARK_COLOR = Color.red;
+    static public Color DEFAULT_POINTMARK_COLOR = Color.white;
     static public Color DEFAULT_LASTINPUT_CURSOR_COLOR = Color.yellow;
     static public Color DEFAULT_LASTINPUT_HIGHLIGHT_CURSOR_COLOR = Color.white;
 
@@ -126,6 +128,13 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
     //
     // Constructors
     //
+    
+     public RPnPhaseSpacePanel(){
+         
+     }
+    
+    
+    
     public RPnPhaseSpacePanel(Scene scene) {
 
         scene_ = scene;
@@ -245,6 +254,24 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
     public void clearGraphicsList() {
         graphicsUtilList_.clear();
     }
+    
+public void clearPointSelection(){
+    
+    
+    ArrayList<rpn.component.util.Point> pointsToRemove = new ArrayList <rpn.component.util.Point>();
+        ListIterator<GraphicsUtil> listIterator = graphicsUtilList_.listIterator();
+        
+        
+        while (listIterator.hasNext()) {
+        GraphicsUtil graphicsUtil = listIterator.next();
+        
+        if(graphicsUtil instanceof rpn.component.util.Point){
+            pointsToRemove.add((rpn.component.util.Point) graphicsUtil);
+        }
+        
+    }
+        graphicsUtilList_.removeAll(pointsToRemove);
+}
 
     public final Polygon getPhysicalBoundaryPolygon() {
 
@@ -273,10 +300,18 @@ public class RPnPhaseSpacePanel extends JPanel implements Printable {
 
     public void setLastGraphicsUtil(GraphicsUtil lastGraphicsUtil) {
 
+       
+        
         if (graphicsUtilList_.isEmpty()) {
             graphicsUtilList_.add(lastGraphicsUtil);
         } else {
             graphicsUtilList_.set(graphicsUtilList_.size() - 1, lastGraphicsUtil);
+            
+             if(lastGraphicsUtil instanceof AreaSelected){
+            RiemannProfileCommand.instance().getState().select(lastGraphicsUtil);
+        }
+            
+            
         }
     }
 

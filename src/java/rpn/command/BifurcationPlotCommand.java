@@ -13,7 +13,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import rpn.RPnDesktopPlotter;
 import rpn.component.*;
-import rpn.controller.ui.RiemannProblemConfig;
 import rpn.controller.ui.UIController;
 import rpn.controller.ui.UI_ACTION_SELECTED;
 import rpn.parser.RPnDataModule;
@@ -45,7 +44,7 @@ public class BifurcationPlotCommand extends RpModelPlotCommand {
     public void actionPerformed(ActionEvent event) {
 
         UI_ACTION_SELECTED action = new UI_ACTION_SELECTED(this);
-        UIController.instance().setState(new RiemannProblemConfig());
+
 
         action.userInputComplete(UIController.instance());// No input needed
 

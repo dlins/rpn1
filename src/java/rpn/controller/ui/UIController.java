@@ -244,7 +244,6 @@ public class UIController extends ComponentUI {
 
         @Override
         public void mousePressed(MouseEvent event) {
-
             drag_ = false;
 
             RPnUIFrame.clearStatusMessage();

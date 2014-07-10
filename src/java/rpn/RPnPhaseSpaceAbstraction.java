@@ -161,6 +161,7 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene implements Observer 
         RPNUMERICS.removeCurve(curve.getId());
 
         super.remove(geom);
+
         for (Iterator<RpGeometry> it = selectedGeometries_.iterator(); it.hasNext();) {
             Object obj = it.next();
 

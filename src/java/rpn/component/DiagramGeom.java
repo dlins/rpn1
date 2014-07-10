@@ -8,8 +8,11 @@ package rpn.component;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import rpn.component.util.GraphicsUtil;
+import rpn.component.util.Label;
+import rpn.component.util.LinePlotted;
 import rpnumerics.Diagram;
 import rpnumerics.DiagramLine;
 import wave.multid.model.MultiPolyLine;
@@ -20,6 +23,7 @@ import wave.multid.DimMismatchEx;
 import wave.multid.Space;
 import wave.multid.model.MultiGeometryImpl;
 import wave.multid.view.ViewingAttr;
+import wave.util.RealSegment;
 import wave.util.RealVector;
 
 public class DiagramGeom extends MultiGeometryImpl implements RpGeometry {
@@ -35,9 +39,9 @@ public class DiagramGeom extends MultiGeometryImpl implements RpGeometry {
     //
     public DiagramGeom(List<MultiPolyLine> diagramsList, RpDiagramFactory factory) {
         super(new Space("Diagram", 2), new ViewingAttr(Color.white));
-        diagramsList_=diagramsList;
-        annotationsList_=new ArrayList<GraphicsUtil>();
-        factory_=factory;
+        diagramsList_ = diagramsList;
+        annotationsList_ = new ArrayList<GraphicsUtil>();
+        factory_ = factory;
 
     }
 
@@ -104,82 +108,97 @@ public class DiagramGeom extends MultiGeometryImpl implements RpGeometry {
         }
 
     }
-    
-    
-    public RealVector getMin (){
-        Diagram geomSource = (Diagram)factory_.geomSource();
-        
-        
-        double minX =0;
-        double minY =0;
+
+    public RealVector getMin() {
+        Diagram geomSource = (Diagram) factory_.geomSource();
+
+        double minX = 0;
+        double minY = 0;
         List<DiagramLine> lines = geomSource.getLines();
-        
+
         for (DiagramLine diagramLine : lines) {
             List<List<RealVector>> coords = diagramLine.getCoords();
-            
+
             for (List<RealVector> list : coords) {
 
                 for (RealVector realVector : list) {
-                    
-                    if(realVector.getElement(0) < minX)
+
+                    if (realVector.getElement(0) < minX) {
                         minX = realVector.getElement(0);
-                    
-                    if(realVector.getElement(1) < minY)
+                    }
+
+                    if (realVector.getElement(1) < minY) {
                         minY = realVector.getElement(1);
-                    
+                    }
+
                 }
             }
         }
-        
+
         RealVector limits = new RealVector(2);
         limits.setElement(0, minX);
         limits.setElement(1, minY);
         return limits;
-        
-        
-        
+
     }
-    
-    
-     public RealVector getMax (){
-        Diagram geomSource = (Diagram)factory_.geomSource();
-        
-        
-        double maxX =0;
-        double maxY =0;
+
+    public RealVector getPointByIndex(int diagramLineIndex, double x) {
+
+        RealVector origin = new RealVector(2);
+        Diagram geomSource = (Diagram) factory_.geomSource();
         List<DiagramLine> lines = geomSource.getLines();
-        
-        for (DiagramLine diagramLine : lines) {
-            List<List<RealVector>> coords = diagramLine.getCoords();
+        DiagramLine diagramLine = lines.get(diagramLineIndex);
+        List<RealSegment> segments = diagramLine.getSegments();
+
+        for (int i = 0; i < segments.size(); i++) {
+            RealSegment realSegment = segments.get(i);
             
-            for (List<RealVector> list : coords) {
-
-                for (RealVector realVector : list) {
-                    
-                    if(realVector.getElement(0) >maxX)
-                        maxX = realVector.getElement(0);
-                    
-                    if(realVector.getElement(1) > maxY)
-                        maxY = realVector.getElement(1);
-                    
-                }
-
-                
+            if(realSegment.p1().getElement(0)==x){
+                return realSegment.p1();                
             }
+
             
         }
         
-        
+       
+        return origin;
+
+    }
+
+    public RealVector getMax() {
+        Diagram geomSource = (Diagram) factory_.geomSource();
+
+        double maxX = 0;
+        double maxY = 0;
+        List<DiagramLine> lines = geomSource.getLines();
+
+        for (DiagramLine diagramLine : lines) {
+            List<List<RealVector>> coords = diagramLine.getCoords();
+
+            for (List<RealVector> list : coords) {
+
+                for (RealVector realVector : list) {
+
+                    if (realVector.getElement(0) > maxX) {
+                        maxX = realVector.getElement(0);
+                    }
+
+                    if (realVector.getElement(1) > maxY) {
+                        maxY = realVector.getElement(1);
+                    }
+
+                }
+
+            }
+
+        }
+
         RealVector limits = new RealVector(2);
         limits.setElement(0, maxX);
         limits.setElement(1, maxY);
         return limits;
-        
-        
-        
-    }
 
-    
+    }
 
     public void clearAnnotations() {
         annotationsList_.clear();
@@ -198,6 +217,15 @@ public class DiagramGeom extends MultiGeometryImpl implements RpGeometry {
     @Override
     public void showSpeed(CoordsArray curvePoint, CoordsArray wcPoint, ViewingTransform transform) {
 
+        List<Object> lineElements = new ArrayList<Object>();
+
+        lineElements.add(new RealVector(curvePoint.getCoords()));
+        lineElements.add(new RealVector(wcPoint.getCoords()));
+        lineElements.add("Teste");
+
+        LinePlotted speed = new LinePlotted(lineElements, transform, new ViewingAttr(Color.white));
+        addAnnotation(speed);
+
     }
 
     @Override
@@ -207,11 +235,27 @@ public class DiagramGeom extends MultiGeometryImpl implements RpGeometry {
 
     @Override
     public boolean isVisible() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+
+        boolean isVisible = false;
+        for (MultiPolyLine graphicsUtil : diagramsList_) {
+
+            isVisible = graphicsUtil.isVisible();
+        }
+
+        return isVisible;
+
     }
 
     @Override
     public boolean isSelected() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+
+        boolean isSelected = false;
+        for (MultiPolyLine graphicsUtil : diagramsList_) {
+
+            isSelected = graphicsUtil.isSelected();
+        }
+
+        return isSelected;
+
     }
 }

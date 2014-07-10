@@ -35,11 +35,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RiemannProfileCalc_nativeCalc
 
 
 
-    jclass classOrbitPoint = (env)->FindClass(ORBITPOINT_LOCATION);
-    jclass classWaveCurveOrbit = (env)->FindClass(WAVECURVEORBIT_LOCATION);
-    jclass classRiemannProfile = (env)->FindClass(RIEMANNPROFILE_LOCATION);
-
-
     jclass arrayListClass = env->FindClass("java/util/ArrayList");
     jclass realVectorClass = env->FindClass(REALVECTOR_LOCATION);
     jclass diagramClass = env->FindClass(DIAGRAM_LOCATION);
@@ -47,41 +42,12 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RiemannProfileCalc_nativeCalc
 
 
     jmethodID diagramConstructor = env->GetMethodID(diagramClass, "<init>", "(Ljava/util/List;)V");
-    jmethodID diagramLineConstructor = env->GetMethodID(diagramLineClass, "<init>", "(Ljava/util/List;)V");
-
     jmethodID diagramLineDefaultConstructor = env->GetMethodID(diagramLineClass, "<init>", "()V");
-
     jmethodID addPartMethodID = env->GetMethodID(diagramLineClass, "addPart", "(Ljava/util/List;)V");
-
-
     jmethodID setTypeMethodID = env->GetMethodID(diagramLineClass, "setType", "(II)V");
-
-
-
     jmethodID arrayListConstructor = env->GetMethodID(arrayListClass, "<init>", "()V");
-
-    jmethodID getCorrespondingCurveIndexMethodID = (env)->GetMethodID(classOrbitPoint, "getCorrespondingCurveIndex", "()I");
-
-    jmethodID riemannProfileConstructorID = (env)->GetMethodID(classRiemannProfile, "<init>", "([Lrpnumerics/OrbitPoint;)V");
-
-
-    jmethodID getCorrespondingPointMethodID = (env)->GetMethodID(classOrbitPoint, "getCorrespondingPointIndex", "()I");
     jmethodID realVectorConstructorDoubleArray = env->GetMethodID(realVectorClass, "<init>", "([D)V");
-
-
-    jmethodID getCurveTypeMethodID = (env)->GetMethodID(classWaveCurveOrbit, "getCurveType", "()I");
-    jmethodID getCurveIndexMethodID = (env)->GetMethodID(classWaveCurveOrbit, "getCurveIndex", "()I");
-    jmethodID isInitialSubCurveID = (env)->GetMethodID(classWaveCurveOrbit, "isInitialSubCurve", "()Z");
-
-
     jmethodID toDoubleMethodID = (env)->GetMethodID(realVectorClass, "toDouble", "()[D");
-
-    jmethodID getOrbitPointsMethodID = (env)->GetMethodID(classWaveCurveOrbit, "getPoints", "()[Lrpnumerics/OrbitPoint;");
-    jmethodID arrayListGetMethodID = env->GetMethodID(arrayListClass, "get", "(I)Ljava/lang/Object;");
-    jmethodID arrayListSizeMethodID = env->GetMethodID(arrayListClass, "size", "()I");
-
-    jmethodID orbitPointConstructor = (env)->GetMethodID(classOrbitPoint, "<init>", "([DD)V");
-    jmethodID setLambdaID = (env)->GetMethodID(classOrbitPoint, "setLambda", "(D)V");
     jmethodID arrayListAddMethod = env->GetMethodID(arrayListClass, "add", "(Ljava/lang/Object;)Z");
 
     int dimension = 2;
@@ -113,8 +79,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RiemannProfileCalc_nativeCalc
     env->GetIntArrayRegion(waveCurveIDArray, 0, waveCurves, nativeWaveCurvesIDArray);
 
 
-    //cout << "ID da curva 0 " << nativeWaveCurvesIDArray[0] << endl;
-    //cout << "ID da curva 1 " << nativeWaveCurvesIDArray[1] << endl;
+    cout << "ID da curva 0 " << nativeWaveCurvesIDArray[0] << endl;
+    cout << "ID da curva 1 " << nativeWaveCurvesIDArray[1] << endl;
 
 
 
@@ -122,8 +88,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RiemannProfileCalc_nativeCalc
     const WaveCurve * waveCurve2 = RpNumerics::getWaveCurve(nativeWaveCurvesIDArray[1]);
 
 
-    //cout << "Curva 0 " << waveCurve1 << endl;
-    //cout << "Curva 1 " << waveCurve2 << endl;
+    cout << "Curva 0 " << waveCurve1 << endl;
+    cout << "Curva 1 " << waveCurve2 << endl;
 
 
 
@@ -134,7 +100,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RiemannProfileCalc_nativeCalc
     int subPoint1;
     int subPoint2;
 
-    //cout << "Chamando Sol de Riemann" << endl;
+   
 
     if (RpNumerics::getPhysics().domain().dim() == 3) {
         nativeDownLeft.resize(3);
@@ -149,12 +115,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RiemannProfileCalc_nativeCalc
     RpNumerics::getPhysics().getSubPhysics(0).preProcess(nativeTopRight);
 
 
-//    nativeDownLeft.component(0)=0.404143;
-//    nativeDownLeft.component(1)= 0.211145;
-//    
-//    nativeTopRight.component(0)=0.624427;
-//    nativeTopRight.component(1)=0.386;
-    
     
 
     cout<<"AREA: " << nativeDownLeft << " " << nativeTopRight << endl;
@@ -180,32 +140,25 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RiemannProfileCalc_nativeCalc
             *waveCurve2, subcurve2, subPoint2, 1,
             profile, speedVector);
 
-
-    if (Debug::get_debug_level() == 5) {
-        //cout << "DownLeft: " << nativeDownLeft << " TopRight" << nativeTopRight << endl;
+    if (profile.size() == 0){
+        return NULL;        
     }
 
+    
+//    
+//            cout << "Coordenadas do perfil" << endl;
+//            for (int i = 0; i < profile.size(); i++) {
+//                
+//                cout<<"Tamanho de um ponto do profile: "<<profile.at(i).size()<<endl;
+////                cout  << profile.at(i)(0) << " " << profile.at(i)(1) << endl;
+//                cout  << profile.at(i) << endl;
+//            }
+//            for (int i = 0; i < speedVector.size(); i++) {
+//        
+//                cout  << speedVector.at(i)<< endl;
+//        
+//            }
 
-
-
-
-    if (profile.size() == 0)
-        return NULL;
-
-    //
-    //        cout << "Coordenadas do perfil" << endl;
-    //        for (int i = 0; i < profile.size(); i++) {
-    //            cout  << profile.at(i)(0) << " " << profile.at(i)(1) << endl;
-    //        }
-    //        for (int i = 0; i < speedVector.size(); i++) {
-    //    
-    //            cout  << speedVector.at(i)<< endl;
-    //    
-    //        }
-
-
-
-    //    jobjectArray orbitPointArray = (jobjectArray) (env)->NewObjectArray(profile.size(), classOrbitPoint, NULL);
 
 
 
@@ -229,15 +182,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RiemannProfileCalc_nativeCalc
             profileCoords.component(0) = speedVector[j];
             profileCoords.component(1) = profile[j].component(i);
 
-            //        RealVector tempVector = profile.at(i);
-            //        tempVector.resize(dimension + 1);
-            //        tempVector[dimension] = speedVector[i];
 
-            //            //cout << profileCoords << endl;
-
-
-
-            jdoubleArray speedArray = env->NewDoubleArray(dimension);
+            jdoubleArray speedArray = env->NewDoubleArray(2);
             env->SetDoubleArrayRegion(speedArray, 0, dimension, (double *) profileCoords);
             jobject realVector = env->NewObject(realVectorClass, realVectorConstructorDoubleArray, speedArray);
             env->CallObjectMethod(speedLinePartList, arrayListAddMethod, realVector);
@@ -251,24 +197,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RiemannProfileCalc_nativeCalc
         env->CallObjectMethod(diagramLinesList, arrayListAddMethod, speedLine);
 
 
-
-
-
-        //        double * dataCoords = tempVector;
-        //
-        //        //Reading only coodinates
-        //        jdoubleArray jTempArray = (env)->NewDoubleArray(tempVector.size());
-        //
-        //        (env)->SetDoubleArrayRegion(jTempArray, 0, dimension, dataCoords);
-        //
-        //        //Lambda is the last component.
-        //        jobject orbitPoint = (env)->NewObject(classOrbitPoint, orbitPointConstructor, jTempArray, 0);
-        //        env->CallVoidMethod(orbitPoint, setLambdaID, speedVector[i]);
-        //
-        //
-        //        (env)->SetObjectArrayElement(orbitPointArray, i, orbitPoint);
-
-
     }
 
 
@@ -276,49 +204,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RiemannProfileCalc_nativeCalc
 
 
     return diagram;
-
-
-
-    //    
-    //    
-    //    
-    //    
-    //    
-    //    
-    //
-    //
-    //    jobjectArray orbitPointArray = (jobjectArray) (env)->NewObjectArray(profile.size(), classOrbitPoint, NULL);
-    //    for (int i = 0; i < profile.size(); i++) {
-    //
-    //        RealVector tempVector = profile.at(i);
-    //        tempVector.resize(dimension + 1);
-    //        tempVector[dimension] = speedVector[i];
-    //
-    //        //cout << tempVector << endl;
-    //
-    //
-    //        double * dataCoords = tempVector;
-    //
-    //        //Reading only coodinates
-    //        jdoubleArray jTempArray = (env)->NewDoubleArray(tempVector.size());
-    //
-    //        (env)->SetDoubleArrayRegion(jTempArray, 0, dimension, dataCoords);
-    //
-    //        //Lambda is the last component.
-    //        jobject orbitPoint = (env)->NewObject(classOrbitPoint, orbitPointConstructor, jTempArray, 0);
-    //        env->CallVoidMethod(orbitPoint, setLambdaID, speedVector[i]);
-    //
-    //
-    //        (env)->SetObjectArrayElement(orbitPointArray, i, orbitPoint);
-    //
-    //
-    //    }
-    //
-    //    jobject riemannProfile = (env)->NewObject(classRiemannProfile, riemannProfileConstructorID, orbitPointArray);
-    //
-    //    return riemannProfile;
-
-
 
 
 }
@@ -331,81 +216,40 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RiemannProfileCalc_nativeCalc
 JNIEXPORT jobject JNICALL Java_rpnumerics_RiemannProfileCalc_nativeAllProfileCalc
 (JNIEnv * env, jobject obj, jint firstWaveCurveID, jint secondWaveCurveID, jobject secondWaveCurveRefPoint, jobject pointOnSecondWaveCurve) {
 
-
-
     jclass realVectorClass = env->FindClass(REALVECTOR_LOCATION);
-    jclass classOrbitPoint = (env)->FindClass(ORBITPOINT_LOCATION);
-    jclass classWaveCurveOrbit = (env)->FindClass(WAVECURVEORBIT_LOCATION);
-    jclass classRiemannProfile = (env)->FindClass(RIEMANNPROFILE_LOCATION);
-
-
-
-
     jclass arrayListClass = env->FindClass("java/util/ArrayList");
-
     jclass diagramClass = env->FindClass(DIAGRAM_LOCATION);
     jclass diagramLineClass = env->FindClass(DIAGRAMLINE_LOCATION);
 
 
     jmethodID diagramConstructor = env->GetMethodID(diagramClass, "<init>", "(Ljava/util/List;)V");
-    jmethodID diagramLineConstructor = env->GetMethodID(diagramLineClass, "<init>", "(Ljava/util/List;)V");
-
     jmethodID diagramLineDefaultConstructor = env->GetMethodID(diagramLineClass, "<init>", "()V");
-
     jmethodID addPartMethodID = env->GetMethodID(diagramLineClass, "addPart", "(Ljava/util/List;)V");
 
 
     jmethodID setTypeMethodID = env->GetMethodID(diagramLineClass, "setType", "(II)V");
-
     jmethodID arrayListAddMethod = env->GetMethodID(arrayListClass, "add", "(Ljava/lang/Object;)Z");
 
 
-
-
     jmethodID arrayListConstructor = env->GetMethodID(arrayListClass, "<init>", "()V");
-    
     jmethodID realVectorConstructorDoubleArray = env->GetMethodID(realVectorClass, "<init>", "([D)V");
 
 
 
-
-    jmethodID getCorrespondingCurveIndexMethodID = (env)->GetMethodID(classOrbitPoint, "getCorrespondingCurveIndex", "()I");
-
-    jmethodID riemannProfileConstructorID = (env)->GetMethodID(classRiemannProfile, "<init>", "([Lrpnumerics/OrbitPoint;)V");
-
-
-    jmethodID getCorrespondingPointMethodID = (env)->GetMethodID(classOrbitPoint, "getCorrespondingPointIndex", "()I");
-    jmethodID getLambdaID = (env)->GetMethodID(classOrbitPoint, "getLambda", "()D");
-
-    jmethodID getCurveTypeMethodID = (env)->GetMethodID(classWaveCurveOrbit, "getCurveType", "()I");
-    jmethodID getCurveIndexMethodID = (env)->GetMethodID(classWaveCurveOrbit, "getCurveIndex", "()I");
-    jmethodID isInitialSubCurveID = (env)->GetMethodID(classWaveCurveOrbit, "isInitialSubCurve", "()Z");
-
-
     jmethodID toDoubleMethodID = (env)->GetMethodID(realVectorClass, "toDouble", "()[D");
-
-    jmethodID getOrbitPointsMethodID = (env)->GetMethodID(classWaveCurveOrbit, "getPoints", "()[Lrpnumerics/OrbitPoint;");
-    jmethodID arrayListGetMethodID = env->GetMethodID(arrayListClass, "get", "(I)Ljava/lang/Object;");
-    jmethodID arrayListSizeMethodID = env->GetMethodID(arrayListClass, "size", "()I");
-
-    jmethodID orbitPointConstructor = (env)->GetMethodID(classOrbitPoint, "<init>", "([D)V");
-    jmethodID setLambdaID = (env)->GetMethodID(classOrbitPoint, "setLambda", "(D)V");
 
     int dimension = 2;
 
-
-
-
-    //cout << "ID da curva 0 " << firstWaveCurveID << endl;
-    //cout << "ID da curva 1 " << secondWaveCurveID << endl;
+    cout << "ID da curva 0 " << firstWaveCurveID << endl;
+    cout << "ID da curva 1 " << secondWaveCurveID << endl;
 
 
     const WaveCurve * waveCurve1 = RpNumerics::getWaveCurve(firstWaveCurveID);
     const WaveCurve * waveCurve2 = RpNumerics::getWaveCurve(secondWaveCurveID);
 
 
-    //cout << "Curva 0 " << waveCurve1 << endl;
-    //cout << "Curva 1 " << waveCurve2 << endl;
+    cout << "Curva 0 " << waveCurve1 << endl;
+    cout << "Curva 1 " << waveCurve2 << endl;
 
 
     jdoubleArray inputPhasePointArray = (jdoubleArray) (env)->CallObjectMethod(secondWaveCurveRefPoint, toDoubleMethodID);
@@ -436,7 +280,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RiemannProfileCalc_nativeAllProfileCal
 
 
 
-    //cout << "Ponto sobre a segunda curva de onda: " << nativePointOnSecondWaveCurve << endl;
+    cout << "Ponto sobre a segunda curva de onda: " << nativePointOnSecondWaveCurve << endl;
 
     int firstWaveCurveSubIndex;
     int firstWaveCurveSegmentIndex;
@@ -457,7 +301,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RiemannProfileCalc_nativeAllProfileCal
     vector<double> speedVector;
 
     rp.all_increase_profile(*waveCurve1, firstWaveCurveSubIndex, firstWaveCurveSegmentIndex, 0,
-            waveCurve2, secondWaveCurveSubIndex, secondWaveCurveSegmentIndex, 1,
+            *waveCurve2, secondWaveCurveSubIndex, secondWaveCurveSegmentIndex, 1,
             profile, speedVector);
 
 
@@ -504,11 +348,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RiemannProfileCalc_nativeAllProfileCal
         env->CallObjectMethod(speedLine, setTypeMethodID, 0, i); //Setando o tipo 
         env->CallObjectMethod(diagramLinesList, arrayListAddMethod, speedLine);
 
-
-
-
-
-
     }
 
 
@@ -516,74 +355,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RiemannProfileCalc_nativeAllProfileCal
 
 
     return diagram;
-
-
-
-
-
-
-
-
-    //
-    //
-    //
-    //        if (profile.size() == 0)
-    //            return NULL;
-    //
-    //
-    //        //cout << "Coordenadas do perfil" << endl;
-    //        for (int i = 0; i < profile.size(); i++) {
-    //            //cout << profile.at(i)(0) << " " << profile.at(i)(1) << endl;
-    //        }
-    //        for (int i = 0; i < speedVector.size(); i++) {
-    //
-    //            //cout << speedVector.at(i) << endl;
-    //
-    //        }
-    //
-    //
-    //        jobjectArray orbitPointArray = (jobjectArray) (env)->NewObjectArray(profile.size(), classOrbitPoint, NULL);
-    //        for (int i = 0; i < profile.size(); i++) {
-    //
-    //            RealVector tempVector = profile.at(i);
-    //            tempVector.resize(3);
-    //            tempVector[2] = speedVector[i];
-    //
-    //
-    //
-    //            if (Debug::get_debug_level() == 5) {
-    //                //cout << tempVector << endl;
-    //            }
-    //
-    //            double * dataCoords = tempVector;
-    //
-    //            //Reading only coodinates
-    //            jdoubleArray jTempArray = (env)->NewDoubleArray(tempVector.size());
-    //
-    //            (env)->SetDoubleArrayRegion(jTempArray, 0, dimension, dataCoords);
-    //
-    //            //Lambda is the last component.
-    //            jobject orbitPoint = (env)->NewObject(classOrbitPoint, orbitPointConstructor, jTempArray);
-    //            env->CallVoidMethod(orbitPoint, setLambdaID, speedVector[i]);
-    //
-    //
-    //            (env)->SetObjectArrayElement(orbitPointArray, i, orbitPoint);
-    //
-    //
-    //        }
-    //
-    //        jobject riemannProfile = (env)->NewObject(classRiemannProfile, riemannProfileConstructorID, orbitPointArray);
-    //
-    //
-    //        return riemannProfile;
-    //
-
-
-
-
-
-
-
 
 
 

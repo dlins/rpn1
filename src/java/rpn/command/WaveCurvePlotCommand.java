@@ -7,6 +7,7 @@ import rpn.component.RpGeometry;
 import rpn.component.WaveCurveGeomFactory;
 import rpn.configuration.CurveConfiguration;
 import rpn.controller.ui.UIController;
+import rpn.parser.RPnDataModule;
 import rpnumerics.InflectionCurve;
 import rpnumerics.InflectionCurveCalc;
 import rpnumerics.OrbitPoint;
@@ -67,6 +68,8 @@ public class WaveCurvePlotCommand extends RpModelPlotCommand {
 
         CurveConfiguration waveCurveConfiguration = (CurveConfiguration) RPNUMERICS.getConfiguration("wavecurve");
         factory = new WaveCurveGeomFactory(new WaveCurveCalc(oPoint, waveCurveConfiguration));
+
+        RiemannProfileCommand.instance().getState().add(factory.geom());
 
         return factory.geom();
 

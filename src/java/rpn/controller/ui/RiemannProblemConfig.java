@@ -42,9 +42,7 @@ public class RiemannProblemConfig extends UI_ACTION_SELECTED {
         EllipticBoundaryExtensionCommand.instance().setEnabled(true);
         EnvelopeCurveCommand.instance().setEnabled(true);
         SecondaryBifurcationCurveCommand.instance().setEnabled(true);
-        
-//        UIController.instance().getActivePhaseSpace().changeState(new RiemannProfileState());
-
+ 
     }
 
     @Override

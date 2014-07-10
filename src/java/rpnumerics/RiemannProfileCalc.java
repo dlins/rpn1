@@ -8,8 +8,6 @@ package rpnumerics;
 
 import rpn.configuration.Configuration;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import wave.util.RealVector;
 
 public class RiemannProfileCalc implements RpCalculation, RpDiagramCalc {

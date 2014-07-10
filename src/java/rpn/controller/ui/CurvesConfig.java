@@ -35,7 +35,7 @@ import rpn.command.PhysicalBoundaryPlotCommand;
 import rpn.command.PointLevelCurvePlotCommand;
 import rpn.command.RarefactionExtensionCurvePlotCommand;
 import rpn.command.RarefactionCurvePlotCommand;
-import rpn.command.RiemannAllProfileCommand;
+import rpn.command.RiemannResetCommand;
 import rpn.command.RiemannProfileCommand;
 import rpn.command.SecondaryBifurcationCurveCommand;
 import rpn.command.ShockCurvePlotCommand;
@@ -61,7 +61,7 @@ public class CurvesConfig extends UI_ACTION_SELECTED {
         ChangeFluxParamsCommand.instance().setEnabled(true);
         RarefactionExtensionCurvePlotCommand.instance().setEnabled(true);
         IntegralCurvePlotCommand.instance().setEnabled(true);
-//        DomainSelectionCommand.instance().setEnabled(true);
+
 
         CompositePlotCommand.instance().setEnabled(true);
         PointLevelCurvePlotCommand.instance().setEnabled(true);
@@ -103,7 +103,7 @@ public class CurvesConfig extends UI_ACTION_SELECTED {
         EnvelopeCurveCommand.instance().setEnabled(true);
         SecondaryBifurcationCurveCommand.instance().setEnabled(true);
         
-        RiemannAllProfileCommand.instance().setEnabled(true);
+        RiemannResetCommand.instance().setEnabled(true);
 
 
     }

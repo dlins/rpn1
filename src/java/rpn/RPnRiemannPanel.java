@@ -8,17 +8,31 @@ package rpn;
 import java.awt.event.MouseEvent;
 import wave.multid.view.*;
 import java.awt.Graphics2D;
-import java.awt.Stroke;
-import java.awt.BasicStroke;
 import java.awt.print.Printable;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Color;
 import java.awt.Polygon;
 import java.awt.Shape;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-import rpn.component.util.GraphicsUtil;
+import java.awt.geom.Line2D;
+import java.util.Iterator;
+import java.util.List;
+import rpn.component.ClosestDistanceCalculator;
+import rpn.component.DiagramGeom;
+import rpn.parser.RPnDataModule;
+import rpnumerics.Diagram;
+import rpnumerics.DiagramLine;
+import wave.multid.Coords2D;
+import wave.multid.CoordsArray;
+import wave.multid.Space;
+import wave.multid.graphs.ViewPlane;
+import wave.multid.graphs.dcViewport;
+import wave.multid.graphs.wcWindow;
+import wave.util.RealVector;
 
 public class RPnRiemannPanel extends RPnPhaseSpacePanel implements Printable {
     //
@@ -30,17 +44,29 @@ public class RPnRiemannPanel extends RPnPhaseSpacePanel implements Printable {
     //
     private Point cursorPos_;
     private Point trackedPoint_;
+    private Line2D.Double trackLine_;
     private boolean addRectangle_ = false;
     private Polygon tempRectangle;
+    private Scene scene_;
 
     //
     // Constructors
     //
     public RPnRiemannPanel(Scene scene) {
-        super(scene);
+//        super(scene);
+        scene_ = scene;
+        cursorPos_ = new Point(0, 0);
+        trackLine_ = new Line2D.Double(cursorPos_, cursorPos_);
+
         addMouseMotionListener(new MouseMotionHandler());
         addMouseListener(new MouseListenerHandler());
+        addComponentListener(new PanelSizeController());
 
+    }
+
+    @Override
+    public Scene scene() {
+        return scene_;
     }
 
     //
@@ -59,28 +85,89 @@ public class RPnRiemannPanel extends RPnPhaseSpacePanel implements Printable {
         @Override
         public void mouseMoved(MouseEvent me) {
 
+            cursorPos_ = me.getPoint();
 
-            if (addRectangle_) {
-                RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) me.getSource();
+            trackLine_ = new Line2D.Double(cursorPos_.x, 0, cursorPos_.x, getHeight());
+            Iterator geomObjIterator = RPnDataModule.RIEMANNPHASESPACE.getGeomObjIterator();
+            
+            ViewingTransform transform = scene_.getViewingTransform();
+            
+            
+            while (geomObjIterator.hasNext()) {
+                DiagramGeom diagram = (DiagramGeom) geomObjIterator.next();
+                
+                Coords2D cursorPoint = new Coords2D(cursorPos_.getX(),cursorPos_.getY());
+                
+                CoordsArray  cursorWC = new CoordsArray(new Space("", 2));
+                
+                transform.dcInverseTransform(cursorPoint, cursorWC);
+            
+//                System.out.println("coordenada x:  " + cursorWC.getCoords()[0]);
+                
+//                RealVector point = diagram.getPointByIndex(0, cursorWC.getCoords()[0]);
+              
+//                System.out.println("PointOnLine" + point);
+//                
+//                
+//                Diagram diagramSource =  (Diagram) diagram.geomFactory().geomSource();
+//                List<DiagramLine> lines = diagramSource.getLines();
+//                
+//                for (DiagramLine diagramLine : lines) {
+//
+//                    RealVector point = new RealVector(2);
+//                    point.setElement(0, me.getX());
+//                    point.setElement(1, me.getY());
+//                    ClosestDistanceCalculator closestCalculator = new ClosestDistanceCalculator(diagramLine.getSegments(), point);
+//                 
+                    
+                
+                    
+//                    CoordsArray pointOnLine = new CoordsArray(closestCalculator.getClosestPoint());
+//                    
+//                    diagram.showSpeed(pointOnLine, new CoordsArray(point), scene_.getViewingTransform());
+                    
+                    
+                }
+                
+                
+                
+//            }
+//            Iterator geometries = scene_.geometries();
+//            
+//            while (geometries.hasNext()) {
+//                GeomObjView object = (GeomObjView) geometries.next();
+//                
+//
+//                
+//            }
+            
+            
+            
 
-                double x = cursorPos_.getX();
-                double y = cursorPos_.getY();
+            repaint();
 
-                double newx = me.getX();
-                double newy = me.getY();
+        }
+    }
 
-                double w = Math.abs(newx - x);
-                double h = Math.abs(newy - y);
+    private class PanelSizeController extends ComponentAdapter {
 
-                x = Math.min(x, newx);
-                y = Math.min(y, newy);
+        @Override
+        public void componentResized(ComponentEvent event) {
 
-//                tempRectangle = new Rectangle2D.Double(x, y, w, h);
+            if (event.getComponent() instanceof RPnPhaseSpacePanel) {
 
+                RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) event.getComponent();
+
+                int wPanel = panel.getWidth();
+                int hPanel = panel.getHeight();
+
+                dcViewport newViewport = new dcViewport(wPanel, hPanel);
+                wcWindow currWindow = panel.scene().getViewingTransform().viewPlane().getWindow();
+
+                panel.scene().getViewingTransform().setViewPlane(new ViewPlane(newViewport, currWindow));
+                panel.scene().update();
                 panel.repaint();
-
             }
-
 
         }
     }
@@ -94,17 +181,6 @@ public class RPnRiemannPanel extends RPnPhaseSpacePanel implements Printable {
 
         @Override
         public void mousePressed(MouseEvent me) {
-
-//            RPnRiemannPanel source = (RPnRiemannPanel) me.getSource();
-//            if (addRectangle_ == false) {
-//
-//                cursorPos_ = new Point(me.getX(), me.getY());
-//                source.repaint();
-//                addRectangle_ = true;
-//            } else {
-//                addRectangle_ = false;
-//                source.getCastedUI().getSelectionAreas().add(tempRectangle);
-//            }
 
         }
 
@@ -127,17 +203,9 @@ public class RPnRiemannPanel extends RPnPhaseSpacePanel implements Printable {
     @Override
     public void paintComponent(Graphics g) {
 
-        super.paintComponent(g);
-        Stroke stroke = ((Graphics2D) g).getStroke();
-        BasicStroke newStroke = new BasicStroke(1.1f);
-        ((Graphics2D) g).setStroke(newStroke);
-        Color prev = g.getColor();
-        Graphics2D gra = (Graphics2D) g;
-
         /*
          * BOUNDARY WINDOW
          */
-
         g.setColor(DEFAULT_BACKGROUND_COLOR);
         Shape s = scene().getViewingTransform().viewPlane().getWindow().dcView(scene().getViewingTransform());
         ((Graphics2D) g).fill(s);
@@ -146,83 +214,14 @@ public class RPnRiemannPanel extends RPnPhaseSpacePanel implements Printable {
         /*
          * SCENE
          */
-
-        if (scene() != null) {     //tentar fazer semelhante a isso para o desenho dos acessorios
+        if (scene() != null) {
 
             scene().draw((Graphics2D) g);
         }
 
-        /*
-         * POINT MARKS
-         */
-
-        g.setColor(DEFAULT_POINTMARK_COLOR);
-        for (int i = 0; i < getCastedUI().pointMarkBuffer().size(); i++) {
-            g.fillRect(((Point) getCastedUI().pointMarkBuffer().get(i)).x,
-                    ((Point) getCastedUI().pointMarkBuffer().get(i)).y, 5, 5);
-        }
-
-
-
-        g.setColor(DEFAULT_POINTMARK_COLOR);
-
-        /*
-         * Tracked Point
-         */
-        if (trackedPoint_ != null) {
-            g.fillRect(trackedPoint_.x, trackedPoint_.y, 5, 5);
-        }
-
-
-        /*
-         * SELECTED AREAS
-         */
-        
-        
-        
-
-        for (GraphicsUtil graphicsUtil : graphicsUtilList_) {
-
-            graphicsUtil.draw(gra);
-
-        }
-
-
-        
-//        /*
-//         * TEMP SELECTED AREA
-//         */
-//        
-//        if(addRectangle_ && tempRectangle!=null)
-//            
-//            g.drawPolygon(tempRectangle);
-////        g.drawRect((int) tempRectangle.getX(), (int) tempRectangle.getY(), (int) tempRectangle.width, (int) tempRectangle.height);
-//        
-        
-        
-
-        /*
-         * USER CURSOR ORIENTATION
-         *
-         * for printing and 3D projections we will not use cursor
-         * orientation
-         */
-
+//        g.setColor(Color.red);
+//        g.drawLine((int) trackLine_.x1, (int) trackLine_.y1, (int) trackLine_.x2, (int) trackLine_.y2);
 
     }
 
-    public void eraseSelectedArea() {
-
-
-//
-//
-//        Graphics2D g = (Graphics2D) this.getGraphics();
-//
-//        g.setColor(Color.BLACK);
-//
-//        for (Rectangle2D.Double rectangle : getCastedUI().getSelectionAreas()) {
-//            g.fill(rectangle);
-//        }
-
-    }
 }
