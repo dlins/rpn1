@@ -84,7 +84,7 @@ public class CurvesConfig extends UI_ACTION_SELECTED {
         ZoomingAreaCommand.instance().setEnabled(true);
         AnnotationSelectionCommand.instance().setEnabled(true);
         
-        AreaSelectionCommand.instance().setEnabled(false);
+//        AreaSelectionCommand.instance().setEnabled(false);
         
         
         

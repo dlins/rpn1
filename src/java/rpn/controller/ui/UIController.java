@@ -320,6 +320,7 @@ public class UIController extends ComponentUI {
     //
     /**
      * Returns the values entered by the user for a specific action.
+     * @return 
      */
     public RealVector[] userInputList() {
         return handler_.userInputList(this);
@@ -329,6 +330,7 @@ public class UIController extends ComponentUI {
      * Returns a table with all the points entered by the user. The application
      * holds a table with all points entered by the user. This points are taked
      * by mouse clicks in all panels .
+     * @return 
      */
     public rpn.controller.ui.UserInputTable globalInputTable() {
 
@@ -345,6 +347,7 @@ public class UIController extends ComponentUI {
     //
     /**
      * This method installs a listener into a panel of application.
+     * @param panel
      */
     public void install(RPnPhaseSpacePanel panel) {
         installedPanels_.add(panel);
@@ -355,6 +358,7 @@ public class UIController extends ComponentUI {
 
     /**
      * This method removes a listener of a panel.
+     * @param panel
      */
     public void uninstall(RPnPhaseSpacePanel panel) {
         installedPanels_.remove(panel);

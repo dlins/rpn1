@@ -71,11 +71,5 @@ public class ImageSelectionCommand extends RpModelPlotCommand implements Observe
         return null;
     }
 
-    @Override
-    public void update(Observable o, Object arg) {
-//        MultiPolygon polygon = (MultiPolygon)arg;
-        GenericExtensionCurveCommand.instance().setSelectedArea((MultiPolygon)arg);
-       
-
-    }
+  
 }

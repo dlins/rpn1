@@ -111,7 +111,7 @@ public abstract class RpModelPlotCommand extends RpModelActionCommand implements
 
         RPnDataModule.PHASESPACE.plot(geometry);
 
-        GenericExtensionCurveCommand.instance().getState().setCurve(geometry);
+     
 
         if (RPnNetworkStatus.instance().isOnline() && RPnNetworkStatus.instance().isMaster()) {
             RPnNetworkStatus.instance().sendCommand(rpn.controller.ui.UndoActionController.instance().getLastCommand().toXML());
@@ -142,8 +142,7 @@ public abstract class RpModelPlotCommand extends RpModelActionCommand implements
 
             RPnDataModule.PHASESPACE.join(factory.geom());
             
-            GenericExtensionCurveCommand.instance().getState().setCurve(factory.geom());
-
+     
             if (RPnNetworkStatus.instance().isOnline() && RPnNetworkStatus.instance().isMaster()) {
                 RPnNetworkStatus.instance().sendCommand(rpn.controller.ui.UndoActionController.instance().getLastCommand().toXML());
             }

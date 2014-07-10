@@ -98,6 +98,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     private JMenuItem alwaysOnCursorMenuItem = new JMenuItem("Always On");
     private JMenuItem alertCursorMenuItem = new JMenuItem("Alert");
     private JMenuItem neverCursorMenuItem = new JMenuItem("Never");
+    private JButton extensionResetButton_ = new JButton("Reset Extension Command");
     
     private static FileWriter logWriter_;
     
@@ -226,8 +227,8 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         utilitiesToolBar_.add(inputCoordsButton);
         utilitiesToolBar_.add(TrackPointCommand.instance().getContainer());
         
-        utilitiesToolBar_.add(AreaSelectionCommand.instance().getContainer());     //** Edson/Leandro
-        utilitiesToolBar_.add(AdjustedSelectionPlotCommand.instance());
+//        utilitiesToolBar_.add(AreaSelectionCommand.instance().getContainer());     //** Edson/Leandro
+//        utilitiesToolBar_.add(AdjustedSelectionPlotCommand.instance());
         
         utilitiesToolBar_.add(DomainSelectionCommand.instance().getContainer());
         utilitiesToolBar_.add(ImageSelectionCommand.instance().getContainer());
@@ -235,12 +236,12 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         utilitiesToolBar_.add(VelocityCommand.instance().getContainer());        //** Leandro
         utilitiesToolBar_.add(ClassifierCommand.instance().getContainer());      //** Leandro
 
-        utilitiesToolBar_.add(CurveSelectionCommand.instance().getContainer());
+//        utilitiesToolBar_.add(CurveSelectionCommand.instance().getContainer());
         utilitiesToolBar_.add(AnnotationSelectionCommand.instance().getContainer());
         
         utilitiesToolBar_.add(ZoomingAreaCommand.instance().getContainer());
         utilitiesToolBar_.add(BifurcationCorrespondenceCommand.instance().getContainer());
-        utilitiesToolBar_.add(WaveCurveSpeedPlotCommand.instance().getContainer());
+//        utilitiesToolBar_.add(WaveCurveSpeedPlotCommand.instance().getContainer());
     }
     
     private void createRiemmanProblemToolBar() {
@@ -255,6 +256,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         
         createCurvesTooBar();
         toolBar_.add(GenericExtensionCurveCommand.instance().getContainer());
+        toolBar_.add(extensionResetButton_);
         
     }
     
@@ -657,9 +659,9 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         leftCurvesList.addObserver(WaveCurveSpeedPlotCommand.instance());
         rightCurvesList.addObserver(WaveCurveSpeedPlotCommand.instance());
         
-        curvesList.addObserver(DomainSelectionCommand.instance());
-        leftCurvesList.addObserver(DomainSelectionCommand.instance());
-        rightCurvesList.addObserver(DomainSelectionCommand.instance());
+        curvesList.addObserver(GenericExtensionCurveCommand.instance());
+        leftCurvesList.addObserver(GenericExtensionCurveCommand.instance());
+        rightCurvesList.addObserver(GenericExtensionCurveCommand.instance());
         
         curvesList.addObserver(AdjustedSelectionPlotCommand.instance());
         leftCurvesList.addObserver(AdjustedSelectionPlotCommand.instance());
@@ -736,6 +738,8 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
             ex.printStackTrace();
         }
     }
+    
+    
     
     void printMenuItem_actionPerformed(ActionEvent e) {
         
@@ -1183,6 +1187,17 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
                         
                     }
                 });
+        
+        
+        extensionResetButton_.addActionListener( new java.awt.event.ActionListener() {
+                    
+                    public void actionPerformed(ActionEvent e) {
+                        GenericExtensionCurveCommand.instance().reset();
+                        
+                    }
+                });
+        
+                
         
         fileMenu.add(saveSessionMenuItem_);
         fileMenu.add(exportMenuItem_);

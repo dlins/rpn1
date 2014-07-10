@@ -9,7 +9,6 @@ import java.util.Iterator;
 import java.util.Observable;
 import java.util.Observer;
 import javax.swing.JToggleButton;
-import rpn.RPnPhaseSpaceAbstraction;
 import rpn.RPnPhaseSpacePanel;
 import rpn.component.RpGeometry;
 import rpn.controller.ui.AREASELECTION_CONFIG;
@@ -38,18 +37,7 @@ public class DomainSelectionCommand extends RpModelPlotCommand implements Observ
             panel.addMouseListener(boxPlotter);
             panel.addMouseMotionListener(boxPlotter);
 
-            // ---
-            RPnPhaseSpaceAbstraction phaseSpace = (RPnPhaseSpaceAbstraction) panel.scene().getAbstractGeom();
-            Iterator phaseSpaceIterator = phaseSpace.getGeomObjIterator();
-            while (phaseSpaceIterator.hasNext()) {
-                RpGeometry phaseSpaceGeometry = (RpGeometry) phaseSpaceIterator.next();
-                if (phaseSpaceGeometry.viewingAttr().isSelected()) {
-                    GenericExtensionCurveCommand.instance().setGeometryAndPanel(phaseSpaceGeometry, panel);
-                    GenericExtensionCurveCommand.instance().setEnabled(true);
-                    ImageSelectionCommand.instance().setEnabled(true);
-                }
-            }
-            // ---
+           
 
         }
 

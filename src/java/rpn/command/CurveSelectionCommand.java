@@ -78,8 +78,6 @@ public class CurveSelectionCommand extends RpModelPlotCommand {
             RPnNetworkStatus.instance().sendCommand(rpn.controller.ui.UndoActionController.instance().getLastCommand().toXML());
         }
 
-        System.out.println("chamando execute do curves selection");
-
     }
 
     static public CurveSelectionCommand instance() {
