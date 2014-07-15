@@ -144,6 +144,7 @@ public class DiagramGeom extends MultiGeometryImpl implements RpGeometry {
 
     public RealVector getPointByIndex(int diagramLineIndex, double x) {
 
+        
         RealVector origin = new RealVector(2);
         Diagram geomSource = (Diagram) factory_.geomSource();
         List<DiagramLine> lines = geomSource.getLines();
@@ -152,17 +153,18 @@ public class DiagramGeom extends MultiGeometryImpl implements RpGeometry {
 
         for (int i = 0; i < segments.size(); i++) {
             RealSegment realSegment = segments.get(i);
-            
-            if(realSegment.p1().getElement(0)==x){
-                return realSegment.p1();                
+
+            if (realSegment.p1().getElement(0) == x) {
+                return realSegment.p1();
+                
             }
+//            } else {
+//                return realSegment.p2();
+//            }
 
-            
         }
-        
-       
-        return origin;
 
+        return origin;
     }
 
     public RealVector getMax() {

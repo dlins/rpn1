@@ -88,8 +88,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RiemannProfileCalc_nativeCalc
     const WaveCurve * waveCurve2 = RpNumerics::getWaveCurve(nativeWaveCurvesIDArray[1]);
 
 
-    cout << "Curva 0 " << waveCurve1 << endl;
-    cout << "Curva 1 " << waveCurve2 << endl;
+    cout << "Curva 0 " << waveCurve1 << waveCurve1->reference_point.point<< endl;
+    cout << "Curva 1 " << waveCurve2 << waveCurve2->reference_point.point<<endl;
 
 
 

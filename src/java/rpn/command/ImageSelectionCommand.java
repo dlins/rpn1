@@ -7,7 +7,6 @@ package rpn.command;
 
 import java.awt.event.ActionEvent;
 import java.util.Iterator;
-import java.util.Observable;
 import java.util.Observer;
 import javax.swing.JToggleButton;
 import rpn.RPnPhaseSpacePanel;
@@ -15,12 +14,11 @@ import rpn.component.RpGeometry;
 import rpn.controller.ui.AREASELECTION_CONFIG;
 import rpn.controller.ui.RPnGenericSelectionPlotter;
 import rpn.controller.ui.UIController;
-import wave.multid.model.MultiPolygon;
 import wave.util.RealVector;
 
 public class ImageSelectionCommand extends RpModelPlotCommand implements Observer {
 
-    static public final String DESC_TEXT = "Extension Image Selection";
+    static public final String DESC_TEXT = "Image Selection";
     static private ImageSelectionCommand instance_ = null;
 
     private ImageSelectionCommand() {

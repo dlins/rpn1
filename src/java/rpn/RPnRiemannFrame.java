@@ -32,9 +32,7 @@ public class RPnRiemannFrame extends RPnPhaseSpaceFrame {
         
         disableEvents(AWTEvent.WINDOW_EVENT_MASK);
         disableEvents(AWTEvent.COMPONENT_EVENT_MASK);
-//        enableEvents(AWTEvent.WINDOW_EVENT_MASK);
-//        enableEvents(AWTEvent.COMPONENT_EVENT_MASK);
-        //	enableEvents(AWTEvent.FOCUS_EVENT_MASK);
+
         commandMenu_ = command;
         try {
             phaseSpacePanel = new RPnRiemannPanel(scene);
@@ -49,10 +47,7 @@ public class RPnRiemannFrame extends RPnPhaseSpaceFrame {
 
     //Component initialization
     private void jbInit() throws Exception {
-        //setIconImage(Toolkit.getDefaultToolkit().createImage(Frame.class.getResource("[Your Icon]")));
-
-
-
+      
         contentPane = (JPanel) this.getContentPane();
         contentPane.setLayout(borderLayout1);
         this.setResizable(true);
@@ -60,20 +55,17 @@ public class RPnRiemannFrame extends RPnPhaseSpaceFrame {
         jPanel3.setBackground(Color.gray);
         jPanel4.setBackground(Color.gray);
         contentPane.setBackground(Color.gray);
-//        setTitle(" Riemann Phase Space Frame - "
-//                + new Integer(((PhaseSpacePanelController) phaseSpacePanel.getCastedUI()).getAbsIndex()).intValue() + ','
-//                + new Integer(((PhaseSpacePanelController) phaseSpacePanel.getCastedUI()).getOrdIndex()).intValue());
-//        phaseSpacePanel.addMouseMotionListener(coordsField.getMouseMotionController());
+
         statusPanel.setBackground(Color.gray);
         statusPanel.setBorder(BorderFactory.createEtchedBorder());
         statusPanel.setLayout(borderLayout2);
-//        coordsField.setText("50:50");
+
         contentPane.add(phaseSpacePanel, BorderLayout.CENTER);
         contentPane.add(statusPanel, BorderLayout.SOUTH);
         contentPane.add(jPanel2, BorderLayout.WEST);
         contentPane.add(jPanel3, BorderLayout.EAST);
         contentPane.add(jPanel4, BorderLayout.NORTH);
-//        statusPanel.add(coordsField, BorderLayout.EAST);
+
         statusPanel.add(jPanel5, BorderLayout.SOUTH);
         statusPanel.add(cursorMonitor_);
         setSize(400,400);

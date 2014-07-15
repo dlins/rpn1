@@ -13,6 +13,7 @@ import javax.swing.JLabel;
 import java.text.NumberFormat;
 import java.awt.event.*;
 import java.awt.*;
+import java.util.ArrayList;
 
 public class RPnRiemannCursorMonitor extends JLabel {
     //
@@ -21,6 +22,7 @@ public class RPnRiemannCursorMonitor extends JLabel {
 
     private MouseMotionController mouseMotionController_;
     private NumberFormat formatter_;
+    private ArrayList labelList_;
 
     //
     // Constructor
@@ -31,6 +33,7 @@ public class RPnRiemannCursorMonitor extends JLabel {
         mouseMotionController_ = new MouseMotionController();
         formatter_ = NumberFormat.getInstance();
         formatter_.setMaximumFractionDigits(4);
+        labelList_ = new ArrayList();
     }
 
     class MouseMotionController extends MouseMotionAdapter {
@@ -40,11 +43,13 @@ public class RPnRiemannCursorMonitor extends JLabel {
 
         @Override
         public void mouseMoved(MouseEvent e) {
-            RPnPhaseSpacePanel scenePane = (RPnPhaseSpacePanel) e.getComponent();
+            RPnRiemannPanel  scenePane = (RPnRiemannPanel) e.getComponent();
             updateCursorPos(scenePane, e.getPoint());
         }
     }
 
+    
+    
        //--------------------------------
 
     //

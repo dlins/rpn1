@@ -15,7 +15,9 @@ import rpn.command.BoundaryExtensionCurveCommand;
 import rpn.command.EllipticBoundaryExtensionCommand;
 import rpn.command.EnvelopeCurveCommand;
 import rpn.command.HysteresisPlotCommand;
+import rpn.command.ImageSelectionCommand;
 import rpn.command.InflectionPlotCommand;
+import rpn.command.RiemannResetCommand;
 import rpn.command.SecondaryBifurcationCurveCommand;
 
 import rpn.command.SubInflectionExtensionCurveCommand;
@@ -42,6 +44,10 @@ public class RiemannProblemConfig extends UI_ACTION_SELECTED {
         EllipticBoundaryExtensionCommand.instance().setEnabled(true);
         EnvelopeCurveCommand.instance().setEnabled(true);
         SecondaryBifurcationCurveCommand.instance().setEnabled(true);
+        ImageSelectionCommand.instance().setEnabled(false);
+                
+        
+        RiemannResetCommand.instance().execute();
  
     }
 
