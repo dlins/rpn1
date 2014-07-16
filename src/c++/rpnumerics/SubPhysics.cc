@@ -28,6 +28,7 @@ space_(new Space(space)),
 ID_(id),
 type_(type) {
     setHugoniotContinuationMethod(new HugoniotContinuation2D2D(fluxFunction_, accumulationFunction_, &getBoundary()));
+    coincidenceMethod_=0;
     //    setShockMethod(new Shock());
 }
 
@@ -119,6 +120,12 @@ Secondary_Bifurcation_Interface * SubPhysics::getSecondaryBifurcationMethod(cons
 CompositeCurve * SubPhysics::getCompositeCurve(){
     return compositeCurve_;
 }
+
+
+Coincidence * SubPhysics::getCoincidenceMethod(){
+    return coincidenceMethod_;
+}
+
 const Boundary * SubPhysics::getPreProcessedBoundary()const {
     return preProcessedBoundary_;
 }
@@ -186,6 +193,8 @@ SubPhysics::~SubPhysics() {
     delete viscosityMatrix_;
 
     delete shockCurve_;
+    
+    delete coincidenceMethod_;
     
      for (std::map<string,Extension *>::iterator it=extensionCurveArray_->begin(); it!=extensionCurveArray_->end(); ++it){
         delete it->second ;        

@@ -181,7 +181,7 @@ public class RPnConfig {
 
 
 
-        if (physicsName.equals("CoreyQuad")) {
+        if (physicsName.equals("CoreyQuad") || physicsName.equals("JD")) {
             teste = new RPnFluxParamsSubject[0];
 
             Configuration physicsConfiguration = RPNUMERICS.getConfiguration(physicsName);

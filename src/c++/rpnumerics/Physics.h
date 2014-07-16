@@ -25,6 +25,7 @@
 #include "Cub2.h"
 #include "TriPhase.h"
 #include "NegativeStone.h"
+#include "JDPhysics.h"
 
 //!
 

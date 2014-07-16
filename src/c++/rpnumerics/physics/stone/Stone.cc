@@ -160,30 +160,12 @@ Stone::Stone() : SubPhysics(StoneFluxFunction(StoneParams(), StonePermParams()),
     shockCurve_ = new ShockCurve(hugoniot_continuation_method_);
 
     compositeCurve_ = new CompositeCurve(accumulationFunction_, fluxFunction_, &getBoundary(), shockCurve_, 0);
+    
+
 
 }
 
-Stone::Stone(const Stone & copy) : SubPhysics(copy.fluxFunction(), copy.accumulation(), copy.getBoundary(), Multid::PLANE, "Stone", _SIMPLE_ACCUMULATION_) {
-    //    Stone_Explicit_Bifurcation_Curves *stoneBifurcation = new Stone_Explicit_Bifurcation_Curves((StoneFluxFunction*)&fluxFunction());
-    //    hugoniotArray_->operator []("STONE") = new StoneExplicitHugoniot((StoneFluxFunction *)&fluxFunction(),(StoneAccumulation *) &accumulation(),&getBoundary(),stoneBifurcation);
-    //    hugoniotArray_->operator []("STONE") = new StoneHugoniot(&fluxFunction(), &accumulation());
-    //    secondaryBifurcationArray_->operator []("IMPLICIT") = new Secondary_Bifurcation(&fluxFunction(), &accumulation(), &fluxFunction(), &accumulation());
 
-
-
-    hugoniotCurveArray_->operator []("IMPLICIT") = new ImplicitHugoniotCurve(fluxFunction_, accumulationFunction_, &getBoundary());
-
-    hugoniot_continuation_method_ = new HugoniotContinuation2D2D(&fluxFunction(), &accumulation(), &getBoundary());
-
-    shockCurve_ = new ShockCurve(getHugoniotContinuationMethod());
-
-    compositeCurve_ = new CompositeCurve(accumulationFunction_, fluxFunction_, &getBoundary(), shockCurve_, 0);
-
-    setDoubleContactFunction(new Double_Contact());
-    setViscosityMatrix(copy.getViscosityMatrix());
-    preProcessedBoundary_ = copy.getPreProcessedBoundary()->clone();
-
-}
 
 SubPhysics * Stone::clone()const {
     return new Stone(*this);

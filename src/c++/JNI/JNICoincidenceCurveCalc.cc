@@ -23,7 +23,7 @@ NOTE :
 #include "RpNumerics.h"
 #include <vector>
 #include <iostream>
-#include "CoincidenceTP.h"
+#include "Coincidence_Contour.h"
 #include "Debug.h"
 
 
@@ -37,7 +37,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CoincidenceCurveCalc_nativeCalc(JNIEnv
         ////cout << "Em coincidence nativo: " << endl;
     }
 
-    jclass classPhasePoint = (env)->FindClass(PHASEPOINT_LOCATION);
+
 
     jclass hugoniotSegmentClass = (env)->FindClass(HUGONIOTSEGMENTCLASS_LOCATION);
 
@@ -49,11 +49,10 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CoincidenceCurveCalc_nativeCalc(JNIEnv
 
     jclass coincidenceCurveClass = env->FindClass(COINCIDENCECURVE_LOCATION);
     
-    
 
-    jmethodID toDoubleMethodID = (env)->GetMethodID(classPhasePoint, "toDouble", "()[D");
+
     jmethodID realVectorConstructorDoubleArray = env->GetMethodID(realVectorClass, "<init>", "([D)V");
-    jmethodID hugoniotSegmentConstructor = (env)->GetMethodID(hugoniotSegmentClass, "<init>", "(Lwave/util/RealVector;DLwave/util/RealVector;DI)V");
+
     jmethodID arrayListConstructor = env->GetMethodID(arrayListClass, "<init>", "()V");
     jmethodID arrayListAddMethod = env->GetMethodID(arrayListClass, "add", "(Ljava/lang/Object;)Z");
     jmethodID coincidenceCurveConstructor = env->GetMethodID(coincidenceCurveClass, "<init>", "(Ljava/util/List;)V");
@@ -62,23 +61,26 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CoincidenceCurveCalc_nativeCalc(JNIEnv
     
     jobject segmentsArray = env->NewObject(arrayListClass, arrayListConstructor, NULL);
 
-    int dimension = 3;
+    int dimension = RpNumerics::getPhysics().getSubPhysics(0).domain().dim();
 
-    RealVector Uref(dimension);
 
-    TPCW & tpcw = (TPCW &) RpNumerics::getPhysics().getSubPhysics(0);
+    const FluxFunction * fluxFunction = &RpNumerics::getPhysics().fluxFunction();
+    const AccumulationFunction * accumulationFunction =&RpNumerics::getPhysics().accumulation();
 
-    Flux2Comp2PhasesAdimensionalized * fluxFunction = (Flux2Comp2PhasesAdimensionalized *) & tpcw.fluxFunction();
+    Coincidence * coincidence  = RpNumerics::getPhysics().getSubPhysics(0).getCoincidenceMethod();
 
-    Accum2Comp2PhasesAdimensionalized * accumulationFunction = (Accum2Comp2PhasesAdimensionalized *) & tpcw.accumulation();
-
-    CoincidenceTP newCoincidence(fluxFunction);
+    if (coincidence==NULL){
+        return NULL;
+    }
+    
+    
+    Coincidence_Contour coincidenceContour(coincidence);
 
     GridValues * gv = RpNumerics::getGridFactory().getGrid("bifurcationcurve");
 
     std::vector< RealVector> outputVector;
 
-    newCoincidence.curve(fluxFunction, accumulationFunction, *gv, outputVector);
+    coincidenceContour.curve(fluxFunction, accumulationFunction, *gv, outputVector);
 
 
     if ( Debug::get_debug_level() == 5 ) {
@@ -86,10 +88,10 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CoincidenceCurveCalc_nativeCalc(JNIEnv
     }
 
     for (int i = 0; i < outputVector.size() / 2; i++) {
-
-        tpcw.postProcess(outputVector[2 * i]);
-        tpcw.postProcess(outputVector[2 * i + 1]);
-
+        
+        RpNumerics::getPhysics().getSubPhysics(0).postProcess(outputVector[2 * i]);
+        RpNumerics::getPhysics().getSubPhysics(0).postProcess(outputVector[2 * i + 1]);
+                
         jdoubleArray eigenValRLeft = env->NewDoubleArray(dimension);
         jdoubleArray eigenValRRight = env->NewDoubleArray(dimension);
 
@@ -104,24 +106,13 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CoincidenceCurveCalc_nativeCalc(JNIEnv
         jobject realVectorLeftPoint = env->NewObject(realVectorClass, realVectorConstructorDoubleArray, eigenValRLeft);
         jobject realVectorRightPoint = env->NewObject(realVectorClass, realVectorConstructorDoubleArray, eigenValRRight);
 
-        int pointType = 1;
-
-        double leftSigma = 0;
-        double rightSigma = 0;
 
         jobject realSegment = env->NewObject(realSegmentClass, realSegmentConstructor, realVectorLeftPoint, realVectorRightPoint);
         
-//        jobject hugoniotSegment = env->NewObject(hugoniotSegmentClass, hugoniotSegmentConstructor, realVectorLeftPoint, leftSigma, realVectorRightPoint, rightSigma, 17);
+
         env->CallObjectMethod(segmentsArray, arrayListAddMethod, realSegment);
 
-
-
-
     }
-
-
-
-
 
 
     jobject result = env->NewObject(coincidenceCurveClass, coincidenceCurveConstructor, segmentsArray);

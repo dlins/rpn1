@@ -12,6 +12,47 @@ bool Eigen::eigen_compare(const eigenpair &n1, const eigenpair &n2){
     return n1.r < n2.r;
 }
 
+// Function to compare the ratio alphar/beta, to be passed to the std::algorithm::sort method.
+// TODO: Check this one.
+
+//// TPCW!!!
+//// In this case the eigenpairs are not sorted according to their eigenvalues,
+//// but according to their eigenvectors (if they are horizontal or not).
+////
+//bool Eigen::eigen_compare(const eigenpair &n1, const eigenpair &n2){
+//    RealVector r1(2), r2(2);
+//    for (int i = 0; i < 2; i++){
+//        r1(i) = n1.vrr[i];
+//        r2(i) = n2.vrr[i];
+//    }
+
+//    normalize(r1);
+//    normalize(r2);
+
+//    return std::abs(r1(1)) < std::abs(r2(1));
+//}
+
+bool Eigen::eigen_compare_using_eigenvalues(const eigenpair &n1, const eigenpair &n2){
+    return n1.r < n2.r;
+}
+
+bool Eigen::eigen_compare_using_eigenvectors(const eigenpair &n1, const eigenpair &n2){
+    RealVector r1(2), r2(2);
+    for (int i = 0; i < 2; i++){
+        r1(i) = n1.vrr[i];
+        r2(i) = n2.vrr[i];
+    }
+
+    normalize(r1);
+    normalize(r2);
+
+    return std::abs(r1(1)) < std::abs(r2(1));
+}
+
+// Function to be used to compare the eigenpairs.
+//
+bool (*Eigen::eigen_sort_function)(const eigenpair&, const eigenpair&) = &eigen_compare_using_eigenvalues;
+
 // Transpose a square matrix, rewriting the original.
 //
 void Eigen::transpose(int n, double *A){
@@ -356,7 +397,9 @@ int Eigen::eig(int n, const double *A, const double *B, vector<eigenpair> &vge){
             }
         }
 
-        sort(vge.begin(), vge.end(), eigen_compare);
+//        sort(vge.begin(), vge.end(), eigen_compare);
+        sort(vge.begin(), vge.end(), eigen_sort_function);
+
     }
 
     return info;
@@ -367,7 +410,7 @@ int Eigen::eig(int n, const double *A, const double *B, int family, eigenpair &e
     std::vector<eigenpair> e;
     int info = eig(n, A, B, e);
     
-//    std:://cout << "Eigen, new method. info = " << info << std::endl;
+//    std::cout << "Eigen, new method. info = " << info << std::endl;
     print_eigen(e);
 
     if (info == 0) ep = e[family];

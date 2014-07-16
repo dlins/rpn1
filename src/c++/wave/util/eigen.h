@@ -54,6 +54,23 @@ extern "C" void dggev_(const char*, const char*,  // JOBVL, JOBVR
 /* Struct to hold an eigenpair. */
 struct eigenpair {
     public:
+        eigenpair(){
+        }
+
+        eigenpair(int n){
+            r = 0.0;
+            i = 0.0;
+
+            vlr.resize(n);
+            vli.resize(n);
+            vrr.resize(n);
+            vri.resize(n);
+
+            for (int i = 0; i < n; i++){
+                vlr[i] = vli[i] = vrr[i] = vri[i] = 0.0;
+            }
+        }
+
         double r;           // Real part of the eigenvalue
         double i;           // Imaginary part of the eigenvalue
 
@@ -96,6 +113,12 @@ class Eigen {
         static int eigen_comp(const void *, const void *); // To be deprecated
         static bool eigen_compare(const eigenpair&, const eigenpair&);
         static void sort_eigen(int, eigenpair*);
+
+
+        static bool eigen_compare_using_eigenvalues(const eigenpair&, const eigenpair&);
+        static bool eigen_compare_using_eigenvectors(const eigenpair&, const eigenpair&);
+
+        static bool (*eigen_sort_function)(const eigenpair&, const eigenpair&);
     protected:
     public:
         static int eig(int n, const double*, vector<eigenpair>&);                // Eigenproblem
@@ -110,6 +133,26 @@ class Eigen {
 
         static void fill_eigenpairs(const FluxFunction *f, const AccumulationFunction *a, const RealVector &u, std::vector<eigenpair> &e);
         static void fill_eigenvalues(const FluxFunction *f, const AccumulationFunction *a, const RealVector &u, std::vector<double> &lambda);
+
+        // Get/set method to order a list of eigenpairs.
+        //
+        static void list_order_eigenpairs(std::vector<bool (*)(const eigenpair&, const eigenpair&)> &order_function, std::vector<std::string> &name){
+            order_function.clear();
+            name.clear();
+
+            order_function.push_back(&eigen_compare_using_eigenvalues);
+            name.push_back(std::string("Using families"));
+
+            order_function.push_back(&eigen_compare_using_eigenvectors);
+            name.push_back(std::string("Using types"));
+        }
+
+        static void set_order_eigenpairs(bool (*f)(const eigenpair&, const eigenpair&)){
+            eigen_sort_function = f;
+
+            return;
+        }
+
 };
 /* Class Eigen. */
 

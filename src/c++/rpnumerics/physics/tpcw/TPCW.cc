@@ -61,7 +61,7 @@ SubPhysics(*defaultBoundary(), *new Space("R3", 3), "TPCW", _GENERAL_ACCUMULATIO
     fluxFunction_ = new Flux2Comp2PhasesAdimensionalized(Flux2Comp2PhasesAdimensionalized_Params(fluxVector, TD));
     accumulationFunction_ = new Accum2Comp2PhasesAdimensionalized(Accum2Comp2PhasesAdimensionalized_Params(TD, paramsVector.component(8)));
 
-
+    coincidenceMethod_ = new Coincidence_TPCW((const Flux2Comp2PhasesAdimensionalized*) &fluxFunction(), (const Accum2Comp2PhasesAdimensionalized*) &accumulation());
     
 
 

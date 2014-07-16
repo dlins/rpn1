@@ -42,8 +42,6 @@ private:
 public:
 
 
-    Stone(const Stone &);
-
     Stone();
 
     virtual ~Stone();

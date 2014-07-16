@@ -67,6 +67,7 @@ protected:
     HugoniotContinuation * hugoniot_continuation_method_;
     CompositeCurve * compositeCurve_;
     ShockCurve * shockCurve_;
+    Coincidence * coincidenceMethod_;
 
 public:
 
@@ -123,6 +124,8 @@ public:
     Extension * getExtensionMethod(const string &);
     
     Secondary_Bifurcation_Interface * getSecondaryBifurcationMethod(const string &);
+    
+    Coincidence * getCoincidenceMethod();
 
     virtual ~SubPhysics();
 
