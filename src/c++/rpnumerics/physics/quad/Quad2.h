@@ -19,8 +19,10 @@
 #include "Quad2AccumulationFunction.h"
 #include "Quad2FluxParams.h"
 #include "RectBoundary.h"
+#include "Double_Contact.h"
 #include "HugoniotContinuation2D2D.h"
 #include "Quad2_Viscosity_Matrix.h"
+#include "ImplicitHugoniotCurve.h"
 
 class Quad2 : public SubPhysics {
 private:

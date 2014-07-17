@@ -558,7 +558,7 @@ int CompositeCurve::curve(const AccumulationFunction *RarAccum, const FluxFuncti
                           RealVector &final_direction,
                           int &reason_why,
                           int &edge){
-    cout<<"Em composite 561"<<endl;
+
     normalize_with_respect_to_whom = NORMALIZE_WITH_RESPECT_TO_RAREFACTION;
     compute_first_determinant = true;
     cmp_deltaxi = deltaxi;

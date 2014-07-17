@@ -11,8 +11,7 @@
  * Includes:
  */
 #include "PolydispersePhysics.h"
-#include "Double_Contact.h"
-#include "HugoniotContinuation2D2D.h"
+
 
 /*
  * ---------------------------------------------------------------
@@ -25,6 +24,17 @@ PolydispersePhysics::PolydispersePhysics() : SubPhysics(Polydisperse(Polydispers
     setDoubleContactFunction(new Double_Contact());
     setViscosityMatrix(new Viscosity_Matrix());
     preProcessedBoundary_ = defaultBoundary();
+    
+    hugoniotCurveArray_->operator []("IMPLICIT") = new ImplicitHugoniotCurve(fluxFunction_, accumulationFunction_, &getBoundary());
+
+    hugoniot_continuation_method_ = new HugoniotContinuation2D2D(&fluxFunction(), &accumulation(), &getBoundary());
+
+    shockCurve_ = new ShockCurve(hugoniot_continuation_method_);
+
+    compositeCurve_ = new CompositeCurve(accumulationFunction_, fluxFunction_, &getBoundary(), shockCurve_, 0);
+    
+    
+    
 }
 
 SubPhysics * PolydispersePhysics::clone()const {
@@ -36,6 +46,16 @@ PolydispersePhysics::PolydispersePhysics(const PolydispersePhysics & copy) : Sub
     setDoubleContactFunction(new Double_Contact());
     setViscosityMatrix(copy.getViscosityMatrix());
     preProcessedBoundary_ = copy.getPreProcessedBoundary()->clone();
+    
+    
+    hugoniotCurveArray_->operator []("IMPLICIT") = new ImplicitHugoniotCurve(fluxFunction_, accumulationFunction_, &getBoundary());
+
+    hugoniot_continuation_method_ = new HugoniotContinuation2D2D(&fluxFunction(), &accumulation(), &getBoundary());
+
+    shockCurve_ = new ShockCurve(hugoniot_continuation_method_);
+
+    compositeCurve_ = new CompositeCurve(accumulationFunction_, fluxFunction_, &getBoundary(), shockCurve_, 0);
+    
 
 }
 

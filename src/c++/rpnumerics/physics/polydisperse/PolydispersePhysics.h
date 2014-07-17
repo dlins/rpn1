@@ -18,6 +18,10 @@
 #include "IsoTriang2DBoundary.h"
 #include "StoneAccumulation.h"
 #include "Quad2AccumulationFunction.h"
+#include "HugoniotContinuation2D2D.h"
+#include "ImplicitHugoniotCurve.h"
+#include "Double_Contact.h"
+
 
 
 /*

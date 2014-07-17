@@ -16,7 +16,8 @@
 #include "JNIDefs.h"
 #include <vector>
 #include <time.h>
-#include "Integral_Curve.h"
+//#include "Integral_Curve.h"
+#include "LSODE.h"
 
 using std::vector;
 
@@ -78,30 +79,56 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_IntegralCurveCalc_calc(JNIEnv * env, j
 
     const Boundary * tempBoundary = RpNumerics::getPhysics().getSubPhysics(0).getPreProcessedBoundary();
 
-    double deltaxi = 1e-3;
+//    double deltaxi = 1e-3;
 
 
     const FluxFunction * fluxFunction = &RpNumerics::getPhysics().fluxFunction();
     const AccumulationFunction * accumulationFunction = &RpNumerics::getPhysics().accumulation();
 
-  
-    Integral_Curve iCurve(fluxFunction, accumulationFunction, tempBoundary);
+//  
+//    Integral_Curve iCurve(fluxFunction, accumulationFunction, tempBoundary);
+//
+//    iCurve.integral_curve(realVectorInput,
+//            deltaxi,
+//            familyIndex,
+//            coords, inflectionPoints);
+//    
+    
+    
+    
+    
+    RarefactionCurve rc(accumulationFunction, fluxFunction, tempBoundary);
 
 
-    iCurve.integral_curve(realVectorInput,
-            deltaxi,
+    double deltaxi = 1e-3;
+    std::vector<RealVector> inflection_point;
+    Curve rarcurve;
+
+    int rar_stopped_because;
+    int edge;
+    RealVector final_direction;
+
+    LSODE lsode;
+    ODE_Solver *odesolver;
+
+    odesolver = &lsode;
+
+    int info_rar = rc.curve(realVectorInput,
             familyIndex,
-            coords, inflectionPoints);
-    
-    
-    
-    
-    
-    
-    
+            0,
+            INTEGRAL_CURVE,
+            RAREFACTION_INITIALIZE,
+            0,
+            odesolver,
+            deltaxi,
+            rarcurve,
+            inflection_point,
+            final_direction,
+            rar_stopped_because,
+            edge);
     
 
-    if (coords.size() == 0) {
+    if (rarcurve.curve.size() == 0) {
         return NULL;
     }
 
@@ -111,8 +138,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_IntegralCurveCalc_calc(JNIEnv * env, j
 
 
     jobject inflectionPointList = env->NewObject(arrayListClass, arrayListConstructor, NULL);
-
-
 
     for (int i = 0; i < inflectionPoints.size(); i++) {
 
@@ -127,15 +152,17 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_IntegralCurveCalc_calc(JNIEnv * env, j
 
     }
 
-    jobjectArray orbitPointArray = (jobjectArray) (env)->NewObjectArray(coords.size(), classOrbitPoint, NULL);
+    jobjectArray orbitPointArray = (jobjectArray) (env)->NewObjectArray(rarcurve.curve.size(), classOrbitPoint, NULL);
 
-    for (i = 0; i < coords.size(); i++) {
+    for (i = 0; i < rarcurve.curve.size(); i++) {
 
-        RealVector tempVector = coords.at(i); 
+        RealVector tempVector = rarcurve.curve.at(i); 
         
         jdoubleArray jTempArray = (env)->NewDoubleArray(dimension);
         
-        double lambda = tempVector.component(dimension);
+//        double lambda = tempVector.component(dimension);
+
+        double lambda = rarcurve.speed[i];
 
         RpNumerics::getPhysics().getSubPhysics(0).postProcess(tempVector);
 

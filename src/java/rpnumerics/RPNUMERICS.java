@@ -17,7 +17,6 @@ import java.util.Set;
 import rpn.configuration.BoundaryConfiguration;
 import rpn.configuration.RPnConfig;
 import rpn.configuration.ConfigurationProfile;
-import rpn.configuration.CurveConfiguration;
 import rpn.configuration.PhysicsConfiguration;
 import rpn.parser.RPnDataModule;
 import wave.multid.CoordsArray;
@@ -59,35 +58,7 @@ public class RPNUMERICS {
 
             Configuration physicsConfiguration = new PhysicsConfiguration(physicsProfile, configurationList);
 
-//            //Accumulation function
-//
-//            Configuration accumulationFunctionConfig = physicsConfiguration.getConfiguration("accumulationfunction");
-//
-//            if (accumulationFunctionConfig != null) {
-//                //            System.out.println("Printando configuration para acumulacao: " + accumulationFunctionConfig.getParamsSize());
-//                //            System.out.println(accumulationFunctionConfig);
-//
-//                RealVector newAccParams = new RealVector(accumulationFunctionConfig.getParamsSize());
-//                for (int i = 0; i < newAccParams.getSize(); i++) {
-//                    //            System.out.println(accumulationFunctionConfig);
-//                    newAccParams.setElement(i, new Double(accumulationFunctionConfig.getParam(i)));
-//
-//                }
-//                setAccumulationParams(newAccParams);
-//            } else {
-//
-//                RealVector paramsVector = getAccumulationParams();
-//
-//                Configuration accumlationFunctionConfiguration = new PhysicsConfiguration("accumulationfunction");
-//
-//                for (int i = 0; i < paramsVector.getSize(); i++) {
-//                    accumlationFunctionConfiguration.setParamValue("param " + i, String.valueOf(paramsVector.getElement(i)));
-//                    accumlationFunctionConfiguration.setParamOrder("param " + i, i);
-//                }
-//
-//                physicsConfiguration.addConfiguration("accumulationfunction", accumlationFunctionConfiguration);
-//            }
-            //Flux function
+
             Configuration fluxFunctionConfig = physicsConfiguration.getConfiguration("fluxfunction");
 
             String[] paramsArray = new String[fluxFunctionConfig.getParamsSize()];
@@ -116,8 +87,8 @@ public class RPNUMERICS {
                     setBoundary(new IsoTriang2DBoundary(boundaryConfiguration.getParam("limits")));
                 }
 
-                //            System.out.println("Limits : " + boundaryConfiguration.getParam("limits"));
-            } else {//            System.out.println("Limits : " + boundaryConfiguration.getParam("limits"));
+                
+            } else {
 
                 Boundary boundary = boundary();
 
@@ -148,6 +119,31 @@ public class RPNUMERICS {
         } catch (Exception ex) {
             Logger.getLogger(RPNUMERICS.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        
+   
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
     }
 
     public static Set<String> getConfigurationNames() {
@@ -952,6 +948,10 @@ public class RPNUMERICS {
     public static native void clearCurvesCache();
     
     public static native void removeCurve(int curveID);
+    
+    public static native List<String> getEigenSortFunctionNames();
+    
+    public static native void setEigenSortFunction(String functionName);
 
     private static native void setFluxParams(FluxParams fluxParams);
 

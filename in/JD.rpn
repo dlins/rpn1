@@ -26,7 +26,6 @@
             </CURVECONFIGURATION>
     
             <CURVECONFIGURATION name="bifurcationcurve">
-
                 <CURVEPARAM name="resolution" value="128 128"/>
             </CURVECONFIGURATION>
     
@@ -50,6 +49,10 @@
                 <CURVEPARAM name="resolution" value="128 128"/>
             </CURVECONFIGURATION>
             
+            
+            <CURVECONFIGURATION name="eigen sort method">
+                <CURVEPARAM name="sort by" value="Using families"/>
+            </CURVECONFIGURATION>
             
             
           
@@ -132,14 +135,14 @@
                 <CURVEPARAM name="resolution" value="128 128"/>
                 <CURVEPARAM name="singular" value="true"/>
                 <CURVEPARAM name="characteristic" value="0"/>
-<!--                <CURVEPARAM name="domain" value="1"/>-->
+                <!--                <CURVEPARAM name="domain" value="1"/>-->
 
             </CURVECONFIGURATION>
   
             <VIEWCONFIGURATION modeldomain="2">
 
 
-           <PROJDESC name="Axis0 Axis1">
+                <PROJDESC name="Axis0 Axis1">
                     <VIEWPARAM name="axis" value="0 1"/>
                     <VIEWPARAM name="vpwidth" value="700"/>
                     <VIEWPARAM name="vpheight" value="700"/>

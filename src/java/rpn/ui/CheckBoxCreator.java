@@ -6,17 +6,12 @@
  */
 package rpn.ui;
 
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.BoxLayout;
-import javax.swing.ButtonGroup;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
 import rpn.configuration.Configuration;
-import rpnumerics.Orbit;
 import rpnumerics.RPNUMERICS;
 
 public class CheckBoxCreator extends UIComponentCreator {
@@ -39,7 +34,7 @@ public class CheckBoxCreator extends UIComponentCreator {
 
         }
         
-        if (configurationParameter_.contains("characteristic")){
+        if (configurationParameter_.contains("characteristic")||configurationParameter_.contains("sort")){
             ComboBoxCreator combo  = new ComboBoxCreator(configuration_, configurationParameter_);
             return combo.createUIComponent();
         }

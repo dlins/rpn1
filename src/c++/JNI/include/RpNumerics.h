@@ -13,6 +13,7 @@
 #include "GridValuesFactory.h"
 #include "StationaryPoint.h"
 #include "WaveCurve.h"
+#include "eigen.h"
 
 class RpNumerics {
 private:
@@ -21,10 +22,12 @@ private:
     static GridValuesFactory * gridValuesFactory_;
     static vector<StationaryPoint* > * stationaryPointVector_;
     static map<int, WaveCurve *> *waveCurveMap_;
-
+    
     static double sigma;
 
     static int curveCounter;
+
+
 
 
 public:
@@ -58,6 +61,13 @@ public:
     static void clearCurveMap();
 
     static void removeCurve(int);
+    
+    static void setEigenOrderFunction (const string & );
+    
+    static map<string,bool (*)(const eigenpair&, const eigenpair&)> *orderFunctionMap_;
+ 
+    
+    
 
 
 
@@ -76,7 +86,7 @@ inline WaveCurve * RpNumerics::getWaveCurve(int n) {
 }
 
 inline void RpNumerics::addWaveCurve(WaveCurve * wc) {
-    waveCurveMap_->insert(std::pair<int,WaveCurve *>(curveCounter,wc));
+    waveCurveMap_->insert(std::pair<int, WaveCurve *>(curveCounter, wc));
 
 }
 
@@ -107,6 +117,35 @@ inline void RpNumerics::setPhysics(const Physics & physics) {
     gridValuesFactory_ = new GridValuesFactory(physics_);
     stationaryPointVector_ = new vector<StationaryPoint *>();
     waveCurveMap_ = new map<int, WaveCurve *>();
+    
+    
+    orderFunctionMap_ = new  map<string,bool (*)(const eigenpair&, const eigenpair&)> ();
+
+    vector<bool (*)(const eigenpair&, const eigenpair&) > order_function;
+    
+    vector<string> eigenSortFunctionNames;
+      
+    
+    Eigen::list_order_eigenpairs(order_function, eigenSortFunctionNames);
+    
+    for (int i = 0; i < eigenSortFunctionNames.size(); i++) {
+         orderFunctionMap_->insert(std::pair<string, bool (*)(const eigenpair&, const eigenpair&)>(eigenSortFunctionNames.at(i), order_function.at(i)));
+
+    }
+      
+//    
+//    for (std::map<string, bool (*)(const eigenpair&, const eigenpair&)>::iterator it = orderFunctionMap_->begin(); it != orderFunctionMap_->end(); ++it) {
+//        cout<< "Primeiro: "<< it->first<<" Segundo: "<<it->second<<endl;
+//    }
+    
+  
+}
+
+
+inline void RpNumerics::setEigenOrderFunction (const string & functionName){
+    
+    Eigen::set_order_eigenpairs(orderFunctionMap_->at(functionName));
+    
 }
 
 inline void RpNumerics::clearCurveMap() {
@@ -138,6 +177,8 @@ inline void RpNumerics::setSigma(double s) {
 inline double RpNumerics::getSigma() {
     return sigma;
 }
+
+
 
 
 

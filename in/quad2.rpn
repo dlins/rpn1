@@ -8,8 +8,8 @@
                 <BOUNDARY name="rect">
 
 
-            <BOUNDARYPARAM name="dimension" value="2" />
-	    <BOUNDARYPARAM name="limits" value="0. 0. 1. 1." />
+                    <BOUNDARYPARAM name="dimension" value="2" />
+                    <BOUNDARYPARAM name="limits" value="0. 0. 1. 1." />
 
             
                 </BOUNDARY>
@@ -48,10 +48,22 @@
             </CURVECONFIGURATION>
 
             
-              <CURVECONFIGURATION name="hugoniotcurve">
+            <CURVECONFIGURATION name="hugoniotcurve">
                 <CURVEPARAM name="resolution" value="120 120"/>
                 <CURVEPARAM name="method" value="IMPLICIT"/>
-              </CURVECONFIGURATION>
+                <CURVEPARAM name="case" value="0"/>
+            </CURVECONFIGURATION>
+              
+              
+              
+            <CURVECONFIGURATION name="wavecurve">
+                <CURVEPARAM name="edge" value="0"/>
+                <CURVEPARAM name="origin" value="13"/>
+                <CURVEPARAM name="curve" value="0"/>
+                <CURVEPARAM name="direction" value="10"/>
+                <CURVEPARAM name="family" value="0"/>
+                
+            </CURVECONFIGURATION>
 
 
             <CURVECONFIGURATION name="fundamentalcurve">
@@ -72,6 +84,14 @@
             <CURVECONFIGURATION name="ellipticboundary">
                 <CURVEPARAM name="resolution" value="128 128"/>
             </CURVECONFIGURATION>
+
+
+      
+            
+            <CURVECONFIGURATION name="eigen sort method">
+                <CURVEPARAM name="sort by" value="Using families"/>
+            </CURVECONFIGURATION>
+            
 
 
 

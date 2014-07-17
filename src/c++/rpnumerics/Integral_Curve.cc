@@ -31,6 +31,8 @@ void Integral_Curve::integral_curve(const RealVector &init,
                                            boundary,
                                            rarcurve,
                                            inflection_points);
+    
+    
 
     for (int i = rarcurve.size() - 1; i >= 0; i--)          ic.push_back(rarcurve[i]); 
     for (int i = inflection_points.size() - 1; i >= 0; i--) ip.push_back(inflection_points[i]);

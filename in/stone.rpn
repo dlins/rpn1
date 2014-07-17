@@ -86,6 +86,13 @@
             
             
             
+            
+                  
+            
+            <CURVECONFIGURATION name="eigen sort method">
+                <CURVEPARAM name="sort by" value="Using families"/>
+            </CURVECONFIGURATION>
+            
 
 
             <CURVECONFIGURATION name="wavecurve">

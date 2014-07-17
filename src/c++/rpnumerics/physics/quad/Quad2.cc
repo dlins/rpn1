@@ -1,5 +1,4 @@
 #include "Quad2.h"
-#include "Double_Contact.h"
 
 Quad2::Quad2(const Quad2FluxParams & params) : SubPhysics(*defaultBoundary(), *new Space("R2", 2), "QuadraticR2", _SIMPLE_ACCUMULATION_) {
 
@@ -13,7 +12,19 @@ Quad2::Quad2(const Quad2FluxParams & params) : SubPhysics(*defaultBoundary(), *n
     setViscosityMatrix(new Viscosity_Matrix());
     preProcessedBoundary_ = defaultBoundary();
 
+    
+    hugoniotCurveArray_->operator []("IMPLICIT") = new ImplicitHugoniotCurve(fluxFunction_, accumulationFunction_, &getBoundary());
 
+    hugoniot_continuation_method_ = new HugoniotContinuation2D2D(&fluxFunction(), &accumulation(), &getBoundary());
+
+    shockCurve_ = new ShockCurve(hugoniot_continuation_method_);
+
+    compositeCurve_ = new CompositeCurve(accumulationFunction_, fluxFunction_, &getBoundary(), shockCurve_, 0);
+    
+    
+    
+    
+    
 }
 
 Quad2::~Quad2() {
@@ -47,6 +58,17 @@ Quad2::Quad2(const Quad2 & copy) : SubPhysics(copy.fluxFunction(), copy.accumula
     setDoubleContactFunction(new Double_Contact());
     setViscosityMatrix(copy.getViscosityMatrix());
     preProcessedBoundary_ = copy.getPreProcessedBoundary()->clone();
+    
+    
+    hugoniotCurveArray_->operator []("IMPLICIT") = new ImplicitHugoniotCurve(fluxFunction_, accumulationFunction_, &getBoundary());
+
+    hugoniot_continuation_method_ = new HugoniotContinuation2D2D(&fluxFunction(), &accumulation(), &getBoundary());
+
+    shockCurve_ = new ShockCurve(hugoniot_continuation_method_);
+
+    compositeCurve_ = new CompositeCurve(accumulationFunction_, fluxFunction_, &getBoundary(), shockCurve_, 0);
+    
+    
 }
 
 void Quad2::setParams(vector<string> params) {

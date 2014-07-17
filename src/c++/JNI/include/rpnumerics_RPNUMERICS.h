@@ -145,6 +145,22 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_removeCurve
 
 /*
  * Class:     rpnumerics_RPNUMERICS
+ * Method:    getEigenSortFunctionNames
+ * Signature: ()Ljava/util/List;
+ */
+JNIEXPORT jobject JNICALL Java_rpnumerics_RPNUMERICS_getEigenSortFunctionNames
+  (JNIEnv *, jclass);
+
+/*
+ * Class:     rpnumerics_RPNUMERICS
+ * Method:    setEigenSortFunction
+ * Signature: (Ljava/lang/String;)V
+ */
+JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setEigenSortFunction
+  (JNIEnv *, jclass, jstring);
+
+/*
+ * Class:     rpnumerics_RPNUMERICS
  * Method:    setFluxParams
  * Signature: (Lrpnumerics/FluxParams;)V
  */

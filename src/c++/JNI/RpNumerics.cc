@@ -58,6 +58,10 @@ GridValuesFactory * RpNumerics::gridValuesFactory_ = NULL;
 vector<StationaryPoint *> * RpNumerics::stationaryPointVector_ = NULL;
 map<int, WaveCurve *> * RpNumerics::waveCurveMap_ = NULL;
 
+
+map<string, bool (*)(const eigenpair&, const eigenpair&) > * RpNumerics::orderFunctionMap_ = NULL;
+
+
 double RpNumerics::sigma = 0;
 
 int RpNumerics::curveCounter = 0;
@@ -79,9 +83,7 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setRPnHome
     Physics::setRPnHome(rpnHomeString);
 
 
-    }
-
-
+}
 
 /*
  * Class:     rpnumerics_RPNUMERICS
@@ -426,6 +428,8 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_clean(JNIEnv * env, jclass cls
 void RpNumerics::clean() {
     delete gridValuesFactory_;
     delete stationaryPointVector_;
+
+    delete orderFunctionMap_;
     delete physics_;
 
 }
@@ -480,6 +484,9 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_initNative(JNIEnv * env, jclas
 
 
 
+
+
+
 }
 
 JNIEXPORT jobject JNICALL Java_rpnumerics_RpNumerics_getXZero(JNIEnv * env, jclass cls) {
@@ -508,14 +515,57 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RpNumerics_getXZero(JNIEnv * env, jcla
     return phasePoint;
 }
 
+/*
+ * Class:     rpnumerics_RPNUMERICS
+ * Method:    getEigenSortFunctionNames
+ * Signature: ()Ljava/util/List;
+ */
+JNIEXPORT jobject JNICALL Java_rpnumerics_RPNUMERICS_getEigenSortFunctionNames
+(JNIEnv * env, jclass cls) {
 
+    jclass arrayListClass = env->FindClass("java/util/ArrayList");
+    jmethodID arrayListConstructor = env->GetMethodID(arrayListClass, "<init>", "()V");
+    jmethodID arrayListAddMethod = env->GetMethodID(arrayListClass, "add", "(Ljava/lang/Object;)Z");
+    
+    jobject functionNamesArray = env->NewObject(arrayListClass, arrayListConstructor, NULL);
 
+    for (std::map < string, bool (*)(const eigenpair&, const eigenpair&) >::iterator it = RpNumerics::orderFunctionMap_->begin(); it != RpNumerics::orderFunctionMap_->end(); ++it) {
+        
+        jstring functionOrderName =   env->NewStringUTF(it->first.c_str());
+        env->CallObjectMethod(functionNamesArray, arrayListAddMethod, functionOrderName);
+
+    }
+
+    return functionNamesArray;
+
+}
 
 /*
  * Class:     rpnumerics_RPNUMERICS
- * Method:    createNativeRarefactionFlow
+ * Method:    setEigenSortFunction
  * Signature: (Ljava/lang/String;)V
  */
+JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setEigenSortFunction
+(JNIEnv * env, jclass cls, jstring functionName) {
+
+
+
+    const char *functionID;
+
+    functionID = env->GetStringUTFChars(functionName, NULL);
+
+
+    string nativeFunctionName(functionID);
+
+
+    RpNumerics::setEigenOrderFunction(nativeFunctionName);
+
+
+
+
+
+
+}
 
 /*
  * Class:     rpnumerics_RPNUMERICS
@@ -639,9 +689,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RPNUMERICS_boundary(JNIEnv * env, jcla
 
 
     }
-    
-}
 
+}
 
 JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_clearCurvesCache(JNIEnv * env, jclass cls) {
     RpNumerics::clearCurveMap();

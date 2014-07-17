@@ -160,10 +160,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
     }
 
 
-
-
-
-
     jobject transitionArray = env->NewObject(arrayListClass, arrayListConstructor, NULL);
 
 

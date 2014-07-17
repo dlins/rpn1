@@ -12,7 +12,7 @@
             <BOUNDARYPARAM name="dimension" value="2" />
             <BOUNDARYPARAM name="limits" value="0.0 0.0 0.0 1.0 1.0 0.0" />
 
-        </BOUNDARY>-->
+                </BOUNDARY>-->
 
                 <PHYSICSCONFIG name="fluxfunction">
                     <PHYSICSPARAM name="phimax" position="0" value ="1.2" />
@@ -33,9 +33,23 @@
             </METHOD>
 
 
-            <CURVECONFIGURATION name="hugoniotcurve">
-                <CURVEPARAM name="resolution" value="128 128"/>
+       <CURVECONFIGURATION name="wavecurve">
+                <CURVEPARAM name="edge" value="0"/>
+                <CURVEPARAM name="origin" value="13"/>
+                <CURVEPARAM name="curve" value="0"/>
+                <CURVEPARAM name="direction" value="10"/>
+                <CURVEPARAM name="family" value="0"/>
+                
             </CURVECONFIGURATION>
+    
+    
+            <CURVECONFIGURATION name="hugoniotcurve">
+                <CURVEPARAM name="resolution" value="120 120"/>
+                <CURVEPARAM name="method" value="IMPLICIT"/>
+                <CURVEPARAM name="case" value="0"/>
+                
+            </CURVECONFIGURATION>
+    
     
     
             <CURVECONFIGURATION name="fundamentalcurve">
@@ -74,6 +88,14 @@
                 <CURVEPARAM name="level" value="0.1"/>
 
             </CURVECONFIGURATION>
+            
+            
+                  
+            
+            <CURVECONFIGURATION name="eigen sort method">
+                <CURVEPARAM name="sort by" value="Using families"/>
+            </CURVECONFIGURATION>
+            
 
 
             <CURVECONFIGURATION name="doublecontactcurve">
@@ -89,14 +111,14 @@
             </CURVECONFIGURATION>
 
 
+
             <CURVECONFIGURATION name="bifurcationcurve">
-                <CURVEPARAM name="curvefamily" value="1"/>
-                <CURVEPARAM name="domainfamily" value="1"/>
-                <CURVEPARAM name="caracteristicwhere" value="1"/>
-                <CURVEPARAM name="singular" value="1"/>
 
-
+                <CURVEPARAM name="resolution" value="60 60"/>
             </CURVECONFIGURATION>
+
+
+
 
             <CURVECONFIGURATION name="boundaryextensioncurve">
 
