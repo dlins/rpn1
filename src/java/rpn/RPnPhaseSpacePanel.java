@@ -426,14 +426,6 @@ public void clearPointSelection(){
         ((Graphics2D) g).fill(s);
 
 
-        /*
-         * POINT MARKS
-         */
-        g.setColor(DEFAULT_POINTMARK_COLOR);
-        for (int i = 0; i < getCastedUI().pointMarkBuffer().size(); i++) {
-            g.fillRect(((Point) getCastedUI().pointMarkBuffer().get(i)).x,
-                    ((Point) getCastedUI().pointMarkBuffer().get(i)).y, 5, 5);
-        }
 
 
         /*
@@ -596,6 +588,17 @@ public void clearPointSelection(){
          */
         if (scene_ != null) {
             scene_.draw((Graphics2D) g);
+        }
+        
+        
+        
+        /*
+         * POINT MARKS
+         */
+        g.setColor(DEFAULT_POINTMARK_COLOR);
+        for (int pointIndex = 0; pointIndex < getCastedUI().pointMarkBuffer().size(); pointIndex++) {
+            g.fillRect(((Point) getCastedUI().pointMarkBuffer().get(pointIndex)).x,
+                    ((Point) getCastedUI().pointMarkBuffer().get(pointIndex)).y, 5, 5);
         }
 
     }

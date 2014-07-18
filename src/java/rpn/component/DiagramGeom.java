@@ -8,11 +8,8 @@ package rpn.component;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import rpn.component.util.GraphicsUtil;
-import rpn.component.util.Label;
-import rpn.component.util.LinePlotted;
 import rpnumerics.Diagram;
 import rpnumerics.DiagramLine;
 import wave.multid.model.MultiPolyLine;
@@ -23,7 +20,6 @@ import wave.multid.DimMismatchEx;
 import wave.multid.Space;
 import wave.multid.model.MultiGeometryImpl;
 import wave.multid.view.ViewingAttr;
-import wave.util.RealSegment;
 import wave.util.RealVector;
 
 public class DiagramGeom extends MultiGeometryImpl implements RpGeometry {
@@ -142,30 +138,7 @@ public class DiagramGeom extends MultiGeometryImpl implements RpGeometry {
 
     }
 
-    public RealVector getPointByIndex(int diagramLineIndex, double x) {
-
-        
-        RealVector origin = new RealVector(2);
-        Diagram geomSource = (Diagram) factory_.geomSource();
-        List<DiagramLine> lines = geomSource.getLines();
-        DiagramLine diagramLine = lines.get(diagramLineIndex);
-        List<RealSegment> segments = diagramLine.getSegments();
-
-        for (int i = 0; i < segments.size(); i++) {
-            RealSegment realSegment = segments.get(i);
-
-            if (realSegment.p1().getElement(0) == x) {
-                return realSegment.p1();
-                
-            }
-//            } else {
-//                return realSegment.p2();
-//            }
-
-        }
-
-        return origin;
-    }
+    
 
     public RealVector getMax() {
         Diagram geomSource = (Diagram) factory_.geomSource();
@@ -219,14 +192,7 @@ public class DiagramGeom extends MultiGeometryImpl implements RpGeometry {
     @Override
     public void showSpeed(CoordsArray curvePoint, CoordsArray wcPoint, ViewingTransform transform) {
 
-        List<Object> lineElements = new ArrayList<Object>();
-
-        lineElements.add(new RealVector(curvePoint.getCoords()));
-        lineElements.add(new RealVector(wcPoint.getCoords()));
-        lineElements.add("Teste");
-
-        LinePlotted speed = new LinePlotted(lineElements, transform, new ViewingAttr(Color.white));
-        addAnnotation(speed);
+       
 
     }
 
