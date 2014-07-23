@@ -252,6 +252,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc
 
 
 
+    cout<<"Antes de adicionar curva de onda: "<<RpNumerics::getCurrentCurveID()<<endl;
     RpNumerics::addWaveCurve(hwc);
 
     jobject waveCurve = (env)->NewObject(classWaveCurve, waveCurveConstructor, familyNumber, timeDirection);

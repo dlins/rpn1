@@ -16,6 +16,7 @@ import java.util.Vector;
 import rpn.RPnPhaseSpaceAbstraction;
 import rpn.parser.RPnDataModule;
 
+
 //public abstract class RpCurve extends MultiPolyLine {
 public abstract class RPnCurve implements RpSolution {
 

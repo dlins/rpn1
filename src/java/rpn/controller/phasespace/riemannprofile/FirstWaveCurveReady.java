@@ -16,6 +16,7 @@ public class FirstWaveCurveReady implements RiemannProfileState {
         firstWaveCurve_ = firstWaveCurve;
     }
     
+    @Override
     public void add(RpGeometry geom) {
         
         if (geom instanceof WaveCurveGeom) {

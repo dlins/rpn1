@@ -11,13 +11,13 @@ import rpnumerics.Area;
 import rpnumerics.RiemannProfileCalc;
 import rpnumerics.WaveCurve;
 
-public class StandartRiemannProfileState implements RiemannProfileState, RiemannProfileReady {
+public class StandardRiemannProfileState implements RiemannProfileState, RiemannProfileReady {
 
     private GraphicsUtil area_;
     private final WaveCurveGeom firstWaveCurve_;
     private final WaveCurveGeom secondWaveCurve_;
 
-    public StandartRiemannProfileState(WaveCurveGeom firstWaveCurve, WaveCurveGeom secondWaveCurve, GraphicsUtil area) {
+    public StandardRiemannProfileState(WaveCurveGeom firstWaveCurve, WaveCurveGeom secondWaveCurve, GraphicsUtil area) {
 
         firstWaveCurve_ = firstWaveCurve;
         secondWaveCurve_ = secondWaveCurve;

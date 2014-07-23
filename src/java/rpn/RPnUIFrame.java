@@ -468,62 +468,62 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         
     }
     
-    public void updateCharacteristicsFrames(int charPhaseSpaceIndex, RealVector profileMin, RealVector profileMax) {
-        
-        RectBoundary boundary = new RectBoundary(profileMin, profileMax);
-        Space characteristicsSpace = new Space("CharacteristicsSpace", 2);
-        
-        int[] characteristicsIndices = {0, 1};
-        
-        wave.multid.graphs.ClippedShape clipping = new wave.multid.graphs.ClippedShape(boundary);
-        RPnProjDescriptor projDescriptor = new RPnProjDescriptor(characteristicsSpace, "CharacteristicsSpace", 400, 400, characteristicsIndices, false);
-        wave.multid.view.ViewingTransform characteristicsTransform = projDescriptor.createTransform(clipping);
-        
-        try {
-            wave.multid.view.Scene characteristicsScene = RPnDataModule.CHARACTERISTICSPHASESPACEARRAY[charPhaseSpaceIndex].createScene(characteristicsTransform, new wave.multid.view.ViewingAttr(Color.black));
-            RPnPhaseSpaceFrame characteristicsFrame = new RPnRiemannFrame(characteristicsScene, commandMenu_);
-            
-            characteristicsFrame.setTitle("Characteristic " + charPhaseSpaceIndex);
-            characteristicsFrame.pack();
-            characteristicsFrames_.add(characteristicsFrame);
-            
-        } catch (DimMismatchEx ex) {
-            ex.printStackTrace();
-        }
-        
-    }
+//    public void updateCharacteristicsFrames(int charPhaseSpaceIndex, RealVector profileMin, RealVector profileMax) {
+//        
+//        RectBoundary boundary = new RectBoundary(profileMin, profileMax);
+//        Space characteristicsSpace = new Space("CharacteristicsSpace", 2);
+//        
+//        int[] characteristicsIndices = {0, 1};
+//        
+//        wave.multid.graphs.ClippedShape clipping = new wave.multid.graphs.ClippedShape(boundary);
+//        RPnProjDescriptor projDescriptor = new RPnProjDescriptor(characteristicsSpace, "CharacteristicsSpace", 400, 400, characteristicsIndices, false);
+//        wave.multid.view.ViewingTransform characteristicsTransform = projDescriptor.createTransform(clipping);
+//        
+//        try {
+//            wave.multid.view.Scene characteristicsScene = RPnDataModule.CHARACTERISTICSPHASESPACEARRAY[charPhaseSpaceIndex].createScene(characteristicsTransform, new wave.multid.view.ViewingAttr(Color.black));
+//            RPnPhaseSpaceFrame characteristicsFrame = new RPnRiemannFrame(characteristicsScene, commandMenu_);
+//            
+//            characteristicsFrame.setTitle("Characteristic " + charPhaseSpaceIndex);
+//            characteristicsFrame.pack();
+//            characteristicsFrames_.add(characteristicsFrame);
+//            
+//        } catch (DimMismatchEx ex) {
+//            ex.printStackTrace();
+//        }
+//        
+//    }
     
-    public void updateRiemannProfileFrames(RealVector profileMin, RealVector profileMax) {
-        
-        if (riemannFrames_ != null) {
-            for (RPnPhaseSpaceFrame rPnPhaseSpaceFrame : riemannFrames_) {
-                rPnPhaseSpaceFrame.dispose();
-            }
-        }
-        
-        System.out.println("Limites de riemann: " + profileMin + profileMax);
-        RectBoundary boundary = new RectBoundary(profileMin, profileMax);
-        Space riemanProfileSpace = new Space("RiemannProfileSpace", RPNUMERICS.domainDim() + 1);
-        riemannFrames_ = new RPnRiemannFrame[RPNUMERICS.domainDim()];
-        
-        for (int i = 0; i < riemannFrames_.length; i++) {
-            int[] riemannProfileIndices = {0, i + 1};
-            
-            wave.multid.graphs.ClippedShape clipping = new wave.multid.graphs.ClippedShape(boundary);
-            RPnProjDescriptor projDescriptor = new RPnProjDescriptor(riemanProfileSpace, "RiemannProfileSpace", 400, 400, riemannProfileIndices, false);
-            wave.multid.view.ViewingTransform riemanTesteTransform = projDescriptor.createTransform(clipping);
-            
-            try {
-                wave.multid.view.Scene riemannScene = RPnDataModule.RIEMANNPHASESPACE.createScene(riemanTesteTransform, new wave.multid.view.ViewingAttr(Color.black));
-                riemannFrames_[i] = new RPnRiemannFrame(riemannScene, commandMenu_);
-                
-            } catch (DimMismatchEx ex) {
-                ex.printStackTrace();
-            }
-            riemannFrames_[i].pack();
-        }
-        
-    }
+//    public void updateRiemannProfileFrames(RealVector profileMin, RealVector profileMax) {
+//        
+//        if (riemannFrames_ != null) {
+//            for (RPnPhaseSpaceFrame rPnPhaseSpaceFrame : riemannFrames_) {
+//                rPnPhaseSpaceFrame.dispose();
+//            }
+//        }
+//        
+//        System.out.println("Limites de riemann: " + profileMin + profileMax);
+//        RectBoundary boundary = new RectBoundary(profileMin, profileMax);
+//        Space riemanProfileSpace = new Space("RiemannProfileSpace", RPNUMERICS.domainDim() + 1);
+//        riemannFrames_ = new RPnRiemannFrame[RPNUMERICS.domainDim()];
+//        
+//        for (int i = 0; i < riemannFrames_.length; i++) {
+//            int[] riemannProfileIndices = {0, i + 1};
+//            
+//            wave.multid.graphs.ClippedShape clipping = new wave.multid.graphs.ClippedShape(boundary);
+//            RPnProjDescriptor projDescriptor = new RPnProjDescriptor(riemanProfileSpace, "RiemannProfileSpace", 400, 400, riemannProfileIndices, false);
+//            wave.multid.view.ViewingTransform riemanTesteTransform = projDescriptor.createTransform(clipping);
+//            
+//            try {
+//                wave.multid.view.Scene riemannScene = RPnDataModule.RIEMANNPHASESPACE.createScene(riemanTesteTransform, new wave.multid.view.ViewingAttr(Color.black));
+//                riemannFrames_[i] = new RPnRiemannFrame(riemannScene, commandMenu_);
+//                
+//            } catch (DimMismatchEx ex) {
+//                ex.printStackTrace();
+//            }
+//            riemannFrames_[i].pack();
+//        }
+//        
+//    }
     
     protected void phaseSpaceFramesInit(Boundary boundary) {
         

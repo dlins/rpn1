@@ -29,7 +29,7 @@ public class SecondWaveCurveReady extends FirstWaveCurveReady {
     @Override
     public void select(GraphicsUtil area) {
 
-        StandartRiemannProfileState standardState = new StandartRiemannProfileState(getFirstWaveCurve(), secondWaveCurve_, area);
+        StandardRiemannProfileState standardState = new StandardRiemannProfileState(getFirstWaveCurve(), secondWaveCurve_, area);
         RiemannProfileCommand.instance().changeState(standardState);
 
     }

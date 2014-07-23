@@ -8,6 +8,7 @@ package rpnumerics;
 
 import rpn.configuration.Configuration;
 import java.util.List;
+import wave.util.RealSegment;
 import wave.util.RealVector;
 
 public class RiemannProfileCalc implements RpCalculation, RpDiagramCalc {
@@ -19,8 +20,6 @@ public class RiemannProfileCalc implements RpCalculation, RpDiagramCalc {
     //
 
     private Area area_;
-    private List<FundamentalCurve> forwardList_;
-    private List<FundamentalCurve> backwardList_;
     private Configuration configuration_;
     private int[] waveCurvesID_;
     private RealVector pointOnSecondWaveCurve_;
@@ -66,6 +65,8 @@ public class RiemannProfileCalc implements RpCalculation, RpDiagramCalc {
 
     public RpSolution calc() throws RpException {
 
+        
+       
         RpSolution result = null;
 
         if (isAllProfile_) {
@@ -84,7 +85,15 @@ public class RiemannProfileCalc implements RpCalculation, RpDiagramCalc {
             throw new RpException("Intersection not found");
         }
 
-        return result;
+        Diagram riemannProfile = (Diagram) result;
+
+        if (!isRiemannSpeedLimitsGood(riemannProfile)) {
+            throw new RpException("Wrong speed limits");
+        }
+
+        addSteadyState(riemannProfile);
+
+        return riemannProfile;
     }
 
     private native RpSolution nativeCalc(RealVector pmin, RealVector pmax, int[] waveCurveIdArray) throws RpException;
@@ -112,4 +121,78 @@ public class RiemannProfileCalc implements RpCalculation, RpDiagramCalc {
         return calc();
 
     }
+
+    private void addSteadyState(Diagram riemannProfile) {
+        
+        System.out.println("Adicionando estado constante !!!");
+
+        String Xlimits[] = RPNUMERICS.getParamValue("riemannprofile", "speedrange").split(" ");
+
+        double xMin = Double.parseDouble(Xlimits[0]);
+
+        double xMax = Double.parseDouble(Xlimits[1]);
+
+        List<DiagramLine> lines = riemannProfile.getLines();
+
+        for (int i=0 ; i < lines.size();i++) {
+
+            RealSegment firstSegment = lines.get(i).getSegments().get(0);
+
+            RealVector leftPoint = new RealVector(2);
+
+            leftPoint.setElement(0, xMin);
+            
+            leftPoint.setElement(1, firstSegment.p1().getElement(1));
+            
+            lines.get(i).addCoord(0, 0, leftPoint);
+
+            
+            
+            List<RealVector> lineList = lines.get(i).getCoords().get(0);
+            RealVector lastPoint = lineList.get(lineList.size()-1);
+            RealVector rightPoint = new RealVector(2);
+
+            rightPoint.setElement(0, xMax);
+
+            rightPoint.setElement(1, lastPoint.getElement(1));
+            
+            lines.get(i).addCoord(0, lineList.size()-1, lastPoint);
+              
+            lines.get(i).addCoord(0, lineList.size()-1, rightPoint);
+            
+  
+
+        }
+
+    }
+
+    private boolean isRiemannSpeedLimitsGood(Diagram riemannProfile) {
+
+        String Xlimits[] = RPNUMERICS.getParamValue("riemannprofile", "speedrange").split(" ");
+
+        double xMin = Double.parseDouble(Xlimits[0]);
+
+        double xMax = Double.parseDouble(Xlimits[1]);
+
+        List<DiagramLine> lines = riemannProfile.getLines();
+
+        for (DiagramLine diagramLine : lines) {
+
+            RealVector lineMin = diagramLine.getMin();
+            RealVector lineMax = diagramLine.getMax();
+
+            if (lineMin.getElement(0) < xMin) {
+                return false;
+            }
+
+            if (lineMax.getElement(0) > xMax) {
+                return false;
+
+            }
+
+        }
+
+        return true;
+    }
+
 }

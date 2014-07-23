@@ -13,6 +13,8 @@ void WaveCurve::init(const WaveCurve &orig){
 }
 
 WaveCurve::WaveCurve(){
+    
+    std::cout << "WaveCurve ctor. this = " << this << std::endl;
 }
 
 WaveCurve::WaveCurve(const WaveCurve &orig){
@@ -24,6 +26,7 @@ WaveCurve::WaveCurve(const WaveCurve *orig){
 }
 
 WaveCurve::~WaveCurve(){
+    std::cout << "    dtor. this = " << this << std::endl;
 }
 
 WaveCurve WaveCurve::operator=(const WaveCurve &orig){

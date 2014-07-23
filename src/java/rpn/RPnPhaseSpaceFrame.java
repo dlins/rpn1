@@ -23,7 +23,7 @@ public class RPnPhaseSpaceFrame extends JFrame {
 
     JPanel contentPane;
     private RPnPhaseSpacePanel phaseSpacePanel = null;
-    BorderLayout borderLayout1 = new BorderLayout();
+    BorderLayout borderLayout1 = new BorderLayout(5,5);
     JPanel statusPanel = new JPanel();
     JPanel jPanel2 = new JPanel();
     JPanel jPanel3 = new JPanel();

@@ -20,6 +20,8 @@ public class DiagramLine {
     //
 
     private final List<List<RealVector>> coords_;
+    
+    private List<RealSegment> segments_;
 
     private int size_;
 
@@ -41,6 +43,8 @@ public class DiagramLine {
             size_ += list.size();
 
         }
+        
+        segments_=createSegmentsList();
 
     }
 
@@ -56,14 +60,90 @@ public class DiagramLine {
             size_ += list.size();
 
         }
+        
+        segments_=createSegmentsList();
+
+    }
+    
+    
+    
+    
+    public RealVector getMin() {
+       
+
+        double minX = 0;
+        double minY = 0;
+        
+            List<List<RealVector>> coords = getCoords();
+
+            for (List<RealVector> list : coords) {
+
+                for (RealVector realVector : list) {
+
+                    if (realVector.getElement(0) < minX) {
+                        minX = realVector.getElement(0);
+                    }
+
+                    if (realVector.getElement(1) < minY) {
+                        minY = realVector.getElement(1);
+                    }
+
+                }
+            
+        }
+
+        RealVector limits = new RealVector(2);
+        limits.setElement(0, minX);
+        limits.setElement(1, minY);
+        return limits;
 
     }
 
+    
+
+    public RealVector getMax() {
+       
+
+        double maxX = 0;
+        double maxY = 0;
+      
+            List<List<RealVector>> coords = getCoords();
+
+            for (List<RealVector> list : coords) {
+
+                for (RealVector realVector : list) {
+
+                    if (realVector.getElement(0) > maxX) {
+                        maxX = realVector.getElement(0);
+                    }
+
+                    if (realVector.getElement(1) > maxY) {
+                        maxY = realVector.getElement(1);
+                    }
+
+                }
+        }
+
+        RealVector limits = new RealVector(2);
+        limits.setElement(0, maxX);
+        limits.setElement(1, maxY);
+        return limits;
+
+    }
+    
+    
     public List<RealSegment> getSegments() {
+
+       return segments_;
+    }
+    
+    
+    
+    private List<RealSegment> createSegmentsList() {
 
         List<RealVector> singleRealVectorList = new ArrayList<RealVector>();
 
-        for (List<RealVector> realVectorList : getCoords()) {
+        for (List<RealVector> realVectorList : coords_) {
             singleRealVectorList.addAll(realVectorList);
         }
 
@@ -82,9 +162,18 @@ public class DiagramLine {
 
     }
 
+    
+    
+    public void addCoord(int partIndex, int coordIndex,RealVector coord){
+        coords_.get(partIndex).add(coordIndex,coord);
+        segments_=createSegmentsList();
+    }
+    
     public void addPart(List<RealVector> part) {
         coords_.add(part);
+        segments_= createSegmentsList();
     }
+
 
     public List<List<RealVector>> getCoords() {
         return coords_;

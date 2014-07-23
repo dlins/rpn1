@@ -84,12 +84,23 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RiemannProfileCalc_nativeCalc
 
 
 
+
+    cout << RpNumerics::getWaveCurve(nativeWaveCurvesIDArray[0]) << endl;
+    cout << RpNumerics::getWaveCurve(nativeWaveCurvesIDArray[1]) << endl;
+
+
+
     const WaveCurve * waveCurve1 = RpNumerics::getWaveCurve(nativeWaveCurvesIDArray[0]);
     const WaveCurve * waveCurve2 = RpNumerics::getWaveCurve(nativeWaveCurvesIDArray[1]);
 
+    //    
+    //
+    //    const WaveCurve * waveCurve1 = RpNumerics::getWaveCurve(0);
+    //    const WaveCurve * waveCurve2 = RpNumerics::getWaveCurve(1);
 
-    cout << "Curva 0 " << waveCurve1 << endl;
-    cout << "Curva 1 " << waveCurve2 << endl;
+
+    cout << "Curva 0 " << waveCurve1 << waveCurve1->reference_point.point << endl;
+    cout << "Curva 1 " << waveCurve2 << waveCurve2->reference_point.point << endl;
 
 
 
@@ -100,7 +111,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RiemannProfileCalc_nativeCalc
     int subPoint1;
     int subPoint2;
 
-   
+
 
     if (RpNumerics::getPhysics().domain().dim() == 3) {
         nativeDownLeft.resize(3);
@@ -115,21 +126,21 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RiemannProfileCalc_nativeCalc
     RpNumerics::getPhysics().getSubPhysics(0).preProcess(nativeTopRight);
 
 
-    
 
-    cout<<"AREA: " << nativeDownLeft << " " << nativeTopRight << endl;
 
-    
+    cout << "AREA: " << nativeDownLeft << " " << nativeTopRight << endl;
+
+
 
     int intersectionCode = WaveCurveFactory::intersection(*waveCurve1, *waveCurve2, nativeDownLeft, nativeTopRight,
             intersectionPoint, subcurve1, subPoint1, subcurve2, subPoint2);
-    
-    
-       if (intersectionCode == WAVE_CURVE_INTERSECTION_NOT_FOUND){
-           cout<<"Intersection not found !"<<endl;
-           return NULL;
-       }
-    
+
+
+    if (intersectionCode == WAVE_CURVE_INTERSECTION_NOT_FOUND) {
+        cout << "Intersection not found !" << endl;
+        return NULL;
+    }
+
 
     RiemannProblem riemanProblem;
 
@@ -140,25 +151,25 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RiemannProfileCalc_nativeCalc
             *waveCurve2, subcurve2, subPoint2, 1,
             profile, speedVector);
 
-    if (profile.size() == 0){
-        return NULL;        
+    if (profile.size() == 0) {
+        return NULL;
     }
 
-    
-//    
-//            cout << "Coordenadas do perfil" << endl;
-//            for (int i = 0; i < profile.size(); i++) {
-//                
-//                cout<<"Tamanho de um ponto do profile: "<<profile.at(i).size()<<endl;
-////                cout  << profile.at(i)(0) << " " << profile.at(i)(1) << endl;
-//                cout  << profile.at(i) << endl;
-//            }
-//            for (int i = 0; i < speedVector.size(); i++) {
-//        
-//                cout  << speedVector.at(i)<< endl;
-//        
-//            }
 
+        
+                cout << "Coordenadas do perfil" << endl;
+                for (int i = 0; i < profile.size(); i++) {
+                    
+//                    cout<<"Tamanho de um ponto do profile: "<<profile.at(i).size()<<endl;
+    //                cout  << profile.at(i)(0) << " " << profile.at(i)(1) << endl;
+                    cout  << profile.at(i) << endl;
+                }
+//                for (int i = 0; i < speedVector.size(); i++) {
+//            
+//                    cout  << speedVector.at(i)<< endl;
+//            
+//                }
+//
 
 
 

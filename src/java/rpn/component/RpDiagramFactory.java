@@ -74,7 +74,6 @@ public final class RpDiagramFactory implements RpGeomFactory {
             List<List<RealVector>> lineCoords = line.getCoords();
 
             int index = 0;
-            System.out.println("Quatidade de partes: " + line.getCoords().size());
             for (List<RealVector> linePart : lineCoords) {
                 CoordsArray[] diagramCoords = MultidAdapter.converseRealVectorListToCoordsArray(linePart);
                 MultiPolyLine diagramLine = new MultiPolyLine(diagramCoords, new ViewingAttr(Color.white));
@@ -95,7 +94,7 @@ public final class RpDiagramFactory implements RpGeomFactory {
 
     }
 
-    private Color colorChooser(int index) {
+    public static Color colorChooser(int index) {
 
         switch (index) {
 
@@ -109,7 +108,7 @@ public final class RpDiagramFactory implements RpGeomFactory {
                 return Color.green;
 
             case 3:
-                return Color.red;
+                return Color.MAGENTA;
             case 4:
                 return Color.gray;
             case 5:

@@ -36,6 +36,24 @@ public class Diagram implements  RpSolution  {
     public List<DiagramLine> getLines() {
         return lines_;
     }
+    
+    
+    
+     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
    
 
