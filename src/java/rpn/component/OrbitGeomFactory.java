@@ -7,6 +7,7 @@ package rpn.component;
 
 import java.awt.Color;
 import rpn.controller.OrbitController;
+import rpn.controller.RiemannProfileController;
 import rpn.controller.RpController;
 import rpnumerics.*;
 import wave.multid.CoordsArray;

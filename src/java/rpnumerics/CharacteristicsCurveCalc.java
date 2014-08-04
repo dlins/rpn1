@@ -66,4 +66,9 @@ public class CharacteristicsCurveCalc implements RpCalculation {
     public RpSolution recalc(List<Area> area) throws RpException {
         throw new UnsupportedOperationException("Not supported yet.");
     }
+
+    @Override
+    public void setReferencePoint(OrbitPoint referencePoint) {
+        
+    }
 }

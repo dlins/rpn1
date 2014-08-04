@@ -14,9 +14,12 @@ import rpn.configuration.Configuration;
 
 
 public interface RpCalculation {
+
     RpSolution calc() throws RpException;
 
     RpSolution recalc() throws RpException;
+    
+    void setReferencePoint(OrbitPoint referencePoint);
 
     RpSolution recalc(List<Area> area) throws RpException;
     

@@ -312,5 +312,10 @@ public class ConnectionOrbitCalc implements RpCalculation {
         return configuration_;
     }
 
+    @Override
+    public void setReferencePoint(OrbitPoint referencePoint) {
+       
+    }
+
    
 }

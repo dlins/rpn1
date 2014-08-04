@@ -48,7 +48,6 @@ public class UIController extends ComponentUI {
     static public final Cursor DEFAULT_CURSOR = Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR);
     static public UI_ACTION_SELECTED INITSTATE = null;
 
-
     //
     // Members
     //
@@ -66,6 +65,8 @@ public class UIController extends ComponentUI {
     private boolean drag_ = false;
     private List<RpGeometry> selectedGeometryList_;
 
+    private ReferencePointSelectorListener referencePointSelector_;
+
     //
     // Constructors
     //
@@ -74,15 +75,16 @@ public class UIController extends ComponentUI {
         mouseMotionController_ = new MouseMotionController();
         stateController_ = new StateInputController(RPnDesktopPlotter.getUIFrame());
 
+        referencePointSelector_ = new ReferencePointSelectorListener();
+
         installedPanels_ = new ArrayList();
         mouseController_ = new MouseController();
         globalInputTable_ = new UserInputTable(rpnumerics.RPNUMERICS.domainDim());
 
-
         handler_ = new CurvesConfig();
         auxPanelsEnabled_ = true;
 
-        activePhaseSpace_ = RPnDataModule.PHASESPACE;       
+        activePhaseSpace_ = RPnDataModule.PHASESPACE;
         selectedGeometryList_ = new ArrayList<RpGeometry>();
 
     }
@@ -162,17 +164,12 @@ public class UIController extends ComponentUI {
         @Override
         public void mouseDragged(MouseEvent event) {
 
-
-
             if (event.getModifiersEx() == MouseEvent.BUTTON1_DOWN_MASK) {
-
 
                 RPnUIFrame.clearStatusMessage();
                 drag_ = true;
 
                 if (event.getComponent() instanceof RPnPhaseSpacePanel) {
-
-
 
                     RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) event.getComponent();
 
@@ -182,7 +179,6 @@ public class UIController extends ComponentUI {
                         RealVector newValue = userInputList.values();
                         RPnPhaseSpaceAbstraction phaseSpace = RPnDataModule.PHASESPACE;
                         RpGeometry geom = phaseSpace.findClosestGeometry(newValue);
-
 
                         //RpGeometry geom = RPnPhaseSpaceAbstraction.findClosestGeometry(newValue);
                         RPnCurve curve = (RPnCurve) (geom.geomFactory().geomSource());
@@ -200,7 +196,6 @@ public class UIController extends ComponentUI {
                         globalInputTable().reset();
                         resetPanelsCursorCoords();
 
-
                         if (event.isShiftDown()) {
                             userInputComplete(globalInputTable().values());
                         } else {
@@ -211,8 +206,6 @@ public class UIController extends ComponentUI {
 //                            action.setPhaseSpace((RPnPhaseSpaceAbstraction) panel.scene().getAbstractGeom());
 //                            DragPlotAgent.instance().setPhaseSpace((RPnPhaseSpaceAbstraction) panel.scene().getAbstractGeom());
 //                        }
-
-
                             DragPlotCommand.instance().execute();
                         }
                     }
@@ -231,61 +224,61 @@ public class UIController extends ComponentUI {
         public void mouseReleased(MouseEvent event) {
 
 
-	   /* this will be fixed input mouse released !
+            /* this will be fixed input mouse released !
  
-	    if(event.getClickCount() == 2 && globalInputTable().isComplete()) {
-                globalInputTable().reset();
-                resetPanelsCursorCoords();
-            }
+             if(event.getClickCount() == 2 && globalInputTable().isComplete()) {
+             globalInputTable().reset();
+             resetPanelsCursorCoords();
+             }
 
-	   */
-
+             */
         }
 
         @Override
         public void mousePressed(MouseEvent event) {
-            drag_ = false;
+            if (event.getButton() == MouseEvent.BUTTON1) {
+                drag_ = false;
 
-            RPnUIFrame.clearStatusMessage();
-            RPnUIFrame.disableSliders();
+                RPnUIFrame.clearStatusMessage();
+                RPnUIFrame.disableSliders();
 
-            if (event.getComponent() instanceof RPnPhaseSpacePanel) {
+                if (event.getComponent() instanceof RPnPhaseSpacePanel) {
 
-                RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) event.getComponent();
+                    RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) event.getComponent();
 
-                // ?? pra que isso .. me parece mal uso de GLOBAL VAR. mvera
-                RPnPhaseSpaceAbstraction.namePhaseSpace = ((RPnPhaseSpaceAbstraction) panel.scene().getAbstractGeom()).getName();   //** acrescentei isso (Leandro)
+                    // ?? pra que isso .. me parece mal uso de GLOBAL VAR. mvera
+                    RPnPhaseSpaceAbstraction.namePhaseSpace = ((RPnPhaseSpaceAbstraction) panel.scene().getAbstractGeom()).getName();   //** acrescentei isso (Leandro)
 
-                panel.setName(RPnPhaseSpaceAbstraction.namePhaseSpace);
+                    panel.setName(RPnPhaseSpaceAbstraction.namePhaseSpace);
 
-                //panel.setName(((RPnPhaseSpaceAbstraction) panel.scene().getAbstractGeom()).getName());
+                    //panel.setName(((RPnPhaseSpaceAbstraction) panel.scene().getAbstractGeom()).getName());
+                    if (RPnNetworkStatus.instance().isMaster() || !(RPnNetworkStatus.instance().isOnline())) {
 
-                if (RPnNetworkStatus.instance().isMaster() || !(RPnNetworkStatus.instance().isOnline())) {
+                        int sceneDim = panel.scene().getViewingTransform().projectionMap().getDomain().getDim();
+                        if (sceneDim == globalInputTable_.flags().length) {
 
-                    int sceneDim = panel.scene().getViewingTransform().projectionMap().getDomain().getDim();
-                    if (sceneDim == globalInputTable_.flags().length) {
+                            updateUserInputTable(panel, event.getPoint());
+                            evaluatePanelsCursorCoords(panel, event.getPoint());
 
-                        updateUserInputTable(panel, event.getPoint());
-                        evaluatePanelsCursorCoords(panel, event.getPoint());
+                            // execute
+                            if (globalInputTable().isComplete()) {
 
-                        // execute
-                        if (globalInputTable().isComplete()) {
+                                if (panel.isBlinkLastInputCursorPos()) {
+                                    userInputComplete(globalInputTable().lastValues());
+                                } else {
+                                    userInputComplete(globalInputTable().values());
+                                }
 
-			    if (panel.isBlinkLastInputCursorPos())
-                            	userInputComplete(globalInputTable().lastValues());
-			    else
-                            	userInputComplete(globalInputTable().values());
+                                globalInputTable().reset();
+                                resetPanelsCursorCoords();
+                                RPnUIFrame.enableSliders();
+                            }
 
-                            globalInputTable().reset();
-                            resetPanelsCursorCoords();
-                            RPnUIFrame.enableSliders();
                         }
 
                     }
-
                 }
             }
-
         }
 
         public void mouseMoved(MouseEvent me) {
@@ -300,7 +293,6 @@ public class UIController extends ComponentUI {
                 if (handler_ instanceof UI_ACTION_SELECTED) {
                     activePhaseSpace_ = (RPnPhaseSpaceAbstraction) panel.scene().getAbstractGeom();
                 }
-
 
             }
         }
@@ -319,7 +311,8 @@ public class UIController extends ComponentUI {
     //
     /**
      * Returns the values entered by the user for a specific action.
-     * @return 
+     *
+     * @return
      */
     public RealVector[] userInputList() {
         return handler_.userInputList(this);
@@ -329,7 +322,8 @@ public class UIController extends ComponentUI {
      * Returns a table with all the points entered by the user. The application
      * holds a table with all points entered by the user. This points are taked
      * by mouse clicks in all panels .
-     * @return 
+     *
+     * @return
      */
     public rpn.controller.ui.UserInputTable globalInputTable() {
 
@@ -346,17 +340,23 @@ public class UIController extends ComponentUI {
     //
     /**
      * This method installs a listener into a panel of application.
+     *
      * @param panel
      */
     public void install(RPnPhaseSpacePanel panel) {
         installedPanels_.add(panel);
         panel.addMouseListener(mouseController_);
         panel.addMouseMotionListener(mouseMotionController_);
+        System.out.println("Instalando");
+
+        panel.addMouseListener(referencePointSelector_);
+        panel.addMouseMotionListener(referencePointSelector_);
 
     }
 
     /**
      * This method removes a listener of a panel.
+     *
      * @param panel
      */
     public void uninstall(RPnPhaseSpacePanel panel) {
@@ -383,6 +383,7 @@ public class UIController extends ComponentUI {
             RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) installedPanels_.get(i);
             panel.addMouseListener(mouseController_);
             panel.addMouseMotionListener(mouseMotionController_);
+
         }
 
     }
@@ -468,13 +469,11 @@ public class UIController extends ComponentUI {
         handler_.userInputComplete(this, userInput);
     }
 
-
     /**
      * Sets the state of the application. The application works as a state
      * machine and this method changes the actual state.
      */
     public void setState(rpn.controller.ui.UserInputHandler newAction) {
-
 
         stateController_.propertyChange(new PropertyChangeEvent(this, "aplication state", handler_, newAction));
 
@@ -510,7 +509,6 @@ public class UIController extends ComponentUI {
         } else {
             handler_ = newAction;
         }
-
 
     }
 
@@ -550,7 +548,6 @@ public class UIController extends ComponentUI {
         } else {
             handler_ = newAction;
         }
-
 
     }
 

@@ -434,27 +434,7 @@ public void clearPointSelection(){
         int i = 0;
         for (GraphicsUtil graphicUtil : graphicsUtilList_) {
 
-            // ------------
-//            if (graphicUtil instanceof LinePlotted) {
-////                String typeStr = getCastedUI().getTypeString().get(i);
-////                String velStr = getCastedUI().getVelocityString().get(i);
-//                i++;
-//                Line2D.Double line = (Line2D.Double) graphicUtil.createShape();
-//                Rectangle2D boundsType = metrics.getStringBounds(typeStr, null);
-//                Rectangle2D boundsVel = metrics.getStringBounds(velStr, null);
-//                int typeWidth = (int) boundsType.getWidth();
-//                int velWidth = (int) boundsVel.getWidth();
-//
-//                if (line.x1 < line.x2) {
-//                    g.drawString(typeStr, (int) (line.x2 + 5), (int) (line.y2 + 5));
-//                    g.drawString(velStr, (int) (line.x2 + 5), (int) (line.y2 + 5));
-//                } else {
-//                    g.drawString(typeStr, (int) (line.x2 - (typeWidth + 2)), (int) (line.y2 + 5));
-//                    g.drawString(velStr, (int) (line.x2 - (velWidth + 2)), (int) (line.y2 + 5));
-//                }
-//
-//            }
-            // ------------
+            g.setColor(graphicUtil.getViewingAttr().getColor());
             graphicUtil.draw((Graphics2D) g);
 
         }

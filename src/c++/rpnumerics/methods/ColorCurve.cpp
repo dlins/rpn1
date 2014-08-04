@@ -419,7 +419,7 @@ void ColorCurve::classify_segment_with_data(
                 RealVector out;
                 //                if (zerotype < fam) Left_Newton_improvement(rtemp[i], zerotype, out);
                 //                else Right_Newton_improvement(rtemp[i], zerotype - fam, out);
-                cout << "Quem eh out : " << out << endl;
+//                cout << "Quem eh out : " << out << endl;
                 //                rtemp[i] = out;
             }
         }
@@ -454,7 +454,7 @@ void ColorCurve::classify_segment_with_data(
 
             // If not removed, the transition list increases
             transition_list.push_back(rtemp[k]);
-            cout << "transition_list.size() ::: " << transition_list.size() << endl;
+//            cout << "transition_list.size() ::: " << transition_list.size() << endl;
 
             // TODO: Antigamente era um complete_point
             classify_point(rtemp[k], r_p, eigenvalue_r, sigttemp[k]);

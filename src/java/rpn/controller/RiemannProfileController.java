@@ -8,17 +8,14 @@ package rpn.controller;
 import rpn.component.RpGeomFactory;
 import rpn.command.*;
 import java.beans.PropertyChangeEvent;
-import rpn.component.HugoniotCurveGeomFactory;
-import rpnumerics.HugoniotCurveCalcND;
-import rpnumerics.HugoniotParams;
-import wave.util.RealVector;
+import rpn.component.WaveCurveGeomFactory;
 
-public class HugoniotController extends RpCalcController {
+public class RiemannProfileController extends RpCalcController {
     //
     // Members
     //
 
-    private HugoniotCurveGeomFactory geomFactory_;
+    private WaveCurveGeomFactory geomFactory_;
     //
     // Constructors
     //
@@ -33,29 +30,20 @@ public class HugoniotController extends RpCalcController {
     protected void register() {
         DragPlotCommand.instance().addPropertyChangeListener(this);
         ChangeFluxParamsCommand.instance().addPropertyChangeListener(this);
-        BifurcationRefineCommand.instance().addPropertyChangeListener(this);      // ****
-        ChangeXZeroCommand.instance().addPropertyChangeListener(this);
         ReferencePointSelectionCommand.instance().addPropertyChangeListener(this);
-
-
-
     }
 
     @Override
     protected void unregister() {
         DragPlotCommand.instance().removePropertyChangeListener(this);
         ChangeFluxParamsCommand.instance().removePropertyChangeListener(this);
-        BifurcationRefineCommand.instance().removePropertyChangeListener(this);
-        ChangeXZeroCommand.instance().removePropertyChangeListener(this);
-         ReferencePointSelectionCommand.instance().removePropertyChangeListener(this);
-    
-       
+        ReferencePointSelectionCommand.instance().removePropertyChangeListener(this);
     }
 
     @Override
     public void install(RpGeomFactory geom) {
         super.install(geom);
-        geomFactory_ = (HugoniotCurveGeomFactory) geom;
+        geomFactory_ = (WaveCurveGeomFactory) geom;
     }
 
     @Override
@@ -66,15 +54,9 @@ public class HugoniotController extends RpCalcController {
 
     @Override
     public void propertyChange(PropertyChangeEvent change) {
+        
+        System.out.println("Chamando property change do perfil de Riemann");
 
 
-        if (change.getSource() instanceof DragPlotCommand) {
-            
-            ((HugoniotParams) ((HugoniotCurveCalcND) geomFactory_.rpCalc()).getParams()).setXZero((RealVector) change.getNewValue());
-            geomFactory_.updateGeom();
-            return;
-        }
-
-        super.propertyChange(change);
     }
 }

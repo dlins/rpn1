@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import rpn.RPnUIFrame;
-import rpn.component.ClosestDistanceCalculator;
 import wave.util.RealSegment;
 import wave.util.RealVector;
 
@@ -22,28 +21,26 @@ public class FundamentalCurve extends Orbit implements WaveCurveBranch, RpSoluti
     private int curveType_;
     private int curveIndex_;
     private boolean initialSubCurve_;
-    private OrbitPoint referencePoint_;
+    
     private List<OrbitPoint> points_;
+
     public FundamentalCurve(OrbitPoint[] points, int family, int increase) {
         super(points, increase);
         familyIndex_ = family;
 
-        points_= new ArrayList<OrbitPoint>();
-        
+        points_ = new ArrayList<OrbitPoint>();
+
         for (int i = 0; i < points.length; i++) {
             OrbitPoint orbitPoint = points[i];
             points_.add(orbitPoint);
-            
-        }
-        
 
-        
+        }
+
     }
 
     public int getFamilyIndex() {
         return familyIndex_;
     }
-
 
     public int getCurveType() {
         return curveType_;
@@ -57,8 +54,6 @@ public class FundamentalCurve extends Orbit implements WaveCurveBranch, RpSoluti
         this.curveIndex_ = curveIndex_;
     }
 
-
-
     public void setCurveType(int curveType_) {
         this.curveType_ = curveType_;
     }
@@ -71,10 +66,6 @@ public class FundamentalCurve extends Orbit implements WaveCurveBranch, RpSoluti
         this.initialSubCurve_ = initialSubCurve_;
     }
 
-
-
-
-
     public List<WaveCurveBranch> getBranchsList() {
 
         List<WaveCurveBranch> result = new ArrayList<WaveCurveBranch>();
@@ -85,31 +76,30 @@ public class FundamentalCurve extends Orbit implements WaveCurveBranch, RpSoluti
 
     }
 
-
-
     // ---------------------------- Acrescentei estes métodos em 18JAN2013 (Leandro)
     public String toMatlabData2D(int curveIndex) {
 
         StringBuffer buffer = new StringBuffer();
 
         try {
-            FileWriter gravador = new FileWriter(RPnUIFrame.dir + "/data" +curveIndex +".txt");
+            FileWriter gravador = new FileWriter(RPnUIFrame.dir + "/data" + curveIndex + ".txt");
             BufferedWriter saida = new BufferedWriter(gravador);
 
             String direction = "Forward";
-            if (getDirection()==Orbit.BACKWARD_DIR) direction = "Backward";
+            if (getDirection() == Orbit.BACKWARD_DIR) {
+                direction = "Backward";
+            }
 
-            saida.write("%% " +getClass().getSimpleName() + " Family:" +getFamilyIndex() + " Direction:" +direction +"\n");
+            saida.write("%% " + getClass().getSimpleName() + " Family:" + getFamilyIndex() + " Direction:" + direction + "\n");
             saida.write("%% xcoord1 ycoord1 xcoord2 ycoord2\n");
 
             for (int i = 0; i < segments().size(); i++) {
                 RealSegment orbitPoint = (RealSegment) segments().get(i);
-                saida.write(orbitPoint.toString() +"\n");
+                saida.write(orbitPoint.toString() + "\n");
             }
 
             saida.close();
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             System.out.println("Arquivos .txt de Orbit nao foram escritos.");
         }
 
@@ -117,23 +107,24 @@ public class FundamentalCurve extends Orbit implements WaveCurveBranch, RpSoluti
 
     }
 
-
     public String create2DPointMatlabPlot(int x, int y, int identifier) {
 
         StringBuffer buffer = new StringBuffer();
 
         String color = null;
 
-        if (getFamilyIndex()==0)
+        if (getFamilyIndex() == 0) {
             color = "[0 0 1]";
-        if (getFamilyIndex()==1)
+        }
+        if (getFamilyIndex() == 1) {
             color = "[1 0 0]";
+        }
 
         x++;
         y++;
 
-        buffer.append("data" +identifier +" = importdata('data" +identifier +".txt');\n");
-        buffer.append("disp('data" +identifier +".txt')\n");
+        buffer.append("data" + identifier + " = importdata('data" + identifier + ".txt');\n");
+        buffer.append("disp('data" + identifier + ".txt')\n");
 
         buffer.append("plot(data" + identifier + "(:,");
         buffer.append(x);
@@ -155,35 +146,27 @@ public class FundamentalCurve extends Orbit implements WaveCurveBranch, RpSoluti
     }
     // -------------------------------------------------------------------------
 
-    @Override
-    public OrbitPoint getReferencePoint() {
-        return referencePoint_;
-    }
+   
 
-    @Override
-    public void setReferencePoint(OrbitPoint referencePoint) {
-        referencePoint_=referencePoint;
-    }
-
+   
 
     public List<OrbitPoint> getBranchPoints() {
-        
-        return  points_;
-        
+
+        return points_;
+
     }
 
     @Override
     public double getSpeed(OrbitPoint point) {
-        
 
-        
         int segmentIndex = findClosestSegment(new RealVector(point.getCoords()));
 
         OrbitPoint curvePoint = points_.get(segmentIndex);
-        
+
         return curvePoint.getSpeed();
     }
 
 
+   
 
 }

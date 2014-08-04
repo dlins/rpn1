@@ -9,6 +9,8 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import rpn.controller.RiemannProfileController;
+import rpn.controller.RpController;
 import rpnumerics.CompositeCurve;
 import rpnumerics.RPnCurve;
 import rpnumerics.RarefactionCurve;
@@ -50,6 +52,13 @@ public class WaveCurveGeomFactory extends WaveCurveOrbitGeomFactory {
 
     }
     
+     
+       @Override
+    protected RpController createUI() {
+        
+        return new RiemannProfileController();
+    }
+
 
     //
     // Accessors/Mutators

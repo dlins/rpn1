@@ -12,7 +12,7 @@ import wave.util.RealSegment;
 public interface WaveCurveBranch {
 
     List<WaveCurveBranch> getBranchsList();
-    OrbitPoint getReferencePoint();
+    OrbitPoint getReferencePoint() throws RpException;
     void setReferencePoint(OrbitPoint referencePoint);
     List<OrbitPoint> getBranchPoints();
     

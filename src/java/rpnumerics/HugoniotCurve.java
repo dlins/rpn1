@@ -29,7 +29,7 @@ public class HugoniotCurve extends SegmentedCurve {
     
     public HugoniotCurve(PhasePoint xZero, List<HugoniotSegment> hSegments,List<RealVector> transitionList) {
         super(hSegments);
-
+        setReferencePoint(new OrbitPoint(xZero.getCoords()));
         xZero_ = new PhasePoint(xZero);
         direction_=Orbit.FORWARD_DIR;
         transitionList_=transitionList;

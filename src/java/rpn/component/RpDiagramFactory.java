@@ -9,9 +9,8 @@ import java.awt.Color;
 import java.util.ArrayList;
 import rpnumerics.RpDiagramCalc;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import rpn.RPnDesktopPlotter;
+import rpn.controller.RiemannProfileController;
 import rpn.controller.RpCalcController;
 import rpn.controller.RpController;
 import rpnumerics.Area;
@@ -142,7 +141,7 @@ public final class RpDiagramFactory implements RpGeomFactory {
     }
 
     protected RpController createUI() {
-        return new RpCalcController();
+        return new RiemannProfileController();
     }
 
     @Override

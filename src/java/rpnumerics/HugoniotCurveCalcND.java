@@ -141,6 +141,15 @@ public class HugoniotCurveCalcND extends ContourCurveCalc implements HugoniotCur
     public double[] getPrimitiveUMinus() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
+    
+    
+    @Override
+    public void setReferencePoint(OrbitPoint referencePoint){
+        HugoniotParams params  = (HugoniotParams)   getParams();
+        
+        params.setXZero(referencePoint);
+    }
+    
 
     private native RpSolution calc(PhasePoint initialpoint, Configuration configuration) throws RpException;
 

@@ -15,7 +15,6 @@ import java.util.List;
 import rpn.RPnPhaseSpacePanel;
 import rpn.command.GenericExtensionCurveCommand;
 import rpn.command.RpCommand;
-import rpn.command.ZoomPlotCommand;
 import rpn.component.util.AreaSelected;
 import rpn.component.util.GraphicsUtil;
 import rpn.message.RPnNetworkStatus;

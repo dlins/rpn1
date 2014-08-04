@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JButton;
 import rpn.RPnMenuCommand;
 import rpn.RPnProjDescriptor;
@@ -184,52 +186,55 @@ public class WaveCurveSpeedPlotCommand extends RpModelPlotCommand implements Obs
         List<MultiPolyLine> polyLineList = new ArrayList<MultiPolyLine>();
 
         for (WaveCurveBranchGeom waveCurveBranchGeom : orbitGeom) {
-
-            WaveCurveOrbitGeom fundamentalGeom = (WaveCurveOrbitGeom) waveCurveBranchGeom;
-            WaveCurveBranch geomSource = (WaveCurveBranch) fundamentalGeom.geomFactory().geomSource();
-
-            referencePoint_ = geomSource.getReferencePoint();
-
-            maxY_ = referencePoint_.getSpeed();
-
-            eigenValuesLength = geomSource.getReferencePoint().getEigenValues().length;
-
-            graphicsCoords.add(makeReferencePointData(referencePoint_));
-
-            List<OrbitPoint> branchPoints = geomSource.getBranchPoints();
-
-            for (int i = 0; i < branchPoints.size() - 1; i++) {
-
-                OrbitPoint secondPoint = geomSource.getBranchPoints().get(i + 1);
-
-                double previousDistance = graphicsCoords.get(i).getElement(0);
-
-                double distance = previousDistance + branchPoints.get(i).getCoords().distance(secondPoint);
-                double speed = secondPoint.getSpeed();
-
-                if (speed > maxY_) {
-                    maxY_ = speed;
+            try {
+                WaveCurveOrbitGeom fundamentalGeom = (WaveCurveOrbitGeom) waveCurveBranchGeom;
+                WaveCurveBranch geomSource = (WaveCurveBranch) fundamentalGeom.geomFactory().geomSource();
+                
+                referencePoint_ = geomSource.getReferencePoint();
+                
+                maxY_ = referencePoint_.getSpeed();
+                
+                eigenValuesLength = geomSource.getReferencePoint().getEigenValues().length;
+                
+                graphicsCoords.add(makeReferencePointData(referencePoint_));
+                
+                List<OrbitPoint> branchPoints = geomSource.getBranchPoints();
+                
+                for (int i = 0; i < branchPoints.size() - 1; i++) {
+                    
+                    OrbitPoint secondPoint = geomSource.getBranchPoints().get(i + 1);
+                    
+                    double previousDistance = graphicsCoords.get(i).getElement(0);
+                    
+                    double distance = previousDistance + branchPoints.get(i).getCoords().distance(secondPoint);
+                    double speed = secondPoint.getSpeed();
+                    
+                    if (speed > maxY_) {
+                        maxY_ = speed;
+                    }
+                    
+                    if (distance > maxX_) {
+                        maxX_ = distance;
+                    }
+                    
+                    StringBuilder stringCoords = new StringBuilder();
+                    
+                    stringCoords.append(distance).append(" ").append(speed);
+                    
+                    for (int j = 0; j < eigenValuesLength; j++) {
+                        
+                        stringCoords.append(" ").append(secondPoint.getEigenValues()[j]);
+                        
+                    }
+                    
+                    System.out.println("String: " + stringCoords.toString());
+                    RealVector coords = new RealVector(stringCoords.toString());
+                    
+                    graphicsCoords.add(coords);
+                    
                 }
-
-                if (distance > maxX_) {
-                    maxX_ = distance;
-                }
-
-                StringBuilder stringCoords = new StringBuilder();
-
-                stringCoords.append(distance).append(" ").append(speed);
-
-                for (int j = 0; j < eigenValuesLength; j++) {
-
-                    stringCoords.append(" ").append(secondPoint.getEigenValues()[j]);
-
-                }
-
-                System.out.println("String: " + stringCoords.toString());
-                RealVector coords = new RealVector(stringCoords.toString());
-
-                graphicsCoords.add(coords);
-
+            } catch (RpException ex) {
+                Logger.getLogger(WaveCurveSpeedPlotCommand.class.getName()).log(Level.SEVERE, null, ex);
             }
 
         }

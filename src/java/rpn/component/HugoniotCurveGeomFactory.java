@@ -13,7 +13,6 @@ import rpn.controller.HugoniotController;
 import rpn.controller.RpController;
 import wave.multid.CoordsArray;
 import wave.multid.model.MultiPoint;
-import wave.multid.view.PointMark;
 import wave.multid.view.ViewingAttr;
 import wave.util.RealVector;
 

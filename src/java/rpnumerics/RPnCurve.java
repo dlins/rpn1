@@ -33,6 +33,8 @@ public abstract class RPnCurve implements RpSolution {
     public List velStringToRemove = new ArrayList();
     private int id_;
     private HyperOctree<RealSegment> octree_;
+    
+    private OrbitPoint referencePoint_;
 
     public RPnCurve() {//TODO REMOVE !!
     }
@@ -101,57 +103,8 @@ public abstract class RPnCurve implements RpSolution {
 //        }
 
     }
-    //********
 
-//    //-------------------------------------------- Parece que não é mais usado
-//    public RealVector projectionCurve(RpCurve curve, RealVector targetPoint) {
-//
-//        int segmentIndex = curve.findClosestSegment(targetPoint);
-//
-//        RealVector closestPoint = curve.findClosestPoint(targetPoint);
-//
-//
-//        if (curve instanceof BifurcationCurve) {
-//
-//            BifurcationCurve bifurcationCurve = (BifurcationCurve) curve;
-//
-//            //2D Processing
-//            RealSegment closest2DSegment = (RealSegment) bifurcationCurve.segments().get(segmentIndex);
-//
-//
-//            RealVector PP1 = new RealVector(2);
-//            RealVector PP2 = new RealVector(2);
-//
-//            PP1.sub(closestPoint, closest2DSegment.p1());
-//            PP2.sub(closest2DSegment.p2(), closestPoint);
-//
-//            double K = PP1.norm() / PP2.norm();
-//
-//            //this curve processing
-//            BifurcationCurve bifurcationNDCurve = (BifurcationCurve) this;
-//
-//            RealSegment closestSegment = (RealSegment) bifurcationNDCurve.segments().get(segmentIndex);
-//
-//            RealVector x1 = new RealVector(closestSegment.p1());
-//            RealVector x2 = new RealVector(closestSegment.p2());
-//
-//            for (int i = 0; i < bifurcationNDCurve.getSpace().getDim(); i++) {
-//
-//                x2.scale(K);
-//                x1.sub(x2);
-//
-//                x1.scale(1 - K);
-//
-//            }
-//
-//            return x1;
-//
-//        }
-//
-//
-//        return null;
-//    }
-//    --------------------------------------------------------------------------
+
     public double getALFA() {
         return ALFA;
     }
@@ -315,6 +268,19 @@ public abstract class RPnCurve implements RpSolution {
 
     public List<RealSegment> segments() {
         return (List<RealSegment>) segments_;
+    }
+
+    public OrbitPoint getReferencePoint() throws RpException{
+        
+        if (referencePoint_==null)
+            throw  new RpException("No reference point available");
+        else
+        
+        return referencePoint_;
+    }
+
+    public void setReferencePoint(OrbitPoint referencePoint_) {
+        this.referencePoint_ = referencePoint_;
     }
     
     

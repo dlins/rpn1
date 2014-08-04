@@ -35,6 +35,7 @@ import rpn.command.PhysicalBoundaryPlotCommand;
 import rpn.command.PointLevelCurvePlotCommand;
 import rpn.command.RarefactionExtensionCurvePlotCommand;
 import rpn.command.RarefactionCurvePlotCommand;
+import rpn.command.ReferencePointSelectionCommand;
 import rpn.command.RiemannResetCommand;
 import rpn.command.RiemannProfileCommand;
 import rpn.command.SecondaryBifurcationCurveCommand;
@@ -87,7 +88,8 @@ public class CurvesConfig extends UI_ACTION_SELECTED {
 //        AreaSelectionCommand.instance().setEnabled(false);
         
         
-        
+        ReferencePointSelectionCommand.instance().setEnabled(true);
+                
         
         CoincidencePlotCommand.instance().setEnabled(true);
         SubInflectionPlotCommand.instance().setEnabled(true);

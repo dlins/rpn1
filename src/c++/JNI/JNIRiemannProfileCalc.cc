@@ -156,20 +156,20 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RiemannProfileCalc_nativeCalc
     }
 
 
-        
-                cout << "Coordenadas do perfil" << endl;
-                for (int i = 0; i < profile.size(); i++) {
-                    
-//                    cout<<"Tamanho de um ponto do profile: "<<profile.at(i).size()<<endl;
-    //                cout  << profile.at(i)(0) << " " << profile.at(i)(1) << endl;
-                    cout  << profile.at(i) << endl;
-                }
-//                for (int i = 0; i < speedVector.size(); i++) {
-//            
-//                    cout  << speedVector.at(i)<< endl;
-//            
+//        
+//                cout << "Coordenadas do perfil" << endl;
+//                for (int i = 0; i < profile.size(); i++) {
+//                    
+////                    cout<<"Tamanho de um ponto do profile: "<<profile.at(i).size()<<endl;
+//    //                cout  << profile.at(i)(0) << " " << profile.at(i)(1) << endl;
+//                    cout  << profile.at(i) << endl;
 //                }
-//
+////                for (int i = 0; i < speedVector.size(); i++) {
+////            
+////                    cout  << speedVector.at(i)<< endl;
+////            
+////                }
+////
 
 
 

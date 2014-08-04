@@ -7,6 +7,7 @@ import rpn.component.RpGeometry;
 import rpn.component.WaveCurveGeom;
 import rpn.component.util.AreaSelected;
 import rpn.component.util.GraphicsUtil;
+import rpn.controller.RiemannProfileController;
 import rpnumerics.Area;
 import rpnumerics.RiemannProfileCalc;
 import rpnumerics.WaveCurve;
@@ -66,6 +67,9 @@ public class StandardRiemannProfileState implements RiemannProfileState, Riemann
         RiemannProfileCalc rc = new RiemannProfileCalc(new Area(selection), waveCurvesID);
 
         RpDiagramFactory factory = new RpDiagramFactory(rc);
+        
+        factory.setUI(new RiemannProfileController());
+                
         DiagramGeom geom = (DiagramGeom) factory.geom();
 
         return geom;

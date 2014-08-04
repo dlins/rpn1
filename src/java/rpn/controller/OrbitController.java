@@ -6,22 +6,19 @@
 package rpn.controller;
 
 import java.beans.PropertyChangeEvent;
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 import rpn.RPnPhaseSpaceFrame;
 import rpn.RPnUIFrame;
 import rpn.component.OrbitGeomFactory;
 import rpn.component.OrbitGeomView;
 import rpn.component.RpGeomFactory;
-import rpn.component.RpGeometry;
-import rpn.component.StationaryPointGeom;
 import rpn.parser.RPnDataModule;
 import rpn.command.ChangeFluxParamsCommand;
 import rpn.command.ChangeOrbitLevelCommand;
 import rpn.command.ChangeSigmaCommand;
 import rpn.command.ChangeXZeroCommand;
 import rpn.command.DragPlotCommand;
+import rpn.command.ReferencePointSelectionCommand;
 import rpnumerics.OrbitCalc;
 import wave.multid.view.GeomObjView;
 import wave.util.RealVector;
@@ -53,6 +50,7 @@ public class OrbitController extends RpCalcController {
         ChangeOrbitLevelCommand.instance().addPropertyChangeListener(this);
         ChangeSigmaCommand.instance().addPropertyChangeListener(this);
         ChangeXZeroCommand.instance().addPropertyChangeListener(this);
+        ReferencePointSelectionCommand.instance().addPropertyChangeListener(this);
 
 
     }
@@ -64,6 +62,8 @@ public class OrbitController extends RpCalcController {
         ChangeOrbitLevelCommand.instance().removePropertyChangeListener(this);
         ChangeSigmaCommand.instance().removePropertyChangeListener(this);
         ChangeXZeroCommand.instance().removePropertyChangeListener(this);
+        ReferencePointSelectionCommand.instance().removePropertyChangeListener(this);
+        
     }
 
     @Override
