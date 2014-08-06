@@ -86,6 +86,8 @@ public class RiemannProfileCalc implements RpCalculation, RpDiagramCalc {
         }
 
         Diagram riemannProfile = (Diagram) result;
+        
+        System.err.println("Ponto R: "+riemannProfile.getInfo());
 
         if (!isRiemannSpeedLimitsGood(riemannProfile)) {
             throw new RpException("Wrong speed limits");

@@ -9,9 +9,11 @@ import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.util.Iterator;
 import java.util.List;
 import javax.swing.JButton;
 import rpn.RPnMenuCommand;
+import rpn.RPnPhaseSpacePanel;
 import rpn.RPnProjDescriptor;
 import rpn.RPnRiemannFrame;
 import rpn.component.*;
@@ -25,6 +27,8 @@ import rpn.parser.RPnDataModule;
 import rpnumerics.*;
 import wave.multid.DimMismatchEx;
 import wave.multid.Space;
+import wave.multid.view.ViewingAttr;
+import wave.multid.view.ViewingTransform;
 import wave.util.RealVector;
 import wave.util.RectBoundary;
 
@@ -41,7 +45,7 @@ public class RiemannProfileCommand extends RpModelPlotCommand implements RPnMenu
 
     private RiemannProfileState state_;
 
-    private RPnRiemannFrame speedGraphicsFrame_;
+    private RPnRiemannFrame riemannFrame_;
 
     //
     // Constructors/Initializers
@@ -55,6 +59,7 @@ public class RiemannProfileCommand extends RpModelPlotCommand implements RPnMenu
     public void actionPerformed(ActionEvent event) {
         UI_ACTION_SELECTED action = new UI_ACTION_SELECTED(this);
         action.userInputComplete(UIController.instance());// No input needed
+        setEnabled(false);
 
     }
 
@@ -77,6 +82,12 @@ public class RiemannProfileCommand extends RpModelPlotCommand implements RPnMenu
 
    
 
+   public void updateRiemannFrame(){
+    
+       riemannFrame_.phaseSpacePanel().repaint();
+       
+   }
+
     private void updateSpeedGraphicsFrame(RealVector profileMin, RealVector profileMax) {
 
         RectBoundary boundary = new RectBoundary(profileMin, profileMax);
@@ -90,10 +101,10 @@ public class RiemannProfileCommand extends RpModelPlotCommand implements RPnMenu
 
         try {
             wave.multid.view.Scene riemannScene = RPnDataModule.RIEMANNPHASESPACE.createScene(riemanTesteTransform, new wave.multid.view.ViewingAttr(Color.black));
-            speedGraphicsFrame_ = new RPnRiemannFrame(riemannScene, this);
-    
-            speedGraphicsFrame_.addWindowListener(this);
-            speedGraphicsFrame_.setVisible(true);
+            riemannFrame_ = new RPnRiemannFrame(riemannScene, this);
+
+            riemannFrame_.addWindowListener(this);
+            riemannFrame_.setVisible(true);
 
         } catch (DimMismatchEx ex) {
             ex.printStackTrace();
@@ -114,7 +125,6 @@ public class RiemannProfileCommand extends RpModelPlotCommand implements RPnMenu
         RealVector max = new RealVector(Xlimits[1] + " " + Ylimits[1]);
 
         RPnDataModule.RIEMANNPHASESPACE.join(state.calcProfile());
-
 
         updateSpeedGraphicsFrame(min, max);
 
@@ -145,32 +155,6 @@ public class RiemannProfileCommand extends RpModelPlotCommand implements RPnMenu
 //            Logger.getLogger(RiemannProfileCommand.class.getName()).log(Level.SEVERE, null, ex);
 //        }
 //    }
-
-    private RealVector createCharacteristicAbscissa(int charFamily, CharacteristicsCurve charCurve) {
-
-        List<PhasePoint[]> charPoints = charCurve.getFamilyPoints(charFamily);
-
-        double minX = 0;
-        double maxX = 0;
-
-        for (int i = 0; i < charPoints.size(); i++) {
-            PhasePoint[] phasePoints = charPoints.get(i);
-
-            for (int j = 0; j < phasePoints.length; j++) {
-                PhasePoint phasePoint = phasePoints[j];
-                if (phasePoint.getElement(0) < minX) {
-                    minX = phasePoint.getElement(0);
-                }
-                if (phasePoint.getElement(0) > maxX) {
-                    maxX = phasePoint.getElement(0);
-                }
-            }
-        }
-
-        return new RealVector(minX + " " + maxX);
-
-    }
-
     private List<AreaSelected> processIntersectionAreas(List<List<AreaSelected>> intersectionAreasList) {
 
         if (intersectionAreasList.get(0).size() > intersectionAreasList.get(1).size()) {
@@ -192,9 +176,7 @@ public class RiemannProfileCommand extends RpModelPlotCommand implements RPnMenu
         UIController.instance().resetCursor();
         UIController.instance().globalInputTable().reset();
 
-        speedGraphicsFrame_.dispose();
-
-
+        riemannFrame_.dispose();
 
     }
 
@@ -206,23 +188,19 @@ public class RiemannProfileCommand extends RpModelPlotCommand implements RPnMenu
     @Override
     public void windowOpened(WindowEvent e) {
 
-
     }
 
     @Override
     public void windowClosing(WindowEvent e) {
 
         RPnDataModule.RIEMANNPHASESPACE.clear();
-        
-        
-        RiemannResetCommand.instance().execute();
 
+        RiemannResetCommand.instance().execute();
 
     }
 
     @Override
     public void windowClosed(WindowEvent e) {
-
 
     }
 

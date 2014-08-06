@@ -77,7 +77,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionCurveCalc_calc(JNIEnv * env
     //    double deltaxi = 1e-3; // This is the original value (Rodrigo/ Panters)
 
 
-    int dimension = 2; //realVectorInput.size();
+    int dimension = realVectorInput.size();
 
 
     //cout << "Ponto de entrada: " << realVectorInput << endl;

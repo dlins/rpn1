@@ -41,7 +41,7 @@ public class ReferencePointSelectorListener implements MouseListener, MouseMotio
     public ReferencePointSelectorListener() {
         setNewReferencePoint_ = false;
     }
-
+//
     @Override
     public void mouseMoved(MouseEvent me) {
 

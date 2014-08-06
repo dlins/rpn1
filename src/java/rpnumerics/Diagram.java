@@ -13,7 +13,7 @@ public class Diagram implements  RpSolution  {
     // Members
     //
 
-
+    private String info_;
 
     private final List<DiagramLine> lines_;
 
@@ -36,6 +36,19 @@ public class Diagram implements  RpSolution  {
     public List<DiagramLine> getLines() {
         return lines_;
     }
+
+    public String getInfo() {
+        return info_;
+    }
+
+    public void setInfo(String info) {
+
+        String cleanString =info.replaceAll("\\(|\\)|,", ""); //Removing () and , from C++ RealVector if needed.        
+        
+        info_ = cleanString;
+    }
+    
+    
     
     
     

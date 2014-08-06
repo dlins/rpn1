@@ -9,6 +9,8 @@ import rpn.component.RpGeomFactory;
 import rpn.command.*;
 import java.beans.PropertyChangeEvent;
 import rpn.component.WaveCurveGeomFactory;
+import rpn.controller.phasespace.riemannprofile.RiemannProfileReady;
+import rpn.controller.phasespace.riemannprofile.RiemannProfileState;
 
 public class RiemannProfileController extends RpCalcController {
     //
@@ -56,6 +58,14 @@ public class RiemannProfileController extends RpCalcController {
     public void propertyChange(PropertyChangeEvent change) {
         
         System.out.println("Chamando property change do perfil de Riemann");
+
+        
+        RiemannProfileReady state = (RiemannProfileReady)RiemannProfileCommand.instance().getState();
+        
+        state.updateRiemannProfile();
+
+        
+        
 
 
     }

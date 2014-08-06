@@ -282,6 +282,7 @@ public void clearPointSelection(){
     }
 
     public void clearAreaSelection() {
+        
         ArrayList<GraphicsUtil> toRemove = new ArrayList();
 
         for (int i = 0; i < graphicsUtilList_.size(); i++) {

@@ -24,5 +24,8 @@ public interface RiemannProfileReady extends RiemannProfileState{
     
     public DiagramGeom calcProfile();
     
+    
+    public void updateRiemannProfile();
+    
 
 }

@@ -347,7 +347,6 @@ public class UIController extends ComponentUI {
         installedPanels_.add(panel);
         panel.addMouseListener(mouseController_);
         panel.addMouseMotionListener(mouseMotionController_);
-        System.out.println("Instalando");
 
         panel.addMouseListener(referencePointSelector_);
         panel.addMouseMotionListener(referencePointSelector_);
