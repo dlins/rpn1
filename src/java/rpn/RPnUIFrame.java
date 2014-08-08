@@ -239,7 +239,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         
         utilitiesToolBar_.add(ZoomingAreaCommand.instance().getContainer());
         utilitiesToolBar_.add(BifurcationCorrespondenceCommand.instance().getContainer());
-//        utilitiesToolBar_.add(WaveCurveSpeedPlotCommand.instance().getContainer());
+        utilitiesToolBar_.add(WaveCurveSpeedPlotCommand.instance().getContainer());
     }
     
     private void createRiemmanProblemToolBar() {

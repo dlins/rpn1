@@ -11,7 +11,6 @@ import rpnumerics.RpDiagramCalc;
 import java.util.List;
 import rpn.RPnDesktopPlotter;
 import rpn.controller.RiemannProfileController;
-import rpn.controller.RpCalcController;
 import rpn.controller.RpController;
 import rpnumerics.Area;
 import rpnumerics.Diagram;
@@ -76,7 +75,7 @@ public final class RpDiagramFactory implements RpGeomFactory {
             for (List<RealVector> linePart : lineCoords) {
                 CoordsArray[] diagramCoords = MultidAdapter.converseRealVectorListToCoordsArray(linePart);
                 MultiPolyLine diagramLine = new MultiPolyLine(diagramCoords, new ViewingAttr(Color.white));
-                System.out.println(line);
+
                 int type = line.getType(index);
 
                 diagramLine.viewingAttr().setColor(colorChooser(type));

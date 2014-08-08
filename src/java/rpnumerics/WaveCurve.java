@@ -232,7 +232,7 @@ public class WaveCurve extends RPnCurve implements WaveCurveBranch, RpSolution, 
 
     @Override
     public RpSolution updateDiagramSource() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+       return createDiagramSource();
     }
 
 }

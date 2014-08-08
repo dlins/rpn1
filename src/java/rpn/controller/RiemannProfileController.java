@@ -8,9 +8,18 @@ package rpn.controller;
 import rpn.component.RpGeomFactory;
 import rpn.command.*;
 import java.beans.PropertyChangeEvent;
+import java.util.Iterator;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import rpn.component.DiagramGeom;
+import rpn.component.RpDiagramFactory;
+import rpn.component.RpGeometry;
 import rpn.component.WaveCurveGeomFactory;
 import rpn.controller.phasespace.riemannprofile.RiemannProfileReady;
 import rpn.controller.phasespace.riemannprofile.RiemannProfileState;
+import rpn.parser.RPnDataModule;
+import rpnumerics.RpException;
+import rpnumerics.WaveCurve;
 
 public class RiemannProfileController extends RpCalcController {
     //
@@ -45,6 +54,7 @@ public class RiemannProfileController extends RpCalcController {
     @Override
     public void install(RpGeomFactory geom) {
         super.install(geom);
+
         geomFactory_ = (WaveCurveGeomFactory) geom;
     }
 
@@ -56,17 +66,39 @@ public class RiemannProfileController extends RpCalcController {
 
     @Override
     public void propertyChange(PropertyChangeEvent change) {
-        
-        System.out.println("Chamando property change do perfil de Riemann");
 
-        
-        RiemannProfileReady state = (RiemannProfileReady)RiemannProfileCommand.instance().getState();
-        
-        state.updateRiemannProfile();
 
-        
-        
 
+        if (RiemannProfileCommand.instance().getState() instanceof RiemannProfileReady) {
+            RiemannProfileReady state = (RiemannProfileReady) RiemannProfileCommand.instance().getState();
+
+            state.updateRiemannProfile();
+
+        }
+        
+        if(RPnDataModule.SPEEDGRAPHICSPHASESPACE.getLastGeometry()!=null){
+            
+            RPnDataModule.SPEEDGRAPHICSPHASESPACE.clear();
+            WaveCurve waveCurve = (WaveCurve)geomFactory_.geomSource();
+            
+            RpDiagramFactory factory = new RpDiagramFactory(waveCurve);
+            try {
+                DiagramGeom diagramGeom = (DiagramGeom) factory.createDiagramFromSource();
+                RPnDataModule.SPEEDGRAPHICSPHASESPACE.join(diagramGeom);
+                WaveCurveSpeedPlotCommand.instance().updateDiagramView(diagramGeom);
+            } catch (RpException ex) {
+                Logger.getLogger(RiemannProfileController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            
+
+           
+
+            
+        }
+        
+        
+        
 
     }
 }

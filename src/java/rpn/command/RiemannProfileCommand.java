@@ -9,13 +9,11 @@ import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.util.Iterator;
 import java.util.List;
 import javax.swing.JButton;
 import rpn.RPnMenuCommand;
-import rpn.RPnPhaseSpacePanel;
 import rpn.RPnProjDescriptor;
-import rpn.RPnRiemannFrame;
+import rpn.RPnDiagramFrame;
 import rpn.component.*;
 import rpn.component.util.AreaSelected;
 import rpn.controller.phasespace.riemannprofile.RiemannProfileReady;
@@ -27,8 +25,6 @@ import rpn.parser.RPnDataModule;
 import rpnumerics.*;
 import wave.multid.DimMismatchEx;
 import wave.multid.Space;
-import wave.multid.view.ViewingAttr;
-import wave.multid.view.ViewingTransform;
 import wave.util.RealVector;
 import wave.util.RectBoundary;
 
@@ -45,7 +41,7 @@ public class RiemannProfileCommand extends RpModelPlotCommand implements RPnMenu
 
     private RiemannProfileState state_;
 
-    private RPnRiemannFrame riemannFrame_;
+    private RPnDiagramFrame riemannFrame_;
 
     //
     // Constructors/Initializers
@@ -101,7 +97,7 @@ public class RiemannProfileCommand extends RpModelPlotCommand implements RPnMenu
 
         try {
             wave.multid.view.Scene riemannScene = RPnDataModule.RIEMANNPHASESPACE.createScene(riemanTesteTransform, new wave.multid.view.ViewingAttr(Color.black));
-            riemannFrame_ = new RPnRiemannFrame(riemannScene, this);
+            riemannFrame_ = new RPnDiagramFrame(riemannScene, this);
 
             riemannFrame_.addWindowListener(this);
             riemannFrame_.setVisible(true);
@@ -125,8 +121,20 @@ public class RiemannProfileCommand extends RpModelPlotCommand implements RPnMenu
         RealVector max = new RealVector(Xlimits[1] + " " + Ylimits[1]);
 
         RPnDataModule.RIEMANNPHASESPACE.join(state.calcProfile());
+        
+        
+          
+        riemannFrame_= new RPnDiagramFrame(RPnDataModule.RIEMANNPHASESPACE,this);
+        
+        riemannFrame_.updateScene(min,max);
+        
+        riemannFrame_.setVisible(true);
+        
+        
+        
+        
 
-        updateSpeedGraphicsFrame(min, max);
+//        updateSpeedGraphicsFrame(min, max);
 
     }
 
