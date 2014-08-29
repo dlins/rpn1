@@ -143,12 +143,12 @@ public class RPnDataModule {
                     RPNUMERICS.domain(), new NumConfigImpl());//  RpNumerics.domain(),
             RIGHTPHASESPACE = new RPnRightPhaseSpaceAbstraction("Right Phase Space",
                     RPNUMERICS.domain(), new NumConfigImpl());//  RpNumerics.domain(),
-            RIEMANNPHASESPACE = new RPnPhaseSpaceAbstraction("Riemann Phase Space",
+            RIEMANNPHASESPACE = new RPnPhaseSpaceAbstraction("Riemann Profile",
                     new Space("Riemann Space", RPNUMERICS.domainDim() + 1), new NumConfigImpl());
             
             
             
-              SPEEDGRAPHICSPHASESPACE = new RPnPhaseSpaceAbstraction("Speed Graphics Phase Space",
+              SPEEDGRAPHICSPHASESPACE = new RPnPhaseSpaceAbstraction("Speed Diagram",
                       new Space("Speed Graphics Space", 2), new NumConfigImpl());
             
 

@@ -7,13 +7,11 @@ package rpn.component;
 
 import java.awt.Color;
 import rpn.controller.OrbitController;
-import rpn.controller.RiemannProfileController;
 import rpn.controller.RpController;
 import rpnumerics.*;
 import wave.multid.CoordsArray;
 import wave.multid.model.MultiPoint;
 import wave.multid.view.ViewingAttr;
-import wave.util.RealVector;
 
 public class OrbitGeomFactory extends RpCalcBasedGeomFactory {
     //

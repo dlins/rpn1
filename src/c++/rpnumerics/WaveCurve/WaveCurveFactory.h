@@ -123,6 +123,8 @@ class WaveCurveFactory {
         int wavecurve_from_wavecurve(const WaveCurve &c, const RealVector &p, HugoniotContinuation *h, WaveCurve &hwc, int &wavecurve_stopped_because, int &edge);
 
         void R_regions(HugoniotContinuation *h, const WaveCurve &c, std::vector<WaveCurve> &curves);
+
+        void add_arclength(int begin, int end, double factor, WaveCurve &hwc);
 };
 
 #endif // _WAVECURVEFACTORY_

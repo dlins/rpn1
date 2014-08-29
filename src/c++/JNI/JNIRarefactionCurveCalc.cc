@@ -44,6 +44,16 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionCurveCalc_calc(JNIEnv * env
     jmethodID orbitPointConstructor = (env)->GetMethodID(classOrbitPoint, "<init>", "([D[DD)V");
     jmethodID toDoubleMethodID = (env)->GetMethodID(classOrbitPoint, "toDouble", "()[D");
 
+
+
+
+    jclass fundamentalCurveClass = env->FindClass(FUNDAMENTALCURVE_LOCATION);
+
+    jmethodID setXIMethodID = (env)->GetMethodID(fundamentalCurveClass, "setXi", "([D)V");
+
+
+
+
     jmethodID setReferencePointID = (env)->GetMethodID(classWaveCurveBranch, "setReferencePoint", "(Lrpnumerics/OrbitPoint;)V");
 
     //Input processing
@@ -69,8 +79,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionCurveCalc_calc(JNIEnv * env
 
 
     const Boundary * tempBoundary = RpNumerics::getPhysics().getSubPhysics(0).getPreProcessedBoundary();
-    
-    
+
+
     //cout<<tempBoundary->minimums()<<endl;
     //cout<<tempBoundary->maximums()<<endl;
 
@@ -95,8 +105,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionCurveCalc_calc(JNIEnv * env
     vector<RealVector> inflectionPoints;
 
     RpNumerics::getPhysics().getSubPhysics(0).preProcess(realVectorInput);
-    
-    
+
+
     //cout << "Ponto de entrada apos pos process: " << realVectorInput << endl;
 
     RarefactionCurve rc(accum, flux, tempBoundary);
@@ -154,6 +164,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionCurveCalc_calc(JNIEnv * env
     jobject referenceOrbitPoint = (env)->NewObject(classOrbitPoint, orbitPointConstructor, refPointCoords, eigenValuesArray, lambda);
 
 
+    
 
 
 
@@ -180,7 +191,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionCurveCalc_calc(JNIEnv * env
         RealVector resizedVector(tempVector);
         RpNumerics::getPhysics().getSubPhysics(0).postProcess(resizedVector);
 
-//        //cout << tempVector << endl;
+//       cout << tempVector << endl;
 
 
         double * dataCoords = resizedVector;
@@ -215,6 +226,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionCurveCalc_calc(JNIEnv * env
     jobject rarefactionOrbit = (env)->NewObject(classRarefactionOrbit, rarefactionOrbitConstructor, orbitPointArray, familyIndex, timeDirection);
 
     env->CallVoidMethod(rarefactionOrbit, setReferencePointID, referenceOrbitPoint);
+
 
 
     //Cleaning up

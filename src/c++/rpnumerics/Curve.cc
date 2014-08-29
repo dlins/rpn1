@@ -13,6 +13,7 @@ void Curve::init(const Curve &orig){
     reference_point = orig.reference_point;
 
     curve = orig.curve;
+    xi = orig.xi;
     back_pointer = orig.back_pointer;
     back_curve_pointer = orig.back_curve_pointer;
 

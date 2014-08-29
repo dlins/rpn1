@@ -39,7 +39,7 @@ public class ReferencePointSelectionCommand extends RpModelConfigChangeCommand {
 
     @Override
     public void execute() {
-        System.out.println("Chamando execute do Reference Point Selection Command");
+
          applyChange(new PropertyChangeEvent(this, "referencepoint", "antes ", "depois"));
       
     }

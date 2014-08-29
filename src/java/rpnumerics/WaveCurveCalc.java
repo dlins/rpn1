@@ -18,24 +18,20 @@ public class WaveCurveCalc extends WaveCurveOrbitCalc {
     //
     // Constructors/Initializers
     //
-   
 
     public WaveCurveCalc(PhasePoint point, int familyIndex, int timeDirection, int origin, int edge) {
 
         super(new OrbitPoint(point), familyIndex, timeDirection);
-       
+
     }
-    
-    
+
     public WaveCurveCalc(PhasePoint input, CurveConfiguration waveCurveConfiguration) {
 
-        super(new OrbitPoint(input), Integer.parseInt(waveCurveConfiguration.getParam("family")),Integer.parseInt(waveCurveConfiguration.getParam("direction")));
+        super(new OrbitPoint(input), Integer.parseInt(waveCurveConfiguration.getParam("family")), Integer.parseInt(waveCurveConfiguration.getParam("direction")));
 
         configuration_ = waveCurveConfiguration.clone();
 
     }
-
-    
 
     //
     // Accessors/Mutators
@@ -46,23 +42,19 @@ public class WaveCurveCalc extends WaveCurveOrbitCalc {
     @Override
     public RpSolution calc() throws RpException {
         WaveCurve result;
-      
+
 //            result = (WaveCurve) nativeCalc(getStart(), getFamilyIndex(), getDirection(), origin_, edge_);
-            
-            result = (WaveCurve) nativeCalc(getStart(), (CurveConfiguration) configuration_);
+        result = (WaveCurve) nativeCalc(getStart(), (CurveConfiguration) configuration_);
+
        
+
         if (result == null) {
             throw new RpException("Error in native layer");
         }
-       
 
         return result;
     }
 
-    
-   
     private native RpSolution nativeCalc(OrbitPoint initialPoint, CurveConfiguration config);
 
-    
-   
 }

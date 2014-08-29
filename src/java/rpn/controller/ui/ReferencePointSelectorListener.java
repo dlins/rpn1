@@ -9,7 +9,6 @@ import java.awt.Color;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -82,7 +81,7 @@ public class ReferencePointSelectorListener implements MouseListener, MouseMotio
 
     @Override
     public void mousePressed(MouseEvent me) {
-
+       
         if (me.getButton() == MouseEvent.BUTTON3) {
             plotLine_ = true;
             RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) me.getSource();

@@ -22,6 +22,8 @@ public class HugoniotCurveCalcND extends ContourCurveCalc implements HugoniotCur
 
     static public final double UMINUS_SHIFT = .01;
 
+  
+    
     //
     // Constructors
     //
@@ -104,13 +106,15 @@ public class HugoniotCurveCalcND extends ContourCurveCalc implements HugoniotCur
     }
 
     public RpSolution calc() throws RpException {
-
+       
         HugoniotCurve result;
         String methodName = ((HugoniotParams) getParams()).getMethodName();
         result = (HugoniotCurve) calc(((HugoniotParams) getParams()).getXZero(), configuration_);
 
         result.setDirection(((HugoniotParams) getParams()).getDirection());
 
+       
+        
         return result;
 
     }

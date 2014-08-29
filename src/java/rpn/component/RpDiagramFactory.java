@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import rpnumerics.RpDiagramCalc;
 import java.util.List;
 import rpn.RPnDesktopPlotter;
-import rpn.controller.RiemannProfileController;
+import rpn.controller.DiagramController;
 import rpn.controller.RpController;
 import rpnumerics.Area;
 import rpnumerics.Diagram;
@@ -34,17 +34,25 @@ public final class RpDiagramFactory implements RpGeomFactory {
     private boolean isGeomOutOfDate_;
     private RpController ui_;
 
+   
+
     public RpDiagramFactory(RpDiagramCalc calc) {
         try {
             calc_ = calc;
             geom_ = createDiagramFromSource();
             isGeomOutOfDate_ = false;
+            
+            ui_= new  DiagramController();
 
             geomSource_ = calc.createDiagramSource();
         } catch (RpException ex) {
             RPnDesktopPlotter.showCalcExceptionDialog(ex);
         }
     }
+
+  
+
+   
 
     @Override
     public void updateGeom() {
@@ -140,7 +148,7 @@ public final class RpDiagramFactory implements RpGeomFactory {
     }
 
     protected RpController createUI() {
-        return new RiemannProfileController();
+        return new DiagramController();
     }
 
     @Override

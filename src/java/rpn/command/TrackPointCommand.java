@@ -50,11 +50,8 @@ public class TrackPointCommand extends RpModelPlotCommand {
     public void execute() {
 
         StateInformation stateInformation = new StateInformation();
-
         info_ = stateInformation.getStateInformation(UIController.instance().globalInputTable().values());
         testFrame_.update();
-
-        System.out.println("Chamando execute do track agent");
 
     }
 

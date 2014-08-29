@@ -8,12 +8,13 @@ package rpn.command;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 import javax.swing.JButton;
 import rpn.RPnMenuCommand;
-import rpn.RPnDiagramFrame;
+import rpn.ui.diagram.RPnDiagramFrame;
 import rpn.component.*;
 import rpn.controller.ui.UIController;
 import rpn.controller.ui.UI_ACTION_SELECTED;
@@ -35,7 +36,6 @@ public class WaveCurveSpeedPlotCommand extends RpModelPlotCommand implements Obs
     private List<RpGeometry> selectedCurves;
     private RPnDiagramFrame speedGraphicsFrame_;
 
-
     //
     // Constructors/Initializers
     //
@@ -46,8 +46,11 @@ public class WaveCurveSpeedPlotCommand extends RpModelPlotCommand implements Obs
 
     @Override
     public void actionPerformed(ActionEvent event) {
+//        RPnDataModule.SPEEDGRAPHICSPHASESPACE.clear();        
         UI_ACTION_SELECTED action = new UI_ACTION_SELECTED(this);
         action.userInputComplete(UIController.instance());// No input needed
+
+        
 
     }
 
@@ -75,28 +78,40 @@ public class WaveCurveSpeedPlotCommand extends RpModelPlotCommand implements Obs
     public void execute() {
 
         selectedCurves = UIController.instance().getSelectedGeometriesList();
-        RpGeometry curveSelected = selectedCurves.get(0);
 
-        WaveCurve waveCurve = (WaveCurve) curveSelected.geomFactory().geomSource();
+        if (!selectedCurves.isEmpty()) {
+            RpGeometry curveSelected = selectedCurves.get(0);
 
-        RpDiagramFactory factory = new RpDiagramFactory(waveCurve);
-        DiagramGeom geom = (DiagramGeom) factory.geom();
-        
-        RPnDataModule.SPEEDGRAPHICSPHASESPACE.join(geom);
-        
-        speedGraphicsFrame_= new RPnDiagramFrame(RPnDataModule.SPEEDGRAPHICSPHASESPACE,this);
-        
-        speedGraphicsFrame_.updateScene(geom.getMin(), geom.getMax());
-        
-        speedGraphicsFrame_.setVisible(true);
-        
-        UIController.instance().getSelectedGeometriesList().clear();
-        
-        UIController.instance().getActivePhaseSpace().updateCurveSelection();
+            WaveCurveBranch waveCurveBranch = (WaveCurveBranch) curveSelected.geomFactory().geomSource();
+
+            RpDiagramFactory factory = new RpDiagramFactory(waveCurveBranch);
+            DiagramGeom geom = (DiagramGeom) factory.geom();
+
+            geom.setRelater(new SpeedDiagramRelater());
+            RPnDataModule.SPEEDGRAPHICSPHASESPACE.join(geom);
+            
+            
+            Diagram diagram = (Diagram) geom.geomFactory().geomSource();
+            
+            
+            String [] fieldNames = new String[diagram.getLines().size()];
+            
+            for (int i = 0; i <diagram.getLines().size(); i++) {
+                fieldNames[i]= diagram.getLine(i).getName();
+            }
+
+            speedGraphicsFrame_ = new RPnDiagramFrame(RPnDataModule.SPEEDGRAPHICSPHASESPACE, "xi", fieldNames, this);
+
+            speedGraphicsFrame_.updateScene(geom.getMin(), geom.getMax());
+
+            speedGraphicsFrame_.setVisible(true);
+
+            UIController.instance().getSelectedGeometriesList().clear();
+
+            UIController.instance().getActivePhaseSpace().updateCurveSelection();
+        }
 
     }
-
- 
 
     @Override
     public void finalizeApplication() {
@@ -119,7 +134,7 @@ public class WaveCurveSpeedPlotCommand extends RpModelPlotCommand implements Obs
     public void windowClosing(WindowEvent e) {
         System.out.println("chamando closing");
         RPnDataModule.SPEEDGRAPHICSPHASESPACE.clear();
-        
+
     }
 
     @Override
@@ -151,8 +166,8 @@ public class WaveCurveSpeedPlotCommand extends RpModelPlotCommand implements Obs
     }
 
     public void updateDiagramView(DiagramGeom diagramGeom) {
-        
+
         speedGraphicsFrame_.updateScene(diagramGeom.getMin(), diagramGeom.getMax());
-      
+
     }
 }

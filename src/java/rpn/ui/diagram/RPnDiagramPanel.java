@@ -3,8 +3,9 @@
  * Departamento de Dinamica dos Fluidos
  *
  */
-package rpn;
+package rpn.ui.diagram;
 
+import rpn.ui.diagram.DiagramLabel;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
@@ -25,11 +26,14 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import javax.swing.JPanel;
+import rpn.RPnPhaseSpaceAbstraction;
+import rpn.RPnPhaseSpacePanel;
 import rpn.component.ClosestDistanceCalculator;
 import rpn.component.DiagramGeom;
+import rpn.component.RpDiagramFactory;
 import rpn.controller.ui.UIController;
 import rpnumerics.Diagram;
-import rpnumerics.RPNUMERICS;
 import wave.multid.Coords2D;
 import wave.multid.CoordsArray;
 import wave.multid.Space;
@@ -48,45 +52,49 @@ public class RPnDiagramPanel extends RPnPhaseSpacePanel implements Printable {
     // Members
     //
     private Point cursorPos_;
-    private List<Point> trackedPointList_;
+    private List<double[]> trackedPointList_;
     private Line2D.Double trackLine_;
 
     private Scene scene_;
-    private final RPnDiagramXMonitor cursorMonitor_;
+    private final DiagramLabel cursorMonitor_;
+    private final DiagramLabel yMonitor_;
+    private final DiagramLabel relaterPoint_;
+    
 
     private NumberFormat formatter_;
+
+    private Font font_;
     
-    private   Font font_;
 
     //
     // Constructors
     //
-    
-    
-     public RPnDiagramPanel(RPnDiagramXMonitor cursorMonitor) {
-         
-        this(null,cursorMonitor);
+    public RPnDiagramPanel(DiagramLabel cursorMonitor,DiagramLabel yMonitor,DiagramLabel relaterPoint) {
+
+        this(null, cursorMonitor,yMonitor,relaterPoint);
 
     }
-    
-    
-    public RPnDiagramPanel(Scene scene, RPnDiagramXMonitor cursorMonitor) {
+
+    public RPnDiagramPanel(Scene scene, DiagramLabel cursorMonitor,DiagramLabel yMonitor,DiagramLabel relaterPoint) {
         setLayout(new BorderLayout());
         scene_ = scene;
         cursorPos_ = new Point(0, 0);
         trackLine_ = new Line2D.Double(cursorPos_, cursorPos_);
-        trackedPointList_ = new ArrayList<Point>();
+        trackedPointList_ = new ArrayList<double[]>();
+      
         cursorMonitor_ = cursorMonitor;
-
+        yMonitor_=yMonitor;
+        relaterPoint_=relaterPoint;
+        
+       
         addMouseMotionListener(new MouseMotionHandler());
         addMouseListener(new MouseListenerHandler());
         addComponentListener(new PanelSizeController());
 
         formatter_ = NumberFormat.getInstance();
         formatter_.setMaximumFractionDigits(4);
-        
+
         font_ = new Font("Arial", Font.PLAIN, 15);
-        
 
     }
 
@@ -105,7 +113,7 @@ public class RPnDiagramPanel extends RPnPhaseSpacePanel implements Printable {
 
         @Override
         public void mouseDragged(MouseEvent me) {
-////            throw new UnsupportedOperationException("Not supported yet.");
+
         }
 
         @Override
@@ -114,16 +122,24 @@ public class RPnDiagramPanel extends RPnPhaseSpacePanel implements Printable {
             trackedPointList_.clear();
             cursorPos_ = me.getPoint();
 
+            ArrayList<Double> yList = new ArrayList<Double>();
+
             trackLine_ = new Line2D.Double(cursorPos_.x, 0, cursorPos_.x, getHeight());
 
             Iterator geomObjIterator = ((RPnPhaseSpaceAbstraction) scene_.getAbstractGeom()).getGeomObjIterator();
 
-//            List<Double> textCoords = new ArrayList<Double>();
+            RealVector pointOnXAxis = new RealVector(2);
 
-            ViewingTransform transform = scene_.getViewingTransform();
+            double[] yArray = null;
+
+            DiagramGeom diagram = null;
+
             double speed = 0;
+            CoordsArray trackedWCCoords = null;
+            ViewingTransform transform = scene_.getViewingTransform();
+
             while (geomObjIterator.hasNext()) {
-                DiagramGeom diagram = (DiagramGeom) geomObjIterator.next();
+                diagram = (DiagramGeom) geomObjIterator.next();
 
                 Coords2D cursorPoint = new Coords2D(cursorPos_.getX(), cursorPos_.getY());
 
@@ -131,41 +147,83 @@ public class RPnDiagramPanel extends RPnPhaseSpacePanel implements Printable {
 
                 transform.dcInverseTransform(cursorPoint, cursorWC);
 
-                Diagram d = (Diagram) diagram.geomFactory().geomSource();
+                RpDiagramFactory factory = (RpDiagramFactory) diagram.geomFactory();
+
+                Diagram d = (Diagram) factory.geomSource();
 
                 for (int i = 0; i < d.getLines().size(); i++) {
 
                     List<RealSegment> segments = d.getLine(i).getSegments();
 
                     // TODO Usar valores dcWindow e viewPort para definir o ponto a partir do qual sera achado o mais proximo.
-                    RealVector pointTest = new RealVector(2);
+                    pointOnXAxis.setElement(0, cursorWC.getElement(0));
 
-                    pointTest.setElement(0, cursorWC.getElement(0));
-                    pointTest.setElement(1, 0);
+                    pointOnXAxis.setElement(1, 0);
 
-                    ClosestDistanceCalculator calculator = new ClosestDistanceCalculator(segments, pointTest);
+                    ClosestDistanceCalculator calculator = new ClosestDistanceCalculator(segments, pointOnXAxis);
 
                     Coords2D trackedDCCoords = new Coords2D(0, 0);
 
-                    CoordsArray trackedWCCoords = new CoordsArray(calculator.getClosestPoint());
+                    Coords2D pointDCCoords = new Coords2D(0, 0);
 
-//                    textCoords.add(trackedWCCoords.getElement(1));
+                    trackedWCCoords = new CoordsArray(calculator.getClosestPoint());
 
                     speed = trackedWCCoords.getElement(0);
 
                     transform.viewPlaneTransform(trackedWCCoords, trackedDCCoords);
 
-                    trackedPointList_.add(new Point((int) trackedDCCoords.getX(), (int) trackedDCCoords.getY()));
+                    yList.add(i, trackedWCCoords.getElement(1));
+
+                    transform.dcInverseTransform(pointDCCoords, new CoordsArray(pointOnXAxis));
+
+                    double[] point = new double[2];
+
+                    point[0] = trackedWCCoords.getElement(0);
+                    point[1] = trackedWCCoords.getElement(1);
+
+                    trackedPointList_.add(point);
+                }
+
+                yArray = new double[d.getLines().size()];
+
+                for (int i = 0; i < yArray.length; i++) {
+                    yArray[i] = yList.get(i);
 
                 }
 
                 repaint();
 
-//                showRiemannCoords();
-                cursorMonitor_.setX(speed);
+               
 
             }
+
+            CoordsArray pointToPhaseSpace = diagram.getPointToPhaseSpace(speed, yArray);
+            
+            cursorMonitor_.setX(speed);
+            
+            yMonitor_.setText(yArray);
+            
+            relaterPoint_.setText(pointToPhaseSpace.getCoords());
+            
+            Iterator<RPnPhaseSpacePanel> installedPanelsIterator = UIController.instance().getInstalledPanelsIterator();
+
+            while (installedPanelsIterator.hasNext()) {
+                RPnPhaseSpacePanel rPnPhaseSpacePanel = installedPanelsIterator.next();
+
+                Coords2D pointDCCoords = new Coords2D(0, 0);
+
+                rPnPhaseSpacePanel.scene().getViewingTransform().viewPlaneTransform(pointToPhaseSpace, pointDCCoords);
+
+                rPnPhaseSpacePanel.getCastedUI().pointMarkBuffer().clear();
+
+                rPnPhaseSpacePanel.getCastedUI().pointMarkBuffer().add(new Point((int) pointDCCoords.getX(), (int) pointDCCoords.getY()));
+
+                rPnPhaseSpacePanel.repaint();
+
+            }
+
         }
+
     }
 
     private class PanelSizeController extends ComponentAdapter {
@@ -222,7 +280,6 @@ public class RPnDiagramPanel extends RPnPhaseSpacePanel implements Printable {
     @Override
     public void paintComponent(Graphics g) {
 
-        
         /*
          * BOUNDARY WINDOW
          */
@@ -241,106 +298,35 @@ public class RPnDiagramPanel extends RPnPhaseSpacePanel implements Printable {
         /**
          * Y coords
          */
-
         ViewingTransform transform = scene().getViewingTransform();
 
         g.setColor(Color.yellow);
 
-        for (Point trackedPoint : trackedPointList_) {
-            g.drawRect(trackedPoint.x, trackedPoint.y, 2, 2);
+        for (double[] trackedPoint : trackedPointList_) {
+            Coords2D cursorPoint = new Coords2D();
+
+            CoordsArray cursorWC = new CoordsArray(trackedPoint);
+            transform.viewPlaneTransform(cursorWC, cursorPoint);
+
+            g.drawRect((int) cursorPoint.getX(), (int) cursorPoint.getY(), 2, 2);
 
             Graphics2D graph = (Graphics2D) g;
 
             StringBuilder builder = new StringBuilder();
 
-            Coords2D cursorPoint = new Coords2D(trackedPoint.x, trackedPoint.y);
-
-            CoordsArray cursorWC = new CoordsArray(new Space("", 2));
-
-            transform.dcInverseTransform(cursorPoint, cursorWC);
-
-            builder.append(formatter_.format(cursorWC.getElement(1)));
+            builder.append(formatter_.format(trackedPoint[1]));
 
             GlyphVector v = font_.createGlyphVector(graph.getFontRenderContext(), builder.toString());
 
-            graph.drawGlyphVector(v, (float) trackedPoint.x, (float) trackedPoint.y);
+            graph.drawGlyphVector(v, (float) cursorPoint.getX(), (float) cursorPoint.getY());
 
         }
 
-        
         /**
          * Track line
          */
-        
         g.setColor(Color.red);
         g.drawLine((int) trackLine_.x1, (int) trackLine_.y1, (int) trackLine_.x2, (int) trackLine_.y2);
-    }
-
-    public List<Point> getTrackedPointList() {
-        return trackedPointList_;
-    }
-
-    private void showRiemannCoords() {
-
-        RealVector pointOnPhaseSpace = new RealVector(RPNUMERICS.domainDim());
-
-        Iterator geomObjIterator = ((RPnPhaseSpaceAbstraction) scene_.getAbstractGeom()).getGeomObjIterator();
-
-        ViewingTransform transform = scene_.getViewingTransform();
-
-        while (geomObjIterator.hasNext()) {
-            DiagramGeom diagram = (DiagramGeom) geomObjIterator.next();
-
-            Coords2D cursorPoint = new Coords2D(cursorPos_.getX(), cursorPos_.getY());
-
-            CoordsArray cursorWC = new CoordsArray(new Space("", 2));
-
-            transform.dcInverseTransform(cursorPoint, cursorWC);
-
-            Diagram d = (Diagram) diagram.geomFactory().geomSource();
-
-            for (int i = 0; i < d.getLines().size(); i++) {
-
-                List<RealSegment> segments = d.getLine(i).getSegments();
-
-                // TODO Usar valores dcWindow e viewPort para definir o ponto a partir do qual sera achado o mais proximo.
-                RealVector pointTest = new RealVector(2);
-
-                pointTest.setElement(0, cursorWC.getElement(0));
-                pointTest.setElement(1, 0);
-
-                ClosestDistanceCalculator calculator = new ClosestDistanceCalculator(segments, pointTest);
-
-                pointOnPhaseSpace.setElement(i, calculator.getClosestPoint().getElement(1));
-
-            }
-
-        }
-
-        //Show point mark
-        Iterator<RPnPhaseSpacePanel> installedPanelsIterator = UIController.instance().getInstalledPanelsIterator();
-
-        while (installedPanelsIterator.hasNext()) {
-
-            RPnPhaseSpacePanel phaseSpacePanel = installedPanelsIterator.next();
-
-            phaseSpacePanel.getCastedUI().pointMarkBuffer().clear();
-            ViewingTransform viewingTransform = phaseSpacePanel.scene().getViewingTransform();
-
-            Coords2D dcCoords = new Coords2D(0, 0);
-
-            CoordsArray wcCoords = new CoordsArray(pointOnPhaseSpace);
-
-            viewingTransform.viewPlaneTransform(wcCoords, dcCoords);
-
-            Point point = new Point((int) dcCoords.getX(), (int) dcCoords.getY());
-
-            phaseSpacePanel.getCastedUI().pointMarkBuffer().add(point);
-
-            phaseSpacePanel.repaint();
-
-        }
-
     }
 
 }

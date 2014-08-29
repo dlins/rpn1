@@ -86,7 +86,7 @@ int WaveCurveFactory::Liu_half_wavecurve(const ReferencePoint &ref,
         if (current_curve == RAREFACTION_CURVE){
             std::cout << "WaveCurveFactory: entering Rarefaction." << std::endl;
 
-            double deltaxi = 3e-4; // Was: 1e-3
+            double deltaxi = 1e-3;//3e-4; // Was: 1e-3
             std::vector<RealVector> inflection_point;
             Curve rarcurve;
 
@@ -226,7 +226,7 @@ int WaveCurveFactory::Liu_half_wavecurve(const ReferencePoint &ref,
             std::cout << "WaveCurveFactory: entering Composite." << std::endl;
 
 //            double deltaxi = 1e-3;
-            double deltaxi = 3e-4; // Was: 1e-3
+            double deltaxi = 1e-3; //3e-4; // Was: 1e-3
 
             Curve cmpcurve, new_rarcurve;
             std::vector<int> index_explicit_bifurcation_transition;
@@ -350,7 +350,7 @@ int WaveCurveFactory::Liu_half_wavecurve(const ReferencePoint &ref,
             std::cout << "WaveCurveFactory. shck_info = " << shck_info << ", shock_stopped_because = " << shock_stopped_because << std::endl;
 
             std::cout << "Speed at first shockpoint = " << shkcurve.speed[0] << std::endl;
-        
+
 
             shkcurve.back_curve_index = hwc.wavecurve.size() - 1;
             hwc.wavecurve.push_back(shkcurve);
@@ -458,7 +458,7 @@ int WaveCurveFactory::Liu_half_wavecurve(const ReferencePoint &ref,
                     return WAVECURVE_OK;
                 }
                 else {
-                    
+
 
                     return WAVECURVE_OK;
                 }
@@ -503,19 +503,39 @@ int WaveCurveFactory::wavecurve(const RealVector &initial_point, int family, int
     hugoniot = h;
 
     std::cout << "initial_direction = " << initial_direction << ", fam. = " << family << ", inc. = " << increase << std::endl;
-  
+
 
     Liu_half_wavecurve(ref, initial_point, family, increase, RAREFACTION_CURVE,  initial_direction, hwc, wavecurve_stopped_because, edge);
 
     hwc.beginnig_of_second_half = hwc.wavecurve.size();
 
-  
+
 
     Liu_half_wavecurve(ref, initial_point, family, increase, SHOCK_CURVE,       -initial_direction, hwc, wavecurve_stopped_because, edge);
 
     for (int i = 0; i < hwc.wavecurve.size(); i++) std::cout << "Curve\'s size = " << hwc.wavecurve[i].curve.size() << std::endl;
 
+    add_arclength(0, hwc.beginnig_of_second_half - 1, 1.0, hwc);
+    add_arclength(hwc.beginnig_of_second_half, hwc.wavecurve.size() - 1, -1.0, hwc);
+
     return WAVECURVE_OK;
+}
+
+void WaveCurveFactory::add_arclength(int begin, int end, double factor, WaveCurve &hwc){
+    double distance = 0.0;
+    RealVector prev_point = hwc.wavecurve[begin].curve.front();
+
+    for (int i = begin; i <= end; i++){
+        hwc.wavecurve[i].xi.resize(hwc.wavecurve[i].curve.size());
+        for (int j = 0; j < hwc.wavecurve[i].curve.size(); j++){
+            distance += norm(hwc.wavecurve[i].curve[j] - prev_point);
+            hwc.wavecurve[i].xi[j] = distance*factor;
+
+            prev_point = hwc.wavecurve[i].curve[j];
+        }
+    }
+
+    return;
 }
 
 int WaveCurveFactory::wavecurve_from_boundary(const RealVector &initial_point, int s, int family, int increase, HugoniotContinuation *h, WaveCurve &hwc, int &wavecurve_stopped_because, int &edge){
@@ -597,7 +617,8 @@ int WaveCurveFactory::wavecurve_from_inflection(const std::vector<RealVector> &i
         int start_as;
 
         std::cout << "i = " << i << ", lambda = " << lambda[family] << ", e[family].r = " << e[family].r << std::endl;
-       
+
+
         if (
             (lambda[family] > e[family].r && increase == SPEED_INCREASE) ||
             (lambda[family] < e[family].r && increase == SPEED_DECREASE)

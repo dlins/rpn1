@@ -29,6 +29,8 @@ public class DiagramGeom extends MultiGeometryImpl implements RpGeometry {
     private RpGeomFactory factory_;
     private List<GraphicsUtil> annotationsList_;
     private List<MultiPolyLine> diagramsList_;
+    
+     private DiagramRelater relater_;
 
     //
     // Constructors
@@ -38,8 +40,28 @@ public class DiagramGeom extends MultiGeometryImpl implements RpGeometry {
         diagramsList_ = diagramsList;
         annotationsList_ = new ArrayList<GraphicsUtil>();
         factory_ = factory;
+        relater_ = new DefaultDiagramRelater();
+    }
+    
+    
+    
+     public CoordsArray getPointToPhaseSpace(double x ,double [] ys) {
+
+        double [] point = relater_.getPointToPhaseSpace(this, x,ys);
+
+        return new CoordsArray(point);
 
     }
+
+    public DiagramRelater getRelater() {
+        return relater_;
+    }
+
+    public void setRelater(DiagramRelater relater_) {
+        this.relater_ = relater_;
+    }
+    
+    
 
     //
     // Accessors/Mutators

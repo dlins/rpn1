@@ -156,9 +156,11 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene implements Observer 
         ((RpGeometry) geom).geomFactory().getUI().uninstall(((RpGeometry) geom).geomFactory());
         selectedGeometries_.remove((RpGeometry) geom);
 
-        RPnCurve curve = (RPnCurve) ((RpGeometry) geom).geomFactory().geomSource();
+        if (!(geom instanceof DiagramGeom)) {
+            RPnCurve curve = (RPnCurve) ((RpGeometry) geom).geomFactory().geomSource();
 
-        RPNUMERICS.removeCurve(curve.getId());
+            RPNUMERICS.removeCurve(curve.getId());
+        }
 
         super.remove(geom);
 
@@ -262,7 +264,7 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene implements Observer 
             else {
                 listResolution.add(new int[]{0, 0});
             }
-                // -----------------------------------
+            // -----------------------------------
 
 //            }
             k++;
@@ -392,16 +394,8 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene implements Observer 
                 }
 
             }
-            
-
-         
-            
-            
 
         }
-        
-        
-
 
     }
 

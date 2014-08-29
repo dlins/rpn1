@@ -1,21 +1,17 @@
 package rpn.controller.phasespace.riemannprofile;
 
-import java.util.Iterator;
 import java.util.List;
-import rpn.RPnPhaseSpacePanel;
 import rpn.command.PointMarkCommand;
 import rpn.command.RiemannProfileCommand;
 import rpn.component.DiagramGeom;
 import rpn.component.RpDiagramFactory;
 import rpn.component.RpGeometry;
 import rpn.component.WaveCurveGeom;
-import rpn.component.util.AreaSelected;
 import rpn.component.util.GraphicsUtil;
 import rpn.component.util.Point;
 import rpn.controller.ui.UIController;
 import rpn.controller.ui.UI_ACTION_SELECTED;
 import rpn.parser.RPnDataModule;
-import rpnumerics.Diagram;
 import rpnumerics.RiemannProfileCalc;
 import rpnumerics.WaveCurve;
 import wave.util.RealVector;
@@ -98,12 +94,6 @@ public class AllIncreaseRimannProfileState implements RiemannProfileState, Riema
         RPnDataModule.RIEMANNPHASESPACE.join(diagramGeom);
         RPnDataModule.RIEMANNPHASESPACE.update();
         RiemannProfileCommand.instance().updateRiemannFrame();
-        
-        
-        
-        
-        
-        
 
     }
 }
