@@ -205,6 +205,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
 
             jobject hugoniotSegment = env->NewObject(hugoniotSegmentClass, hugoniotSegmentConstructor, realVectorLeftPoint, leftSigma, realVectorRightPoint, rightSigma, leftLambda1, leftLambda2, rightLambda1, rightLambda2, pointType, env->NewStringUTF(signature.c_str()));
             env->CallObjectMethod(segmentsArray, arrayListAddMethod, hugoniotSegment);
+            
+            env->DeleteLocalRef(hugoniotSegment);
+
 
         }
 

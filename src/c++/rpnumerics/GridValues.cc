@@ -94,14 +94,14 @@ void GridValues::fill_values_on_grid(const Boundary *b,
 }
 
 void GridValues::fill_functions_on_grid(const FluxFunction *ff, const AccumulationFunction *aa){
-    printf("    point_inside = %d x %d\n", point_inside.rows(), point_inside.cols());
+//    printf("    point_inside = %d x %d\n", point_inside.rows(), point_inside.cols());
 
     if (!functions_on_grid_computed){
 //        fill_values_on_grid(GridValues &gv);
 
-        printf("Inside GridValues::fill_functions_on_grid\n");
+//        printf("Inside GridValues::fill_functions_on_grid\n");
         
-           cout<<"Flux e acumm em grid values: "<<ff<<" "<<aa<<endl;
+//           cout<<"Flux e acumm em grid values: "<<ff<<" "<<aa<<endl;
 
         int rows = grid.rows(), cols = grid.cols(); 
         int n = rows*cols;
@@ -111,7 +111,7 @@ void GridValues::fill_functions_on_grid(const FluxFunction *ff, const Accumulati
         G_on_grid.resize(rows, cols);
 
         int dim = grid(0, 0).size();
-        std::cout << "Dim = " << dim << std::endl;
+//        std::cout << "Dim = " << dim << std::endl;
 
         #pragma omp parallel for schedule(dynamic)
         for (int i = 0; i < n; i++) {
@@ -131,7 +131,7 @@ void GridValues::fill_functions_on_grid(const FluxFunction *ff, const Accumulati
         functions_on_grid_computed = true;
     }
 
-    printf("Filled correctly\n");
+//    printf("Filled correctly\n");
 
     return;
 }
