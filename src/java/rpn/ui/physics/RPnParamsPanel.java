@@ -22,7 +22,6 @@ import javax.swing.JPanel;
 import javax.swing.event.MouseInputListener;
 import rpn.configuration.Configuration;
 import rpn.controller.ui.UIController;
-import rpn.ui.ParamsDescriptor;
 import rpnumerics.RPNUMERICS;
 import java.util.List;
 
@@ -177,6 +176,11 @@ public class RPnParamsPanel extends JPanel implements Printable {
         return 0;
     }
 
+//    @Override
+//    public void update(Observable o, Object arg) {
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+//    }
+
     private class MouseMotionHandler implements MouseInputListener {
 
         @Override
@@ -207,6 +211,8 @@ public class RPnParamsPanel extends JPanel implements Printable {
             }
 
             RPNUMERICS.applyFluxParams();
+            
+            fluxConfiguration.notifyObservers();
 
             rpn.command.ChangeFluxParamsCommand.instance().applyChange(new PropertyChangeEvent(rpn.command.ChangeFluxParamsCommand.instance(), phaseSpaceName,
                     fluxConfiguration,

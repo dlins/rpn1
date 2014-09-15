@@ -6,9 +6,6 @@
  */
 package rpn.ui;
 
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import javax.swing.JComponent;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
@@ -34,44 +31,23 @@ public class TextFieldCreator extends UIComponentCreator {
 
     }
 
+    
     @Override
     public JComponent createUIComponent() {
 
         JPanel panel_ = new JPanel();
 
-        GridBagConstraints gridConstraints = new GridBagConstraints();
-
-        gridConstraints.fill = GridBagConstraints.BOTH;
-
-        gridConstraints.gridwidth = 1;
-        gridConstraints.gridheight = 1;
-        gridConstraints.ipadx = 50;
-        gridConstraints.gridy = 0;
-        gridConstraints.gridx = 0;
-
-        GridLayout gridBayLayout = new GridLayout(configuration_.getParamsSize(), 1);
-
-        panel_.setLayout(gridBayLayout);
-
-
-        gridConstraints.gridx = 0;
         panel_.add(createTextField(configurationParameter_, configuration_.getParam(configurationParameter_)));
-
-
-        gridConstraints.gridy++;
-
 
         return panel_;
 
     }
-
+    
     private JPanel createTextField(String paramName, String paramValue) {
 
         JFormattedTextField textField = new JFormattedTextField();
-        GridBagConstraints gridConstraints = new GridBagConstraints();
-        GridBagLayout gridBayLayout = new GridBagLayout();
 
-        JPanel textPanel = new JPanel(gridBayLayout);
+        JPanel textPanel = new JPanel();
 
 
         textField.setText(paramValue);
@@ -83,20 +59,17 @@ public class TextFieldCreator extends UIComponentCreator {
         textField.getDocument().addDocumentListener(new TextValueHandler());
 
         JLabel label = new JLabel(paramName);
+        textPanel.add(label);
 
-        gridConstraints.gridx = 0;
-        textPanel.add(label, gridConstraints);
-        gridConstraints.gridx = 1;
-        textPanel.add(textField, gridConstraints);
+        textPanel.add(textField);
 
         return textPanel;
 
     }
 
+    
+
     private class TextValueHandler implements DocumentListener {
-
-
-
 
         public void insertUpdate(DocumentEvent arg0) {
 

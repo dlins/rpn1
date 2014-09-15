@@ -17,7 +17,7 @@ import rpnumerics.RPNUMERICS;
 public class CheckBoxCreator extends UIComponentCreator {
 
     private JCheckBox singularCheckBox_;
-    private int currentOrbitDirection_;
+
 
     public CheckBoxCreator(Configuration configuration_, String configurationParameter) {
         super(configuration_, configurationParameter);

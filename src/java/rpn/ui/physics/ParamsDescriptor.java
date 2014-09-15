@@ -3,7 +3,7 @@
  * Departamento de Dinamica dos Fluidos
  *
  */
-package rpn.ui;
+package rpn.ui.physics;
 
 import java.awt.Polygon;
 import rpn.RPnProjDescriptor;

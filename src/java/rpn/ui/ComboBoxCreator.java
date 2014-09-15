@@ -6,8 +6,6 @@
  */
 package rpn.ui;
 
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.HashMap;
@@ -30,27 +28,14 @@ public class ComboBoxCreator extends UIComponentCreator {
         super(configuration, configurationParameter);
 
     }
-
-    @Override
+    
+    
+     @Override
     public JComponent createUIComponent() {
 
         JPanel panel_ = new JPanel();
 
-        GridBagConstraints gridConstraints = new GridBagConstraints();
-
-        gridConstraints.fill = GridBagConstraints.BOTH;
-
-        gridConstraints.gridwidth = 1;
-        gridConstraints.gridheight = 1;
-        gridConstraints.ipadx = 50;
-        gridConstraints.gridy = 0;
-        gridConstraints.gridx = 0;
-
-        GridBagLayout gridBayLayout = new GridBagLayout();
-
         JLabel methodLabel = new JLabel(configurationParameter_);
-
-        panel_.setLayout(gridBayLayout);
 
         HashMap<String, String> paramsValues = new HashMap<String, String>();
 
@@ -72,15 +57,9 @@ public class ComboBoxCreator extends UIComponentCreator {
         JComboBox comboBox = new JComboBox(paramsValues.keySet().toArray());
 
         comboBox.addItemListener(new ComboEventHandler());
+        panel_.add(methodLabel);
 
-        gridConstraints.gridy = 0;
-        gridConstraints.gridx = 0;
-        panel_.add(methodLabel, gridConstraints);
-
-        gridConstraints.gridy = 1;
-        gridConstraints.gridx = 0;
-
-        panel_.add(comboBox, gridConstraints);
+        panel_.add(comboBox);
         
         
          if (configurationParameter_.contains("sort")) {//To eigen sort functions
@@ -101,7 +80,8 @@ public class ComboBoxCreator extends UIComponentCreator {
         return panel_;
 
     }
-
+    
+    
     private String chooseCharacteristic(int charFlag) {
 
         if (charFlag == 0) {

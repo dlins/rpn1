@@ -21,7 +21,7 @@ import javax.swing.event.ChangeListener;
 
 import rpn.controller.ui.UIController;
 import rpn.configuration.Configuration;
-import rpn.ui.ParamsDescriptor;
+import rpn.ui.physics.ParamsDescriptor;
 import rpnumerics.RPNUMERICS;
 import wave.util.Boundary;
 import wave.util.IsoTriang2DBoundary;

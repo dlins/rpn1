@@ -43,7 +43,7 @@
             </METHOD>
 
             <CURVECONFIGURATION name="hugoniotcurve">
-                <CURVEPARAM name="resolution" value="120 120"/>
+                <CURVEPARAM name="resolution" value="60 60"/>
                 <CURVEPARAM name="method" value="IMPLICIT"/>
                 <CURVEPARAM name="case" value="0"/>
                 
