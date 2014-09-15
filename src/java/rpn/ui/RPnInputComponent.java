@@ -66,6 +66,8 @@ public class RPnInputComponent extends Observable implements Observer {//TODO Re
     private static final String FORMAT_TYPE = "FORMAT_TYPE";
     //RADIO BUTTON INDEX
     public static int rb = -1;
+    
+    private Configuration configuration_;
 
     public RPnInputComponent(RPnSubject subject) {
         stringValues_ = new String[subject.getParamsNames().length];
@@ -310,6 +312,7 @@ public class RPnInputComponent extends Observable implements Observer {//TODO Re
 
     public RPnInputComponent(Configuration configuration, boolean useEvents) {
 
+        configuration_=configuration;
         textField_ = new JFormattedTextField[configuration.getParamsSize()];
 
         stringValues_ = new String[configuration.getParamsSize()];
@@ -478,16 +481,22 @@ public class RPnInputComponent extends Observable implements Observer {//TODO Re
     @Override
     public void update(Observable o, Object arg) {
         
-//        System.out.println("Chamando update de input component: "+ o);
-//        Configuration configuration =(Configuration)o;
-//        
-//        for (int i = 0; i < textField_.length; i++) {
-//            JFormattedTextField jFormattedTextField = textField_[i];
-//            
-//            textField_[i].setText(configuration.getParam(i));
-//         
-//            
-//        }
+        System.out.println("chamando notify observers");
+        
+        
+        System.out.println("Chamando update de input component: "+ o);
+        Configuration configuration =(Configuration)o;
+        
+        
+        
+        
+        for (int i = 0; i < textField_.length; i++) {
+            JFormattedTextField jFormattedTextField = textField_[i];
+            
+            textField_[i].setText(configuration.getParam(i));
+         
+            
+        }
 //        
 ////
 ////        String[] newParamsValues = (String[]) arg;
@@ -555,8 +564,10 @@ public class RPnInputComponent extends Observable implements Observer {//TODO Re
     }
 
     private class TextValueHandler implements DocumentListener {
-
+        
         public void insertUpdate(DocumentEvent arg0) {
+            
+            System.out.println("em insert update: "+ arg0.getDocument());
             String[] newValues = new String[textField_.length];
             Document doc = (Document) arg0.getDocument();
             try {
@@ -567,12 +578,17 @@ public class RPnInputComponent extends Observable implements Observer {//TODO Re
                         String newValue = doc.getText(0, doc.getLength());
 
                         stringValues_[j] = newValue;
+                        configuration_.setParamValue(parameterName_, newValue);
 
                     } else {
                         stringValues_[j] = ((JFormattedTextField) textField_[j]).getText();
+                        configuration_.setParamValue(parameterName_, stringValues_[j]);
                     }
+                    
 
-                    controller_.propertyChange(new PropertyChangeEvent(this, parameterName_, stringValues_, stringValues_));
+
+
+//                    controller_.propertyChange(new PropertyChangeEvent(this, parameterName_, stringValues_, stringValues_));
                     setChanged();
                     notifyObservers();
                 }

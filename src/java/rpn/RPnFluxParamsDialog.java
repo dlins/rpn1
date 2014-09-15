@@ -147,7 +147,9 @@ public class RPnFluxParamsDialog extends RPnDialog {
         
         ParamsDescriptor descriptor  = new ParamsDescriptor(paramNames, paramsOrientation, paramIndex,boundary);
 
-        paramsPanel_.add(new RPnParamsPanel(descriptor));
+        RPnParamsPanel paramsPanel=     new RPnParamsPanel(descriptor);
+        
+        paramsPanel_.add(paramsPanel);
         
         this.getContentPane().add(paramsPanel_,BorderLayout.EAST);
         

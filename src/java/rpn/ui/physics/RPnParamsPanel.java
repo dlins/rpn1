@@ -114,7 +114,6 @@ public class RPnParamsPanel extends JPanel implements Printable {
         paramValues_ = new double[2];
 
         addComponentListener(new RPnParamsPanel.PanelSizeController());
-//        addMouseMotionListener(new MouseMotionHandler());
         addMouseListener(new MouseMotionHandler());
         addMouseMotionListener(new MouseMotionHandler());
 
@@ -212,7 +211,7 @@ public class RPnParamsPanel extends JPanel implements Printable {
 
             RPNUMERICS.applyFluxParams();
             
-            fluxConfiguration.notifyObservers();
+//            fluxConfiguration.notifyObservers();
 
             rpn.command.ChangeFluxParamsCommand.instance().applyChange(new PropertyChangeEvent(rpn.command.ChangeFluxParamsCommand.instance(), phaseSpaceName,
                     fluxConfiguration,
