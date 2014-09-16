@@ -10,7 +10,6 @@ import java.io.IOException;
 import rpn.command.*;
 import rpn.parser.*;
 import rpnumerics.RPNUMERICS;
-import wave.multid.DimMismatchEx;
 import wave.util.Boundary;
 import java.awt.print.PrinterJob;
 import javax.swing.*;
@@ -35,8 +34,6 @@ import rpn.controller.ui.UI_ACTION_SELECTED;
 import rpn.glasspane.RPnGlassPane;
 import rpn.message.RPnNetworkStatus;
 import wave.multid.Space;
-import wave.util.RealVector;
-import wave.util.RectBoundary;
 
 public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     
@@ -234,12 +231,12 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         utilitiesToolBar_.add(VelocityCommand.instance().getContainer());        //** Leandro
         utilitiesToolBar_.add(ClassifierCommand.instance().getContainer());      //** Leandro
 
-//        utilitiesToolBar_.add(CurveSelectionCommand.instance().getContainer());
+     
         utilitiesToolBar_.add(AnnotationSelectionCommand.instance().getContainer());
         
         utilitiesToolBar_.add(ZoomingAreaCommand.instance().getContainer());
         utilitiesToolBar_.add(BifurcationCorrespondenceCommand.instance().getContainer());
-//        utilitiesToolBar_.add(WaveCurveSpeedPlotCommand.instance().getContainer());
+        utilitiesToolBar_.add(WaveCurveSpeedPlotCommand.instance().getContainer());
     }
     
     private void createRiemmanProblemToolBar() {

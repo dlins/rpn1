@@ -61,7 +61,7 @@ public class CoincidenceExtensionCurvePlotAgent extends BifurcationPlotCommand {
 
         auxPhaseSpace.plot(geometry);
 
-        System.out.println("Chamando execute");
+
     }
 
     static public CoincidenceExtensionCurvePlotAgent instance() {

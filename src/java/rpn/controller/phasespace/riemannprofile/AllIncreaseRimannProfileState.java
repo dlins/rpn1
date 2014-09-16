@@ -11,6 +11,7 @@ import rpn.component.util.GraphicsUtil;
 import rpn.component.util.Point;
 import rpn.controller.ui.UIController;
 import rpn.controller.ui.UI_ACTION_SELECTED;
+import rpn.parser.RPnDataModule;
 import rpnumerics.RiemannProfileCalc;
 import rpnumerics.WaveCurve;
 import wave.util.RealVector;
@@ -76,5 +77,23 @@ public class AllIncreaseRimannProfileState implements RiemannProfileState, Riema
         DiagramGeom geom = (DiagramGeom) factory.geom();
 
         return geom;
+    }
+
+    @Override
+    public void updateRiemannProfile() {
+        
+         if(RPnDataModule.RIEMANNPHASESPACE.getLastGeometry()==null)return;
+
+        RPnDataModule.RIEMANNPHASESPACE.remove(0);
+        
+        DiagramGeom diagramGeom = calcProfile();
+
+        if(diagramGeom==null)return;
+        
+        
+        RPnDataModule.RIEMANNPHASESPACE.join(diagramGeom);
+        RPnDataModule.RIEMANNPHASESPACE.update();
+        RiemannProfileCommand.instance().updateRiemannFrame();
+
     }
 }

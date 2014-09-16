@@ -58,4 +58,9 @@ public class PhysicalBoundaryCalc implements RpCalculation {
         return configuration_;
 
     }
+
+    @Override
+    public void setReferencePoint(OrbitPoint referencePoint) {
+        
+    }
 }

@@ -54,13 +54,6 @@ public abstract class RpModelPlotCommand extends RpModelActionCommand implements
 
         button_.setText(buttonCaption.toString());
 
-//        button_.setFont(rpn.RPnConfigReader.MODELPLOT_BUTTON_FONT);
-//
-//        AffineTransform fontTransform = new AffineTransform();
-//
-//        fontTransform.scale(1.5, 1.5);
-//        Font newFont = button_.getFont().deriveFont(fontTransform);
-//        button_.setFont(newFont);
         button_.setToolTipText(shortDesc);
 
         putValue(Action.SHORT_DESCRIPTION, shortDesc);

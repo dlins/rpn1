@@ -10,11 +10,8 @@ import java.beans.*;
 import java.util.List;
 import java.util.ArrayList;
 
-import rpn.configuration.CommandConfiguration;
-import rpn.configuration.Configuration;
 import rpn.controller.ui.*;
 import rpn.parser.RPnDataModule;
-import wave.util.RealVector;
 
 public abstract class RpModelConfigChangeCommand extends RpModelActionCommand {
     //
@@ -32,12 +29,7 @@ public abstract class RpModelConfigChangeCommand extends RpModelActionCommand {
 
     public void applyChange(PropertyChangeEvent change) {
 
-
-        
-  
-
         firePropertyChange(change);
-
         RPnDataModule.updatePhaseSpaces();
         UIController.instance().panelsUpdate();
 

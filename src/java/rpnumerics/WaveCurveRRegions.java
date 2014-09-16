@@ -32,35 +32,6 @@ public class WaveCurveRRegions implements RpSolution {
     }
 
 
-//    @Override
-//    public String toString() {
-//        StringBuilder stringBuilder = new StringBuilder();
-//
-//        for (WaveCurveBranch waveCurveBranch : branchList_) {
-//
-//
-//            for (WaveCurveBranch waveCurveBranch2 : waveCurveBranch.getBranchsList()) {
-//
-//                FundamentalCurve orbit = (FundamentalCurve) waveCurveBranch2;
-//
-//                stringBuilder.append("--------Inicio branch-------------"+orbit.getCurveType()+"\n");
-//
-//                for (int i = 0; i < orbit.getPoints().length; i++) {
-//
-//                    stringBuilder.append(orbit.getPoints()[i] + " " + orbit.getPoints()[i].getCorrespondingCurveIndex() + " " + orbit.getPoints()[i].getCorrespondingPointIndex()+"\n");
-//
-//                }
-//
-//                stringBuilder.append("--------Fim branch-------------\n");
-//            }
-//        }
-//        return stringBuilder.toString();
-//
-//    }
-
-
-
-
     @Override
     public String toXML() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.

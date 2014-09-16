@@ -12,7 +12,6 @@ import rpnumerics.*;
 import wave.multid.CoordsArray;
 import wave.multid.model.MultiPoint;
 import wave.multid.view.ViewingAttr;
-import wave.util.RealVector;
 
 public class OrbitGeomFactory extends RpCalcBasedGeomFactory {
     //

@@ -86,6 +86,8 @@ public class RiemannProfileCalc implements RpCalculation, RpDiagramCalc {
         }
 
         Diagram riemannProfile = (Diagram) result;
+        
+        System.err.println("Ponto R: "+riemannProfile.getInfo());
 
         if (!isRiemannSpeedLimitsGood(riemannProfile)) {
             throw new RpException("Wrong speed limits");
@@ -123,8 +125,6 @@ public class RiemannProfileCalc implements RpCalculation, RpDiagramCalc {
     }
 
     private void addSteadyState(Diagram riemannProfile) {
-        
-        System.out.println("Adicionando estado constante !!!");
 
         String Xlimits[] = RPNUMERICS.getParamValue("riemannprofile", "speedrange").split(" ");
 
@@ -145,8 +145,6 @@ public class RiemannProfileCalc implements RpCalculation, RpDiagramCalc {
             leftPoint.setElement(1, firstSegment.p1().getElement(1));
             
             lines.get(i).addCoord(0, 0, leftPoint);
-
-            
             
             List<RealVector> lineList = lines.get(i).getCoords().get(0);
             RealVector lastPoint = lineList.get(lineList.size()-1);
@@ -159,9 +157,6 @@ public class RiemannProfileCalc implements RpCalculation, RpDiagramCalc {
             lines.get(i).addCoord(0, lineList.size()-1, lastPoint);
               
             lines.get(i).addCoord(0, lineList.size()-1, rightPoint);
-            
-  
-
         }
 
     }
@@ -193,6 +188,11 @@ public class RiemannProfileCalc implements RpCalculation, RpDiagramCalc {
         }
 
         return true;
+    }
+
+    @Override
+    public void setReferencePoint(OrbitPoint referencePoint) {
+       
     }
 
 }

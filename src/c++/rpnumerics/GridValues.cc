@@ -100,7 +100,7 @@ void GridValues::fill_functions_on_grid(const FluxFunction *ff, const Accumulati
 //        fill_values_on_grid(GridValues &gv);
 
 //        printf("Inside GridValues::fill_functions_on_grid\n");
-        
+
 //           cout<<"Flux e acumm em grid values: "<<ff<<" "<<aa<<endl;
 
         int rows = grid.rows(), cols = grid.cols(); 

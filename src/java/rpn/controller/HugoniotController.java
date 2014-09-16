@@ -35,6 +35,7 @@ public class HugoniotController extends RpCalcController {
         ChangeFluxParamsCommand.instance().addPropertyChangeListener(this);
         BifurcationRefineCommand.instance().addPropertyChangeListener(this);      // ****
         ChangeXZeroCommand.instance().addPropertyChangeListener(this);
+        ReferencePointSelectionCommand.instance().addPropertyChangeListener(this);
 
 
 
@@ -46,7 +47,9 @@ public class HugoniotController extends RpCalcController {
         ChangeFluxParamsCommand.instance().removePropertyChangeListener(this);
         BifurcationRefineCommand.instance().removePropertyChangeListener(this);
         ChangeXZeroCommand.instance().removePropertyChangeListener(this);
-
+         ReferencePointSelectionCommand.instance().removePropertyChangeListener(this);
+    
+       
     }
 
     @Override
@@ -66,7 +69,6 @@ public class HugoniotController extends RpCalcController {
 
 
         if (change.getSource() instanceof DragPlotCommand) {
-            
             
             ((HugoniotParams) ((HugoniotCurveCalcND) geomFactory_.rpCalc()).getParams()).setXZero((RealVector) change.getNewValue());
             geomFactory_.updateGeom();

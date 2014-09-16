@@ -48,6 +48,11 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc
     jclass rpnCurveClass = env->FindClass(RPNCURVE_LOCATION);
     jclass classConfiguration = env->FindClass(CONFIGURATION_LOCATION);
 
+    //     public void setXi(double [] xi)
+
+
+    jclass fundamentalCurveClass = env->FindClass(FUNDAMENTALCURVE_LOCATION);
+
 
     jclass shockCurveClass = (env)->FindClass(SHOCKCURVE_LOCATION);
     jclass classRarefactionOrbit = (env)->FindClass(RAREFACTIONCURVE_LOCATION);
@@ -57,6 +62,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc
 
 
 
+
+    jmethodID setXIMethodID = (env)->GetMethodID(fundamentalCurveClass, "setXi", "([D)V");
 
     jmethodID setCorrespondingCurveIndexID = (env)->GetMethodID(classOrbitPoint, "setCorrespondingCurveIndex", "(I)V");
     jmethodID setCorrespondingPointIndexID = (env)->GetMethodID(classOrbitPoint, "setCorrespondingPointIndex", "(I)V");
@@ -104,7 +111,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc
         realVectorInput.component(i) = input[i];
     }
 
-  
+
     RpNumerics::getPhysics().getSubPhysics(0).preProcess(realVectorInput);
     env->DeleteLocalRef(inputPhasePointArray);
 
@@ -112,18 +119,18 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc
 
     const FluxFunction * flux = &RpNumerics::getPhysics().fluxFunction();
 
-//    cout << "Parametros na chamada: " << flux->fluxParams().params() << endl;
+    //    cout << "Parametros na chamada: " << flux->fluxParams().params() << endl;
 
     const AccumulationFunction * accum = &RpNumerics::getPhysics().accumulation();
 
     RarefactionCurve rc(accum, flux, boundary);
 
     HugoniotContinuation * hug = RpNumerics::getPhysics().getSubPhysics(0).getHugoniotContinuationMethod();
-    
+
     ShockCurve * shock = RpNumerics::getPhysics().getSubPhysics(0).getShockMethod();
-    
+
     CompositeCurve * cmp = RpNumerics::getPhysics().getSubPhysics(0).getCompositeCurve();
-    
+
     LSODE lsode;
     ODE_Solver *odesolver;
     odesolver = &lsode;
@@ -177,16 +184,16 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc
     std::stringstream streamFamily(family);
     streamFamily >> familyNumber;
 
-//
-//    cout << "Valor de origin" << originNumber << endl;
-//
-//    cout << "Ponto entrado: " << realVectorInput << endl;
-//
-//
-//    cout << "Curve index: " << curveNumber << endl;
-//    cout << "Direcao: " << timeDirection << endl;
-//    cout << "Family" << familyNumber << endl;
-//    cout << "Edge" << edgeNumber << endl;
+    //
+    //    cout << "Valor de origin" << originNumber << endl;
+    //
+    //    cout << "Ponto entrado: " << realVectorInput << endl;
+    //
+    //
+    //    cout << "Curve index: " << curveNumber << endl;
+    //    cout << "Direcao: " << timeDirection << endl;
+    //    cout << "Family" << familyNumber << endl;
+    //    cout << "Edge" << edgeNumber << endl;
 
 
     WaveCurve * hwc = new WaveCurve();
@@ -227,6 +234,39 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc
     }
 
 
+
+//    for (int j = 0; j < hwc->wavecurve.size(); j++) {
+//
+//        Curve testeWC = hwc->wavecurve[j];
+//
+//        vector<double> xiVector = testeWC.xi;
+//
+//        cout <<"Curva: "<<j<<endl;
+//
+//        for (int n = 0; n < xiVector.size(); n++) {
+//            cout << "xi=" << xiVector[n] << endl;
+//        }
+//
+//
+//
+//
+//
+//    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     double speedAtReferencePoint = hwc->reference_point.e[familyNumber].r;
 
 
@@ -252,7 +292,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc
 
 
 
-    cout<<"Antes de adicionar curva de onda: "<<RpNumerics::getCurrentCurveID()<<endl;
+    cout << "Antes de adicionar curva de onda: " << RpNumerics::getCurrentCurveID() << endl;
     RpNumerics::addWaveCurve(hwc);
 
     jobject waveCurve = (env)->NewObject(classWaveCurve, waveCurveConstructor, familyNumber, timeDirection);
@@ -264,10 +304,29 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc
     jobject waveCurveBranchForward = env->NewObject(classWaveCurve, waveCurveConstructor, familyNumber, timeDirection); //First branch for now
 
 
-    //
+
+
+
+
+
     for (int i = 0; i < hwc->wavecurve.size(); i++) {
-        //
+
         Curve wc = hwc->wavecurve[i];
+
+        vector<double> xiVector = wc.xi;
+
+        double nativeXi [xiVector.size()];
+
+        for (int n = 0; n < xiVector.size(); n++) {
+            nativeXi[n] = xiVector.at(n);
+
+        }
+        
+        
+        jdoubleArray xiArray = (env)->NewDoubleArray(xiVector.size());
+
+        (env)->SetDoubleArrayRegion(xiArray, 0, xiVector.size(), nativeXi);
+
         std::vector<RealVector> coords = wc.curve;
         int relatedCurvesIndexVector = wc.back_curve_index;
         std::vector<int> correspondingPointIndexVector = wc.back_pointer;
@@ -312,10 +371,11 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc
                 case 1:
                 {
                     jobject rarefactionOrbit = (env)->NewObject(classRarefactionOrbit, rarefactionOrbitConstructor, orbitPointArray, familyNumber, timeDirection);
+                    env->CallVoidMethod(rarefactionOrbit, setXIMethodID, xiArray);
                     env->CallVoidMethod(rarefactionOrbit, setCurveTypeID, 1);
                     env->CallVoidMethod(waveCurveBranchForward, waveCurveAddBranch, rarefactionOrbit);
                     env->CallVoidMethod(rarefactionOrbit, setCurveIndexID, i);
-                    //                    env->CallVoidMethod(rarefactionOrbit, setInitialSubCurveID, curves[i].initial_subcurve);
+                   
 
                 }
                     break;
@@ -323,10 +383,11 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc
                 case 2:
                 {
                     jobject compositeCurve = (env)->NewObject(classComposite, compositeConstructor, orbitPointArray, timeDirection, familyNumber);
+                    env->CallVoidMethod(compositeCurve, setXIMethodID, xiArray);
                     env->CallVoidMethod(compositeCurve, setCurveTypeID, 2);
                     env->CallVoidMethod(waveCurveBranchForward, waveCurveAddBranch, compositeCurve);
                     env->CallVoidMethod(compositeCurve, setCurveIndexID, i);
-                    //                    env->CallVoidMethod(compositeCurve, setInitialSubCurveID, curves[i].initial_subcurve);
+
                 }
                     break;
 
@@ -335,16 +396,17 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc
                 {
                     //cout << "No shock" << endl;
                     jobject shockCurve = (env)->NewObject(shockCurveClass, shockCurveConstructor, orbitPointArray, familyNumber, timeDirection);
+                    env->CallVoidMethod(shockCurve, setXIMethodID, xiArray);
                     env->CallVoidMethod(shockCurve, setCurveTypeID, 3);
                     env->CallVoidMethod(waveCurveBranchForward, waveCurveAddBranch, shockCurve);
                     env->CallVoidMethod(shockCurve, setCurveIndexID, i);
-                    //                    env->CallVoidMethod(shockCurve, setInitialSubCurveID, curves[i].initial_subcurve);
+
                 }
                     break;
 
                 default:
 
-                    return NULL;//cout << "Tipo de curva nao conhecido !!" << endl;
+                    return NULL; //cout << "Tipo de curva nao conhecido !!" << endl;
 
             }
 

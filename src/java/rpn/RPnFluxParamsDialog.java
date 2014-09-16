@@ -5,6 +5,7 @@
  */
 package rpn;
 
+import rpn.ui.physics.RPnParamsPanel;
 import rpn.ui.RPnInputComponent;
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -20,7 +21,10 @@ import javax.swing.event.ChangeListener;
 
 import rpn.controller.ui.UIController;
 import rpn.configuration.Configuration;
+import rpn.ui.physics.ParamsDescriptor;
 import rpnumerics.RPNUMERICS;
+import wave.util.Boundary;
+import wave.util.IsoTriang2DBoundary;
 
 public class RPnFluxParamsDialog extends RPnDialog {
 
@@ -29,12 +33,21 @@ public class RPnFluxParamsDialog extends RPnDialog {
     private JPanel radioPanel_ = new JPanel();            //*************
     //****
     private JTabbedPane tabsPanel;
+    
+    private JPanel paramsPanel_;
+    
     private RPnInputComponent fluxParamInputComponent_;
     //****
+//    private RPnParamsPanel paramsPanel_;
 
     public RPnFluxParamsDialog(RPnFluxParamsSubject[] subjectArray, RPnFluxParamsObserver paramObserver) {
         super(true, false);
-
+        
+        
+        
+        
+        paramsPanel_ = new JPanel();
+//        paramsPanel_.setLayout(ne);//new BoxLayout(paramsPanel_, BoxLayout.X_AXIS));
         setTitle(RPNUMERICS.physicsID());
         beginButton.setText("Close");
         subjectParamsPanel_ = new JPanel();
@@ -112,11 +125,50 @@ public class RPnFluxParamsDialog extends RPnDialog {
         fluxParamsPanel_.add(observerInputComponent.getContainer());
 
         this.getContentPane().add(fluxParamsPanel_, BorderLayout.WEST);
+        
+
+        
+        
+       
+
+        
+//        double [] testMinLimits = {0,0};
+//        
+//        double [] testMaxLimits = {1,1};
+//        
+//        Boundary boundary = new IsoTriang2DBoundary("0 0 0 1 1 0");
+//        
+//        String [] paramNames = {"grw","grg"};
+//        
+//        int [] paramsOrientation ={0,1};
+//        
+//        int [] paramIndex = {0,1};
+//        
+//        
+//        ParamsDescriptor descriptor  = new ParamsDescriptor(paramNames, paramsOrientation, paramIndex,boundary);
+//
+//        RPnParamsPanel paramsPanel=     new RPnParamsPanel(descriptor);
+//        
+//        paramsPanel_.add(paramsPanel);
+//        
+//        this.getContentPane().add(paramsPanel_,BorderLayout.EAST);
+        
+        
+//
+
 
         pack();
 
 
     }
+    
+    
+   
+    
+    
+    
+    
+    
 
     public RPnFluxParamsDialog() {
         super(true, false);

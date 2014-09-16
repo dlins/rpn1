@@ -9,10 +9,8 @@ import java.awt.Color;
 import java.util.ArrayList;
 import rpnumerics.RpDiagramCalc;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import rpn.RPnDesktopPlotter;
-import rpn.controller.RpCalcController;
+import rpn.controller.DiagramController;
 import rpn.controller.RpController;
 import rpnumerics.Area;
 import rpnumerics.Diagram;
@@ -36,17 +34,25 @@ public final class RpDiagramFactory implements RpGeomFactory {
     private boolean isGeomOutOfDate_;
     private RpController ui_;
 
+   
+
     public RpDiagramFactory(RpDiagramCalc calc) {
         try {
             calc_ = calc;
             geom_ = createDiagramFromSource();
             isGeomOutOfDate_ = false;
+            
+            ui_= new  DiagramController();
 
             geomSource_ = calc.createDiagramSource();
         } catch (RpException ex) {
             RPnDesktopPlotter.showCalcExceptionDialog(ex);
         }
     }
+
+  
+
+   
 
     @Override
     public void updateGeom() {
@@ -77,7 +83,7 @@ public final class RpDiagramFactory implements RpGeomFactory {
             for (List<RealVector> linePart : lineCoords) {
                 CoordsArray[] diagramCoords = MultidAdapter.converseRealVectorListToCoordsArray(linePart);
                 MultiPolyLine diagramLine = new MultiPolyLine(diagramCoords, new ViewingAttr(Color.white));
-                System.out.println(line);
+
                 int type = line.getType(index);
 
                 diagramLine.viewingAttr().setColor(colorChooser(type));
@@ -142,7 +148,7 @@ public final class RpDiagramFactory implements RpGeomFactory {
     }
 
     protected RpController createUI() {
-        return new RpCalcController();
+        return new DiagramController();
     }
 
     @Override

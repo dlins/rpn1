@@ -49,6 +49,7 @@ class Curve {
         //     this->curve[i] is related to wavecurve[back_curve_pointer[i]][back_pointer[i]] 
         //
         std::vector<RealVector> curve;
+        std::vector<double>     xi;
         std::vector<int>        back_pointer;
         std::vector<int>        back_curve_pointer;
 

@@ -43,21 +43,10 @@ public class SpinButtonCreator extends UIComponentCreator {
 
         JPanel panel_ = new JPanel();
 
-//        GridBagConstraints gridConstraints = new GridBagConstraints();
-//
-//        gridConstraints.fill = GridBagConstraints.BOTH;
-//
-//        gridConstraints.gridwidth = 1;
-//        gridConstraints.gridheight = 1;
-//        gridConstraints.ipadx = 50;
-//        gridConstraints.gridy = 0;
-//        gridConstraints.gridx = 0;
 
         GridLayout gridBayLayout = new GridLayout(configuration_.getParamsSize(), 1);
 
         panel_.setLayout(gridBayLayout);
-
-//        gridConstraints.gridx = 0;
 
         if (parameterName_.contains("family")) {
 
@@ -80,12 +69,14 @@ public class SpinButtonCreator extends UIComponentCreator {
         return radioCreator.createUIComponent();
     }
 
-    private JPanel spinButtonCreator(String paramName, String paramValue) {
-        GridBagConstraints gridConstraints = new GridBagConstraints();
-        GridBagLayout gridBayLayout = new GridBagLayout();
 
-        JPanel familyPanel = new JPanel(gridBayLayout);
+    
+    
+ private JPanel spinButtonCreator(String paramName, String paramValue) {
 
+
+        JPanel familyPanel = new JPanel();
+  
         Integer family = new Integer(paramValue);
 
         SpinnerNumberModel spinerModel = new SpinnerNumberModel(family.intValue(), 0, RPNUMERICS.domainDim() - 1, 1);
@@ -100,22 +91,12 @@ public class SpinButtonCreator extends UIComponentCreator {
 
         JLabel familyLabel = new JLabel(paramName);
 
-        gridConstraints.anchor= GridBagConstraints.PAGE_END;
-        gridConstraints.gridx = 0;
-        gridConstraints.ipadx = 10;
-        
 
-        familyPanel.add(familyLabel, gridConstraints);
+        familyPanel.add(familyLabel);
 
-
-        gridConstraints.gridx = 1;
-        
-
-        familyPanel.add(familySpinner, gridConstraints);
-
+        familyPanel.add(familySpinner);
 
         return familyPanel;
-
 
     }
 
@@ -139,13 +120,8 @@ public class SpinButtonCreator extends UIComponentCreator {
             spinerModel.setMinimum(new Integer(1));
             spinerModel.setStepSize(new Integer(1));
             spinerModel.setValue(resolution[i]);
-            
-            
-
 
             resolutionSpinnerArray_[i] = new JSpinner(spinerModel);
-
-
 
             ((DefaultEditor) resolutionSpinnerArray_[i].getEditor()).getTextField().setEditable(true);
             JFormattedTextField textField = ((DefaultEditor) resolutionSpinnerArray_[i].getEditor()).getTextField();//TODO Trocar a formatacao para quando for mais de 999

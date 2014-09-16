@@ -15,7 +15,6 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.beans.PropertyChangeEvent;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Observable;
@@ -38,7 +37,6 @@ import rpn.RPnFluxParamsSubject;
 import rpn.RPnInputController;
 import rpn.ui.physics.RPnObserverController;
 import rpn.ui.physics.RPnSubject;
-import rpn.command.ChangeCurveConfigurationCommand;
 import rpn.configuration.Configuration;
 import rpnumerics.RPNUMERICS;
 import wave.util.RealVector;
@@ -381,8 +379,12 @@ public class RPnInputComponent extends Observable implements Observer {//TODO Re
 
 
         }
+       
 
         controller_ = new RPnInputController(this, configuration);
+        
+        
+        configuration.addObserver(this);
 
 
 
@@ -403,11 +405,11 @@ public class RPnInputComponent extends Observable implements Observer {//TODO Re
 
 
 
-
-        controller_.propertyChange(
-                new PropertyChangeEvent(this, parameterName_, oldValues, stringValues_));
-
-        ChangeCurveConfigurationCommand.instance().applyChange(new PropertyChangeEvent(this, parameterName_, null, controller_.getConfiguration()));
+//
+//        controller_.propertyChange(
+//                new PropertyChangeEvent(this, parameterName_, oldValues, stringValues_));
+//
+//        ChangeCurveConfigurationCommand.instance().applyChange(new PropertyChangeEvent(this, parameterName_, null, controller_.getConfiguration()));
 
     }
 
@@ -473,13 +475,26 @@ public class RPnInputComponent extends Observable implements Observer {//TODO Re
 
     }
 
+    @Override
     public void update(Observable o, Object arg) {
-
-        String[] newParamsValues = (String[]) arg;
-       
-        System.arraycopy(newParamsValues, 0, stringValues_, 0, newParamsValues.length);
-
-        applyConfigurationChange();
+        
+//        System.out.println("Chamando update de input component: "+ o);
+//        Configuration configuration =(Configuration)o;
+//        
+//        for (int i = 0; i < textField_.length; i++) {
+//            JFormattedTextField jFormattedTextField = textField_[i];
+//            
+//            textField_[i].setText(configuration.getParam(i));
+//         
+//            
+//        }
+//        
+////
+////        String[] newParamsValues = (String[]) arg;
+////       
+////        System.arraycopy(newParamsValues, 0, stringValues_, 0, newParamsValues.length);
+//
+//        applyConfigurationChange();
 
 
     }

@@ -51,7 +51,12 @@ public abstract class ContourCurveCalc implements RpCalculation {
     public ContourParams getParams() {
         return params_;
     }
-
+    
+    @Override
+    public void setReferencePoint(OrbitPoint referencePoint){
+        
+    }
+ 
     public Configuration getConfiguration() {
         return configuration_;
     }

@@ -84,7 +84,7 @@ public class GenericExtensionCurveCommand extends BifurcationPlotCommand {
             rPnPhaseSpacePanel.getCastedUI().pointMarkBuffer().clear();
         }
         
-        UIController.instance().clearAllAreas();
+//        UIController.instance().clearAllAreas();
         
     }
     

@@ -582,4 +582,9 @@ public class ManifoldOrbitCalc implements RpCalculation {
         return configuration_;
     }
 
+    @Override
+    public void setReferencePoint(OrbitPoint referencePoint) {
+       firstPoint_= new OrbitPoint(referencePoint);
+    }
+
 }

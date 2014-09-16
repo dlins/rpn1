@@ -20,7 +20,7 @@ public class DiagramLine {
     //
 
     private final List<List<RealVector>> coords_;
-    
+
     private List<RealSegment> segments_;
 
     private int size_;
@@ -28,12 +28,14 @@ public class DiagramLine {
     private int partsNumber_;
 
     private HashMap<Integer, Integer> typesID_;
+
+    private String name_;
+
     //
     // Constructor
     //
-
     public DiagramLine(List<List<RealVector>> coords) {
-
+        name_="no name";
         coords_ = coords;
         partsNumber_ = coords.size();
         typesID_ = new HashMap<Integer, Integer>(partsNumber_);
@@ -43,13 +45,34 @@ public class DiagramLine {
             size_ += list.size();
 
         }
-        
-        segments_=createSegmentsList();
+
+        segments_ = createSegmentsList();
+
+    }
+
+    public DiagramLine(String name) {
+
+        coords_ = new ArrayList<List<RealVector>>();
+
+        name_ = name;
+
+        partsNumber_ = coords_.size();
+        typesID_ = new HashMap<Integer, Integer>();
+
+        for (List<RealVector> list : coords_) {
+
+            size_ += list.size();
+
+        }
+
+        segments_ = createSegmentsList();
 
     }
 
     public DiagramLine() {
 
+        
+        name_= "no name";
         coords_ = new ArrayList<List<RealVector>>();
 
         partsNumber_ = coords_.size();
@@ -60,36 +83,32 @@ public class DiagramLine {
             size_ += list.size();
 
         }
-        
-        segments_=createSegmentsList();
+
+        segments_ = createSegmentsList();
 
     }
-    
-    
-    
-    
+
     public RealVector getMin() {
-       
 
         double minX = 0;
         double minY = 0;
-        
-            List<List<RealVector>> coords = getCoords();
 
-            for (List<RealVector> list : coords) {
+        List<List<RealVector>> coords = getCoords();
 
-                for (RealVector realVector : list) {
+        for (List<RealVector> list : coords) {
 
-                    if (realVector.getElement(0) < minX) {
-                        minX = realVector.getElement(0);
-                    }
+            for (RealVector realVector : list) {
 
-                    if (realVector.getElement(1) < minY) {
-                        minY = realVector.getElement(1);
-                    }
-
+                if (realVector.getElement(0) < minX) {
+                    minX = realVector.getElement(0);
                 }
-            
+
+                if (realVector.getElement(1) < minY) {
+                    minY = realVector.getElement(1);
+                }
+
+            }
+
         }
 
         RealVector limits = new RealVector(2);
@@ -99,29 +118,26 @@ public class DiagramLine {
 
     }
 
-    
-
     public RealVector getMax() {
-       
 
         double maxX = 0;
         double maxY = 0;
-      
-            List<List<RealVector>> coords = getCoords();
 
-            for (List<RealVector> list : coords) {
+        List<List<RealVector>> coords = getCoords();
 
-                for (RealVector realVector : list) {
+        for (List<RealVector> list : coords) {
 
-                    if (realVector.getElement(0) > maxX) {
-                        maxX = realVector.getElement(0);
-                    }
+            for (RealVector realVector : list) {
 
-                    if (realVector.getElement(1) > maxY) {
-                        maxY = realVector.getElement(1);
-                    }
-
+                if (realVector.getElement(0) > maxX) {
+                    maxX = realVector.getElement(0);
                 }
+
+                if (realVector.getElement(1) > maxY) {
+                    maxY = realVector.getElement(1);
+                }
+
+            }
         }
 
         RealVector limits = new RealVector(2);
@@ -130,15 +146,12 @@ public class DiagramLine {
         return limits;
 
     }
-    
-    
+
     public List<RealSegment> getSegments() {
 
-       return segments_;
+        return segments_;
     }
-    
-    
-    
+
     private List<RealSegment> createSegmentsList() {
 
         List<RealVector> singleRealVectorList = new ArrayList<RealVector>();
@@ -148,32 +161,25 @@ public class DiagramLine {
         }
 
         CoordsArray[] toTransformArray = new CoordsArray[singleRealVectorList.size()];
-        
-        
+
         for (int i = 0; i < toTransformArray.length; i++) {
-            toTransformArray[i]= new CoordsArray(singleRealVectorList.get(i));
-            
+            toTransformArray[i] = new CoordsArray(singleRealVectorList.get(i));
+
         }
-        
-        
-        
 
         return MultidAdapter.converseCoordsArrayToRealSegments(toTransformArray);
 
     }
 
-    
-    
-    public void addCoord(int partIndex, int coordIndex,RealVector coord){
-        coords_.get(partIndex).add(coordIndex,coord);
-        segments_=createSegmentsList();
-    }
-    
-    public void addPart(List<RealVector> part) {
-        coords_.add(part);
-        segments_= createSegmentsList();
+    public void addCoord(int partIndex, int coordIndex, RealVector coord) {
+        coords_.get(partIndex).add(coordIndex, coord);
+        segments_ = createSegmentsList();
     }
 
+    public void addPart(List<RealVector> part) {
+        coords_.add(part);
+        segments_ = createSegmentsList();
+    }
 
     public List<List<RealVector>> getCoords() {
         return coords_;
@@ -192,11 +198,41 @@ public class DiagramLine {
         return typesID_.get(partIndex);
     }
 
+    @Override
+    public String toString() {
+
+        StringBuilder builder = new StringBuilder();
+
+        for (int i = 0; i < segments_.size(); i++) {
+
+            RealSegment coordsList = segments_.get(i);
+
+            builder.append(coordsList.toString()).append("\n");
+
+        }
+
+        return builder.toString();
+
+    }
+
     public String toXML() {
 
         return toString();
     }
 
+    public String getName() {
+        return name_;
+    }
+
+    public void setName(String name) {
+        this.name_ = name;
+    }
+
+    
+    
+    
+    
+    
     public String toMatlab(int curveIndex) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }

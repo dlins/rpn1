@@ -43,6 +43,11 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RiemannProfileCalc_nativeCalc
 
     jmethodID diagramConstructor = env->GetMethodID(diagramClass, "<init>", "(Ljava/util/List;)V");
     jmethodID diagramLineDefaultConstructor = env->GetMethodID(diagramLineClass, "<init>", "()V");
+
+
+
+
+    jmethodID diagramSetInfoMethod = env->GetMethodID(diagramClass, "setInfo", "(Ljava/lang/String;)V");
     jmethodID addPartMethodID = env->GetMethodID(diagramLineClass, "addPart", "(Ljava/util/List;)V");
     jmethodID setTypeMethodID = env->GetMethodID(diagramLineClass, "setType", "(II)V");
     jmethodID arrayListConstructor = env->GetMethodID(arrayListClass, "<init>", "()V");
@@ -93,11 +98,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RiemannProfileCalc_nativeCalc
     const WaveCurve * waveCurve1 = RpNumerics::getWaveCurve(nativeWaveCurvesIDArray[0]);
     const WaveCurve * waveCurve2 = RpNumerics::getWaveCurve(nativeWaveCurvesIDArray[1]);
 
-    //    
-    //
-    //    const WaveCurve * waveCurve1 = RpNumerics::getWaveCurve(0);
-    //    const WaveCurve * waveCurve2 = RpNumerics::getWaveCurve(1);
-
 
     cout << "Curva 0 " << waveCurve1 << waveCurve1->reference_point.point << endl;
     cout << "Curva 1 " << waveCurve2 << waveCurve2->reference_point.point << endl;
@@ -126,14 +126,25 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RiemannProfileCalc_nativeCalc
     RpNumerics::getPhysics().getSubPhysics(0).preProcess(nativeTopRight);
 
 
-
-
     cout << "AREA: " << nativeDownLeft << " " << nativeTopRight << endl;
-
 
 
     int intersectionCode = WaveCurveFactory::intersection(*waveCurve1, *waveCurve2, nativeDownLeft, nativeTopRight,
             intersectionPoint, subcurve1, subPoint1, subcurve2, subPoint2);
+
+
+    stringstream interPointStream;
+
+    interPointStream << intersectionPoint;
+
+
+    cout << "Ponto R em C: " << interPointStream.str().c_str() << endl;
+
+    jstring interPointString = env->NewStringUTF(interPointStream.str().c_str());
+
+
+
+
 
 
     if (intersectionCode == WAVE_CURVE_INTERSECTION_NOT_FOUND) {
@@ -156,20 +167,20 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RiemannProfileCalc_nativeCalc
     }
 
 
-        
-                cout << "Coordenadas do perfil" << endl;
-                for (int i = 0; i < profile.size(); i++) {
-                    
-//                    cout<<"Tamanho de um ponto do profile: "<<profile.at(i).size()<<endl;
-    //                cout  << profile.at(i)(0) << " " << profile.at(i)(1) << endl;
-                    cout  << profile.at(i) << endl;
-                }
-//                for (int i = 0; i < speedVector.size(); i++) {
-//            
-//                    cout  << speedVector.at(i)<< endl;
-//            
-//                }
-//
+    //        
+    //                cout << "Coordenadas do perfil" << endl;
+    //                for (int i = 0; i < profile.size(); i++) {
+    //                    
+    ////                    cout<<"Tamanho de um ponto do profile: "<<profile.at(i).size()<<endl;
+    //    //                cout  << profile.at(i)(0) << " " << profile.at(i)(1) << endl;
+    //                    cout  << profile.at(i) << endl;
+    //                }
+    ////                for (int i = 0; i < speedVector.size(); i++) {
+    ////            
+    ////                    cout  << speedVector.at(i)<< endl;
+    ////            
+    ////                }
+    ////
 
 
 
@@ -214,6 +225,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RiemannProfileCalc_nativeCalc
     jobject diagram = (env)->NewObject(diagramClass, diagramConstructor, diagramLinesList);
 
 
+    env->CallObjectMethod(diagram, diagramSetInfoMethod, interPointString);
+        
     return diagram;
 
 
@@ -301,8 +314,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RiemannProfileCalc_nativeAllProfileCal
 
     RealVector R;
     double speed_on_point;
+    
 
-    Utilities::pick_point_from_wavecurve(*waveCurve2, nativesecondWaveCurveRefPoint, firstWaveCurveSubIndex, firstWaveCurveSegmentIndex, R, speed_on_point);
+    Utilities::pick_point_from_wavecurve(*waveCurve1, waveCurve2->reference_point.point, firstWaveCurveSubIndex, firstWaveCurveSegmentIndex, R, speed_on_point);
 
     Utilities::pick_point_from_wavecurve(*waveCurve2, nativePointOnSecondWaveCurve, secondWaveCurveSubIndex, secondWaveCurveSegmentIndex, R, speed_on_point);
 
@@ -342,7 +356,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RiemannProfileCalc_nativeAllProfileCal
             //        tempVector.resize(dimension + 1);
             //        tempVector[dimension] = speedVector[i];
 
-            //            //cout << profileCoords << endl;
+//            cout << profileCoords << endl;
 
 
 

@@ -177,10 +177,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_CompositeCalc_nativeCalc(JNIEnv * env,
 
     jobject referenceOrbitPoint = (env)->NewObject(classOrbitPoint, orbitPointConstructor, refPointCoords, eigenValuesArray, speed);
 
-
-    cout<<"tamanho da composta: "<<cmpcurve.curve.size()<<endl;
-
-
     jobjectArray orbitPointArray = (jobjectArray) (env)->NewObjectArray(cmpcurve.curve.size() - 1, classOrbitPoint, NULL);
 
     for (int i = 1; i < cmpcurve.curve.size(); i++) {

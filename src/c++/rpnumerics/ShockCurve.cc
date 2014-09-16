@@ -582,9 +582,7 @@ void ShockCurve::add_point(Curve &c, const RealVector &p){
     f->jet(p, Fjet, 1);
     g->jet(p, Gjet, 1);
 
-    // Speed.
-    //
-    c.speed.push_back(hc->sigma(Fjet.function(), Gjet.function()));
+   
 
     // Eigenvalues.
     //
@@ -602,6 +600,19 @@ void ShockCurve::add_point(Curve &c, const RealVector &p){
 
     RealVector eigenvalues(e.size());
     for (int i = 0; i < e.size(); i++) eigenvalues(i) = e[i].r;
+    
+     // Speed.
+    //
+    if (c.curve.size()==1){
+      
+        
+        c.speed.push_back(e[current_family].r);
+        
+    }else {
+    c.speed.push_back(hc->sigma(Fjet.function(), Gjet.function()));        
+    }
+    
+
 
     c.eigenvalues.push_back(eigenvalues);
 

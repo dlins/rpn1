@@ -37,15 +37,6 @@ public abstract class Configuration extends Observable{
         }
 
 
-//        if (!profile.getProfiles().isEmpty()) {
-//
-//            Set<Entry<String, ConfigurationProfile>> profilesSet = profile.getProfiles().entrySet();
-//            for (Entry<String, ConfigurationProfile> profileEntry : profilesSet) {
-//                configurationMap_.put(profileEntry.getKey(), new Configuration(profileEntry.getValue()));
-//            }
-//        }
-
-
         name_ = profile.getName();
         type_ = profile.getType();
 

@@ -28,11 +28,11 @@ void RiemannProblem::half_profile(const WaveCurve &wavecurve, int initial_curve,
         phase_state.push_back(current_point);
         speed.push_back(current_speed);
 
-        std::cout << "Riemann profile. Adding point " << point << " of curve " << curve << " (" << current_curve.type << ")" << std::endl;
-        std::cout << "    speed = " << current_speed << std::endl;
+//        std::cout << "Riemann profile. Adding point " << point << " of curve " << curve << " (" << current_curve.type << ")" << std::endl;
+//        std::cout << "    speed = " << current_speed << std::endl;
 
         if (current_curve.type == SHOCK_CURVE){
-            std::cout << "Riemann profile. Shock curve. speed = " << current_speed << std::endl;
+//            std::cout << "Riemann profile. Shock curve. speed = " << current_speed << std::endl;
 
             // If the current curve is a shock, go to the reference point and end this profile.
             //
@@ -43,19 +43,19 @@ void RiemannProblem::half_profile(const WaveCurve &wavecurve, int initial_curve,
             break;
         }
         else if (current_curve.type == COMPOSITE_CURVE){
-            std::cout << "Riemann composite"  << std::endl;
-            std::cout << "point = " << point << ", curve = " << curve << std::endl;
+//            std::cout << "Riemann composite"  << std::endl;
+//            std::cout << "point = " << point << ", curve = " << curve << std::endl;
         }
 
         int old_point = point;
-        std::cout << "old_point = " << old_point << std::endl;
+//        std::cout << "old_point = " << old_point << std::endl;
 
         point = current_curve.back_pointer[point];
-        std::cout << "Next point: " << point << std::endl;
+//        std::cout << "Next point: " << point << std::endl;
 
         curve = current_curve.back_curve_pointer[old_point];
-        std::cout << "Next curve: " << curve << std::endl;    
-        std::cout << "    current_curve.back_curve_pointer[old_point] = " << current_curve.back_curve_pointer[old_point] << std::endl;
+//        std::cout << "Next curve: " << curve << std::endl;    
+//        std::cout << "    current_curve.back_curve_pointer[old_point] = " << current_curve.back_curve_pointer[old_point] << std::endl;
     }
 
     return;
@@ -65,7 +65,7 @@ void RiemannProblem::profile(const WaveCurve &wavecurve1, int curve1, int point1
                              const WaveCurve &wavecurve2, int curve2, int point2, int family2,
                              std::vector<RealVector> &phase_state, std::vector<double> &speed){
 
-    std::cout << "Riemann, entering." << std::endl;
+//    std::cout << "Riemann, entering." << std::endl;
     
     // TODO: Check that the families and increases of both wavecurves are compatible
     if (wavecurve1.wavecurve[curve1].speed[point1] > wavecurve2.wavecurve[curve2].speed[point2]) return;
@@ -74,7 +74,7 @@ void RiemannProblem::profile(const WaveCurve &wavecurve1, int curve1, int point1
     phase_state.clear();
     speed.clear();
 
-    std::cout << "Riemann Init" << std::endl;
+//    std::cout << "Riemann Init" << std::endl;
     
     // From L to M. Results must be reversed before the next step.
     //
@@ -92,11 +92,11 @@ void RiemannProblem::profile(const WaveCurve &wavecurve1, int curve1, int point1
 
 //    TestTools::pause("Check all the backcurves!");
 
-    std::cout << "Riemann before first half profile" << std::endl;
+//    std::cout << "Riemann before first half profile" << std::endl;
     
     half_profile(wavecurve1, curve1, point1, family1, temp_phase_state, temp_speed);
     
-    std::cout << "Riemann after first half profile" << std::endl;
+//    std::cout << "Riemann after first half profile" << std::endl;
     
     for (int i = temp_phase_state.size() - 1; i >= 0; i--){
         phase_state.push_back(temp_phase_state[i]);
@@ -134,13 +134,13 @@ void RiemannProblem::profile(const WaveCurve &wavecurve1, int curve1, int point1
 //    speed.push_back(beta*wavecurve2.wavecurve[curve2].speed[point2] + (1.0 - beta)*wavecurve2.wavecurve[curve2].speed[point2 + 1]);
     speed.push_back(wavecurve2.wavecurve[curve2].speed[point2]);
 
-    std::cout << "Riemann before second half profile" << std::endl;
+//    std::cout << "Riemann before second half profile" << std::endl;
     
     // From M to R.
     //
     half_profile(wavecurve2, curve2, point2, family2, phase_state, speed);
 
-    std::cout << "Riemann after second half profile" << std::endl;
+//    std::cout << "Riemann after second half profile" << std::endl;
     
     return;
 }
@@ -212,13 +212,15 @@ void RiemannProblem::all_increase_profile(const WaveCurve &wavecurve1, int curve
     temp_speed.clear();
 
     half_profile(wavecurve2, curve2, point2, family2, temp_phase_state, temp_speed);
-    std::cout << "From R to ref. temp_phase_state.size() = " << temp_phase_state.size() << std::endl;
+//    std::cout << "From R to ref. temp_phase_state.size() = " << temp_phase_state.size() << std::endl;
 
 
     for (int i = temp_phase_state.size() - 1; i >= 0; i--){
         phase_state.push_back(temp_phase_state[i]);
         speed.push_back(temp_speed[i]);
     }
+      
+    
 
     return;
 }

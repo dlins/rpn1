@@ -25,6 +25,7 @@ public class WaveCurve extends RPnCurve implements WaveCurveBranch, RpSolution, 
     private double ALFA;
     private List<OrbitPoint> points_;
 
+
     public WaveCurve(int family, int increase) {
 
         family_ = family;
@@ -45,6 +46,7 @@ public class WaveCurve extends RPnCurve implements WaveCurveBranch, RpSolution, 
         branchList_.remove(branch);
 
         points_.removeAll(branch.getBranchPoints());
+
     }
 
     public int[] getCurveTypes() {
@@ -67,13 +69,6 @@ public class WaveCurve extends RPnCurve implements WaveCurveBranch, RpSolution, 
 
         return branchList_;
 
-//        List<WaveCurveBranch> result = new ArrayList<WaveCurveBranch>();
-//
-//        for (WaveCurveBranch branch : branchList_) {
-//            result.addAll(branch.getBranchsList());
-//        }
-//
-//        return result;
     }
 
     @Override
@@ -85,16 +80,6 @@ public class WaveCurve extends RPnCurve implements WaveCurveBranch, RpSolution, 
             temp.addAll(object.segments());
         }
 
-//        for (int i = 0; i < getBranchsList().size(); i++) {
-//            for (int j = 0; j < ((WaveCurveBranch) getBranchsList().get(i)).segments().size(); j++) {
-//                temp.add(((WaveCurveBranch) getBranchsList().get(i)).segments().get(j));
-//            }
-//        }
-//        for (int i = 0; i < getBranchsList().size(); i++) {
-//            for (int j = 0; j < ((WaveCurveBranch) getBranchsList().get(i)).segments().size(); j++) {
-//                temp.add(((WaveCurveBranch) getBranchsList().get(i)).segments().get(j));
-//            }
-//        }
         return temp;
 
     }
@@ -153,6 +138,38 @@ public class WaveCurve extends RPnCurve implements WaveCurveBranch, RpSolution, 
 
         return buffer.toString();
 
+    }
+
+    
+
+    @Override
+    public double [] getCoordByArcLength(double x) throws RpException{
+
+        for (WaveCurveBranch branch : getBranchsList()) {
+
+            for (WaveCurveBranch innerBranch : branch.getBranchsList()) {
+
+                FundamentalCurve fundamentalCurve = (FundamentalCurve) innerBranch;
+
+                double[] xi = fundamentalCurve.getXi();
+
+                for (int n = 0; n < xi.length; n++) {
+
+                    if (xi[n] == x) {
+                        
+                    OrbitPoint point = fundamentalCurve.getBranchPoints().get(n);
+
+                    return point.getCoords().toDouble();
+                    }
+
+
+                }
+
+            }
+
+        }
+        
+        throw  new RpException(x +" arc length is not in this curve");
     }
 
     public String create2DPointMatlabPlot(int x, int y, int identifier) {
@@ -225,14 +242,17 @@ public class WaveCurve extends RPnCurve implements WaveCurveBranch, RpSolution, 
 
     @Override
     public RpSolution createDiagramSource() {
-        return nativeDiagramCalc(family_, getId());
+
+        Diagram diagram = (Diagram) nativeDiagramCalc(family_, getId());
+
+        return diagram;
     }
 
     private native RpSolution nativeDiagramCalc(int family, int curveID);
 
     @Override
     public RpSolution updateDiagramSource() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return createDiagramSource();
     }
 
 }

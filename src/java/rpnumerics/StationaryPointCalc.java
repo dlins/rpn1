@@ -67,12 +67,18 @@ public class StationaryPointCalc implements RpCalculation {
     //
 
 
-    public RealVector getReferencePoint_() {
+    public RealVector getReferencePoint() {
         return referencePoint_;
     }
 
     public void setReferencePoint_(RealVector referencePoint) {
         referencePoint_ = referencePoint;
+    }
+    
+     @Override
+    public void setReferencePoint(OrbitPoint referencePoint) {
+        referencePoint_= referencePoint;
+        
     }
 
 
@@ -188,5 +194,7 @@ public Configuration getConfiguration() {
     }
 
     private native RpSolution nativeCalc(RealVector eqPoint, RealVector refPoint, double sigma) throws RpException;
+
+   
 
 }

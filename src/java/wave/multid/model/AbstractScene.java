@@ -9,9 +9,6 @@ import java.io.FileWriter;
 import java.util.ArrayList;
 import java.io.FileReader;
 import java.util.Iterator;
-import rpn.command.ClassifierCommand;
-
-import rpn.command.VelocityCommand;
 
 import wave.multid.view.*;
 import wave.multid.*;
@@ -86,7 +83,6 @@ public class AbstractScene implements AbstractGeomObj {
     public void load(FileReader cin) {
     }
 
-
     public void remove(int geometryIndex) {
 
         MultiGeometry geom = (MultiGeometry) geomList_.remove(geometryIndex);
@@ -99,7 +95,6 @@ public class AbstractScene implements AbstractGeomObj {
         for (int i = 0; i < viewList_.size(); i++) {
             ((Scene) viewList_.get(i)).removeViewOf(geom);
         }
-
 
     }
 
@@ -134,8 +129,17 @@ public class AbstractScene implements AbstractGeomObj {
     }
 
     public void clear() {
+
+        for (Object object : geomList_) {
+            for (int i = 0; i < viewList_.size(); i++) {
+                ((Scene) viewList_.get(i)).removeViewOf((MultiGeometry) object);
+            }
+
+        }
+
         geomList_.clear();
-        update();
+
+//        update();
     }
 
     public void update() {

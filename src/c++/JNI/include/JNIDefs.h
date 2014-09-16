@@ -52,6 +52,8 @@
 
 #define BIFURCATIONCURVE_LOCATION             "rpnumerics/BifurcationCurve"
 
+#define FUNDAMENTALCURVE_LOCATION             "rpnumerics/FundamentalCurve"
+
 
 
 #define SHOCKFLOW_LOCATION                     "rpnumerics/ShockFlow"

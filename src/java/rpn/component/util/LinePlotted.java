@@ -41,7 +41,7 @@ public class LinePlotted extends GraphicsUtil {
 
         RealVector newStringPoint1 = new RealVector(stringPoint);
 
-        //Adding a gap between the curve and the line and between the line and the string
+//        Adding a gap between the curve and the line and between the line and the string
         newStringPoint1.scale(0.9);
 
         newCurvePoint1.scale(0.1);
@@ -64,6 +64,8 @@ public class LinePlotted extends GraphicsUtil {
 
         CoordsArray wcPoint1 = new CoordsArray(newCurvePoint1);
         CoordsArray wcPoint2 = new CoordsArray(newStringPoint2);
+        
+        
         getViewingTransform().viewPlaneTransform(wcPoint1, dcPoint1);
         getViewingTransform().viewPlaneTransform(wcPoint2, dcPoint2);
 
@@ -102,8 +104,6 @@ public class LinePlotted extends GraphicsUtil {
        return (Double) wcObjects_;
         
     }
-    
-    
     
      public String toXML() {
 

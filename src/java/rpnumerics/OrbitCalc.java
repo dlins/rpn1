@@ -39,6 +39,12 @@ public class OrbitCalc implements RpCalculation {
     public void setPoincareSection(RealVector[] poincare) {
         poincareSection_ = poincare;
     }
+    
+    
+    @Override
+    public void setReferencePoint (OrbitPoint referencePoint){
+        start_=referencePoint;
+    }
 
     //
     // Methods

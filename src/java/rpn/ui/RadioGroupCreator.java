@@ -9,7 +9,6 @@ package rpn.ui;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
@@ -106,7 +105,6 @@ public class RadioGroupCreator extends UIComponentCreator {
 
 
         JPanel directionPanel = new JPanel();
-
 
         forwardCheckBox_ = new JRadioButton("Forward");
         forwardCheckBox_.setSelected(true);//Default 

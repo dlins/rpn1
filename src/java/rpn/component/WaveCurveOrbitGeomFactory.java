@@ -6,10 +6,13 @@
 package rpn.component;
 
 import java.awt.Color;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import rpnumerics.FundamentalCurve;
 import rpnumerics.Orbit;
 import rpnumerics.OrbitPoint;
 import rpnumerics.RPNUMERICS;
+import rpnumerics.RpException;
 import rpnumerics.WaveCurve;
 import rpnumerics.WaveCurveOrbitCalc;
 import wave.multid.view.ViewingAttr;
@@ -64,7 +67,12 @@ public class WaveCurveOrbitGeomFactory extends OrbitGeomFactory {
         StringBuilder buffer = new StringBuilder();
 
         FundamentalCurve geomSource = (FundamentalCurve) geomSource();
-        OrbitPoint referencePoint = geomSource.getReferencePoint();
+        OrbitPoint referencePoint = null;
+        try {
+            referencePoint = geomSource.getReferencePoint();
+        } catch (RpException ex) {
+            Logger.getLogger(WaveCurveOrbitGeomFactory.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
         String curve_name = '\"' + geomSource.getClass().getSimpleName() + '\"';
         String dimension = '\"' + Integer.toString(RPNUMERICS.domainDim()) + '\"';

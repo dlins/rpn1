@@ -32,12 +32,14 @@ public class RpCalcController implements RpController {
     protected void register() {
         ChangeFluxParamsCommand.instance().addPropertyChangeListener(this);
         ChangeSigmaCommand.instance().addPropertyChangeListener(this);
+        ReferencePointSelectionCommand.instance().addPropertyChangeListener(this);
     }
 
     /** Unregisters a controller that handle the changes in numerics parameters.*/
     protected void unregister() {
         ChangeFluxParamsCommand.instance().removePropertyChangeListener(this);
         ChangeSigmaCommand.instance().removePropertyChangeListener(this);
+        ReferencePointSelectionCommand.instance().removePropertyChangeListener(this);
     }
 
     /** Updates the properties of a geometry when any change in its geometry is made.*/
@@ -67,6 +69,7 @@ public class RpCalcController implements RpController {
     }
 
     /** Installs a controller in a geometric model.*/
+    @Override
     public void install(RpGeomFactory geom) {
         register();
         geomFactory_ = (RpCalcBasedGeomFactory) geom;

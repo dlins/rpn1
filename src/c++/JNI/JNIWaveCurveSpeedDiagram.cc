@@ -39,6 +39,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurve_nativeDiagramCalc
     jmethodID diagramLineDefaultConstructor = env->GetMethodID(diagramLineClass, "<init>", "()V");
 
     jmethodID addPartMethodID = env->GetMethodID(diagramLineClass, "addPart", "(Ljava/util/List;)V");
+    
+    
+    jmethodID setLineNameMethodID = env->GetMethodID(diagramLineClass, "setName", "(Ljava/lang/String;)V");
 
 
     jmethodID setTypeMethodID = env->GetMethodID(diagramLineClass, "setType", "(II)V");
@@ -66,6 +69,13 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurve_nativeDiagramCalc
 
 
     jobject speedLine = env->NewObject(diagramLineClass, diagramLineDefaultConstructor, NULL);
+    
+
+    
+    jstring speedLineName = env->NewStringUTF("Speed");
+    
+     
+    env->CallVoidMethod(speedLine,setLineNameMethodID,speedLineName);
 
     jobject speedLineList = env->NewObject(arrayListClass, arrayListConstructor, NULL); //ADDING SPEED 
 
@@ -87,18 +97,10 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurve_nativeDiagramCalc
         env->CallObjectMethod(speedLine, setTypeMethodID, i, partType);
 
 
-//        env->CallObjectMethod(speedLineList, arrayListAddMethod, speedLinePartList);
-
     }
-
-
-    //    jobject speedLine = env->NewObject(diagramLineClass, diagramLineConstructor, speedLineList);
-
 
         env->CallObjectMethod(diagramLinesList, arrayListAddMethod, speedLine);
 
-
-    //
 
 
     //REF POINT SPEED 
@@ -106,8 +108,12 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurve_nativeDiagramCalc
     for (int i = 0; i < arclength_reference_eigenvalues.size(); i++) {
 
         jobject eigenLine = env->NewObject(diagramLineClass, diagramLineDefaultConstructor, NULL);
-
-//        jobject linePartsList = env->NewObject(arrayListClass, arrayListConstructor, NULL);
+        
+        stringstream lineName ;
+        lineName <<"Reference point eigen value "<<i;
+        
+        jstring speedLineName = env->NewStringUTF(lineName.str().c_str());
+        env->CallVoidMethod(eigenLine,setLineNameMethodID,speedLineName);
 
         jobject speedLinePartList = env->NewObject(arrayListClass, arrayListConstructor, NULL);
 
@@ -149,6 +155,15 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurve_nativeDiagramCalc
 
 
         jobject eigenLine = env->NewObject(diagramLineClass, diagramLineDefaultConstructor, NULL);
+        
+        
+         stringstream lineName ;
+        lineName <<"Eigen value "<<eigenValueIndex-1;
+        
+        jstring speedLineName = env->NewStringUTF(lineName.str().c_str());
+        env->CallVoidMethod(eigenLine,setLineNameMethodID,speedLineName);
+        
+        
         
 //        jobject eigenLineList = env->NewObject(arrayListClass, arrayListConstructor, NULL); //EIGEN VALUES 
 
