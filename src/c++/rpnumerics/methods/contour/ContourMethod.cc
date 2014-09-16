@@ -166,7 +166,7 @@ int ContourMethod::contour2d(ImplicitFunction *impf, std::vector<RealVector> &vr
 
     GridValues *gv = impf->grid_value();
 
-    printf("BEGINS: Contour2D()\n");
+//    printf("BEGINS: Contour2D()\n");
 
 //    deallocate_arrays();
     allocate_arrays();
@@ -364,7 +364,7 @@ if ( method == CONTINUATION_METHOD ) {
     }
 
     if ( method == SEGMENTATION_METHOD ) {
-        printf("ENDS:     Contour2D()/For Segments\n\n");
+//        printf("ENDS:     Contour2D()/For Segments\n\n");
         return 0;
     }
 

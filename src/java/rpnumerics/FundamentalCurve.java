@@ -259,6 +259,8 @@ public class FundamentalCurve extends Orbit implements WaveCurveBranch, RpSoluti
             OrbitPoint point = getBranchPoints().get(i);
 
             double xi = xi_[i];
+            
+         
 
             // Filling Speed
 

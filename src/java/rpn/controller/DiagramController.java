@@ -99,7 +99,7 @@ public class DiagramController extends RpCalcController {
 
             super.propertyChange(change);
         }
-        if (change.getSource() instanceof DragPlotCommand) {
+        if (change.getSource() instanceof DragPlotCommand && (geomFactory_.rpCalc() instanceof WaveCurveCalc)) {
 
             ((WaveCurveCalc) (geomFactory_.rpCalc())).setReferencePoint(new OrbitPoint((RealVector) change.getNewValue()));
             geomFactory_.updateGeom();

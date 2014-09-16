@@ -129,29 +129,29 @@ public class RPnFluxParamsDialog extends RPnDialog {
 
         
         
-        //TESTE
+       
 
         
-        double [] testMinLimits = {0,0};
-        
-        double [] testMaxLimits = {1,1};
-        
-        Boundary boundary = new IsoTriang2DBoundary("0 0 0 1 1 0");
-        
-        String [] paramNames = {"grw","grg"};
-        
-        int [] paramsOrientation ={0,1};
-        
-        int [] paramIndex = {0,1};
-        
-        
-        ParamsDescriptor descriptor  = new ParamsDescriptor(paramNames, paramsOrientation, paramIndex,boundary);
-
-        RPnParamsPanel paramsPanel=     new RPnParamsPanel(descriptor);
-        
-        paramsPanel_.add(paramsPanel);
-        
-        this.getContentPane().add(paramsPanel_,BorderLayout.EAST);
+//        double [] testMinLimits = {0,0};
+//        
+//        double [] testMaxLimits = {1,1};
+//        
+//        Boundary boundary = new IsoTriang2DBoundary("0 0 0 1 1 0");
+//        
+//        String [] paramNames = {"grw","grg"};
+//        
+//        int [] paramsOrientation ={0,1};
+//        
+//        int [] paramIndex = {0,1};
+//        
+//        
+//        ParamsDescriptor descriptor  = new ParamsDescriptor(paramNames, paramsOrientation, paramIndex,boundary);
+//
+//        RPnParamsPanel paramsPanel=     new RPnParamsPanel(descriptor);
+//        
+//        paramsPanel_.add(paramsPanel);
+//        
+//        this.getContentPane().add(paramsPanel_,BorderLayout.EAST);
         
         
 //
