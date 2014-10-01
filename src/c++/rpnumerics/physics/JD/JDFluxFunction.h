@@ -2,14 +2,15 @@
 #define _JDFLUXFUNCTION_
 
 #include "FluxFunction.h"
+#include "Parameter.h"
+#include "ImplicitHugoniotCurve.h"
 
 class JDFluxFunction : public FluxFunction {
     private:
     protected:
-        double epsilon;
+        Parameter *epsilon_parameter;
     public:
-        JDFluxFunction();
-        JDFluxFunction(double e);
+        JDFluxFunction(Parameter *e);
 
         virtual ~JDFluxFunction();
 
@@ -19,10 +20,6 @@ class JDFluxFunction : public FluxFunction {
         // For the coincidence:
         //
         double alpha_dot(const RealVector &p) const;
-
-        // Temporal.
-        //
-        void set_epsilon(double e);
 };
 
 #endif // _JDFLUXFUNCTION_

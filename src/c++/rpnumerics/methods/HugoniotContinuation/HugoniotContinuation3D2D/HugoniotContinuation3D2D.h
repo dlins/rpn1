@@ -21,6 +21,7 @@ class HugoniotContinuation3D2D : public HugoniotContinuation {
         // void jet_Hugoniot(const RealVector &p, RealVector &H, DoubleMatrix &nablaH); // Is no more.
         void jet_Hugoniot(const RealVector &F, const DoubleMatrix &JF, 
                           const RealVector &G, const DoubleMatrix &JG,
+                          const RealVector &C, const DoubleMatrix &JC,
                           RealVector &H, DoubleMatrix &nablaH);
 
 };

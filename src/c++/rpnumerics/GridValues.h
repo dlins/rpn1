@@ -42,6 +42,12 @@ class GridValues {
         void fill_values_on_grid(const Boundary *b, 
                                  const RealVector &min, const RealVector &max,
                                  const std::vector<int> &number_of_cells);
+
+        // For a double-linked list.
+        //
+        static GridValues *first_, *last_, *active_;
+
+        GridValues *prev_, *next_;
     public:
         // Values on the grid. Every value MUST have a boolean companion that can be used
         // to know if the values are already computed or not.
@@ -70,6 +76,15 @@ class GridValues {
         Matrix<bool>                     cell_is_real;               // Is the whole cell real or complex?
         bool                             e_computed;                 // Already computed?
 
+        void clear_computations(){
+            functions_on_grid_computed = false;
+            Jacobians_on_grid_computed = false;
+            dd_computed = false;
+            e_computed = false;
+
+            return;
+        }
+
         // TODO:
         // Replace (or complement) the use of cell_is_real by (with) a Matrix of discriminants.
 
@@ -83,9 +98,7 @@ class GridValues {
                    const RealVector &pmin, const RealVector &pmax,
                    const std::vector<int> &number_of_cells);
 
-        // Destructor. Does nothing so far.
-        //
-        ~GridValues(){}
+        ~GridValues();
 
         // Set the grid. This function could be merged with fill_values_on_grid().
         //
@@ -112,6 +125,24 @@ class GridValues {
         bool inside(const RealVector &p);
 
         bool cell(const RealVector &p, int &row, int &col);
+
+        // Set/get the active object.
+        //
+        static void active(GridValues *g);
+        static GridValues* active();
+
+        // First/last object.
+        //
+        static GridValues* first();
+        static GridValues* last();
+
+        // Access to the object's next and previous objects.
+        //
+        GridValues* next();
+        GridValues* prev();
+
+        const GridValues* next() const;
+        const GridValues* prev() const;
 };
 
 #endif // _GRIDVALUES_

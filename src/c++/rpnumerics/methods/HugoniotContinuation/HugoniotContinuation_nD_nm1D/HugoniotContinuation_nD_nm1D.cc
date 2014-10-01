@@ -10,6 +10,7 @@
 //
 void HugoniotContinuation_nD_nm1D::jet_Hugoniot(const RealVector &F, const DoubleMatrix &JF, 
                                                 const RealVector &G, const DoubleMatrix &JG,
+                                                const RealVector &C, const DoubleMatrix &JC,
                                                 RealVector &H, DoubleMatrix &nablaH){
                                               
 //void HugoniotContinuation_nD_nm1D::jet_Hugoniot(const JetMatrix &JM_F, const JetMatrix &JM_G, 

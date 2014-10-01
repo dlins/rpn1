@@ -19,7 +19,7 @@
 //#include "ReturnCodes.h"
 #include "JetMatrix.h"
 #include "WaveState.h"
-
+#include "Parameter.h"
 
 /*
  ** ---------------------------------------------------------------
@@ -42,22 +42,40 @@
  * @ingroup rpnumerics
  */
 class RpFunction {
-    
-public:
-   
-    virtual ~RpFunction(void);
-    /*! virtual constructor
-     */
-   
-    virtual RpFunction * clone() const = 0;
-    
-    /*! m coordinates function evaluation at u
-     *this is the nth derivative calculation that might be available or not
-     */
+    protected:
+        int Ceqs, vars; // Number of conserved variables and equations.
 
-    virtual int jet(const WaveState &u, JetMatrix &m, int degree) const = 0;
+        std::vector<Parameter*> parameter;
+    public:
+        virtual ~RpFunction();
+//        virtual RpFunction * clone() const = 0;
+    
+        /*! m coordinates function evaluation at u
+         *this is the nth derivative calculation that might be available or not
+         */
 
-    void fill_with_jet(int n, const double *in, int degree, double *F, double *J, double *H) const;
+        virtual int jet(const WaveState &u, JetMatrix &m, int degree) const = 0;
+        virtual int jet(const WaveState &u, JetMatrix &m_full, JetMatrix &m_redux, int degree) const {
+            int info = jet(u, m_full, degree);
+
+            m_redux = m_full;
+
+            return info;
+        }
+
+        int jet(const RealVector &u, JetMatrix &m, int degree){
+            return jet(WaveState(u), m, degree);
+        }
+
+        virtual void fill_with_jet(int n, const double *in, int degree, double *F, double *J, double *H) const;
+
+        virtual int number_of_conservation_equations() const {return Ceqs;};
+        virtual int number_of_variables() const {return vars;};
+
+        virtual void parameters(std::vector<Parameter*> &vp){
+            vp = parameter;
+            return;
+        }
 };
 
 

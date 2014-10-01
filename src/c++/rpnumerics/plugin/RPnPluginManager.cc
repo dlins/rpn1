@@ -1,5 +1,4 @@
 #include "RPnPluginManager.h"
-#include "Debug.h"
 
 map<string, map <string, map<string, string> * > > * RPnPluginManager::configMap_ = NULL;
 map<string, map <string, map<string, string> * > > * RPnPluginManager::destroyMap_ = NULL;
@@ -36,9 +35,7 @@ void RPnPluginManager::unload(RpnPlugin * plugin, const string pluginType) {
         dirPath += pluginMapIterator->first;
         PluginService service(dirPath);
 
-        if ( Debug::get_debug_level() == 5 ) {
-            //cout << "Unload Lib: " << dirPath << "\n";
-        }
+        //        cout << "Unload Lib: " << dirPath << "\n";
 
 
         // Searching destroy method

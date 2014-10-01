@@ -80,6 +80,7 @@ inline void JetMatrix::resize(){
 
     vec_size = Ceqs + Ceqs*vars + Ceqs*vars*vars;
     vec = new double[vec_size];
+    for (int i = 0; i < vec_size; i++) vec[i] = 0.0;
 
     return;
 }

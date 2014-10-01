@@ -1,13 +1,7 @@
 #include "JDFluxFunction.h"
 
-JDFluxFunction::JDFluxFunction() : FluxFunction(FluxParams (RealVector(1))) {
-    epsilon = 1e-1;
-    
-    
-}
-
-JDFluxFunction::JDFluxFunction(double e) : FluxFunction(FluxParams(RealVector(1))) {
-    epsilon = e;
+JDFluxFunction::JDFluxFunction(Parameter *e) : FluxFunction() {
+    epsilon_parameter = e;
 }
 
 JDFluxFunction::~JDFluxFunction(){
@@ -16,12 +10,9 @@ JDFluxFunction::~JDFluxFunction(){
 int JDFluxFunction::jet(const WaveState &w, JetMatrix &f, int degree) const {
     f.resize(2);
 
+    double epsilon = epsilon_parameter->value();
+
     if (degree >= 0){
-//        double epsilon;
-
-//        epsilon = 1e-1; // Classic
-//        epsilon = 1.0;
-
         double u = w(0);
         double v = w(1);
 
@@ -52,21 +43,9 @@ int JDFluxFunction::jet(const WaveState &w, JetMatrix &f, int degree) const {
     return degree;
 }
 
-JDFluxFunction* JDFluxFunction::clone() const {
-    return new JDFluxFunction;
-}
-
 double JDFluxFunction::alpha_dot(const RealVector &p) const {
     double v = p(1);
+    double epsilon = epsilon_parameter->value();
 
     return 2.0*epsilon*(v + 1.0);
 }
-
-void JDFluxFunction::set_epsilon(double e){
-    epsilon = e;
-
-    std::cout << "New value: " << epsilon << std::endl;
-
-    return;
-}
-

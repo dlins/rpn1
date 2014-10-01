@@ -1,12 +1,27 @@
 #include "CoreyQuad.h"
 
+CoreyQuad::CoreyQuad(Parameter *grw, Parameter *gro, Parameter *grg, 
+                  Parameter *muw, Parameter *muo, Parameter *mug,
+                  Parameter *vel){
+
+    grw_parameter_ = grw;
+    gro_parameter_ = gro;
+    grg_parameter_ = grg;
+
+    muw_parameter_ = muw;
+    muo_parameter_ = muo;
+    mug_parameter_ = mug;
+
+    vel_parameter_ = vel;
+}
+
 CoreyQuad::CoreyQuad(const CoreyQuad_Params &param) : FluxFunction(param) {//TODO USAR OS ELEMENTOS DO VETOR GUARDADO EM FLUXFUNCTION
 
 }
 
-CoreyQuad * CoreyQuad::clone() const {
-    return new CoreyQuad(*this);
-}
+//CoreyQuad * CoreyQuad::clone() const {
+//    return new CoreyQuad(*this);
+//}
 
 CoreyQuad::CoreyQuad(const CoreyQuad & copy) : FluxFunction(copy.fluxParams()) {
 
@@ -18,15 +33,16 @@ CoreyQuad::~CoreyQuad() {
 int CoreyQuad::jet(const WaveState &w, JetMatrix &m, int degree) const {
 
 
-    double grw = fluxParams().component(0);
-    double grg = fluxParams().component(1);
-    double gro = fluxParams().component(2);
+//    double grw = fluxParams().component(0);
+//    double grg = fluxParams().component(1);
+//    double gro = fluxParams().component(2);
 
-    double muw = fluxParams().component(3);
-    double mug = fluxParams().component(4);
-    double muo = fluxParams().component(5);
+//    double muw = fluxParams().component(3);
+//    double mug = fluxParams().component(4);
+//    double muo = fluxParams().component(5);
 
-    double vel = fluxParams().component(6);
+//    // TODO: Maybe this parameter should be always 1 (one) in the absence of gravity.
+//    double vel = fluxParams().component(6);
 
 //    double krw_p = fluxParams().component(7);
 //    double krg_p = fluxParams().component(8);
@@ -36,6 +52,16 @@ int CoreyQuad::jet(const WaveState &w, JetMatrix &m, int degree) const {
 //    double cng = fluxParams().component(11);
 //    double cno = fluxParams().component(12);
 
+
+    double grw = grw_parameter_->value();
+    double gro = gro_parameter_->value();
+    double grg = grg_parameter_->value();
+
+    double muw = muw_parameter_->value();
+    double muo = muo_parameter_->value();
+    double mug = mug_parameter_->value();
+
+    double vel = vel_parameter_->value();
 
     double sw = w(0);
     double so = w(1);
@@ -68,7 +94,7 @@ int CoreyQuad::jet(const WaveState &w, JetMatrix &m, int degree) const {
 //    }
 //    else {
 //        double denkw = krw_p/((1. - CN)*(1. - CN));
-        kw         = sw * sw;
+        kw         = sw * sw; // swcnw*swcnw
         dkw_dsw    = 2. * sw;
         dkw_dso    = 0.;
 
@@ -186,7 +212,7 @@ int CoreyQuad::jet(const WaveState &w, JetMatrix &m, int degree) const {
             double tw = vel + lko * (grw - gro) + lkg * (grw - grg);
 
             double dtodso = (gro - grg) * ldkg_dso;
-            double dtodsw = (gro - grw) * ldkw_dsw + (gro - grg) * ldkg_dso;
+            double dtodsw = (gro - grw) * ldkw_dsw + (gro - grg) * ldkg_dsw; // Was: ... + (gro - grg) * ldkg_dso <== This is an error. Marchesin & Morante, 2014-09-25.
             double dtwdso = (grw - gro) * ldko_dso + (grw - grg) * ldkg_dso;
             double dtwdsw = ldko_dsw * (grw - gro) + (grw - grg) * ldkg_dsw;
 

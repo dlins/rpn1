@@ -26,56 +26,53 @@
  */
 
 #define  RECT_BOUNDARY_SG_ZERO 0
-#define  RECT_BOUNDARY_SG_ONE 1
+#define  RECT_BOUNDARY_SG_ONE  1
+
+#define  RECT_BOUNDARY_THETA_MIN 10
+#define  RECT_BOUNDARY_THETA_MAX 11
 
 class RectBoundary : public Boundary {
-private:
-    RealVector * minimums_;
-    RealVector * maximums_;
-    int size_;
-    const char * type_;
+    private:
+        RealVector * minimums_;
+        RealVector * maximums_;
+        int size_;
+        const char * type_;
 
-    //    std::vector<int> exception;
-    std::vector<bool> test_dimension;
+        //    std::vector<int> exception;
+        std::vector<bool> test_dimension;
+    public:
+        RectBoundary(const RectBoundary &);
+        virtual ~RectBoundary();
 
+        Boundary * clone() const;
 
-public:
+        RectBoundary(const RealVector & minimums, const RealVector & maximums);
+        RectBoundary(const RealVector & minimums, const RealVector & maximums, const std::vector<bool> &, const double = 1e-10);
 
+        RectBoundary & operator =(const RectBoundary &);
 
-    RectBoundary(const RectBoundary &);
-    virtual ~RectBoundary();
+        double coordinateSpan(int i);
+        bool inside(const RealVector &y) const;
+        bool inside(const double*)const;
 
-    Boundary * clone() const;
-
-    RectBoundary(const RealVector & minimums, const RealVector & maximums);
-    RectBoundary(const RealVector & minimums, const RealVector & maximums, const std::vector<bool> &, const double = 1e-10);
-
-    RectBoundary & operator =(const RectBoundary &);
-
-
-    double coordinateSpan(int i);
-    bool inside(const RealVector &y) const;
-    bool inside(const double*)const;
-
-
-    const RealVector & minimums(void) const;
-    const RealVector & maximums(void) const;
-    RealVector intersect(RealVector & y1, RealVector & y2) const;
+        const RealVector & minimums(void) const;
+        const RealVector & maximums(void) const;
+        RealVector intersect(RealVector & y1, RealVector & y2) const;
     //    bool inside(const RealVector &);
     //    int intersection(const RealVector &, const RealVector &, RealVector &)const;
-    int intersection(const RealVector &, const RealVector &, RealVector &, int &)const;
+        int intersection(const RealVector &, const RealVector &, RealVector &, int &)const;
 
-    const char * boundaryType()const;
+        const char * boundaryType()const;
 
-    virtual int edge_segments(int where_constant, int number_of_steps, const RealVector & limMin, const RealVector & limMax, std::vector<RealVector> &seg);
+        virtual int edge_segments(int where_constant, int number_of_steps, const RealVector & limMin, const RealVector & limMax, std::vector<RealVector> &seg);
 
-    void extension_curve(const FluxFunction *f, const AccumulationFunction *a,
+        void extension_curve(const FluxFunction *f, const AccumulationFunction *a,
             GridValues &gv,
             int where_constant, int number_of_steps, bool singular,
             int fam, int characteristic,
             std::vector<RealVector> &c, std::vector<RealVector> &d);
 
-    void extension_curve(const FluxFunction *df, const AccumulationFunction *da, // Over the domain
+        void extension_curve(const FluxFunction *df, const AccumulationFunction *da, // Over the domain
                          const FluxFunction *cf, const AccumulationFunction *ca, // Over the curve 
                          GridValues &gv,
                          int where_constant, int number_of_steps, bool singular,
@@ -83,17 +80,17 @@ public:
                          std::vector<RealVector> &c, std::vector<RealVector> &d);
 
 
-      void envelope_curve(const FluxFunction *f, const AccumulationFunction *a,
+        void envelope_curve(const FluxFunction *f, const AccumulationFunction *a,
             GridValues &gv,
             int where_constant, int number_of_steps, bool singular,
             std::vector<RealVector> &c, std::vector<RealVector> &d);
 
 
+        RealVector side_transverse_interior(const RealVector &p, int s) const;
 
-    void physical_boundary(std::vector<RealVector> &);
-
-    RealVector side_transverse_interior(const RealVector &p, int s) const;
-
+        void edge_segments(int where_constant, int number_of_steps, std::vector<RealVector> &seg) const;
+        void list_of_sides(std::vector<int> &where_constant_codes, std::vector<std::string> &where_constant_names) const;
+        void physical_boundary(std::vector<std::vector<RealVector> > &pb) const;
 };
 
 inline const char * RectBoundary::boundaryType()const {
@@ -108,7 +105,7 @@ inline double RectBoundary::coordinateSpan(int i) {
 
 //inline bool RectBoundary::inside(const RealVector & y) const {
 //    // true if y inside rectangular boundary
-//        //cout << "tamanho dentro de inside inline" << endl;
+//        cout << "tamanho dentro de inside inline" << endl;
 //    bool result = true;
 //    for (int i = 0; i < y.size(); i++)
 //        if ((y.component(i) < minimums_->component(i)) || (y.component(i) > maximums_->component(i)))

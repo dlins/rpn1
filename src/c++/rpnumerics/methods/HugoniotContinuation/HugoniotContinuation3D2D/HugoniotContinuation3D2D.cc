@@ -3,6 +3,7 @@
 //void HugoniotContinuation3D2D::jet_Hugoniot(const RealVector &p, RealVector &H, DoubleMatrix &nablaH){
 void HugoniotContinuation3D2D::jet_Hugoniot(const RealVector &F, const DoubleMatrix &JF, 
                                             const RealVector &G, const DoubleMatrix &JG,
+                                            const RealVector &C, const DoubleMatrix &JC,
                                             RealVector &H, DoubleMatrix &nablaH){
 //    int n = p.size();
 

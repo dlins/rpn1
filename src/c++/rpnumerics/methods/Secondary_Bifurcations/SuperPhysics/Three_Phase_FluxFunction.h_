@@ -1,0 +1,20 @@
+#ifndef _THREE_PHASE_FLUXFUNCTION_
+#define _THREE_PHASE_FLUXFUNCTION_
+
+#include "FluxFunction.h"
+#include "Three_Phase_Permeability.h"
+
+class Three_Phase_FluxFunction : public FluxFunction {
+    private:
+    protected:
+         Three_Phase_Permeability *perm_;
+    public:
+        Three_Phase_FluxFunction();
+        virtual ~Three_Phase_FluxFunction();
+
+              Three_Phase_Permeability* perm()       {return perm_;}
+        const Three_Phase_Permeability* perm() const {return perm_;}
+};
+
+#endif // _THREE_PHASE_FLUXFUNCTION_
+

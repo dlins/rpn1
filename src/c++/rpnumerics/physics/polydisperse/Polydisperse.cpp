@@ -66,24 +66,33 @@ int Polydisperse::Hindered_jet(double phi1, double phi2, JetMatrix &Vj, int degr
     double n2 = fluxParams().component(6);
 
     if (degree >= 0){
-        double V1 = ( (phi <= phimax) ? pow(1.0 - phi, n1 - 2.0) : 0.0 );
-        double V2 = ( (phi <= phimax) ? pow(1.0 - phi, n2 - 2.0) : 0.0 );
+        // The velocity exponents must be larger than 1.0
+        // It is not usual to have states outside the domain, however, we let this to happen.
+        // The sign is controled inside the paramenter "inverse".
+        //
+        double modulus = fabs(1.0 - phi);
+        double inverse = ( (phi != 1.0) ? 1./(1.0 - phi) : 0.0);
+        double V1 = ( (phi < phimax) ? inverse*pow(modulus, n1 - 1.0) : 0.0 );
+        double V2 = ( (phi < phimax) ? inverse*pow(modulus, n2 - 1.0) : 0.0 );
 
         Vj.set(0, V1);
         Vj.set(1, V2);
 
         if (degree >= 1){
-            double dV1_dphi = ( (phi <= phimax) ? - (n1 - 2.0) * pow(1.0 - phi, n1 - 3.0) : 0.0 );
-            double dV2_dphi = ( (phi <= phimax) ? - (n2 - 2.0) * pow(1.0 - phi, n2 - 3.0) : 0.0 );
+            // We do not need the sign of the inverse, so we take the absolute value.
+            inverse = fabs(inverse);
+
+            double dV1_dphi = ( (phi < phimax) ? - (n1 - 2.0) * inverse * V1 : 0.0 );
+            double dV2_dphi = ( (phi < phimax) ? - (n2 - 2.0) * inverse * V2 : 0.0 );
 
             Vj.set(0, 0, dV1_dphi);
-//            Vj.set(0, 1, dV1_dphi);
+//            Vj(0, 1, dV1_dphi);
             Vj.set(1, 0, dV2_dphi);
 //            Vj(1, 1, dV2_dphi);
 
             if (degree >= 2){
-                double d2V1_dphi2 = ( (phi <= phimax) ? (n1 - 2.0) * (n1 - 3.0) * pow(1.0 - phi, n1 - 4.0) : 0.0 );
-                double d2V2_dphi2 = ( (phi <= phimax) ? (n2 - 2.0) * (n2 - 3.0) * pow(1.0 - phi, n2 - 4.0) : 0.0 );
+                double d2V1_dphi2 = ( (phi < phimax) ? - (n1 - 3.0) * inverse * dV1_dphi : 0.0 );
+                double d2V2_dphi2 = ( (phi < phimax) ? - (n2 - 3.0) * inverse * dV2_dphi : 0.0 );
 
                 Vj.set(0, 0, 0, d2V1_dphi2);
 //                Vj(0, 0, 1, d2V1_dphi2);

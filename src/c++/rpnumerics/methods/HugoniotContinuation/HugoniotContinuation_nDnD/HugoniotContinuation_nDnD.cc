@@ -5,14 +5,14 @@
 //void HugoniotContinuation_nDnD::jet_Hugoniot(const RealVector &p, RealVector &H, DoubleMatrix &nablaH){
 void HugoniotContinuation_nDnD::jet_Hugoniot(const RealVector &F, const DoubleMatrix &JF, 
                                              const RealVector &G, const DoubleMatrix &JG,
+                                             const RealVector &C, const DoubleMatrix &JC,
                                              RealVector &H, DoubleMatrix &nablaH){
 
     // The number of columns of the Jacobians is the dimension of the space.
-    int n = JF.cols();
-    int nm1 = n - 1; // n minus one
+    int n     = JF.cols();
 
-    H.resize(nm1);
-    nablaH.resize(n, nm1);
+    H.resize(n - 1);
+    nablaH.resize(n, n - 1);
 
     // [F] & [G]
     //
@@ -23,19 +23,44 @@ void HugoniotContinuation_nDnD::jet_Hugoniot(const RealVector &F, const DoubleMa
     //       URGENT!!! DUE YESTERDAY!!!
     //
 //    int eq_number = n - 1; // = 2.
-    int eq_number = 1; // = 2.
-    int i = 0;
+    int eq_number = 2; // = 2.
+//    int i = 0;
 
-    for (int ii = 0; ii < nm1; ii++){
-        if (ii != eq_number){
-            H(i) = diff_F(i)*diff_G(eq_number) - diff_F(eq_number)*diff_G(i);
+    int neqm1 = F.size() - 1;
+    std::vector<int> index(neqm1);
+    for (int i = 0; i < neqm1; i++){
+        if (i < eq_number) index[i] = i;
+        else               index[i] = i + 1;
+    }
 
-            for (int j = 0; j < n; j++) nablaH(j, i) = JF(i, j)*diff_G(eq_number) + JG(eq_number, j)*diff_F(i) - 
-                                                       JF(eq_number, j)*diff_G(i) - JG(i, j)*diff_F(eq_number);
+//    for (int ii = 0; ii < nm1; ii++){
+//        if (ii != eq_number){
+//            H(i) = diff_F(i)*diff_G(eq_number) - diff_F(eq_number)*diff_G(i);
 
-            i++;
-        }
-        
+//            for (int j = 0; j < n; j++) nablaH(j, i) = JF(i, j)*diff_G(eq_number) + JG(eq_number, j)*diff_F(i) - 
+//                                                       JF(eq_number, j)*diff_G(i) - JG(i, j)*diff_F(eq_number);
+
+//            i++;
+//        }
+//        
+//    }
+
+    double diff_F_eq = diff_F(eq_number);
+    double diff_G_eq = diff_G(eq_number);
+
+    for (int ii = 0; ii < index.size(); ii++){
+        int i = index[ii];
+
+            H(ii) = diff_F(i)*diff_G_eq - diff_F_eq*diff_G(i);
+
+            for (int j = 0; j < n; j++) nablaH(j, ii) = JF(i, j)*diff_G_eq + JG(eq_number, j)*diff_F(i) - 
+                                                       JF(eq_number, j)*diff_G(i) - JG(i, j)*diff_F_eq;
+    }
+
+    for (int ii = 0; ii < C.size(); ii++){
+            H(ii + index.size()) = C(ii);
+
+            for (int j = 0; j < n; j++) nablaH(j, ii + index.size()) = JC(ii, j);
     }
 
 //    double norm_diff_G_squared = diff_G*diff_G;

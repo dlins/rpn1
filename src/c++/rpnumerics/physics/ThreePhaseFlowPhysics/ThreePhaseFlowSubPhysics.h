@@ -1,0 +1,54 @@
+#ifndef _THREEPHASEFLOWSUBPHYSICS_
+#define _THREEPHASEFLOWSUBPHYSICS_
+
+#include "SubPhysics.h"
+
+#include "IsoTriang2DBoundary.h"
+#include "Implicit_Extension_Curve.h"
+#include "ImplicitHugoniotCurve.h"
+#include "HugoniotContinuation2D2D.h"
+#include "StoneAccumulation.h"
+#include "ThreePhaseFlowPermeability.h"
+#include "ThreePhaseImplicitHugoniotCurve.h"
+
+class ThreePhaseFlowSubPhysics : public SubPhysics {
+    private:
+        // No private members.
+        //
+    protected:
+        // This should be moved to ThreePhaseFlowBoundary.
+        //
+        RealVector W_vertex, O_vertex, G_vertex;
+
+        Implicit_Extension_Curve *iec;
+
+        Parameter *muw_parameter, *muo_parameter, *mug_parameter;
+        Parameter *grw_parameter, *gro_parameter, *grg_parameter;
+        Parameter *vel_parameter;
+
+        ThreePhaseFlowPermeability *permeability_;
+    public:
+        ThreePhaseFlowSubPhysics();
+        virtual ~ThreePhaseFlowSubPhysics();
+
+        // Return some parameters.
+        //
+        RealVector W(){return W_vertex;}
+        RealVector O(){return O_vertex;}
+        RealVector G(){return G_vertex;}
+
+        Parameter* muw(){return muw_parameter;}
+        Parameter* muo(){return muo_parameter;}
+        Parameter* mug(){return mug_parameter;}
+        Parameter* grw(){return grw_parameter;}
+        Parameter* gro(){return gro_parameter;}
+        Parameter* grg(){return grg_parameter;}
+        Parameter* vel(){return vel_parameter;}
+
+        // Permeability.
+        //
+        ThreePhaseFlowPermeability* permeability(){return permeability_;}
+};
+
+#endif // _THREEPHASEFLOWSUBPHYSICS_
+
