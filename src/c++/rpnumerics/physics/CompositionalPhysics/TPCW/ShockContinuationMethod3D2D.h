@@ -47,12 +47,7 @@
 // Comment/uncomment the line above to allow graphical operations for testing purposes.
 
 
-#ifdef SHOCK_TEST_PLOT
-#include "canvas.h"
-#include "canvasmenuscroll.h"
-#include "quiverplot.h"
-#include "curve2d.h"
-#endif
+
 
 struct Plane {
 public:
@@ -169,10 +164,7 @@ public:
 
     static int debugshock;
 
-    #ifdef SHOCK_TEST_PLOT
-    static Canvas *canvas;
-    static CanvasMenuScroll *scroll;
-    #endif
+   
 };
 
 #endif //! _ShockContinuationMethod3D2D_H

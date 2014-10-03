@@ -224,7 +224,7 @@ int WaveCurveFactory::Liu_half_wavecurve(const ReferencePoint &ref,
         } // if (current_curve == RAREFACTION_CURVE)
         else if (current_curve == COMPOSITE_CURVE){
             std::cout << "WaveCurveFactory: entering Composite." << std::endl;
-            TestTools::pause("WaveCurveFactory: entering Composite.");
+
 
 //            double deltaxi = 1e-3;
             double deltaxi = 1e-3; //3e-4; // Was: 1e-3
@@ -251,7 +251,7 @@ int WaveCurveFactory::Liu_half_wavecurve(const ReferencePoint &ref,
 
             is_first = false;
 
-            TestTools::pause("WaveCurveFactory: exiting Composite.");
+
             std::cout << "WaveCurveFactory, composite completed. Info = " << info_cmp << ", final_direction = " << final_direction << std::endl;
             cmpcurve.final_direction = final_direction;
 
@@ -264,7 +264,7 @@ int WaveCurveFactory::Liu_half_wavecurve(const ReferencePoint &ref,
                 for (int i = 0; i < cmpcurve.curve.size(); i++) cmpcurve.back_curve_pointer[i] = rarefaction_list.back();
 
                 std::cout << "cmpcurve.back_curve_index = " << cmpcurve.back_curve_index << std::endl;
-                TestTools::pause("Composite computed, check console!");
+
                 
                 hwc.wavecurve.push_back(cmpcurve);
 
@@ -352,7 +352,7 @@ int WaveCurveFactory::Liu_half_wavecurve(const ReferencePoint &ref,
             std::cout << "WaveCurveFactory. shck_info = " << shck_info << ", shock_stopped_because = " << shock_stopped_because << std::endl;
 
             std::cout << "Speed at first shockpoint = " << shkcurve.speed[0] << std::endl;
-            TestTools::pause("After shock");
+
 
             shkcurve.back_curve_index = hwc.wavecurve.size() - 1;
             hwc.wavecurve.push_back(shkcurve);
@@ -460,7 +460,7 @@ int WaveCurveFactory::Liu_half_wavecurve(const ReferencePoint &ref,
                     return WAVECURVE_OK;
                 }
                 else {
-                    TestTools::pause("Non-classical shock. The code is not written.\nStopping.");
+
 
                     return WAVECURVE_OK;
                 }
@@ -505,13 +505,13 @@ int WaveCurveFactory::wavecurve(const RealVector &initial_point, int family, int
     hugoniot = h;
 
     std::cout << "initial_direction = " << initial_direction << ", fam. = " << family << ", inc. = " << increase << std::endl;
-    TestTools::pause("First half");
+
 
     Liu_half_wavecurve(ref, initial_point, family, increase, RAREFACTION_CURVE,  initial_direction, hwc, wavecurve_stopped_because, edge);
 
     hwc.beginnig_of_second_half = hwc.wavecurve.size();
 
-    TestTools::pause("Second half");
+
 
     Liu_half_wavecurve(ref, initial_point, family, increase, SHOCK_CURVE,       -initial_direction, hwc, wavecurve_stopped_because, edge);
 
@@ -619,7 +619,7 @@ int WaveCurveFactory::wavecurve_from_inflection(const std::vector<RealVector> &i
         int start_as;
 
         std::cout << "i = " << i << ", lambda = " << lambda[family] << ", e[family].r = " << e[family].r << std::endl;
-        TestTools::pause();
+
 
         if (
             (lambda[family] > e[family].r && increase == SPEED_INCREASE) ||

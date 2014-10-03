@@ -62,15 +62,7 @@
 #define SHOCK_COMPLEX_EIGENVALUE_AT_FAMILY                               305
 #define SHOCK_REACHED_BOUNDARY                                           306
 
-// For test purposes only. DELETE LATER
-#define USECANVAS
 
-#ifdef USECANVAS
-#include "canvas.h"
-#include "canvasmenuscroll.h"
-#include "curve2d.h"
-#endif
-// For test purposes only. DELETE LATER
 
 #define DONT_USE_INTERRUPTION_FUNCTIONS            1
 #define USE_INTERRUPTION_FUNCTIONS_SPECIFIC_FAMILY 2

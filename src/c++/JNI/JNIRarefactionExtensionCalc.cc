@@ -14,10 +14,9 @@
 #include "RpNumerics.h"
 #include "RealVector.h"
 #include "JNIDefs.h"
-#include "Stone.h"
 #include "StoneAccumulation.h"
 #include "RectBoundary.h"
-#include "Debug.h"
+
 #include <vector>
 
 //#include "Rarefaction_Extension.h"

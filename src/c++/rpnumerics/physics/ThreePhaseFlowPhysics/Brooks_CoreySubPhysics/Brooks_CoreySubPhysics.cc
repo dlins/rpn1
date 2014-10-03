@@ -1,29 +1,49 @@
 #include "Brooks_CoreySubPhysics.h"
 
 Brooks_CoreySubPhysics::Brooks_CoreySubPhysics() : ThreePhaseFlowSubPhysics(){
+    // Every ThreePhaseFlowSubPhysics has these.
+    //
+    muw_parameter = new Parameter(std::string("muw"), 1.0);
+    muo_parameter = new Parameter(std::string("muo"), 2.0);
+    mug_parameter = new Parameter(std::string("mug"), 0.5);
+
+    // Brooks_CoreySubPhysics-specific.
+    //
     lambda_parameter = new Parameter(std::string("lambda"), .2, 7.0, 1.0);
     cnw_parameter = new Parameter(std::string("cnw"), 0.0);
     cno_parameter = new Parameter(std::string("cno"), 0.0);
     cng_parameter = new Parameter(std::string("cng"), 0.0);
 
-    // Permeability.
+    // Not in the original Brooks-Corey, but needed by the permeability.
+    // TODO: Decide if they are to be added to the list of
+    //       parameters. They could be NOT added, so they
+    //       would not be modified.
     //
-//    perm = new Brooks_CoreyPermeability(lambda_parameter, cnw_parameter, cno_parameter, cng_parameter, this);
-//    auxiliaryfunctions_.push_back(perm);
-
-    permeability_ = new Brooks_CoreyPermeability(lambda_parameter, cnw_parameter, cno_parameter, cng_parameter, this);
-    auxiliaryfunctions_.push_back(permeability_);
-
-    muw_parameter = new Parameter(std::string("muw"), 1.0);
-    muo_parameter = new Parameter(std::string("muo"), 2.0);
-    mug_parameter = new Parameter(std::string("mug"), 0.5);
+    grw_parameter = new Parameter(std::string("grw"), 1.0);
+    gro_parameter = new Parameter(std::string("gro"), 1.0);
+    grg_parameter = new Parameter(std::string("grg"), 1.0);
+    vel_parameter = new Parameter(std::string("vel"), 1.0);
 
     equation_parameter_.push_back(muw_parameter);
     equation_parameter_.push_back(muo_parameter);
     equation_parameter_.push_back(mug_parameter);
 
+    equation_parameter_.push_back(grw_parameter); // TODO: Add or not?
+    equation_parameter_.push_back(gro_parameter); // TODO: Add or not?
+    equation_parameter_.push_back(grg_parameter); // TODO: Add or not?
+    equation_parameter_.push_back(vel_parameter); // TODO: Add or not?
+
+    // Permeability.
+    //
+    permeability_ = new Brooks_CoreyPermeability(lambda_parameter, cnw_parameter, cno_parameter, cng_parameter, this);
+    auxiliaryfunctions_.push_back(permeability_);
+
+    // Flux.
+    //
     flux_ = new Brooks_CoreyFluxFunction(muw_parameter, muo_parameter, mug_parameter, (Brooks_CoreyPermeability*)permeability_);
 
+    // Accumulation.
+    //
     accumulation_ = new StoneAccumulation;
 
     // GridValues.

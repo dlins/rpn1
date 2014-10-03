@@ -15,10 +15,9 @@
 #include "RpNumerics.h"
 #include "RealVector.h"
 #include "JNIDefs.h"
-#include "Debug.h"
 #include <vector>
 
-#include "TPCW.h"
+//#include "TPCW.h"
 #include "RarefactionCurve.h"
 #include "LSODE.h"
 
@@ -52,8 +51,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionCurveCalc_calc(JNIEnv * env
     jmethodID setXIMethodID = (env)->GetMethodID(fundamentalCurveClass, "setXi", "([D)V");
 
 
-
-
     jmethodID setReferencePointID = (env)->GetMethodID(classWaveCurveBranch, "setReferencePoint", "(Lrpnumerics/OrbitPoint;)V");
 
     //Input processing
@@ -77,12 +74,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionCurveCalc_calc(JNIEnv * env
 
     vector <RealVector> coords;
 
+    RarefactionCurve *rarefaction_curve = RpNumerics::physicsVector_->at(0)->rarefaction_curve();
 
-    const Boundary * tempBoundary = RpNumerics::getPhysics().getSubPhysics(0).getPreProcessedBoundary();
-
-
-    //cout<<tempBoundary->minimums()<<endl;
-    //cout<<tempBoundary->maximums()<<endl;
 
     //    double deltaxi = 1e-3; // This is the original value (Rodrigo/ Panters)
 
@@ -93,23 +86,19 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionCurveCalc_calc(JNIEnv * env
     //cout << "Ponto de entrada: " << realVectorInput << endl;
 
 
-    const FluxFunction * flux = &RpNumerics::getPhysics().fluxFunction();
-    const AccumulationFunction * accum = &RpNumerics::getPhysics().accumulation();
+    const FluxFunction * flux = RpNumerics::physicsVector_->at(0)->flux();
+    const AccumulationFunction * accum = RpNumerics::physicsVector_->at(0)->accumulation();
 
-
-
-    //cout << "Fluxo: " << flux << endl;
-    //cout << "Accum: " << accum << endl;
 
 
     vector<RealVector> inflectionPoints;
 
-    RpNumerics::getPhysics().getSubPhysics(0).preProcess(realVectorInput);
+
 
 
     //cout << "Ponto de entrada apos pos process: " << realVectorInput << endl;
 
-    RarefactionCurve rc(accum, flux, tempBoundary);
+//    RarefactionCurve rc(accum, flux, tempBoundary);
 
 
     double deltaxi = 1e-3;
@@ -125,7 +114,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionCurveCalc_calc(JNIEnv * env
 
     odesolver = &lsode;
 
-    int info_rar = rc.curve(realVectorInput,
+    int info_rar = rarefaction_curve->curve(realVectorInput,
             familyIndex,
             timeDirection,
             RAREFACTION,
@@ -189,7 +178,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionCurveCalc_calc(JNIEnv * env
         //        double * dataCoords = tempVector;
 
         RealVector resizedVector(tempVector);
-        RpNumerics::getPhysics().getSubPhysics(0).postProcess(resizedVector);
+//        RpNumerics::getPhysics().getSubPhysics(0).postProcess(resizedVector);
 
 //       cout << tempVector << endl;
 
@@ -250,136 +239,136 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionCurveCalc_boundaryNativeCal
 (JNIEnv *env, jobject obj, jobject initialPoint, jint familyIndex, jint timeDirection, jint edge) {
 
 
-
-
-    unsigned int i;
-
-    jclass classOrbitPoint = (env)->FindClass(ORBITPOINT_LOCATION);
-    jclass classRarefactionOrbit = (env)->FindClass(RAREFACTIONCURVE_LOCATION);
-
-    jmethodID rarefactionOrbitConstructor = (env)->GetMethodID(classRarefactionOrbit, "<init>", "([Lrpnumerics/OrbitPoint;II)V");
-    jmethodID orbitPointConstructor = (env)->GetMethodID(classOrbitPoint, "<init>", "([DD)V");
-    jmethodID toDoubleMethodID = (env)->GetMethodID(classOrbitPoint, "toDouble", "()[D");
-
-    //Input processing
-    jdoubleArray inputPhasePointArray = (jdoubleArray) (env)->CallObjectMethod(initialPoint, toDoubleMethodID);
-
-    double input [env->GetArrayLength(inputPhasePointArray)];
-
-    env->GetDoubleArrayRegion(inputPhasePointArray, 0, env->GetArrayLength(inputPhasePointArray), input);
-
-    RealVector realVectorInput(env->GetArrayLength(inputPhasePointArray));
-
-
-    for (i = 0; i < (unsigned int) realVectorInput.size(); i++) {
-
-        realVectorInput.component(i) = input[i];
-
-    }
-
-    env->DeleteLocalRef(inputPhasePointArray);
-
-    //    vector <RealVector> coords;
-
-    const Boundary * tempBoundary = RpNumerics::getPhysics().getSubPhysics(0).getPreProcessedBoundary();
-
-    const FluxFunction * flux = &RpNumerics::getPhysics().fluxFunction();
-    const AccumulationFunction * accum = &RpNumerics::getPhysics().accumulation();
-
-
-
-    RpNumerics::getPhysics().getSubPhysics(0).preProcess(realVectorInput);
-
-    RarefactionCurve rc(accum, flux, tempBoundary);
-
-
-    double deltaxi = 1e-3;
-    std::vector<RealVector> inflection_point;
-    Curve rarcurve;
-
-    int rar_stopped_because;
-    int s;
-    RealVector final_direction;
-
-    LSODE lsode;
-    ODE_Solver *odesolver;
-
-    odesolver = &lsode;
-
-    //    realVectorInput(0)=0.538996;
-    //    realVectorInput(1)=0.461004;
-
-    ////cout << "Ponto de entrada: " << realVectorInput << " edge " << edge << " familyIndex " << familyIndex << " timedirection " << timeDirection << endl;
-    ////cout << " rar for itself " << RAREFACTION << " odesolver " << odesolver << " deltaxi " << deltaxi << endl;
-
-    int info_rar = rc.curve_from_boundary(realVectorInput, edge,
-            familyIndex,
-            timeDirection,
-            RAREFACTION,
-            odesolver,
-            deltaxi,
-            rarcurve,
-            inflection_point,
-            final_direction,
-            rar_stopped_because,
-            s);
-
-
-    ////cout << "final direction : " << final_direction << endl;
-    ////cout << "rar_stop : " << rar_stopped_because << endl;
-
-    ////cout << "Tamanho de rar curve: " << rarcurve.curve.size() << endl;
-
-    RpNumerics::getPhysics().getSubPhysics(0).postProcess(rarcurve.curve);
-    //----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-    //Orbit members creation
-
-    jobjectArray orbitPointArray = (jobjectArray) (env)->NewObjectArray(rarcurve.curve.size(), classOrbitPoint, NULL);
-
-    for (i = 0; i < rarcurve.curve.size(); i++) {
-
-        RealVector tempVector = rarcurve.curve.at(i);
-
-        double lambda = rarcurve.speed[i];
-
-
-        if (Debug::get_debug_level() == 5) {
-            ////cout << tempVector << endl;
-        }
-
-        double * dataCoords = tempVector;
-
-        //Reading only coodinates
-        jdoubleArray jTempArray = (env)->NewDoubleArray(tempVector.size());
-
-        (env)->SetDoubleArrayRegion(jTempArray, 0, tempVector.size(), dataCoords);
-
-        //Lambda is the last component.
-        jobject orbitPoint = (env)->NewObject(classOrbitPoint, orbitPointConstructor, jTempArray, lambda);
-
-        (env)->SetObjectArrayElement(orbitPointArray, i, orbitPoint);
-
-        env->DeleteLocalRef(jTempArray);
-
-        env->DeleteLocalRef(orbitPoint);
-
-    }
-
-    //Building the orbit
-
-    jobject rarefactionOrbit = (env)->NewObject(classRarefactionOrbit, rarefactionOrbitConstructor, orbitPointArray, familyIndex, timeDirection);
-
-
-    //Cleaning up
-
-
-
-    env->DeleteLocalRef(orbitPointArray);
-    env->DeleteLocalRef(classOrbitPoint);
-    env->DeleteLocalRef(classRarefactionOrbit);
-
-    return rarefactionOrbit;
+//
+//
+//    unsigned int i;
+//
+//    jclass classOrbitPoint = (env)->FindClass(ORBITPOINT_LOCATION);
+//    jclass classRarefactionOrbit = (env)->FindClass(RAREFACTIONCURVE_LOCATION);
+//
+//    jmethodID rarefactionOrbitConstructor = (env)->GetMethodID(classRarefactionOrbit, "<init>", "([Lrpnumerics/OrbitPoint;II)V");
+//    jmethodID orbitPointConstructor = (env)->GetMethodID(classOrbitPoint, "<init>", "([DD)V");
+//    jmethodID toDoubleMethodID = (env)->GetMethodID(classOrbitPoint, "toDouble", "()[D");
+//
+//    //Input processing
+//    jdoubleArray inputPhasePointArray = (jdoubleArray) (env)->CallObjectMethod(initialPoint, toDoubleMethodID);
+//
+//    double input [env->GetArrayLength(inputPhasePointArray)];
+//
+//    env->GetDoubleArrayRegion(inputPhasePointArray, 0, env->GetArrayLength(inputPhasePointArray), input);
+//
+//    RealVector realVectorInput(env->GetArrayLength(inputPhasePointArray));
+//
+//
+//    for (i = 0; i < (unsigned int) realVectorInput.size(); i++) {
+//
+//        realVectorInput.component(i) = input[i];
+//
+//    }
+//
+//    env->DeleteLocalRef(inputPhasePointArray);
+//
+//    //    vector <RealVector> coords;
+//
+//    const Boundary * tempBoundary = RpNumerics::getPhysics().getSubPhysics(0).getPreProcessedBoundary();
+//
+//    const FluxFunction * flux = &RpNumerics::getPhysics().fluxFunction();
+//    const AccumulationFunction * accum = &RpNumerics::getPhysics().accumulation();
+//
+//
+//
+//    RpNumerics::getPhysics().getSubPhysics(0).preProcess(realVectorInput);
+//
+//    RarefactionCurve rc(accum, flux, tempBoundary);
+//
+//
+//    double deltaxi = 1e-3;
+//    std::vector<RealVector> inflection_point;
+//    Curve rarcurve;
+//
+//    int rar_stopped_because;
+//    int s;
+//    RealVector final_direction;
+//
+//    LSODE lsode;
+//    ODE_Solver *odesolver;
+//
+//    odesolver = &lsode;
+//
+//    //    realVectorInput(0)=0.538996;
+//    //    realVectorInput(1)=0.461004;
+//
+//    ////cout << "Ponto de entrada: " << realVectorInput << " edge " << edge << " familyIndex " << familyIndex << " timedirection " << timeDirection << endl;
+//    ////cout << " rar for itself " << RAREFACTION << " odesolver " << odesolver << " deltaxi " << deltaxi << endl;
+//
+//    int info_rar = rc.curve_from_boundary(realVectorInput, edge,
+//            familyIndex,
+//            timeDirection,
+//            RAREFACTION,
+//            odesolver,
+//            deltaxi,
+//            rarcurve,
+//            inflection_point,
+//            final_direction,
+//            rar_stopped_because,
+//            s);
+//
+//
+//    ////cout << "final direction : " << final_direction << endl;
+//    ////cout << "rar_stop : " << rar_stopped_because << endl;
+//
+//    ////cout << "Tamanho de rar curve: " << rarcurve.curve.size() << endl;
+//
+//    RpNumerics::getPhysics().getSubPhysics(0).postProcess(rarcurve.curve);
+//    //----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//
+//    //Orbit members creation
+//
+//    jobjectArray orbitPointArray = (jobjectArray) (env)->NewObjectArray(rarcurve.curve.size(), classOrbitPoint, NULL);
+//
+//    for (i = 0; i < rarcurve.curve.size(); i++) {
+//
+//        RealVector tempVector = rarcurve.curve.at(i);
+//
+//        double lambda = rarcurve.speed[i];
+//
+//
+//        if (Debug::get_debug_level() == 5) {
+//            ////cout << tempVector << endl;
+//        }
+//
+//        double * dataCoords = tempVector;
+//
+//        //Reading only coodinates
+//        jdoubleArray jTempArray = (env)->NewDoubleArray(tempVector.size());
+//
+//        (env)->SetDoubleArrayRegion(jTempArray, 0, tempVector.size(), dataCoords);
+//
+//        //Lambda is the last component.
+//        jobject orbitPoint = (env)->NewObject(classOrbitPoint, orbitPointConstructor, jTempArray, lambda);
+//
+//        (env)->SetObjectArrayElement(orbitPointArray, i, orbitPoint);
+//
+//        env->DeleteLocalRef(jTempArray);
+//
+//        env->DeleteLocalRef(orbitPoint);
+//
+//    }
+//
+//    //Building the orbit
+//
+//    jobject rarefactionOrbit = (env)->NewObject(classRarefactionOrbit, rarefactionOrbitConstructor, orbitPointArray, familyIndex, timeDirection);
+//
+//
+//    //Cleaning up
+//
+//
+//
+//    env->DeleteLocalRef(orbitPointArray);
+//    env->DeleteLocalRef(classOrbitPoint);
+//    env->DeleteLocalRef(classRarefactionOrbit);
+//
+//    return rarefactionOrbit;
 
 
 

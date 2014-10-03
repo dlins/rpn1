@@ -35,14 +35,6 @@
 
 #include <complex> // To handle complex eigenpairs.
 
-#define TEST
-#ifdef TEST
-    #include "canvas.h"
-    #include "canvasmenuscroll.h"
-    #include "curve2d.h"
-
-    #include "TestTools.h"
-#endif
 
 class WaveCurveFactory;
 

@@ -13,9 +13,7 @@ class Brooks_CoreySubPhysics : public ThreePhaseFlowSubPhysics {
     protected:
         Parameter *lambda_parameter;
         Parameter *cnw_parameter, *cno_parameter, *cng_parameter;
-        Brooks_CoreyPermeability *perm;
 
-        Parameter *muw_parameter, *muo_parameter, *mug_parameter;
     public:
         Brooks_CoreySubPhysics();
         virtual ~Brooks_CoreySubPhysics();

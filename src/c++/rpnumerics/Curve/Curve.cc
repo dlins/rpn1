@@ -1,5 +1,5 @@
 #include "Curve.h"
-#include "TestTools.h"
+
 
 void Curve::init(const Curve &orig){
     type = orig.type;

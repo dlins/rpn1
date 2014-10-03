@@ -39,42 +39,42 @@ public class ComboBoxCreator extends UIComponentCreator {
 
         HashMap<String, String> paramsValues = new HashMap<String, String>();
 
-        if (configurationParameter_.contains("sort")) {//To eigen sort functions
-
-            List<String> sortFunctionList = RPNUMERICS.getEigenSortFunctionNames();
-
-            for (String string : sortFunctionList) {
-
-                paramsValues.put(string, string);
-            }
-
-        } else {//To characteristics 
-
-            paramsValues.put("on curve", "1");
-            paramsValues.put("on domain", "0");
-        }
-
-        JComboBox comboBox = new JComboBox(paramsValues.keySet().toArray());
-
-        comboBox.addItemListener(new ComboEventHandler());
-        panel_.add(methodLabel);
-
-        panel_.add(comboBox);
-        
-        
-         if (configurationParameter_.contains("sort")) {//To eigen sort functions
-             
-             System.out.println("em sort eigen value: "+ configurationParameter_ + " "+ configuration_.getParam(configurationParameter_));
-             comboBox.setSelectedItem(configuration_.getParam(configurationParameter_));
-             
-             
-         }
-         
-         else {
-             int charFlag = new Integer(configuration_.getParam(configurationParameter_));
-             comboBox.setSelectedItem(chooseCharacteristic(charFlag));
-         }
-        
+//        if (configurationParameter_.contains("sort")) {//To eigen sort functions
+//
+//            List<String> sortFunctionList = RPNUMERICS.getEigenSortFunctionNames();
+//
+//            for (String string : sortFunctionList) {
+//
+//                paramsValues.put(string, string);
+//            }
+//
+//        } else {//To characteristics 
+//
+//            paramsValues.put("on curve", "1");
+//            paramsValues.put("on domain", "0");
+//        }
+//
+//        JComboBox comboBox = new JComboBox(paramsValues.keySet().toArray());
+//
+//        comboBox.addItemListener(new ComboEventHandler());
+//        panel_.add(methodLabel);
+//
+//        panel_.add(comboBox);
+//        
+//        
+//         if (configurationParameter_.contains("sort")) {//To eigen sort functions
+//             
+//             System.out.println("em sort eigen value: "+ configurationParameter_ + " "+ configuration_.getParam(configurationParameter_));
+//             comboBox.setSelectedItem(configuration_.getParam(configurationParameter_));
+//             
+//             
+//         }
+//         
+//         else {
+//             int charFlag = new Integer(configuration_.getParam(configurationParameter_));
+//             comboBox.setSelectedItem(chooseCharacteristic(charFlag));
+//         }
+//        
        
 
         return panel_;

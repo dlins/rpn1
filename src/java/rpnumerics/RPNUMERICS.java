@@ -50,6 +50,32 @@ public class RPNUMERICS {
             setRPnHome(System.getProperty("rpnhome"));
 
             initNative(physicsID);
+            
+            
+             String [] hugoniotNames  = getHugoniotNames();
+             
+             for (String string : hugoniotNames) {
+                
+                 System.out.println("Nome da hugoniot em Java: "+string);
+                 
+                 
+                 String [] hugoniotCases = getHugoniotCaseNames(string)            ;
+                 
+                 for (String string1 : hugoniotCases) {
+                     
+                     
+                     System.out.println("caso em Java: " + string1);
+                     
+                 }
+                 
+                 
+            }
+             
+             
+    
+
+            
+            
 
             //Processing configuration data
             ConfigurationProfile physicsProfile = RPnConfig.getActivePhysicsProfile();
@@ -115,7 +141,7 @@ public class RPNUMERICS {
             }
 
             configMap_.put(physicsID, physicsConfiguration);
-            errorControl_ = new RpErrorControl(boundary());
+//            errorControl_ = new RpErrorControl(boundary());
         } catch (Exception ex) {
             Logger.getLogger(RPNUMERICS.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -952,6 +978,11 @@ public class RPNUMERICS {
     public static native List<String> getEigenSortFunctionNames();
     
     public static native void setEigenSortFunction(String functionName);
+    
+    
+    public static native String [] getHugoniotNames();
+    
+    public static native String [] getHugoniotCaseNames(String hugoniotMethodName);
 
     private static native void setFluxParams(FluxParams fluxParams);
 

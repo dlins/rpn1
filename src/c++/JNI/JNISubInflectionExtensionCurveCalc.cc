@@ -24,11 +24,9 @@ NOTE :
 #include "RpNumerics.h"
 #include <vector>
 #include <iostream>
-#include "TPCW.h"
-#include "SubinflectionTPCW_Extension.h"
-#include "Extension_Curve.h"
+
 //#include "SubinflectionTPCW.h"
-#include "Debug.h"
+
 
 using std::vector;
 using namespace std;

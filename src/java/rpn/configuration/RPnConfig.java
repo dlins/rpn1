@@ -57,172 +57,172 @@ public class RPnConfig {
 
     public static void createParamsFluxSubject(String physicsName) {
 
-        if (physicsName.equals("QuadraticR2")) {
-            teste = new RPnFluxParamsSubject[5];
-
-            Configuration physicsConfiguration = RPNUMERICS.getConfiguration(physicsName);
-
-            Configuration fluxConfiguration = physicsConfiguration.getConfiguration("fluxfunction");
-
-            paramObserver = new RPnFluxParamsObserver(fluxConfiguration);
-
-
-//              System.out.println("VETOTR A : ");
-            String[] namesA = new String[fluxConfiguration.getParamsSize()];
-            for (int i=0; i<namesA.length;i++) {
-                namesA[i] = "A " +fluxConfiguration.getParamName(i);
-                System.out.println(namesA[i]);
-            }
-
-
-//            System.out.println("VETOTR B : ");
-            String[] namesB = new String[fluxConfiguration.getParamsSize()];
-            for (int i=0; i<namesB.length;i++) {
-                namesB[i] = "B " +fluxConfiguration.getParamName(i);
-                System.out.println(namesB[i]);
-            }
-
-            String[] finalNames = new String[fluxConfiguration.getParamsSize()*2 + 1];
-            for (int i=0; i<namesA.length; i++) {
-                finalNames[i] = namesA[i];
-            }
-
-            for (int i=0; i<namesA.length; i++) {
-                finalNames[i+namesA.length] = namesB[i];
-            }
-
-            finalNames[finalNames.length - 1] = "alpha";
+//        if (physicsName.equals("QuadraticR2")) {
+//            teste = new RPnFluxParamsSubject[5];
 //
-//            System.out.println("VETOTR FINAL_NAMES : ");
-//            for (int i=0; i<finalNames.length; i++) {
-//                System.out.println(finalNames[i]);
-//            }
-
-
-            String[] values = new String[fluxConfiguration.getParamsSize()*2 + 1];
-            for (int i=0; i<values.length-1;i++) {
-                values[i]=String.valueOf(i);
-            }
-            teste[0] = new RPnSchearerSchaeffer(new String[3], new String[]{"A", "B", "C"});
-            teste[1] = new RPnPalmeira(new String[3], new String[]{"B1", "B2", "C"});
-            teste[2] = new RPnCorey(new String[2], new String[]{"A", "B"});
-            teste[3] = new RPnFluxConvexCombination(values, finalNames);
-            teste[4]= new RPnViscosityMatrix(new String[4], new String[]{"f1","g1","f2","g2"});
-            
-
-            teste[0].attach(paramObserver);
-            teste[1].attach(paramObserver);
-            teste[2].attach(paramObserver);
-            teste[3].attach(paramObserver);
-            teste[4].attach(paramObserver);
-
-
-        }
-        if (physicsName.equals("Stone")) {      //testando combinacao convexa de parametros
-            teste = new RPnFluxParamsSubject[5];
-
-            Configuration physicsConfiguration = RPNUMERICS.getConfiguration(physicsName);
-
-            Configuration fluxConfiguration = physicsConfiguration.getConfiguration("fluxfunction");
-
-            paramObserver = new RPnFluxParamsObserver(fluxConfiguration);
-
-//            System.out.println("VETOTR A : ");
-            String[] namesA = new String[fluxConfiguration.getParamsSize()];
-            for (int i=0; i<namesA.length;i++) {
-                namesA[i] = "A " +fluxConfiguration.getParamName(i);
+//            Configuration physicsConfiguration = RPNUMERICS.getConfiguration(physicsName);
+//
+//            Configuration fluxConfiguration = physicsConfiguration.getConfiguration("fluxfunction");
+//
+//            paramObserver = new RPnFluxParamsObserver(fluxConfiguration);
+//
+//
+////              System.out.println("VETOTR A : ");
+//            String[] namesA = new String[fluxConfiguration.getParamsSize()];
+//            for (int i=0; i<namesA.length;i++) {
+//                namesA[i] = "A " +fluxConfiguration.getParamName(i);
 //                System.out.println(namesA[i]);
-            }
-
-
-//            System.out.println("VETOTR B : ");
-            String[] namesB = new String[fluxConfiguration.getParamsSize()];
-            for (int i=0; i<namesB.length;i++) {
-                namesB[i] = "B " +fluxConfiguration.getParamName(i);
+//            }
+//
+//
+////            System.out.println("VETOTR B : ");
+//            String[] namesB = new String[fluxConfiguration.getParamsSize()];
+//            for (int i=0; i<namesB.length;i++) {
+//                namesB[i] = "B " +fluxConfiguration.getParamName(i);
 //                System.out.println(namesB[i]);
-            }
-
-            String[] finalNames = new String[fluxConfiguration.getParamsSize()*2 + 1];
-            for (int i=0; i<namesA.length; i++) {
-                finalNames[i] = namesA[i];
-            }
-
-            for (int i=0; i<namesA.length; i++) {
-                finalNames[i+namesA.length] = namesB[i];
-            }
-
-            finalNames[finalNames.length - 1] = "alpha";
-
-//            System.out.println("VETOTR FINAL_NAMES : ");
-            for (int i=0; i<finalNames.length; i++) {
-//                System.out.println(finalNames[i]);
-            }
-
-            String[] values = new String[fluxConfiguration.getParamsSize()*2 + 1];
-            for (int i=0; i<values.length-1;i++) {
-                values[i]=String.valueOf(i);
-            }
-
-            teste[0] = new RPnCoreyToStone(new String[9], new String[]{"muw", "mug", "muo", "expw", "expg", "expo", "cnw", "cng", "cno"});
-            teste[1] = new RPnStoneToStone(new String[10], new String[]{"muw", "mug", "muo", "expw", "expg", "expow", "expog", "cnw", "cng", "cno"});
-            teste[2] = new RPnCoreyBrooks(new String[8], new String[]{"muw", "mug", "muo", "epsl", "cnw", "cng", "cno", "lambda"});
-            teste[3] = new RPnRadioButtonToStone(new String[3], new String[]{"", "", ""});       // aqui virao os nomes dos botoes
-            //teste[4] = new RPnFluxConvexCombination(new String[fluxConfiguration.getParamsSize()*2 + 1], finalNames);
-            teste[4] = new RPnFluxConvexCombination(values, finalNames);
-
-            teste[0].attach(paramObserver);
-            teste[1].attach(paramObserver);
-            teste[2].attach(paramObserver);
-            teste[3].attach(paramObserver);
-            teste[4].attach(paramObserver);
-
-
-        }
-
-
-
-        if (physicsName.equals("CoreyQuad") || physicsName.equals("JD")) {
-            teste = new RPnFluxParamsSubject[0];
-
-            Configuration physicsConfiguration = RPNUMERICS.getConfiguration(physicsName);
-
-            Configuration fluxConfiguration = physicsConfiguration.getConfiguration("fluxfunction");
-
-            paramObserver = new RPnFluxParamsObserver(fluxConfiguration);
-
-
-        }
-        
-        
-           if (physicsName.equals("TriPhase")) {
-            teste = new RPnFluxParamsSubject[0];
-
-            Configuration physicsConfiguration = RPNUMERICS.getConfiguration(physicsName);
-
-            Configuration fluxConfiguration = physicsConfiguration.getConfiguration("fluxfunction");
-
-            paramObserver = new RPnFluxParamsObserver(fluxConfiguration);
-
-        }
-
-
-
-        if (physicsName.equals("Polydisperse")) {
-
-            teste = new RPnFluxParamsSubject[2];
-            Configuration physicsConfiguration = RPNUMERICS.getConfiguration(physicsName);
-
-            Configuration fluxConfiguration = physicsConfiguration.getConfiguration("fluxfunction");
-
-            paramObserver = new RPnFluxParamsObserver(fluxConfiguration);
-
-            teste[0] = new RPnBasson(new String[5], new String[]{"phimax", "Vinf1", "Vinf2", "n1", "n2"});
-            teste[1] = new RPnMLB(new String[7], new String[]{"phimax", "rho1", "rho2", "d1", "d2", "n1", "n2"});
-
-            teste[0].attach(paramObserver);
-            teste[1].attach(paramObserver);
-
-        }
+//            }
+//
+//            String[] finalNames = new String[fluxConfiguration.getParamsSize()*2 + 1];
+//            for (int i=0; i<namesA.length; i++) {
+//                finalNames[i] = namesA[i];
+//            }
+//
+//            for (int i=0; i<namesA.length; i++) {
+//                finalNames[i+namesA.length] = namesB[i];
+//            }
+//
+//            finalNames[finalNames.length - 1] = "alpha";
+////
+////            System.out.println("VETOTR FINAL_NAMES : ");
+////            for (int i=0; i<finalNames.length; i++) {
+////                System.out.println(finalNames[i]);
+////            }
+//
+//
+//            String[] values = new String[fluxConfiguration.getParamsSize()*2 + 1];
+//            for (int i=0; i<values.length-1;i++) {
+//                values[i]=String.valueOf(i);
+//            }
+//            teste[0] = new RPnSchearerSchaeffer(new String[3], new String[]{"A", "B", "C"});
+//            teste[1] = new RPnPalmeira(new String[3], new String[]{"B1", "B2", "C"});
+//            teste[2] = new RPnCorey(new String[2], new String[]{"A", "B"});
+//            teste[3] = new RPnFluxConvexCombination(values, finalNames);
+//            teste[4]= new RPnViscosityMatrix(new String[4], new String[]{"f1","g1","f2","g2"});
+//            
+//
+//            teste[0].attach(paramObserver);
+//            teste[1].attach(paramObserver);
+//            teste[2].attach(paramObserver);
+//            teste[3].attach(paramObserver);
+//            teste[4].attach(paramObserver);
+//
+//
+//        }
+//        if (physicsName.equals("Stone")) {      //testando combinacao convexa de parametros
+//            teste = new RPnFluxParamsSubject[5];
+//
+//            Configuration physicsConfiguration = RPNUMERICS.getConfiguration(physicsName);
+//
+//            Configuration fluxConfiguration = physicsConfiguration.getConfiguration("fluxfunction");
+//
+//            paramObserver = new RPnFluxParamsObserver(fluxConfiguration);
+//
+////            System.out.println("VETOTR A : ");
+//            String[] namesA = new String[fluxConfiguration.getParamsSize()];
+//            for (int i=0; i<namesA.length;i++) {
+//                namesA[i] = "A " +fluxConfiguration.getParamName(i);
+////                System.out.println(namesA[i]);
+//            }
+//
+//
+////            System.out.println("VETOTR B : ");
+//            String[] namesB = new String[fluxConfiguration.getParamsSize()];
+//            for (int i=0; i<namesB.length;i++) {
+//                namesB[i] = "B " +fluxConfiguration.getParamName(i);
+////                System.out.println(namesB[i]);
+//            }
+//
+//            String[] finalNames = new String[fluxConfiguration.getParamsSize()*2 + 1];
+//            for (int i=0; i<namesA.length; i++) {
+//                finalNames[i] = namesA[i];
+//            }
+//
+//            for (int i=0; i<namesA.length; i++) {
+//                finalNames[i+namesA.length] = namesB[i];
+//            }
+//
+//            finalNames[finalNames.length - 1] = "alpha";
+//
+////            System.out.println("VETOTR FINAL_NAMES : ");
+//            for (int i=0; i<finalNames.length; i++) {
+////                System.out.println(finalNames[i]);
+//            }
+//
+//            String[] values = new String[fluxConfiguration.getParamsSize()*2 + 1];
+//            for (int i=0; i<values.length-1;i++) {
+//                values[i]=String.valueOf(i);
+//            }
+//
+//            teste[0] = new RPnCoreyToStone(new String[9], new String[]{"muw", "mug", "muo", "expw", "expg", "expo", "cnw", "cng", "cno"});
+//            teste[1] = new RPnStoneToStone(new String[10], new String[]{"muw", "mug", "muo", "expw", "expg", "expow", "expog", "cnw", "cng", "cno"});
+//            teste[2] = new RPnCoreyBrooks(new String[8], new String[]{"muw", "mug", "muo", "epsl", "cnw", "cng", "cno", "lambda"});
+//            teste[3] = new RPnRadioButtonToStone(new String[3], new String[]{"", "", ""});       // aqui virao os nomes dos botoes
+//            //teste[4] = new RPnFluxConvexCombination(new String[fluxConfiguration.getParamsSize()*2 + 1], finalNames);
+//            teste[4] = new RPnFluxConvexCombination(values, finalNames);
+//
+//            teste[0].attach(paramObserver);
+//            teste[1].attach(paramObserver);
+//            teste[2].attach(paramObserver);
+//            teste[3].attach(paramObserver);
+//            teste[4].attach(paramObserver);
+//
+//
+//        }
+//
+//
+//
+//        if (physicsName.equals("CoreyQuad") || physicsName.equals("JD")) {
+//            teste = new RPnFluxParamsSubject[0];
+//
+//            Configuration physicsConfiguration = RPNUMERICS.getConfiguration(physicsName);
+//
+//            Configuration fluxConfiguration = physicsConfiguration.getConfiguration("fluxfunction");
+//
+//            paramObserver = new RPnFluxParamsObserver(fluxConfiguration);
+//
+//
+//        }
+//        
+//        
+//           if (physicsName.equals("TriPhase")) {
+//            teste = new RPnFluxParamsSubject[0];
+//
+//            Configuration physicsConfiguration = RPNUMERICS.getConfiguration(physicsName);
+//
+//            Configuration fluxConfiguration = physicsConfiguration.getConfiguration("fluxfunction");
+//
+//            paramObserver = new RPnFluxParamsObserver(fluxConfiguration);
+//
+//        }
+//
+//
+//
+//        if (physicsName.equals("Polydisperse")) {
+//
+//            teste = new RPnFluxParamsSubject[2];
+//            Configuration physicsConfiguration = RPNUMERICS.getConfiguration(physicsName);
+//
+//            Configuration fluxConfiguration = physicsConfiguration.getConfiguration("fluxfunction");
+//
+//            paramObserver = new RPnFluxParamsObserver(fluxConfiguration);
+//
+//            teste[0] = new RPnBasson(new String[5], new String[]{"phimax", "Vinf1", "Vinf2", "n1", "n2"});
+//            teste[1] = new RPnMLB(new String[7], new String[]{"phimax", "rho1", "rho2", "d1", "d2", "n1", "n2"});
+//
+//            teste[0].attach(paramObserver);
+//            teste[1].attach(paramObserver);
+//
+//        }
 
 
 

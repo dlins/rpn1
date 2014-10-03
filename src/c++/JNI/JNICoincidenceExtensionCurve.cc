@@ -24,10 +24,10 @@ NOTE :
 #include "RpNumerics.h"
 #include <vector>
 #include <iostream>
-#include "TPCW.h"
+
 
 //#include "CoincidenceTPCW_Extension.h"
-#include "Debug.h"
+
 
 
 using std::vector;

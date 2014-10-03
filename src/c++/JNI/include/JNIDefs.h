@@ -24,6 +24,7 @@
 #define REALSEGMENT_LOCATION                  "wave/util/RealSegment"
 #define AREA_LOCATION                         "rpnumerics/Area"
 #define CONFIGURATION_LOCATION                "rpn/configuration/Configuration"
+#define CURVECONFIGURATION_LOCATION           "rpn/configuration/CurveConfiguration"
 #define DIAGRAM_LOCATION                      "rpnumerics/Diagram"
 #define DIAGRAMLINE_LOCATION                  "rpnumerics/DiagramLine"
 

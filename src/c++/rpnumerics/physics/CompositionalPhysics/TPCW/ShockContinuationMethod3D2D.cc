@@ -19,10 +19,6 @@
 
 int ShockContinuationMethod3D2D::debugshock = 0;
 
-#ifdef SHOCK_TEST_PLOT
-Canvas* ShockContinuationMethod3D2D::canvas;
-CanvasMenuScroll* ShockContinuationMethod3D2D::scroll;
-#endif
 
 ShockContinuationMethod3D2D::ShockContinuationMethod3D2D() : ShockMethod(){
 //    Uref = 0;
@@ -841,21 +837,6 @@ int ShockContinuationMethod3D2D::init(int family, int increase, Plane &plane, Re
         Eigen::eig(n, &A[0][0], &B[0][0], e);
     }
 
-    #ifdef SHOCK_TEST_PLOT
-    std::vector<Point2D> begin, end;
-    begin.push_back(Point2D(initial_point.component(0), initial_point.component(1)));
-    end.push_back(Point2D(initial_point.component(0) + e[family].vrr[0], initial_point.component(1) + e[family].vrr[1]));
-
-    QuiverPlot *qp = new QuiverPlot(begin, end, 0, 0, 0);
-    canvas->add(qp);
-    scroll->add("ShockContinuationMethod3D2D. Arrow", canvas, qp);
-
-    printf("ShockContinuationMethod3D2D. v1 = (%f, %f, %f)\n", v1[0], v1[1], v1[2]);
-    printf("ShockContinuationMethod3D2D. v2 = (%f, %f, %f)\n", v2[0], v2[1], v2[2]);
-    printf("ShockContinuationMethod3D2D.  d = (%f, %f, %f)\n", e[family].vrr[0], e[family].vrr[1], e[family].vrr[2]);
-
-    #endif
-
     if (debugshock == 1){
         std::cout << "    After EIGEN" << std::endl;
     }
@@ -943,22 +924,6 @@ int ShockContinuationMethod3D2D::init(int family, int increase, Plane &plane, Re
     // Output: reference vector
 //    for (int i = 0; i < n; i++) refvec.component(i) = Uprevious[i] - Uref[i];
     for (int i = 0; i < n; i++) refvec.component(i) = Uprevious[i] - initial_point.component(i);
-
-    #ifdef SHOCK_TEST_PLOT
-    if (canvas != 0){
-        std::vector<Point2D> vp;
-        vp.push_back(Point2D(initial_point.component(0), initial_point.component(1)));
-        Curve2D *cinit = new Curve2D(vp, 0, 0, 1, CURVE2D_MARKERS);
-        canvas->add(cinit);
-        scroll->add("Initial point.", canvas, cinit);
-
-
-        vp[0] = Point2D(Uprevious[0], Uprevious[1]);                
-        Curve2D *cprev = new Curve2D(vp, 0, 1, 0, CURVE2D_MARKERS);
-        canvas->add(cprev);
-        scroll->add("First point being computed.", canvas, cprev);
-    }
-    #endif
 
     es = epsilon_start;
     rfs = rebounds_first_step;

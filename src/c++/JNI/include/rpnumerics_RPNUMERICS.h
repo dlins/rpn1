@@ -161,6 +161,22 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setEigenSortFunction
 
 /*
  * Class:     rpnumerics_RPNUMERICS
+ * Method:    getHugoniotNames
+ * Signature: ()[Ljava/lang/String;
+ */
+JNIEXPORT jobjectArray JNICALL Java_rpnumerics_RPNUMERICS_getHugoniotNames
+  (JNIEnv *, jclass);
+
+/*
+ * Class:     rpnumerics_RPNUMERICS
+ * Method:    getHugoniotCaseNames
+ * Signature: (Ljava/lang/String;)[Ljava/lang/String;
+ */
+JNIEXPORT jobjectArray JNICALL Java_rpnumerics_RPNUMERICS_getHugoniotCaseNames
+  (JNIEnv *, jclass, jstring);
+
+/*
+ * Class:     rpnumerics_RPNUMERICS
  * Method:    setFluxParams
  * Signature: (Lrpnumerics/FluxParams;)V
  */

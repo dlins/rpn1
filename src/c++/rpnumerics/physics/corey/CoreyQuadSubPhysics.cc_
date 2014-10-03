@@ -1,9 +1,0 @@
-#include "CoreyQuadSubPhysics.h"
-
-CoreyQuadSubPhysics::CoreyQuadSubPhysics(){
-}
-
-CoreyQuadSubPhysics::~CoreyQuadSubPhysics(){
-}
-
-

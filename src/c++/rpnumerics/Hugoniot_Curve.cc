@@ -1,5 +1,4 @@
 #include "Hugoniot_Curve.h"
-#include "TestTools.h"
 
 // This is the classified Hugoniot given by segments
 //

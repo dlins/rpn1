@@ -14,12 +14,7 @@
 #define INITIAL_POINT_NOT_FOUND 1
 #endif
 
-#define TEST_PARAMETRICPLOT
 
-#ifdef TEST_PARAMETRICPLOT
-#include "canvas.h"
-#include "canvasmenuscroll.h"
-#endif 
 
 #ifndef SQRT_TWO
 #define SQRT_TWO 1.41421356237

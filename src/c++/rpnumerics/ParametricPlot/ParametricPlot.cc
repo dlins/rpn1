@@ -1,11 +1,6 @@
 #include "ParametricPlot.h"
-#include "TestTools.h"
 
-#ifdef TEST_PARAMETRICPLOT
-Canvas* ParametricPlot::canvas = 0;
-CanvasMenuScroll* ParametricPlot::scroll = 0;
-#include "curve2d.h"
-#endif
+
 
 // Angle phi will be updated to the first viable value.
 //

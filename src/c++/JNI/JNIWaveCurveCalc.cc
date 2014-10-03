@@ -15,7 +15,6 @@
 #include "RpNumerics.h"
 #include "RealVector.h"
 #include "JNIDefs.h"
-#include "Debug.h"
 #include <vector>
 #include "RarefactionCurve.h"
 #include "ShockCurve.h"
@@ -112,33 +111,13 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc
     }
 
 
-    RpNumerics::getPhysics().getSubPhysics(0).preProcess(realVectorInput);
+
     env->DeleteLocalRef(inputPhasePointArray);
 
-    const Boundary * boundary = RpNumerics::getPhysics().getSubPhysics(0).getPreProcessedBoundary();
-
-    const FluxFunction * flux = &RpNumerics::getPhysics().fluxFunction();
-
-    //    cout << "Parametros na chamada: " << flux->fluxParams().params() << endl;
-
-    const AccumulationFunction * accum = &RpNumerics::getPhysics().accumulation();
-
-    RarefactionCurve rc(accum, flux, boundary);
-
-    HugoniotContinuation * hug = RpNumerics::getPhysics().getSubPhysics(0).getHugoniotContinuationMethod();
-
-    ShockCurve * shock = RpNumerics::getPhysics().getSubPhysics(0).getShockMethod();
-
-    CompositeCurve * cmp = RpNumerics::getPhysics().getSubPhysics(0).getCompositeCurve();
-
-    LSODE lsode;
-    ODE_Solver *odesolver;
-    odesolver = &lsode;
 
     int dimension = realVectorInput.size();
 
 
-    WaveCurveFactory wavecurvefactory(accum, flux, boundary, odesolver, &rc, shock, cmp);
 
 
 
@@ -196,42 +175,47 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc
     //    cout << "Edge" << edgeNumber << endl;
 
 
-    WaveCurve * hwc = new WaveCurve();
+    WaveCurve  hwc;
 
     int reason_why, s;
+    
+    WaveCurveFactory *factory = RpNumerics::physicsVector_->at(0)->wavecurvefactory();
+    HugoniotContinuation * shock = RpNumerics::physicsVector_->at(0)->Hugoniot_continuation();
+    
+    factory->wavecurve(realVectorInput, familyNumber, timeDirection, shock, hwc, reason_why,s);
+    
 
-
-    if (originNumber == 11) {
-
-        wavecurvefactory.wavecurve(realVectorInput, familyNumber, timeDirection, hug, *hwc, reason_why, s);
-    }
-
-    if ((originNumber == 1) || (originNumber == 2) || (originNumber == 3)) {
-        wavecurvefactory.wavecurve_from_boundary(realVectorInput, edgeNumber, familyNumber, timeDirection, hug, *hwc, reason_why, s);
-    }
-
-
-
-    if (originNumber == 12) {
-
-        Inflection_Curve inflectionCurve;
-
-        std::vector<RealVector> left_vrs;
-
-        GridValues * gv = RpNumerics::getGridFactory().getGrid("bifurcationcurve");
-
-        inflectionCurve.curve(& RpNumerics::getPhysics().fluxFunction(), & RpNumerics::getPhysics().accumulation(), *gv, familyNumber, left_vrs);
-
-        wavecurvefactory.wavecurve_from_inflection(left_vrs, realVectorInput, familyNumber, timeDirection, hug, *hwc, reason_why, s);
-    }
-
-
-    if (originNumber == 13) {
-
-        WaveCurve * waveCurve = RpNumerics::getWaveCurve(curveNumber);
-        wavecurvefactory.wavecurve_from_wavecurve(*waveCurve, realVectorInput, hug, *hwc, reason_why, s);
-
-    }
+//    if (originNumber == 11) {
+//
+//        wavecurvefactory.wavecurve(realVectorInput, familyNumber, timeDirection, hug, *hwc, reason_why, s);
+//    }
+//
+//    if ((originNumber == 1) || (originNumber == 2) || (originNumber == 3)) {
+//        wavecurvefactory.wavecurve_from_boundary(realVectorInput, edgeNumber, familyNumber, timeDirection, hug, *hwc, reason_why, s);
+//    }
+//
+//
+//
+//    if (originNumber == 12) {
+//
+//        Inflection_Curve inflectionCurve;
+//
+//        std::vector<RealVector> left_vrs;
+//
+//        GridValues * gv = RpNumerics::getGridFactory().getGrid("bifurcationcurve");
+//
+//        inflectionCurve.curve(& RpNumerics::getPhysics().fluxFunction(), & RpNumerics::getPhysics().accumulation(), *gv, familyNumber, left_vrs);
+//
+//        wavecurvefactory.wavecurve_from_inflection(left_vrs, realVectorInput, familyNumber, timeDirection, hug, *hwc, reason_why, s);
+//    }
+//
+//
+//    if (originNumber == 13) {
+//
+//        WaveCurve * waveCurve = RpNumerics::getWaveCurve(curveNumber);
+//        wavecurvefactory.wavecurve_from_wavecurve(*waveCurve, realVectorInput, hug, *hwc, reason_why, s);
+//
+//    }
 
 
 
@@ -267,7 +251,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc
 
 
 
-    double speedAtReferencePoint = hwc->reference_point.e[familyNumber].r;
+    double speedAtReferencePoint = hwc.reference_point.e[familyNumber].r;
 
 
     double nativeEigenValues [dimension];
@@ -275,7 +259,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc
     for (int i = 0; i < dimension; i++) {
 
 
-        nativeEigenValues[i] = hwc->reference_point.e[i].r;
+        nativeEigenValues[i] = hwc.reference_point.e[i].r;
 
     }
 
@@ -286,14 +270,14 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc
 
     jdoubleArray refPointCoords = (env)->NewDoubleArray(dimension);
 
-    (env)->SetDoubleArrayRegion(refPointCoords, 0, dimension, (double *) hwc->reference_point.point);
+    (env)->SetDoubleArrayRegion(refPointCoords, 0, dimension, (double *) hwc.reference_point.point);
 
     jobject referenceOrbitPoint = (env)->NewObject(classOrbitPoint, orbitPointConstructor, refPointCoords, eigenValuesArray, speedAtReferencePoint);
 
-
-
-    cout << "Antes de adicionar curva de onda: " << RpNumerics::getCurrentCurveID() << endl;
-    RpNumerics::addWaveCurve(hwc);
+//
+//
+//    cout << "Antes de adicionar curva de onda: " << RpNumerics::getCurrentCurveID() << endl;
+//    RpNumerics::addWaveCurve(hwc);
 
     jobject waveCurve = (env)->NewObject(classWaveCurve, waveCurveConstructor, familyNumber, timeDirection);
 
@@ -309,9 +293,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc
 
 
 
-    for (int i = 0; i < hwc->wavecurve.size(); i++) {
+    for (int i = 0; i < hwc.wavecurve.size(); i++) {
 
-        Curve wc = hwc->wavecurve[i];
+        Curve wc = hwc.wavecurve[i];
 
         vector<double> xiVector = wc.xi;
 
@@ -339,7 +323,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc
 
 
                 RealVector resizedVector(tempVector);
-                RpNumerics::getPhysics().getSubPhysics(0).postProcess(resizedVector);
+
 
                 double * dataCoords = resizedVector;
 

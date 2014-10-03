@@ -39,11 +39,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotContinuationCurveCalc_calc
 
 
 
-
-
-    //JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc(JNIEnv * env, jobject obj, jobject initialPoint, jint subPhysicsIndex, jint familyIndex, jint increase) {
-
-
     unsigned int i;
 
 
@@ -78,34 +73,21 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotContinuationCurveCalc_calc
 
     }
 
-    string physicsID(RpNumerics::getPhysics().getSubPhysics(0).ID());
-
-    //    if (physicsID.compare("TPCW") == 0) {
-    //        realVectorInput.resize(3);
-    //        realVectorInput.component(2) = 1.0;
-    //    }
-    RpNumerics::getPhysics().getSubPhysics(0).preProcess(realVectorInput);
     env->DeleteLocalRef(inputPhasePointArray);
 
 
     vector <vector<RealVector> > allCoords, shock_alt;
+    
+    
+    const FluxFunction * flux = RpNumerics::physicsVector_->at(0)->flux();
+    const AccumulationFunction * accum = RpNumerics::physicsVector_->at(0)->accumulation();
+    
 
-
-
-//    if (increase == RAREFACTION_SPEED_INCREASE)
-//        increase = WAVE_FORWARD;
-//
-//    if (increase == RAREFACTION_SPEED_DECREASE)
-//        increase = WAVE_BACKWARD;
-
-    const FluxFunction * fluxFunction = &RpNumerics::getPhysics().fluxFunction();
-    const AccumulationFunction * accumulationFunction = &RpNumerics::getPhysics().accumulation();
-
-    HugoniotContinuation * shock = RpNumerics::getPhysics().getSubPhysics(0).getHugoniotContinuationMethod();
+    HugoniotContinuation * shock = RpNumerics::physicsVector_->at(0)->Hugoniot_continuation();
 
     Viscosity_Matrix viscosityMatrix;
 
-    ReferencePoint referencePoint(realVectorInput, fluxFunction, accumulationFunction, &viscosityMatrix);
+    ReferencePoint referencePoint(realVectorInput, flux, accum, &viscosityMatrix);
 
     shock->set_reference_point(referencePoint);
 
@@ -122,8 +104,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotContinuationCurveCalc_calc
         for (int j = 0; j < allCoords[i].size(); j++) {
 
             RealVector tempVector = allCoords[i].at(j);
-
-            RpNumerics::getPhysics().getSubPhysics(0).postProcess(tempVector);
 
             double lambda = tempVector.component(tempVector.size() - 1);
 

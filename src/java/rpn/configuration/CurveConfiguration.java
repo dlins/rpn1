@@ -17,6 +17,11 @@ public class CurveConfiguration extends Configuration{
         super(configurationProfile);
 
     }
+    
+    
+    public CurveConfiguration (String name){
+        super(name);
+    }
 
     
     
