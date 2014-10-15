@@ -14,6 +14,8 @@
 #define INITIAL_POINT_NOT_FOUND 1
 #endif
 
+#define TEST_PARAMETRICPLOT
+
 
 
 #ifndef SQRT_TWO
@@ -69,10 +71,7 @@ class ParametricPlot {
             return;
         }
 
-        #ifdef TEST_PARAMETRICPLOT
-        static Canvas *canvas;
-        static CanvasMenuScroll *scroll;
-        #endif
+      
 };
 
 #endif // _PARAMETRICPLOT_

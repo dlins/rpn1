@@ -27,19 +27,19 @@ public class HugoniotCurveCalcND extends ContourCurveCalc implements HugoniotCur
     //
     // Constructors
     //
-    public HugoniotCurveCalcND(HugoniotParams params) {
-        super(params);
-
-        CurveConfiguration config = (CurveConfiguration) RPNUMERICS.getConfiguration("fundamentalcurve");
-
-        configuration_ = config.clone();
-
-        String[] parameterToKeep = {"direction"};
-
-        configuration_.keepParameters(parameterToKeep);
-        configuration_.setParamValue("resolution", RPNUMERICS.getParamValue("hugoniotcurve", "resolution"));
-
-    }
+//    public HugoniotCurveCalcND(HugoniotParams params) {
+//        super(params);
+//
+//        CurveConfiguration config = (CurveConfiguration) RPNUMERICS.getConfiguration("fundamentalcurve");
+//
+//        configuration_ = config.clone();
+//
+//        String[] parameterToKeep = {"direction"};
+//
+//        configuration_.keepParameters(parameterToKeep);
+//        configuration_.setParamValue("resolution", RPNUMERICS.getParamValue("hugoniotcurve", "resolution"));
+//
+//    }
 
     public HugoniotCurveCalcND(PhasePoint input, CurveConfiguration hugoniotConfiguration) {
 
@@ -55,7 +55,7 @@ public class HugoniotCurveCalcND extends ContourCurveCalc implements HugoniotCur
 
         Integer direction = new Integer(getParamValue("fundamentalcurve", "direction"));
 
-        String methodName = HugoniotCurveCalcND.HugoniotMethods.valueOf(getParamValue("hugoniotcurve", "method")).name();
+        String methodName =RPNUMERICS.getParamValue("hugoniotcurve", "method");
 
         HugoniotParams params = new HugoniotParams(new PhasePoint(input), direction, resolution, methodName);
 
@@ -108,8 +108,8 @@ public class HugoniotCurveCalcND extends ContourCurveCalc implements HugoniotCur
     public RpSolution calc() throws RpException {
        
         HugoniotCurve result;
-        String methodName = ((HugoniotParams) getParams()).getMethodName();
-        result = (HugoniotCurve) calc(((HugoniotParams) getParams()).getXZero(), configuration_);
+
+        result = (HugoniotCurve) calc(((HugoniotParams) getParams()).getXZero(), RPNUMERICS.getConfiguration("hugoniotcurve"));
 
         result.setDirection(((HugoniotParams) getParams()).getDirection());
 

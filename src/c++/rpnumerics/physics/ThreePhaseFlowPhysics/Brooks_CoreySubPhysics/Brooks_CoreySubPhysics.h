@@ -5,6 +5,7 @@
 #include "Brooks_CoreyPermeability.h"
 #include "Brooks_CoreyFluxFunction.h"
 #include "StoneAccumulation.h"
+#include "LSODE.h"
 
 #define BROOKS_COREYGENERICPOINT 0
 

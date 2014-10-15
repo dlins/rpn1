@@ -10,6 +10,7 @@
 
 #include <string>
 #include <vector>
+#include <iostream>
 
 using namespace std;
 
@@ -23,7 +24,6 @@ public:
     
     virtual ~HugoniotConfig();
     
-//    void addCase(const string , const int );
     string *  getName();
     
     vector<string> * getCaseNames();

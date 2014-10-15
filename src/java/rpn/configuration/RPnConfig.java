@@ -223,9 +223,23 @@ public class RPnConfig {
 //            teste[1].attach(paramObserver);
 //
 //        }
-
-
-
+        
+        
+        
+         Configuration physicsConfiguration = RPNUMERICS.getConfiguration(physicsName);
+        
+        
+        paramObserver = new RPnFluxParamsObserver(physicsConfiguration);
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
     }
 
     public static RPnFluxParamsSubject[] getFluxParamsSubject() {
@@ -244,7 +258,6 @@ public class RPnConfig {
                 RPNUMERICS.domain(), new NumConfigImpl());
         RPnDataModule.RIGHTPHASESPACE = new RPnPhaseSpaceAbstraction("Right Phase Space",
                 RPNUMERICS.domain(), new NumConfigImpl());
-
 
     }
 
@@ -274,11 +287,9 @@ public class RPnConfig {
 
             Configuration configuration = null;
 
-
             if (profile.getType().equals(ConfigurationProfile.PHYSICS_PROFILE)) {
                 configuration = new PhysicsConfiguration(profile, innerConfigurations);
             }
-
 
             if (profile.getType().equals(ConfigurationProfile.VISUALIZATION)) {
 
@@ -286,11 +297,9 @@ public class RPnConfig {
                 configuration = new VisualConfiguration(profile, innerConfigurations);
             }
 
-
             if (profile.getType().equals(ConfigurationProfile.BOUNDARY)) {
                 configuration = new BoundaryConfiguration(profile, innerConfigurations);
             }
-
 
             if (profile.getType().equals(ConfigurationProfile.METHOD)) {
                 configuration = new MethodConfiguration(profile);
@@ -298,11 +307,13 @@ public class RPnConfig {
 
             if (profile.getType().equals(ConfigurationProfile.CURVECONFIGURATION)) {
                 configuration = new CurveConfiguration(profile);
+
             }
 
-
-
             RPNUMERICS.setConfiguration(configuration.getName(), configuration);
+
+          
+
         } catch (Exception ex) {
             Logger.getLogger(RPnConfig.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -311,25 +322,21 @@ public class RPnConfig {
 
     public static HashMap<String, Configuration> createConfigurationList(ConfigurationProfile profile) throws Exception {
 
-
         HashMap<String, Configuration> configurationMap = new HashMap<String, Configuration>();
 
         Set<Entry<String, ConfigurationProfile>> configurationProfileSet = profile.getProfiles().entrySet();
 
         for (Entry<String, ConfigurationProfile> entry : configurationProfileSet) {
 
-
             if (entry.getValue().getType().equals(ConfigurationProfile.PHYSICS_PROFILE)
                     || entry.getValue().getType().equals(ConfigurationProfile.PHYSICS_CONFIG)
                     || entry.getValue().getType().equals(ConfigurationProfile.BOUNDARY)
                     || entry.getValue().getType().equals(ConfigurationProfile.VISUALIZATION)) {
 
-
                 if (entry.getValue().getType().equals(ConfigurationProfile.PHYSICS_PROFILE)) {
 
                     configurationMap.put(entry.getKey(), new PhysicsConfiguration(entry.getValue()));
                 }
-
 
                 if (entry.getValue().getType().equals(ConfigurationProfile.PHYSICS_CONFIG)) {
                     configurationMap.put(entry.getKey(), new PhysicsConfigurationParams(entry.getValue()));
@@ -337,31 +344,18 @@ public class RPnConfig {
 
                 if (entry.getValue().getType().equals(ConfigurationProfile.VISUALIZATION)) {
 
-
-
-
-
                     configurationMap.put(entry.getKey(), new VisualConfiguration(entry.getValue()));
                 }
-
 
                 if (entry.getValue().getType().equals(ConfigurationProfile.BOUNDARY)) {
                     configurationMap.put(entry.getKey(), new BoundaryConfiguration(entry.getValue()));
                 }
-
-
-
-
-
 
             } else {
                 throw new Exception("Profile type unknow:" + entry.getValue().getName() + " " + entry.getValue().getType());
             }
 
         }
-
-
-
 
         return configurationMap;
 
@@ -424,18 +418,15 @@ public class RPnConfig {
 
     public static void setActiveVisualConfiguration(String visualConfigName) {
         activeVisualConfig_ = visualConfigName;
-        
-         HashMap<String, Configuration> innerConfigurations;
+
+        HashMap<String, Configuration> innerConfigurations;
         try {
             innerConfigurations = createConfigurationList(configurationsProfileMap_.get(visualConfigName));
-            visualConfiguration_ = new VisualConfiguration(configurationsProfileMap_.get(visualConfigName),innerConfigurations);
+            visualConfiguration_ = new VisualConfiguration(configurationsProfileMap_.get(visualConfigName), innerConfigurations);
         } catch (Exception ex) {
             Logger.getLogger(RPnConfig.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        
-        
-        
+
     }
 
     public static ConfigurationProfile getActivePhysicsProfile() {

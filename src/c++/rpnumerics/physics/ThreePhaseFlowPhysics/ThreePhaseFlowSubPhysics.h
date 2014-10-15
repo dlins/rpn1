@@ -7,9 +7,11 @@
 #include "Implicit_Extension_Curve.h"
 #include "ImplicitHugoniotCurve.h"
 #include "HugoniotContinuation2D2D.h"
+#include "HugoniotContinuation_nDnD.h"
 #include "StoneAccumulation.h"
 #include "ThreePhaseFlowPermeability.h"
 #include "ThreePhaseImplicitHugoniotCurve.h"
+#include "ThreePhaseFlowWaveCurveFactory.h"
 
 class ThreePhaseFlowSubPhysics : public SubPhysics {
     private:
@@ -36,6 +38,30 @@ class ThreePhaseFlowSubPhysics : public SubPhysics {
         RealVector W(){return W_vertex;}
         RealVector O(){return O_vertex;}
         RealVector G(){return G_vertex;}
+
+        RealVector E(){
+            RealVector Ep(2);
+            Ep(0) = 0.0;
+            Ep(1) = muo_parameter->value()/(muo_parameter->value() + mug_parameter->value());
+
+            return Ep;
+        }
+
+        RealVector B(){
+            RealVector Bp(2);
+            Bp(0) = muw_parameter->value()/(muw_parameter->value() + mug_parameter->value());
+            Bp(1) = 0.0;
+
+            return Bp;
+        }
+
+        RealVector D(){
+            RealVector Dp(2);
+            Dp(0) = muw_parameter->value()/(muw_parameter->value() + muo_parameter->value());
+            Dp(1) = muo_parameter->value()/(muw_parameter->value() + muo_parameter->value());
+
+            return Dp;
+        }
 
         Parameter* muw(){return muw_parameter;}
         Parameter* muo(){return muo_parameter;}

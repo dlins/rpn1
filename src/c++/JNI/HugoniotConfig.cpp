@@ -8,13 +8,8 @@
 #include "HugoniotConfig.h"
 
 
-
-
-
 HugoniotConfig::HugoniotConfig(const string & name,const vector<int> & caseIndices, const vector<string> & caseNames):name_(new string(name)),casesIndexVector_(new vector<int>(caseIndices)),
         casesNamesVector_(new vector<string>(caseNames)) {
-
-
     
 }
 
@@ -27,31 +22,18 @@ string * HugoniotConfig::getName(){
 }
 
 
-//void HugoniotConfig::addCase(const string caseName, const int caseIndex){
-//
-//    casesNamesVector_->push_back(caseName);
-//    casesIndexVector_->push_back(caseIndex);
-//
-//   
-//    
-//}
 
 int HugoniotConfig::getCase(const string & caseName){
     
     for (int i = 0; i < casesNamesVector_->size(); i++) {
-        
+       
         if(casesNamesVector_->at(i).compare(caseName)==0)
             
-            return casesIndexVector_->at(i);
+            return i;
 
     }
     
-    
 }
-
-
-
-
 
 
 HugoniotConfig::HugoniotConfig(const HugoniotConfig& orig) {

@@ -1,20 +1,15 @@
 package rpn.command;
 
 import java.awt.event.ActionEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Observable;
-import java.util.Observer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JButton;
-import rpn.RPnPhaseSpacePanel;
 import rpn.component.RpGeometry;
 import rpn.component.WaveCurveGeom;
 import rpn.component.WaveCurveGeomFactory;
-import rpn.controller.ui.RPn2DMouseController;
 import rpn.controller.ui.UIController;
 import rpnumerics.RPnCurve;
 import rpnumerics.RpException;
@@ -87,9 +82,9 @@ public class WaveCurveRRegionsPlotCommand extends RpModelPlotCommand {
     public void update(Observable o, Object arg) {
 
         List<RpGeometry> geometryList = UIController.instance().getSelectedGeometriesList();
-       
+
         if (geometryList != null) {
-       
+
             if ((geometryList.size() == 1) && (geometryList.get(0) instanceof WaveCurveGeom)) {
                 setEnabled(true);
             } else {

@@ -1,6 +1,7 @@
 #ifndef _COMPOSITECURVE_
 #define _COMPOSITECURVE_
 
+
 #include <cmath> // For std::abs.
 #include <algorithm>
 
@@ -174,6 +175,8 @@ class CompositeCurve {
 //        void transition_with_explicit_bifurcation(const RealVector &rarcmp_point, double initial_time, RealVector &out, double &final_time, int &index_of_explicit_bifurcation);
 
         int normalize_with_respect_to_whom;
+
+       
     public:
         CompositeCurve(const AccumulationFunction *a, const FluxFunction *f, const Boundary *b, ShockCurve *s, Explicit_Bifurcation_Curves *ebc);
         virtual ~CompositeCurve();

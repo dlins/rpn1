@@ -13,10 +13,7 @@ ShockCurve::ShockCurve(HugoniotContinuation *h){
     f = hc->flux();
     g = hc->accumulation();
 
-    #ifdef USECANVAS
-    canvas = 0;
-    scroll = 0;
-    #endif
+   
 }
 
 ShockCurve::~ShockCurve(){
@@ -580,12 +577,6 @@ void ShockCurve::add_point(Curve &c, const RealVector &p){
     f->jet(p, Fjet, 1);
     g->jet(p, Gjet, 1);
 
-    // Speed. If within a certain distance of the reference point, use the eigenvalue.
-    //
-    c.speed.push_back(hc->sigma(Fjet.function(), Gjet.function()));
-
-    std::cout << "Adding shock point. p = " << p << ", speed = " << c.speed.back() << std::endl;
-
     // Eigenvalues.
     //
     std::vector<eigenpair> e;
@@ -608,6 +599,13 @@ void ShockCurve::add_point(Curve &c, const RealVector &p){
     for (int i = 0; i < e.size(); i++) eigenvalues(i) = e[i].r;
 
     c.eigenvalues.push_back(eigenvalues);
+
+    // Speed. If within a certain distance of the reference point, use the eigenvalue.
+    //
+    if (c.curve.size() == 1) c.speed.push_back(e[current_family].r);
+    else                     c.speed.push_back(hc->sigma(Fjet.function(), Gjet.function()));
+
+    std::cout << "Adding shock point. p = " << p << ", speed = " << c.speed.back() << std::endl;
 
     return;
 }
@@ -717,7 +715,7 @@ int ShockCurve::curve_engine(const ReferencePoint &r, const RealVector &in, cons
     RealVector previous_point = in;
 
     add_point(shockcurve, in); // See relation with lambda.
-    
+
     RealVector previous_direction = initial_direction;
     normalize(previous_direction);
 

@@ -35,46 +35,108 @@
 
 using namespace std;
 
-
-
-
-
 vector<StationaryPoint *> * RpNumerics::stationaryPointVector_ = NULL;
 map<int, WaveCurve *> * RpNumerics::waveCurveMap_ = NULL;
 
-std::vector<string> * RpNumerics::hugoniotNamesVector_ = NULL;
+std::vector<WaveCurveConfig *> * RpNumerics::waveCurveConfigVector_ = NULL;
 
 
 std::vector<HugoniotConfig *> * RpNumerics::hugoniotCasesVector_ = NULL;
 
+std::vector<Parameter*> *RpNumerics::physicsParams_ = NULL;
 
+std::map<string, AuxiliaryFunction *> *RpNumerics::physicsAuxFunctionsMap_ = NULL;
 
 std::vector<SubPhysics*> * RpNumerics::physicsVector_ = new vector<SubPhysics *>();
 
 map<string, bool (*)(const eigenpair&, const eigenpair&) > * RpNumerics::orderFunctionMap_ = NULL;
 
-
 double RpNumerics::sigma = 0;
 
-int RpNumerics::curveCounter = 0;
+int RpNumerics::getHugoniotConfigIndex(const string & configName) {
+
+    for (int i = 0; i < RpNumerics::hugoniotCasesVector_->size(); i++) {
+
+        HugoniotConfig * config = RpNumerics::hugoniotCasesVector_->at(i);
+
+
+        if (config->getName()->compare(configName) == 0) {
+            return i;
+        }
+
+    }
+
+}
+
+HugoniotConfig * RpNumerics::getHugoniotConfig(const string & configName) {
+
+    for (int i = 0; i < RpNumerics::hugoniotCasesVector_->size(); i++) {
+
+        HugoniotConfig * config = RpNumerics::hugoniotCasesVector_->at(i);
+
+
+        if (config->getName()->compare(configName) == 0) {
+            return config;
+        }
+
+    }
+
+
+
+}
+
+void RpNumerics::fillWaveCurveCases() {
+
+
+    waveCurveConfigVector_ = new vector<WaveCurveConfig *>();
+
+    std::vector<int> type;
+    std::vector<std::string> name;
+
+    RpNumerics::physicsVector_->at(0)->wavecurvefactory()->list_of_initial_points(type, name);
+
+    WaveCurveConfig * config = new WaveCurveConfig(name, type);
+
+    waveCurveConfigVector_->push_back(config);
+
+
+}
+
+void RpNumerics::fillPhysicsParams() {
+
+    physicsParams_ = new vector<Parameter *>();
+
+    physicsVector_->at(0)->equation_parameter(*physicsParams_);
+
+
+    vector<AuxiliaryFunction *> auxFuncVector;
+
+    physicsVector_->at(0)->auxiliary_functions(auxFuncVector);
+
+
+    physicsAuxFunctionsMap_ = new map<string, AuxiliaryFunction *>();
+
+
+    for (int i = 0; i < auxFuncVector.size(); i++) {
+
+
+        physicsAuxFunctionsMap_->at(auxFuncVector.at(i)->info_auxiliary_function()) = auxFuncVector.at(i);
+
+
+    }
+
+}
 
 void RpNumerics::fillHugoniotNames() {
 
     vector<HugoniotCurve*> hugoniotMethodsVector;
-
-    hugoniotNamesVector_ = new vector<string>();
 
     hugoniotCasesVector_ = new vector<HugoniotConfig *>();
 
 
     physicsVector_->at(0)->list_of_Hugoniot_methods(hugoniotMethodsVector);
 
-
-
     for (int i = 0; i < hugoniotMethodsVector.size(); i++) {
-
-        hugoniotNamesVector_->push_back(hugoniotMethodsVector[i]->Hugoniot_info());
-
 
         vector<int> types;
         vector<string> typeNames;
@@ -88,11 +150,227 @@ void RpNumerics::fillHugoniotNames() {
 
     }
 
+}
+
+/*
+ * Class:     rpnumerics_RPNUMERICS
+ * Method:    getPhysicsParamsNames
+ * Signature: ()[Ljava/lang/String;
+ */
+JNIEXPORT jobjectArray JNICALL Java_rpnumerics_RPNUMERICS_getPhysicsParamsNames
+(JNIEnv * env, jclass cls) {
+    jclass stringClass = env->FindClass("Ljava/lang/String;");
+
+    jobjectArray paramsArray = env->NewObjectArray(RpNumerics::physicsParams_->size(), stringClass, NULL);
+
+    for (int i = 0; i < RpNumerics::physicsParams_->size(); i++) {
+        jstring paramName = env->NewStringUTF(RpNumerics::physicsParams_->at(i)->name().c_str());
+        env->SetObjectArrayElement(paramsArray, i, paramName);
+    }
+
+    return paramsArray;
+
+
+}
+
+JNIEXPORT jobjectArray JNICALL Java_rpnumerics_RPNUMERICS_getAuxFunctionNames
+(JNIEnv * env, jclass cls) {
+
+    jclass stringClass = env->FindClass("Ljava/lang/String;");
+
+    jobjectArray auxFuncNamesArray = env->NewObjectArray(RpNumerics::physicsAuxFunctionsMap_->size(), stringClass, NULL);
+
+    int i = 0;
+    for (std::map < string, AuxiliaryFunction * >::iterator it = RpNumerics::physicsAuxFunctionsMap_->begin();
+            it != RpNumerics::physicsAuxFunctionsMap_->end(); ++it) {
+
+        jstring functionName = env->NewStringUTF(it->first.c_str());
+
+
+        env->SetObjectArrayElement(auxFuncNamesArray, i, functionName);
+
+        i++;
+
+    }
+
+
+    return auxFuncNamesArray;
+
+}
+
+/*
+ * Class:     rpnumerics_RPNUMERICS
+ * Method:    getAuxParamsNames
+ * Signature: (Ljava/lang/String;)[Ljava/lang/String;
+ */
+JNIEXPORT jobjectArray JNICALL Java_rpnumerics_RPNUMERICS_getAuxParamsNames
+(JNIEnv * env, jclass cls, jstring auxFunctionName) {
+
+    jclass stringClass = env->FindClass("Ljava/lang/String;");
+
+
+
+    const char * auxFuncNameChar;
+
+    auxFuncNameChar = env->GetStringUTFChars(auxFunctionName, NULL);
+
+
+    string auxFuncNameString(auxFuncNameChar);
+
+    AuxiliaryFunction * auxFunction = RpNumerics::physicsAuxFunctionsMap_->at(auxFuncNameString);
+
+
+
+    vector<Parameter *> parameterVector;
+
+
+    auxFunction->parameter(parameterVector);
+
+
+    jobjectArray paramsNamesArray = env->NewObjectArray(parameterVector.size(), stringClass, NULL);
+
+    for (int i = 0; i < parameterVector.size(); i++) {
+        jstring paramName = env->NewStringUTF(parameterVector.at(i)->name().c_str());
+        env->SetObjectArrayElement(paramsNamesArray, i, paramName);
+    }
+
+    return paramsNamesArray;
 
 
 
 }
 
+/*
+ * Class:     rpnumerics_RPNUMERICS
+ * Method:    getAuxParamsNames
+ * Signature: ()[Ljava/lang/String;
+ */
+JNIEXPORT jobjectArray JNICALL Java_rpnumerics_RPNUMERICS_getAuxParamsNames
+(JNIEnv *env, jclass cls) {
+    jclass stringClass = env->FindClass("Ljava/lang/String;");
+}
+
+/*
+ * Class:     rpnumerics_RPNUMERICS
+ * Method:    getAuxParamValue
+ * Signature: (Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+ */
+JNIEXPORT jstring JNICALL Java_rpnumerics_RPNUMERICS_getAuxParamValue
+(JNIEnv * env, jclass cls, jstring auxFuncName, jstring paramName) {
+    jclass stringClass = env->FindClass("Ljava/lang/String;");
+}
+
+/*
+ * Class:     rpnumerics_RPNUMERICS
+ * Method:    setAuxParamValue
+ * Signature: (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
+ */
+JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setAuxParamValue
+(JNIEnv * env, jclass cls, jstring auxFuncName, jstring paramName, jstring paramValue) {
+
+    jclass stringClass = env->FindClass("Ljava/lang/String;");
+}
+
+/*
+ * Class:     rpnumerics_RPNUMERICS
+ * Method:    setPhysicsParams
+ * Signature: (ILjava/lang/String;)V
+ */
+JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setPhysicsParams
+(JNIEnv * env, jclass cls, jint paramIndex, jstring paramValue) {
+
+
+    jclass stringClass = env->FindClass("Ljava/lang/String;");
+
+    const char * paramChar;
+
+    paramChar = env->GetStringUTFChars(paramValue, NULL);
+
+
+    string paramString(paramChar);
+
+    stringstream paramStream;
+
+
+    paramStream << paramString;
+
+    double paramDoubleValue;
+
+    paramStream >> paramDoubleValue;
+
+
+    Parameter * param = RpNumerics::physicsParams_->at(paramIndex);
+
+
+    param->value(paramDoubleValue);
+
+
+
+    RpNumerics::physicsVector_->at(0)->gridvalues()->clear_computations();
+
+
+
+}
+
+/*
+ * Class:     rpnumerics_RPNUMERICS
+ * Method:    getPhysicsParam
+ * Signature: (I)Ljava/lang/String;
+ */
+JNIEXPORT jstring JNICALL Java_rpnumerics_RPNUMERICS_getPhysicsParam
+(JNIEnv * env, jclass cls, jint paramIndex) {
+
+
+    jclass stringClass = env->FindClass("Ljava/lang/String;");
+
+    Parameter * param = RpNumerics::physicsParams_->at(paramIndex);
+
+
+    double paramValue = param->value();
+
+
+    stringstream paramStream;
+
+
+    paramStream << paramValue;
+
+
+    jstring paramStringValue = env->NewStringUTF(paramStream.str().c_str());
+
+    return paramStringValue;
+
+
+
+
+
+}
+
+/*
+ * Class:     rpnumerics_RPNUMERICS
+ * Method:    getWaveCurveCaseNames
+ * Signature: ()[Ljava/lang/String;
+ */
+JNIEXPORT jobjectArray JNICALL Java_rpnumerics_RPNUMERICS_getWaveCurveCaseNames
+(JNIEnv * env, jclass cls) {
+
+
+    jclass stringClass = env->FindClass("Ljava/lang/String;");
+
+    jobjectArray waveCurveCasesArray = env->NewObjectArray(RpNumerics::waveCurveConfigVector_->at(0)->getNames().size(), stringClass, NULL);
+
+
+    for (int i = 0; i < RpNumerics::waveCurveConfigVector_->at(0)->getNames().size(); i++) {
+        
+        jstring caseName = env->NewStringUTF(RpNumerics::waveCurveConfigVector_->at(0)->getNames().at(i).c_str());
+        env->SetObjectArrayElement(waveCurveCasesArray, i, caseName);
+        
+    }
+        
+    
+    return waveCurveCasesArray;
+
+
+}
 
 /*
  * Class:     rpnumerics_RPNUMERICS
@@ -100,25 +378,25 @@ void RpNumerics::fillHugoniotNames() {
  * Signature: ()[Ljava/lang/String;
  */
 JNIEXPORT jobjectArray JNICALL Java_rpnumerics_RPNUMERICS_getHugoniotNames
-  (JNIEnv * env , jclass cls){
-    
-    
-    
+(JNIEnv * env, jclass cls) {
+
+
+
     jclass stringClass = env->FindClass("Ljava/lang/String;");
-    
-    jobjectArray hugoniotNames = env->NewObjectArray( RpNumerics::hugoniotCasesVector_->size(),stringClass,NULL);
-    
-    
-    
-    for (int i = 0; i <     RpNumerics::hugoniotCasesVector_->size(); i++) {
-          jstring jhugoniotName = env->NewStringUTF(RpNumerics::hugoniotCasesVector_->at(i)->getName()->c_str());
-                
-          env->SetObjectArrayElement(hugoniotNames,i,jhugoniotName);
-        
+
+    jobjectArray hugoniotNames = env->NewObjectArray(RpNumerics::hugoniotCasesVector_->size(), stringClass, NULL);
+
+
+
+    for (int i = 0; i < RpNumerics::hugoniotCasesVector_->size(); i++) {
+        jstring jhugoniotName = env->NewStringUTF(RpNumerics::hugoniotCasesVector_->at(i)->getName()->c_str());
+
+        env->SetObjectArrayElement(hugoniotNames, i, jhugoniotName);
+
     }
     return hugoniotNames;
-    
-    
+
+
 }
 
 /*
@@ -127,62 +405,54 @@ JNIEXPORT jobjectArray JNICALL Java_rpnumerics_RPNUMERICS_getHugoniotNames
  * Signature: (Ljava/lang/String;)[Ljava/lang/String;
  */
 JNIEXPORT jobjectArray JNICALL Java_rpnumerics_RPNUMERICS_getHugoniotCaseNames
-  (JNIEnv * env , jclass cls, jstring hugoniotMethodName){
-    
-    
+(JNIEnv * env, jclass cls, jstring hugoniotMethodName) {
+
+
     const char * hugoniotNameC;
 
     hugoniotNameC = env->GetStringUTFChars(hugoniotMethodName, NULL);
-    
-    jclass stringClass = env->FindClass("Ljava/lang/String;");
-    
-    
-    string hugoniotName(hugoniotNameC);
-    
-    for (int i = 0; i <     RpNumerics::hugoniotCasesVector_->size(); i++) {
 
-        
-        HugoniotConfig  *config  =   RpNumerics::hugoniotCasesVector_->at(i);
-        
-        if(config->getName()->compare(hugoniotName)==0){
-            vector<string>  * caseNames =  config->getCaseNames();
-            
-            jobjectArray caseNamesArray = env->NewObjectArray(caseNames->size(),stringClass,NULL);
-            
-            
+    jclass stringClass = env->FindClass("Ljava/lang/String;");
+
+
+    string hugoniotName(hugoniotNameC);
+
+    for (int i = 0; i < RpNumerics::hugoniotCasesVector_->size(); i++) {
+
+
+        HugoniotConfig *config = RpNumerics::hugoniotCasesVector_->at(i);
+
+        if (config->getName()->compare(hugoniotName) == 0) {
+            vector<string> * caseNames = config->getCaseNames();
+
+            jobjectArray caseNamesArray = env->NewObjectArray(caseNames->size(), stringClass, NULL);
+
+
             for (int j = 0; j < caseNames->size(); j++) {
 
-                
+
                 string caseName = caseNames->at(j);
-                
+
                 jstring jcaseName = env->NewStringUTF(caseName.c_str());
-                
-               env->SetObjectArrayElement(caseNamesArray,j,jcaseName);
-                
+
+                env->SetObjectArrayElement(caseNamesArray, j, jcaseName);
+
 
             }
-            
+
             return caseNamesArray;
 
-            
+
         }
-        
-        
-        
+
+
+
     }
 
-    
+
     return NULL;
-    
+
 }
-
-
-
-
-
-
-
-
 
 /*
  * Class:     rpnumerics_RPNUMERICS
@@ -542,8 +812,39 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_clean(JNIEnv * env, jclass cls
 
 void RpNumerics::clean() {
 
-    delete hugoniotNamesVector_;
+
+    clearCurveMap();
+
     delete hugoniotCasesVector_;
+
+    for (int i = 0; i < physicsVector_->size(); i++) {
+        delete physicsVector_->at(i);
+
+    }
+
+
+
+    for (int i = 0; i < waveCurveConfigVector_->size(); i++) {
+        delete waveCurveConfigVector_->at(i);
+
+    }
+
+
+    delete waveCurveMap_;
+
+    delete waveCurveConfigVector_;
+
+    delete physicsParams_;
+
+    delete physicsAuxFunctionsMap_;
+
+    delete physicsVector_;
+
+
+
+
+
+
 
     //    delete stationaryPointVector_;
     //
@@ -590,13 +891,13 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RPNUMERICS_domain(JNIEnv * env, jclass
 
 JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_initNative(JNIEnv * env, jclass cls, jstring physicsName) {
 
-    
-   
-    
-    
-    
-    
-    
+
+
+
+
+
+
+
     const char *physicsID;
 
     physicsID = env->GetStringUTFChars(physicsName, NULL);
@@ -628,11 +929,15 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_initNative(JNIEnv * env, jclas
     }
 
     RpNumerics::fillHugoniotNames();
+    RpNumerics::fillPhysicsParams();
+    RpNumerics::fillWaveCurveCases();
+
+    RpNumerics::waveCurveMap_ = new map<int, WaveCurve *> ();
 
 
 
 
-    
+
 
 
 

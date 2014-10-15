@@ -5,6 +5,7 @@
  */
 package rpn;
 
+import java.awt.Point;
 import wave.multid.view.Viewing2DTransform;
 import wave.multid.view.Viewing3DTransform;
 import wave.multid.view.ViewingTransform;
@@ -33,7 +34,7 @@ public class RPnProjDescriptor {
     private boolean iso2equi_;
 
     public RPnProjDescriptor(Space domain, String label, int w, int h, int[] projIndices, boolean iso2equi) {
-        viewport_ = new dcViewport(w, h);
+        viewport_ = new dcViewport(new Point(),w, h,20);
         Space projSpace = null;
         if (projIndices.length == 2) {
             projSpace = Multid.PLANE;
@@ -47,6 +48,34 @@ public class RPnProjDescriptor {
         iso2equi_ = iso2equi;
 
     }
+    
+    
+    public RPnProjDescriptor(Space domain, String label, int w, int h, int[] projIndices) {
+        viewport_ = new dcViewport(w, h);
+        Space projSpace = null;
+        if (projIndices.length == 2) {
+            projSpace = Multid.PLANE;
+        } else if (projIndices.length == 3) {
+            projSpace = Multid.SPACE;
+        } else {
+            throw new IllegalArgumentException("Invalid projection dim...");
+        }
+        projMap_ = new ProjectionMap(domain, projSpace, projIndices);
+        label_ = label;
+        iso2equi_ = false;
+
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
     public dcViewport viewport() {
         return viewport_;

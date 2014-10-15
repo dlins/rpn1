@@ -5,7 +5,6 @@
  */
 package rpn.ui.diagram;
 
-import rpn.ui.diagram.DiagramLabel;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
@@ -26,7 +25,6 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import javax.swing.JPanel;
 import rpn.RPnPhaseSpaceAbstraction;
 import rpn.RPnPhaseSpacePanel;
 import rpn.component.ClosestDistanceCalculator;
@@ -65,7 +63,7 @@ public class RPnDiagramPanel extends RPnPhaseSpacePanel implements Printable {
 
     private Font font_;
     
-
+    private static Color DEFAULT_BACKGROUND_COLOR= Color.black;
     //
     // Constructors
     //

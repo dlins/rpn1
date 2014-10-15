@@ -5,7 +5,6 @@
  */
 package rpn;
 
-import rpn.ui.physics.RPnParamsPanel;
 import rpn.ui.RPnInputComponent;
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -21,10 +20,7 @@ import javax.swing.event.ChangeListener;
 
 import rpn.controller.ui.UIController;
 import rpn.configuration.Configuration;
-import rpn.ui.physics.ParamsDescriptor;
 import rpnumerics.RPNUMERICS;
-import wave.util.Boundary;
-import wave.util.IsoTriang2DBoundary;
 
 public class RPnFluxParamsDialog extends RPnDialog {
 
@@ -43,9 +39,6 @@ public class RPnFluxParamsDialog extends RPnDialog {
     public RPnFluxParamsDialog(RPnFluxParamsSubject[] subjectArray, RPnFluxParamsObserver paramObserver) {
         super(true, false);
         
-        
-        
-        
         paramsPanel_ = new JPanel();
 //        paramsPanel_.setLayout(ne);//new BoxLayout(paramsPanel_, BoxLayout.X_AXIS));
         setTitle(RPNUMERICS.physicsID());
@@ -59,30 +52,30 @@ public class RPnFluxParamsDialog extends RPnDialog {
         tabsPanel.setPreferredSize(new Dimension(400, 600));
         setLocation(400, 400);
       
-        for (RPnFluxParamsSubject subject : subjectArray) {
-            RPnInputComponent inputComponent = null;
-
-            if (subject instanceof RPnFluxConvexCombination) {
-                inputComponent = new RPnInputComponent(subject, "alpha");
-            } else {
-                inputComponent = new RPnInputComponent(subject);
-            }
-
-            tabsPanel.add(inputComponent.getContainer());
-
-            //-----------------------------------------
-            if (subject.getName() == null ? "Radio" != null : !subject.getName().equals("Radio")) {
-                tabsPanel.add(inputComponent.getContainer());
-            }
-
-            //-----------------------------------------
-
-            if (subject.getName().equals("Radio")) {
-                radioPanel_.add(inputComponent.getContainer());
-            }
-
-
-        }
+//        for (RPnFluxParamsSubject subject : subjectArray) {
+//            RPnInputComponent inputComponent = null;
+//
+//            if (subject instanceof RPnFluxConvexCombination) {
+//                inputComponent = new RPnInputComponent(subject, "alpha");
+//            } else {
+//                inputComponent = new RPnInputComponent(subject);
+//            }
+//
+//            tabsPanel.add(inputComponent.getContainer());
+//
+//            //-----------------------------------------
+//            if (subject.getName() == null ? "Radio" != null : !subject.getName().equals("Radio")) {
+//                tabsPanel.add(inputComponent.getContainer());
+//            }
+//
+//            //-----------------------------------------
+//
+//            if (subject.getName().equals("Radio")) {
+//                radioPanel_.add(inputComponent.getContainer());
+//            }
+//
+//
+//        }
 
 
 
@@ -204,8 +197,6 @@ public class RPnFluxParamsDialog extends RPnDialog {
     protected void apply() {
         
         Configuration physicsConfiguration = RPNUMERICS.getConfiguration(RPNUMERICS.physicsID());
-        
-        Configuration fluxConfiguration = physicsConfiguration.getConfiguration("fluxfunction");
 
         RPNUMERICS.applyFluxParams();
 
@@ -214,8 +205,7 @@ public class RPnFluxParamsDialog extends RPnDialog {
         
         
         rpn.command.ChangeFluxParamsCommand.instance().applyChange(new PropertyChangeEvent(rpn.command.ChangeFluxParamsCommand.instance(),phaseSpaceName,
-        fluxConfiguration,
-                fluxConfiguration));
+        physicsConfiguration,physicsConfiguration));
         rpn.command.ChangeFluxParamsCommand.instance().updatePhaseDiagram();
     }
 

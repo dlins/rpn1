@@ -17,14 +17,19 @@
             <METHOD name="Newton">
                 <METHODPARAM  name="tolerance" value="0.001" />
             </METHOD>
-
+            
+            
+            
+                 
             <CURVECONFIGURATION name="hugoniotcurve">
                 <CURVEPARAM name="resolution" value="120 120"/>
-                <CURVEPARAM name="method" value="IMPLICIT"/>
-                <CURVEPARAM name="case" value="0"/>
+                <CURVEPARAM name="method" value="Generic Implicit Hugoniot Curve"/>
+                <CURVEPARAM name="case" value="Generic point"/>
                 
-            </CURVECONFIGURATION>
-    
+            </CURVECONFIGURATION> 
+            
+
+          
             <CURVECONFIGURATION name="bifurcationcurve">
                 <CURVEPARAM name="resolution" value="128 128"/>
             </CURVECONFIGURATION>

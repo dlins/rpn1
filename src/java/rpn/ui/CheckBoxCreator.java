@@ -34,10 +34,23 @@ public class CheckBoxCreator extends UIComponentCreator {
 
         }
         
-        if (configurationParameter_.contains("characteristic")||configurationParameter_.contains("sort")){
+//        if (configurationParameter_.contains("method")
+//                ||configurationParameter_.contains("case")){
+//            ComboBoxCreator combo  = new ComboBoxCreator(configuration_, configurationParameter_);
+//            return combo.createUIComponent();
+//        }
+        
+        
+        if (configuration_.getName().contains("hugoniot")|| configuration_.getName().contains("wavecurve")){
+
             ComboBoxCreator combo  = new ComboBoxCreator(configuration_, configurationParameter_);
             return combo.createUIComponent();
         }
+           
+        
+        
+        
+        
 
         TextFieldCreator textFieldCreator = new TextFieldCreator(configuration_, configurationParameter_);
         return textFieldCreator.createUIComponent();

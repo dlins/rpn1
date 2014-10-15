@@ -20,6 +20,7 @@ import java.util.Set;
 import javax.swing.*;
 import rpn.command.ChangeDirectionCommand;
 import rpn.configuration.Configuration;
+import rpn.configuration.ConfigurationProfile;
 import rpn.ui.UIComponentCreator;
 import rpnumerics.Orbit;
 import rpnumerics.RPNUMERICS;
@@ -71,7 +72,8 @@ public class RPnCurvesConfigPanel extends Observable implements PropertyChangeLi
             
             String configurationType = entry.getValue().getType();
             
-            if (!configurationType.equalsIgnoreCase("PHYSICS") && !configurationType.equalsIgnoreCase("VISUAL") && !configurationType.equalsIgnoreCase("METHOD")) {
+            
+            if (configurationType.equalsIgnoreCase(ConfigurationProfile.CURVECONFIGURATION)){
                 
                 Configuration config = entry.getValue();
                 
@@ -102,6 +104,64 @@ public class RPnCurvesConfigPanel extends Observable implements PropertyChangeLi
                 }
                 
             }
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+//            if (!configurationType.equalsIgnoreCase(ConfigurationProfile.PHYSICS_CONFIG) && !configurationType.equalsIgnoreCase("VISUAL") && !configurationType.equalsIgnoreCase("METHOD")) {
+//                
+//                Configuration config = entry.getValue();
+//                
+//                HashMap<String, String> configParams = config.getParams();
+//                
+//                Set<Entry<String, String>> paramSet = configParams.entrySet();
+//                
+//                JPanel paramsPanel = new JPanel();
+//                
+//                BoxLayout box = new BoxLayout(paramsPanel, BoxLayout.X_AXIS);
+//                paramsPanel.setLayout(box);
+//                paramsPanel.invalidate();
+//                paramsPanel.setSize(new Dimension(200,20));
+//                
+//                
+//                for (Entry<String, String> paramEntry : paramSet) {
+//                    if (!paramEntry.getKey().contains("resolution")) {
+//                        UIComponentCreator componentCreator = new UIComponentCreator(config, paramEntry.getKey());
+//                        JComponent component = componentCreator.createUIComponent();
+//                        paramsPanel.add(component);
+//                    }
+//                    
+//                }
+//                
+//                if (paramsPanel.getComponentCount() > 0) {
+//                    curvesTabbedPanel_.addTab(config.getName(), paramsPanel);
+//                    componentMap_.put(config.getName(), paramsPanel);
+//                }
+//                
+//            }
             
         }
         

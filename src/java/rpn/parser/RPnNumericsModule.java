@@ -12,7 +12,6 @@ import org.xml.sax.Attributes;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXParseException;
 
-
 import wave.util.RealVector;
 
 import org.xml.sax.SAXException;
@@ -27,7 +26,11 @@ import rpn.configuration.Configuration;
 import rpnumerics.RPNUMERICS;
 import wave.util.Boundary;
 
-/** This class implements methods to configure the numeric layer. The values are taked from a XML file and this values are used to setup the physics and all others numerics parameters. */
+/**
+ * This class implements methods to configure the numeric layer. The values are
+ * taked from a XML file and this values are used to setup the physics and all
+ * others numerics parameters.
+ */
 public class RPnNumericsModule {
     //
     // Constants
@@ -44,7 +47,7 @@ public class RPnNumericsModule {
         private static ConfigurationProfile physicsProfile_;
         private static ConfigurationProfile innerPhysicsConfigurationProfile_;
         private static boolean initialConfiguration_;
-        private static String [] METHODNAMES = {"hugoniotmethod"};
+        private static String[] METHODNAMES = {"hugoniotmethod"};
 
         public void startElement(String uri, String localName, String qName, Attributes att) throws SAXException {
             currentElement_ = localName;
@@ -52,6 +55,9 @@ public class RPnNumericsModule {
             if (localName.equals("CURVECONFIGURATION")) {
 
                 currentConfigurationProfile_ = new ConfigurationProfile(att.getValue("name"), ConfigurationProfile.CURVECONFIGURATION);
+
+                
+
 
             }
 
@@ -64,8 +70,6 @@ public class RPnNumericsModule {
                 initialConfiguration_ = true;
                 physicsProfile_ = new ConfigurationProfile(att.getValue(0), ConfigurationProfile.PHYSICS_PROFILE);
             }
-
-
 
             if (localName.equals("BOUNDARY")) {
                 physicsProfile_.addConfigurationProfile(ConfigurationProfile.BOUNDARY, new ConfigurationProfile(att.getValue(0), ConfigurationProfile.BOUNDARY));
@@ -90,7 +94,6 @@ public class RPnNumericsModule {
 
             }
 
-
             if (localName.equals("METHOD")) {
 
                 currentConfigurationProfile_ = new ConfigurationProfile(att.getValue("name"), ConfigurationProfile.METHOD);
@@ -101,15 +104,11 @@ public class RPnNumericsModule {
                 checkNumberFormat(att.getValue("value"));
                 currentConfigurationProfile_.addParam(att.getValue("name"), att.getValue("value"));
 
-
             }
-
-
 
             if (localName.equals("PHASEPOINT")) {
                 tempVector_ = new RealVector((new Integer(att.getValue(0))).intValue());
             }
-
 
         }
 
@@ -122,19 +121,16 @@ public class RPnNumericsModule {
                 initialConfiguration_ = false;
             }
 
-
-
             if (localName.equals("PHYSICSCONFIG")) {
 
                 physicsProfile_.addConfigurationProfile(innerPhysicsConfigurationProfile_.getName(), innerPhysicsConfigurationProfile_);
 
             }
 
-
             if (localName.equals("CURVECONFIGURATION") || localName.equals("METHOD")) {
 
                 RPnConfig.addProfile(currentConfigurationProfile_.getName(), currentConfigurationProfile_);
-
+                
             }
 
         }
@@ -162,7 +158,6 @@ public class RPnNumericsModule {
 
         public void endDocument() throws SAXException {//Setando a resolucao dos grids.Usando tres grids . Um para Hugoniot, um para DoubleContact e um para as demais curvas (com resolucao da inflexao)
 
-
             Boundary boundary = RPNUMERICS.boundary();
 
             RealVector min = boundary.getMinimums();
@@ -174,31 +169,16 @@ public class RPnNumericsModule {
 
             int[] bifurcationCurvesResolution = RPnDataModule.processResolution(RPNUMERICS.getParamValue("bifurcationcurve", "resolution"));
 
-
-            RPNUMERICS.setResolution(min, max, "doublecontactcurve", doubleContactResolution);
-
-            RPNUMERICS.setResolution(min, max, "hugoniotcurve", hugoniotResolution);
-
-            RPNUMERICS.setResolution(min, max, "bifurcationcurve", bifurcationCurvesResolution);
-
-
-            for (String methodName : METHODNAMES) {
-                
-                setMethod(methodName);
-                
-            }
-
-
-
-
-
-
-
-
-
-
-
-
+//            RPNUMERICS.setResolution(min, max, "doublecontactcurve", doubleContactResolution);
+//
+//            RPNUMERICS.setResolution(min, max, "hugoniotcurve", hugoniotResolution);
+//
+//            RPNUMERICS.setResolution(min, max, "bifurcationcurve", bifurcationCurvesResolution);
+//            for (String methodName : METHODNAMES) {
+//                
+//                setMethod(methodName);
+//                
+//            }
         }
 
         public void startPrefixMapping(String prefix, String uri) throws SAXException {
@@ -218,7 +198,6 @@ public class RPnNumericsModule {
 
         private void setMethod(String methodName) {
 
-
             HashMap<String, Configuration> configurationMap = RPNUMERICS.getConfigurations();
 
             if (configurationMap.containsKey(methodName)) {
@@ -236,12 +215,7 @@ public class RPnNumericsModule {
 
                 }
 
-
-
-
-
             }
-
 
         }
 
@@ -300,7 +274,9 @@ public class RPnNumericsModule {
     //
     // Methods
     //
-    /** Writes the actual values of the numerics parameters into a XML file. */
+    /**
+     * Writes the actual values of the numerics parameters into a XML file.
+     */
     public static void export(FileWriter writer) throws java.io.IOException {
         writer.write(RPNUMERICS.toXML());
     }

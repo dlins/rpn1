@@ -134,6 +134,7 @@ public class wcWindow {
         for (int i = 0; i < vertexList.size(); i++) {
             defPointsX[i] = new Double(((double[]) vertexList.get(i)) [0]).intValue();
             defPointsY[i] = new Double(((double[]) vertexList.get(i)) [1]).intValue();
+
         }
 
 

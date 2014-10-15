@@ -27,6 +27,7 @@ import rpn.component.RpGeomFactory;
 import rpn.controller.ui.*;
 import rpnumerics.RPnCurve;
 import rpn.message.RPnNetworkStatus;
+import rpnumerics.WaveCurve;
 
 public abstract class RpModelPlotCommand extends RpModelActionCommand implements Observer {
 
@@ -90,8 +91,12 @@ public abstract class RpModelPlotCommand extends RpModelActionCommand implements
 
         RPnCurve curve = (RPnCurve) factory.geomSource();
 
-        curve.setId(curveID_);
-        curveID_++;
+        if (!(curve instanceof WaveCurve)) {
+
+            curve.setId(curveID_);
+
+            curveID_++;
+        }
 
         PropertyChangeEvent event_ = new PropertyChangeEvent(this, UIController.instance().getActivePhaseSpace().getName(), oldValue, geometry);
 
@@ -104,8 +109,6 @@ public abstract class RpModelPlotCommand extends RpModelActionCommand implements
 
         RPnDataModule.PHASESPACE.plot(geometry);
 
-     
-
         if (RPnNetworkStatus.instance().isOnline() && RPnNetworkStatus.instance().isMaster()) {
             RPnNetworkStatus.instance().sendCommand(rpn.controller.ui.UndoActionController.instance().getLastCommand().toXML());
         }
@@ -114,32 +117,38 @@ public abstract class RpModelPlotCommand extends RpModelActionCommand implements
 
     public void execute(RpGeomFactory factory) {
 
-            RPnCurve curve = null;
-            curve = (RPnCurve) factory.geomSource();
-            
-            if (curve==null)return;
-            
+        RPnCurve curve = null;
+        curve = (RPnCurve) factory.geomSource();
+
+        if (curve == null) {
+            return;
+        }
+
+        if (!(curve instanceof WaveCurve)) {
 
             curve.setId(curveID_);
+
             curveID_++;
 
-            Iterator oldValue = RPnDataModule.PHASESPACE.getGeomObjIterator();
+        }
 
-            PropertyChangeEvent event = new PropertyChangeEvent(this,
-                    UIController.instance().getActivePhaseSpace().getName(),
-                    oldValue,
-                    factory.geom());
+//            curve.setId(curveID_);
+//            curveID_++;
+        Iterator oldValue = RPnDataModule.PHASESPACE.getGeomObjIterator();
 
-            ArrayList<RealVector> emptyInput = new ArrayList<RealVector>();
-            logCommand(new RpCommand(event, emptyInput));
+        PropertyChangeEvent event = new PropertyChangeEvent(this,
+                UIController.instance().getActivePhaseSpace().getName(),
+                oldValue,
+                factory.geom());
 
-            RPnDataModule.PHASESPACE.join(factory.geom());
-            
-     
-            if (RPnNetworkStatus.instance().isOnline() && RPnNetworkStatus.instance().isMaster()) {
-                RPnNetworkStatus.instance().sendCommand(rpn.controller.ui.UndoActionController.instance().getLastCommand().toXML());
-            }
+        ArrayList<RealVector> emptyInput = new ArrayList<RealVector>();
+        logCommand(new RpCommand(event, emptyInput));
 
+        RPnDataModule.PHASESPACE.join(factory.geom());
+
+        if (RPnNetworkStatus.instance().isOnline() && RPnNetworkStatus.instance().isMaster()) {
+            RPnNetworkStatus.instance().sendCommand(rpn.controller.ui.UndoActionController.instance().getLastCommand().toXML());
+        }
 
     }
 

@@ -36,6 +36,7 @@
 #include <complex> // To handle complex eigenpairs.
 
 
+
 class WaveCurveFactory;
 
 class NewRarefactionCurve {

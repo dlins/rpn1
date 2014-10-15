@@ -29,6 +29,8 @@
 #define WAVE_CURVE_INTERSECTION_FOUND                           300
 #define WAVE_CURVE_INTERSECTION_NOT_FOUND                       400
 
+#define WAVECURVEFACTORY_GENERIC_POINT                          1000
+
 class WaveCurveSegment {
     private:
     protected:
@@ -89,7 +91,7 @@ class WaveCurveFactory {
         static bool segment_intersection(double *p1, double *p2, double *q1, double *q2, double *r);
     public:
         WaveCurveFactory(const AccumulationFunction *gg, const FluxFunction *ff, const Boundary *bb, const ODE_Solver *o, RarefactionCurve *r, ShockCurve *s, CompositeCurve *c);
-        ~WaveCurveFactory();
+        virtual ~WaveCurveFactory();
 
         // This half-wavecurve is meaningless along the boundary's side.
         // If necessary, create a new one which does not use initial_direction.
@@ -103,7 +105,7 @@ class WaveCurveFactory {
                                int &wavecurve_stopped_because, 
                                int &edge);
 
-        int wavecurve(const RealVector &initial_point, int family, int increase, HugoniotContinuation *h, WaveCurve &hwc, 
+        virtual int wavecurve(int type, const RealVector &initial_point, int family, int increase, HugoniotContinuation *h, WaveCurve &hwc, 
                       int &wavecurve_stopped_because, int &edge);
 
         // s = side.
@@ -125,6 +127,16 @@ class WaveCurveFactory {
         void R_regions(HugoniotContinuation *h, const WaveCurve &c, std::vector<WaveCurve> &curves);
 
         void add_arclength(int begin, int end, double factor, WaveCurve &hwc);
+
+        virtual void list_of_initial_points(std::vector<int> &type, std::vector<std::string> &name) const {
+            type.clear();
+            name.clear();
+
+            type.push_back(WAVECURVEFACTORY_GENERIC_POINT);
+            name.push_back(std::string("Generic point"));
+
+            return;
+        }
 };
 
 #endif // _WAVECURVEFACTORY_

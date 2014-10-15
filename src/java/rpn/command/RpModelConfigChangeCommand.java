@@ -9,6 +9,7 @@ import rpn.controller.XZeroController;
 import java.beans.*;
 import java.util.List;
 import java.util.ArrayList;
+import rpn.controller.DiagramController;
 
 import rpn.controller.ui.*;
 import rpn.parser.RPnDataModule;
@@ -40,12 +41,12 @@ public abstract class RpModelConfigChangeCommand extends RpModelActionCommand {
         /*
          * MAKES SURE XZERO IS NOTIFIED FIRST
          */
-
         if (listener instanceof XZeroController) {
             listenersList_.add(0, listener);
         } else {
             listenersList_.add(listener);
         }
+        
         super.addPropertyChangeListener(listener);
     }
 

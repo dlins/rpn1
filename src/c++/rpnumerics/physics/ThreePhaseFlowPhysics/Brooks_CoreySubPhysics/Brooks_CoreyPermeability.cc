@@ -28,8 +28,6 @@ Brooks_CoreyPermeability::~Brooks_CoreyPermeability(){
 int Brooks_CoreyPermeability::PermeabilityWater_jet(const RealVector &state, int degree, JetMatrix &water){
     double reduced_water;
 
-    std::cout << "Water" << std::endl;
-
     return PermeabilityWater_jet(state, degree, water, reduced_water);
 }
 

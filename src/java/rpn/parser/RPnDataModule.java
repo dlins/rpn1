@@ -33,6 +33,7 @@ import java.util.Set;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.XMLReader;
 import rpn.component.RpGeomFactory;
+import rpn.configuration.CurveConfiguration;
 
 /**
  * With this class the calculus made in a previous session can be reloaded. A
@@ -209,6 +210,7 @@ public class RPnDataModule {
             } else if (currentElement_.equals("CURVECONFIGURATION")) {
 
                 currentConfiguration_ = rpnumerics.RPNUMERICS.getConfiguration(att.getValue("name"));
+                
 
             } else if (currentElement_.equals("REALSEG")) {
 
@@ -540,15 +542,15 @@ public class RPnDataModule {
 
 
                     HugoniotCurve curve = new HugoniotCurve(startPoint_, hugoniotSegments_, transitionPoint_);
-                    int direction = Integer.parseInt(currentConfiguration_.getParam("direction"));
+//                    int direction = Integer.parseInt(currentConfiguration_.getParam("direction"));
+//
+//                    int[] resolution = processResolution(currentConfiguration_.getParam("resolution"));
+//                    
+//                    //TODO Replace !!
+//                    
+//                    HugoniotParams params = new HugoniotParams(startPoint_, direction, resolution,"IMPLICIT");
 
-                    int[] resolution = processResolution(currentConfiguration_.getParam("resolution"));
-                    
-                    //TODO Replace !!
-                    
-                    HugoniotParams params = new HugoniotParams(startPoint_, direction, resolution,"IMPLICIT");
-
-                    HugoniotCurveCalcND calc = new HugoniotCurveCalcND(params);
+                    HugoniotCurveCalcND calc = new HugoniotCurveCalcND(startPoint_, (CurveConfiguration) currentConfiguration_);
 
                     HugoniotCurveGeomFactory factory = new HugoniotCurveGeomFactory(calc, curve);
 

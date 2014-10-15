@@ -9,8 +9,8 @@ CoreyQuadSubPhysics::CoreyQuadSubPhysics() : ThreePhaseFlowSubPhysics(){
 //    muo_parameter = new Parameter(std::string("muo"), 1.0 + 2e-3);
 //    mug_parameter = new Parameter(std::string("mug"), 1.0 - 3e-3);
 
-    muw_parameter = new Parameter(std::string("muw"), 3.0);
-    muo_parameter = new Parameter(std::string("muo"), 4.0);
+    muw_parameter = new Parameter(std::string("muw"), 1.0);
+    muo_parameter = new Parameter(std::string("muo"), 1.0);
     mug_parameter = new Parameter(std::string("mug"), 1.0);
 
     vel_parameter = new Parameter(std::string("vel"), 1.0);
@@ -31,7 +31,7 @@ CoreyQuadSubPhysics::CoreyQuadSubPhysics() : ThreePhaseFlowSubPhysics(){
 
     // Flux.
     //
-    flux_ = new CoreyQuad(grw_parameter, gro_parameter, grg_parameter,
+    flux_ = new CoreyQuadFluxFunction(grw_parameter, gro_parameter, grg_parameter,
                           muw_parameter, muo_parameter, mug_parameter,
                           vel_parameter);
 
@@ -79,7 +79,8 @@ CoreyQuadSubPhysics::CoreyQuadSubPhysics() : ThreePhaseFlowSubPhysics(){
 
     // WaveCurve.
     //
-    wavecurvefactory_ = new WaveCurveFactory(accumulation_, flux_, boundary_, odesolver_, rarefactioncurve_, shockcurve_, compositecurve_);
+//    wavecurvefactory_ = new WaveCurveFactory(accumulation_, flux_, boundary_, odesolver_, rarefactioncurve_, shockcurve_, compositecurve_);
+    wavecurvefactory_ = new ThreePhaseFlowWaveCurveFactory(flux_, accumulation_, boundary_, odesolver_, rarefactioncurve_, shockcurve_, compositecurve_, this);
 
     // Inflection.
     //

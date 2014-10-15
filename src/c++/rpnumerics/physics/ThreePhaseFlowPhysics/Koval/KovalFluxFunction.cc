@@ -19,6 +19,8 @@ KovalFluxFunction::~KovalFluxFunction(){
 }
 
 int KovalFluxFunction::jet(const WaveState &w, JetMatrix &m, int degree) const {
+    m.resize(2);
+
     double grw = grw_parameter_->value();
     double gro = gro_parameter_->value();
     double grg = grg_parameter_->value();

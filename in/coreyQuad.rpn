@@ -24,12 +24,28 @@
 
             
             
-             <CURVECONFIGURATION name="hugoniotcurve">
+         <CURVECONFIGURATION name="hugoniotcurve">
+                <CURVEPARAM name="resolution" value="120 120"/>
+                <CURVEPARAM name="method" value="Generic Implicit Hugoniot Curve"/>
+                <CURVEPARAM name="case" value="Generic point"/>
+                
+            </CURVECONFIGURATION> 
+            
+            
+               <CURVECONFIGURATION name="riemannprofile">
+                <CURVEPARAM name="speedrange" value="0 3"/>
+                <CURVEPARAM name="Yrange" value="0 1.0"/>
+                
+            </CURVECONFIGURATION>
+            
+            
+              
+          <!--   <CURVECONFIGURATION name="hugoniotcurve">
                 <CURVEPARAM name="resolution" value="120 120"/>
                 <CURVEPARAM name="method" value="COREY"/>
                 <CURVEPARAM name="case" value="0"/>
                 
-            </CURVECONFIGURATION>
+            </CURVECONFIGURATION>-->
             
             
                      
@@ -42,9 +58,9 @@
 
             <CURVECONFIGURATION name="wavecurve">
                 <CURVEPARAM name="edge" value="0"/>
-                <CURVEPARAM name="origin" value="13"/>
+                <CURVEPARAM name="origin" value="Generic point"/>
                 <CURVEPARAM name="curve" value="0"/>
-                 <CURVEPARAM name="direction" value="10"/>
+                <CURVEPARAM name="direction" value="10"/>
                 <CURVEPARAM name="family" value="0"/>
                 
             </CURVECONFIGURATION>
@@ -120,10 +136,10 @@
             
             
             
-              <CURVECONFIGURATION name="secondarybifurcation">
+            <CURVECONFIGURATION name="secondarybifurcation">
                 <CURVEPARAM name="edge" value="0"/>
                 <CURVEPARAM name="numberofsteps" value="128"/>
-                 <CURVEPARAM name="method" value="IMPLICIT"/>
+                <CURVEPARAM name="method" value="IMPLICIT"/>
             </CURVECONFIGURATION>
     
 

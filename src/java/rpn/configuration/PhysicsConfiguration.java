@@ -15,11 +15,13 @@ public class PhysicsConfiguration extends Configuration {
 
         super(configurationProfile, configurationHash);
 
+
     }
 
     public PhysicsConfiguration(String name) {
 
         super(name);
+        setType(ConfigurationProfile.PHYSICS_CONFIG);
 
     }
 

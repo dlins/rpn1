@@ -2,6 +2,7 @@
 
 
 
+
 // Angle phi will be updated to the first viable value.
 //
 int ParametricPlot::find_initial_point_within_domain(RealVector (*f)(void*, double), void *obj, double &phi, double phi_final, double delta_phi, const Boundary *b, Curve &curve){
@@ -15,21 +16,7 @@ int ParametricPlot::find_initial_point_within_domain(RealVector (*f)(void*, doub
         RealVector old_point;
 
         while (phi <= phi_final){
-            #ifdef TEST_PARAMETRICPLOT
-            if (canvas != 0){
-                std::vector<RealVector> temp;
-                temp.push_back(point);
-                Curve2D *c = new Curve2D(temp, 1.0, 0.0, 0.0, CURVE2D_MARKERS);
-                canvas->add(c);
-
-                std::stringstream ss;
-                ss << "Outside. phi = " << phi << ", point = " << point;
-
-                scroll->add(ss.str().c_str(), canvas, c);
-
-//                TestTools::pause("Click to continue");
-            }
-            #endif
+           
 
             old_point = point;
 
@@ -129,21 +116,7 @@ void ParametricPlot::find_curve(RealVector (*f)(void*, double),
         if (b->inside(point)){
             curve.curve.push_back(point);
 
-            #ifdef TEST_PARAMETRICPLOT
-            if (canvas != 0){
-                std::vector<RealVector> temp;
-                temp.push_back(point);
-                Curve2D *c = new Curve2D(temp, 0.0, 0.0, 0.0, CURVE2D_MARKERS);
-                canvas->add(c);
-
-                std::stringstream ss;
-                ss << "Inside. phi = " << phi + delta_phi;
-
-                scroll->add(ss.str().c_str(), canvas, c);
-
-                TestTools::pause("Click to continue");
-            }
-            #endif
+           
         }
         else {
             RealVector boundary_point;

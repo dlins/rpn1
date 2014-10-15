@@ -110,15 +110,10 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc
         realVectorInput.component(i) = input[i];
     }
 
-
-
     env->DeleteLocalRef(inputPhasePointArray);
 
 
     int dimension = realVectorInput.size();
-
-
-
 
 
     jstring jedge = (jstring) env->CallObjectMethod(configuration, getParamMethodID, env->NewStringUTF("edge"));
@@ -149,10 +144,17 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc
     streamEdge >> edgeNumber;
 
 
-    int originNumber;
-    std::stringstream streamOrigin(origin);
-    streamOrigin >> originNumber;
 
+//    std::stringstream streamOrigin(origin);
+
+
+    int originNumber = RpNumerics::waveCurveConfigVector_->at(0)->flag(origin);
+
+    
+    cout<<"Valor de origin string: "<< origin<<endl;    
+
+    
+//    streamOrigin >> originNumber;
 
     int curveNumber;
     std::stringstream streamCurve(curve);
@@ -164,7 +166,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc
     streamFamily >> familyNumber;
 
     //
-    //    cout << "Valor de origin" << originNumber << endl;
+        cout << "Valor de origin" << originNumber << endl;
     //
     //    cout << "Ponto entrado: " << realVectorInput << endl;
     //
@@ -175,83 +177,57 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc
     //    cout << "Edge" << edgeNumber << endl;
 
 
-    WaveCurve  hwc;
+    WaveCurve * hwc = new WaveCurve();
+
+
+
+    jclass modelPlotClass = (env)->FindClass("Lrpn/command/RpModelPlotCommand;");
+
+    jfieldID curveIdField = env->GetStaticFieldID(modelPlotClass, "curveID_", "I");
+
+
+
+    int CURVEID = env->GetStaticIntField(modelPlotClass, curveIdField);
+
+
+
+    cout << "Valor de curveID C++" << CURVEID << endl;
+
+
+
+
 
     int reason_why, s;
-    
+
     WaveCurveFactory *factory = RpNumerics::physicsVector_->at(0)->wavecurvefactory();
     HugoniotContinuation * shock = RpNumerics::physicsVector_->at(0)->Hugoniot_continuation();
-    
-    factory->wavecurve(realVectorInput, familyNumber, timeDirection, shock, hwc, reason_why,s);
-    
 
-//    if (originNumber == 11) {
-//
-//        wavecurvefactory.wavecurve(realVectorInput, familyNumber, timeDirection, hug, *hwc, reason_why, s);
-//    }
-//
-//    if ((originNumber == 1) || (originNumber == 2) || (originNumber == 3)) {
-//        wavecurvefactory.wavecurve_from_boundary(realVectorInput, edgeNumber, familyNumber, timeDirection, hug, *hwc, reason_why, s);
-//    }
-//
-//
-//
-//    if (originNumber == 12) {
-//
-//        Inflection_Curve inflectionCurve;
-//
-//        std::vector<RealVector> left_vrs;
-//
-//        GridValues * gv = RpNumerics::getGridFactory().getGrid("bifurcationcurve");
-//
-//        inflectionCurve.curve(& RpNumerics::getPhysics().fluxFunction(), & RpNumerics::getPhysics().accumulation(), *gv, familyNumber, left_vrs);
-//
-//        wavecurvefactory.wavecurve_from_inflection(left_vrs, realVectorInput, familyNumber, timeDirection, hug, *hwc, reason_why, s);
-//    }
-//
-//
-//    if (originNumber == 13) {
-//
-//        WaveCurve * waveCurve = RpNumerics::getWaveCurve(curveNumber);
-//        wavecurvefactory.wavecurve_from_wavecurve(*waveCurve, realVectorInput, hug, *hwc, reason_why, s);
-//
-//    }
-
-
-
-//    for (int j = 0; j < hwc->wavecurve.size(); j++) {
-//
-//        Curve testeWC = hwc->wavecurve[j];
-//
-//        vector<double> xiVector = testeWC.xi;
-//
-//        cout <<"Curva: "<<j<<endl;
-//
-//        for (int n = 0; n < xiVector.size(); n++) {
-//            cout << "xi=" << xiVector[n] << endl;
-//        }
-//
-//
-//
-//
-//
-//    }
+    factory->wavecurve(originNumber,realVectorInput, familyNumber, timeDirection, shock, *hwc, reason_why, s);
 
 
 
 
+    //    for (int j = 0; j < hwc->wavecurve.size(); j++) {
+    //
+    //        Curve testeWC = hwc->wavecurve[j];
+    //
+    //        vector<double> xiVector = testeWC.xi;
+    //
+    //        cout <<"Curva: "<<j<<endl;
+    //
+    //        for (int n = 0; n < xiVector.size(); n++) {
+    //            cout << "xi=" << xiVector[n] << endl;
+    //        }
+    //
+    //
+    //
+    //
+    //
+    //    }
 
 
 
-
-
-
-
-
-
-
-
-    double speedAtReferencePoint = hwc.reference_point.e[familyNumber].r;
+    double speedAtReferencePoint = hwc->reference_point.e[familyNumber].r;
 
 
     double nativeEigenValues [dimension];
@@ -259,7 +235,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc
     for (int i = 0; i < dimension; i++) {
 
 
-        nativeEigenValues[i] = hwc.reference_point.e[i].r;
+        nativeEigenValues[i] = hwc->reference_point.e[i].r;
 
     }
 
@@ -270,32 +246,29 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc
 
     jdoubleArray refPointCoords = (env)->NewDoubleArray(dimension);
 
-    (env)->SetDoubleArrayRegion(refPointCoords, 0, dimension, (double *) hwc.reference_point.point);
+    (env)->SetDoubleArrayRegion(refPointCoords, 0, dimension, (double *) hwc->reference_point.point);
 
     jobject referenceOrbitPoint = (env)->NewObject(classOrbitPoint, orbitPointConstructor, refPointCoords, eigenValuesArray, speedAtReferencePoint);
 
-//
-//
-//    cout << "Antes de adicionar curva de onda: " << RpNumerics::getCurrentCurveID() << endl;
-//    RpNumerics::addWaveCurve(hwc);
+    //
+    //
+    //    cout << "Antes de adicionar curva de onda: " << RpNumerics::getCurrentCurveID() << endl;
+    RpNumerics::addWaveCurve(CURVEID,hwc);
 
     jobject waveCurve = (env)->NewObject(classWaveCurve, waveCurveConstructor, familyNumber, timeDirection);
 
-    env->CallVoidMethod(waveCurve, setIDMethodID, RpNumerics::getCurrentCurveID());
+    env->CallVoidMethod(waveCurve, setIDMethodID, CURVEID);
+    
+    env->SetStaticIntField(modelPlotClass,curveIdField,++CURVEID);
 
-    RpNumerics::increaseCurveID();
+    //    RpNumerics::increaseCurveID();
 
     jobject waveCurveBranchForward = env->NewObject(classWaveCurve, waveCurveConstructor, familyNumber, timeDirection); //First branch for now
 
 
+    for (int i = 0; i < hwc->wavecurve.size(); i++) {
 
-
-
-
-
-    for (int i = 0; i < hwc.wavecurve.size(); i++) {
-
-        Curve wc = hwc.wavecurve[i];
+        Curve wc = hwc->wavecurve[i];
 
         vector<double> xiVector = wc.xi;
 
@@ -305,8 +278,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc
             nativeXi[n] = xiVector.at(n);
 
         }
-        
-        
+
+
         jdoubleArray xiArray = (env)->NewDoubleArray(xiVector.size());
 
         (env)->SetDoubleArrayRegion(xiArray, 0, xiVector.size(), nativeXi);
@@ -359,7 +332,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc
                     env->CallVoidMethod(rarefactionOrbit, setCurveTypeID, 1);
                     env->CallVoidMethod(waveCurveBranchForward, waveCurveAddBranch, rarefactionOrbit);
                     env->CallVoidMethod(rarefactionOrbit, setCurveIndexID, i);
-                   
+
 
                 }
                     break;

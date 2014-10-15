@@ -33,6 +33,8 @@ import rpn.command.SecondaryBifurcationCurveCommand;
 import rpn.command.ShockCurvePlotCommand;
 import rpn.command.SubInflectionPlotCommand;
 import rpn.command.WaveCurvePlotCommand;
+import rpnumerics.RPNUMERICS;
+import static rpnumerics.RPNUMERICS.setParamValue;
 
 /**
  * This class configures the initial visualization properties. Reading a XML
@@ -117,6 +119,13 @@ public class RPnInterfaceModule {
 
         public void endElement(String uri, String localName, String qName) throws SAXException {
 
+            
+            
+            
+            
+            
+            
+            
         }
 
         public void setDocumentLocator(Locator locator) {
@@ -126,6 +135,16 @@ public class RPnInterfaceModule {
         }
 
         public void endDocument() throws SAXException {
+            
+            
+          
+            
+            
+            
+            
+            
+            
+            
 
         }
 

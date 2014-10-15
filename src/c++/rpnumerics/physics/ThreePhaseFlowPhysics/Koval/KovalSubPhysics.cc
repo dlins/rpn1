@@ -74,7 +74,7 @@ KovalSubPhysics::KovalSubPhysics() : ThreePhaseFlowSubPhysics(){
 
     // WaveCurve.
     //
-    wavecurvefactory_ = new WaveCurveFactory(accumulation_, flux_, boundary_, odesolver_, rarefactioncurve_, shockcurve_, compositecurve_);
+    wavecurvefactory_ = new ThreePhaseFlowWaveCurveFactory(flux_, accumulation_, boundary_, odesolver_, rarefactioncurve_, shockcurve_, compositecurve_, this);
 
     // Inflection.
     //

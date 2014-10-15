@@ -9,7 +9,6 @@ package rpn.ui;
 import java.util.Observable;
 import javax.swing.JComponent;
 import rpn.configuration.Configuration;
-import rpn.configuration.ConfigurationProfile;
 
 public class UIComponentCreator extends Observable {
 

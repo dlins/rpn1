@@ -204,11 +204,13 @@ public class PhaseSpacePanel2DController extends ComponentUI implements PhaseSpa
             if (event.getComponent() instanceof RPnPhaseSpacePanel) {
                 
                 RPnPhaseSpacePanel panel = (RPnPhaseSpacePanel) event.getComponent();
+                
+
 
                 int wPanel = panel.getWidth();
                 int hPanel = panel.getHeight();
    
-                dcViewport newViewport = new dcViewport(wPanel,hPanel);
+                dcViewport newViewport = new dcViewport(new Point(),wPanel,hPanel,20);
                 wcWindow currWindow = panel.scene().getViewingTransform().viewPlane().getWindow();
                         
                 panel.scene().getViewingTransform().setViewPlane(new ViewPlane(newViewport,currWindow));

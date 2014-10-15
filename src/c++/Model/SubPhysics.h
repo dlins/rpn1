@@ -45,98 +45,155 @@
 //       Morante.
 
 class SubPhysics {
-    private:
-        // Users should not add any private members.
-    protected:
-        std::string info_subphysics_;
+private:
+    // Users should not add any private members.
+protected:
+    std::string info_subphysics_;
 
-        const FluxFunction         *flux_;
-        const AccumulationFunction *accumulation_;
-        const Boundary             *boundary_;
-        const Viscosity_Matrix     *viscosity_matrix_;
+    const FluxFunction *flux_;
+    const AccumulationFunction *accumulation_;
+    const Boundary *boundary_;
+    const Viscosity_Matrix *viscosity_matrix_;
 
-        std::vector<AuxiliaryFunction*> auxiliaryfunctions_;
+    std::vector<AuxiliaryFunction*> auxiliaryfunctions_;
 
-        RarefactionCurve     *rarefactioncurve_;
-        CompositeCurve       *compositecurve_;
-        HugoniotContinuation *hugoniotcontinuation_;
-        ShockCurve           *shockcurve_;
-        WaveCurveFactory     *wavecurvefactory_;
-        ODE_Solver           *odesolver_;
+    RarefactionCurve *rarefactioncurve_;
+    CompositeCurve *compositecurve_;
+    HugoniotContinuation *hugoniotcontinuation_;
+    ShockCurve *shockcurve_;
+    WaveCurveFactory *wavecurvefactory_;
+    ODE_Solver *odesolver_;
 
-        GridValues                 *gridvalues_;
+    GridValues *gridvalues_;
 
-        std::vector<HugoniotCurve*> hugoniot_curve;
-        std::vector<Extension*> extension_curve;
+    std::vector<HugoniotCurve*> hugoniot_curve;
+    std::vector<Extension*> extension_curve;
 
-        Explicit_Bifurcation_Curves *explicitbifurcationcurves_;
+    Explicit_Bifurcation_Curves *explicitbifurcationcurves_;
 
-        // I do not know if the RPn can use it right now.
-        //
-        DoubleMatrix transformation_matrix_;
+    // I do not know if the RPn can use it right now.
+    //
+    DoubleMatrix transformation_matrix_;
 
-        std::string xlabel_, ylabel_;
+    std::string xlabel_, ylabel_;
 
-        std::vector<Parameter*> equation_parameter_;
+    std::vector<Parameter*> equation_parameter_;
 
-        const Coincidence *coincidence_;
-        Coincidence_Contour *coincidence_contour_;
+    const Coincidence *coincidence_;
+    Coincidence_Contour *coincidence_contour_;
 
-        Inflection_Curve *inflection_curve_;
-    public:
-        SubPhysics();
-        virtual ~SubPhysics();
+    Inflection_Curve *inflection_curve_;
+public:
+    SubPhysics();
+    virtual ~SubPhysics();
 
-        // Information about the subphysic, which can be displayed somewhere.
-        //
-        virtual const std::string info_subphysics(){return info_subphysics_;}
+    // Information about the subphysic, which can be displayed somewhere.
+    //
 
-        // Access to the data.
-        virtual const FluxFunction *         flux(){return flux_;}
-        virtual const AccumulationFunction * accumulation(){return accumulation_;}
-        virtual const Boundary *             boundary(){return boundary_;}
-        virtual       GridValues *           gridvalues(){return gridvalues_;}
+    virtual const std::string info_subphysics() {
+        return info_subphysics_;
+    }
 
-//        virtual const Viscosity_Matrix *     viscosity_matrix(){return viscosity_matrix_;}
+    // Access to the data.
 
-        virtual void list_of_Hugoniot_methods(std::vector<HugoniotCurve*> &h) const {
-            h = hugoniot_curve;
-            return;
-        }
+    virtual const FluxFunction * flux() {
+        return flux_;
+    }
 
-        virtual void list_of_extension_methods(std::vector<Extension*> &e) const {
-            e = extension_curve;
-            return;
-        }
+    virtual const AccumulationFunction * accumulation() {
+        return accumulation_;
+    }
 
-        virtual Explicit_Bifurcation_Curves* explicit_bifurcation_curves(){
-            return explicitbifurcationcurves_;
-        }
+    virtual const Boundary * boundary() {
+        return boundary_;
+    }
 
-        virtual DoubleMatrix transformation_matrix(){return transformation_matrix_;}
+    virtual GridValues * gridvalues() {
+        return gridvalues_;
+    }
 
-        virtual std::string xlabel(){return xlabel_;}
-        virtual std::string ylabel(){return ylabel_;}
+    //        virtual const Viscosity_Matrix *     viscosity_matrix(){return viscosity_matrix_;}
 
-        virtual void equation_parameter(std::vector<Parameter*> &ep){
-            ep = equation_parameter_;
+    virtual void list_of_Hugoniot_methods(std::vector<HugoniotCurve*> &h) const {
+        h = hugoniot_curve;
+        return;
+    }
 
-            return;
-        }
+    virtual void list_of_extension_methods(std::vector<Extension*> &e) const {
+        e = extension_curve;
+        return;
+    }
 
-        virtual Coincidence_Contour* coincidence_contour(){return coincidence_contour_;}
-        
-        virtual void auxiliary_functions(std::vector<AuxiliaryFunction*> &vaf){vaf = auxiliaryfunctions_; return;}
-        
-        virtual RarefactionCurve * rarefaction_curve(){return rarefactioncurve_;}
+    virtual Explicit_Bifurcation_Curves* explicit_bifurcation_curves() {
+        return explicitbifurcationcurves_;
+    }
 
-        virtual HugoniotContinuation * Hugoniot_continuation(){return hugoniotcontinuation_;}
+    virtual DoubleMatrix transformation_matrix() {
+        return transformation_matrix_;
+    }
 
-        virtual WaveCurveFactory * wavecurvefactory(){return wavecurvefactory_;}
+    virtual std::string xlabel() {
+        return xlabel_;
+    }
 
-        virtual Inflection_Curve * inflection_curve(){return inflection_curve_;}
+    virtual std::string ylabel() {
+        return ylabel_;
+    }
 
-        virtual const Coincidence *coincidence(){return coincidence_;}
+    virtual void equation_parameter(std::vector<Parameter*> &ep) {
+        ep = equation_parameter_;
+
+        return;
+    }
+
+    virtual Coincidence_Contour* coincidence_contour() {
+        return coincidence_contour_;
+    }
+
+    virtual void auxiliary_functions(std::vector<AuxiliaryFunction*> &vaf) {
+        vaf = auxiliaryfunctions_;
+        return;
+    }
+
+    virtual RarefactionCurve * rarefaction_curve() {
+        return rarefactioncurve_;
+    }
+
+    virtual HugoniotContinuation * Hugoniot_continuation() {
+        return hugoniotcontinuation_;
+    }
+
+    virtual WaveCurveFactory * wavecurvefactory() {
+        return wavecurvefactory_;
+    }
+
+    virtual Inflection_Curve * inflection_curve() {
+        return inflection_curve_;
+    }
+
+    virtual const Coincidence *coincidence() {
+        return coincidence_;
+    }
+
+    virtual ShockCurve *shock() {
+        return shockcurve_;
+    }
+
+    virtual CompositeCurve *composite() {
+        return compositecurve_;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
 };
 
 #endif // _SUBPHYSICS_

@@ -251,7 +251,7 @@ int WaveCurveFactory::Liu_half_wavecurve(const ReferencePoint &ref,
 
             is_first = false;
 
-
+           
             std::cout << "WaveCurveFactory, composite completed. Info = " << info_cmp << ", final_direction = " << final_direction << std::endl;
             cmpcurve.final_direction = final_direction;
 
@@ -482,7 +482,7 @@ int WaveCurveFactory::Liu_half_wavecurve(const ReferencePoint &ref,
 //
 // TODO: Create the rarefaction, shock and composite externally, pass them here, use them as pointers in all the methods of WaveCurve.
 //
-int WaveCurveFactory::wavecurve(const RealVector &initial_point, int family, int increase, HugoniotContinuation *h, WaveCurve &hwc, 
+int WaveCurveFactory::wavecurve(int type, const RealVector &initial_point, int family, int increase, HugoniotContinuation *h, WaveCurve &hwc, 
                                 int &wavecurve_stopped_because, int &edge){
 
     // Initialize.
@@ -733,7 +733,7 @@ int WaveCurveFactory::wavecurve_from_wavecurve(const WaveCurve &c, const RealVec
 
     int family = (c.increase == SPEED_INCREASE) ? c.family + 1 : c.family - 1;
 
-    return wavecurve(closest_point, family, c.increase, h, hwc, wavecurve_stopped_because, edge);
+    return wavecurve(WAVECURVEFACTORY_GENERIC_POINT, closest_point, family, c.increase, h, hwc, wavecurve_stopped_because, edge);
 }
 
 //int WaveCurveFactory::wavecurve_from_wavecurve(const WaveCurve &c, const RealVector &p, HugoniotContinuation *h, WaveCurve &hwc, int &wavecurve_stopped_because, int &edge){
@@ -776,7 +776,7 @@ void WaveCurveFactory::R_regions(HugoniotContinuation *h, const WaveCurve &c, st
 
         int wavecurve_stopped_because, edge;
 
-        wavecurve(c.wavecurve[i].curve[0], family, increase, h, w, 
+        wavecurve(WAVECURVEFACTORY_GENERIC_POINT, c.wavecurve[i].curve[0], family, increase, h, w, 
                   wavecurve_stopped_because, edge);
 
         curves.push_back(w);

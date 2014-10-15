@@ -540,6 +540,8 @@ void CompositeCurve::add_point_to_curve(const RealVector &p, int back, const Cur
 //    curve.speed.push_back(point_eigenvalues(family));
     curve.speed.push_back(rarcurve.speed[back]);
 
+    
+
     return;
 }
 

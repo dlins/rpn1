@@ -23,7 +23,7 @@ void HugoniotContinuation_nDnD::jet_Hugoniot(const RealVector &F, const DoubleMa
     //       URGENT!!! DUE YESTERDAY!!!
     //
 //    int eq_number = n - 1; // = 2.
-    int eq_number = 2; // = 2.
+    int eq_number = 0; // Equation number MUST be between 0 and (n - 1), or else a segfault will happen.
 //    int i = 0;
 
     int neqm1 = F.size() - 1;

@@ -1,5 +1,6 @@
 #include "Hugoniot_Curve.h"
 
+
 // This is the classified Hugoniot given by segments
 //
 int Hugoniot_Curve::classified_curve(const FluxFunction *f, const AccumulationFunction *a, 

@@ -7,7 +7,7 @@
         
         
         
-                <PHYSICSCONFIG name="fluxfunction">
+             <!--   <PHYSICSCONFIG name="fluxfunction">
                     <PHYSICSPARAM name="grw" position="0" value ="1.0" />
                     <PHYSICSPARAM name="grg" position="1" value ="1.0" />
                     <PHYSICSPARAM name="gro" position="2" value ="1.0" />
@@ -34,7 +34,7 @@
                     <PHYSICSPARAM name="epsl" position="20" value ="0.0" />
 
 
-                </PHYSICSCONFIG>
+                </PHYSICSCONFIG>-->
 
             </PHYSICS>
 

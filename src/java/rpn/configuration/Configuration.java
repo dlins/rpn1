@@ -18,7 +18,9 @@ public abstract class Configuration extends Observable{
     private HashMap<String, Configuration> configurationMap_;
     private String name_;
     private String type_;
-
+    
+    
+    
     public Configuration(ConfigurationProfile profile) {
 
         configurationMap_ = new HashMap<String, Configuration>();
@@ -202,6 +204,12 @@ public abstract class Configuration extends Observable{
     public String getType() {
         return type_;
     }
+    
+    protected void setType(String type){
+        
+        type_=type;
+    }
+    
 
     @Override
     public String toString() {

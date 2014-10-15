@@ -164,7 +164,7 @@ public class SpinButtonCreator extends UIComponentCreator {
             RealVector min = boundary.getMinimums();
             RealVector max = boundary.getMaximums();
 
-            RPNUMERICS.setResolution(min, max, configuration_.getName(), RPnDataModule.processResolution(resolution.toString()));
+//            RPNUMERICS.setResolution(min, max, configuration_.getName(), RPnDataModule.processResolution(resolution.toString()));
 
         }
     }

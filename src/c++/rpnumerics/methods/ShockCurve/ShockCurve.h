@@ -188,10 +188,7 @@ class ShockCurve {
         virtual void find_system(const RealVector &in, const ReferencePoint &reference_point, double lambda_ref, DoubleMatrix &nablaH, RealVector &H);
         //virtual void find_system(const RealVector &in, double lambda_ref, DoubleMatrix &nablaH, RealVector &H);
 
-        #ifdef USECANVAS
-        Canvas *canvas;
-        CanvasMenuScroll *scroll;
-        #endif
+       
 
         // Use (or don't) interruption functions.
         // If no one is used, the shock is allowed to reach the boundary.
@@ -305,9 +302,7 @@ class ShockCurve {
 
         HugoniotContinuation * get_HugoniotContinuation(){return hc;}
 
-        #ifdef USECANVAS
-        void set_graphics(Canvas *c, CanvasMenuScroll *s){canvas = c; scroll = s; return;}
-        #endif
+       
 };
 
 #endif // _SHOCKCURVE_

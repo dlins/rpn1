@@ -15,9 +15,6 @@ public  class WaveCurveOrbitCalc extends OrbitCalc  {
     //
 
     private int familyIndex_;
-    
-
-
 
     //
     // Constructors/Initializers
@@ -30,11 +27,6 @@ public  class WaveCurveOrbitCalc extends OrbitCalc  {
         configuration_= RPNUMERICS.getConfiguration("fundamentalcurve");
         
     }
-    
-    
-     
-    
-    
     
 
     //
