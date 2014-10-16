@@ -46,7 +46,7 @@ StoneSubPhysics::StoneSubPhysics() : ThreePhaseFlowSubPhysics(){
 
     // ThreePhaseFlowImplicitHugoniot.
     //
-    ThreePhaseImplicitHugoniotCurve *tpfih = new ThreePhaseImplicitHugoniotCurve(this);
+    ThreePhaseFlowImplicitHugoniotCurve *tpfih = new ThreePhaseFlowImplicitHugoniotCurve(this);
     hugoniot_curve.push_back(tpfih);
 
     // Explicit Bifurcation Curves.

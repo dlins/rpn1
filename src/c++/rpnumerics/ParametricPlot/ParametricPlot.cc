@@ -16,8 +16,7 @@ int ParametricPlot::find_initial_point_within_domain(RealVector (*f)(void*, doub
         RealVector old_point;
 
         while (phi <= phi_final){
-           
-
+            
             old_point = point;
 
             point = (*f)(obj, phi + delta_phi);
@@ -116,7 +115,7 @@ void ParametricPlot::find_curve(RealVector (*f)(void*, double),
         if (b->inside(point)){
             curve.curve.push_back(point);
 
-           
+            
         }
         else {
             RealVector boundary_point;

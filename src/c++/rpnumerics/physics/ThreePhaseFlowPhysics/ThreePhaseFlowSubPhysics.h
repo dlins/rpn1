@@ -10,7 +10,7 @@
 #include "HugoniotContinuation_nDnD.h"
 #include "StoneAccumulation.h"
 #include "ThreePhaseFlowPermeability.h"
-#include "ThreePhaseImplicitHugoniotCurve.h"
+#include "ThreePhaseFlowImplicitHugoniotCurve.h"
 #include "ThreePhaseFlowWaveCurveFactory.h"
 
 class ThreePhaseFlowSubPhysics : public SubPhysics {

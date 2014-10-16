@@ -74,6 +74,11 @@ class Thermodynamics {
         int SuperCriticEnthalpyVol_jet(const double yw, const double Theta, int degree, JetMatrix &Hsij) const;
         int SuperCriticEnthalpyVol_jet(const double Theta, int degree, JetMatrix &Hsij) const;
 
+        static int static_SuperCriticEnthalpyVol_jet(void *obj, const RealVector &state, int degree, JetMatrix &jm){
+            return ((Thermodynamics*)obj)->SuperCriticEnthalpyVol_jet(state(0) /*yw*/, state(1) /*Theta*/, degree, jm);
+        }
+
+
         int AqueousEnthalpyVol_jet(const double xc, const double Theta, int degree, JetMatrix &Haj) const;
         int AqueousEnthalpyVol_jet(const double Theta, int degree, JetMatrix &Haj) const;
 
@@ -133,6 +138,13 @@ class Thermodynamics {
 
         // Convert from u to U (dimensioned -> dimensionless)
         static double u2U(double u){return u/U_typical_;}
+
+//        void test_jets(){
+//            JetTester(&static_SuperCriticEnthalpyVol_jet, this);
+//            JetTester(&static_AqueousEnthalpyVol_jet, this);
+
+//            return;
+//        }
 };
 
 #endif //  _THERMODYNAMICS_

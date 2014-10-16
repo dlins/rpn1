@@ -235,7 +235,7 @@ void Curve::disable_intersecting_cells(const RealVector &p, const RealVector &q,
             return;
         }
 
-//        TestTools::pause();
+
     }
 
     g->cell_type(q_row, q_col) = CELL_IS_INVALID;

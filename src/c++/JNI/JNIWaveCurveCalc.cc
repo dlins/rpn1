@@ -202,7 +202,17 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc
     WaveCurveFactory *factory = RpNumerics::physicsVector_->at(0)->wavecurvefactory();
     HugoniotContinuation * shock = RpNumerics::physicsVector_->at(0)->Hugoniot_continuation();
 
-    factory->wavecurve(originNumber,realVectorInput, familyNumber, timeDirection, shock, *hwc, reason_why, s);
+int info =    factory->wavecurve(originNumber,realVectorInput, familyNumber, timeDirection, shock, *hwc, reason_why, s);
+
+
+if (info== WAVECURVEFACTORY_INVALID_PARAMETERS){
+    
+    delete hwc;
+    
+    return NULL;
+    
+    
+}
 
 
 

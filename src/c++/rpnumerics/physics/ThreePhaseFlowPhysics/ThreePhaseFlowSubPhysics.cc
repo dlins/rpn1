@@ -15,6 +15,16 @@ ThreePhaseFlowSubPhysics::ThreePhaseFlowSubPhysics() : SubPhysics() {
     O_vertex(0) = 0.0;
     O_vertex(1) = 1.0;
 
+    
+    
+//    
+//    cout << G_vertex << endl;
+//    cout<< W_vertex<<endl;
+//    cout<<W_vertex<<endl;
+//    
+    
+    
+    
     info_subphysics_ = std::string("ThreePhaseFlow base class");
     xlabel_ = std::string("sw");
     ylabel_ = std::string("so");

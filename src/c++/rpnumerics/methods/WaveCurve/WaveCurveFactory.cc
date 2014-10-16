@@ -54,6 +54,7 @@ int WaveCurveFactory::Liu_half_wavecurve(const ReferencePoint &ref,
                                          int increase, 
                                          int initial_curve, 
                                          const RealVector &initial_direction, 
+                                         void *linobj, double (*linear_function)(void *o, const RealVector &p),
                                          WaveCurve &hwc,
                                          int &wavecurve_stopped_because, 
                                          int &edge){
@@ -101,6 +102,7 @@ int WaveCurveFactory::Liu_half_wavecurve(const ReferencePoint &ref,
                                                    &current_curve_initial_direction,
                                                    odesolver,
                                                    deltaxi,
+                                                   linobj, linear_function,
                                                    rarcurve,
                                                    inflection_point,
                                                    final_direction,
@@ -205,6 +207,13 @@ int WaveCurveFactory::Liu_half_wavecurve(const ReferencePoint &ref,
                         std::cout << "WaveCurveFactory: the rarefaction claims it finished ok, but returned zero points!" << std::endl;
                     }
                 }
+                else if (rar_stopped_because == RAREFACTION_REACHED_LINE){
+                    wavecurve_stopped_because = WAVECURVE_REACHED_LINE;
+
+                    std::cout << "WaveCurveFactory reached the line." << std::endl;
+
+                    return WAVECURVE_OK;
+                }
                 // TODO: add Panters' case. lambda = 0!!!
 //                else{
 //                }
@@ -241,6 +250,7 @@ int WaveCurveFactory::Liu_half_wavecurve(const ReferencePoint &ref,
                                                  hwc.wavecurve[rarefaction_list.back()].curve[last_point_in_rarefaction.back()],
                                                  last_point_in_rarefaction.back(), 
                                                  odesolver, deltaxi,
+                                                 linobj, linear_function,
                                                  future_composite_type, // COMPOSITE_BEGINS_AT_INFLECTION or COMPOSITE_AFTER_COMPOSITE.
                                                  family, 
                                                  new_rarcurve,
@@ -251,7 +261,7 @@ int WaveCurveFactory::Liu_half_wavecurve(const ReferencePoint &ref,
 
             is_first = false;
 
-           
+
             std::cout << "WaveCurveFactory, composite completed. Info = " << info_cmp << ", final_direction = " << final_direction << std::endl;
             cmpcurve.final_direction = final_direction;
 
@@ -264,6 +274,7 @@ int WaveCurveFactory::Liu_half_wavecurve(const ReferencePoint &ref,
                 for (int i = 0; i < cmpcurve.curve.size(); i++) cmpcurve.back_curve_pointer[i] = rarefaction_list.back();
 
                 std::cout << "cmpcurve.back_curve_index = " << cmpcurve.back_curve_index << std::endl;
+                std::cout << "composite_stopped_because = " << composite_stopped_because << std::endl;
 
                 
                 hwc.wavecurve.push_back(cmpcurve);
@@ -305,6 +316,13 @@ int WaveCurveFactory::Liu_half_wavecurve(const ReferencePoint &ref,
 
                     return WAVECURVE_OK;
                 }
+                else if (composite_stopped_because == COMPOSITE_REACHED_LINE){
+                    wavecurve_stopped_because = WAVECURVE_REACHED_LINE;
+
+                    std::cout << "WaveCurveFactory: leaving Composite (reached line)." << std::endl;
+
+                    return WAVECURVE_OK;
+                }
             }
             else { // info_cmp == COMPOSITE_ERROR
                 return  WAVECURVE_ERROR;
@@ -331,6 +349,7 @@ int WaveCurveFactory::Liu_half_wavecurve(const ReferencePoint &ref,
                                             SHOCK_SIGMA_EQUALS_LAMBDA_OF_FAMILY_AT_RIGHT,
                                             USE_ALL_FAMILIES, // TODO: Only for the time being! The correct one is USE_ALL_FAMILIES.
                                             STOP_AFTER_TRANSITION /*int after_transition*/,
+                                            linobj, linear_function,
                                             shkcurve, 
                                             stop_right_index,
                                             stop_right_family,
@@ -459,6 +478,13 @@ int WaveCurveFactory::Liu_half_wavecurve(const ReferencePoint &ref,
 
                     return WAVECURVE_OK;
                 }
+                else if (shock_stopped_because == SHOCK_REACHED_LINE){
+                    wavecurve_stopped_because = WAVECURVE_REACHED_LINE;
+
+                    std::cout << "WaveCurveFactory, shock reached line." << std::endl;
+
+                    return WAVECURVE_OK;
+                }
                 else {
 
 
@@ -482,7 +508,9 @@ int WaveCurveFactory::Liu_half_wavecurve(const ReferencePoint &ref,
 //
 // TODO: Create the rarefaction, shock and composite externally, pass them here, use them as pointers in all the methods of WaveCurve.
 //
-int WaveCurveFactory::wavecurve(int type, const RealVector &initial_point, int family, int increase, HugoniotContinuation *h, WaveCurve &hwc, 
+int WaveCurveFactory::wavecurve(int type, const RealVector &initial_point, int family, int increase, HugoniotContinuation *h, 
+                                void *linobj, double (*linear_function)(void *o, const RealVector &p),
+                                WaveCurve &hwc, 
                                 int &wavecurve_stopped_because, int &edge){
 
     // Initialize.
@@ -507,13 +535,13 @@ int WaveCurveFactory::wavecurve(int type, const RealVector &initial_point, int f
     std::cout << "initial_direction = " << initial_direction << ", fam. = " << family << ", inc. = " << increase << std::endl;
 
 
-    Liu_half_wavecurve(ref, initial_point, family, increase, RAREFACTION_CURVE,  initial_direction, hwc, wavecurve_stopped_because, edge);
+    Liu_half_wavecurve(ref, initial_point, family, increase, RAREFACTION_CURVE,  initial_direction, linobj, linear_function, hwc, wavecurve_stopped_because, edge);
 
     hwc.beginnig_of_second_half = hwc.wavecurve.size();
 
 
 
-    Liu_half_wavecurve(ref, initial_point, family, increase, SHOCK_CURVE,       -initial_direction, hwc, wavecurve_stopped_because, edge);
+    Liu_half_wavecurve(ref, initial_point, family, increase, SHOCK_CURVE,       -initial_direction, linobj, linear_function, hwc, wavecurve_stopped_because, edge);
 
     for (int i = 0; i < hwc.wavecurve.size(); i++) std::cout << "Curve\'s size = " << hwc.wavecurve[i].curve.size() << std::endl;
 

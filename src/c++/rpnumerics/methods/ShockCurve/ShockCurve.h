@@ -61,8 +61,10 @@
 
 #define SHOCK_COMPLEX_EIGENVALUE_AT_FAMILY                               305
 #define SHOCK_REACHED_BOUNDARY                                           306
+#define SHOCK_REACHED_LINE                                               307
 
 
+// For test purposes only. DELETE LATER
 
 #define DONT_USE_INTERRUPTION_FUNCTIONS            1
 #define USE_INTERRUPTION_FUNCTIONS_SPECIFIC_FAMILY 2
@@ -189,7 +191,6 @@ class ShockCurve {
         //virtual void find_system(const RealVector &in, double lambda_ref, DoubleMatrix &nablaH, RealVector &H);
 
        
-
         // Use (or don't) interruption functions.
         // If no one is used, the shock is allowed to reach the boundary.
         int use_interruption_functions;
@@ -261,6 +262,33 @@ class ShockCurve {
                                  int type, int left_subtype, int right_subtype,
                                  int what_family_to_use,
                                  int after_transition,
+                                 Curve &shockcurve, 
+                                 std::vector<int> &transition_current_index,
+                                 std::vector<int> &transition_current_family,
+                                 std::vector<int> &transition_reference_index,
+                                 std::vector<int> &transition_reference_family, 
+                                 int &shock_stopped_because,
+                                 int &edge){
+
+            return curve_engine(r, in, initial_direction, family, 
+                                type, left_subtype, right_subtype,
+                                what_family_to_use,
+                                after_transition,
+                                0, 0,
+                                shockcurve, 
+                                transition_current_index,
+                                transition_current_family,
+                                transition_reference_index,
+                                transition_reference_family, 
+                                shock_stopped_because,
+                                edge);
+        }
+
+        virtual int curve_engine(const ReferencePoint &r, const RealVector &in, const RealVector &initial_direction, int family, 
+                                 int type, int left_subtype, int right_subtype,
+                                 int what_family_to_use,
+                                 int after_transition,
+                                 void *linobj, double (*linear_function)(void *o, const RealVector &p),
                                  Curve &shockcurve, 
                                  std::vector<int> &transition_current_index,
                                  std::vector<int> &transition_current_family,

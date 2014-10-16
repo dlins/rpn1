@@ -60,10 +60,7 @@ class NewRarefactionCurve {
 
         void add_point_to_curve(const RealVector &p, Curve &curve);
 
-        #ifdef TEST
-            Canvas *canvas;
-            CanvasMenuScroll *scroll;
-        #endif
+       
     public:
         NewRarefactionCurve(Equations *eq, const Boundary *bb);
         NewRarefactionCurve(const AccumulationFunction *gg, const FluxFunction *ff, const Boundary *bb);
@@ -109,10 +106,7 @@ class NewRarefactionCurve {
         friend class WaveCurveFactory;
         friend class ShockCurve;
 
-        #ifdef TEST
-        void set_canvas(Canvas *c, CanvasMenuScroll *s){canvas = c; scroll = s; return;}
-        #endif
-
+       
 //        static int curve(NewRarefactionCurve *obj, const RealVector &initial_point,
 //                  int curve_family,
 //                  int increase,

@@ -6,6 +6,7 @@
 #include "LSODE.h"
 #include "CoreyQuadExplicitHugoniotCurve.h"
 #include "CoreyQuadPermeability.h"
+#include "CoreyQuadTransitionalLine.h"
 
 class CoreyQuadSubPhysics : public ThreePhaseFlowSubPhysics {
     private:

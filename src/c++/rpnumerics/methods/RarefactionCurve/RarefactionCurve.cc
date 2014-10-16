@@ -272,6 +272,7 @@ int RarefactionCurve::curve(const RealVector &initial_point,
                             const RealVector *direction,
                             const ODE_Solver *odesolver, // Should it be another one for the Bisection? Can it really be const? If so, how to use initialize()?
                             double deltaxi,
+                            void *linobj, double (*linear_function)(void *o, const RealVector &p),
                             Curve &rarcurve,
                             std::vector<RealVector> &inflection_points, // Will these survive/be added to the Curve class?
                             RealVector &final_direction,
@@ -290,6 +291,12 @@ int RarefactionCurve::curve(const RealVector &initial_point,
     rarcurve.clear();
     rarcurve.type = RAREFACTION_CURVE;
     rarcurve.family = curve_family;
+
+    // Initialize the intersection of the rarefaction and a line.
+    //
+    double old_linear_function_value = 0.0;
+    if (linear_function != 0) old_linear_function_value = (*linear_function)(linobj, initial_point);
+    double linear_function_value = old_linear_function_value;
 
     inflection_points.clear();
 
@@ -338,6 +345,7 @@ int RarefactionCurve::curve(const RealVector &initial_point,
 
     while (true){
         if (rarcurve.curve.size() > 8000) return RAREFACTION_OK;
+
         int info_odesolver = odesolver->integrate_step(&RarefactionCurve::field, 
                                                       (int*)this, 0 /*double *function_data*/,
                                                       xi,      point,
@@ -473,6 +481,32 @@ int RarefactionCurve::curve(const RealVector &initial_point,
                 }
             }
         
+        }
+
+        if (linear_function != 0){
+            linear_function_value = (*linear_function)(linobj, next_point);
+
+            if (linear_function_value*old_linear_function_value < 0.0){
+                double alpha = linear_function_value/(linear_function_value - old_linear_function_value);
+
+                RealVector point_on_line = alpha*point + (1.0 - alpha)*next_point;
+
+                add_point_to_curve(point_on_line, rarcurve);
+
+                reason_why = RAREFACTION_REACHED_LINE;
+                rarcurve.reason_to_stop = RAREFACTION_REACHED_LINE;
+
+                rarcurve.last_point = point_on_line;
+                rarcurve.final_direction = next_point - point; //rarcurve.curve.back() - rarcurve.curve[rarcurve.curve.size() - 2];
+                normalize(rarcurve.final_direction);
+
+                final_direction = rarcurve.final_direction;
+
+
+
+                return RAREFACTION_OK;
+            }
+            else old_linear_function_value = linear_function_value;
         }
 
 //        // Has the rarefaction curve reached the coincidence? 

@@ -310,7 +310,7 @@ int ShockCurve::find_point_for_sigma_equal_reference_lambda(const RealVector &in
         }
 
         iteration_point = iteration_point - deviation; // was: - deviation
-        std::cout << "Newton. Iteration = " << iterations << ", nablaH =\n" << nablaH << "det = " << det(nablaH) << ", deviation =\n   " << deviation << std::endl << "solution = " << iteration_point << std::endl;
+//        std::cout << "Newton. Iteration = " << iterations << ", nablaH =\n" << nablaH << "det = " << det(nablaH) << ", deviation =\n   " << deviation << std::endl << "solution = " << iteration_point << std::endl;
 
 
         // Verify that the point found by the Newton method is inside the
@@ -328,32 +328,7 @@ int ShockCurve::find_point_for_sigma_equal_reference_lambda(const RealVector &in
 
         iterations++;
 
-            #ifdef USECANVAS
-                if (canvas != 0 && scroll != 0){
-                    std::vector<RealVector> temp_vec;
-                    temp_vec.push_back(iteration_point);
-                    
-                    std::vector<std::string> sigma;
-
-                    int n = iteration_point.size();
-
-                    JetMatrix JM_F(n), JM_G(n);
-                    f->jet(WaveState(iteration_point), JM_F, 0);
-                    g->jet(WaveState(iteration_point), JM_G, 0);
-
-                    std::stringstream ss;
-                    ss << hc->sigma(JM_F.function(), JM_G.function());
-
-                    sigma.push_back(ss.str());
-
-                    Curve2D *test = new Curve2D(temp_vec, 0.0/255.0, 0.0/255.0, 255.0/255.0, sigma, CURVE2D_MARKERS | CURVE2D_SOLID_LINE | CURVE2D_INDICES);
-                    canvas->add(test);
-
-                    std::stringstream buf;
-                    buf << "Shock, Newton. Iteration = " << iterations << ", p = " << iteration_point << ". Sigma = " << sigma[0];
-                    scroll->add(buf.str().c_str(), canvas, test);
-                }
-            #endif
+           
     }
 
     std::cout << "*** Found_point = " << found_point << std::endl << std::endl << std::endl;
@@ -605,7 +580,7 @@ void ShockCurve::add_point(Curve &c, const RealVector &p){
     if (c.curve.size() == 1) c.speed.push_back(e[current_family].r);
     else                     c.speed.push_back(hc->sigma(Fjet.function(), Gjet.function()));
 
-    std::cout << "Adding shock point. p = " << p << ", speed = " << c.speed.back() << std::endl;
+//    std::cout << "Adding shock point. p = " << p << ", speed = " << c.speed.back() << std::endl;
 
     return;
 }
@@ -688,6 +663,7 @@ int ShockCurve::curve_engine(const ReferencePoint &r, const RealVector &in, cons
                              int type, int left_subtype, int right_subtype,
                              int what_family_to_use,
                              int after_transition,
+                             void *linobj, double (*linear_function)(void *o, const RealVector &p),
                              Curve &shockcurve, 
                              std::vector<int> &transition_current_index,
                              std::vector<int> &transition_current_family,
@@ -718,6 +694,12 @@ int ShockCurve::curve_engine(const ReferencePoint &r, const RealVector &in, cons
 
     RealVector previous_direction = initial_direction;
     normalize(previous_direction);
+
+    // Initialize the intersection of the rarefaction and a line.
+    //
+    double old_linear_function_value = 0.0;
+    if (linear_function != 0) old_linear_function_value = (*linear_function)(linobj, previous_point);
+    double linear_function_value = old_linear_function_value;
 
     double step_size = hc->default_step_size();
     int number_of_steps_with_unchanged_size = 0;
@@ -760,7 +742,7 @@ int ShockCurve::curve_engine(const ReferencePoint &r, const RealVector &in, cons
         double sigma_between_points;
         RealVector Hugoniot_direction;
 
-        std::cout << "Shock. Prev. point = " << previous_point << ", prev. dir. = " << previous_direction << std::endl;
+//        std::cout << "Shock. Prev. point = " << previous_point << ", prev. dir. = " << previous_direction << std::endl;
 
         int info_curve_point = hc->curve_point(previous_point, previous_sigma_between_points,
                                                previous_direction, 
@@ -768,8 +750,8 @@ int ShockCurve::curve_engine(const ReferencePoint &r, const RealVector &in, cons
                                                Hugoniot_intersection, sigma_between_points,
                                                Hugoniot_direction);
 
-        std::cout << "       Curr. point = " << Hugoniot_intersection << ", curr. dir. = " << Hugoniot_direction << std::endl;
-        std::cout << "       sigma_between_points = " << sigma_between_points << std::endl;
+//        std::cout << "       Curr. point = " << Hugoniot_intersection << ", curr. dir. = " << Hugoniot_direction << std::endl;
+//        std::cout << "       sigma_between_points = " << sigma_between_points << std::endl;
 
         // Update sigma_between_points
         previous_sigma_between_points = sigma_between_points;
@@ -856,7 +838,29 @@ int ShockCurve::curve_engine(const ReferencePoint &r, const RealVector &in, cons
         if (shockcurve.curve.size() > 0){
             RealVector r;
             int info_intersect = b->intersection(previous_point, Hugoniot_intersection, r, edge);
-            std::cout << "Intersection: r = " << r << std::endl;
+//            std::cout << "Intersection: r = " << r << std::endl;
+
+            if (linear_function != 0){
+                linear_function_value = (*linear_function)(linobj, Hugoniot_intersection);
+
+                if (linear_function_value*old_linear_function_value < 0.0){
+                    double alpha = linear_function_value/(linear_function_value - old_linear_function_value);
+
+                    RealVector point_on_line = alpha*previous_point + (1.0 - alpha)*Hugoniot_intersection;
+
+                    add_point(shockcurve, point_on_line);
+
+                    shock_stopped_because = SHOCK_REACHED_LINE;
+                    shockcurve.reason_to_stop = SHOCK_REACHED_LINE;
+
+                    shockcurve.last_point = point_on_line;
+                    shockcurve.final_direction = Hugoniot_intersection - previous_point; //rarcurve.curve.back() - rarcurve.curve[rarcurve.curve.size() - 2];
+                    normalize(shockcurve.final_direction);
+
+                    return SHOCKCURVE_OK;
+                }
+                else old_linear_function_value = linear_function_value;
+            }
 
             // Both points are inside: carry on.
             if (info_intersect == BOUNDARY_INTERSECTION_BOTH_INSIDE){
@@ -889,7 +893,6 @@ int ShockCurve::curve_engine(const ReferencePoint &r, const RealVector &in, cons
                 //return HUGONIOTCONTINUATION_CURVE_OK;
             }
         }
-
 
         // NEW LINE BELOW, update Hugoniot_direction using Hugoniot_intersection.
         //

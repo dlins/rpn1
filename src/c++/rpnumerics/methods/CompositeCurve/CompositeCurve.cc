@@ -552,6 +552,7 @@ int CompositeCurve::curve(const AccumulationFunction *RarAccum, const FluxFuncti
                           int last_point_in_rarefaction,
                           const ODE_Solver *odesolver,
                           double deltaxi,
+                          void *linobj, double (*linear_function)(void *o, const RealVector &p),
                           int where_composite_begins, int fam, 
                           Curve &new_rarcurve,
                           Curve &compositecurve,
@@ -590,6 +591,12 @@ int CompositeCurve::curve(const AccumulationFunction *RarAccum, const FluxFuncti
     //
     add_point_to_curve(composite_initial_point, last_point_in_rarefaction, rarcurve, compositecurve);
     new_rarcurve.curve.push_back(rarcurve.curve[last_point_in_rarefaction]);
+
+    // Initialize the intersection of the rarefaction and a line.
+    //
+    double old_linear_function_value = 0.0;
+    if (linear_function != 0) old_linear_function_value = (*linear_function)(linobj, composite_initial_point);
+    double linear_function_value = old_linear_function_value;
 
     // Initialize the composite curve.
     //
@@ -844,6 +851,30 @@ int CompositeCurve::curve(const AccumulationFunction *RarAccum, const FluxFuncti
                 compositecurve.reason_to_stop = COMPOSITE_ERROR_AT_DETERMINANT;
                 return COMPOSITE_ERROR_AT_DETERMINANT;
             }
+        }
+
+        if (linear_function != 0){
+            linear_function_value = (*linear_function)(linobj, point_on_composite);
+
+            if (linear_function_value*old_linear_function_value < 0.0){
+                double alpha = linear_function_value/(linear_function_value - old_linear_function_value);
+
+                RealVector point_on_line = alpha*prev_point_on_composite + (1.0 - alpha)*point_on_composite;
+
+                add_point_to_curve(point_on_line, index_of_corresponding_point_in_rarefaction, rarcurve, compositecurve);
+
+                reason_why = COMPOSITE_REACHED_LINE;
+                compositecurve.reason_to_stop = COMPOSITE_REACHED_LINE;
+
+                compositecurve.last_point = point_on_line;
+                compositecurve.final_direction = point_on_composite - prev_point_on_composite; //rarcurve.curve.back() - rarcurve.curve[rarcurve.curve.size() - 2];
+                normalize(compositecurve.final_direction);
+
+                final_direction = compositecurve.final_direction;
+
+                return COMPOSITE_OK;
+            }
+            else old_linear_function_value = linear_function_value;
         }
                 
         // Check if the beginning of the rarefaction was reached.

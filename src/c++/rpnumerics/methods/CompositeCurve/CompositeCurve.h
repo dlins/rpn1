@@ -2,6 +2,9 @@
 #define _COMPOSITECURVE_
 
 
+
+// For test purposes only. DELETE LATER
+
 #include <cmath> // For std::abs.
 #include <algorithm>
 
@@ -71,10 +74,14 @@ class WaveCurve;
 #define COMPOSITE_REACHED_DOUBLE_CONTACT 101
 #endif
 
+#ifndef COMPOSITE_REACHED_LINE
+#define COMPOSITE_REACHED_LINE           102
+#endif
+
 // Equivalent to "Rarefaction depleted."
 //
 #ifndef COMPOSITE_COMPLETED    
-#define COMPOSITE_COMPLETED              102
+#define COMPOSITE_COMPLETED              103
 #endif
 
 #ifndef SECUNDARY_BIFURCATION_DETECTED    
@@ -214,6 +221,38 @@ class CompositeCurve {
                   Curve &compositecurve,
                   RealVector &final_direction,
                   int &reason_why,
+                  int &edge){
+
+            return curve(RarAccum, RarFlux, RarBoundary, rarcurve,
+                         composite_initial_point,
+                         last_point_in_rarefaction,
+                         odesolver,
+                         deltaxi,
+                         0, 0,
+                         where_composite_begins, fam, 
+                         new_rarcurve,
+                         compositecurve,
+                         final_direction,
+                         reason_why,
+                         edge);
+        }
+
+        int curve(const AccumulationFunction *RarAccum, const FluxFunction *RarFlux,
+                  const Boundary *RarBoundary, 
+                  const Curve &rarcurve,
+//                  std::vector<RealVector> &rarcurve, std::vector<double> &lambda,
+                  const RealVector &composite_initial_point,
+                  int last_point_in_rarefaction,
+                  const ODE_Solver *odesolver,
+                  double deltaxi,
+                  void *linobj, double (*linear_function)(void *o, const RealVector &p),
+                  int where_composite_begins, int fam, 
+//                  std::vector<RealVector> &newrarcurve,
+//                  std::vector<RealVector> &compositecurve,
+                  Curve &new_rarcurve,
+                  Curve &compositecurve,
+                  RealVector &final_direction,
+                  int &reason_why,
                   int &edge);
 
         int correct_last_point(const ODE_Solver *odesolver, double deltaxi, WaveCurve &wavecurve);
@@ -231,6 +270,7 @@ class CompositeCurve {
 
 //        static int characteristic_shock_signal_event(const RealVector &where, double &diff_lambda, int *obj, int * /*not used*/);
 
+        
 };
 
 #endif // _COMPOSITECURVE_

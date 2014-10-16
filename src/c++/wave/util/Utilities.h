@@ -59,6 +59,10 @@ class Utilities {
         //
         static int Bhaskara(double b, double c, double &x1, double &x2);
         static int Bhaskara(double a, double b, double c, double &x1, double &x2);
+
+        template <typename T> static int sgn(T val) {
+            return (T(0) < val) - (val < T(0));
+        }
 };
 
 #endif // _UTILITIES_

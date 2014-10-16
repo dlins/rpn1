@@ -360,13 +360,13 @@ JNIEXPORT jobjectArray JNICALL Java_rpnumerics_RPNUMERICS_getWaveCurveCaseNames
 
 
     for (int i = 0; i < RpNumerics::waveCurveConfigVector_->at(0)->getNames().size(); i++) {
-        
+
         jstring caseName = env->NewStringUTF(RpNumerics::waveCurveConfigVector_->at(0)->getNames().at(i).c_str());
         env->SetObjectArrayElement(waveCurveCasesArray, i, caseName);
-        
+
     }
-        
-    
+
+
     return waveCurveCasesArray;
 
 
@@ -925,7 +925,28 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_initNative(JNIEnv * env, jclas
 
 
     if (physicsStringName.compare("CoreyQuad") == 0) {
-        RpNumerics::physicsVector_->push_back(new CoreyQuadSubPhysics());
+
+
+
+        ThreePhaseFlowSubPhysics * subphysics = (ThreePhaseFlowSubPhysics*) new CoreyQuadSubPhysics();
+        
+
+
+//
+//        cout << subphysics->B() << endl;
+//        cout << subphysics->D() << endl;
+//        cout << subphysics->E() << endl;
+//        cout << subphysics->G() << endl;
+//
+//        cout << subphysics->O() << endl;
+//
+//        cout << subphysics->W() << endl;
+
+
+
+
+
+        RpNumerics::physicsVector_->push_back(subphysics);
     }
 
     RpNumerics::fillHugoniotNames();

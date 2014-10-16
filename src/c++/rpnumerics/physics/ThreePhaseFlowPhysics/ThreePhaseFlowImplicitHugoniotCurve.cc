@@ -1,16 +1,16 @@
-#include "ThreePhaseImplicitHugoniotCurve.h"
+#include "ThreePhaseFlowImplicitHugoniotCurve.h"
 
-ThreePhaseImplicitHugoniotCurve::ThreePhaseImplicitHugoniotCurve(ThreePhaseFlowSubPhysics *s): ImplicitHugoniotCurve(s->flux(), s->accumulation(), s->boundary()), 
+ThreePhaseFlowImplicitHugoniotCurve::ThreePhaseFlowImplicitHugoniotCurve(ThreePhaseFlowSubPhysics *s): ImplicitHugoniotCurve(s->flux(), s->accumulation(), s->boundary()), 
                                                                                                subphysics_(s),
                                                                                                permeability_(s->permeability())  {
      method_ = IMPLICIT_HUGONIOT;
-     info_ = std::string("ThreePhaseImplicitHugoniotCurve");
+     info_ = std::string("ThreePhaseFlowImplicitHugoniotCurve");
 }
 
-ThreePhaseImplicitHugoniotCurve::~ThreePhaseImplicitHugoniotCurve(){
+ThreePhaseFlowImplicitHugoniotCurve::~ThreePhaseFlowImplicitHugoniotCurve(){
 }
 
-int ThreePhaseImplicitHugoniotCurve::classical_function_on_square(ImplicitHugoniotCurve *obj, double *foncub, int i, int j){
+int ThreePhaseFlowImplicitHugoniotCurve::classical_function_on_square(ImplicitHugoniotCurve *obj, double *foncub, int i, int j){
     int is_square = obj->gridvalues()->cell_type(i, j);
     double dg1, dg2;
     double f_aux[4];
@@ -51,13 +51,13 @@ int ThreePhaseImplicitHugoniotCurve::classical_function_on_square(ImplicitHugoni
     return 1;
 }
 
-int ThreePhaseImplicitHugoniotCurve::threephase_function_on_square(ImplicitHugoniotCurve *obj, double *foncub, int i, int j) {
+int ThreePhaseFlowImplicitHugoniotCurve::threephase_function_on_square(ImplicitHugoniotCurve *obj, double *foncub, int i, int j) {
     int is_square = obj->gridvalues()->cell_type(i, j);
 
     RealVector state(2); //state(3);
     RealVector f_aux(4);
 
-    double (*implicit_Hugoniot_function)(ThreePhaseImplicitHugoniotCurve *obj, const RealVector &state) = ((ThreePhaseImplicitHugoniotCurve*)obj)->implicit_Hugoniot_function;
+    double (*implicit_Hugoniot_function)(ThreePhaseFlowImplicitHugoniotCurve *obj, const RealVector &state) = ((ThreePhaseFlowImplicitHugoniotCurve*)obj)->implicit_Hugoniot_function;
 
     for (int l = 0; l < 2; l++) {
         for (int k = 0; k < 2; k++) {
@@ -65,7 +65,7 @@ int ThreePhaseImplicitHugoniotCurve::threephase_function_on_square(ImplicitHugon
             state(1) = obj->gridvalues()->grid(i + l, j + k).component(1);
 /*            state(2) = 1.0 - state(0) - state(1);*/
 
-            f_aux(l * 2 + k) = (*implicit_Hugoniot_function)((ThreePhaseImplicitHugoniotCurve*)obj, state);
+            f_aux(l * 2 + k) = (*implicit_Hugoniot_function)((ThreePhaseFlowImplicitHugoniotCurve*)obj, state);
         }
     }
 
@@ -80,7 +80,7 @@ int ThreePhaseImplicitHugoniotCurve::threephase_function_on_square(ImplicitHugon
     return 1;
 }
 
-int ThreePhaseImplicitHugoniotCurve::function_on_square(double *foncub, int i, int j) {
+int ThreePhaseFlowImplicitHugoniotCurve::function_on_square(double *foncub, int i, int j) {
 //    std::cout << "Here 1" << std::endl;
 
     int info = (*fonsq)(this, foncub, i, j);
@@ -90,7 +90,7 @@ int ThreePhaseImplicitHugoniotCurve::function_on_square(double *foncub, int i, i
     return info;
 }
 
-double ThreePhaseImplicitHugoniotCurve::gas_vertex_function(ThreePhaseImplicitHugoniotCurve *obj, const RealVector &state){
+double ThreePhaseFlowImplicitHugoniotCurve::gas_vertex_function(ThreePhaseFlowImplicitHugoniotCurve *obj, const RealVector &state){
     RealVector redperm(3);
     obj->permeability_->reduced_permeability(state, redperm);
 
@@ -112,7 +112,7 @@ double ThreePhaseImplicitHugoniotCurve::gas_vertex_function(ThreePhaseImplicitHu
     return oil_factor - water_factor;
 }
 
-double ThreePhaseImplicitHugoniotCurve::water_vertex_function(ThreePhaseImplicitHugoniotCurve *obj, const RealVector &state){
+double ThreePhaseFlowImplicitHugoniotCurve::water_vertex_function(ThreePhaseFlowImplicitHugoniotCurve *obj, const RealVector &state){
     RealVector redperm(3);
     obj->permeability_->reduced_permeability(state, redperm);
 
@@ -134,7 +134,7 @@ double ThreePhaseImplicitHugoniotCurve::water_vertex_function(ThreePhaseImplicit
     return oil_factor - gas_factor;
 }
 
-double ThreePhaseImplicitHugoniotCurve::oil_vertex_function(ThreePhaseImplicitHugoniotCurve *obj, const RealVector &state){
+double ThreePhaseFlowImplicitHugoniotCurve::oil_vertex_function(ThreePhaseFlowImplicitHugoniotCurve *obj, const RealVector &state){
     RealVector redperm(3);
     obj->permeability_->reduced_permeability(state, redperm);
 
@@ -156,7 +156,7 @@ double ThreePhaseImplicitHugoniotCurve::oil_vertex_function(ThreePhaseImplicitHu
     return water_factor - gas_factor;
 }
 
-double ThreePhaseImplicitHugoniotCurve::water_gas_side_function(ThreePhaseImplicitHugoniotCurve *obj, const RealVector &state){
+double ThreePhaseFlowImplicitHugoniotCurve::water_gas_side_function(ThreePhaseFlowImplicitHugoniotCurve *obj, const RealVector &state){
     double sw = state(0);
     double sw_ref = obj->reference_point.point(0);
 
@@ -186,7 +186,7 @@ double ThreePhaseImplicitHugoniotCurve::water_gas_side_function(ThreePhaseImplic
     return term1 - term2 + term3;
 }
 
-double ThreePhaseImplicitHugoniotCurve::water_oil_side_function(ThreePhaseImplicitHugoniotCurve *obj, const RealVector &state){
+double ThreePhaseFlowImplicitHugoniotCurve::water_oil_side_function(ThreePhaseFlowImplicitHugoniotCurve *obj, const RealVector &state){
     double sw = state(0);
     double sw_ref = obj->reference_point.point(0);
 
@@ -216,7 +216,7 @@ double ThreePhaseImplicitHugoniotCurve::water_oil_side_function(ThreePhaseImplic
     return term1 - term2 + term3;
 }
 
-double ThreePhaseImplicitHugoniotCurve::oil_gas_side_function(ThreePhaseImplicitHugoniotCurve *obj, const RealVector &state){
+double ThreePhaseFlowImplicitHugoniotCurve::oil_gas_side_function(ThreePhaseFlowImplicitHugoniotCurve *obj, const RealVector &state){
     double so = state(1);
     double so_ref = obj->reference_point.point(1);
 
@@ -246,10 +246,10 @@ double ThreePhaseImplicitHugoniotCurve::oil_gas_side_function(ThreePhaseImplicit
     return term1 - term2 + term3;
 }
 
-void ThreePhaseImplicitHugoniotCurve::curve(const ReferencePoint &ref, int type, std::vector<Curve> &c){
+void ThreePhaseFlowImplicitHugoniotCurve::curve(const ReferencePoint &ref, int type, std::vector<Curve> &c){
     if (subphysics_ != 0) gv = subphysics_->gridvalues();
 
-    if (type == THREEPHASEIMPLICITHUGONIOTCURVE_G_VERTEX){
+    if (type == THREEPHASEFLOWIMPLICITHUGONIOTCURVE_G_VERTEX){
         implicit_Hugoniot_function = &gas_vertex_function;
         fonsq = &threephase_function_on_square;
 
@@ -296,7 +296,7 @@ void ThreePhaseImplicitHugoniotCurve::curve(const ReferencePoint &ref, int type,
 //                    c.push_back(temp_curve);
 //                }
     }
-    else if (type == THREEPHASEIMPLICITHUGONIOTCURVE_W_VERTEX){
+    else if (type == THREEPHASEFLOWIMPLICITHUGONIOTCURVE_W_VERTEX){
         implicit_Hugoniot_function = &water_vertex_function;
         fonsq = &threephase_function_on_square;
 
@@ -343,7 +343,7 @@ void ThreePhaseImplicitHugoniotCurve::curve(const ReferencePoint &ref, int type,
 //                    c.push_back(temp_curve);
 //                }
     }
-    else if (type == THREEPHASEIMPLICITHUGONIOTCURVE_O_VERTEX){
+    else if (type == THREEPHASEFLOWIMPLICITHUGONIOTCURVE_O_VERTEX){
         implicit_Hugoniot_function = &oil_vertex_function;
         fonsq = &threephase_function_on_square;
 
@@ -390,7 +390,7 @@ void ThreePhaseImplicitHugoniotCurve::curve(const ReferencePoint &ref, int type,
 //                    c.push_back(temp_curve);
 //                }
     }
-    else if (type == THREEPHASEIMPLICITHUGONIOTCURVE_GW_SIDE) {
+    else if (type == THREEPHASEFLOWIMPLICITHUGONIOTCURVE_GW_SIDE) {
         implicit_Hugoniot_function = &water_gas_side_function;
         fonsq = &threephase_function_on_square;
 
@@ -406,7 +406,7 @@ void ThreePhaseImplicitHugoniotCurve::curve(const ReferencePoint &ref, int type,
             c.push_back(temp_curve);
         }
     }
-    else if (type == THREEPHASEIMPLICITHUGONIOTCURVE_WO_SIDE) {
+    else if (type == THREEPHASEFLOWIMPLICITHUGONIOTCURVE_WO_SIDE) {
         implicit_Hugoniot_function = &water_oil_side_function;
         fonsq = &threephase_function_on_square;
 
@@ -422,7 +422,7 @@ void ThreePhaseImplicitHugoniotCurve::curve(const ReferencePoint &ref, int type,
             c.push_back(temp_curve);
         }
     }
-    else if (type == THREEPHASEIMPLICITHUGONIOTCURVE_GO_SIDE) {
+    else if (type == THREEPHASEFLOWIMPLICITHUGONIOTCURVE_GO_SIDE) {
         implicit_Hugoniot_function = &oil_gas_side_function;
         fonsq = &threephase_function_on_square;
 

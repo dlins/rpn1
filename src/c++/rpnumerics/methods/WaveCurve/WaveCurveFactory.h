@@ -25,11 +25,14 @@
 #define WAVECURVE_REACHED_INITIAL_POINT 5
 #define WAVECURVE_COMPLEX_EIGENVALUE_AT_FAMILY 6
 #define WAVECURVE_REACHED_COINCIDENCE_CURVE    7
+#define WAVECURVE_REACHED_LINE                 8
 
 #define WAVE_CURVE_INTERSECTION_FOUND                           300
 #define WAVE_CURVE_INTERSECTION_NOT_FOUND                       400
 
 #define WAVECURVEFACTORY_GENERIC_POINT                          1000
+
+#define WAVECURVEFACTORY_INVALID_PARAMETERS                     (-100)
 
 class WaveCurveSegment {
     private:
@@ -103,10 +106,42 @@ class WaveCurveFactory {
                                const RealVector &initial_direction, 
                                WaveCurve &hwc,
                                int &wavecurve_stopped_because, 
+                               int &edge){
+
+            return Liu_half_wavecurve(ref, initial_point, 
+                                      initial_family, increase, 
+                                      initial_curve, 
+                                      initial_direction, 
+                                      0, 0, 
+                                      hwc,
+                                      wavecurve_stopped_because, 
+                                      edge);
+        }
+
+        int Liu_half_wavecurve(const ReferencePoint &ref, 
+                               const RealVector &initial_point, 
+                               int initial_family, int increase, 
+                               int initial_curve, 
+                               const RealVector &initial_direction, 
+                               void *linobj, double (*linear_function)(void *o, const RealVector &p),
+                               WaveCurve &hwc,
+                               int &wavecurve_stopped_because, 
                                int &edge);
 
         virtual int wavecurve(int type, const RealVector &initial_point, int family, int increase, HugoniotContinuation *h, WaveCurve &hwc, 
-                      int &wavecurve_stopped_because, int &edge);
+                              int &wavecurve_stopped_because, int &edge){
+
+            return wavecurve(type, initial_point, family, increase, h, 
+                             0, 0, 
+                             hwc, 
+                             wavecurve_stopped_because, edge);
+
+        }
+
+        virtual int wavecurve(int type, const RealVector &initial_point, int family, int increase, HugoniotContinuation *h, 
+                              void *linobj, double (*linear_function)(void *o, const RealVector &p),
+                              WaveCurve &hwc, 
+                              int &wavecurve_stopped_because, int &edge);
 
         // s = side.
         int wavecurve_from_boundary(const RealVector &initial_point, int s, int family, int increase, HugoniotContinuation *h, WaveCurve &hwc, int &wavecurve_stopped_because, int &edge);

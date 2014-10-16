@@ -273,14 +273,14 @@ int HugoniotContinuation::Newton_step(const RealVector &previous_point, double &
 
         hyperplane_origin = previous_point + step_size*previous_direction;
 
-        std::cout << "hyperplane_origin = " << hyperplane_origin << std::endl;
+//        std::cout << "hyperplane_origin = " << hyperplane_origin << std::endl;
 
         // The hyperplane where the Hugoniot Locus point will be found via Newton.
         // (The columns are the basis' vectors).
         //
         int info_fill_hyperplane = fill_hyperplane(hyperplane_origin, hyperplane);
 
-        std::cout << "hyperplane = " << hyperplane << std::endl;
+//        std::cout << "hyperplane = " << hyperplane << std::endl;
         
         if (info_fill_hyperplane == HUGONIOTCONTINUATION_HYPERPLANE_ERROR){
             return HUGONIOTCONTINUATION_HYPERPLANE_ERROR;
@@ -501,7 +501,7 @@ int HugoniotContinuation::curve_point(const RealVector &previous_point, double p
                                       RealVector &Hugoniot_intersection, double &sigma_between_points,
                                       RealVector &Hugoniot_direction){
                                       
-    std::cout << "HugoniotContinuation. Entering curve_point, direction = " << direction << std::endl;
+//    std::cout << "HugoniotContinuation. Entering curve_point, direction = " << direction << std::endl;
 
 //    // TODO: These parameters must belong to the object, and SHOULD be made public. THEY ENTER, CANT STAY HERE
 //    // This is the distance between two consecutive hyperplanes.
@@ -511,7 +511,7 @@ int HugoniotContinuation::curve_point(const RealVector &previous_point, double p
 
     int info_Newton_step = Newton_step(previous_point, step_size, number_of_steps_with_unchanged_size, direction, Hugoniot_intersection);
 
-    std::cout << "Hugoniot_intersection = " << Hugoniot_intersection << std::endl;
+//    std::cout << "Hugoniot_intersection = " << Hugoniot_intersection << std::endl;
 
     sigma_between_points = shockspeed(f, g, previous_point, f, g, Hugoniot_intersection);
     if (std::abs(sigma_between_points - previous_sigma_between_points) < .1*(std::abs(sigma_between_points) + std::abs(previous_sigma_between_points))){

@@ -5,13 +5,13 @@ CoreyQuadSubPhysics::CoreyQuadSubPhysics() : ThreePhaseFlowSubPhysics(){
     gro_parameter = new Parameter(std::string("gro"), 1.0);
     grg_parameter = new Parameter(std::string("grg"), 1.0);
 
-//    muw_parameter = new Parameter(std::string("muw"), 1.0 + 1e-3);
-//    muo_parameter = new Parameter(std::string("muo"), 1.0 + 2e-3);
-//    mug_parameter = new Parameter(std::string("mug"), 1.0 - 3e-3);
+    muw_parameter = new Parameter(std::string("muw"), 1.0 + 1e-3);
+    muo_parameter = new Parameter(std::string("muo"), 1.0 + 2e-3);
+    mug_parameter = new Parameter(std::string("mug"), 1.0 - 3e-3);
 
-    muw_parameter = new Parameter(std::string("muw"), 1.0);
-    muo_parameter = new Parameter(std::string("muo"), 1.0);
-    mug_parameter = new Parameter(std::string("mug"), 1.0);
+//    muw_parameter = new Parameter(std::string("muw"), 1.0);
+//    muo_parameter = new Parameter(std::string("muo"), 1.0);
+//    mug_parameter = new Parameter(std::string("mug"), 1.0);
 
     vel_parameter = new Parameter(std::string("vel"), 1.0);
 
@@ -52,7 +52,7 @@ CoreyQuadSubPhysics::CoreyQuadSubPhysics() : ThreePhaseFlowSubPhysics(){
 
     // ThreePhaseFlowImplicitHugoniot.
     //
-    ThreePhaseImplicitHugoniotCurve *tpfih = new ThreePhaseImplicitHugoniotCurve(this);
+    ThreePhaseFlowImplicitHugoniotCurve *tpfih = new ThreePhaseFlowImplicitHugoniotCurve(this);
     hugoniot_curve.push_back(tpfih);
 
     // Explicit Hugoniot.
@@ -85,6 +85,10 @@ CoreyQuadSubPhysics::CoreyQuadSubPhysics() : ThreePhaseFlowSubPhysics(){
     // Inflection.
     //
     inflection_curve_ = new Inflection_Curve;
+
+    // BifurcationCurve
+    //
+    bifurcationcurve_ = new CoreyQuadTransitionalLine(this);
 
     info_subphysics_ = std::string("CoreyQuad");
 }

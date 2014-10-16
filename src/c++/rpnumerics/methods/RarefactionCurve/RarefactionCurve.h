@@ -11,6 +11,7 @@
 #define RAREFACTION_INIT_ERROR                   5
 #define RAREFACTION_COMPLEX_EIGENVALUE_AT_FAMILY 6
 #define RAREFACTION_REACHED_COINCIDENCE_CURVE    7
+#define RAREFACTION_REACHED_LINE                 8
 
 // Options.
 //
@@ -30,6 +31,7 @@
 #include "Boundary.h"
 #include "Curve.h"
 #include "eigen.h"
+#include "Utilities.h"
 
 #include <complex> // To handle complex eigenpairs.
 
@@ -56,7 +58,7 @@ class RarefactionCurve {
 
         void add_point_to_curve(const RealVector &p, Curve &curve);
 
-        
+       
     public:
         RarefactionCurve(const AccumulationFunction *gg, const FluxFunction *ff, const Boundary *bb);
         virtual ~RarefactionCurve();
@@ -69,6 +71,37 @@ class RarefactionCurve {
                   const RealVector *direction,
                   const ODE_Solver *odesolver, // Should it be another one for the Bisection? Can it really be const? If so, how to use initialize()?
                   double deltaxi,
+                  Curve &rarcurve,
+                  std::vector<RealVector> &inflection_points, // Will these survive/be added to the Curve class?
+                  RealVector &final_direction,
+                  int &reason_why, // Similar to Composite.
+                  int &edge){
+
+            return curve(initial_point,
+                         curve_family,
+                         increase,
+                         type_of_rarefaction, // For itself or as engine for integral curve.
+                         should_initialize,
+                         direction,
+                         odesolver, // Should it be another one for the Bisection? Can it really be const? If so, how to use initialize()?
+                         deltaxi,
+                         0, 0, 
+                         rarcurve,
+                         inflection_points, // Will these survive/be added to the Curve class?
+                         final_direction,
+                         reason_why, // Similar to Composite.
+                         edge);
+        }
+
+        int curve(const RealVector &initial_point,
+                  int curve_family,
+                  int increase,
+                  int type_of_rarefaction, // For itself or as engine for integral curve.
+                  int should_initialize,
+                  const RealVector *direction,
+                  const ODE_Solver *odesolver, // Should it be another one for the Bisection? Can it really be const? If so, how to use initialize()?
+                  double deltaxi,
+                  void *linobj, double (*linear_function)(void *o, const RealVector &p),
                   Curve &rarcurve,
                   std::vector<RealVector> &inflection_points, // Will these survive/be added to the Curve class?
                   RealVector &final_direction,
@@ -101,7 +134,7 @@ class RarefactionCurve {
         friend class WaveCurveFactory;
         friend class ShockCurve;
 
-       
+        
 
 //        static int curve(RarefactionCurve *obj, const RealVector &initial_point,
 //                  int curve_family,

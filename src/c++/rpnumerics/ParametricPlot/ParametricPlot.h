@@ -71,7 +71,7 @@ class ParametricPlot {
             return;
         }
 
-      
+        
 };
 
 #endif // _PARAMETRICPLOT_
