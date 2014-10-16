@@ -24,7 +24,7 @@
 
             
             
-         <CURVECONFIGURATION name="hugoniotcurve">
+            <CURVECONFIGURATION name="hugoniotcurve">
                 <CURVEPARAM name="resolution" value="120 120"/>
                 <CURVEPARAM name="method" value="Generic Implicit Hugoniot Curve"/>
                 <CURVEPARAM name="case" value="Generic point"/>
@@ -32,22 +32,23 @@
             </CURVECONFIGURATION> 
             
             
-               <CURVECONFIGURATION name="riemannprofile">
+            <CURVECONFIGURATION name="riemannprofile">
                 <CURVEPARAM name="speedrange" value="0 3"/>
                 <CURVEPARAM name="Yrange" value="0 1.0"/>
                 
             </CURVECONFIGURATION>
             
             
-              
-          <!--   <CURVECONFIGURATION name="hugoniotcurve">
-                <CURVEPARAM name="resolution" value="120 120"/>
-                <CURVEPARAM name="method" value="COREY"/>
-                <CURVEPARAM name="case" value="0"/>
-                
-            </CURVECONFIGURATION>-->
             
             
+            <CURVECONFIGURATION name="extensioncurve">
+                <CURVEPARAM name="family" value="0"/>
+                <CURVEPARAM name="resolution" value="128 128"/>
+                <CURVEPARAM name="singular" value="true"/>
+                <CURVEPARAM name="characteristic" value="0"/>
+
+
+            </CURVECONFIGURATION>
                      
             
             <CURVECONFIGURATION name="eigen sort method">
@@ -62,7 +63,6 @@
                 <CURVEPARAM name="curve" value="0"/>
                 <CURVEPARAM name="direction" value="10"/>
                 <CURVEPARAM name="family" value="0"/>
-                
             </CURVECONFIGURATION>
 
             

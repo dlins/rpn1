@@ -14,6 +14,7 @@ import rpn.controller.PhaseSpacePanel2DController;
 import rpn.controller.PhaseSpacePanelController;
 import rpn.controller.PhaseSpacePanel3DController;
 import java.awt.*;
+import java.awt.font.GlyphVector;
 import java.awt.print.Printable;
 import java.awt.print.PageFormat;
 import java.awt.image.BufferedImage;
@@ -39,6 +40,7 @@ import rpn.component.util.GeometryGraphND;
 import rpn.component.util.GraphicsUtil;
 import rpn.controller.ui.UIController;
 import rpn.message.RPnNetworkStatus;
+import rpnumerics.RPNUMERICS;
 import wave.multid.DimMismatchEx;
 import wave.multid.model.MultiGeometryImpl;
 import wave.multid.model.MultiPolygon;
@@ -414,10 +416,9 @@ public void clearPointSelection(){
         ((Graphics2D) g).setStroke(newStroke);
         Color prev = g.getColor();
 
-        Font font = new Font("Verdana", Font.PLAIN, 13);
+        Font font = new Font("Verdana", Font.PLAIN, 15);
         g.setFont(font);
-        FontMetrics metrics = new FontMetrics(font) {
-        };
+        
 
         /*
          * BOUNDARY WINDOW
@@ -426,9 +427,25 @@ public void clearPointSelection(){
         Shape s = scene_.getViewingTransform().viewPlane().getWindow().dcView(scene_.getViewingTransform());
         ((Graphics2D) g).fill(s);
 
+        /*
+        *  Axis Labels
+        */        
+        Graphics2D gra = (Graphics2D)g;
+        
+        gra.setColor(Color.white);
+        GlyphVector xLabel = font.createGlyphVector(gra.getFontRenderContext(), RPNUMERICS.getXLabel());
 
-
-
+        GlyphVector yLabel = font.createGlyphVector(gra.getFontRenderContext(), RPNUMERICS.getYLabel());
+        int viewPortMargin =   scene().getViewingTransform().viewPlane().getViewport().getMargin();
+        
+        gra.drawGlyphVector(xLabel, 0,(float) getHeight()/2);
+        gra.drawGlyphVector(yLabel, (float) getWidth()/2,(float) getHeight()-viewPortMargin/2);
+        
+        
+        
+        
+        
+        
         /*
          * SELECTED AREAS
          */

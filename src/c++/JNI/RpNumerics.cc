@@ -781,6 +781,38 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setBoundary
 
 /*
  * Class:     rpnumerics_RPNUMERICS
+ * Method:    getXLabel
+ * Signature: ()Ljava/lang/String;
+ */
+JNIEXPORT jstring JNICALL Java_rpnumerics_RPNUMERICS_getXLabel
+(JNIEnv * env, jclass cls) {
+    
+    jclass stringClass = env->FindClass("Ljava/lang/String;");
+    
+    jstring xLabel = env->NewStringUTF(RpNumerics::physicsVector_->at(0)->xlabel().c_str());
+    
+    return xLabel;
+
+}
+
+/*
+ * Class:     rpnumerics_RPNUMERICS
+ * Method:    getYLabel
+ * Signature: ()Ljava/lang/String;
+ */
+JNIEXPORT jstring JNICALL Java_rpnumerics_RPNUMERICS_getYLabel
+(JNIEnv * env, jclass cls) {
+
+    jclass stringClass = env->FindClass("Ljava/lang/String;");
+
+    jstring yLabel = env->NewStringUTF(RpNumerics::physicsVector_->at(0)->ylabel().c_str());
+   
+    return yLabel;
+
+}
+
+/*
+ * Class:     rpnumerics_RPNUMERICS
  * Method:    setFamilyIndex
  * Signature: (I)V
  */
@@ -928,25 +960,12 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_initNative(JNIEnv * env, jclas
 
 
 
-        ThreePhaseFlowSubPhysics * subphysics = (ThreePhaseFlowSubPhysics*) new CoreyQuadSubPhysics();
-        
-
-
-//
-//        cout << subphysics->B() << endl;
-//        cout << subphysics->D() << endl;
-//        cout << subphysics->E() << endl;
-//        cout << subphysics->G() << endl;
-//
-//        cout << subphysics->O() << endl;
-//
-//        cout << subphysics->W() << endl;
+//        ThreePhaseFlowSubPhysics * subphysics = (ThreePhaseFlowSubPhysics*) new CoreyQuadSubPhysics();
 
 
 
 
-
-        RpNumerics::physicsVector_->push_back(subphysics);
+        RpNumerics::physicsVector_->push_back(new CoreyQuadSubPhysics());
     }
 
     RpNumerics::fillHugoniotNames();

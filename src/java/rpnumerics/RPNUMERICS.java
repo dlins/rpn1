@@ -47,6 +47,7 @@ public class RPNUMERICS {
 
             initNative(physicsID);
             
+       
 //            
 //             String [] hugoniotNames  = getHugoniotNames();
 //             
@@ -92,16 +93,10 @@ public class RPNUMERICS {
              }
             
         setConfiguration(physicsID, physicsConfiguration);
-        String[] waveCurveCaseNames = getWaveCurveCaseNames();
+   
         
         
         
-        for (String string : waveCurveCaseNames) {
-            
-            
-            System.out.println("caso: "+string);
-            
-        }
         
         
         
@@ -1039,6 +1034,11 @@ public class RPNUMERICS {
     public static native void setEigenSortFunction(String functionName);
     
     public static native String [] getHugoniotNames();
+    
+    
+    public static native String getXLabel();
+    
+    public static native String getYLabel();
     
     
     public static native String [] getWaveCurveCaseNames();

@@ -225,6 +225,22 @@ JNIEXPORT jobjectArray JNICALL Java_rpnumerics_RPNUMERICS_getHugoniotNames
 
 /*
  * Class:     rpnumerics_RPNUMERICS
+ * Method:    getXLabel
+ * Signature: ()Ljava/lang/String;
+ */
+JNIEXPORT jstring JNICALL Java_rpnumerics_RPNUMERICS_getXLabel
+  (JNIEnv *, jclass);
+
+/*
+ * Class:     rpnumerics_RPNUMERICS
+ * Method:    getYLabel
+ * Signature: ()Ljava/lang/String;
+ */
+JNIEXPORT jstring JNICALL Java_rpnumerics_RPNUMERICS_getYLabel
+  (JNIEnv *, jclass);
+
+/*
+ * Class:     rpnumerics_RPNUMERICS
  * Method:    getWaveCurveCaseNames
  * Signature: ()[Ljava/lang/String;
  */
