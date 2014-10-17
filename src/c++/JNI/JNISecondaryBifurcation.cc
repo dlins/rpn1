@@ -33,35 +33,35 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_SecondaryBifurcationCurveCalc_nativeCa
 (JNIEnv * env, jobject obj, jstring methodName, jint edge) {
 
 
-//
-//    jclass classPhasePoint = (env)->FindClass(PHASEPOINT_LOCATION);
-//
-//    jclass realVectorClass = env->FindClass(REALVECTOR_LOCATION);
-//
-//    jclass realSegmentClass = env->FindClass(REALSEGMENT_LOCATION);
-//
-//    jclass arrayListClass = env->FindClass("java/util/ArrayList");
-//
-//    jclass secondaryBifurcationCurveClass = env->FindClass(SECONDARY_BIFURCATION_LOCATION);
-//
-//    jmethodID toDoubleMethodID = (env)->GetMethodID(classPhasePoint, "toDouble", "()[D");
-//    jmethodID realVectorConstructorDoubleArray = env->GetMethodID(realVectorClass, "<init>", "([D)V");
-//    jmethodID realSegmentConstructor = (env)->GetMethodID(realSegmentClass, "<init>", "(Lwave/util/RealVector;Lwave/util/RealVector;)V");
-//
-//    jmethodID arrayListConstructor = env->GetMethodID(arrayListClass, "<init>", "()V");
-//    jmethodID arrayListAddMethod = env->GetMethodID(arrayListClass, "add", "(Ljava/lang/Object;)Z");
-//    jmethodID hysteresisCurveConstructor = env->GetMethodID(secondaryBifurcationCurveClass, "<init>", "(Ljava/util/List;Ljava/util/List;)V");
-//
-//    int dimension = RpNumerics::getPhysics().domain().dim();
-//    //int dimension = 2;
-//
-//    jobject leftSegmentsArray = env->NewObject(arrayListClass, arrayListConstructor, NULL);
-//    jobject rightSegmentsArray = env->NewObject(arrayListClass, arrayListConstructor, NULL);
-//
-//    // Storage space for the segments:
-//    std::vector<RealVector> left_vrs;
-//    std::vector<RealVector> right_vrs;
-//
+
+    jclass classPhasePoint = (env)->FindClass(PHASEPOINT_LOCATION);
+
+    jclass realVectorClass = env->FindClass(REALVECTOR_LOCATION);
+
+    jclass realSegmentClass = env->FindClass(REALSEGMENT_LOCATION);
+
+    jclass arrayListClass = env->FindClass("java/util/ArrayList");
+
+    jclass secondaryBifurcationCurveClass = env->FindClass(SECONDARY_BIFURCATION_LOCATION);
+
+    jmethodID toDoubleMethodID = (env)->GetMethodID(classPhasePoint, "toDouble", "()[D");
+    jmethodID realVectorConstructorDoubleArray = env->GetMethodID(realVectorClass, "<init>", "([D)V");
+    jmethodID realSegmentConstructor = (env)->GetMethodID(realSegmentClass, "<init>", "(Lwave/util/RealVector;Lwave/util/RealVector;)V");
+
+    jmethodID arrayListConstructor = env->GetMethodID(arrayListClass, "<init>", "()V");
+    jmethodID arrayListAddMethod = env->GetMethodID(arrayListClass, "add", "(Ljava/lang/Object;)Z");
+    jmethodID hysteresisCurveConstructor = env->GetMethodID(secondaryBifurcationCurveClass, "<init>", "(Ljava/util/List;Ljava/util/List;)V");
+
+    
+    //int dimension = 2;
+
+    jobject leftSegmentsArray = env->NewObject(arrayListClass, arrayListConstructor, NULL);
+    jobject rightSegmentsArray = env->NewObject(arrayListClass, arrayListConstructor, NULL);
+
+    // Storage space for the segments:
+    std::vector<RealVector> left_vrs;
+    std::vector<RealVector> right_vrs;
+
 //    const FluxFunction * leftFlux = &RpNumerics::getPhysics().fluxFunction();
 //    const AccumulationFunction * leftAccum = &RpNumerics::getPhysics().accumulation();
 //
@@ -69,47 +69,57 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_SecondaryBifurcationCurveCalc_nativeCa
 //    const AccumulationFunction * rightAccum = leftAccum;
 //
 //    GridValues * gv = RpNumerics::getGridFactory().getGrid("doublecontactcurve");
-//
-//
-//    string secondaryBifurcationMethodName(env->GetStringUTFChars(methodName, NULL));
-//
-//    //cout << "Nome do metodo em JNI: " << secondaryBifurcationMethodName << endl;
+    
+    
+    
+    const FluxFunction * flux = RpNumerics::physicsVector_->at(0)->flux();
+    const AccumulationFunction * accum = RpNumerics::physicsVector_->at(0)->accumulation();
+    GridValues * gv = RpNumerics::physicsVector_->at(0)->gridvalues();
+
+    int dimension = RpNumerics::physicsVector_->at(0)->boundary()->minimums().size();
+    
+    
+
+
+    string secondaryBifurcationMethodName(env->GetStringUTFChars(methodName, NULL));
+
+    //cout << "Nome do metodo em JNI: " << secondaryBifurcationMethodName << endl;
+    
+    //cout<<"Grid values: "<<gv<<endl;
+    
+    //cout<<"Flux esq: "<<leftFlux<<endl;
+    
+    //cout<<"Flux dir: "<<rightFlux<<endl;
+    
+    //cout<<"Accum esq:"<<leftAccum<<endl;
+    
+    //cout<<"Accum dir:"<<rightAccum<<endl;
+    
+    
+//        
+//    Secondary_Bifurcation_Interface *secondaryBifurcation = RpNumerics::getPhysics().getSubPhysics(0).getSecondaryBifurcationMethod(secondaryBifurcationMethodName);
 //    
-//    //cout<<"Grid values: "<<gv<<endl;
 //    
-//    //cout<<"Flux esq: "<<leftFlux<<endl;
+//    secondaryBifurcation ->setLeftGrid(gv);
+//    secondaryBifurcation ->setRightGrid(gv);
 //    
-//    //cout<<"Flux dir: "<<rightFlux<<endl;
-//    
-//    //cout<<"Accum esq:"<<leftAccum<<endl;
-//    
-//    //cout<<"Accum dir:"<<rightAccum<<endl;
+//    secondaryBifurcation->setEdge(edge);
 //    
 //    
-////        
-////    Secondary_Bifurcation_Interface *secondaryBifurcation = RpNumerics::getPhysics().getSubPhysics(0).getSecondaryBifurcationMethod(secondaryBifurcationMethodName);
-////    
-////    
-////    secondaryBifurcation ->setLeftGrid(gv);
-////    secondaryBifurcation ->setRightGrid(gv);
-////    
-////    secondaryBifurcation->setEdge(edge);
-////    
-////    
-////    secondaryBifurcation->bifurcationCurve(left_vrs,right_vrs);
-//
-//    
-//
-//    if (secondaryBifurcationMethodName.compare("IMPLICIT") == 0) {
-//
-//        Secondary_Bifurcation sb;
-//
-//        sb.curve(leftFlux, leftAccum, *gv,
-//                rightFlux, rightAccum, *gv,
-//                left_vrs, right_vrs);
-//
-//    }
-//
+//    secondaryBifurcation->bifurcationCurve(left_vrs,right_vrs);
+
+    
+
+    if (secondaryBifurcationMethodName.compare("IMPLICIT") == 0) {
+
+        Secondary_Bifurcation sb;
+
+        sb.curve(flux, accum, *gv,
+                flux, accum, *gv,
+                left_vrs, right_vrs);
+
+    }
+
 //    if (secondaryBifurcationMethodName.compare("STONE") == 0) {
 //        
 //        RealVector flux_params = leftFlux->fluxParams().params();
@@ -146,76 +156,76 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_SecondaryBifurcationCurveCalc_nativeCa
 //
 //
 //    }
-//
-//
-//
-//
-//
-//
-////    if (Debug::get_debug_level() == 5) {
-//        //cout << "left_vrs.size()  = " << left_vrs.size() << endl;
-//        //cout << "right_vrs.size()  = " << right_vrs.size() << endl;
-////    }
-//
-//
-//
-//    if (left_vrs.size() == 0 || right_vrs.size() == 0)return NULL;
-//
-//
-//    for (unsigned int i = 0; i < left_vrs.size() / 2; i++) {
-//
-//
-//        jdoubleArray eigenValRLeft = env->NewDoubleArray(dimension);
-//        jdoubleArray eigenValRRight = env->NewDoubleArray(dimension);
-//
-//        double * leftCoords = (double *) left_vrs.at(2 * i);
-//        double * rightCoords = (double *) left_vrs.at(2 * i + 1);
-//
-//
-//        env->SetDoubleArrayRegion(eigenValRLeft, 0, dimension, leftCoords);
-//        env->SetDoubleArrayRegion(eigenValRRight, 0, dimension, rightCoords);
-//
-//        //Construindo left e right points
-//        jobject realVectorLeftPoint = env->NewObject(realVectorClass, realVectorConstructorDoubleArray, eigenValRLeft);
-//
-//        jobject realVectorRightPoint = env->NewObject(realVectorClass, realVectorConstructorDoubleArray, eigenValRRight);
-//
-//
-//        jobject realSegment = env->NewObject(realSegmentClass, realSegmentConstructor, realVectorLeftPoint, realVectorRightPoint);
-//        env->CallObjectMethod(leftSegmentsArray, arrayListAddMethod, realSegment);
-//
+
+
+
+
+
+
+//    if (Debug::get_debug_level() == 5) {
+        //cout << "left_vrs.size()  = " << left_vrs.size() << endl;
+        //cout << "right_vrs.size()  = " << right_vrs.size() << endl;
 //    }
-//
-//    for (unsigned int i = 0; i < right_vrs.size() / 2; i++) {
-//
-//
-//
-//        jdoubleArray eigenValRLeft = env->NewDoubleArray(dimension);
-//        jdoubleArray eigenValRRight = env->NewDoubleArray(dimension);
-//
-//        double * leftCoords = (double *) right_vrs.at(2 * i);
-//        double * rightCoords = (double *) right_vrs.at(2 * i + 1);
-//
-//
-//        env->SetDoubleArrayRegion(eigenValRLeft, 0, dimension, leftCoords);
-//        env->SetDoubleArrayRegion(eigenValRRight, 0, dimension, rightCoords);
-//
-//        //Construindo left e right points
-//        jobject realVectorLeftPoint = env->NewObject(realVectorClass, realVectorConstructorDoubleArray, eigenValRLeft);
-//
-//        jobject realVectorRightPoint = env->NewObject(realVectorClass, realVectorConstructorDoubleArray, eigenValRRight);
-//        jobject realSegment = env->NewObject(realSegmentClass, realSegmentConstructor, realVectorLeftPoint, realVectorRightPoint);
-//
-//
-//        env->CallObjectMethod(rightSegmentsArray, arrayListAddMethod, realSegment);
-//
-//    }
-//
-//
-//    jobject result = env->NewObject(secondaryBifurcationCurveClass, hysteresisCurveConstructor, leftSegmentsArray, rightSegmentsArray);
-//
-//
-//    return result;
+
+
+
+    if (left_vrs.size() == 0 || right_vrs.size() == 0)return NULL;
+
+
+    for (unsigned int i = 0; i < left_vrs.size() / 2; i++) {
+
+
+        jdoubleArray eigenValRLeft = env->NewDoubleArray(dimension);
+        jdoubleArray eigenValRRight = env->NewDoubleArray(dimension);
+
+        double * leftCoords = (double *) left_vrs.at(2 * i);
+        double * rightCoords = (double *) left_vrs.at(2 * i + 1);
+
+
+        env->SetDoubleArrayRegion(eigenValRLeft, 0, dimension, leftCoords);
+        env->SetDoubleArrayRegion(eigenValRRight, 0, dimension, rightCoords);
+
+        //Construindo left e right points
+        jobject realVectorLeftPoint = env->NewObject(realVectorClass, realVectorConstructorDoubleArray, eigenValRLeft);
+
+        jobject realVectorRightPoint = env->NewObject(realVectorClass, realVectorConstructorDoubleArray, eigenValRRight);
+
+
+        jobject realSegment = env->NewObject(realSegmentClass, realSegmentConstructor, realVectorLeftPoint, realVectorRightPoint);
+        env->CallObjectMethod(leftSegmentsArray, arrayListAddMethod, realSegment);
+
+    }
+
+    for (unsigned int i = 0; i < right_vrs.size() / 2; i++) {
+
+
+
+        jdoubleArray eigenValRLeft = env->NewDoubleArray(dimension);
+        jdoubleArray eigenValRRight = env->NewDoubleArray(dimension);
+
+        double * leftCoords = (double *) right_vrs.at(2 * i);
+        double * rightCoords = (double *) right_vrs.at(2 * i + 1);
+
+
+        env->SetDoubleArrayRegion(eigenValRLeft, 0, dimension, leftCoords);
+        env->SetDoubleArrayRegion(eigenValRRight, 0, dimension, rightCoords);
+
+        //Construindo left e right points
+        jobject realVectorLeftPoint = env->NewObject(realVectorClass, realVectorConstructorDoubleArray, eigenValRLeft);
+
+        jobject realVectorRightPoint = env->NewObject(realVectorClass, realVectorConstructorDoubleArray, eigenValRRight);
+        jobject realSegment = env->NewObject(realSegmentClass, realSegmentConstructor, realVectorLeftPoint, realVectorRightPoint);
+
+
+        env->CallObjectMethod(rightSegmentsArray, arrayListAddMethod, realSegment);
+
+    }
+
+
+    jobject result = env->NewObject(secondaryBifurcationCurveClass, hysteresisCurveConstructor, leftSegmentsArray, rightSegmentsArray);
+
+
+    return result;
 
 }
 

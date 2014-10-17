@@ -72,29 +72,39 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_BoundaryExtensionCurveCalc_nativeCalc
 
     int dimension = RpNumerics::physicsVector_->at(0)->boundary()->minimums().size();
 
-    Boundary * physicsBoundary = (Boundary *)RpNumerics::physicsVector_->at(0)->boundary();
-    
+    Boundary * physicsBoundary = (Boundary *) RpNumerics::physicsVector_->at(0)->boundary();
+
 
     const FluxFunction * flux = RpNumerics::physicsVector_->at(0)->flux();
     const AccumulationFunction * accum = RpNumerics::physicsVector_->at(0)->accumulation();
 
 
-    GridValues * gv = RpNumerics::physicsVector_->at(0)->gridvalues();
-    
-    
-    
-    
-    cout <<"domain family: "<<domainFamily<<endl;
-    cout<<"characteristicWhere: "<<characteristicWhere<<endl;
-    cout<<"Edge resolution: "<<edgeResolution<<endl;
-    cout<<"edge: "<<edge<<endl;
-    
-    
+    //    GridValues * gv = RpNumerics::physicsVector_->at(0)->gridvalues();
 
 
-    physicsBoundary->extension_curve(flux, accum, *gv, edge, edgeResolution, true, domainFamily, characteristicWhere, curve_segments, domain_segments);
-    
-    cout<<"Tamanho da curva: "<<curve_segments.size()<<endl;
+
+
+    cout << "domain family: " << domainFamily << endl;
+    cout << "characteristicWhere: " << characteristicWhere << endl;
+    cout << "Edge resolution: " << edgeResolution << endl;
+    cout << "edge: " << edge << endl;
+
+
+
+    std::vector<int> number_of_cells(2);
+    number_of_cells[0] = 80;
+    number_of_cells[1] = 80;
+
+    GridValues gv(RpNumerics::physicsVector_->at(0)->boundary(), RpNumerics::physicsVector_->at(0)->boundary()->minimums(),
+            RpNumerics::physicsVector_->at(0)->boundary()->maximums(),
+            number_of_cells);
+
+
+
+
+    physicsBoundary->extension_curve(flux, accum, gv, edge, edgeResolution, true, domainFamily, characteristicWhere, curve_segments, domain_segments);
+
+    cout << "Tamanho da curva: " << curve_segments.size() << endl;
 
     if (curve_segments.size() == 0)return NULL;
 
@@ -127,7 +137,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_BoundaryExtensionCurveCalc_nativeCalc
         jdoubleArray eigenValRLeft = env->NewDoubleArray(dimension);
         jdoubleArray eigenValRRight = env->NewDoubleArray(dimension);
 
-     
+
 
         double * leftCoords = (double *) domain_segments.at(2 * i);
         double * rightCoords = (double *) domain_segments.at(2 * i + 1);

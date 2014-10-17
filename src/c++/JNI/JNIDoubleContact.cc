@@ -54,9 +54,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_DoubleContactCurveCalc_nativeCalc__II
     jmethodID doubleContactCurveConstructor = env->GetMethodID(doubleContactCurveClass, "<init>", "(Ljava/util/List;Ljava/util/List;)V");
 
 
-
-
-
     int dimension = RpNumerics::physicsVector_->at(0)->boundary()->minimums().size();
 
 
@@ -74,13 +71,22 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_DoubleContactCurveCalc_nativeCalc__II
     const AccumulationFunction * accum = RpNumerics::physicsVector_->at(0)->accumulation();
 
 
-    GridValues * gv = RpNumerics::physicsVector_->at(0)->gridvalues();
+    //    GridValues * gv = RpNumerics::physicsVector_->at(0)->gridvalues();
+
+    std::vector<int> number_of_cells(2);
+    number_of_cells[0] = 80;
+    number_of_cells[1] = 80;
+
+    GridValues gv(RpNumerics::physicsVector_->at(0)->boundary(), RpNumerics::physicsVector_->at(0)->boundary()->minimums(),
+            RpNumerics::physicsVector_->at(0)->boundary()->maximums(),
+            number_of_cells);
+
 
     Double_Contact doubleContactFunction;
 
 
-    doubleContactFunction.curve(flux, accum, gv, leftFamily,
-            flux, accum, gv, rightFamily,
+    doubleContactFunction.curve(flux, accum, &gv, leftFamily,
+            flux, accum, &gv, rightFamily,
             left_vrs, right_vrs);
 
 

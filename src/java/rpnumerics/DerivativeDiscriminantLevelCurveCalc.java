@@ -17,7 +17,9 @@ public class DerivativeDiscriminantLevelCurveCalc extends CharacteristicPolynomi
 
     public RpSolution calc() throws RpException {
 
-        CharacteristicsPolynomialCurve result = (CharacteristicsPolynomialCurve) calcNative(u_);
+        RpSolution result=null;
+        
+         result =  calcNative(u_);
 
         if (result == null) {
             throw new RpException("Error in native layer");
