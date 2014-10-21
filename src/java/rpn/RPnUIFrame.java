@@ -164,6 +164,8 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         auxiliarCurvesToolBar_.add(EllipticBoundaryExtensionCommand.instance().getContainer());
         auxiliarCurvesToolBar_.add(EllipticBoundaryCommand.instance().getContainer());
         
+        auxiliarCurvesToolBar_.add(TransitionalLinePlotCommand.instance().getContainer());
+        
         auxiliarCurvesToolBar_.add(PointLevelCurvePlotCommand.instance().getContainer());
         auxiliarCurvesToolBar_.add(LevelCurvePlotCommand.instance().getContainer());
         auxiliarCurvesToolBar_.add(PhysicalBoundaryPlotCommand.instance().getContainer());
@@ -208,7 +210,7 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         
         toolBar_.setLayout(new GridLayout(2, 2));
         toolBar_.add(InvariantPlotCommand.instance().getContainer());
-        toolBar_.add(OrbitPlotCommand.instance().getContainer());
+        toolBar_.add(TransitionalLinePlotCommand.instance().getContainer());
         toolBar_.add(ConnectionManifoldPlotCommand.instance().getContainer());
         toolBar_.add(PoincareSectionPlotCommand.instance().getContainer());
         
@@ -668,6 +670,14 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         curvesList.addObserver(WaveCurveRRegionsPlotCommand.instance());
         leftCurvesList.addObserver(WaveCurveRRegionsPlotCommand.instance());
         rightCurvesList.addObserver(WaveCurveRRegionsPlotCommand.instance());
+        
+        curvesList.addObserver(WaveCurvePlotCommand.instance());
+        leftCurvesList.addObserver(WaveCurvePlotCommand.instance());
+        rightCurvesList.addObserver(WaveCurvePlotCommand.instance());
+
+        
+        
+        
         
         curvesList.update();
 //        leftCurvesList.update();

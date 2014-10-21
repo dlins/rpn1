@@ -48,6 +48,7 @@
 
 
 
+
 struct Plane {
 public:
     std::vector<RealVector> vec; // Array of vectors
@@ -163,7 +164,7 @@ public:
 
     static int debugshock;
 
-    
+   
 };
 
 #endif //! _ShockContinuationMethod3D2D_H

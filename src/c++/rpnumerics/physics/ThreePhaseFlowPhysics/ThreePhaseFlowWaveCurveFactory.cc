@@ -15,9 +15,6 @@ int ThreePhaseFlowWaveCurveFactory::wavecurve(int type, const RealVector &initia
                                               int &wavecurve_stopped_because, int &edge){
 
     std::cout << "ThreePhaseFlowWaveCurveFactory::wavecurve(), type = " << type << std::endl;
-    
-    std::cout << "Ponteiro:  " << coreyquadsubphysics_ << std::endl;
-   
 
     if (type == THREEPHASEFLOWWAVECURVEFACTORY_GENERIC_POINT){
         WaveCurveFactory::wavecurve(WAVECURVEFACTORY_GENERIC_POINT, initial_point, family, increase, h, linobj, linear_function, hwc, wavecurve_stopped_because, edge);

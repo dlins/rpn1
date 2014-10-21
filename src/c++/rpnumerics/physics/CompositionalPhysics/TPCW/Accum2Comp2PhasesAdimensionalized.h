@@ -33,6 +33,13 @@ public:
     virtual~Accum2Comp2PhasesAdimensionalized();
 
     int jet(const WaveState &u, JetMatrix &m, int degree) const;
+
+    static int accumulation_test(void *obj, const RealVector &state, int degree, JetMatrix &jm){
+        const Accum2Comp2PhasesAdimensionalized *accum = (Accum2Comp2PhasesAdimensionalized*)obj;
+
+        return accum->jet(WaveState(state), jm, degree);
+    }
+
     ReducedAccum2Comp2PhasesAdimensionalized * getReducedAccumulation()const;
 
 

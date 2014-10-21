@@ -85,6 +85,51 @@ HugoniotConfig * RpNumerics::getHugoniotConfig(const string & configName) {
 
 }
 
+/*
+ * Class:     rpnumerics_RPNUMERICS
+ * Method:    getTransisionalLinesNames
+ * Signature: ()Ljava/util/ArrayList;
+ */
+JNIEXPORT jobject JNICALL Java_rpnumerics_RPNUMERICS_getTransisionalLinesNames
+(JNIEnv * env, jclass cls) {
+
+
+    jclass arrayListClass = env->FindClass("java/util/ArrayList");
+
+
+    jmethodID arrayListConstructor = env->GetMethodID(arrayListClass, "<init>", "()V");
+    jmethodID arrayListAddMethod = env->GetMethodID(arrayListClass, "add", "(Ljava/lang/Object;)Z");
+    
+    
+    jobject namesArray = env->NewObject(arrayListClass, arrayListConstructor, NULL);
+
+    BifurcationCurve * bifurcation=    RpNumerics::physicsVector_->at(0)->bifurcation_curve();
+    
+    
+    std::vector<int> type;
+    std::vector<std::string> name;
+    std::vector<void*> object;
+    std::vector<double (*)(void*, const RealVector &)> function;
+    
+    
+    
+    bifurcation->list_of_secondary_bifurcation_curves(type,name,object,function);
+    
+    
+    for (int i = 0; i < name.size(); i++) {
+
+        
+        jstring paramName = env->NewStringUTF(name[i].c_str());
+        
+        env->CallObjectMethod(namesArray, arrayListAddMethod, paramName);
+
+    }
+    
+    return namesArray;
+
+
+}
+
 void RpNumerics::fillWaveCurveCases() {
 
 
@@ -786,11 +831,11 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setBoundary
  */
 JNIEXPORT jstring JNICALL Java_rpnumerics_RPNUMERICS_getXLabel
 (JNIEnv * env, jclass cls) {
-    
+
     jclass stringClass = env->FindClass("Ljava/lang/String;");
-    
+
     jstring xLabel = env->NewStringUTF(RpNumerics::physicsVector_->at(0)->xlabel().c_str());
-    
+
     return xLabel;
 
 }
@@ -806,7 +851,7 @@ JNIEXPORT jstring JNICALL Java_rpnumerics_RPNUMERICS_getYLabel
     jclass stringClass = env->FindClass("Ljava/lang/String;");
 
     jstring yLabel = env->NewStringUTF(RpNumerics::physicsVector_->at(0)->ylabel().c_str());
-   
+
     return yLabel;
 
 }
@@ -960,7 +1005,7 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_initNative(JNIEnv * env, jclas
 
 
 
-//        ThreePhaseFlowSubPhysics * subphysics = (ThreePhaseFlowSubPhysics*) new CoreyQuadSubPhysics();
+        //        ThreePhaseFlowSubPhysics * subphysics = (ThreePhaseFlowSubPhysics*) new CoreyQuadSubPhysics();
 
 
 

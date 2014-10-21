@@ -27,6 +27,7 @@ import rpn.controller.ui.UIController;
 import rpn.command.TrackPointCommand;
 import rpn.component.RpGeomFactory;
 import rpnumerics.RPnCurve;
+import rpnumerics.TransitionalLine;
 import wave.multid.Coords2D;
 import wave.multid.CoordsArray;
 import wave.multid.Space;
@@ -150,7 +151,8 @@ public class PhaseSpacePanel2DController extends ComponentUI implements PhaseSpa
                     RpGeomFactory geomFactory = UIController.instance().getSelectedGeometriesList().get(0).geomFactory();
                     RPnCurve curve = (RPnCurve) geomFactory.geomSource();
                     
-//                    System.out.println("Curve mais proxima: "+curve);
+                    if (!(curve instanceof TransitionalLine)){//TODO To refactor !
+                           System.out.println("Curve mais proxima: "+curve);
                     RealVector closestPoint = curve.findClosestPoint(wcCoordsVector);
                     for (int i = 0; i < closestPoint.getSize(); i++) {
                         UIController.instance().globalInputTable().setElement(i, closestPoint.getElement(i));
@@ -171,6 +173,8 @@ public class PhaseSpacePanel2DController extends ComponentUI implements PhaseSpa
                         pointMarkBuffer.set(pointMarkBuffer.size() - 1, point);
                     }
 
+                    }
+//                 
                 }
 
 

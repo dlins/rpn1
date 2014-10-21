@@ -42,6 +42,7 @@ import rpn.command.SecondaryBifurcationCurveCommand;
 import rpn.command.ShockCurvePlotCommand;
 import rpn.command.SubInflectionExtensionCurveCommand;
 import rpn.command.SubInflectionPlotCommand;
+import rpn.command.TransitionalLinePlotCommand;
 import rpn.command.WaveCurvePlotCommand;
 import rpn.command.WaveCurveRRegionsPlotCommand;
 import rpn.command.WaveCurveSpeedPlotCommand;
@@ -109,6 +110,7 @@ public class CurvesConfig extends UI_ACTION_SELECTED {
         EllipticBoundaryExtensionCommand.instance().setEnabled(true);
         EnvelopeCurveCommand.instance().setEnabled(true);
         SecondaryBifurcationCurveCommand.instance().setEnabled(true);
+        TransitionalLinePlotCommand.instance().setEnabled(true);
         
         RiemannResetCommand.instance().setEnabled(true);
 

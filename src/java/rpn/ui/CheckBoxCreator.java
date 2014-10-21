@@ -41,7 +41,8 @@ public class CheckBoxCreator extends UIComponentCreator {
 //        }
         
         
-        if (configuration_.getName().contains("hugoniot")|| configuration_.getName().contains("wavecurve")){
+        if (configuration_.getName().contains("hugoniot")|| configuration_.getName().contains("wavecurve")||
+                configuration_.getName().contains("transitional")){
 
             ComboBoxCreator combo  = new ComboBoxCreator(configuration_, configurationParameter_);
             return combo.createUIComponent();

@@ -93,6 +93,20 @@ GasVolatileDeadSubPhysics::GasVolatileDeadSubPhysics() : SubPhysics() {
                                                     phi_parameter);
     extension_curve.push_back(evap_);
 
+    // Shockcurve.
+    //
+    shockcurve_ = new ShockCurve(hugoniotcontinuation_);
+
+    // Composite.
+    //
+    compositecurve_ = new GasVolatileDeadCompositeCurve(evap_, accumulation_, flux_, boundary_, shockcurve_, 0/*&bc*/);
+
+    odesolver_ = new LSODE;
+
+    // Wavecurvefactory.
+    //
+    wavecurvefactory_ = new WaveCurveFactory(accumulation_, flux_, boundary_, odesolver_, rarefactioncurve_, shockcurve_, compositecurve_);
+
     // Canvas-related.
     //
     transformation_matrix_ = DoubleMatrix::eye(2);
@@ -106,9 +120,20 @@ GasVolatileDeadSubPhysics::GasVolatileDeadSubPhysics() : SubPhysics() {
 }
 
 GasVolatileDeadSubPhysics::~GasVolatileDeadSubPhysics(){
+    delete wavecurvefactory_;
+
+    delete odesolver_;
+
+    delete compositecurve_;
+
+    delete shockcurve_;
+
     for (int i = 0; i < extension_curve.size(); i++) delete extension_curve[i];
 
     delete inflection_curve_;
+
+    delete rarefactioncurve_;
+
     delete coincidence_contour_;
     delete coincidence_;
 //    delete godcoincidence_;

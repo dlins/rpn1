@@ -328,7 +328,32 @@ int ShockCurve::find_point_for_sigma_equal_reference_lambda(const RealVector &in
 
         iterations++;
 
-           
+            #ifdef USECANVAS
+                if (canvas != 0 && scroll != 0){
+                    std::vector<RealVector> temp_vec;
+                    temp_vec.push_back(iteration_point);
+                    
+                    std::vector<std::string> sigma;
+
+                    int n = iteration_point.size();
+
+                    JetMatrix JM_F(n), JM_G(n);
+                    f->jet(WaveState(iteration_point), JM_F, 0);
+                    g->jet(WaveState(iteration_point), JM_G, 0);
+
+                    std::stringstream ss;
+                    ss << hc->sigma(JM_F.function(), JM_G.function());
+
+                    sigma.push_back(ss.str());
+
+                    Curve2D *test = new Curve2D(temp_vec, 0.0/255.0, 0.0/255.0, 255.0/255.0, sigma, CURVE2D_MARKERS | CURVE2D_SOLID_LINE | CURVE2D_INDICES);
+                    canvas->add(test);
+
+                    std::stringstream buf;
+                    buf << "Shock, Newton. Iteration = " << iterations << ", p = " << iteration_point << ". Sigma = " << sigma[0];
+                    scroll->add(buf.str().c_str(), canvas, test);
+                }
+            #endif
     }
 
     std::cout << "*** Found_point = " << found_point << std::endl << std::endl << std::endl;

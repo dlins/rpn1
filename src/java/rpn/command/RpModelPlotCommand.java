@@ -27,6 +27,7 @@ import rpn.component.RpGeomFactory;
 import rpn.controller.ui.*;
 import rpnumerics.RPnCurve;
 import rpn.message.RPnNetworkStatus;
+import rpnumerics.TransitionalLine;
 import rpnumerics.WaveCurve;
 
 public abstract class RpModelPlotCommand extends RpModelActionCommand implements Observer {
@@ -90,6 +91,8 @@ public abstract class RpModelPlotCommand extends RpModelActionCommand implements
         RpCalcBasedGeomFactory factory = (RpCalcBasedGeomFactory) geometry.geomFactory();
 
         RPnCurve curve = (RPnCurve) factory.geomSource();
+        
+       
 
         if (!(curve instanceof WaveCurve)) {
 
@@ -108,6 +111,9 @@ public abstract class RpModelPlotCommand extends RpModelActionCommand implements
         logCommand(new RpCommand(event_, inputArray));
 
         RPnDataModule.PHASESPACE.plot(geometry);
+        
+        
+        
 
         if (RPnNetworkStatus.instance().isOnline() && RPnNetworkStatus.instance().isMaster()) {
             RPnNetworkStatus.instance().sendCommand(rpn.controller.ui.UndoActionController.instance().getLastCommand().toXML());

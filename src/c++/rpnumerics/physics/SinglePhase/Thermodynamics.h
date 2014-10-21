@@ -83,7 +83,14 @@ class Thermodynamics {
         int AqueousEnthalpyVol_jet(const double Theta, int degree, JetMatrix &Haj) const;
 
         int Rhosic_jet(const double yw, const double Theta, int degree, JetMatrix &rhosicj) const;
+
         int Rhosic_jet(const double Theta, int degree, JetMatrix &rhosicj) const;
+        static int Rhosic_jet_test(void *obj, const RealVector &state, int degree, JetMatrix &jm){
+            Thermodynamics *thermo = (Thermodynamics*)obj;
+            double Theta = state(0);
+
+            return thermo->Rhosic_jet(Theta, degree, jm);
+        }
 
         int Rhosiw_jet(const double yw, const double Theta, int degree, JetMatrix &rhosiwj) const;
         int Rhosiw_jet(const double Theta, int degree, JetMatrix &rhosiwj) const;

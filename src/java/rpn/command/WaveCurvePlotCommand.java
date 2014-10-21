@@ -1,21 +1,17 @@
 package rpn.command;
 
+import java.util.List;
+import java.util.Observable;
 import javax.swing.JToggleButton;
-import rpn.component.RpCalcBasedGeomFactory;
-import rpn.component.RpGeomFactory;
 import rpn.component.RpGeometry;
 import rpn.component.WaveCurveGeomFactory;
 import rpn.configuration.CurveConfiguration;
 import rpn.controller.ui.UIController;
-import rpn.parser.RPnDataModule;
-import rpnumerics.InflectionCurve;
-import rpnumerics.InflectionCurveCalc;
 import rpnumerics.OrbitPoint;
-import rpnumerics.PhysicalBoundary;
 import wave.util.RealVector;
 import rpnumerics.RPNUMERICS;
 import rpnumerics.RPnCurve;
-import rpnumerics.WaveCurve;
+import rpnumerics.TransitionalLine;
 import rpnumerics.WaveCurveCalc;
 
 public class WaveCurvePlotCommand extends RpModelPlotCommand {
@@ -35,7 +31,6 @@ public class WaveCurvePlotCommand extends RpModelPlotCommand {
         WaveCurveGeomFactory factory = null;
 
 //        RPNUMERICS.setParamValue("wavecurve", "origin", String.valueOf(11));
-
 //        if (UIController.instance().getSelectedGeometriesList().size() == 1) {
 //
 //            RpGeomFactory geomFactory = UIController.instance().getSelectedGeometriesList().get(0).geomFactory();
@@ -65,8 +60,8 @@ public class WaveCurvePlotCommand extends RpModelPlotCommand {
 //            }
 //
 //        }
-
         CurveConfiguration waveCurveConfiguration = (CurveConfiguration) RPNUMERICS.getConfiguration("wavecurve");
+
         factory = new WaveCurveGeomFactory(new WaveCurveCalc(oPoint, waveCurveConfiguration));
 
         RiemannProfileCommand.instance().getState().add(factory.geom());
@@ -81,4 +76,42 @@ public class WaveCurvePlotCommand extends RpModelPlotCommand {
         }
         return instance_;
     }
+
+    @Override
+    public void update(Observable o,
+            Object arg) {
+
+        List<RpGeometry> selectedGeometriesList = UIController.instance().getSelectedGeometriesList();
+
+        if (selectedGeometriesList.size() == 1) {
+
+            for (RpGeometry rpGeometry : selectedGeometriesList) {
+
+                RPnCurve curve = (RPnCurve) rpGeometry.geomFactory().geomSource();
+
+                if (curve instanceof TransitionalLine) {
+
+                    TransitionalLine line = (TransitionalLine) curve;
+                    RPNUMERICS.setParamValue("wavecurve", "transitionalline", line.getName());
+                    
+                    System.out.println("adicionando linha: "+ line.getName());
+
+                }
+
+            }
+
+        }
+        
+        else {
+            
+            RPNUMERICS.setParamValue("wavecurve", "transitionalline", "None");
+            System.out.println("removendo linha: ");
+            
+        }
+
+    }
+    
+    
+    
+    
 }

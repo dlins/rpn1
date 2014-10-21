@@ -10,7 +10,7 @@ import rpn.RPnPhaseSpaceAbstraction;
 import rpn.controller.ui.UIController;
 import rpn.parser.RPnDataModule;
 import rpn.command.FindProfileCommand;
-import rpn.command.OrbitPlotCommand;
+import rpn.command.TransitionalLinePlotCommand;
 import rpnumerics.HugoniotCurve;
 import rpnumerics.ManifoldOrbit;
 import rpnumerics.ManifoldOrbitCalc;
@@ -40,7 +40,7 @@ public class ProfileSetupReadyImpl extends PoincareReadyImpl
         bwdManifoldGeom_ = null;
         // ENABLED
         FindProfileCommand.instance().setEnabled(true);
-        OrbitPlotCommand.instance().setEnabled(false);
+        TransitionalLinePlotCommand.instance().setEnabled(false);
     }
 
     public ProfileSetupReadyImpl(HugoniotCurveGeom hugoniotGeom, XZeroGeom xzeroGeom, PoincareSectionGeom poincareGeom,
@@ -50,7 +50,7 @@ public class ProfileSetupReadyImpl extends PoincareReadyImpl
         bwdManifoldGeom_ = bwdManifoldGeom;
         // ENABLED
         FindProfileCommand.instance().setEnabled(true);
-        OrbitPlotCommand.instance().setEnabled(false);
+        TransitionalLinePlotCommand.instance().setEnabled(false);
     }
 
     //

@@ -42,6 +42,8 @@ public class RPnCurvesConfigPanel extends Observable implements PropertyChangeLi
         
         addObserver(ChangeDirectionCommand.instance());
         
+
+        
         mainPainel_ = new JPanel();
         GridLayout grid = new GridLayout(1, 1);
         mainPainel_.setLayout(grid);

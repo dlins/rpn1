@@ -7,6 +7,7 @@
 package wave.util;
 
 public interface PoincareSection {
+
     RealVector[] getPoints();
 
     RealVector getNormal();

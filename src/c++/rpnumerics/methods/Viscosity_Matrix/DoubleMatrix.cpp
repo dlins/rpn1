@@ -146,6 +146,18 @@ DoubleMatrix DoubleMatrix::eye(int n){
     return e;
 }
 
+DoubleMatrix DoubleMatrix::zero(int m, int n){
+    DoubleMatrix z(m, n);
+
+    #pragma omp parallel for schedule(static)
+    for (int i = 0; i < m; i++){
+        for (int j = 0; j < n; j++) z(i, j) = 0.0;
+    }
+
+    return z;
+}
+
+
 double DoubleMatrix::max(){
 	double minimum, maximum;
 	
@@ -163,15 +175,23 @@ double DoubleMatrix::min(){
 }
 
 void DoubleMatrix::minmax(double &minimum, double &maximum){
-	minimum =  std::numeric_limits<double>::max();
-	maximum = -std::numeric_limits<double>::max();
+    minimum =  std::numeric_limits<double>::max();
+    maximum = -std::numeric_limits<double>::max();
 	
-	for (int i = 0; i < rows_*cols_; i++){
-		if (vec[i] > maximum) maximum = vec[i];
-		if (vec[i] < minimum) minimum = vec[i];
-	}
+    for (int i = 0; i < rows_*cols_; i++){
+        if (vec[i] > maximum) maximum = vec[i];
+        if (vec[i] < minimum) minimum = vec[i];
+    }
 	
-	return;
+    return;
+}
+
+double DoubleMatrix::norm_max(){
+    double d = 0.0;
+
+    for (int i = 0; i < rows_*cols_; i++) d = std::max(d, std::abs(vec[i]));
+
+    return d;
 }
 
 // Returns A + B
@@ -476,6 +496,7 @@ double trace(const DoubleMatrix &A){
 
 // Output to a stream
 std::ostream& operator<<(std::ostream& stream, const DoubleMatrix &m){
+    std::cout << std::endl;
     for (int i = 0; i < m.rows_; i++){
         stream << "|";
         for (int j = 0; j < m.cols_; j++){

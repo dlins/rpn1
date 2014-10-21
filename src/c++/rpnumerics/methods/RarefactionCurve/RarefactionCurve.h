@@ -58,7 +58,7 @@ class RarefactionCurve {
 
         void add_point_to_curve(const RealVector &p, Curve &curve);
 
-       
+    
     public:
         RarefactionCurve(const AccumulationFunction *gg, const FluxFunction *ff, const Boundary *bb);
         virtual ~RarefactionCurve();
@@ -134,7 +134,7 @@ class RarefactionCurve {
         friend class WaveCurveFactory;
         friend class ShockCurve;
 
-        
+       
 
 //        static int curve(RarefactionCurve *obj, const RealVector &initial_point,
 //                  int curve_family,

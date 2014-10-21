@@ -18,10 +18,14 @@ SubPhysics::SubPhysics(){
     coincidence_contour_ = 0;
 
     inflection_curve_ = 0;
-    bifurcationcurve_= 0;
 
+    bifurcationcurve_ = 0;
+
+    doublecontact_ = 0;
 }
 
 SubPhysics::~SubPhysics(){
 }
+
+
 

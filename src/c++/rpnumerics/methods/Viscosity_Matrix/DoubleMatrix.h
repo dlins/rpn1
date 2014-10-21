@@ -53,14 +53,21 @@ class DoubleMatrix : public Matrix<double> {
         // Deprecated:
         // void print(void) const;
 
-        // Create the identity matrix
+        // Create the identity matrix.
+        //
         static DoubleMatrix eye(int n);
+
+        // Create a zero-filled matrix.
+        //
+        static DoubleMatrix zero(int m, int n);
         
         // Maximum and minimum.
         //
         double max();
         double min();
         void minmax(double &minimum, double &maximum);
+
+        double norm_max();
 
         // Set/get the width used for printing
         void w(int ww){w_ = ww; return;}

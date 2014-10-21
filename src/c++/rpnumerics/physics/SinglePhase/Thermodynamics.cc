@@ -637,6 +637,8 @@ int Thermodynamics::Rhosic_jet(const double Theta, int degree, JetMatrix &rhosic
     JetMatrix Originalrhosicj(2);
     int info = Rhosic_jet(yw_T, Theta, degree, Originalrhosicj);
     
+    rhosicj.resize(1);
+
     if (degree >= 0){
         rhosicj.set(0, Originalrhosicj.get(0));
         if (degree >= 1){

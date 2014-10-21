@@ -32,8 +32,8 @@ int GasVolatileDeadEvaporationExtension::extension(const RealVector &p,  RealVec
     double x1 = 0.0, x2 = 0.0;
     int info = Utilities::Bhaskara(B_Bhaskara/A_Bhaskara, C_Bhaskara/A_Bhaskara, x1, x2);
 
-    std::cout << "A = " << A_Bhaskara << ", B = " << B_Bhaskara << ", C = " << C_Bhaskara << ", x1 = " << x1 << ", x2 = " << x2 << std::endl;
-    std::cout << "    info = " << info << std::endl;
+//    std::cout << "A = " << A_Bhaskara << ", B = " << B_Bhaskara << ", C = " << C_Bhaskara << ", x1 = " << x1 << ", x2 = " << x2 << std::endl;
+//    std::cout << "    info = " << info << std::endl;
 
     if (info == BHASKARA_COMPLEX_ROOTS) return EXTENSION_ERROR;
 

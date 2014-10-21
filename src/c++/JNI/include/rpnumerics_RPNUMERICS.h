@@ -249,6 +249,14 @@ JNIEXPORT jobjectArray JNICALL Java_rpnumerics_RPNUMERICS_getWaveCurveCaseNames
 
 /*
  * Class:     rpnumerics_RPNUMERICS
+ * Method:    getTransisionalLinesNames
+ * Signature: ()Ljava/util/ArrayList;
+ */
+JNIEXPORT jobject JNICALL Java_rpnumerics_RPNUMERICS_getTransisionalLinesNames
+  (JNIEnv *, jclass);
+
+/*
+ * Class:     rpnumerics_RPNUMERICS
  * Method:    getHugoniotCaseNames
  * Signature: (Ljava/lang/String;)[Ljava/lang/String;
  */

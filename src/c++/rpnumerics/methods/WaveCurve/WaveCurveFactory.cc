@@ -77,7 +77,7 @@ int WaveCurveFactory::Liu_half_wavecurve(const ReferencePoint &ref,
     std::vector<int> rarefaction_list;
     std::vector<int> last_point_in_rarefaction;
 
-    while (true){
+    while (true && hwc.wavecurve.size() < 3){
         int current_curve = future_curve;
         RealVector current_curve_initial_point(future_curve_initial_point);
         RealVector current_curve_initial_direction(future_curve_initial_direction);
@@ -417,7 +417,7 @@ int WaveCurveFactory::Liu_half_wavecurve(const ReferencePoint &ref,
 //                        std::cout << "    r = " << RealVector(n, e[i].vrr.data()) << std::endl << std::endl;
 //                    }
 
-//                    TestTools::pause("Check console.");
+
 
 //                    std::cout << "Transitions: " << stop_current_family.size() << std::endl;
 //                    for (int i = 0; i < stop_current_family.size(); i++) std::cout << "    " << stop_current_family[i] << std::endl;

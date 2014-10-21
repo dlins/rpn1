@@ -12,9 +12,13 @@ class BifurcationCurve {
         BifurcationCurve();
         virtual ~BifurcationCurve();
 
-        virtual void list_of_secondary_bifurcation_curves(std::vector<int> &type, std::vector<std::string> &name) = 0;
+        virtual void list_of_secondary_bifurcation_curves(std::vector<int> &type, 
+                                                          std::vector<std::string> &name, 
+                                                          std::vector<void*> &object,
+                                                          std::vector<double (*)(void*, const RealVector &)> &function) = 0;
 
-        virtual double evaluate_point(int type, const RealVector &p) = 0;
+        virtual void curve(int type, std::vector<RealVector> &c) = 0;
+
 };
 
 #endif // _BIFURCATIONCURVE_

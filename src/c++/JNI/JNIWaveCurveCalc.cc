@@ -116,22 +116,32 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc
     int dimension = realVectorInput.size();
 
 
-    jstring jedge = (jstring) env->CallObjectMethod(configuration, getParamMethodID, env->NewStringUTF("edge"));
+
 
     jstring jorigin = (jstring) env->CallObjectMethod(configuration, getParamMethodID, env->NewStringUTF("origin"));
     jstring jcurve = (jstring) env->CallObjectMethod(configuration, getParamMethodID, env->NewStringUTF("curve"));
     jstring jdirection = (jstring) env->CallObjectMethod(configuration, getParamMethodID, env->NewStringUTF("direction"));
 
 
+//    jstring jtLine = (jstring) env->CallObjectMethod(configuration, getParamMethodID, env->NewStringUTF("transitionalline"));
+
+
+
+
+
     jstring jfamily = (jstring) env->CallObjectMethod(configuration, getParamMethodID, env->NewStringUTF("family"));
 
 
-    string edge(env->GetStringUTFChars(jedge, NULL));
+
     string origin(env->GetStringUTFChars(jorigin, NULL));
     string curve(env->GetStringUTFChars(jcurve, NULL));
     string direction(env->GetStringUTFChars(jdirection, NULL));
 
     string family(env->GetStringUTFChars(jfamily, NULL));
+
+//    string nativeTLine(env->GetStringUTFChars(jtLine, NULL));
+
+
 
 
     int timeDirection;
@@ -139,22 +149,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc
     stream >> timeDirection;
 
 
-    int edgeNumber;
-    std::stringstream streamEdge(edge);
-    streamEdge >> edgeNumber;
-
-
-
-//    std::stringstream streamOrigin(origin);
-
-
-    int originNumber = RpNumerics::waveCurveConfigVector_->at(0)->flag(origin);
-
-    
-    cout<<"Valor de origin string: "<< origin<<endl;    
-
-    
-//    streamOrigin >> originNumber;
 
     int curveNumber;
     std::stringstream streamCurve(curve);
@@ -165,8 +159,66 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc
     std::stringstream streamFamily(family);
     streamFamily >> familyNumber;
 
-    //
-        cout << "Valor de origin" << originNumber << endl;
+   
+    //    std::stringstream streamOrigin(origin);
+
+
+
+    WaveCurve * hwc = new WaveCurve();
+
+
+    int originNumber = RpNumerics::waveCurveConfigVector_->at(0)->flag(origin);
+
+
+    cout << "Valor de origin" <<" "<<origin<<"  " <<originNumber << endl;
+    
+    cout << "Valor de family" << familyNumber << endl;
+    
+    cout << "Valor de increase" << timeDirection << endl;
+
+
+
+
+
+
+    WaveCurveFactory *factory = RpNumerics::physicsVector_->at(0)->wavecurvefactory();
+    HugoniotContinuation * shock = RpNumerics::physicsVector_->at(0)->Hugoniot_continuation();
+
+    int info;
+    int reason_why, s;
+
+    //    if (nativeTLine.compare("NONE") != 0) {
+
+    BifurcationCurve * bifurcation = RpNumerics::physicsVector_->at(0)->bifurcation_curve();
+
+
+    std::vector<int> type;
+    std::vector<std::string> name;
+    std::vector<void*> object;
+    std::vector<double (*)(void*, const RealVector &) > function;
+
+
+
+//    bifurcation->list_of_secondary_bifurcation_curves(type, name, object, function);
+//
+//    int index;
+//
+//
+//    for (int i = 0; i < name.size(); i++) {
+//
+//        if (name[i].compare(nativeTLine) == 0) {
+//            index = i;
+//        }
+//
+//    }
+//
+//
+//    cout << "Name index: " << name[index] << endl;
+
+    factory->wavecurve(originNumber, realVectorInput, familyNumber, timeDirection, shock,0,0,
+            *hwc, reason_why, s);
+
+
     //
     //    cout << "Ponto entrado: " << realVectorInput << endl;
     //
@@ -177,7 +229,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc
     //    cout << "Edge" << edgeNumber << endl;
 
 
-    WaveCurve * hwc = new WaveCurve();
+
 
 
 
@@ -195,45 +247,35 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc
 
 
 
+    if (info == WAVECURVEFACTORY_INVALID_PARAMETERS) {
+
+        delete hwc;
+
+        return NULL;
 
 
-    int reason_why, s;
-
-    WaveCurveFactory *factory = RpNumerics::physicsVector_->at(0)->wavecurvefactory();
-    HugoniotContinuation * shock = RpNumerics::physicsVector_->at(0)->Hugoniot_continuation();
-
-int info =    factory->wavecurve(originNumber,realVectorInput, familyNumber, timeDirection, shock, *hwc, reason_why, s);
-
-
-if (info== WAVECURVEFACTORY_INVALID_PARAMETERS){
-    
-    delete hwc;
-    
-    return NULL;
-    
-    
-}
+    }
 
 
 
 
-    //    for (int j = 0; j < hwc->wavecurve.size(); j++) {
-    //
-    //        Curve testeWC = hwc->wavecurve[j];
-    //
-    //        vector<double> xiVector = testeWC.xi;
-    //
-    //        cout <<"Curva: "<<j<<endl;
-    //
-    //        for (int n = 0; n < xiVector.size(); n++) {
-    //            cout << "xi=" << xiVector[n] << endl;
+    //        for (int j = 0; j < hwc->wavecurve.size(); j++) {
+    //    
+    //            Curve testeWC = hwc->wavecurve[j];
+    //    
+    //            vector<double> xiVector = testeWC.xi;
+    //    
+    //            cout <<"Curva: "<<j<<endl;
+    //    
+    //            for (int n = 0; n < xiVector.size(); n++) {
+    //                cout << "xi=" << xiVector[n] << endl;
+    //            }
+    //    
+    //    
+    //    
+    //    
+    //    
     //        }
-    //
-    //
-    //
-    //
-    //
-    //    }
 
 
 
@@ -263,13 +305,13 @@ if (info== WAVECURVEFACTORY_INVALID_PARAMETERS){
     //
     //
     //    cout << "Antes de adicionar curva de onda: " << RpNumerics::getCurrentCurveID() << endl;
-    RpNumerics::addWaveCurve(CURVEID,hwc);
+    RpNumerics::addWaveCurve(CURVEID, hwc);
 
     jobject waveCurve = (env)->NewObject(classWaveCurve, waveCurveConstructor, familyNumber, timeDirection);
 
     env->CallVoidMethod(waveCurve, setIDMethodID, CURVEID);
-    
-    env->SetStaticIntField(modelPlotClass,curveIdField,++CURVEID);
+
+    env->SetStaticIntField(modelPlotClass, curveIdField, ++CURVEID);
 
     //    RpNumerics::increaseCurveID();
 

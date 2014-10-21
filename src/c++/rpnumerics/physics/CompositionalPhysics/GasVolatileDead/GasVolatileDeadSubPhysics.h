@@ -9,6 +9,9 @@
 
 #include "GasVolatileDeadFluxFunction.h"
 #include "GasVolatileDeadAccumulationFunction.h"
+#include "GasVolatileDeadCompositeCurve.h"
+#include "LSODE.h"
+
 #include "RectBoundary.h"
 
 #include "Hugoniot_TP.h"

@@ -36,7 +36,7 @@ public class NumConfigReadyImpl extends NumConfigImpl
         plotManifold_ = plotManifold;
 
         // ENABLED
-        OrbitPlotCommand.instance().setEnabled(true);
+        TransitionalLinePlotCommand.instance().setEnabled(true);
         PoincareSectionPlotCommand.instance().setEnabled(true);
         StationaryPointPlotCommand.instance().setEnabled(true);
         ChangeDirectionCommand.instance().setEnabled(true);

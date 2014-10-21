@@ -2,9 +2,6 @@
 #define _COMPOSITECURVE_
 
 
-
-// For test purposes only. DELETE LATER
-
 #include <cmath> // For std::abs.
 #include <algorithm>
 
@@ -151,8 +148,8 @@ class CompositeCurve {
 
         RealVector composite_field(const RealVector &final_point_pair);
 
-        void all_eigenvalues(const RealVector &p, int family, RealVector &point_eigenvalues);
-        void add_point_to_curve(const RealVector &p, int back, const Curve &rarcurve, Curve &curve);
+        virtual void all_eigenvalues(const RealVector &p, int family, RealVector &point_eigenvalues);
+        virtual void add_point_to_curve(const RealVector &p, int back, const Curve &rarcurve, Curve &curve);
 
         // To be used by the correction of the last point.
         //                #include "Hugoniot_Curve.h"
@@ -183,7 +180,6 @@ class CompositeCurve {
 
         int normalize_with_respect_to_whom;
 
-       
     public:
         CompositeCurve(const AccumulationFunction *a, const FluxFunction *f, const Boundary *b, ShockCurve *s, Explicit_Bifurcation_Curves *ebc);
         virtual ~CompositeCurve();
@@ -206,7 +202,7 @@ class CompositeCurve {
 //                  int &reason_why,
 //                  int &edge);
 
-        int curve(const AccumulationFunction *RarAccum, const FluxFunction *RarFlux,
+        virtual int curve(const AccumulationFunction *RarAccum, const FluxFunction *RarFlux,
                   const Boundary *RarBoundary, 
                   const Curve &rarcurve,
 //                  std::vector<RealVector> &rarcurve, std::vector<double> &lambda,
@@ -237,7 +233,7 @@ class CompositeCurve {
                          edge);
         }
 
-        int curve(const AccumulationFunction *RarAccum, const FluxFunction *RarFlux,
+        virtual int curve(const AccumulationFunction *RarAccum, const FluxFunction *RarFlux,
                   const Boundary *RarBoundary, 
                   const Curve &rarcurve,
 //                  std::vector<RealVector> &rarcurve, std::vector<double> &lambda,
@@ -255,7 +251,7 @@ class CompositeCurve {
                   int &reason_why,
                   int &edge);
 
-        int correct_last_point(const ODE_Solver *odesolver, double deltaxi, WaveCurve &wavecurve);
+        virtual int correct_last_point(const ODE_Solver *odesolver, double deltaxi, WaveCurve &wavecurve);
                           
         static int double_contact_signal_event(const RealVector & where, double & determinant, int *obj, int * /*not used*/);
         static int rarefaction_of_composite_signal_event(const RealVector &where, double & current_diff_lambda, int *obj, int * /*not used*/);
@@ -270,7 +266,7 @@ class CompositeCurve {
 
 //        static int characteristic_shock_signal_event(const RealVector &where, double &diff_lambda, int *obj, int * /*not used*/);
 
-        
+   
 };
 
 #endif // _COMPOSITECURVE_

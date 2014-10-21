@@ -15,16 +15,6 @@ ThreePhaseFlowSubPhysics::ThreePhaseFlowSubPhysics() : SubPhysics() {
     O_vertex(0) = 0.0;
     O_vertex(1) = 1.0;
 
-    
-    
-//    
-//    cout << G_vertex << endl;
-//    cout<< W_vertex<<endl;
-//    cout<<W_vertex<<endl;
-//    
-    
-    
-    
     info_subphysics_ = std::string("ThreePhaseFlow base class");
     xlabel_ = std::string("sw");
     ylabel_ = std::string("so");
@@ -46,6 +36,10 @@ ThreePhaseFlowSubPhysics::ThreePhaseFlowSubPhysics() : SubPhysics() {
     // The permeability will be instantiated in the derived classes.
     permeability_ = 0;
 
+    // Double_Contact.
+    //
+    doublecontact_ = new Double_Contact;
+
     // Projection matrix.
     //
     double m[9] = {1.0, .5, 0.0, 0.0, sqrt(3)/2, 0.0, 0.0, 0.0, 1.0};
@@ -53,6 +47,8 @@ ThreePhaseFlowSubPhysics::ThreePhaseFlowSubPhysics() : SubPhysics() {
 }
 
 ThreePhaseFlowSubPhysics::~ThreePhaseFlowSubPhysics(){
+    delete doublecontact_;
+
     if (accumulation_ != 0) delete accumulation_;
     delete iec;
     delete boundary_;

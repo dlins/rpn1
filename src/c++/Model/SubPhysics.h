@@ -27,6 +27,9 @@
 #include "Inflection_Curve.h"
 
 #include "BifurcationCurve.h"
+
+#include "Double_Contact.h"
+
 //#include "Extension_Curve.h"
 //#include "Double_Contact.h"
 //#include "Hysteresis.h"
@@ -84,9 +87,11 @@ protected:
     Coincidence_Contour *coincidence_contour_;
 
     Inflection_Curve *inflection_curve_;
-    
-     BifurcationCurve *bifurcationcurve_;
-    
+
+    BifurcationCurve *bifurcationcurve_;
+
+    Double_Contact *doublecontact_;
+
 public:
     SubPhysics();
     virtual ~SubPhysics();
@@ -179,6 +184,14 @@ public:
         return coincidence_;
     }
 
+    virtual BifurcationCurve* bifurcation_curve() {
+        return bifurcationcurve_;
+    }
+
+    virtual Double_Contact* double_contact() {
+        return doublecontact_;
+    }
+
     virtual ShockCurve *shock() {
         return shockcurve_;
     }
@@ -186,12 +199,6 @@ public:
     virtual CompositeCurve *composite() {
         return compositecurve_;
     }
-
-
- virtual BifurcationCurve* bifurcation_curve(){return bifurcationcurve_;}
-
-
-
 
 
 

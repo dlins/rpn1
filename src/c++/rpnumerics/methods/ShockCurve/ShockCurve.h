@@ -64,7 +64,6 @@
 #define SHOCK_REACHED_LINE                                               307
 
 
-// For test purposes only. DELETE LATER
 
 #define DONT_USE_INTERRUPTION_FUNCTIONS            1
 #define USE_INTERRUPTION_FUNCTIONS_SPECIFIC_FAMILY 2
@@ -190,7 +189,7 @@ class ShockCurve {
         virtual void find_system(const RealVector &in, const ReferencePoint &reference_point, double lambda_ref, DoubleMatrix &nablaH, RealVector &H);
         //virtual void find_system(const RealVector &in, double lambda_ref, DoubleMatrix &nablaH, RealVector &H);
 
-       
+
         // Use (or don't) interruption functions.
         // If no one is used, the shock is allowed to reach the boundary.
         int use_interruption_functions;
@@ -330,7 +329,7 @@ class ShockCurve {
 
         HugoniotContinuation * get_HugoniotContinuation(){return hc;}
 
-       
+        
 };
 
 #endif // _SHOCKCURVE_

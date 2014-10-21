@@ -104,29 +104,35 @@ public class RPNUMERICS {
         
         
         
-//        String[] auxFunctionNames = getAuxFunctionNames();
-//        
-//        System.out.println("Funcoes auxiliares");
-//        
-//        for (String string : auxFunctionNames) {
-//
-//            
-//            System.out.println(string);
-//                String[] auxParamsNames = getAuxParamsNames(string);
-//                
-//                for (String string1 : auxParamsNames) {
-//
-//                    
-//                    System.out.println("parametro: "+ string1 + " valor:" +getAuxParamValue(string, string1));
-//
-//
-//                
-//            }
-//
-//            
-//        }
-//
-//
+        ArrayList<String> auxFunctionNames = getTransisionalLinesNames();
+        for (String string : auxFunctionNames) {
+            
+            System.out.println("TLines: " + string);
+            
+        }
+        
+        
+        System.out.println("Funcoes auxiliares");
+        
+        for (String string : auxFunctionNames) {
+
+            
+            System.out.println(string);
+                String[] auxParamsNames = getAuxParamsNames(string);
+                
+                for (String string1 : auxParamsNames) {
+
+                    
+                    System.out.println("parametro: "+ string1 + " valor:" +getAuxParamValue(string, string1));
+
+
+                
+            }
+
+            
+        }
+
+
 //
 //
 //            //Processing configuration data
@@ -1042,6 +1048,8 @@ public class RPNUMERICS {
     
     
     public static native String [] getWaveCurveCaseNames();
+    
+    public static native ArrayList<String> getTransisionalLinesNames();
     
     
     public static native String [] getHugoniotCaseNames(String hugoniotMethodName);

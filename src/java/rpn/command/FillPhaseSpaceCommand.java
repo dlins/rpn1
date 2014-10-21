@@ -92,7 +92,7 @@ public class FillPhaseSpaceCommand extends AbstractAction {
             UIController.instance().userInputComplete(coords[0]);
             if (bounds.inside(coords[0])) {
 
-                OrbitGeom orbitGeom = (OrbitGeom)OrbitPlotCommand.instance().createRpGeometry(coords);
+                OrbitGeom orbitGeom = (OrbitGeom)TransitionalLinePlotCommand.instance().createRpGeometry(coords);
 
                 try {
                     int fPoints = ((Orbit) orbitGeom.geomFactory().geomSource()).getPoints().length;

@@ -40,6 +40,8 @@ int Accum2Comp2PhasesAdimensionalized::jet(const WaveState &w, JetMatrix &m, int
 
     double U = w(2);
 
+    m.resize(3);
+
     // Some auxiliary variables
     JetMatrix Hrj(1);
     TD->RockEnthalpyVol_jet(Theta, degree, Hrj);

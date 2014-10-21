@@ -41,6 +41,13 @@
             
             
             
+            <CURVECONFIGURATION name="transitionalline">
+                <CURVEPARAM name="name" value="W-E"/>
+            </CURVECONFIGURATION>
+            
+            
+            
+            
             <CURVECONFIGURATION name="extensioncurve">
                 <CURVEPARAM name="family" value="0"/>
                 <CURVEPARAM name="resolution" value="128 128"/>
@@ -58,11 +65,11 @@
 
 
             <CURVECONFIGURATION name="wavecurve">
-                <CURVEPARAM name="edge" value="0"/>
                 <CURVEPARAM name="origin" value="Generic point"/>
                 <CURVEPARAM name="curve" value="0"/>
                 <CURVEPARAM name="direction" value="10"/>
                 <CURVEPARAM name="family" value="0"/>
+                <CURVEPARAM name="transitionalline" value="None"/>
             </CURVECONFIGURATION>
 
              <CURVECONFIGURATION name="secondarybifurcation">

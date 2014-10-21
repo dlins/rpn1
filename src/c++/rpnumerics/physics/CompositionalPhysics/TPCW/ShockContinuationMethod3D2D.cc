@@ -838,7 +838,6 @@ int ShockContinuationMethod3D2D::init(int family, int increase, Plane &plane, Re
         Eigen::eig(n, &A[0][0], &B[0][0], e);
     }
 
-   
 
     if (debugshock == 1){
         std::cout << "    After EIGEN" << std::endl;
