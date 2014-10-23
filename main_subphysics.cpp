@@ -574,7 +574,7 @@ void add_Hugoniots_group(){
         hugoniotrnd->deactivate();
         hugoniotgrp->deactivate();
     }
-    else {
+    else {	../../../../rpnumerics/physics/ThreePhaseFlowPhysics/StoneSubPhysics/StoneSubPhysics.cc \
         Hugoniot_method_choice->value(0);
         Hugoniot_method_choice->do_callback();
 

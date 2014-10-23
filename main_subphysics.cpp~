@@ -767,7 +767,7 @@ void wavecurvefactioncb(Fl_Widget*, void*){
 
     int bifindex = 1;
 
-//    for (int i = 0; i < function.size(); i++) std::cout << (void*)function[i] << std::endl;
+    for (int i = 0; i < function.size(); i++) std::cout << (void*)function[i] << std::endl;
 
     int info = wcf->wavecurve(type, initial_point, family, increase, subphysics->Hugoniot_continuation(), object[bifindex], function[bifindex], hwc, reason_why, edge);
 
