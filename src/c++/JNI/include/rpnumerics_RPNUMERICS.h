@@ -41,14 +41,6 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_clean
 
 /*
  * Class:     rpnumerics_RPNUMERICS
- * Method:    setParams
- * Signature: ([Ljava/lang/String;)V
- */
-JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setParams
-  (JNIEnv *, jclass, jobjectArray);
-
-/*
- * Class:     rpnumerics_RPNUMERICS
  * Method:    setPhysicsParams
  * Signature: (ILjava/lang/String;)V
  */
@@ -121,14 +113,6 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setResolution
 
 /*
  * Class:     rpnumerics_RPNUMERICS
- * Method:    getAccumulationParams
- * Signature: ()Lwave/util/RealVector;
- */
-JNIEXPORT jobject JNICALL Java_rpnumerics_RPNUMERICS_getAccumulationParams
-  (JNIEnv *, jclass);
-
-/*
- * Class:     rpnumerics_RPNUMERICS
  * Method:    physicsID
  * Signature: ()Ljava/lang/String;
  */
@@ -158,14 +142,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RPNUMERICS_boundary
  */
 JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setBoundary
   (JNIEnv *, jclass, jobject);
-
-/*
- * Class:     rpnumerics_RPNUMERICS
- * Method:    setMethod
- * Signature: (Ljava/lang/String;Ljava/lang/String;)V
- */
-JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setMethod
-  (JNIEnv *, jclass, jstring, jstring);
 
 /*
  * Class:     rpnumerics_RPNUMERICS
@@ -262,22 +238,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RPNUMERICS_getTransisionalLinesNames
  */
 JNIEXPORT jobjectArray JNICALL Java_rpnumerics_RPNUMERICS_getHugoniotCaseNames
   (JNIEnv *, jclass, jstring);
-
-/*
- * Class:     rpnumerics_RPNUMERICS
- * Method:    setFluxParams
- * Signature: (Lrpnumerics/FluxParams;)V
- */
-JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setFluxParams
-  (JNIEnv *, jclass, jobject);
-
-/*
- * Class:     rpnumerics_RPNUMERICS
- * Method:    setAccumulationParams
- * Signature: (Lwave/util/RealVector;)V
- */
-JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setAccumulationParams
-  (JNIEnv *, jclass, jobject);
 
 #ifdef __cplusplus
 }

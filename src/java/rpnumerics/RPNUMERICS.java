@@ -98,39 +98,33 @@ public class RPNUMERICS {
         
         
         
+//        ArrayList<String> auxFunctionNames = getTransisionalLinesNames();
+//        for (String string : auxFunctionNames) {
+//            
+//            System.out.println("TLines: " + string);
+//            
+//        }
         
         
-        
-        
-        
-        
-        ArrayList<String> auxFunctionNames = getTransisionalLinesNames();
-        for (String string : auxFunctionNames) {
-            
-            System.out.println("TLines: " + string);
-            
-        }
-        
-        
-        System.out.println("Funcoes auxiliares");
-        
-        for (String string : auxFunctionNames) {
-
-            
-            System.out.println(string);
-                String[] auxParamsNames = getAuxParamsNames(string);
-                
-                for (String string1 : auxParamsNames) {
-
-                    
-                    System.out.println("parametro: "+ string1 + " valor:" +getAuxParamValue(string, string1));
-
-
-                
-            }
-
-            
-        }
+//        System.out.println("Funcoes auxiliares");
+//        
+//        for (String string : auxFunctionNames) {
+//
+//            
+//            System.out.println(string);
+//                String[] auxParamsNames = getAuxParamsNames(string);
+//                
+//                for (String string1 : auxParamsNames) {
+//
+//                    
+//                    System.out.println("parametro: "+ string1 + " valor:" +getAuxParamValue(string, string1));
+//
+//
+//                
+//            }
+//
+//            
+//        }
 
 
 //
@@ -995,7 +989,6 @@ public class RPNUMERICS {
      */
     public static native void clean();
 
-    public static native void setParams(String[] params);
     
     public static native void setPhysicsParams(int paramIndex, String value);
     
@@ -1015,8 +1008,6 @@ public class RPNUMERICS {
 
     public static native void setResolution(RealVector min, RealVector max, String gridName, int[] newResolution);
 
-    public static native RealVector getAccumulationParams();
-
     public static native String physicsID();
 
     public static native void setRPnHome(String rpnHome);
@@ -1025,7 +1016,6 @@ public class RPNUMERICS {
 
     public static native void setBoundary(Boundary newBoundary);
 
-    public static native void setMethod(String methodType, String methodName);
 
     public static native int domainDim();
 
@@ -1054,7 +1044,5 @@ public class RPNUMERICS {
     
     public static native String [] getHugoniotCaseNames(String hugoniotMethodName);
 
-    private static native void setFluxParams(FluxParams fluxParams);
-
-    private static native void setAccumulationParams(RealVector accumulationParams);
+  
 }

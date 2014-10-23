@@ -23,8 +23,7 @@ NOTE :
 #include "RpNumerics.h"
 #include <vector>
 #include <iostream>
-#include "Hugoniot_TP.h"
-#include "ImplicitHugoniotCurve.h"
+
 
 
 using std::vector;
@@ -138,6 +137,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
     
    HugoniotConfig * config =  RpNumerics::getHugoniotConfig(methodName);
    
+   
+   
+   cout <<"Pont config: "<<config<<endl;
 
    cout <<"Indice do caso: "<<config->getCase(caseName)<<endl;
    

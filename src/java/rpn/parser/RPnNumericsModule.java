@@ -196,28 +196,7 @@ public class RPnNumericsModule {
         public void skippedEntity(String name) throws SAXException {
         }
 
-        private void setMethod(String methodName) {
-
-            HashMap<String, Configuration> configurationMap = RPNUMERICS.getConfigurations();
-
-            if (configurationMap.containsKey(methodName)) {
-
-                Configuration hugoniotConfig = configurationMap.get(methodName);
-
-                HashMap<String, String> configParams = hugoniotConfig.getParams();
-                Set<Entry<String, String>> entrySet = configParams.entrySet();
-
-                for (Entry<String, String> entry : entrySet) {
-
-                    if (entry.getValue().equals("1")) {
-                        RPNUMERICS.setMethod(methodName, entry.getKey());
-                    }
-
-                }
-
-            }
-
-        }
+       
 
         private void checkNumberFormat(String value) {
             try {

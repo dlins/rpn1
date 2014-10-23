@@ -6,7 +6,6 @@
 package rpn.controller.ui;
 
 import rpn.command.AnnotationSelectionCommand;
-import rpn.command.AreaSelectionCommand;
 import rpn.command.BoundaryExtensionCurveCommand;
 import rpn.command.BuckleyLeverettiInflectionCommand;
 import rpn.command.ChangeFluxParamsCommand;
@@ -45,7 +44,6 @@ import rpn.command.SubInflectionPlotCommand;
 import rpn.command.TransitionalLinePlotCommand;
 import rpn.command.WaveCurvePlotCommand;
 import rpn.command.WaveCurveRRegionsPlotCommand;
-import rpn.command.WaveCurveSpeedPlotCommand;
 import rpn.command.ZoomPlotCommand;
 import rpn.command.ZoomingAreaCommand;
 import wave.util.RealVector;
@@ -84,9 +82,6 @@ public class CurvesConfig extends UI_ACTION_SELECTED {
         CurveSelectionCommand.instance().setEnabled(true);
 
         
-//        WaveCurveSpeedPlotCommand.instance().setEnabled(true);
-        
-        
         ZoomPlotCommand.instance().setEnabled(true);
         ZoomingAreaCommand.instance().setEnabled(true);
         AnnotationSelectionCommand.instance().setEnabled(true);
@@ -110,7 +105,17 @@ public class CurvesConfig extends UI_ACTION_SELECTED {
         EllipticBoundaryExtensionCommand.instance().setEnabled(true);
         EnvelopeCurveCommand.instance().setEnabled(true);
         SecondaryBifurcationCurveCommand.instance().setEnabled(true);
-        TransitionalLinePlotCommand.instance().setEnabled(true);
+
+        
+        
+        if(rpnumerics.RPNUMERICS.getTransisionalLinesNames().isEmpty()){
+            TransitionalLinePlotCommand.instance().setEnabled(false);            
+        }
+        else {
+            TransitionalLinePlotCommand.instance().setEnabled(true);
+        }
+
+        
         
         RiemannResetCommand.instance().setEnabled(true);
 

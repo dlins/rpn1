@@ -100,7 +100,7 @@ StoneSubPhysics::~StoneSubPhysics(){
     //
     for (int i = 0; i < hugoniot_curve.size(); i++) delete hugoniot_curve[i];
 
-    delete hugoniotcontinuation_;
+//    delete hugoniotcontinuation_;
 
     delete flux_;
 

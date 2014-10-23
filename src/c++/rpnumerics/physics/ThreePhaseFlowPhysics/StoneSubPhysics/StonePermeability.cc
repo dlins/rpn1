@@ -119,6 +119,10 @@ StonePermeability::StonePermeability(ThreePhaseFlowSubPhysics *s) : ThreePhaseFl
     parameters_.push_back(log_parameter);
 
     parameters_.push_back(epsl_parameter);
+    
+    info_auxiliaryfunction_= std::string("Stone permeability");
+
+    
 }
 
 StonePermeability::~StonePermeability() {

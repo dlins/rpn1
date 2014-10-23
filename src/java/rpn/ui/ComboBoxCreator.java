@@ -80,14 +80,21 @@ public class ComboBoxCreator extends UIComponentCreator {
 
             JComboBox hugoniotMethodsComboBox = new JComboBox(hugoniotMethodNames);
 
-            casesNameCombo.addActionListener(new DefaultComboEventHandler());
+            casesNameCombo.addActionListener(new HugoniotCaseMethodComboEventHandler());
 
             hugoniotMethodsComboBox.addActionListener(new HugoniotMethodComboEventHandler(casesNameCombo));
 
             panel_.add(hugoniotMethodsComboBox);
 
             panel_.add(casesNameCombo);
+//            
+//            
+//            RPNUMERICS.setParamValue(configuration_.getName(), "method", hugoniotMethodNames[0]);
+//            RPNUMERICS.setParamValue(configuration_.getName(), "case", hugoniotCaseNames[0]);
 
+//            hugoniotMethodsComboBox.setSelectedIndex(0);
+//            
+//            hugoniotMethodsComboBox.actionPerformed(new ActionEvent(hugoniotMethodsComboBox, 0, ""));
         }
 
         if (configurationParameter_.contains("origin")) {
@@ -98,7 +105,7 @@ public class ComboBoxCreator extends UIComponentCreator {
             JComboBox casesNameCombo = new JComboBox(waveCurveCaseNames);
             
             
-            casesNameCombo.addActionListener(new DefaultComboEventHandler());
+            casesNameCombo.addActionListener(new WaveCurveCaseMethodComboEventHandler());
             
             
             panel_.add(casesNameCombo);
@@ -116,7 +123,7 @@ public class ComboBoxCreator extends UIComponentCreator {
              
              JComboBox casesNameCombo = new JComboBox(transitionalNames.toArray(transName));
             
-            casesNameCombo.addActionListener(new DefaultComboEventHandler());
+            casesNameCombo.addActionListener(new TransitionalLineComboEventHandler());
             
             
             panel_.add(casesNameCombo);
@@ -126,6 +133,24 @@ public class ComboBoxCreator extends UIComponentCreator {
         }
         
 
+        
+        
+        
+
+//        
+//         if (configurationParameter_.contains("sort")) {//To eigen sort functions
+//             
+//             System.out.println("em sort eigen value: "+ configurationParameter_ + " "+ configuration_.getParam(configurationParameter_));
+//             comboBox.setSelectedItem(configuration_.getParam(configurationParameter_));
+//             
+//             
+//         }
+//         
+//         else {
+//             int charFlag = new Integer(configuration_.getParam(configurationParameter_));
+//             comboBox.setSelectedItem(chooseCharacteristic(charFlag));
+//         }
+//        
         return panel_;
 
     }
@@ -175,31 +200,75 @@ public class ComboBoxCreator extends UIComponentCreator {
 
     }
 
-   
-    
-        
-        
-        private class DefaultComboEventHandler implements ActionListener {
-              
-              @Override
-              public void actionPerformed(ActionEvent e) {
-                  
-                  JComboBox combo = (JComboBox) e.getSource();
-                  
-                  String selectedItem = (String) combo.getSelectedItem();
-                  
-                  
-                  
-                  RPNUMERICS.setParamValue(configuration_.getName(), configurationParameter_, selectedItem);
-                  
-              }
+    private class HugoniotCaseMethodComboEventHandler implements ActionListener {
 
+        @Override
+        public void actionPerformed(ActionEvent e) {
+
+            JComboBox combo = (JComboBox) e.getSource();
+
+            String selectedItem = (String) combo.getSelectedItem();
+
+//            System.out.println("Chamando caso item changed" + configuration_.getName() + " " + configurationParameter_ + " " + selectedItem);
+
+            RPNUMERICS.setParamValue(configuration_.getName(), "case", selectedItem);
+
+        }
+
+    }
     
-     }
     
     
-        
-        
+     private class TransitionalLineComboEventHandler implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+
+            JComboBox combo = (JComboBox) e.getSource();
+
+            String selectedItem = (String) combo.getSelectedItem();
+
+//            System.out.println("Chamando caso item changed" + configuration_.getName() + " " + configurationParameter_ + " " + selectedItem);
+
+            RPNUMERICS.setParamValue(configuration_.getName(), "name", selectedItem);
+
+        }
+
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+     private class WaveCurveCaseMethodComboEventHandler implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+
+            JComboBox combo = (JComboBox) e.getSource();
+
+            String selectedItem = (String) combo.getSelectedItem();
+
+//            System.out.println("Chamando caso item changed" + configuration_.getName() + " " + configurationParameter_ + " " + selectedItem);
+
+            RPNUMERICS.setParamValue(configuration_.getName(), "origin", selectedItem);
+
+        }
+
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     
     
@@ -233,5 +302,3 @@ public class ComboBoxCreator extends UIComponentCreator {
 
     }
 }
-     
-

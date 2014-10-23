@@ -99,32 +99,34 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RPNUMERICS_getTransisionalLinesNames
 
     jmethodID arrayListConstructor = env->GetMethodID(arrayListClass, "<init>", "()V");
     jmethodID arrayListAddMethod = env->GetMethodID(arrayListClass, "add", "(Ljava/lang/Object;)Z");
-    
-    
+
+
     jobject namesArray = env->NewObject(arrayListClass, arrayListConstructor, NULL);
 
-    BifurcationCurve * bifurcation=    RpNumerics::physicsVector_->at(0)->bifurcation_curve();
-    
-    
-    std::vector<int> type;
-    std::vector<std::string> name;
-    std::vector<void*> object;
-    std::vector<double (*)(void*, const RealVector &)> function;
-    
-    
-    
-    bifurcation->list_of_secondary_bifurcation_curves(type,name,object,function);
-    
-    
-    for (int i = 0; i < name.size(); i++) {
+    BifurcationCurve * bifurcation = RpNumerics::physicsVector_->at(0)->bifurcation_curve();
 
-        
-        jstring paramName = env->NewStringUTF(name[i].c_str());
-        
-        env->CallObjectMethod(namesArray, arrayListAddMethod, paramName);
+    if (bifurcation != NULL) {
+     
+        std::vector<int> type;
+        std::vector<std::string> name;
+        std::vector<void*> object;
+        std::vector<double (*)(void*, const RealVector &) > function;
 
+
+
+        bifurcation->list_of_secondary_bifurcation_curves(type, name, object, function);
+
+
+        for (int i = 0; i < name.size(); i++) {
+
+
+            jstring paramName = env->NewStringUTF(name[i].c_str());
+
+            env->CallObjectMethod(namesArray, arrayListAddMethod, paramName);
+
+        }
     }
-    
+
     return namesArray;
 
 
@@ -153,20 +155,15 @@ void RpNumerics::fillPhysicsParams() {
 
     physicsVector_->at(0)->equation_parameter(*physicsParams_);
 
-
     vector<AuxiliaryFunction *> auxFuncVector;
 
     physicsVector_->at(0)->auxiliary_functions(auxFuncVector);
 
-
     physicsAuxFunctionsMap_ = new map<string, AuxiliaryFunction *>();
-
 
     for (int i = 0; i < auxFuncVector.size(); i++) {
 
-
-        physicsAuxFunctionsMap_->at(auxFuncVector.at(i)->info_auxiliary_function()) = auxFuncVector.at(i);
-
+        physicsAuxFunctionsMap_->insert(std::pair<string, AuxiliaryFunction *>(auxFuncVector.at(i)->info_auxiliary_function(), auxFuncVector.at(i)));
 
     }
 
@@ -253,24 +250,17 @@ JNIEXPORT jobjectArray JNICALL Java_rpnumerics_RPNUMERICS_getAuxParamsNames
 
     jclass stringClass = env->FindClass("Ljava/lang/String;");
 
-
-
     const char * auxFuncNameChar;
 
     auxFuncNameChar = env->GetStringUTFChars(auxFunctionName, NULL);
-
 
     string auxFuncNameString(auxFuncNameChar);
 
     AuxiliaryFunction * auxFunction = RpNumerics::physicsAuxFunctionsMap_->at(auxFuncNameString);
 
-
-
     vector<Parameter *> parameterVector;
 
-
     auxFunction->parameter(parameterVector);
-
 
     jobjectArray paramsNamesArray = env->NewObjectArray(parameterVector.size(), stringClass, NULL);
 
@@ -336,20 +326,15 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setPhysicsParams
 
     stringstream paramStream;
 
-
     paramStream << paramString;
 
     double paramDoubleValue;
 
     paramStream >> paramDoubleValue;
 
-
     Parameter * param = RpNumerics::physicsParams_->at(paramIndex);
 
-
     param->value(paramDoubleValue);
-
-
 
     RpNumerics::physicsVector_->at(0)->gridvalues()->clear_computations();
 
@@ -370,22 +355,15 @@ JNIEXPORT jstring JNICALL Java_rpnumerics_RPNUMERICS_getPhysicsParam
 
     Parameter * param = RpNumerics::physicsParams_->at(paramIndex);
 
-
     double paramValue = param->value();
-
 
     stringstream paramStream;
 
-
     paramStream << paramValue;
-
 
     jstring paramStringValue = env->NewStringUTF(paramStream.str().c_str());
 
     return paramStringValue;
-
-
-
 
 
 }
@@ -425,13 +403,9 @@ JNIEXPORT jobjectArray JNICALL Java_rpnumerics_RPNUMERICS_getWaveCurveCaseNames
 JNIEXPORT jobjectArray JNICALL Java_rpnumerics_RPNUMERICS_getHugoniotNames
 (JNIEnv * env, jclass cls) {
 
-
-
     jclass stringClass = env->FindClass("Ljava/lang/String;");
 
     jobjectArray hugoniotNames = env->NewObjectArray(RpNumerics::hugoniotCasesVector_->size(), stringClass, NULL);
-
-
 
     for (int i = 0; i < RpNumerics::hugoniotCasesVector_->size(); i++) {
         jstring jhugoniotName = env->NewStringUTF(RpNumerics::hugoniotCasesVector_->at(i)->getName()->c_str());
@@ -518,33 +492,7 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setRPnHome
 
 }
 
-/*
- * Class:     rpnumerics_RPNUMERICS
- * Method:    setParams
- * Signature: ([Ljava/lang/String;)V
- */
-JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setParams
-(JNIEnv * env, jclass cls, jobjectArray stringParamsArray) {
 
-    const char *paramNative;
-
-    int paramSize = env->GetArrayLength(stringParamsArray);
-
-    vector<string> paramVector;
-
-    for (int i = 0; i < paramSize; i++) {
-        jstring paramString = (jstring) (env)->GetObjectArrayElement(stringParamsArray, i);
-
-        paramNative = env->GetStringUTFChars(paramString, NULL);
-
-        string paramElementString(paramNative);
-        paramVector.push_back(paramElementString);
-
-    }
-    //    RpNumerics::getPhysics().setParams(paramVector);
-
-
-}
 
 /*
  * Class:     rpnumerics_RPNUMERICS
@@ -584,85 +532,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RPNUMERICS_getFluxParams
 
 }
 
-/*
- * Class:     rpnumerics_RPNUMERICS
- * Method:    setAccumulationParams
- * Signature: (Lwave/util/RealVector;)V
- */
-JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setAccumulationParams
-(JNIEnv * env, jclass cls, jobject newParamsVector) {
 
-
-    //
-    //    jclass realVectorClass = env->FindClass(REALVECTOR_LOCATION);
-    //
-    //    jmethodID toDoubleMethodID = (env)->GetMethodID(realVectorClass, "toDouble", "()[D");
-    //
-    //
-    //    //Input processing
-    //    jdoubleArray newVectorArray = (jdoubleArray) (env)->CallObjectMethod(newParamsVector, toDoubleMethodID);
-    //
-    //    int dimension = env->GetArrayLength(newVectorArray);
-    //
-    //    double input [dimension];
-    //
-    //    env->GetDoubleArrayRegion(newVectorArray, 0, dimension, input);
-    //
-    //    RealVector newAccumulationParamsVector(dimension, input);
-    //
-    //    AccumulationParams newAccumulationParams(newAccumulationParamsVector);
-    //    RpNumerics::getPhysics().accumulationParams(newAccumulationParams);
-
-}
-
-/*
- * Class:     rpnumerics_RPNUMERICS
- * Method:    setMethod
- * Signature: (Ljava/lang/String;Ljava/lang/String;)V
- */
-JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setMethod
-(JNIEnv * env, jclass cls, jstring methodType, jstring methodName) {
-
-    //    string nativeMethodType(env->GetStringUTFChars(methodType, NULL));
-    //    string nativeMethodName(env->GetStringUTFChars(methodName, NULL));
-
-}
-
-/*
- * Class:     rpnumerics_RPNUMERICS
- * Method:    getAccumulationParams
- * Signature: ()Lwave/util/RealVector;
- */
-JNIEXPORT jobject JNICALL Java_rpnumerics_RPNUMERICS_getAccumulationParams
-(JNIEnv * env, jclass cls) {
-
-    //    jclass realVectorClass = env->FindClass(REALVECTOR_LOCATION);
-    //
-    //    jmethodID realVectorConstructorID = env->GetMethodID(realVectorClass, "<init>", "([D)V");
-    //
-    ////    const AccumulationParams & nativeAccumulationParams = RpNumerics::getPhysics().accumulation().accumulationParams();
-    //
-    //    const RealVector & nativeRealVectorParams = nativeAccumulationParams.params();
-    //
-    //    int paramsSize = nativeRealVectorParams.size();
-    //
-    //
-    //    double nativeRealVectorArray[paramsSize];
-    //
-    //    for (int i = 0; i < paramsSize; i++) {
-    //
-    //        nativeRealVectorArray[i] = nativeRealVectorParams.component(i);
-    //    }
-    //
-    //    jdoubleArray realVectorArray = env->NewDoubleArray(paramsSize);
-    //    env->SetDoubleArrayRegion(realVectorArray, 0, paramsSize, nativeRealVectorArray);
-    //
-    //    jobject realVector = (env)->NewObject(realVectorClass, realVectorConstructorID, realVectorArray);
-    //
-    //
-    //    return realVector;
-
-}
 
 /*
  * Class:     rpnumerics_RPNUMERICS
@@ -720,33 +590,7 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setResolution
 
 }
 
-/*
- * Class:     rpnumerics_RPNUMERICS
- * Method:    setFluxParams
- * Signature: (Lrpnumerics/FluxParams;)V
- */
-JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setFluxParams(JNIEnv * env, jclass cls, jobject fluxParams) {
 
-
-    //    jclass realVectorClass = env->FindClass(REALVECTOR_LOCATION);
-    //    jclass fluxParamsClass = env->FindClass(FLUXPARAMS_LOCATION);
-    //
-    //    jmethodID getParamsMethodID = (env)->GetMethodID(fluxParamsClass, "getParams", "()Lwave/util/RealVector;");
-    //    jmethodID toDoubleMethodID = (env)->GetMethodID(realVectorClass, "toDouble", "()[D");
-    //
-    //    jobject fluxParamRealVector = env->CallObjectMethod(fluxParams, getParamsMethodID);
-    //    jdoubleArray fluxParamRealVectorArray = (jdoubleArray) (env)->CallObjectMethod(fluxParamRealVector, toDoubleMethodID);
-    //
-    //    int fluxParamSize = env->GetArrayLength(fluxParamRealVectorArray);
-    //    double nativeFluxParamArray[fluxParamSize];
-    //
-    //    env->GetDoubleArrayRegion(fluxParamRealVectorArray, 0, fluxParamSize, nativeFluxParamArray);
-    //
-    //    RealVector nativeFluxParamRealVector(fluxParamSize, nativeFluxParamArray);
-    //    FluxParams newFluxParams(nativeFluxParamRealVector);
-    //    RpNumerics::getPhysics().fluxParams(newFluxParams);
-
-}
 
 /*
  * Class:     rpnumerics_RPNUMERICS
@@ -856,27 +700,7 @@ JNIEXPORT jstring JNICALL Java_rpnumerics_RPNUMERICS_getYLabel
 
 }
 
-/*
- * Class:     rpnumerics_RPNUMERICS
- * Method:    setFamilyIndex
- * Signature: (I)V
- */
-JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setFamilyIndex
-(JNIEnv *env, jobject obj, jint familyIndex) {
 
-
-}
-
-/*
- * Class:     rpnumerics_RPNUMERICS
- * Method:    setTimeDirection
- * Signature: (I)V
- */
-JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setTimeDirection
-(JNIEnv * env, jobject obj, jint timeDirection) {
-    //WaveFlowFactory::setTimeDirection(timeDirection);
-
-}
 
 /*
  * Class:     rpnumerics_RPNUMERICS
@@ -969,12 +793,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RPNUMERICS_domain(JNIEnv * env, jclass
 JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_initNative(JNIEnv * env, jclass cls, jstring physicsName) {
 
 
-
-
-
-
-
-
     const char *physicsID;
 
     physicsID = env->GetStringUTFChars(physicsName, NULL);
@@ -1020,109 +838,9 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_initNative(JNIEnv * env, jclas
     RpNumerics::waveCurveMap_ = new map<int, WaveCurve *> ();
 
 
-
-
-
-
-
-
-
-
-
-
-
-    //
-    //    if (physicsID.compare("QuadraticR4") == 0) {
-    //        physicsVector_->push_back(new Quad4(Quad4FluxParams()));
-    //    }
-    //
-    //    if (physicsID.compare("Stone") == 0) {
-    //        physicsVector_->push_back(new Stone());
-    //    }
-    //
-    //    
-    //    if (physicsID.compare("StoneNegative") == 0) {
-    //        physicsVector_->push_back(new NegativeStone());
-    //    }
-    //    
-    //
-    //    if (physicsID.compare("Polydisperse") == 0) {
-    //
-    //        physicsVector_->push_back(new PolydispersePhysics());
-    //    }
-    //
-    //
-    //     if (physicsID.compare("CoreyQuad") == 0) {
-    //
-    //        physicsVector_->push_back(new CoreyQuadPhysics());
-    //    }
-    //
-    //    
-    //    
-    //     if (physicsID.compare("TriPhase") == 0) {
-    //
-    //        physicsVector_->push_back(new TriPhase());
-    //    }
-    //
-    //
-    //
-    //
-    //
-    //    if (physicsID.compare("Cub2") == 0) {
-    //        physicsVector_->push_back(new Cub2(Cub2FluxParams()));
-    //    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
 
-JNIEXPORT jobject JNICALL Java_rpnumerics_RpNumerics_getXZero(JNIEnv * env, jclass cls) {
 
-    //    double teste[2];
-    //
-    //    teste[0] = 0.1;
-    //    teste[1] = 0.1;
-    //
-    //    int coordsSize = 2;
-    //
-    //    jclass realVectorClass_ = env->FindClass("wave/util/RealVector");
-    //    jclass phasePointClass_ = env->FindClass("rpnumerics/PhasePoint");
-    //
-    //    jmethodID phasePointConstructor_ = (env)->GetMethodID(phasePointClass_, "<init>", "(Lwave/util/RealVector;)V");
-    //    jmethodID realVectorConstructorDoubleArray_ = env->GetMethodID(realVectorClass_, "<init>", "([D)V");
-    //
-    //    jdoubleArray tempArray = env->NewDoubleArray(coordsSize);
-    //    env->SetDoubleArrayRegion(tempArray, 0, coordsSize, teste);
-    //
-    //    jobject realVector = env->NewObject(realVectorClass_, realVectorConstructorDoubleArray_, tempArray);
-    //    jobject phasePoint = env->NewObject(phasePointClass_, phasePointConstructor_, realVector);
-    //
-    //    env->DeleteLocalRef(tempArray);
-    //
-    //    return phasePoint;
-}
 
 /*
  * Class:     rpnumerics_RPNUMERICS

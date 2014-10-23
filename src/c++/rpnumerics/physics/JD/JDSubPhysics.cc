@@ -93,16 +93,18 @@ JDSubPhysics::~JDSubPhysics(){
     delete coincidence_contour_;
     delete coincidence_;
 
-    // Not sure if this should really be done like this.
-    // Perhaps it is best to eliminate only the HugoniotCurves that were instantiated
-    // in this class, and let the rest be deleted at the father's dtor. 
-    //
+//    // Not sure if this should really be done like this.
+//    // Perhaps it is best to eliminate only the HugoniotCurves that were instantiated
+//    // in this class, and let the rest be deleted at the father's dtor. 
+//    //
     for (int i = 0; i < hugoniot_curve.size(); i++) delete hugoniot_curve[i];
-    
+//    
     delete gridvalues_;
     delete boundary_;
     delete accumulation_;
     delete flux_;
+
+    
     delete epsilon_parameter;
 }
 

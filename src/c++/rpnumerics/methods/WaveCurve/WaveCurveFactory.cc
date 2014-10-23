@@ -1,3 +1,5 @@
+
+
 #include "WaveCurveFactory.h"
 
 // Find the intesection between two segments: p1-p2 and q1-q2, store the answer in r.
@@ -77,7 +79,7 @@ int WaveCurveFactory::Liu_half_wavecurve(const ReferencePoint &ref,
     std::vector<int> rarefaction_list;
     std::vector<int> last_point_in_rarefaction;
 
-    while (true && hwc.wavecurve.size() < 3){
+    while (true ){
         int current_curve = future_curve;
         RealVector current_curve_initial_point(future_curve_initial_point);
         RealVector current_curve_initial_direction(future_curve_initial_direction);
@@ -546,13 +548,18 @@ int WaveCurveFactory::wavecurve(int type, const RealVector &initial_point, int f
     for (int i = 0; i < hwc.wavecurve.size(); i++) std::cout << "Curve\'s size = " << hwc.wavecurve[i].curve.size() << std::endl;
 
     add_arclength(0, hwc.beginnig_of_second_half - 1, 1.0, hwc);
+    
+//    cout<<"Indices: "<<hwc.beginnig_of_second_half <<" "<< hwc.wavecurve.size() - 1<<endl;
+    
     add_arclength(hwc.beginnig_of_second_half, hwc.wavecurve.size() - 1, -1.0, hwc);
 
     return WAVECURVE_OK;
 }
 
 void WaveCurveFactory::add_arclength(int begin, int end, double factor, WaveCurve &hwc){
+
     double distance = 0.0;
+
     RealVector prev_point = hwc.wavecurve[begin].curve.front();
 
     for (int i = begin; i <= end; i++){
