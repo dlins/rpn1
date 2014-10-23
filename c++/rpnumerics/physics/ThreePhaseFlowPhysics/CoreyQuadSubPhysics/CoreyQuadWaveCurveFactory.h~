@@ -1,0 +1,52 @@
+#ifndef _COREYQUADWAVECURVEFACTORY_
+#define _COREYQUADWAVECURVEFACTORY_
+
+#include "ThreePhaseFlowWaveCurveFactory.h"
+
+class CoreyQuadSubPhysics;
+
+// Remember that WAVECURVEFACTORY_GENERIC_POINT was
+// defined in WaveCurveFactory.h.
+//
+#define COREYQUADWAVECURVEFACTORY_WAG 1101
+#define COREYQUADWAVECURVEFACTORY_WAO 1102
+#define COREYQUADWAVECURVEFACTORY_GAO 1103
+
+class CoreyQuadWaveCurveFactory: public ThreePhaseFlowWaveCurveFactory {
+    private:
+    protected:
+    public:
+        CoreyQuadWaveCurveFactory(const AccumulationFunction *gg, 
+                                  const FluxFunction *ff,
+                                  const Boundary *bb,
+                                  const ODE_Solver *o,
+                                  RarefactionCurve *r, 
+                                  ShockCurve *s,
+                                  CompositeCurve *c,
+                                  CoreyQuadSubPhysics *cc);
+
+        virtual ~CoreyQuadWaveCurveFactory();
+
+        virtual int wavecurve(int type, const RealVector &initial_point, int family, int increase, HugoniotContinuation *h, 
+                              void *linobj, double (*linear_function)(void *o, const RealVector &p),
+                              WaveCurve &hwc, 
+                              int &wavecurve_stopped_because, int &edge);
+
+        virtual void list_of_initial_points(std::vector<int> &type, std::vector<std::string> &name) const {
+            ThreePhaseFlowWaveCurveFactory::list_of_initial_points(type, name);
+
+            type.push_back(COREYQUADWAVECURVEFACTORY_WAG);
+            name.push_back(std::string("WAG"));
+
+            type.push_back(COREYQUADWAVECURVEFACTORY_WAO);
+            name.push_back(std::string("WAO"));
+
+            type.push_back(COREYQUADWAVECURVEFACTORY_GAO);
+            name.push_back(std::string("GAO"));
+
+            return;
+        }
+};
+
+#endif // _COREYQUADWAVECURVEFACTORY_
+

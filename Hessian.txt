@@ -1,0 +1,896 @@
+Hessian Accumulation TPCW
+
+Resolution: (0.0078125, 0.00372814, -2.70886e-09)
+Comp.: 0, var1: 0, var2: 0
+d2f in [0, 0], df in [0.0397, 0.244]
+
+Comp.: 0, var1: 0, var2: 1
+d2f in [-0.00389, 0.0122], df in [0.0397, 0.244]
+
+Comp.: 0, var1: 1, var2: 0
+d2f in [-4.49e-14, 4.04e-14], df in [-2.42, -0.00996]
+
+***** UNACCEPTABLE *****
+Comp.: 0, var1: 1, var2: 1
+d2f in [-1.34, 1.01], df in [-2.42, -0.00996]
+
+Comp.: 1, var1: 0, var2: 0
+d2f in [0, 0], df in [-0.363, -0.34]
+
+Comp.: 1, var1: 0, var2: 1
+d2f in [-1.88e-05, 3.9e-05], df in [-0.363, -0.34]
+
+Comp.: 1, var1: 1, var2: 0
+d2f in [-2.22e-15, 2.72e-15], df in [-0.114, 0.0531]
+
+Comp.: 1, var1: 1, var2: 1
+d2f in [-0.00356, 0.00224], df in [-0.114, 0.0531]
+
+
+Hessian Accumulation TPCW
+
+Resolution: (0.00390625, 0.00186407, -1.25459e-09)
+Comp.: 0, var1: 0, var2: 0
+d2f in [0, 0], df in [0.0397, 0.244]
+
+Comp.: 0, var1: 0, var2: 1
+d2f in [-0.000981, 0.0031], df in [0.0397, 0.244]
+
+Comp.: 0, var1: 1, var2: 0
+d2f in [-1.11e-13, 8.57e-14], df in [-2.42, -0.00996]
+
+***** UNACCEPTABLE, BUT CONSISTENT WITH ITS LOWER RESOLUTION COUNTERPART *****
+Comp.: 0, var1: 1, var2: 1
+d2f in [-0.342, 0.259], df in [-2.42, -0.00996]
+
+Comp.: 1, var1: 0, var2: 0
+d2f in [0, 0], df in [-0.363, -0.34]
+
+Comp.: 1, var1: 0, var2: 1
+d2f in [-4.71e-06, 9.93e-06], df in [-0.363, -0.34]
+
+Comp.: 1, var1: 1, var2: 0
+d2f in [-5.58e-15, 4.95e-15], df in [-0.114, 0.0531]
+
+Comp.: 1, var1: 1, var2: 1
+d2f in [-0.000957, 0.00059], df in [-0.114, 0.0531]
+
+Resolution: (0.0156247, 0.0156247, inf)
+Comp.: 0, var1: 0, var2: 0
+d2f in [-13.7, 8.18], df in [-298, -0.0002]
+
+Comp.: 0, var1: 0, var2: 1
+d2f in [-0.000248, 0.000132], df in [-298, -0.0002]
+
+Comp.: 0, var1: 1, var2: 0
+d2f in [-0.125, 0.304], df in [2e-10, 6.25]
+
+Comp.: 0, var1: 1, var2: 1
+d2f in [-3.07e-05, -5.17e-15], df in [2e-10, 6.25]
+
+Comp.: 1, var1: 0, var2: 0
+d2f in [-0.402, 0.651], df in [6e-11, 19.5]
+
+Comp.: 1, var1: 0, var2: 1
+d2f in [-0.0171, -1.2e-06], df in [6e-11, 19.5]
+
+Comp.: 1, var1: 1, var2: 0
+d2f in [-0.0461, 0.101], df in [-16.3, -3e-11]
+
+Comp.: 1, var1: 1, var2: 1
+d2f in [2.19e-08, 0.0341], df in [-16.3, -3e-11]
+
+Resolution: (0.0156247, 0.0156247, inf)
+Comp.: 0, var1: 0, var2: 0
+d2f in [-13.7, 8.18], df in [-298, -0.0002]
+
+Comp.: 0, var1: 0, var2: 1
+d2f in [-0.000248, 0.000132], df in [-298, -0.0002]
+
+Comp.: 0, var1: 1, var2: 0
+d2f in [-0.125, 0.304], df in [2e-10, 6.25]
+
+Comp.: 0, var1: 1, var2: 1
+d2f in [-3.07e-05, -5.17e-15], df in [2e-10, 6.25]
+
+Comp.: 1, var1: 0, var2: 0
+d2f in [-0.402, 0.651], df in [6e-11, 19.5]
+
+Comp.: 1, var1: 0, var2: 1
+d2f in [-0.0171, -1.2e-06], df in [6e-11, 19.5]
+
+Comp.: 1, var1: 1, var2: 0
+d2f in [-0.0461, 0.101], df in [-16.3, -3e-11]
+
+Comp.: 1, var1: 1, var2: 1
+d2f in [2.19e-08, 0.0341], df in [-16.3, -3e-11]
+
+Resolution: (0.00781234, 0.00781234, inf)
+Comp.: 0, var1: 0, var2: 0
+d2f in [-3.45, 2.06], df in [-298, -0.0002]
+
+Comp.: 0, var1: 0, var2: 1
+d2f in [-6.24e-05, 3.32e-05], df in [-298, -0.0002]
+
+Comp.: 0, var1: 1, var2: 0
+d2f in [-0.0313, 0.0762], df in [2e-10, 6.25]
+
+Comp.: 0, var1: 1, var2: 1
+d2f in [-7.75e-06, 5.86e-16], df in [2e-10, 6.25]
+
+Comp.: 1, var1: 0, var2: 0
+d2f in [-0.102, 0.166], df in [6e-11, 19.5]
+
+Comp.: 1, var1: 0, var2: 1
+d2f in [-0.00446, -1.44e-07], df in [6e-11, 19.5]
+
+Comp.: 1, var1: 1, var2: 0
+d2f in [-0.013, 0.026], df in [-16.3, -3e-11]
+
+Comp.: 1, var1: 1, var2: 1
+d2f in [1.32e-09, 0.00897], df in [-16.3, -3e-11]
+
+Resolution: (0.00781234, 0.00781234, inf)
+Comp.: 0, var1: 0, var2: 0
+d2f in [-3.44, 2.05], df in [-298, -0.00014]
+
+Comp.: 0, var1: 0, var2: 1
+d2f in [-6.46e-05, 0.000128], df in [-298, -0.00014]
+
+Comp.: 0, var1: 1, var2: 0
+d2f in [-0.0644, 0.168], df in [4.64e-08, 44]
+
+Comp.: 0, var1: 1, var2: 1
+d2f in [-8.46e-13, 1.34e-05], df in [4.64e-08, 44]
+
+Comp.: 1, var1: 0, var2: 0
+d2f in [-0.887, 0.548], df in [-103, -8.2e-10]
+
+Comp.: 1, var1: 0, var2: 1
+d2f in [-0.00464, 2.1e-06], df in [-103, -8.2e-10]
+
+Comp.: 1, var1: 1, var2: 0
+d2f in [-0.0955, 0.0438], df in [-44, -3]
+
+Comp.: 1, var1: 1, var2: 1
+d2f in [7.78e-10, 0.00897], df in [-44, -3]
+
+Resolution: (0.00781234, 0.00781234, inf)
+Comp.: 0, var1: 0, var2: 0
+d2f in [0, 0], df in [-20, -11.2]
+
+Comp.: 0, var1: 0, var2: 1
+d2f in [-1.71e-13, 2.84e-13], df in [-20, -11.2]
+
+Comp.: 0, var1: 1, var2: 0
+d2f in [-1.14e-13, 5.68e-14], df in [8.8e-05, 8.8]
+
+Comp.: 0, var1: 1, var2: 1
+d2f in [0, 0], df in [8.8e-05, 8.8]
+
+Comp.: 1, var1: 0, var2: 0
+d2f in [0, 0], df in [-7.4, -8.2e-05]
+
+Comp.: 1, var1: 0, var2: 1
+d2f in [-0.00034, -1.22e-05], df in [-7.4, -8.2e-05]
+
+Comp.: 1, var1: 1, var2: 0
+d2f in [-146, -34.8], df in [0.000264, 144]
+
+Comp.: 1, var1: 1, var2: 1
+d2f in [-369, -0.929], df in [0.000264, 144]
+
+Resolution: (0.00781234, 0.00781234, inf)
+Comp.: 0, var1: 0, var2: 0
+d2f in [0, 0], df in [-20, -20]
+
+Comp.: 0, var1: 0, var2: 1
+d2f in [0, 0], df in [-20, -20]
+
+Comp.: 0, var1: 1, var2: 0
+d2f in [0, 0], df in [0, 0]
+
+Comp.: 0, var1: 1, var2: 1
+d2f in [0, 0], df in [0, 0]
+
+Comp.: 1, var1: 0, var2: 0
+d2f in [0, 0], df in [6e-06, 1.4]
+
+Comp.: 1, var1: 0, var2: 1
+d2f in [-0.00034, -1.22e-05], df in [6e-06, 1.4]
+
+Comp.: 1, var1: 1, var2: 0
+d2f in [0.605, 3.2], df in [0, 0]
+
+Comp.: 1, var1: 1, var2: 1
+d2f in [-8.38, -0.00544], df in [0, 0]
+
+Resolution: (0.00781234, 0.00781234, inf)
+Comp.: 0, var1: 0, var2: 0
+d2f in [0, 0], df in [-20, -20]
+
+Comp.: 0, var1: 0, var2: 1
+d2f in [0, 0], df in [-20, -20]
+
+Comp.: 0, var1: 1, var2: 0
+d2f in [0, 0], df in [0, 0]
+
+Comp.: 0, var1: 1, var2: 1
+d2f in [0, 0], df in [0, 0]
+
+Comp.: 1, var1: 0, var2: 0
+d2f in [0, 0], df in [6e-06, 1.4]
+
+Comp.: 1, var1: 0, var2: 1
+d2f in [-0.00034, -1.22e-05], df in [6e-06, 1.4]
+
+Comp.: 1, var1: 1, var2: 0
+d2f in [0.605, 3.2], df in [0, 0]
+
+Comp.: 1, var1: 1, var2: 1
+d2f in [-8.38, -0.00544], df in [0, 0]
+
+Resolution: (0.00781234, 0.00781234, inf)
+Comp.: 0, var1: 0, var2: 0
+d2f in [0, 0], df in [-20, -20]
+
+Comp.: 0, var1: 0, var2: 1
+d2f in [0, 0], df in [-20, -20]
+
+Comp.: 0, var1: 1, var2: 0
+d2f in [0, 0], df in [0, 0]
+
+Comp.: 0, var1: 1, var2: 1
+d2f in [0, 0], df in [0, 0]
+
+Comp.: 1, var1: 0, var2: 0
+d2f in [0, 0], df in [6e-06, 1.4]
+
+Comp.: 1, var1: 0, var2: 1
+d2f in [-0.00034, -1.22e-05], df in [6e-06, 1.4]
+
+Comp.: 1, var1: 1, var2: 0
+d2f in [-3.64e-14, 4.88e-14], df in [-3.27, -6e-06]
+
+Comp.: 1, var1: 1, var2: 1
+d2f in [2.19e-07, 0.00178], df in [-3.27, -6e-06]
+
+Resolution: (0.00781234, 0.00781234, inf)
+Comp.: 0, var1: 0, var2: 0
+d2f in [0, 0], df in [-20, -11.2]
+
+Comp.: 0, var1: 0, var2: 1
+d2f in [-1.71e-13, 2.84e-13], df in [-20, -11.2]
+
+Comp.: 0, var1: 1, var2: 0
+d2f in [-1.14e-13, 5.68e-14], df in [8.8e-05, 8.8]
+
+Comp.: 0, var1: 1, var2: 1
+d2f in [0, 0], df in [8.8e-05, 8.8]
+
+Comp.: 1, var1: 0, var2: 0
+d2f in [0, 0], df in [-7.4, -8.2e-05]
+
+Comp.: 1, var1: 0, var2: 1
+d2f in [-0.00034, -1.22e-05], df in [-7.4, -8.2e-05]
+
+Comp.: 1, var1: 1, var2: 0
+d2f in [-2.5e-13, 2.29e-13], df in [-8.8, -0.6]
+
+Comp.: 1, var1: 1, var2: 1
+d2f in [2.19e-07, 0.00178], df in [-8.8, -0.6]
+
+Resolution: (0.0078125, 0.00372814, 1.77837e-09)
+Comp.: 0, var1: 0, var2: 0
+d2f in [-0.114, 0.0602], df in [0, 2.65]
+
+Comp.: 0, var1: 0, var2: 1
+d2f in [-0.0423, 0.135], df in [0, 2.65]
+
+Comp.: 0, var1: 1, var2: 0
+d2f in [-0.0115, 0.041], df in [-6.36, -0.0262]
+
+Comp.: 0, var1: 1, var2: 1
+d2f in [-3.56, 2.68], df in [-6.36, -0.0262]
+
+Comp.: 1, var1: 0, var2: 0
+d2f in [-0.151, 0.294], df in [-4.41, -0]
+
+Comp.: 1, var1: 0, var2: 1
+d2f in [-0.0119, 0.00891], df in [-4.41, -0]
+
+Comp.: 1, var1: 1, var2: 0
+d2f in [-0.0884, 0.0405], df in [-0.605, 2.3]
+
+Comp.: 1, var1: 1, var2: 1
+d2f in [-0.026, 0.0143], df in [-0.605, 2.3]
+
+Resolution: (0.0078125, 0.00372814, 1.77957e-09)
+Comp.: 0, var1: 0, var2: 0
+d2f in [0, 0], df in [0.0397, 0.244]
+
+Comp.: 0, var1: 0, var2: 1
+d2f in [-0.00389, 0.0122], df in [0.0397, 0.244]
+
+Comp.: 0, var1: 1, var2: 0
+d2f in [-4.49e-14, 4.04e-14], df in [-2.42, -0.00996]
+
+Comp.: 0, var1: 1, var2: 1
+d2f in [-1.34, 1.01], df in [-2.42, -0.00996]
+
+Comp.: 1, var1: 0, var2: 0
+d2f in [0, 0], df in [-0.363, -0.34]
+
+Comp.: 1, var1: 0, var2: 1
+d2f in [-1.88e-05, 3.9e-05], df in [-0.363, -0.34]
+
+Comp.: 1, var1: 1, var2: 0
+d2f in [-2.22e-15, 2.72e-15], df in [-0.114, 0.0531]
+
+Comp.: 1, var1: 1, var2: 1
+d2f in [-0.00356, 0.00224], df in [-0.114, 0.0531]
+
+Resolution: (0.00781234, 0.00781234, inf)
+Comp.: 0, var1: 0, var2: 0
+d2f in [0, 0], df in [-20, -11.2]
+
+Comp.: 0, var1: 0, var2: 1
+d2f in [-1.71e-13, 2.84e-13], df in [-20, -11.2]
+
+Comp.: 0, var1: 1, var2: 0
+d2f in [-1.14e-13, 5.68e-14], df in [8.8e-05, 8.8]
+
+Comp.: 0, var1: 1, var2: 1
+d2f in [0, 0], df in [8.8e-05, 8.8]
+
+Comp.: 1, var1: 0, var2: 0
+d2f in [0, 0], df in [-7.4, -8.2e-05]
+
+Comp.: 1, var1: 0, var2: 1
+d2f in [-0.00034, -1.22e-05], df in [-7.4, -8.2e-05]
+
+Comp.: 1, var1: 1, var2: 0
+d2f in [-2.5e-13, 2.29e-13], df in [-8.8, -0.6]
+
+Comp.: 1, var1: 1, var2: 1
+d2f in [2.19e-07, 0.00178], df in [-8.8, -0.6]
+
+Resolution: (0.00781234, 0.00781234, inf)
+Comp.: 0, var1: 0, var2: 0
+d2f in [0, 0], df in [-20, -11.2]
+
+Comp.: 0, var1: 0, var2: 1
+d2f in [-1.71e-13, 2.84e-13], df in [-20, -11.2]
+
+Comp.: 0, var1: 1, var2: 0
+d2f in [-1.14e-13, 5.68e-14], df in [8.8e-05, 8.8]
+
+Comp.: 0, var1: 1, var2: 1
+d2f in [0, 0], df in [8.8e-05, 8.8]
+
+Comp.: 1, var1: 0, var2: 0
+d2f in [0, 0], df in [-7.4, -8.2e-05]
+
+Comp.: 1, var1: 0, var2: 1
+d2f in [-0.00034, -1.22e-05], df in [-7.4, -8.2e-05]
+
+Comp.: 1, var1: 1, var2: 0
+d2f in [-2.5e-13, 2.29e-13], df in [-8.8, -0.6]
+
+Comp.: 1, var1: 1, var2: 1
+d2f in [2.19e-07, 0.00178], df in [-8.8, -0.6]
+
+Resolution: (0.00781234, 0.00781234, inf)
+Comp.: 0, var1: 0, var2: 0
+d2f in [0, 0], df in [-20, -11.2]
+
+Comp.: 0, var1: 0, var2: 1
+d2f in [-1.71e-13, 2.84e-13], df in [-20, -11.2]
+
+Comp.: 0, var1: 1, var2: 0
+d2f in [-1.14e-13, 5.68e-14], df in [8.8e-05, 8.8]
+
+Comp.: 0, var1: 1, var2: 1
+d2f in [0, 0], df in [8.8e-05, 8.8]
+
+Comp.: 1, var1: 0, var2: 0
+d2f in [0, 0], df in [-7.4, -8.2e-05]
+
+Comp.: 1, var1: 0, var2: 1
+d2f in [-0.00034, -1.22e-05], df in [-7.4, -8.2e-05]
+
+Comp.: 1, var1: 1, var2: 0
+d2f in [-2.5e-13, 2.29e-13], df in [-8.8, -0.6]
+
+Comp.: 1, var1: 1, var2: 1
+d2f in [2.19e-07, 0.00178], df in [-8.8, -0.6]
+
+Resolution: (0.0078125, 0.00372814, -1.20706e-09)
+Comp.: 0, var1: 0, var2: 0
+d2f in [0, 0], df in [0.0397, 0.244]
+
+Comp.: 0, var1: 0, var2: 1
+d2f in [-0.00389, 0.0122], df in [0.0397, 0.244]
+
+Comp.: 0, var1: 1, var2: 0
+d2f in [0.0793, 2.32], df in [-6.36, -0.235]
+
+Comp.: 0, var1: 1, var2: 1
+d2f in [-3.56, 2.68], df in [-6.36, -0.235]
+
+Comp.: 1, var1: 0, var2: 0
+d2f in [0, 0], df in [-0.363, -0.34]
+
+Comp.: 1, var1: 0, var2: 1
+d2f in [-1.88e-05, 3.9e-05], df in [-0.363, -0.34]
+
+Comp.: 1, var1: 1, var2: 0
+d2f in [-2.22e-15, 2.72e-15], df in [-0.114, 0.0531]
+
+Comp.: 1, var1: 1, var2: 1
+d2f in [-0.00356, 0.00224], df in [-0.114, 0.0531]
+
+Resolution: (0.00390625, 0.00186407, 9.62784e-10)
+Comp.: 0, var1: 0, var2: 0
+d2f in [0, 0], df in [0.0397, 0.244]
+
+Comp.: 0, var1: 0, var2: 1
+d2f in [-0.000981, 0.0031], df in [0.0397, 0.244]
+
+Comp.: 0, var1: 1, var2: 0
+d2f in [0.0793, 2.32], df in [-6.36, -0.235]
+
+Comp.: 0, var1: 1, var2: 1
+d2f in [-0.904, 0.683], df in [-6.36, -0.235]
+
+Comp.: 1, var1: 0, var2: 0
+d2f in [0, 0], df in [-0.363, -0.34]
+
+Comp.: 1, var1: 0, var2: 1
+d2f in [-4.71e-06, 9.93e-06], df in [-0.363, -0.34]
+
+Comp.: 1, var1: 1, var2: 0
+d2f in [-5.58e-15, 4.95e-15], df in [-0.114, 0.0531]
+
+Comp.: 1, var1: 1, var2: 1
+d2f in [-0.000957, 0.00059], df in [-0.114, 0.0531]
+
+Resolution: (0.0078125, 0.00372814, -2.43164e-09)
+Comp.: 0, var1: 0, var2: 0
+d2f in [0, 0], df in [0.0397, 0.244]
+
+Comp.: 0, var1: 0, var2: 1
+d2f in [-0.00389, 0.0122], df in [0.0397, 0.244]
+
+Comp.: 0, var1: 1, var2: 0
+d2f in [0.0793, 2.32], df in [-0.303, -0.0262]
+
+Comp.: 0, var1: 1, var2: 1
+d2f in [-0.00384, 0.00912], df in [-0.303, -0.0262]
+
+Comp.: 1, var1: 0, var2: 0
+d2f in [0, 0], df in [-0.363, -0.34]
+
+Comp.: 1, var1: 0, var2: 1
+d2f in [-1.88e-05, 3.9e-05], df in [-0.363, -0.34]
+
+Comp.: 1, var1: 1, var2: 0
+d2f in [-2.22e-15, 2.72e-15], df in [-0.114, 0.0531]
+
+Comp.: 1, var1: 1, var2: 1
+d2f in [-0.00356, 0.00224], df in [-0.114, 0.0531]
+
+Resolution: (0.00390625, 0.00186407, 1.4047e-09)
+Comp.: 0, var1: 0, var2: 0
+d2f in [0, 0], df in [0.0397, 0.244]
+
+Comp.: 0, var1: 0, var2: 1
+d2f in [-0.000981, 0.0031], df in [0.0397, 0.244]
+
+Comp.: 0, var1: 1, var2: 0
+d2f in [0.0793, 2.32], df in [-0.303, -0.0262]
+
+Comp.: 0, var1: 1, var2: 1
+d2f in [-0.00098, 0.00234], df in [-0.303, -0.0262]
+
+Comp.: 1, var1: 0, var2: 0
+d2f in [0, 0], df in [-0.363, -0.34]
+
+Comp.: 1, var1: 0, var2: 1
+d2f in [-4.71e-06, 9.93e-06], df in [-0.363, -0.34]
+
+Comp.: 1, var1: 1, var2: 0
+d2f in [-5.58e-15, 4.95e-15], df in [-0.114, 0.0531]
+
+Comp.: 1, var1: 1, var2: 1
+d2f in [-0.000957, 0.00059], df in [-0.114, 0.0531]
+
+Resolution: (0.0078125, 0.00372814, -3.63622e-09)
+Comp.: 0, var1: 0, var2: 0
+d2f in [0, 0], df in [0.0419, 0.0568]
+
+Comp.: 0, var1: 0, var2: 1
+d2f in [-0.000954, 0.0248], df in [0.0419, 0.0568]
+
+Comp.: 0, var1: 1, var2: 0
+d2f in [0.0285, 0.0565], df in [-0.026, -0.00455]
+
+Comp.: 0, var1: 1, var2: 1
+d2f in [0.00501, 0.0647], df in [-0.026, -0.00455]
+
+Comp.: 1, var1: 0, var2: 0
+d2f in [0, 0], df in [-0.0235, -0.0174]
+
+Comp.: 1, var1: 0, var2: 1
+d2f in [-0.0103, 0.000372], df in [-0.0235, -0.0174]
+
+Comp.: 1, var1: 1, var2: 0
+d2f in [-4.68e-16, 4.2e-16], df in [-0.0236, -1.78e-05]
+
+Comp.: 1, var1: 1, var2: 1
+d2f in [-0.01, -1.15e-05], df in [-0.0236, -1.78e-05]
+
+Resolution: (0.00390625, 0.00186407, -1.61648e-08)
+Comp.: 0, var1: 0, var2: 0
+d2f in [0, 0], df in [0.0419, 0.0568]
+
+Comp.: 0, var1: 0, var2: 1
+d2f in [-0.000955, 0.0249], df in [0.0419, 0.0568]
+
+Comp.: 0, var1: 1, var2: 0
+d2f in [0.0285, 0.0566], df in [-0.026, -0.00455]
+
+Comp.: 0, var1: 1, var2: 1
+d2f in [0.005, 0.065], df in [-0.026, -0.00455]
+
+Comp.: 1, var1: 0, var2: 0
+d2f in [0, 0], df in [-0.0235, -0.0174]
+
+Comp.: 1, var1: 0, var2: 1
+d2f in [-0.0103, 0.000373], df in [-0.0235, -0.0174]
+
+Comp.: 1, var1: 1, var2: 0
+d2f in [-8.33e-16, 8.99e-16], df in [-0.0236, -1.78e-05]
+
+Comp.: 1, var1: 1, var2: 1
+d2f in [-0.0101, 3.35e-05], df in [-0.0236, -1.78e-05]
+
+Resolution: (0.0625, 0.0298251, 1.26555e-09)
+Comp.: 0, var1: 0, var2: 0
+d2f in [0, 0], df in [0.0419, 0.0568]
+
+Comp.: 0, var1: 0, var2: 1
+d2f in [-0.000883, 0.0235], df in [0.0419, 0.0568]
+
+Comp.: 0, var1: 1, var2: 0
+d2f in [0.0296, 0.0543], df in [-0.026, -0.00455]
+
+Comp.: 0, var1: 1, var2: 1
+d2f in [0.00515, 0.0604], df in [-0.026, -0.00455]
+
+Comp.: 1, var1: 0, var2: 0
+d2f in [0, 0], df in [-0.0235, -0.0174]
+
+Comp.: 1, var1: 0, var2: 1
+d2f in [-0.00974, 0.000344], df in [-0.0235, -0.0174]
+
+Comp.: 1, var1: 1, var2: 0
+d2f in [-3.12e-17, 4.16e-17], df in [-0.0236, -1.79e-05]
+
+Comp.: 1, var1: 1, var2: 1
+d2f in [-0.00879, -0.000516], df in [-0.0236, -1.79e-05]
+
+Resolution: (0.0078125, 0.00372814, 9.62994e-09)
+Comp.: 0, var1: 0, var2: 0
+d2f in [0, 0], df in [0.0419, 0.0568]
+
+Comp.: 0, var1: 0, var2: 1
+d2f in [-0.000954, 0.0248], df in [0.0419, 0.0568]
+
+Comp.: 0, var1: 1, var2: 0
+d2f in [0.0285, 0.0565], df in [-0.026, -0.00455]
+
+Comp.: 0, var1: 1, var2: 1
+d2f in [0.00501, 0.0647], df in [-0.026, -0.00455]
+
+Comp.: 1, var1: 0, var2: 0
+d2f in [0, 0], df in [-0.0235, -0.0174]
+
+Comp.: 1, var1: 0, var2: 1
+d2f in [-0.0103, 0.000372], df in [-0.0235, -0.0174]
+
+Comp.: 1, var1: 1, var2: 0
+d2f in [-4.68e-16, 4.2e-16], df in [-0.0236, -1.78e-05]
+
+Comp.: 1, var1: 1, var2: 1
+d2f in [-0.01, -1.15e-05], df in [-0.0236, -1.78e-05]
+
+Resolution: (0.00390625, 0.00186407, 1.20067e-09)
+Comp.: 0, var1: 0, var2: 0
+d2f in [0, 0], df in [0.0419, 0.0568]
+
+Comp.: 0, var1: 0, var2: 1
+d2f in [-0.000955, 0.0249], df in [0.0419, 0.0568]
+
+Comp.: 0, var1: 1, var2: 0
+d2f in [0.0285, 0.0566], df in [-0.026, -0.00455]
+
+Comp.: 0, var1: 1, var2: 1
+d2f in [0.005, 0.065], df in [-0.026, -0.00455]
+
+Comp.: 1, var1: 0, var2: 0
+Resolution: (0.00390625, 0.00186407, -4.38174e-09)
+Comp.: 0, var1: 0, var2: 0
+d2f in [0, 0], df in [0.0419, 0.0568]
+
+Comp.: 0, var1: 0, var2: 1
+d2f in [-0.000955, 0.0249], df in [0.0419, 0.0568]
+
+Comp.: 0, var1: 1, var2: 0
+d2f in [0.0285, 0.0566], df in [-0.026, -0.00455]
+
+Comp.: 0, var1: 1, var2: 1
+d2f in [0.005, 0.065], df in [-0.026, -0.00455]
+
+Comp.: 1, var1: 0, var2: 0
+d2f in [0, 0], df in [-0.0235, -0.0174]
+
+Comp.: 1, var1: 0, var2: 1
+d2f in [-0.0103, 0.000373], df in [-0.0235, -0.0174]
+
+Comp.: 1, var1: 1, var2: 0
+Resolution: (0.00390625, 0.00186407, -6.54399e-08)
+Comp.: 0, var1: 0, var2: 0
+d2f in [0, 0], df in [0.0397, 0.244]
+
+Comp.: 0, var1: 0, var2: 1
+Resolution: (0.00390625, 0.00186407, -1.758e-09)
+Comp.: 0, var1: 0, var2: 0
+d2f in [0, 0], df in [0.0397, 0.244]
+
+Comp.: 0, var1: 0, var2: 1
+d2f in [-0.000981, 0.0031], df in [0.0397, 0.244]
+
+Comp.: 0, var1: 1, var2: 0
+d2f in [0.0793, 2.32], df in [-0.303, -0.0262]
+
+Comp.: 0, var1: 1, var2: 1
+d2f in [-0.00098, 0.00234], df in [-0.303, -0.0262]
+
+Comp.: 1, var1: 0, var2: 0
+d2f in [0, 0], df in [-0.363, -0.34]
+
+Comp.: 1, var1: 0, var2: 1
+d2f in [-4.71e-06, 9.93e-06], df in [-0.363, -0.34]
+
+Comp.: 1, var1: 1, var2: 0
+d2f in [-5.83e-15, 4.47e-15], df in [-0.114, 0.0531]
+
+Comp.: 1, var1: 1, var2: 1
+d2f in [-0.000957, 0.00059], df in [-0.114, 0.0531]
+
+Resolution: (0.00390625, 0.00186407, -1.03843e-09)
+Comp.: 0, var1: 0, var2: 0
+d2f in [0, 0], df in [-0.026, -0.00552]
+
+Comp.: 0, var1: 0, var2: 1
+d2f in [-8.06e-06, 6.11e-06], df in [-0.026, -0.00552]
+
+Comp.: 0, var1: 1, var2: 0
+d2f in [-0.114, -0.01], df in [-0.303, -0.0262]
+
+Comp.: 0, var1: 1, var2: 1
+d2f in [-0.00098, 0.00234], df in [-0.303, -0.0262]
+
+Comp.: 1, var1: 0, var2: 0
+d2f in [0, 0], df in [-0.363, -0.342]
+
+Comp.: 1, var1: 0, var2: 1
+d2f in [-4.35e-06, 6.42e-06], df in [-0.363, -0.342]
+
+Comp.: 1, var1: 1, var2: 0
+d2f in [-5.23e-15, 4.25e-15], df in [-0.114, 0.0531]
+
+Comp.: 1, var1: 1, var2: 1
+d2f in [-0.000675, 0.000277], df in [-0.114, 0.0531]
+
+Resolution: (0.00390625, 0.00186407, -1.02648e-09)
+Comp.: 0, var1: 0, var2: 0
+d2f in [0, 0], df in [-0.026, -0.0055]
+
+Comp.: 0, var1: 0, var2: 1
+d2f in [-8.06e-06, 6.11e-06], df in [-0.026, -0.0055]
+
+Comp.: 0, var1: 1, var2: 0
+d2f in [-0.114, -0.00991], df in [-0.303, -0.0262]
+
+Comp.: 0, var1: 1, var2: 1
+d2f in [-0.00098, 0.00234], df in [-0.303, -0.0262]
+
+Comp.: 1, var1: 0, var2: 0
+d2f in [0, 0], df in [-0.363, -0.342]
+
+Comp.: 1, var1: 0, var2: 1
+d2f in [-4.35e-06, 6.42e-06], df in [-0.363, -0.342]
+
+Comp.: 1, var1: 1, var2: 0
+d2f in [-3.86e-15, 4.97e-15], df in [-0.114, 0.0531]
+
+Comp.: 1, var1: 1, var2: 1
+d2f in [-0.000675, 0.000277], df in [-0.114, 0.0531]
+
+Resolution: (0.00390625, 0.00186407, -9.59402e-10)
+Comp.: 0, var1: 0, var2: 0
+d2f in [0, 0], df in [-0.026, -0.00553]
+
+Comp.: 0, var1: 0, var2: 1
+d2f in [-8.06e-06, 6.11e-06], df in [-0.026, -0.00553]
+
+Comp.: 0, var1: 1, var2: 0
+d2f in [-0.114, -0.01], df in [-0.303, -0.0262]
+
+Comp.: 0, var1: 1, var2: 1
+d2f in [-0.00098, 0.00234], df in [-0.303, -0.0262]
+
+Comp.: 1, var1: 0, var2: 0
+d2f in [0, 0], df in [-0.363, -0.342]
+
+Comp.: 1, var1: 0, var2: 1
+d2f in [-4.35e-06, 6.42e-06], df in [-0.363, -0.342]
+
+Comp.: 1, var1: 1, var2: 0
+d2f in [-4.73e-15, 4.93e-15], df in [-0.114, 0.0531]
+
+Comp.: 1, var1: 1, var2: 1
+d2f in [-0.000675, 0.000277], df in [-0.114, 0.0531]
+
+Resolution: (0.00390625, 0.00186407, -2.0326e-08)
+Comp.: 0, var1: 0, var2: 0
+d2f in [0, 0], df in [-0.026, -0.00552]
+
+Comp.: 0, var1: 0, var2: 1
+d2f in [-8.06e-06, 6.1e-06], df in [-0.026, -0.00552]
+
+Comp.: 0, var1: 1, var2: 0
+d2f in [-0.114, -0.00997], df in [-0.303, -0.0262]
+
+Comp.: 0, var1: 1, var2: 1
+d2f in [-0.00098, 0.00234], df in [-0.303, -0.0262]
+
+Comp.: 1, var1: 0, var2: 0
+d2f in [0, 0], df in [-0.363, -0.342]
+
+Comp.: 1, var1: 0, var2: 1
+d2f in [-4.35e-06, 6.42e-06], df in [-0.363, -0.342]
+
+Comp.: 1, var1: 1, var2: 0
+d2f in [-4.97e-15, 4.43e-15], df in [-0.114, 0.0531]
+
+Comp.: 1, var1: 1, var2: 1
+d2f in [-0.000675, 0.000277], df in [-0.114, 0.0531]
+
+Resolution: (0.00390625, 0.00186407, 3.68196e-09)
+Comp.: 0, var1: 0, var2: 0
+d2f in [0, 0], df in [-0.026, -0.00554]
+
+Comp.: 0, var1: 0, var2: 1
+d2f in [1.68e-05, 8.55e-05], df in [-0.026, -0.00554]
+
+Comp.: 0, var1: 1, var2: 0
+d2f in [-0.114, -0.00999], df in [-0.303, -0.0262]
+
+Comp.: 0, var1: 1, var2: 1
+d2f in [-0.00098, 0.00234], df in [-0.303, -0.0262]
+
+Comp.: 1, var1: 0, var2: 0
+d2f in [0, 0], df in [-0.363, -0.342]
+
+Comp.: 1, var1: 0, var2: 1
+d2f in [-4.23e-06, 6.53e-06], df in [-0.363, -0.342]
+
+Comp.: 1, var1: 1, var2: 0
+d2f in [-5.15e-15, 4.39e-15], df in [-0.114, 0.0531]
+
+Comp.: 1, var1: 1, var2: 1
+d2f in [-0.000675, 0.000277], df in [-0.114, 0.0531]
+
+Resolution: (0.00390625, 0.00186407, -9.86298e-10)
+Comp.: 0, var1: 0, var2: 0
+d2f in [0, 0], df in [-0.0259, -0.0055]
+
+Comp.: 0, var1: 0, var2: 1
+d2f in [-8.06e-06, 6.1e-06], df in [-0.0259, -0.0055]
+
+Comp.: 0, var1: 1, var2: 0
+d2f in [-0.114, -0.00993], df in [-0.303, -0.0262]
+
+Comp.: 0, var1: 1, var2: 1
+d2f in [-0.00098, 0.00234], df in [-0.303, -0.0262]
+
+Comp.: 1, var1: 0, var2: 0
+d2f in [0, 0], df in [-0.363, -0.342]
+
+Comp.: 1, var1: 0, var2: 1
+d2f in [-4.35e-06, 6.42e-06], df in [-0.363, -0.342]
+
+Comp.: 1, var1: 1, var2: 0
+d2f in [-5.93e-15, 4.72e-15], df in [-0.114, 0.0531]
+
+Comp.: 1, var1: 1, var2: 1
+d2f in [-0.000675, 0.000277], df in [-0.114, 0.0531]
+
+Resolution: (0.00390625, 0.00186407, -3.01827e-08)
+Comp.: 0, var1: 0, var2: 0
+d2f in [0, 0], df in [-0.026, -0.00554]
+
+Comp.: 0, var1: 0, var2: 1
+d2f in [-8.06e-06, 6.11e-06], df in [-0.026, -0.00554]
+
+Comp.: 0, var1: 1, var2: 0
+d2f in [-0.114, -0.01], df in [-0.303, -0.0262]
+
+Comp.: 0, var1: 1, var2: 1
+d2f in [-0.00098, 0.00234], df in [-0.303, -0.0262]
+
+Comp.: 1, var1: 0, var2: 0
+d2f in [0, 0], df in [-0.363, -0.342]
+
+Comp.: 1, var1: 0, var2: 1
+d2f in [-4.35e-06, 6.42e-06], df in [-0.363, -0.342]
+
+Comp.: 1, var1: 1, var2: 0
+d2f in [-4.34e-15, 4.8e-15], df in [-0.114, 0.0531]
+
+Comp.: 1, var1: 1, var2: 1
+d2f in [-0.000675, 0.000277], df in [-0.114, 0.0531]
+
+Resolution: (0.00390625, 0.00186407, -1.79662e-09)
+Comp.: 0, var1: 0, var2: 0
+d2f in [0, 0], df in [-0.026, -0.00554]
+
+Comp.: 0, var1: 0, var2: 1
+d2f in [-8.06e-06, 6.11e-06], df in [-0.026, -0.00554]
+
+Comp.: 0, var1: 1, var2: 0
+d2f in [-0.114, -0.01], df in [-0.303, -0.0262]
+
+Comp.: 0, var1: 1, var2: 1
+d2f in [-0.00098, 0.00234], df in [-0.303, -0.0262]
+
+Comp.: 1, var1: 0, var2: 0
+d2f in [0, 0], df in [-0.363, -0.342]
+
+Comp.: 1, var1: 0, var2: 1
+d2f in [-4.35e-06, 6.42e-06], df in [-0.363, -0.342]
+
+Comp.: 1, var1: 1, var2: 0
+d2f in [-4.64e-15, 4.37e-15], df in [-0.114, 0.0531]
+
+Comp.: 1, var1: 1, var2: 1
+d2f in [-0.000675, 0.000277], df in [-0.114, 0.0531]
+
+Resolution: (0.00390625, 0.00186407, -1.25637e-09)
+Comp.: 0, var1: 0, var2: 0
+d2f in [0, 0], df in [-0.026, -0.00554]
+
+Comp.: 0, var1: 0, var2: 1
+d2f in [-3.11e-06, 9.1e-06], df in [-0.026, -0.00554]
+
+Comp.: 0, var1: 1, var2: 0
+d2f in [-0.114, -0.01], df in [-0.303, -0.0262]
+
+Comp.: 0, var1: 1, var2: 1
+d2f in [-0.00098, 0.00234], df in [-0.303, -0.0262]
+
+Comp.: 1, var1: 0, var2: 0
+d2f in [0, 0], df in [-0.363, -0.342]
+
+Comp.: 1, var1: 0, var2: 1
+d2f in [-4.35e-06, 6.42e-06], df in [-0.363, -0.342]
+
+Comp.: 1, var1: 1, var2: 0
+d2f in [-5.25e-15, 4.5e-15], df in [-0.114, 0.0531]
+
+Comp.: 1, var1: 1, var2: 1
+d2f in [-0.000675, 0.000277], df in [-0.114, 0.0531]
+

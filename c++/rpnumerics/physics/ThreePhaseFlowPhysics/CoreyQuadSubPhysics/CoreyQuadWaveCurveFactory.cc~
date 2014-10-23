@@ -1,0 +1,41 @@
+#include "CoreyQuadWaveCurveFactory.h"
+#include "CoreyQuadSubPhysics.h"
+
+CoreyQuadWaveCurveFactory::CoreyQuadWaveCurveFactory(const FluxFunction *ff, 
+                                                     const AccumulationFunction *gg,
+                                                     const Boundary *bb,
+                                                     const ODE_Solver *o,
+                                                     RarefactionCurve *r,
+                                                     ShockCurve *s,
+                                                     CompositeCurve *c,
+                                                     CoreyQuadSubPhysics *cc): ThreePhaseFlowWaveCurveFactory(ff, gg, bb, o, r, s, c, (ThreePhaseFlowSubPhysics*)cc) {
+}
+
+CoreyQuadWaveCurveFactory::~CoreyQuadWaveCurveFactory(){
+}
+
+int CoreyQuadWaveCurveFactory::wavecurve(int type, const RealVector &initial_point, int family, int increase, HugoniotContinuation *h, 
+                                         void *linobj, double (*linear_function)(void *o, const RealVector &p),
+                                         WaveCurve &hwc, 
+                                         int &wavecurve_stopped_because, int &edge){
+
+    if (type == WAVECURVEFACTORY_GENERIC_POINT){
+        return WaveCurveFactory::wavecurve(type, initial_point, family, increase, h, 
+                                           linobj, linear_function,
+                                           hwc, 
+                                           wavecurve_stopped_because, edge);
+    }
+    else if (type == COREYQUADWAVECURVEFACTORY_WAG){
+        if (family != 1 || increase != RAREFACTION_SPEED_SHOULD_DECREASE) return THREEPHASEFLOWWAVECURVEFACTORY_INVALID_PARAMETERS;
+
+        int info = WaveCurveFactory::wavecurve(type, initial_point, family, increase, h, 
+                                               linobj, linear_function,
+                                               hwc, 
+                                               wavecurve_stopped_because, edge);        
+
+        if (info == WAVECURVE_ERROR) return WAVECURVE_ERROR;
+
+        
+    }
+}
+

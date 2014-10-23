@@ -1,0 +1,485 @@
+
+VPATH = \
+	c++ \
+	c++/canvas \
+	c++/canvas/Dump_Fl_Widget \
+	c++/Model \
+	c++/JetTester \
+	c++/rpnumerics \
+	c++/rpnumerics/factories \
+	c++/rpnumerics/viscousprofile \
+	c++/rpnumerics/CoincidenceTP \
+	c++/rpnumerics/Curve \
+	c++/rpnumerics/plugin \
+	c++/rpnumerics/methods \
+	c++/rpnumerics/methods/TransitionalShock \
+	c++/rpnumerics/methods/Extension \
+	c++/rpnumerics/methods/contour \
+	c++/rpnumerics/methods/contour/GPU \
+	c++/rpnumerics/methods/NewRarefactionCurve \
+	c++/rpnumerics/methods/RiemannSolver \
+	c++/rpnumerics/methods/Coincidence \
+	c++/rpnumerics/methods/RarefactionCurve \
+	c++/rpnumerics/methods/Bisection \
+	c++/rpnumerics/methods/Coincidence_Contour \
+	c++/rpnumerics/methods/ShockCurve \
+	c++/rpnumerics/methods/BifurcationCurve \
+	c++/rpnumerics/methods/HugoniotContinuation \
+	c++/rpnumerics/methods/HugoniotContinuation/HugoniotContinuation_nDnD \
+	c++/rpnumerics/methods/HugoniotContinuation/HugoniotContinuation_nD_nm1D \
+	c++/rpnumerics/methods/HugoniotContinuation/HugoniotContinuation2D2D \
+	c++/rpnumerics/methods/HugoniotContinuation/HugoniotContinuation3D2D \
+	c++/rpnumerics/methods/Secondary_Bifurcations \
+	c++/rpnumerics/methods/Secondary_Bifurcations/Explicit_Bifurcation_Curves \
+	c++/rpnumerics/methods/Secondary_Bifurcations/SuperPhysics \
+	c++/rpnumerics/methods/Viscosity_Matrix \
+	c++/rpnumerics/methods/HugoniotCurve \
+	c++/rpnumerics/methods/CompositeCurve \
+	c++/rpnumerics/methods/WaveCurve \
+	c++/rpnumerics/methods/CharacteristicPolynomialLevels \
+	c++/rpnumerics/characteristics \
+	c++/rpnumerics/Discriminant_Contour \
+	c++/rpnumerics/ParametricPlot \
+	c++/rpnumerics/physics \
+	c++/rpnumerics/physics/quad \
+	c++/rpnumerics/physics/corey \
+	c++/rpnumerics/physics/Quad2C1SubPhysics \
+	c++/rpnumerics/physics/corey_leandro \
+	c++/rpnumerics/physics/SinglePhase \
+	c++/rpnumerics/physics/Quad3SubPhysics \
+	c++/rpnumerics/physics/SplineFlux \
+	c++/rpnumerics/physics/TrivialTestSubphysics \
+	c++/rpnumerics/physics/polydisperse \
+	c++/rpnumerics/physics/cub \
+	c++/rpnumerics/physics/Ion \
+	c++/rpnumerics/physics/CompositionalPhysics \
+	c++/rpnumerics/physics/CompositionalPhysics/TPCW \
+	c++/rpnumerics/physics/CompositionalPhysics/GasVolatileDead \
+	c++/rpnumerics/physics/SimpleFlux \
+	c++/rpnumerics/physics/JD \
+	c++/rpnumerics/physics/ThreePhaseFlowPhysics \
+	c++/rpnumerics/physics/ThreePhaseFlowPhysics/Brooks_CoreySubPhysics \
+	c++/rpnumerics/physics/ThreePhaseFlowPhysics/StoneSubPhysics \
+	c++/rpnumerics/physics/ThreePhaseFlowPhysics/CoreyQuadSubPhysics \
+	c++/rpnumerics/physics/ThreePhaseFlowPhysics/Koval \
+	c++/JNI \
+	c++/wave \
+	c++/wave/multid \
+	c++/wave/util \
+	c++/wave/util/MultiArray \
+	c++/wave/util/alglib \
+	c++/wave/util/alglib/alglib \
+	c++/wave/ode \
+	c++/wave/ode/LSODE \
+	c++/wave/ode/EulerSolver \
+	c++/Equations \
+	plugins
+
+INCLUDE = \
+	-I c++ \
+	-I c++/canvas \
+	-I c++/canvas/Dump_Fl_Widget \
+	-I c++/Model \
+	-I c++/JetTester \
+	-I c++/rpnumerics \
+	-I c++/rpnumerics/factories \
+	-I c++/rpnumerics/viscousprofile \
+	-I c++/rpnumerics/CoincidenceTP \
+	-I c++/rpnumerics/Curve \
+	-I c++/rpnumerics/plugin \
+	-I c++/rpnumerics/methods \
+	-I c++/rpnumerics/methods/TransitionalShock \
+	-I c++/rpnumerics/methods/Extension \
+	-I c++/rpnumerics/methods/contour \
+	-I c++/rpnumerics/methods/contour/GPU \
+	-I c++/rpnumerics/methods/NewRarefactionCurve \
+	-I c++/rpnumerics/methods/RiemannSolver \
+	-I c++/rpnumerics/methods/Coincidence \
+	-I c++/rpnumerics/methods/RarefactionCurve \
+	-I c++/rpnumerics/methods/Bisection \
+	-I c++/rpnumerics/methods/Coincidence_Contour \
+	-I c++/rpnumerics/methods/ShockCurve \
+	-I c++/rpnumerics/methods/BifurcationCurve \
+	-I c++/rpnumerics/methods/HugoniotContinuation \
+	-I c++/rpnumerics/methods/HugoniotContinuation/HugoniotContinuation_nDnD \
+	-I c++/rpnumerics/methods/HugoniotContinuation/HugoniotContinuation_nD_nm1D \
+	-I c++/rpnumerics/methods/HugoniotContinuation/HugoniotContinuation2D2D \
+	-I c++/rpnumerics/methods/HugoniotContinuation/HugoniotContinuation3D2D \
+	-I c++/rpnumerics/methods/Secondary_Bifurcations \
+	-I c++/rpnumerics/methods/Secondary_Bifurcations/Explicit_Bifurcation_Curves \
+	-I c++/rpnumerics/methods/Secondary_Bifurcations/SuperPhysics \
+	-I c++/rpnumerics/methods/Viscosity_Matrix \
+	-I c++/rpnumerics/methods/HugoniotCurve \
+	-I c++/rpnumerics/methods/CompositeCurve \
+	-I c++/rpnumerics/methods/WaveCurve \
+	-I c++/rpnumerics/methods/CharacteristicPolynomialLevels \
+	-I c++/rpnumerics/characteristics \
+	-I c++/rpnumerics/Discriminant_Contour \
+	-I c++/rpnumerics/ParametricPlot \
+	-I c++/rpnumerics/physics \
+	-I c++/rpnumerics/physics/quad \
+	-I c++/rpnumerics/physics/corey \
+	-I c++/rpnumerics/physics/Quad2C1SubPhysics \
+	-I c++/rpnumerics/physics/corey_leandro \
+	-I c++/rpnumerics/physics/SinglePhase \
+	-I c++/rpnumerics/physics/Quad3SubPhysics \
+	-I c++/rpnumerics/physics/SplineFlux \
+	-I c++/rpnumerics/physics/TrivialTestSubphysics \
+	-I c++/rpnumerics/physics/polydisperse \
+	-I c++/rpnumerics/physics/cub \
+	-I c++/rpnumerics/physics/Ion \
+	-I c++/rpnumerics/physics/CompositionalPhysics \
+	-I c++/rpnumerics/physics/CompositionalPhysics/TPCW \
+	-I c++/rpnumerics/physics/CompositionalPhysics/GasVolatileDead \
+	-I c++/rpnumerics/physics/SimpleFlux \
+	-I c++/rpnumerics/physics/JD \
+	-I c++/rpnumerics/physics/ThreePhaseFlowPhysics \
+	-I c++/rpnumerics/physics/ThreePhaseFlowPhysics/Brooks_CoreySubPhysics \
+	-I c++/rpnumerics/physics/ThreePhaseFlowPhysics/StoneSubPhysics \
+	-I c++/rpnumerics/physics/ThreePhaseFlowPhysics/CoreyQuadSubPhysics \
+	-I c++/rpnumerics/physics/ThreePhaseFlowPhysics/Koval \
+	-I c++/JNI \
+	-I c++/wave \
+	-I c++/wave/multid \
+	-I c++/wave/util \
+	-I c++/wave/util/MultiArray \
+	-I c++/wave/util/alglib \
+	-I c++/wave/util/alglib/alglib \
+	-I c++/wave/ode \
+	-I c++/wave/ode/LSODE \
+	-I c++/wave/ode/EulerSolver \
+	-I c++/Equations \
+	-I plugins
+
+CCSRC = \
+	DoubleMatrixDisplay.cc \
+	TestTools.cc \
+	SubPhysics.cc \
+	TrivialAccumulationFunction.cc \
+	Parameter.cc \
+	Physics.cc \
+	JetTester1D.cc \
+	JetTester.cc \
+	JetTester2D.cc \
+	StationaryPoint.cc \
+	RpFunction.cc \
+	Hugoniot_Locus.cc \
+	ShockFlowParams.cc \
+	FluxFunction.cc \
+	PhasePoint.cc \
+	RarefactionCalc.cc \
+	Envelope_Curve.cc \
+	Elliptic_Boundary.cc \
+	Hugoniot_Curve.cc \
+	EllipticExtension.cc \
+	WavePoint.cc \
+	Inflection_Curve.cc \
+	Implicit_Curve.cc \
+	DefaultAccumulationFunction.cc \
+	Curve.cc \
+	Newton_Improvement.cc \
+	AccumulationFunction.cc \
+	PluginService.cc \
+	RPnPluginManager.cc \
+	RpCalculation.cc \
+	RPnCurve.cc \
+	TransitionalShock.cc \
+	Extension.cc \
+	Implicit_Extension_Curve.cc \
+	Contour2p5_Method.cc \
+	Contour2x2_Method.cc \
+	ContourMethod.cc \
+	HugoniotFunctionClass.cc \
+	Contour2x2_Method_GPU.cc \
+	Double_Contact_GPU.cc \
+	HyperCube.cc \
+	NewRarefactionCurve.cc \
+	ReferencePoint.cc \
+	RiemannProblem.cc \
+	RarefactionCurve.cc \
+	Bisection.cc \
+	Coincidence_Contour.cc \
+	ShockCurve.cc \
+	ClassifyShockCurve.cc \
+	BifurcationCurve.cc \
+	HugoniotContinuation_nDnD.cc \
+	HugoniotContinuation_nD_nm1D.cc \
+	HugoniotContinuation2D2D.cc \
+	HugoniotContinuation.cc \
+	HugoniotContinuation3D2D.cc \
+	Explicit_Bifurcation_Curves.cc \
+	Viscosity_Matrix.cc \
+	ViscosityJetMatrix.cc \
+	ImplicitHugoniotCurve.cc \
+	CompositeCurve.cc \
+	WaveCurve.cc \
+	ExplicitTransitionalWavecurve.cc \
+	WaveCurveFactory.cc \
+	CharacteristicPolynomialLevels.cc \
+	Double_Contact_Function.cc \
+	FluxParams.cc \
+	AccumulationParams.cc \
+	Shock.cc \
+	Secondary_Bifurcation.cc \
+	RpSolution.cc \
+	plotter.cc \
+	interpol.cc \
+	curvegen.cc \
+	Rarefaction.cc \
+	HugoniotSegment.cc \
+	ParametricPlot.cc \
+	Double_Contact.cc \
+	WaveState.cc \
+	Hysteresis.cc \
+	DefaultAccumulationParams.cc \
+	GridValues.cc \
+	Quad2HugoniotFunction.cc \
+	Quad4AccumulationFunction.cc \
+	QuadWaveState.cc \
+	Quad2FluxFunction.cc \
+	Quad4FluxFunction.cc \
+	Quad3FluxFunction.cc \
+	Quad2FluxParams.cc \
+	Quad3AccumulationFunction.cc \
+	Quad3FluxParams.cc \
+	Quad2AccumulationFunction.cc \
+	Quad4FluxParams.cc \
+	Quad2C1Equations.cc \
+	Thermodynamics.cc \
+	Quad3Equations.cc \
+	SplineFlux.cc \
+	TrivialTestFluxFunction.cc \
+	TrivialTestSubPhysics.cc \
+	IonAdsorption.cc \
+	IonAccumulation.cc \
+	IonPermeability.cc \
+	IonFlux.cc \
+	IonRatios.cc \
+	ShockMethod.cc \
+	Double_Contact_TP.cc \
+	ShockContinuationMethod3D2D.cc \
+	GasVolatileDeadCoincidence.cc \
+	GasVolatileDeadAccumulationFunction.cc \
+	GasVolatileDeadFluxFunction.cc \
+	GasVolatileDeadHydrodynamics.cc \
+	GasVolatileDeadCompositeCurve.cc \
+	GasVolatileDeadThermodynamics.cc \
+	GasVolatileDeadEvaporationExtension.cc \
+	GasVolatileDeadSubPhysics.cc \
+	Hugoniot_TP.cc \
+	SimpleFlux.cc \
+	JDEvaporationCompositeCurve.cc \
+	JDEvap_Extension.cc \
+	JDSubPhysics.cc \
+	CoincidenceJD.cc \
+	JDFluxFunction.cc \
+	JDAccumulationFunction.cc \
+	ThreePhaseFlowSubPhysics.cc \
+	Brooks_CoreyPermeability.cc \
+	Brooks_CoreyFluxFunction.cc \
+	Brooks_CoreySubPhysics.cc \
+	ThreePhaseFlowPermeability.cc \
+	ThreePhaseFlowImplicitHugoniotCurve.cc \
+	StonePermeability.cc \
+	StoneSubPhysics.cc \
+	StonePermParams.cc \
+	StoneAccumulation.cc \
+	StoneParams.cc \
+	StoneFluxFunction.cc \
+	Stone_Explicit_Bifurcation_Curves.cc \
+	CoreyQuadPermeability.cc \
+	CoreyQuadTransitionalLine.cc \
+	CoreyQuadExplicitHugoniotCurve.cc \
+	CoreyQuadWaveCurveFactory.cc \
+	CoreyQuadSubPhysics.cc \
+	Three_Phase_Flow_Explicit_Bifurcation_Curves.cc \
+	KovalAccumulationFunction.cc \
+	KovalPermeability.cc \
+	KovalFluxFunction.cc \
+	KovalSubPhysics.cc \
+	ThreePhaseFlowFluxFunction.cc \
+	ThreePhaseFlowWaveCurveFactory.cc \
+	Extension_Curve.cc \
+	Multid.cc \
+	Space.cc \
+	mathutil.cc \
+	RealSegment.cc \
+	RealVector.cc \
+	IsoTriang2DBoundary.cc \
+	errorhandler.cc \
+	eigen.cc \
+	Line.cc \
+	bool.cc \
+	Boundary.cc \
+	RealMatrix2.cc \
+	except.cc \
+	JetMatrix.cc \
+	IntArray.cc \
+	RectBoundary.cc \
+	HessianMatrix.cc \
+	JacobianMatrix.cc \
+	Utilities.cc \
+	LSODE.cc \
+	EulerSolver.cc \
+	Equations.cc
+
+CPPSRC = \
+	canvas.cpp \
+	point2d.cpp \
+	canvasmenuscroll.cpp \
+	quiverplot.cpp \
+	Text.cpp \
+	segmentedcurve.cpp \
+	marchingsquares.cpp \
+	GridValuesPlot.cpp \
+	Dump_Fl_Widget.cpp \
+	curve2d.cpp \
+	graphicobject.cpp \
+	canvasmenu.cpp \
+	canvasmenupack.cpp \
+	WaveCurvePlot.cpp \
+	ArrowHead.cpp \
+	MultiColoredCurve.cpp \
+	CoincidenceTP.cpp \
+	Eigenvalue_Contour.cpp \
+	DoubleMatrix.cpp \
+	ColorCurve.cpp \
+	CoreyQuad_Params.cpp \
+	VLE_Flash_TPCW.cpp \
+	MolarDensity.cpp \
+	JetSinglePhaseLiquid.cpp \
+	JetSinglePhaseVapor.cpp \
+	FluxSinglePhaseLiquidAdimensionalized.cpp \
+	AccumulationSinglePhaseVaporAdimensionalized_Params.cpp \
+	FluxSinglePhaseLiquidAdimensionalized_Params.cpp \
+	FluxSinglePhaseVaporAdimensionalized_Params.cpp \
+	AccumulationSinglePhaseLiquidAdimensionalized.cpp \
+	Thermodynamics_SuperCO2_Water_SinglePhases_Adimensionalized.cpp \
+	AccumulationSinglePhaseLiquidAdimensionalized_Params.cpp \
+	AccumulationSinglePhaseVaporAdimensionalized.cpp \
+	FluxSinglePhaseVaporAdimensionalized.cpp \
+	Polydisperse.cpp \
+	Polydisperse_Params.cpp \
+	TrivialAccumulation.cpp \
+	Flux2Comp2PhasesAdimensionalized_Params.cpp \
+	Thermodynamics_SuperCO2_WaterAdimensionalized.cpp \
+	Accum2Comp2PhasesAdimensionalized.cpp \
+	Accum2Comp2PhasesAdimensionalized_Params.cpp \
+	TrivialAccumulation_Params.cpp \
+	Flux2Comp2PhasesAdimensionalized.cpp \
+	SubinflectionTP.cpp \
+	CoreyQuadFluxFunction.cpp \
+	PointND.cpp \
+	correlation.cpp \
+	blas.cpp \
+	mannwhitneyu.cpp \
+	spdgevd.cpp \
+	jarquebera.cpp \
+	creflections.cpp \
+	elliptic.cpp \
+	idwint.cpp \
+	ibetaf.cpp \
+	normaldistr.cpp \
+	ortfac.cpp \
+	polint.cpp \
+	stest.cpp \
+	logit.cpp \
+	legendre.cpp \
+	mlpbase.cpp \
+	apserv.cpp \
+	svd.cpp \
+	ldlt.cpp \
+	trfac.cpp \
+	studentttests.cpp \
+	gkq.cpp \
+	evd.cpp \
+	ratinterpolation.cpp \
+	psif.cpp \
+	gammafunc.cpp \
+	spline2d.cpp \
+	poissondistr.cpp \
+	variancetests.cpp \
+	matdet.cpp \
+	descriptivestatistics.cpp \
+	kmeans.cpp \
+	dawson.cpp \
+	corr.cpp \
+	rotations.cpp \
+	trlinsolve.cpp \
+	xblas.cpp \
+	linmin.cpp \
+	spline1d.cpp \
+	fresnel.cpp \
+	wsr.cpp \
+	tsort.cpp \
+	matinv.cpp \
+	densesolver.cpp \
+	expintegrals.cpp \
+	fdistr.cpp \
+	bdsvd.cpp \
+	gq.cpp \
+	laguerre.cpp \
+	lda.cpp \
+	odesolver.cpp \
+	binomialdistr.cpp \
+	lsfit.cpp \
+	trigintegrals.cpp \
+	mlptrain.cpp \
+	reflections.cpp \
+	pca.cpp \
+	ssolve.cpp \
+	ablasf.cpp \
+	hsschur.cpp \
+	srcond.cpp \
+	igammaf.cpp \
+	fht.cpp \
+	pspline.cpp \
+	mlpe.cpp \
+	betaf.cpp \
+	mincg.cpp \
+	sblas.cpp \
+	bessel.cpp \
+	chebyshev.cpp \
+	hqrnd.cpp \
+	bdss.cpp \
+	hblas.cpp \
+	linreg.cpp \
+	nearunityunit.cpp \
+	jacobianelliptic.cpp \
+	correlationtests.cpp \
+	ap.cpp \
+	minlbfgs.cpp \
+	conv.cpp \
+	studenttdistr.cpp \
+	minasa.cpp \
+	ftbase.cpp \
+	dforest.cpp \
+	spline3.cpp \
+	matgen.cpp \
+	fft.cpp \
+	chisquaredistr.cpp \
+	minlm.cpp \
+	airyf.cpp \
+	safesolve.cpp \
+	ialglib.cpp \
+	ratint.cpp \
+	nearestneighbor.cpp \
+	ablas.cpp \
+	inverseupdate.cpp \
+	schur.cpp \
+	sdet.cpp \
+	estnorm.cpp \
+	rcond.cpp \
+	autogk.cpp \
+	sinverse.cpp \
+	hermite.cpp \
+	BoxND.cpp
+
+FSRC = \
+	lsode.F \
+	lsode3.F \
+	lsode2.F
+
+vpath %.F   $(VPATH)
+vpath %.cc  $(VPATH)
+vpath %.cpp $(VPATH)

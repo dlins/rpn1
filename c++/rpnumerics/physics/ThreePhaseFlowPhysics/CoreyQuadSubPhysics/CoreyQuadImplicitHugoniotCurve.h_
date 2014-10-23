@@ -1,0 +1,24 @@
+#ifndef _COREYQUADIMPLICITHUGONIOTCURVE_
+#define _COREYQUADIMPLICITHUGONIOTCURVE_
+
+#include "CoreyQuadHugoniotCurve.h"
+#include "ImplicitHugoniotCurve.h"
+
+class CoreyQuadImplicitHugoniotCurve : public CoreyQuadHugoniotCurve, public ImplicitHugoniotCurve {
+    private:
+    protected:
+    public:
+        CoreyQuadImplicitHugoniotCurve(const CoreyQuad *ff, const AccumulationFunction *aa, const Boundary *b);
+        ~CoreyQuadImplicitHugoniotCurve();
+
+        void curve(const ReferencePoint &ref, int type, std::vector<Curve> &c);
+
+        void curve(const ReferencePoint &ref, int type, std::vector<HugoniotPolyLine> &classified_curve){
+            CoreyQuadHugoniotCurve::curve(ref, type, classified_curve);
+
+            return;
+        }
+};
+
+#endif // _COREYQUADIMPLICITHUGONIOTCURVE_
+

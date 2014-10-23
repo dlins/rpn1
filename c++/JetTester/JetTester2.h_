@@ -1,0 +1,46 @@
+#ifndef _JETTESTER_
+#define _JETTESTER_
+
+#include "JetMatrix.h"
+#include "MultiArray.h"
+#include <vector>
+#include <iostream>
+#include <limits>
+
+class JetTester{
+    private:
+    protected:
+    public:
+        JetTester();
+        virtual ~JetTester();
+
+        void populate_F(void *obj, int (*f)(void *obj, const RealVector &state, int degree, JetMatrix &jm),
+                        const RealVector &pmin, const RealVector &pmax,
+                        const std::vector<unsigned long int> &subdivision,
+                        MultiArray<RealVector> &F, MultiArray<DoubleMatrix> &JF);
+
+        void numerical_Jacobian(const MultiArray<RealVector>    &F, 
+                                const MultiArray<DoubleMatrix> &JF,
+                                int rows, int cols, // rows and columns of the Jacobians, maybe there is a better way to do this.
+                                const RealVector &pmin, const RealVector &pmax,
+                                const std::vector<unsigned long int> &subdivision,
+                                /*MultiArray<DoubleMatrix> &numerical_analytic_deviation*/
+                                DoubleMatrix &numerical_analytic_abs_deviation_sup,
+                                double &synthetic_deviation);
+
+        // TODO: Ideally, we could obtain pmin, pmax and subdivision merely by querying GridValues.
+        //       
+        //
+        virtual void test(void *obj, int (*f)(void *obj, const RealVector &state, int degree, JetMatrix &jm), 
+                          const std::vector<int> &variables,
+                          const RealVector &pmin, const RealVector &pmax,
+                          const std::vector<unsigned long int> &subdivision,
+                          std::vector<double> &min_error, 
+                          std::vector<double> &max_error,
+                          std::vector<double> &mean_value);
+
+
+};
+
+#endif // _JETTESTER_
+

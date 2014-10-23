@@ -1,0 +1,15 @@
+#include "MultiArray4D.h"
+
+MultiArray4D::MultiArray4D(int rx, int ry, int rz, int rw): MultiArray(){
+    std::vector<int> v(4);
+    v[0] = rx;
+    v[1] = ry;
+    v[2] = rz;
+    v[3] = rw;
+
+    resize(v);
+}
+
+MultiArray4D::~MultiArray4D(){
+}
+
