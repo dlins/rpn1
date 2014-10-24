@@ -28,6 +28,7 @@ class JetTester2D: public JetTester {
                                 const std::vector<unsigned long int> &subdivision,
                                 /*MultiArray<DoubleMatrix> &numerical_analytic_deviation*/
                                 DoubleMatrix &numerical_analytic_abs_deviation_sup,
+                                Matrix<std::vector<unsigned int> > &sup_pos,
                                 double &synthetic_deviation,
                                 double &max_abs_F);
 

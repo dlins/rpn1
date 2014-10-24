@@ -32,14 +32,14 @@ class JetTester1D: public JetTester {
                                 double &max_abs_F);
 
         virtual void numerical_Hessian(const MultiArray<DoubleMatrix>               &JF, 
-                               const MultiArray<std::vector<DoubleMatrix> > &HF,
-                               int rows, int cols, // rows and columns of the Jacobians, maybe there is a better way to do this.
-                               const RealVector &pmin, const RealVector &pmax,
-                               const std::vector<unsigned long int> &subdivision,
-                               /*MultiArray<DoubleMatrix> &numerical_analytic_deviation*/
-                               std::vector<DoubleMatrix> &numerical_analytic_abs_deviation_sup,
-                               RealVector &max_vec,
-                               double &synthetic_deviation);
+                                       const MultiArray<std::vector<DoubleMatrix> > &HF,
+                                       int rows, int cols, // rows and columns of the Jacobians, maybe there is a better way to do this.
+                                       const RealVector &pmin, const RealVector &pmax,
+                                       const std::vector<unsigned long int> &subdivision,
+                                       /*MultiArray<DoubleMatrix> &numerical_analytic_deviation*/
+                                       std::vector<DoubleMatrix> &numerical_analytic_abs_deviation_sup,
+                                       RealVector &max_vec,
+                                       double &synthetic_deviation);
 };
 
 #endif // _JETTESTER1D_

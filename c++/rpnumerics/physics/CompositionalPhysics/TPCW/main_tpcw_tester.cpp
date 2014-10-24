@@ -39,9 +39,9 @@ int main(){
     pmax.component(2) = 2.0;
 
     std::vector<unsigned long int> subdivision;
-    subdivision.push_back(100);
-    subdivision.push_back(100);
-    subdivision.push_back(100);
+    subdivision.push_back(10);
+    subdivision.push_back(10);
+    subdivision.push_back(10);
 
     // JetTester.
     //
@@ -62,10 +62,11 @@ int main(){
     DoubleMatrix numerical_analytic_abs_deviation_sup;
     double synthetic_deviation;
     double max_abs_F;
+    Matrix<std::vector<unsigned int> > sup_pos;
 
     // Integer delta.
     //
-    for (int k = 0; k < 5; k++){
+    for (int k = 0; k < 2; k++){
         unsigned long int intdelta = 1;
         for (int i = 0; i < k; i++) intdelta *= 2;
 
@@ -76,6 +77,7 @@ int main(){
                               pmin, pmax,
                               subdivision,
                               numerical_analytic_abs_deviation_sup,
+                              sup_pos,
                               synthetic_deviation,
                               max_abs_F);
 
@@ -85,7 +87,43 @@ int main(){
         std::cout << "synthetic_deviation = " << synthetic_deviation << std::endl;
         std::cout << "max_abs_F = " << max_abs_F << std::endl;
         std::cout << "synthetic_deviation/max_abs_F = " << numerical_analytic_abs_deviation_sup*(1.0/max_abs_F) << std::endl;
+
+        std::cout << sup_pos.rows() << " x " << sup_pos.cols() << std::endl;
+
+        for (int i = 0; i < rows; i++){
+            std::cout << "Function component: " << i << std::endl;
+            for (int j = 0; j < cols; j++){
+                std::cout << "    Variable: " << j << std::endl;
+                std::cout << "        Max. reached at: ";
+                for (int p = 0; p < cols; p++) std::cout << sup_pos(i, j)[p] << ", ";
+                std::cout << std::endl << std::endl;
+            }
+        }
     }
+
+//    while (true){
+//        int fcomp, var;
+//        std::cout << "Select function component (negative to stop): ";
+//        std::cin >> fcomp;
+//        if (fcomp < 0) break;
+
+//        std::cout << "Select variable (negative to stop): ";
+//        std::cin >> var;
+//        if (var < 0) break;
+
+//        std::vector<RealVector> v;
+//        RealVector p(2);
+//        for (int i = 0; i < subdivision[fcomp]; i++){
+//            MultiArray<DoubleMatrix> &JF;
+
+//            p(0) = subdivision[fcomp];
+//            p(1) = JF();
+
+//            	
+
+//            v.push_back(p);
+//        }
+//    }
 
     return 0;
 }

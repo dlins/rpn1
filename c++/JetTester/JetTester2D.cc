@@ -185,6 +185,7 @@ void JetTester2D::numerical_Jacobian(const MultiArray<RealVector>    &F,
                                      const std::vector<unsigned long int> &subdivision,
                                      /*MultiArray<DoubleMatrix> &numerical_analytic_deviation*/
                                      DoubleMatrix &numerical_analytic_abs_deviation_sup,
+                                     Matrix<std::vector<unsigned int> > &sup_pos,
                                      double &synthetic_deviation,
                                      double &max_abs_F){
 
@@ -198,6 +199,9 @@ void JetTester2D::numerical_Jacobian(const MultiArray<RealVector>    &F,
     std::vector<long unsigned int> range = F.range();
 
     numerical_analytic_abs_deviation_sup = DoubleMatrix::zero(rows, cols);
+
+    sup_pos.resize(rows, cols);
+    for (int i = 0; i < rows*cols; i++) sup_pos(i).resize(cols);
 
     max_abs_F = 0.0;
 
@@ -222,7 +226,14 @@ void JetTester2D::numerical_Jacobian(const MultiArray<RealVector>    &F,
 
                     dev[p] = std::abs((F(p_shifted)(m) - F(m_shifted)(m))*inv_2_delta[p] - JF(index)(m, p));
 
-                    numerical_analytic_abs_deviation_sup(m, p) = std::max(numerical_analytic_abs_deviation_sup(m, p), dev[p]);
+//                    numerical_analytic_abs_deviation_sup(m, p) = std::max(numerical_analytic_abs_deviation_sup(m, p), dev[p]);
+                    if (dev[p] > numerical_analytic_abs_deviation_sup(m, p)){
+                        // Store the indices of the variables where the supremum was reached for 
+                        // the given component of the function.
+                        //
+                        for (int v = 0; v < cols; v++) sup_pos(m, p)[v] = index[v];
+                        numerical_analytic_abs_deviation_sup(m, p) = dev[p];
+                    }
                 }
 
                 max_abs_F = std::max(max_abs_F, F(index)(m));

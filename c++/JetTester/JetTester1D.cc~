@@ -79,8 +79,8 @@ void JetTester1D::populate_JF(void *obj, int (*f)(void *obj, const RealVector &s
         point(0) = coord[0][i0];
 
         (*f)(obj, point, 2, jm);
-        JF(i0, i1, i2) = jm.Jacobian();
-        HF(i0, i1, i2) = jm.Hessian();
+        JF(i0) = jm.Jacobian();
+        HF(i0) = jm.Hessian();
     }
 
     return;
@@ -177,6 +177,7 @@ void JetTester1D::numerical_Jacobian(const MultiArray<RealVector>    &F,
                                      const std::vector<unsigned long int> &subdivision,
                                      /*MultiArray<DoubleMatrix> &numerical_analytic_deviation*/
                                      DoubleMatrix &numerical_analytic_abs_deviation_sup,
+                                     Matrix<std::vector<unsigned int> > &sup_pos,
                                      double &synthetic_deviation,
                                      double &max_abs_F){
 
@@ -190,6 +191,9 @@ void JetTester1D::numerical_Jacobian(const MultiArray<RealVector>    &F,
     std::vector<long unsigned int> range = F.range();
 
     numerical_analytic_abs_deviation_sup = DoubleMatrix::zero(rows, cols);
+
+    sup_pos.resize(rows, cols);
+    for (int i = 0; i < rows*cols; i++) sup_pos(i).resize(cols);
 
     max_abs_F = 0.0;
 
