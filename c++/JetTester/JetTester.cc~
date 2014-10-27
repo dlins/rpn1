@@ -208,6 +208,9 @@ void JetTester::numerical_Jacobian(const MultiArray<RealVector>    &F,
 
     numerical_analytic_abs_deviation_sup = DoubleMatrix::zero(rows, cols);
 
+    sup_pos.resize(rows, cols);
+    for (int i = 0; i < rows*cols; i++) sup_pos(i).resize(cols);
+
     max_abs_F = 0.0;
 
     // Proceed.
