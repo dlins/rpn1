@@ -1,7 +1,5 @@
 #include "JetTester.h"
 
-
-
 JetTester::JetTester(){
 }
 
@@ -35,20 +33,33 @@ void JetTester::populate_F(void *obj, int (*f)(void *obj, const RealVector &stat
     JetMatrix jm;
     RealVector point(fine_subdivision.size());
 
-    for (int i0 = 0; i0 < fine_subdivision[0]; i0++){
-        point(0) = coord[0][i0];
+//    for (int i0 = 0; i0 < fine_subdivision[0]; i0++){
+//        point(0) = coord[0][i0];
 
-        for (int i1 = 0; i1 < fine_subdivision[1]; i1++){
-            point(1) = coord[1][i1];
+//        for (int i1 = 0; i1 < fine_subdivision[1]; i1++){
+//            point(1) = coord[1][i1];
 
-            for (int i2 = 0; i2 < fine_subdivision[2]; i2++){
-                point(2) = coord[2][i2];
+//            for (int i2 = 0; i2 < fine_subdivision[2]; i2++){
+//                point(2) = coord[2][i2];
 
-                (*f)(obj, point, 1, jm);
-                fine_F(i0, i1, i2)  = jm.function();
-                fine_JF(i0, i1, i2) = jm.Jacobian();
-            }
-        }
+//                (*f)(obj, point, 1, jm);
+//                fine_F(i0, i1, i2)  = jm.function();
+//                fine_JF(i0, i1, i2) = jm.Jacobian();
+//            }
+//        }
+//    }
+
+    unsigned long int total_number_elements = 1;
+    for (unsigned long int i = 0; i < fine_subdivision.size(); i++) total_number_elements *= fine_subdivision[i];
+
+    for (unsigned long int location = 0; location < total_number_elements; location++){
+        std::vector<unsigned long int> mi = fine_F.multiindex(location);
+
+        for (int p = 0; p < fine_subdivision.size(); p++) point(p) = coord[p][mi[p]];
+
+        (*f)(obj, point, 1, jm);
+        fine_F(mi)  = jm.function();
+        fine_JF(mi) = jm.Jacobian();
     }
 
     return;

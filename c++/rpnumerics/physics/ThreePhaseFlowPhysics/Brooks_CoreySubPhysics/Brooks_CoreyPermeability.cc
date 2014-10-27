@@ -1,12 +1,12 @@
 #include "Brooks_CoreyPermeability.h"
 
-double Brooks_CoreyPermeability::power(double x, double y){
-    double p = 1.0;
+//double Brooks_CoreyPermeability::power(double x, double y){
+//    double p = 1.0;
 
-    for (int i = 0; i < (int)y; i++) p *= x;
+//    for (int i = 0; i < (int)y; i++) p *= x;
 
-    return p;
-}
+//    return p;
+//}
 
 Brooks_CoreyPermeability::Brooks_CoreyPermeability(Parameter *lambda, Parameter *cnw, Parameter *cno, Parameter *cng, ThreePhaseFlowSubPhysics *s) :  ThreePhaseFlowPermeability(s) {
     lambda_parameter = lambda;
