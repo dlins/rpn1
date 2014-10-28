@@ -10,7 +10,7 @@ class Brooks_CoreyPermeability : public ThreePhaseFlowPermeability {
 
         Parameter *cnw_parameter, *cno_parameter, *cng_parameter;
 
-//        double power(double x, double y);
+        double power(double x, double y);
     public:
         Brooks_CoreyPermeability(Parameter *lambda, Parameter *cnw, Parameter *cno, Parameter *cng, ThreePhaseFlowSubPhysics *s);
         virtual ~Brooks_CoreyPermeability();

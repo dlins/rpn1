@@ -44,6 +44,8 @@ ThreePhaseFlowSubPhysics::ThreePhaseFlowSubPhysics() : SubPhysics() {
     //
 //    double m[9] = {1.0, .5, 0.0, 0.0, sqrt(3)/2, 0.0, 0.0, 0.0, 1.0};
 //    transformation_matrix_ = DoubleMatrix(3, 3, m);
+
+    transformation_matrix_ = DoubleMatrix::eye(3);
 }
 
 ThreePhaseFlowSubPhysics::~ThreePhaseFlowSubPhysics(){

@@ -5,6 +5,7 @@
 #include "Brooks_CoreySubPhysics.h"
 #include "CoreyQuadSubPhysics.h"
 #include "KovalSubPhysics.h"
+#include "FoamSubPhysics.h"
 
 #include <FL/Fl.H>
 #include <FL/Fl_Double_Window.H>
@@ -574,7 +575,7 @@ void add_Hugoniots_group(){
         hugoniotrnd->deactivate();
         hugoniotgrp->deactivate();
     }
-    else {	../../../../rpnumerics/physics/ThreePhaseFlowPhysics/StoneSubPhysics/StoneSubPhysics.cc \
+    else {
         Hugoniot_method_choice->value(0);
         Hugoniot_method_choice->do_callback();
 
@@ -1241,8 +1242,9 @@ int main(){
 
 //    subphysics = new StoneSubPhysics;
 //    subphysics = new Brooks_CoreySubPhysics;
-    subphysics = new CoreyQuadSubPhysics;
+//    subphysics = new CoreyQuadSubPhysics;
 //    subphysics = new KovalSubPhysics;
+    subphysics = new FoamSubPhysics;
 
     std::cout << "SubPhysics \"" << subphysics->info_subphysics() << "\" created successfully." << std::endl;
 
@@ -1372,31 +1374,31 @@ int main(){
 
     Fl::scheme("gtk+");
 
-    // Test purposes!
-    {
-        CoreyQuadSubPhysics *corey = new CoreyQuadSubPhysics;
+//    // Test purposes!
+//    {
+//        CoreyQuadSubPhysics *corey = new CoreyQuadSubPhysics;
 
-        std::vector<int> type;
-        std::vector<std::string> name;
-        std::vector<void*> object;
-        std::vector<double (*)(void*, const RealVector &)> function;
-        corey->bifurcation_curve()->list_of_secondary_bifurcation_curves(type, 
-                                                    name,
-                                                    object,
-                                                    function);    
+//        std::vector<int> type;
+//        std::vector<std::string> name;
+//        std::vector<void*> object;
+//        std::vector<double (*)(void*, const RealVector &)> function;
+//        corey->bifurcation_curve()->list_of_secondary_bifurcation_curves(type, 
+//                                                    name,
+//                                                    object,
+//                                                    function);    
 
-        for (int i = 0; i < name.size(); i++) std::cout << "name[" << i << "] = \"" << name[i] << "\"" << std::endl;
+//        for (int i = 0; i < name.size(); i++) std::cout << "name[" << i << "] = \"" << name[i] << "\"" << std::endl;
 
-        // WE
-        {
-            std::vector<RealVector> v;
-            v.push_back(corey->W());
-            v.push_back(corey->E());
+//        // WE
+//        {
+//            std::vector<RealVector> v;
+//            v.push_back(corey->W());
+//            v.push_back(corey->E());
 
-            Curve2D *c = new Curve2D(v, 0.0, 0.0, 0.0);
-            canvas->add(c);
-        }
-    }
+//            Curve2D *c = new Curve2D(v, 0.0, 0.0, 0.0);
+//            canvas->add(c);
+//        }
+//    }
 
     return Fl::run();
 }
