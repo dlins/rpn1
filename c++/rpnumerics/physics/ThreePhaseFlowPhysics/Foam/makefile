@@ -23,7 +23,7 @@ LD = $(CXX)
 #
 #	Include, C-preprocessor, C, C++ and Fortran compilation flags
 INCFLAGS = -I ../../../../wave/ode -I ../../../../rpnumerics/methods/Coincidence -I ../../../../wave/util/MultiArray
-CPPFLAGS =
+CPPFLAGS = -fopenmp -g -p
 CXXFLAGS =
 CFLAGS =
 FFLAGS =
@@ -36,51 +36,12 @@ LDFLAGS = -fopenmp -g -p
 #
 #	Flags used to create a library. Only needed if LIBNAME was defined.
 LIBEXT = so
-LIBFLAGS = -shared  -Wl,-soname,$(LIBNAME).$(LIBEXT)
+LIBFLAGS = -shared -Wl,-soname,$(LIBNAME).$(LIBEXT)
 
 #
-#	Source code files lists
-
-#
-#	Define if the list of source files will be set internally (see bellow)
-INTERNAL_SOURCE_DEF = no
-
-#
-#	Define if the list of source files will be set by external file (use 'make sourcedef')
-EXTERNAL_SOURCE_DEF = yes
-EXTERNAL_SOURCE_FILE = source_files.mk
-
-#
-#	Define if the list of source files will be automatically searched
-AUTO_SOURCE_DEF = no
-AUTO_SOURCE_DIR = ../../../..
-AUTO_SOURCE_EXT = c cc cpp F
-
-
-##################################################################################
-#
-#	Internal source code files definition. Relative or full path required.
-#
-##################################################################################
-
-ifeq ($(INTERNAL_SOURCE_DEF),yes)
-#	C source files (.c)
-cSRC =
-
-
-#	C++ source files (.cc)
-ccSRC = 
-
-
-#	C++ source files (.cpp)
-cppSRC = 
-
-
-#	Fortran source files (.F)
-FSRC =
-endif
-
-
+#	Source code files
+SOURCE_DIR = ../../../..
+SOURCE_LIST = source_files.mk
 
 
 
@@ -89,7 +50,7 @@ endif
 #
 #
 #
-#	WARNING: change the code below at youe ow: risk!
+#	WARNING: change the code below at your own risk!
 #
 #
 #
@@ -103,47 +64,18 @@ endif
 #
 ##################################################################################
 
-ifeq ($(EXTERNAL_SOURCE_DEF),yes)
-EXISTS = $(shell if [ -f $(EXTERNAL_SOURCE_FILE) ]; then echo yes; fi )
+SOURCE_EXT = c cc cpp F
+
+EXISTS = $(shell if [ -f $(SOURCE_LIST) ]; then echo yes; fi )
 
 ifeq ($(EXISTS),yes)
--include $(EXTERNAL_SOURCE_FILE)
+-include $(SOURCE_LIST)
 else
 abort_1:
-	@echo Error: No $(EXTERNAL_SOURCE_FILE) found!
+	@echo Error: No $(SOURCE_LIST) found!
 	@echo You can use \'make sourcedef\' to create one.
 endif
-endif
 
-
-
-##################################################################################
-#
-#	If AUTO_SOURCE_DEF then automatically search for source files
-#
-##################################################################################
-
-ifeq ($(AUTO_SOURCE_DEF),yes)
-
-EXISTS = $(shell if [ -d $(AUTO_SOURCE_DIR) ]; then echo yes; fi )
-
-ifeq ($(EXISTS),yes)
-#	C source files (.c)
-cSRC += $(shell for src in `find $(AUTO_SOURCE_DIR) -name \*.c`; do cSRC="$$cSRC "$$src; done; echo $$cSRC)
-
-#	C++ source files (.cc)
-ccSRC += $(shell for src in `find $(AUTO_SOURCE_DIR) -name \*.cc`; do ccSRC="$$ccSRC "$$src; done; echo $$ccSRC)
-
-#	C++ source files (.cpp)
-cppSRC += $(shell for src in `find $(AUTO_SOURCE_DIR) -name \*.cpp`; do cppSRC="$$cppSRC "$$src; done; echo $$cppSRC)
-
-#	Fortran source files (.F)
-FSRC += $(shell for src in `find $(AUTO_SOURCE_DIR) -name \*.F`; do FSRC="$$FSRC "$$src; done; echo $$FSRC)
-else
-abort_2:
-	@echo Error: $(AUTO_SOURCE_DIR) is not a directory!
-endif
-endif
 
 
 
@@ -158,29 +90,6 @@ endif
 #
 VPATH := $(shell echo $(dir $(cSRC) $(ccSRC) $(cppSRC) $(FSRC)) | sed "s, ,$'\n,g" | sort | uniq )
 INCLUDE = $(patsubst %,-I %,$(subst :, ,$(VPATH))) $(INCFLAGS)
-
-#
-#	List of objects and dependency files
-#
-cSRC_ = $(notdir $(cSRC))
-ccSRC_ = $(notdir $(ccSRC))
-cppSRC_ = $(notdir $(cppSRC))
-FSRC_ = $(notdir $(FSRC))
-
-OBJECTS = $(cSRC_:%.c=$(OBJDIR)/%.o) \
-	  $(ccSRC_:%.cc=$(OBJDIR)/%.o) \
-          $(cppSRC_:%.cpp=$(OBJDIR)/%.o) \
-          $(FSRC_:%.F=$(OBJDIR)/%.o)
-
-DEPENDS = $(cSRC_:%.c=$(OBJDIR)/%.d) \
-	  $(ccSRC_:%.cc=$(OBJDIR)/%.d) \
-	  $(cppSRC_:%.cpp=$(OBJDIR)/%.d) \
-          $(FSRC_:%.F=$(OBJDIR)/%.d)
-
-ifeq ($(strip $(OBJECTS)),)
-abort_3:
-	@echo Error: No source code defined!
-endif
 
 #
 #	Definitions for cleaning
@@ -219,7 +128,33 @@ RMDIR = rmdir --ignore-fail-on-non-empty
 #	Location for object, archive, and dependency files
 #
 RPHOSTTYPE = $(shell uname -s | tr '[:upper:]' '[:lower:]')_$(shell uname -m)
-OBJDIR = $(RPHOSTTYPE)
+PHYSICS = $(notdir $(CURDIR))
+OBJDIR = $(RPHOSTTYPE)-$(PHYSICS)
+
+#
+#	List of objects and dependency files
+#
+cSRC_ = $(notdir $(cSRC))
+ccSRC_ = $(notdir $(ccSRC))
+cppSRC_ = $(notdir $(cppSRC))
+FSRC_ = $(notdir $(FSRC))
+
+OBJECTS = $(cSRC_:%.c=$(OBJDIR)/%.o) \
+	$(ccSRC_:%.cc=$(OBJDIR)/%.o) \
+	$(cppSRC_:%.cpp=$(OBJDIR)/%.o) \
+	$(FSRC_:%.F=$(OBJDIR)/%.o)
+
+DEPENDS = $(cSRC_:%.c=$(OBJDIR)/%.d) \
+	$(ccSRC_:%.cc=$(OBJDIR)/%.d) \
+	$(cppSRC_:%.cpp=$(OBJDIR)/%.d) \
+	$(FSRC_:%.F=$(OBJDIR)/%.d)
+
+ifeq ($(strip $(OBJECTS)),)
+abort_3:
+	@echo Error: No source code defined!
+endif
+
+
 
 .PRECIOUS: 
 
@@ -239,19 +174,19 @@ all: $(PROGNAME) $(LIBNAME)
 #	make a program
 #
 $(PROGNAME): $(OBJECTS)
-	$(LINK) -o $@ $^  $(LDLIBS) $(LDFLAGS)
+	$(LINK) $(CPPFLAGS) -o $@ $^ $(LDLIBS) $(LDFLAGS)
 
 #
 #	make a TEST1 program
 #
 subphysics: $(OBJECTS)
-	$(LINK)  $(CPPFLAGS) $(INCLUDE) ../../../../../main_subphysics.cpp -o $@ $^  $(LDLIBS) $(LDFLAGS)
+	$(LINK) $(CPPFLAGS) $(INCLUDE) ../../../../../main_subphysics.cpp -o $@ $^ $(LDLIBS) $(LDFLAGS)
 
 #
 #	Make a library
 #
 $(LIBNAME): $(OBJECTS)
-	$(LINK) $(LIBFLAGS) -o $@ $^  $(LDLIBS) $(LDFLAGS)
+	$(LINK) $(LIBFLAGS) -o $@ $^ $(LDLIBS) $(LDFLAGS)
 
 
 
@@ -265,9 +200,11 @@ SUFFIXES = .o .d .c .cc .cpp .F
 .SUFFIXES:
 .SUFFIXES: $(SUFFIXES)
 
+
 CPPFLAGS := $(CPPFLAGS) $(INCLUDE)
 DEPEND = $(CC) -M $(CPPFLAGS)
 LINK = $(LD)
+
 
 #
 #	C definitions & rules
@@ -278,6 +215,7 @@ $(OBJDIR)/%.o: %.c
 	$(COMPILE.c) -o $@ $<
 
 $(OBJDIR)/%.d: %.c
+	@echo Creating dependency file $@ from $<
 	@set -e; rm -f $@; $(DEPEND) $< | sed 's,\($*\)\.o[ :]*,$(OBJDIR)/\1.o $@ : ,g' > $@;
 
 
@@ -293,9 +231,11 @@ $(OBJDIR)/%.o: %.cpp
 	$(COMPILE.cc) -o $@ $<
 
 $(OBJDIR)/%.d: %.cc
+	@echo Creating dependency file $@ from $<
 	@set -e; rm -f $@; $(DEPEND) $< | sed 's,\($*\)\.o[ :]*,$(OBJDIR)/\1.o $@ : ,g' > $@;
 
 $(OBJDIR)/%.d: %.cpp
+	@echo Creating dependency file $@ from $<
 	@set -e; rm -f $@; $(DEPEND) $< | sed 's,\($*\)\.o[ :]*,$(OBJDIR)/\1.o $@ : ,g' > $@;
 
 
@@ -308,6 +248,7 @@ $(OBJDIR)/%.o: %.F
 	$(COMPILE.F) -o $@ $<
 
 $(OBJDIR)/%.d: %.F
+	@echo Creating dependency file $@ from $<
 	@set -e; rm -f $@; $(DEPEND) $< | sed 's,\($*\)\.o[ :]*,$(OBJDIR)/\1.o $@ : ,g' > $@;
 
 
@@ -320,10 +261,10 @@ $(OBJDIR)/%.d: %.F
 ##################################################################################
 
 $(OBJECTS) $(DEPENDS): | $(OBJDIR)
-     
+
 $(OBJDIR):
 	@echo Creating object repository directory \"$(OBJDIR)\".
-	@mkdir $(OBJDIR)
+	@mkdir -p $(OBJDIR)
 
 
 clean: FORCE
@@ -332,7 +273,7 @@ clean: FORCE
 
 distclean: FORCE clean
 	@$(RMDIR) $(OBJDIR)
-	$(CLEAN) $(EXTERNAL_SOURCE_FILE)
+	$(CLEAN) $(SOURCE_LIST)
 
 
 print: FORCE
@@ -349,12 +290,12 @@ tar: FORCE
 
 
 sourcedef: FORCE
-	@set -e; > $(EXTERNAL_SOURCE_FILE) ; \
-	for ext in $(AUTO_SOURCE_EXT); do \
-	    for source in `find $(AUTO_SOURCE_DIR)  -name \*.$$ext | sed -e 's,^\./,,g'`; do  \
+	@set -e; > $(SOURCE_LIST) ; \
+	for ext in $(SOURCE_EXT); do \
+	    for source in `find $(SOURCE_DIR) -name \*.$$ext | sed -e 's,^\./,,g'`; do \
 	        src="$$src \\\\\n\\t$$source"; \
 	    done; \
-	    echo "\n"$$ext"SRC += $$src\n" >> $(EXTERNAL_SOURCE_FILE); src=; \
+	    echo "\n"$$ext"SRC += $$src\n" >> $(SOURCE_LIST); src=; \
 	done
 
 
@@ -363,9 +304,10 @@ debug:
 	$(info )
 	$(info SOURCEFILES = $(cSRC) $(ccSRC) $(cppSRC) $(FSRC))
 	$(info OBJECTS     = $(OBJECTS))
+	$(info DEPENDS     = $(DEPENDS))
 	$(info VPATH       = $(VPATH))
 	$(info INCLUDE     = $(INCLUDE))
-	$(info DEPENDS     = $(DEPENDS))
+	$(info OBJDIR      = $(OBJDIR))
 	@echo
 	
 FORCE:

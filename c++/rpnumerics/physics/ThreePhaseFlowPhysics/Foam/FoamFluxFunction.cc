@@ -82,15 +82,15 @@ int FoamFluxFunction::jet(const RealVector &w, JetMatrix &m, int degree) const {
            double ldkw_dso = kw_jet.get(0, 1)/muw; // dkw_dsw = kw_jet.get(0, 0)
            double ldko_dso = ko_jet.get(0, 1)/muo; // dko_dsw = ko_jet.get(0, 0)
            double ldkg_dso = kg_jet.get(0, 1)/mug  -  lkg*mug_jet.get(0, 1)/mug; // dkg_dsw = kg_jet.get(0, 0), dmug_dsw = mug_jet.get(0, 0)
-           double ldk_dso  = ldkw_dsw + ldko_dso + ldkg_dso;
+           double ldk_dso  = ldkw_dso + ldko_dso + ldkg_dso;
 
-           double to = vel + lkw*(gro - grw) + lkg*(gro - grg);
            double tw = vel + lko*(grw - gro) + lkg*(grw - grg);
+           double to = vel + lkw*(gro - grw) + lkg*(gro - grg);
 
            double dtodso = (gro - grg)*ldkg_dso;
            double dtodsw = (gro - grw)*ldkw_dsw + (gro - grg)*ldkg_dsw;
            double dtwdso = (grw - gro)*ldko_dso + (grw - grg)*ldkg_dso;
-           double dtwdsw = ldko_dsw*(grw - gro) + (grw - grg)*ldkg_dsw;
+           double dtwdsw = (grw - gro)*ldko_dsw;// + (grw - grg)*ldkg_dsw;
 
            double zgwdsw = ( lk * ldkw_dsw  -  lkw * ldk_dsw ) / (lk * lk);
            double zgwdso = ( lk * ldkw_dso  -  lkw * ldk_dso ) / (lk * lk);
