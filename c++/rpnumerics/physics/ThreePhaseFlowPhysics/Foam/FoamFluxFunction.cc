@@ -112,15 +112,15 @@ int FoamFluxFunction::jet(const RealVector &w, JetMatrix &m, int degree) const {
                double ld2ko_dso2  = ko_jet.get(0, 1, 1)/muo; // d2kw_dso2  = kw_jet.get(0, 1, 1)
 
                double ld2kg_dsw2  = kg_jet.get(0, 0, 0)/mug - kg_jet.get(0, 0)*mug_jet.get(0, 0)/(mug*mug) - 
-                                    (dlkg_dsw*mug_jet.get(0, 0) + lkg*mug_jet.get(0, 0, 0))/mug + 
+                                    (ldkg_dsw*mug_jet.get(0, 0) + lkg*mug_jet.get(0, 0, 0))/mug + 
                                     (lkg*mug_jet.get(0, 0)*mug_jet.get(0, 0))/(mug*mug); // ***
 
                double ld2kg_dswso = kg_jet.get(0, 0, 1)/mug - kg_jet.get(0, 0)*mug_jet.get(0, 1)/(mug*mug) - 
-                                    (dlkg_dso*mug_jet.get(0, 0) + lkg*mug_jet.get(0, 0, 1))/mug + 
+                                    (ldkg_dso*mug_jet.get(0, 0) + lkg*mug_jet.get(0, 0, 1))/mug + 
                                     (lkg*mug_jet.get(0, 0)*mug_jet.get(0, 1))/(mug*mug); // ***
 
                double ld2kg_dso2  = kg_jet.get(0, 1, 1)/mug - kg_jet.get(0, 1)*mug_jet.get(0, 1)/(mug*mug) - 
-                                    (dlkg_dso*mug_jet.get(0, 1) + lkg*mug_jet.get(0, 1, 1))/mug + 
+                                    (ldkg_dso*mug_jet.get(0, 1) + lkg*mug_jet.get(0, 1, 1))/mug + 
                                     (lkg*mug_jet.get(0, 1)*mug_jet.get(0, 1))/(mug*mug); // ***
 
                double ld2k_dsw2  = ld2kw_dsw2 + ld2ko_dsw2 + ld2kg_dsw2; 
