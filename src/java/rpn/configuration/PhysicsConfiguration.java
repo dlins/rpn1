@@ -17,7 +17,7 @@ public class PhysicsConfiguration extends Configuration {
 
 
     }
-
+    
     public PhysicsConfiguration(String name) {
 
         super(name);

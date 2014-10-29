@@ -21,6 +21,7 @@ import javax.swing.*;
 import rpn.command.ChangeDirectionCommand;
 import rpn.configuration.Configuration;
 import rpn.configuration.ConfigurationProfile;
+import rpn.configuration.Parameter;
 import rpn.ui.UIComponentCreator;
 import rpnumerics.Orbit;
 import rpnumerics.RPNUMERICS;
@@ -93,12 +94,28 @@ public class RPnCurvesConfigPanel extends Observable implements PropertyChangeLi
                 
                 for (Entry<String, String> paramEntry : paramSet) {
                     if (!paramEntry.getKey().contains("resolution")) {
+                              
                         UIComponentCreator componentCreator = new UIComponentCreator(config, paramEntry.getKey());
                         JComponent component = componentCreator.createUIComponent();
                         paramsPanel.add(component);
+                      
                     }
                     
                 }
+                java.util.List<Parameter> parameterList = config.getParameterList();
+                
+                
+                for (Parameter parameter : parameterList) {
+                    
+                    UIComponentCreator componentCreator = new UIComponentCreator(parameter);
+                    JComponent component = componentCreator.createUIComponent();
+                    paramsPanel.add(component);
+                    
+                    
+                }
+                
+                
+                
                 
                 if (paramsPanel.getComponentCount() > 0) {
                     curvesTabbedPanel_.addTab(config.getName(), paramsPanel);

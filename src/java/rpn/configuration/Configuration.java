@@ -7,6 +7,7 @@ package rpn.configuration;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map.Entry;
 import java.util.Observable;
 import java.util.Set;
@@ -19,13 +20,15 @@ public abstract class Configuration extends Observable{
     private String name_;
     private String type_;
     
-    
+    private  List<Parameter> paramList_;
     
     public Configuration(ConfigurationProfile profile) {
 
         configurationMap_ = new HashMap<String, Configuration>();
         params_ = profile.getParams();
         paramOrder_ = new ArrayList<String>();
+        
+        paramList_=new ArrayList<Parameter>();
 
         int index = 0;
 
@@ -50,6 +53,7 @@ public abstract class Configuration extends Observable{
         this(profile);
 
         configurationMap_ = innerConfigurations;
+        paramList_=new ArrayList<Parameter>();
 
     }
 
@@ -57,6 +61,7 @@ public abstract class Configuration extends Observable{
         params_ = new HashMap<String, String>();
         paramOrder_ = new ArrayList<String>();
         configurationMap_ = new HashMap<String, Configuration>();
+        paramList_=new ArrayList<Parameter>();
         name_ = name;
 
     }
@@ -64,6 +69,17 @@ public abstract class Configuration extends Observable{
     public void removeParam(String paramName) {
         params_.remove(paramName);
     }
+    
+     public List<Parameter> getParamList() {
+        return paramList_;
+    }
+    
+    public void addParameter(Parameter param){
+        paramList_.add(param);
+    }
+    
+    
+    
     
     public void keepParameters(String [] parametersToKeep){
         
@@ -208,6 +224,13 @@ public abstract class Configuration extends Observable{
     protected void setType(String type){
         
         type_=type;
+    }
+    
+    
+    
+    
+    public List<Parameter> getParameterList(){
+        return paramList_;
     }
     
 

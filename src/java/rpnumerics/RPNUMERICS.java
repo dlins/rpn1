@@ -1042,6 +1042,8 @@ public class RPNUMERICS {
     public static native ArrayList<String> getTransisionalLinesNames();
     
     
+    public static native void readNativePhysicsConfig();
+    
     public static native String [] getHugoniotCaseNames(String hugoniotMethodName);
 
   

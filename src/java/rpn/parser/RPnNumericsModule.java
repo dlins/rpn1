@@ -168,6 +168,10 @@ public class RPnNumericsModule {
             int[] hugoniotResolution = RPnDataModule.processResolution(RPNUMERICS.getParamValue("hugoniotcurve", "resolution"));
 
             int[] bifurcationCurvesResolution = RPnDataModule.processResolution(RPNUMERICS.getParamValue("bifurcationcurve", "resolution"));
+            
+            
+            RPNUMERICS.readNativePhysicsConfig();
+            
 
 //            RPNUMERICS.setResolution(min, max, "doublecontactcurve", doubleContactResolution);
 //

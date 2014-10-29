@@ -87,6 +87,174 @@ HugoniotConfig * RpNumerics::getHugoniotConfig(const string & configName) {
 
 /*
  * Class:     rpnumerics_RPNUMERICS
+ * Method:    readNativePhysicsConfig
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_readNativePhysicsConfig
+(JNIEnv * env, jclass cls) {
+
+
+    jclass configurationClass = env->FindClass(CONFIGURATION_LOCATION);
+    jclass parameterLeafClass = env->FindClass("rpn/configuration/ParameterLeaf");
+    jclass parameterClass = env->FindClass("rpn/configuration/Parameter");
+    jclass parameterCompositeClass = env->FindClass("rpn/configuration/ParameterComposite");
+
+    jclass arrayListClass = env->FindClass("java/util/ArrayList");
+
+
+    jclass rpnumericsClass = env->FindClass(RPNUMERICS_LOCATION);
+
+
+
+    jmethodID getConfigurationMethodID = env->GetStaticMethodID(cls, "getConfiguration", "(Ljava/lang/String;)Lrpn/configuration/Configuration;");
+
+    jmethodID parameterLeafConstructorID = env->GetMethodID(parameterLeafClass, "<init>", "(Ljava/lang/String;Ljava/lang/String;)V");
+    jmethodID parameterCompositeConstructorID = env->GetMethodID(parameterCompositeClass, "<init>", "(Ljava/lang/String;Ljava/lang/String;)V");
+    
+
+
+
+    jmethodID parameterAddOptionID = env->GetMethodID(parameterClass, "addOption", "(Ljava/lang/String;)V");
+
+    jmethodID addParameterMethodID = env->GetMethodID(configurationClass, "addParameter", "(Lrpn/configuration/Parameter;)V");
+    
+    jmethodID addAssociatedParameterMethodID = env->GetMethodID(parameterClass, "addAssociatedParameter", "(Lrpn/configuration/Parameter;)V");
+    
+    
+
+    jmethodID arrayListAddMethod = env->GetMethodID(arrayListClass, "add", "(Ljava/lang/Object;)Z");
+
+    jmethodID arrayListConstructor = env->GetMethodID(arrayListClass, "<init>", "()V");
+
+
+    //     public void addParameter(Parameter param){
+
+
+
+    //WaveCurveCases
+
+    jstring waveCurveName = env->NewStringUTF("wavecurve");
+    jobject waveCurveConfiguration = env->CallStaticObjectMethod(cls, getConfigurationMethodID, waveCurveName);
+
+    jstring paramName = env->NewStringUTF("origin");
+
+
+
+    std::vector<int> type;
+    std::vector<std::string> name;
+
+    RpNumerics::physicsVector_->at(0)->wavecurvefactory()->list_of_initial_points(type, name);
+
+    jstring waveCurveDefaultCaseValue = env->NewStringUTF(name.at(0).c_str());
+
+    jobject parameterLeaf = env->NewObject(parameterLeafClass, parameterLeafConstructorID, paramName, waveCurveDefaultCaseValue);
+
+
+    jobject waveCurveOptiosArray = env->NewObject(arrayListClass, arrayListConstructor, NULL);
+
+    for (int i = 0; i < name.size(); i++) {
+
+        jstring waveCurveOptionName = env->NewStringUTF(name.at(i).c_str());
+
+
+        env->CallVoidMethod(parameterLeaf, parameterAddOptionID, waveCurveOptionName);
+
+
+    }
+
+
+
+    env->CallVoidMethod(waveCurveConfiguration, addParameterMethodID, parameterLeaf);
+
+    //--------------------------------------------------------------------------------------------------
+
+    //Hugoniot Cases 
+
+
+
+    jstring hugoniotName = env->NewStringUTF("hugoniotcurve");
+
+    jobject hugoniotConfiguration = env->CallStaticObjectMethod(cls, getConfigurationMethodID, hugoniotName);
+
+    jstring hugoniotParamName = env->NewStringUTF("method");
+
+
+    vector<HugoniotCurve*> hugoniotMethodsVector;
+
+
+    RpNumerics::physicsVector_->at(0)->list_of_Hugoniot_methods(hugoniotMethodsVector);
+    
+    
+    jstring hugoniotDefaultParamName = env->NewStringUTF(hugoniotMethodsVector[0]->Hugoniot_info().c_str());
+
+
+    jobject methodParameter = env->NewObject(parameterCompositeClass, parameterCompositeConstructorID, hugoniotParamName, hugoniotDefaultParamName);
+
+
+   
+    env->CallVoidMethod(hugoniotConfiguration, addParameterMethodID, methodParameter);
+    
+    
+    
+    for (int i = 0; i < hugoniotMethodsVector.size(); i++) {
+
+        vector<int> types;
+        vector<string> typeNames;
+
+
+        jstring hugoniotMethodName = env->NewStringUTF(hugoniotMethodsVector.at(i)->Hugoniot_info().c_str());
+
+
+        env->CallVoidMethod(methodParameter, parameterAddOptionID, hugoniotMethodName);
+
+        hugoniotMethodsVector[i]->list_of_reference_points(types, typeNames);
+
+
+        jstring hugoniotCaseName = env->NewStringUTF("case");
+        
+        jstring hugoniotDefaultCaseName = env->NewStringUTF(hugoniotMethodsVector[0]->Hugoniot_info().c_str());
+
+        jobject caseParameter = env->NewObject(parameterLeafClass, parameterLeafConstructorID, hugoniotCaseName, hugoniotDefaultCaseName);
+        
+        for (int j = 0; j < typeNames.size(); j++) {
+            
+            jstring paramOptionName = env->NewStringUTF(typeNames.at(j).c_str());
+            
+            env->CallVoidMethod(caseParameter, parameterAddOptionID, paramOptionName);
+ 
+
+        }
+
+        env->CallVoidMethod(methodParameter, addAssociatedParameterMethodID,caseParameter);                    
+        
+        if(i==0){
+            env->CallVoidMethod(hugoniotConfiguration, addParameterMethodID, caseParameter);    
+
+        }
+        
+
+
+
+    }
+
+
+
+    
+   
+    
+    //-------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+}
+
+/*
+ * Class:     rpnumerics_RPNUMERICS
  * Method:    getTransisionalLinesNames
  * Signature: ()Ljava/util/ArrayList;
  */
@@ -106,7 +274,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RPNUMERICS_getTransisionalLinesNames
     BifurcationCurve * bifurcation = RpNumerics::physicsVector_->at(0)->bifurcation_curve();
 
     if (bifurcation != NULL) {
-     
+
         std::vector<int> type;
         std::vector<std::string> name;
         std::vector<void*> object;
@@ -133,6 +301,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RPNUMERICS_getTransisionalLinesNames
 }
 
 void RpNumerics::fillWaveCurveCases() {
+
 
 
     waveCurveConfigVector_ = new vector<WaveCurveConfig *>();
@@ -492,8 +661,6 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setRPnHome
 
 }
 
-
-
 /*
  * Class:     rpnumerics_RPNUMERICS
  * Method:    getFluxParams
@@ -531,8 +698,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RPNUMERICS_getFluxParams
     //    return fluxParams;
 
 }
-
-
 
 /*
  * Class:     rpnumerics_RPNUMERICS
@@ -589,8 +754,6 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setResolution
     //    grid->set_grid(boundary, boundary->minimums(), boundary->maximums(), newResolutionVector);
 
 }
-
-
 
 /*
  * Class:     rpnumerics_RPNUMERICS
@@ -699,8 +862,6 @@ JNIEXPORT jstring JNICALL Java_rpnumerics_RPNUMERICS_getYLabel
     return yLabel;
 
 }
-
-
 
 /*
  * Class:     rpnumerics_RPNUMERICS
@@ -839,8 +1000,6 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_initNative(JNIEnv * env, jclas
 
 
 }
-
-
 
 /*
  * Class:     rpnumerics_RPNUMERICS

@@ -30,6 +30,7 @@
 
 
 
+
 #define RPNSTATEINFO                          "rpnumerics/RPnStateInfo"
 #define STATIONARYPOINT_LOCATION              "rpnumerics/StationaryPoint"
 #define PHASEPOINT_LOCATION                   "rpnumerics/PhasePoint"

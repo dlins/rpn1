@@ -233,6 +233,14 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RPNUMERICS_getTransisionalLinesNames
 
 /*
  * Class:     rpnumerics_RPNUMERICS
+ * Method:    readNativePhysicsConfig
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_readNativePhysicsConfig
+  (JNIEnv *, jclass);
+
+/*
+ * Class:     rpnumerics_RPNUMERICS
  * Method:    getHugoniotCaseNames
  * Signature: (Ljava/lang/String;)[Ljava/lang/String;
  */

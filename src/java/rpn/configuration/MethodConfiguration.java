@@ -5,22 +5,29 @@
  */
 package rpn.configuration;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
 
 public class MethodConfiguration extends Configuration{
 
+    
+   
 
     public MethodConfiguration(ConfigurationProfile configurationProfile){
         
         super(configurationProfile);
+      
 
     }
 
     MethodConfiguration(ConfigurationProfile profile, HashMap<String, Configuration> innerConfigurations) {
         super(profile, innerConfigurations);
     }
+
+   
  
     @Override
     public String toXML() {
