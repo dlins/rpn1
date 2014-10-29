@@ -167,6 +167,9 @@ void rarefactioncb(Fl_Widget*, void*){
 
     if (dimension == 3) initial_point(2) = 1.0;
 
+    initial_point(0) = 0.7126;
+    initial_point(1) = 0.1974;
+
     LSODE lsode;
     ODE_Solver *odesolver = &lsode;
 
@@ -751,26 +754,26 @@ void wavecurvefactioncb(Fl_Widget*, void*){
 //    initial_point(0) = 0.2237;
 //    initial_point(1) = 0.4173;
 
-    initial_point(0) = 0.7126;
-    initial_point(1) = 0.1974;
+//    initial_point(0) = 0.7126;
+//    initial_point(1) = 0.1974;
     WaveCurve hwc;
     int reason_why, edge;
     int type = wavecurve_points[wavecurvechoice->value()];
 
-        std::vector<int> biftype;
-        std::vector<std::string> name;
-        std::vector<void*> object;
-        std::vector<double (*)(void*, const RealVector &)> function;
-        subphysics->bifurcation_curve()->list_of_secondary_bifurcation_curves(biftype, 
-                                                    name,
-                                                    object,
-                                                    function);    
+//        std::vector<int> biftype;
+//        std::vector<std::string> name;
+//        std::vector<void*> object;
+//        std::vector<double (*)(void*, const RealVector &)> function;
+//        subphysics->bifurcation_curve()->list_of_secondary_bifurcation_curves(biftype, 
+//                                                    name,
+//                                                    object,
+//                                                    function);    
 
-    int bifindex = 1;
+//    int bifindex = 1;
 
-    for (int i = 0; i < function.size(); i++) std::cout << (void*)function[i] << std::endl;
+//    for (int i = 0; i < function.size(); i++) std::cout << (void*)function[i] << std::endl;
 
-    int info = wcf->wavecurve(type, initial_point, family, increase, subphysics->Hugoniot_continuation(), object[bifindex], function[bifindex], hwc, reason_why, edge);
+    int info = wcf->wavecurve(type, initial_point, family, increase, subphysics->Hugoniot_continuation(), 0/*object[bifindex]*/, 0/*function[bifindex]*/, hwc, reason_why, edge);
 
     if (info == WAVECURVEFACTORY_INVALID_PARAMETERS) TestTools::pause("The wavecurve could not be computed because\nthe family and/or the monotonicity are wrong.");
 

@@ -53,7 +53,7 @@ int FoamFluxFunction::jet(const RealVector &w, JetMatrix &m, int degree) const {
         // Water mobility.
         //
         double kw = kw_jet.get(0);
-        double lkw = kw/muw;         
+        double lkw = kw/muw;
 
         // Oil mobility.
         //

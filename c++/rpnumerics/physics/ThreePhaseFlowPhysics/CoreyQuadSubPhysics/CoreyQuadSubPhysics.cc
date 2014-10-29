@@ -1,13 +1,13 @@
 #include "CoreyQuadSubPhysics.h"
 
 CoreyQuadSubPhysics::CoreyQuadSubPhysics() : ThreePhaseFlowSubPhysics(){
-    muw_parameter = new Parameter(std::string("muw"), 1.0 + 1e-3);
-    muo_parameter = new Parameter(std::string("muo"), 1.0 + 2e-3);
-    mug_parameter = new Parameter(std::string("mug"), 1.0 - 3e-3);
+//    muw_parameter = new Parameter(std::string("muw"), 1.0 + 1e-3);
+//    muo_parameter = new Parameter(std::string("muo"), 1.0 + 2e-3);
+//    mug_parameter = new Parameter(std::string("mug"), 1.0 - 3e-3);
 
-//    muw_parameter = new Parameter(std::string("muw"), 1.0);
-//    muo_parameter = new Parameter(std::string("muo"), 1.0);
-//    mug_parameter = new Parameter(std::string("mug"), 1.0);
+    muw_parameter = new Parameter(std::string("muw"), 1.0);
+    muo_parameter = new Parameter(std::string("muo"), 1.0);
+    mug_parameter = new Parameter(std::string("mug"), 1.0);
 
     vel_parameter = new Parameter(std::string("vel"), 1.0);
 

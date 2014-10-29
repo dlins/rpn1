@@ -10,6 +10,8 @@ class FoamPermeability : public ThreePhaseFlowPermeability {
         Parameter *nw_parameter, *no_parameter, *ng_parameter;
 
 //        double power(double x, double y);
+
+//        double pow(double x, double y){return 1.0;}
     public:
         FoamPermeability(Parameter *cnw, Parameter *cno, Parameter *cng,
                          Parameter  *nw, Parameter  *no, Parameter  *ng, 

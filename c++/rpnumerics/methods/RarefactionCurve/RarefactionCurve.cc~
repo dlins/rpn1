@@ -101,6 +101,8 @@ double RarefactionCurve::directional_derivative(const RealVector &p, int fam, co
     std::vector<DoubleMatrix> F_H = F_jet.Hessian();
     std::vector<DoubleMatrix> G_H = G_jet.Hessian();
 
+    std::cout << "Rarefaction. point = " << p << ", JetMatrix for flux = " << F_jet << std::endl;
+
     std::vector<eigenpair> e; 
     Eigen::eig(n, F_J.data(), G_J.data(), e);
 
@@ -423,6 +425,33 @@ int RarefactionCurve::curve(const RealVector &initial_point,
         }
         #endif
 
+        if (linear_function != 0){
+            linear_function_value = (*linear_function)(linobj, next_point);
+
+            if (linear_function_value*old_linear_function_value < 0.0){
+                double alpha = linear_function_value/(linear_function_value - old_linear_function_value);
+
+                RealVector point_on_line = alpha*point + (1.0 - alpha)*next_point;
+
+                add_point_to_curve(point_on_line, rarcurve);
+
+                reason_why = RAREFACTION_REACHED_LINE;
+                rarcurve.reason_to_stop = RAREFACTION_REACHED_LINE;
+
+                rarcurve.last_point = point_on_line;
+                rarcurve.final_direction = next_point - point; //rarcurve.curve.back() - rarcurve.curve[rarcurve.curve.size() - 2];
+                normalize(rarcurve.final_direction);
+
+                final_direction = rarcurve.final_direction;
+
+                TestTools::pause("Rarefaction reached line.");
+
+                return RAREFACTION_OK;
+            }
+            else old_linear_function_value = linear_function_value;
+        }
+
+
         if (dirdrv*previous_dirdrv < 0.0){
             double bisection_epsilon = 1e-10; // Must be relative to the flux.
 
@@ -481,32 +510,6 @@ int RarefactionCurve::curve(const RealVector &initial_point,
                 }
             }
         
-        }
-
-        if (linear_function != 0){
-            linear_function_value = (*linear_function)(linobj, next_point);
-
-            if (linear_function_value*old_linear_function_value < 0.0){
-                double alpha = linear_function_value/(linear_function_value - old_linear_function_value);
-
-                RealVector point_on_line = alpha*point + (1.0 - alpha)*next_point;
-
-                add_point_to_curve(point_on_line, rarcurve);
-
-                reason_why = RAREFACTION_REACHED_LINE;
-                rarcurve.reason_to_stop = RAREFACTION_REACHED_LINE;
-
-                rarcurve.last_point = point_on_line;
-                rarcurve.final_direction = next_point - point; //rarcurve.curve.back() - rarcurve.curve[rarcurve.curve.size() - 2];
-                normalize(rarcurve.final_direction);
-
-                final_direction = rarcurve.final_direction;
-
-                TestTools::pause("Rarefaction reached line.");
-
-                return RAREFACTION_OK;
-            }
-            else old_linear_function_value = linear_function_value;
         }
 
 //        // Has the rarefaction curve reached the coincidence? 

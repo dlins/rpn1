@@ -28,13 +28,13 @@ int FoamPermeability::PermeabilityWater_jet(const RealVector &state, int degree,
 }
 
 int FoamPermeability::PermeabilityWater_jet(const RealVector &state, int degree, JetMatrix &water, double &reduced_water){
-    water.resize(2);
+    water.resize(2, 1);
 
     // Kludge.
     //
     double eps = 1e-6;
 
-    double sw = state.component(0) + eps; // kludge to avoid problems with pow.
+    double sw = state.component(0)/* + eps*/; // kludge to avoid problems with pow.
 
     double cnw = cnw_parameter->value();
     double cno = cno_parameter->value();
@@ -83,6 +83,13 @@ int FoamPermeability::PermeabilityWater_jet(const RealVector &state, int degree,
             double pow1_kw = pow2_kw*scaled_sw;
             double kw      = pow1_kw*scaled_sw;
 
+//            double scaled_sw = sw;
+//            double nw = nw_parameter->value();
+
+//            double pow2_kw = 1.0;
+//            double pow1_kw = sw;
+//            double kw      = sw*sw;
+
             water.set(0, kw);
 
             // Reduced permeability.
@@ -121,13 +128,14 @@ int FoamPermeability::PermeabilityGas_jet(const RealVector &state, int degree, J
 }
 
 int FoamPermeability::PermeabilityGas_jet(const RealVector &state, int degree, JetMatrix &gas, double &reduced_gas){
-    gas.resize(2);
+    gas.resize(2, 1);
 
     // Kludge.
     //
     double eps = 1e-6;
 
-    double sg =  1.0 - (state.component(0) + eps + state.component(1) + eps); // kludge to avoid problems with pow.
+//    double sg =  1.0 - (state.component(0) + eps + state.component(1) + eps); // kludge to avoid problems with pow.
+    double sg =  1.0 - (state.component(0) + state.component(1)); // kludge to avoid problems with pow.
 
     double cnw = cnw_parameter->value();
     double cno = cno_parameter->value();
@@ -176,6 +184,13 @@ int FoamPermeability::PermeabilityGas_jet(const RealVector &state, int degree, J
             double pow1_kg = pow2_kg*scaled_sg;
             double kg      = pow1_kg*scaled_sg;
 
+//            double scaled_sg = sg;
+//            double ng = nw_parameter->value();
+
+//            double pow2_kg = 1.0;
+//            double pow1_kg = sg;
+//            double kg      = sg*sg;
+
             gas.set(0, kg);
 
             // Reduced permeability.
@@ -214,13 +229,13 @@ int FoamPermeability::PermeabilityOil_jet(const RealVector &state, int degree, J
 }
 
 int FoamPermeability::PermeabilityOil_jet(const RealVector &state, int degree, JetMatrix &oil, double &reduced_oil){
-    oil.resize(2);
+    oil.resize(2, 1);
 
     // Kludge.
     //
     double eps = 1e-6;
 
-    double so = state.component(1) + eps; // kludge to avoid problems with pow.
+    double so = state.component(1)/* + eps*/; // kludge to avoid problems with pow.
 
     double cnw = cnw_parameter->value();
     double cno = cno_parameter->value();
@@ -268,6 +283,13 @@ int FoamPermeability::PermeabilityOil_jet(const RealVector &state, int degree, J
             double pow2_ko = pow(scaled_so, no - 2.0);
             double pow1_ko = pow2_ko*scaled_so;
             double ko      = pow1_ko*scaled_so;
+
+//            double scaled_so = so;
+//            double no = no_parameter->value();
+
+//            double pow2_ko = 1.0;
+//            double pow1_ko = so;
+//            double ko      = so*so;
 
             oil.set(0, ko);
 
