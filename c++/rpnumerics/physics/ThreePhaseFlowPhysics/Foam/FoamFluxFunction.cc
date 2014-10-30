@@ -66,8 +66,6 @@ int FoamFluxFunction::jet(const RealVector &w, JetMatrix &m, int degree) const {
         double kg = kg_jet.get(0);
         double lkg = kg/mug; // ***
 
-        std::cout << "sg = " << sg << ", sg*sg = " << sg*sg << ", kg = " << kg << ", mug = " << mug << std::endl;
-
         // Total mobility.
         //
         double lk = lkw + lko + lkg;
@@ -80,17 +78,11 @@ int FoamFluxFunction::jet(const RealVector &w, JetMatrix &m, int degree) const {
            double ldko_dsw = ko_jet.get(0, 0)/muo; // dko_dsw = ko_jet.get(0, 0)
            double ldkg_dsw = kg_jet.get(0, 0)/mug  -  lkg*mug_jet.get(0, 0)/mug; // dkg_dsw = kg_jet.get(0, 0), dmug_dsw = mug_jet.get(0, 0) ***
            double ldk_dsw  = ldkw_dsw + ldko_dsw + ldkg_dsw;
-           std::cout << "kg_jet.get(0, 0) = " << kg_jet.get(0, 0) << ", mug_jet.get(0, 0) = " << mug_jet.get(0, 0) << std::endl;
-           std::cout << "ldkw_dsw = " << ldkw_dsw << ", ldko_dsw = " << ldko_dsw << ", ldkg_dsw = " << ldkg_dsw << std::endl;
-           std::cout << "ldk_dsw = " << ldk_dsw << std::endl;
 
            double ldkw_dso = kw_jet.get(0, 1)/muw; // dkw_dsw = kw_jet.get(0, 0)
            double ldko_dso = ko_jet.get(0, 1)/muo; // dko_dsw = ko_jet.get(0, 0)
            double ldkg_dso = kg_jet.get(0, 1)/mug  -  lkg*mug_jet.get(0, 1)/mug; // dkg_dsw = kg_jet.get(0, 0), dmug_dsw = mug_jet.get(0, 0) ***
            double ldk_dso  = ldkw_dso + ldko_dso + ldkg_dso;
-           std::cout << "kg_jet.get(0, 1) = " << kg_jet.get(0, 1) << ", mug_jet.get(0, 1) = " << mug_jet.get(0, 1) << std::endl;
-           std::cout << "ldkw_dso = " << ldkw_dso << ", ldko_dso = " << ldko_dso << ", ldkg_dso = " << ldkg_dso << std::endl;
-           std::cout << "ldk_dso = " << ldk_dso << std::endl;
 
            double tw = vel + lko*(grw - gro) + lkg*(grw - grg);
            double to = vel + lkw*(gro - grw) + lkg*(gro - grg);
