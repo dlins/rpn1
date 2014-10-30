@@ -12,6 +12,9 @@ class FoamViscosity {
     private:
     protected:
         Parameter *mug_parameter; // mug0
+
+        void Fdry(double x, int degree, JetMatrix &fdry_jet);
+        void Fo(double so, int degree, JetMatrix &fo_jet);
     public:
         FoamViscosity(Parameter *mug);
         ~FoamViscosity();

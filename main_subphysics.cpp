@@ -167,8 +167,8 @@ void rarefactioncb(Fl_Widget*, void*){
 
     if (dimension == 3) initial_point(2) = 1.0;
 
-    initial_point(0) = 0.7126;
-    initial_point(1) = 0.1974;
+//    initial_point(0) = 0.7126;
+//    initial_point(1) = 0.1974;
 
     LSODE lsode;
     ODE_Solver *odesolver = &lsode;

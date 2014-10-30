@@ -222,6 +222,101 @@ int FoamPermeability::PermeabilityGas_jet(const RealVector &state, int degree, J
     return degree;
 }
 
+//int FoamPermeability::PermeabilityGas_jet(const RealVector &state, int degree, JetMatrix &gas, double &reduced_gas){
+//    gas.resize(2, 1);
+
+//    // Kludge.
+//    //
+//    double eps = 1e-6;
+
+////    double sg =  1.0 - (state.component(0) + eps + state.component(1) + eps); // kludge to avoid problems with pow.
+//    double sg =  1.0 - (state.component(0) + state.component(1)); // kludge to avoid problems with pow.
+
+//    double cnw = cnw_parameter->value();
+//    double cno = cno_parameter->value();
+//    double cng = cng_parameter->value();
+
+//    double inv_cn = 1.0/(1.0 - cnw - cno - cng);
+
+//    double sgcng = sg - cng;
+
+//    if (sgcng <= 0.){ 
+//        if (degree >= 0){
+//            double kg = 0.;
+//            gas.set(0, kg);
+
+//            // Reduced permeability.
+//            //
+//            reduced_gas = 0.0;
+
+//            if (degree >= 1){
+//                double dkg_dsw = 0.;
+//                double dkg_dso = 0.;
+
+//                gas.set(0, 0, dkg_dsw);
+//                gas.set(0, 1, dkg_dso);
+
+//                if (degree >= 2){
+//                    double d2kg_dsw2  = 0.;
+//                    double d2kg_dswso = 0.;
+//                    double d2kg_dsosw = d2kg_dswso;
+//                    double d2kg_dso2  = 0.;
+
+//                    gas.set(0, 0, 0, d2kg_dsw2);
+//                    gas.set(0, 0, 1, d2kg_dswso);
+//                    gas.set(0, 1, 0, d2kg_dsosw);
+//                    gas.set(0, 1, 1, d2kg_dso2);
+//                }
+//            }
+//        }
+//    }
+//    else {
+//        if (degree >= 0){
+//            double scaled_sg = sgcng*inv_cn;
+//            double ng = nw_parameter->value();
+
+//            double pow2_kg = pow(scaled_sg, ng - 2.0);
+//            double pow1_kg = pow2_kg*scaled_sg;
+//            double kg      = pow1_kg*scaled_sg;
+
+////            double scaled_sg = sg;
+////            double ng = nw_parameter->value();
+
+////            double pow2_kg = 1.0;
+////            double pow1_kg = sg;
+////            double kg      = sg*sg;
+
+//            gas.set(0, 1.0);
+
+//            // Reduced permeability.
+//            //
+//            reduced_gas = pow1_kg*inv_cn; // reduced_water = kw/swcnw; *** Aqui paramos. 27/10/2014
+
+//            if (degree >= 1){
+//                double dkg_dsw = -ng*pow1_kg*inv_cn; // Rodrigo
+//                double dkg_dso = dkg_dsw;
+
+//                gas.set(0, 0, 0.0);
+//                gas.set(0, 1, 0.0);
+
+//                if (degree >= 2){
+//                    double d2kg_dsw2  = ng*(ng - 1.0)*pow2_kg*inv_cn*inv_cn; // Rodrigo
+//                    double d2kg_dswso = d2kg_dsw2;
+//                    double d2kg_dsosw = d2kg_dsw2;
+//                    double d2kg_dso2  = d2kg_dsw2;
+
+//                    gas.set(0, 0, 0, 0.0);
+//                    gas.set(0, 0, 1, 0.0);
+//                    gas.set(0, 1, 0, 0.0);
+//                    gas.set(0, 1, 1, 0.0);
+//                }
+//            }
+//        }
+//    }
+
+//    return degree;
+//}
+
 int FoamPermeability::PermeabilityOil_jet(const RealVector &state, int degree, JetMatrix &oil){
     double reduced_oil;
 

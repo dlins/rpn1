@@ -101,7 +101,7 @@ double RarefactionCurve::directional_derivative(const RealVector &p, int fam, co
     std::vector<DoubleMatrix> F_H = F_jet.Hessian();
     std::vector<DoubleMatrix> G_H = G_jet.Hessian();
 
-//    std::cout << "Rarefaction. point = " << p << ", JetMatrix for flux = " << F_jet << std::endl;
+    std::cout << "Rarefaction. point = " << p << ", JetMatrix for flux = " << F_jet << std::endl;
 
     std::vector<eigenpair> e; 
     Eigen::eig(n, F_J.data(), G_J.data(), e);
