@@ -5,6 +5,7 @@
 *.[oda]
 *~
 *.java
+*.txt
 subphysics
 rec
 riemann
