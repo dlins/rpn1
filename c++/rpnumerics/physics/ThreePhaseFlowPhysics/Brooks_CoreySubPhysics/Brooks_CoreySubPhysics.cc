@@ -85,14 +85,21 @@ Brooks_CoreySubPhysics::Brooks_CoreySubPhysics() : ThreePhaseFlowSubPhysics(){
 
     shockcurve_ = new ShockCurve(hugoniotcontinuation_);
 
-    // WaveCurve.
+    // ODE solver.
     //
     odesolver_ = new LSODE;
 
     // Composite.
+    //
     compositecurve_ = new CompositeCurve(accumulation_, flux_, boundary_, shockcurve_, 0);
 
-    wavecurvefactory_ = new ThreePhaseFlowWaveCurveFactory(flux_, accumulation_, boundary_, odesolver_, rarefactioncurve_, shockcurve_, compositecurve_, this);
+    // WaveCurve.
+    //
+    wavecurvefactory_ = new WaveCurveFactory(accumulation_, flux_, boundary_, odesolver_, rarefactioncurve_, shockcurve_, compositecurve_);
+
+    // Viscosity.
+    //
+    viscosity_ = new Brooks_CoreyViscosity(this);
 
     // Info.
     //
@@ -100,6 +107,8 @@ Brooks_CoreySubPhysics::Brooks_CoreySubPhysics() : ThreePhaseFlowSubPhysics(){
 }
 
 Brooks_CoreySubPhysics::~Brooks_CoreySubPhysics(){
+    delete viscosity_;
+
     delete wavecurvefactory_;
 
     delete compositecurve_;

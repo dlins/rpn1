@@ -94,7 +94,7 @@ CoreyQuadSubPhysics::CoreyQuadSubPhysics() : ThreePhaseFlowSubPhysics(){
     // WaveCurve.
     //
 //    wavecurvefactory_ = new WaveCurveFactory(accumulation_, flux_, boundary_, odesolver_, rarefactioncurve_, shockcurve_, compositecurve_);
-    wavecurvefactory_ = new ThreePhaseFlowWaveCurveFactory(flux_, accumulation_, boundary_, odesolver_, rarefactioncurve_, shockcurve_, compositecurve_, this);
+    wavecurvefactory_ = new CoreyQuadWaveCurveFactory(flux_, accumulation_, boundary_, odesolver_, rarefactioncurve_, shockcurve_, compositecurve_, this);
 
     // Inflection.
     //
@@ -104,10 +104,15 @@ CoreyQuadSubPhysics::CoreyQuadSubPhysics() : ThreePhaseFlowSubPhysics(){
     //
     bifurcationcurve_ = new CoreyQuadTransitionalLine(this);
 
+    // Viscosity.
+    //
+    viscosity_ = new CoreyQuadViscosity(this);
+
     info_subphysics_ = std::string("CoreyQuad");
 }
 
 CoreyQuadSubPhysics::~CoreyQuadSubPhysics(){
+    delete viscosity_;
     delete inflection_curve_;
     delete wavecurvefactory_;
     delete odesolver_;

@@ -17,7 +17,7 @@ class ThreePhaseFlowImplicitHugoniotCurve : public ImplicitHugoniotCurve {
         ThreePhaseFlowSubPhysics *subphysics_;
         ThreePhaseFlowPermeability *permeability_;
 
-        double vel, muw, muo, mug, grw, gro, grg;
+        double vel, muw, muo, /*mug,*/ grw, gro, grg;
 
         double rho_w_o, rho_o_w;
         double rho_w_g, rho_g_w;

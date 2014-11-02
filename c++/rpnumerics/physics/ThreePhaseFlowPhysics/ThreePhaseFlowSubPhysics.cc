@@ -34,7 +34,12 @@ ThreePhaseFlowSubPhysics::ThreePhaseFlowSubPhysics() : SubPhysics() {
     hugoniotcontinuation_ = 0;
 
     // The permeability will be instantiated in the derived classes.
+    //
     permeability_ = 0;
+
+    // The viscosity will be instantiated in the derived classes.
+    //
+    viscosity_ = 0;
 
     // Double_Contact.
     //

@@ -104,7 +104,12 @@ double ThreePhaseFlowImplicitHugoniotCurve::gas_vertex_function(ThreePhaseFlowIm
 
     JetMatrix gas(2);
     obj->permeability_->PermeabilityGas_jet(state, 0, gas);
-    double lambda_g = gas.get(0)/obj->mug; // kg/mug
+
+    JetMatrix mug_jet;
+    obj->subphysics_->viscosity()->gas_viscosity_jet(state, 0, mug_jet);
+    double mug = mug_jet.get(0);
+
+    double lambda_g = gas.get(0)/mug; // kg/mug
 
     double oil_factor   = (redperm(1)/obj->muo)*(obj->vel + lambda_g*obj->rho_o_g + lambda_w*obj->rho_o_w);
     double water_factor = (redperm(0)/obj->muw)*(obj->vel + lambda_g*obj->rho_w_g + lambda_o*obj->rho_w_o);
@@ -126,10 +131,15 @@ double ThreePhaseFlowImplicitHugoniotCurve::water_vertex_function(ThreePhaseFlow
 
     JetMatrix gas(2);
     obj->permeability_->PermeabilityGas_jet(state, 0, gas);
-    double lambda_g = gas.get(0)/obj->mug; // kg/mug
+
+    JetMatrix mug_jet;
+    obj->subphysics_->viscosity()->gas_viscosity_jet(state, 0, mug_jet);
+    double mug = mug_jet.get(0);
+
+    double lambda_g = gas.get(0)/mug; // kg/mug
 
     double oil_factor   = (redperm(1)/obj->muo)*(obj->vel + lambda_g*obj->rho_o_g + lambda_w*obj->rho_o_w);
-    double gas_factor   = (redperm(2)/obj->mug)*(obj->vel + lambda_w*obj->rho_g_w + lambda_o*obj->rho_g_o);
+    double gas_factor   = (redperm(2)/mug)*(obj->vel + lambda_w*obj->rho_g_w + lambda_o*obj->rho_g_o);
 
     return oil_factor - gas_factor;
 }
@@ -148,10 +158,15 @@ double ThreePhaseFlowImplicitHugoniotCurve::oil_vertex_function(ThreePhaseFlowIm
 
     JetMatrix gas(2);
     obj->permeability_->PermeabilityGas_jet(state, 0, gas);
-    double lambda_g = gas.get(0)/obj->mug; // kg/mug
+
+    JetMatrix mug_jet;
+    obj->subphysics_->viscosity()->gas_viscosity_jet(state, 0, mug_jet);
+    double mug = mug_jet.get(0);
+
+    double lambda_g = gas.get(0)/mug; // kg/mug
 
     double water_factor = (redperm(0)/obj->muw)*(obj->vel + lambda_g*obj->rho_w_g + lambda_o*obj->rho_w_o);
-    double gas_factor   = (redperm(2)/obj->mug)*(obj->vel + lambda_w*obj->rho_g_w + lambda_o*obj->rho_g_o);
+    double gas_factor   = (redperm(2)/mug)*(obj->vel + lambda_w*obj->rho_g_w + lambda_o*obj->rho_g_o);
 
     return water_factor - gas_factor;
 }
@@ -173,7 +188,12 @@ double ThreePhaseFlowImplicitHugoniotCurve::water_gas_side_function(ThreePhaseFl
 
     JetMatrix gas(2);
     obj->permeability_->PermeabilityGas_jet(state, 0, gas);
-    double lambda_g = gas.get(0)/obj->mug; // kg/mug
+
+    JetMatrix mug_jet;
+    obj->subphysics_->viscosity()->gas_viscosity_jet(state, 0, mug_jet);
+    double mug = mug_jet.get(0);
+
+    double lambda_g = gas.get(0)/mug; // kg/mug
 
     double lambda = lambda_w + lambda_o + lambda_g;
 
@@ -203,11 +223,16 @@ double ThreePhaseFlowImplicitHugoniotCurve::water_oil_side_function(ThreePhaseFl
 
     JetMatrix gas(2);
     obj->permeability_->PermeabilityGas_jet(state, 0, gas);
-    double lambda_g = gas.get(0)/obj->mug; // kg/mug
+
+    JetMatrix mug_jet;
+    obj->subphysics_->viscosity()->gas_viscosity_jet(state, 0, mug_jet);
+    double mug = mug_jet.get(0);
+
+    double lambda_g = gas.get(0)/mug; // kg/mug
 
     double lambda = lambda_w + lambda_o + lambda_g;
 
-    double term1   = (redperm(2)/(obj->mug*lambda))*(obj->vel + lambda_w*obj->rho_g_w + lambda_o*obj->rho_g_o)*(sw_ref - sw);
+    double term1   = (redperm(2)/(mug*lambda))*(obj->vel + lambda_w*obj->rho_g_w + lambda_o*obj->rho_g_o)*(sw_ref - sw);
 
     double term2 = (obj->lambda_w_ref/(obj->lambda_w_ref + obj->lambda_o_ref))*(obj->vel + obj->lambda_o_ref*obj->rho_w_o);
 
@@ -233,7 +258,12 @@ double ThreePhaseFlowImplicitHugoniotCurve::oil_gas_side_function(ThreePhaseFlow
 
     JetMatrix gas(2);
     obj->permeability_->PermeabilityGas_jet(state, 0, gas);
-    double lambda_g = gas.get(0)/obj->mug; // kg/mug
+
+    JetMatrix mug_jet;
+    obj->subphysics_->viscosity()->gas_viscosity_jet(state, 0, mug_jet);
+    double mug = mug_jet.get(0);
+
+    double lambda_g = gas.get(0)/mug; // kg/mug
 
     double lambda = lambda_w + lambda_o + lambda_g;
 
@@ -455,7 +485,7 @@ void ThreePhaseFlowImplicitHugoniotCurve::curve(const ReferencePoint &ref, int t
     vel = subphysics_->vel()->value();
     muw = subphysics_->muw()->value();
     muo = subphysics_->muo()->value();
-    mug = subphysics_->mug()->value();
+//    mug = subphysics_->mug()->value();
     grw = subphysics_->grw()->value();
     gro = subphysics_->gro()->value();
     grg = subphysics_->grg()->value();
@@ -479,6 +509,11 @@ void ThreePhaseFlowImplicitHugoniotCurve::curve(const ReferencePoint &ref, int t
 
     JetMatrix gas(2);
     permeability_->PermeabilityGas_jet(reference_point.point, 0, gas);
+
+    JetMatrix mug_jet;
+    subphysics_->viscosity()->gas_viscosity_jet(reference_point.point, 0, mug_jet);
+    double mug = mug_jet.get(0);
+
     lambda_g_ref = gas.get(0)/mug; // kg/mug
 
     std::vector<RealVector> hugoniot_curve;

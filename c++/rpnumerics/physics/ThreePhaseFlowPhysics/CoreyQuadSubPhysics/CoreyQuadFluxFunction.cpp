@@ -179,7 +179,7 @@ int CoreyQuadFluxFunction::jet(const WaveState &w, JetMatrix &m, int degree) con
     double lko = ko / muo; // Oil mobility
     double lkg = kg / mug; // Gas mobility
 
-        std::cout << "sg = " << sg << ", sg*sg = " << sg*sg << ", kg = " << kg << ", mug = " << mug << std::endl;
+//        std::cout << "sg = " << sg << ", sg*sg = " << sg*sg << ", kg = " << kg << ", mug = " << mug << std::endl;
 
     double lk = lkw + lko + lkg; // Total mobility
 
@@ -192,17 +192,17 @@ int CoreyQuadFluxFunction::jet(const WaveState &w, JetMatrix &m, int degree) con
             double ldko_dsw = dko_dsw / muo;
             double ldkg_dsw = dkg_dsw / mug;
             double ldk_dsw = ldkw_dsw + ldko_dsw + ldkg_dsw;
-           std::cout << "kg_jet.get(0, 0) = " << dkg_dsw << std::endl;
-           std::cout << "ldkw_dsw = " << ldkw_dsw << ", ldko_dsw = " << ldko_dsw << ", ldkg_dsw = " << ldkg_dsw << std::endl;
-           std::cout << "ldk_dsw = " << ldk_dsw << std::endl;
+//           std::cout << "kg_jet.get(0, 0) = " << dkg_dsw << std::endl;
+//           std::cout << "ldkw_dsw = " << ldkw_dsw << ", ldko_dsw = " << ldko_dsw << ", ldkg_dsw = " << ldkg_dsw << std::endl;
+//           std::cout << "ldk_dsw = " << ldk_dsw << std::endl;
 
             double ldkw_dso = dkw_dso / muw;
             double ldko_dso = dko_dso / muo;
             double ldkg_dso = dkg_dso / mug;
             double ldk_dso = ldkw_dso + ldko_dso + ldkg_dso;
-           std::cout << "kg_jet.get(0, 1) = " << dkg_dso << std::endl;
-           std::cout << "ldkw_dso = " << ldkw_dso << ", ldko_dso = " << ldko_dso << ", ldkg_dso = " << ldkg_dso << std::endl;
-           std::cout << "ldk_dso = " << ldk_dso << std::endl;
+//           std::cout << "kg_jet.get(0, 1) = " << dkg_dso << std::endl;
+//           std::cout << "ldkw_dso = " << ldkw_dso << ", ldko_dso = " << ldko_dso << ", ldkg_dso = " << ldkg_dso << std::endl;
+//           std::cout << "ldk_dso = " << ldk_dso << std::endl;
 
             double ld2kw_dsw2 = d2kw_dsw2 / muw;
             double ld2kw_dswso = d2kw_dswso / muw;

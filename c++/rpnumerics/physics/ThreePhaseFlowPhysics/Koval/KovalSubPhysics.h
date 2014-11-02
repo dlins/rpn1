@@ -7,6 +7,7 @@
 
 #include "KovalFluxFunction.h"
 #include "KovalAccumulationFunction.h"
+#include "KovalViscosity.h"
 
 class KovalSubPhysics : public ThreePhaseFlowSubPhysics {
     private:

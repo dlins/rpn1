@@ -6,6 +6,7 @@
 #include "StoneAccumulation.h"
 #include "Stone_Explicit_Bifurcation_Curves.h"
 #include "LSODE.h"
+#include "StoneViscosity.h"
 
 class StoneSubPhysics : public ThreePhaseFlowSubPhysics {
     private:

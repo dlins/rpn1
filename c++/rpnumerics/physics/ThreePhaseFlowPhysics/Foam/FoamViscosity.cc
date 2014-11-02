@@ -1,6 +1,21 @@
 #include "FoamViscosity.h"
 
-FoamViscosity::FoamViscosity(Parameter *mug): mug_parameter(mug){
+FoamViscosity::FoamViscosity(Parameter *mug0, 
+                             Parameter *epdry,
+                             Parameter *fdry,
+                             Parameter *foil,
+                             Parameter *fmdry,
+                             Parameter *fmmob,
+                             Parameter *fmoil,
+                             ThreePhaseFlowSubPhysics *t):
+                             ThreePhaseFlowViscosity(t),
+                             mug0_parameter(mug0),
+                             epdry_parameter(epdry),
+                             fdry_parameter(fdry),
+                             foil_parameter(foil),
+                             fmdry_parameter(fmdry),
+                             fmmob_parameter(fmmob),
+                             fmoil_parameter(fmoil){
 }
 
 FoamViscosity::~FoamViscosity(){
@@ -73,18 +88,23 @@ void FoamViscosity::Fo(double so, int degree, JetMatrix &fo_jet){
 }
 
 int FoamViscosity::gas_viscosity_jet(const WaveState &w, int degree, JetMatrix &mug_jet){
-    double fmmob = 55.0; // Is this correct???
+    double epdry = epdry_parameter->value();
+    double fdry  = fdry_parameter->value();
+    double foil  = foil_parameter->value();
+    double fmdry = fmdry_parameter->value();
+    double fmmob = fmmob_parameter->value();
+    double fmoil = fmoil_parameter->value();
 
     mug_jet.resize(2, 1);
 
     JetMatrix fdry_jet;
-    Fdry(w(0), degree, fdry_jet);
+    Fdry(w(0) - fmdry, degree, fdry_jet);
 
     JetMatrix fo_jet;
     Fo(w(1), degree, fo_jet);
 
     if (degree >= 0){
-        double mug0 = mug_parameter->value();
+        double mug0 = mug0_parameter->value();
         double fdry = fdry_jet.get(0);
         double fo   = fo_jet.get(0);
 

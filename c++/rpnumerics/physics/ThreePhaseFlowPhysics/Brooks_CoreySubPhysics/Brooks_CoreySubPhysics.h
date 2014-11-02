@@ -6,6 +6,7 @@
 #include "Brooks_CoreyFluxFunction.h"
 #include "StoneAccumulation.h"
 #include "LSODE.h"
+#include "Brooks_CoreyViscosity.h"
 
 #define BROOKS_COREYGENERICPOINT 0
 

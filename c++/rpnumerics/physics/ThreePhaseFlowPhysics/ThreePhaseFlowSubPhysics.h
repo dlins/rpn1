@@ -11,7 +11,9 @@
 #include "StoneAccumulation.h"
 #include "ThreePhaseFlowPermeability.h"
 #include "ThreePhaseFlowImplicitHugoniotCurve.h"
-#include "ThreePhaseFlowWaveCurveFactory.h"
+//#include "ThreePhaseFlowWaveCurveFactory.h"
+#include "WaveCurveFactory.h"
+#include "ThreePhaseFlowViscosity.h"
 
 class ThreePhaseFlowSubPhysics : public SubPhysics {
     private:
@@ -29,6 +31,7 @@ class ThreePhaseFlowSubPhysics : public SubPhysics {
         Parameter *vel_parameter;
 
         ThreePhaseFlowPermeability *permeability_;
+        ThreePhaseFlowViscosity *viscosity_;
     public:
         ThreePhaseFlowSubPhysics();
         virtual ~ThreePhaseFlowSubPhysics();
@@ -39,29 +42,31 @@ class ThreePhaseFlowSubPhysics : public SubPhysics {
         RealVector O(){return O_vertex;}
         RealVector G(){return G_vertex;}
 
-        RealVector E(){
-            RealVector Ep(2);
-            Ep(0) = 0.0;
-            Ep(1) = muo_parameter->value()/(muo_parameter->value() + mug_parameter->value());
+//        // These three methods below will, in all probability, move to CoreyQuadSubPhysics.
+//        //
+//        RealVector E(){
+//            RealVector Ep(2);
+//            Ep(0) = 0.0;
+//            Ep(1) = muo_parameter->value()/(muo_parameter->value() + mug_parameter->value());
 
-            return Ep;
-        }
+//            return Ep;
+//        }
 
-        RealVector B(){
-            RealVector Bp(2);
-            Bp(0) = muw_parameter->value()/(muw_parameter->value() + mug_parameter->value());
-            Bp(1) = 0.0;
+//        RealVector B(){
+//            RealVector Bp(2);
+//            Bp(0) = muw_parameter->value()/(muw_parameter->value() + mug_parameter->value());
+//            Bp(1) = 0.0;
 
-            return Bp;
-        }
+//            return Bp;
+//        }
 
-        RealVector D(){
-            RealVector Dp(2);
-            Dp(0) = muw_parameter->value()/(muw_parameter->value() + muo_parameter->value());
-            Dp(1) = muo_parameter->value()/(muw_parameter->value() + muo_parameter->value());
+//        RealVector D(){
+//            RealVector Dp(2);
+//            Dp(0) = muw_parameter->value()/(muw_parameter->value() + muo_parameter->value());
+//            Dp(1) = muo_parameter->value()/(muw_parameter->value() + muo_parameter->value());
 
-            return Dp;
-        }
+//            return Dp;
+//        }
 
         Parameter* muw(){return muw_parameter;}
         Parameter* muo(){return muo_parameter;}
@@ -74,6 +79,10 @@ class ThreePhaseFlowSubPhysics : public SubPhysics {
         // Permeability.
         //
         ThreePhaseFlowPermeability* permeability(){return permeability_;}
+
+        // Viscosity.
+        //
+        ThreePhaseFlowViscosity* viscosity(){return viscosity_;}
 };
 
 #endif // _THREEPHASEFLOWSUBPHYSICS_

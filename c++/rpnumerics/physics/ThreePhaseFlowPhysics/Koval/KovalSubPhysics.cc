@@ -74,16 +74,21 @@ KovalSubPhysics::KovalSubPhysics() : ThreePhaseFlowSubPhysics(){
 
     // WaveCurve.
     //
-    wavecurvefactory_ = new ThreePhaseFlowWaveCurveFactory(flux_, accumulation_, boundary_, odesolver_, rarefactioncurve_, shockcurve_, compositecurve_, this);
+    wavecurvefactory_ = new WaveCurveFactory(accumulation_, flux_, boundary_, odesolver_, rarefactioncurve_, shockcurve_, compositecurve_);
 
     // Inflection.
     //
     inflection_curve_ = new Inflection_Curve;
 
+    // Viscosity.
+    //
+    viscosity_ = new KovalViscosity(this);
+
     info_subphysics_ = std::string("Koval");
 }
 
 KovalSubPhysics::~KovalSubPhysics(){
+    delete viscosity_;
     delete inflection_curve_;
     delete wavecurvefactory_;
     delete odesolver_;

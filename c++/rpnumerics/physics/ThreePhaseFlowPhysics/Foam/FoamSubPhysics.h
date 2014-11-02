@@ -13,7 +13,8 @@ class FoamSubPhysics : public ThreePhaseFlowSubPhysics {
         Parameter *cnw_parameter, *cno_parameter, *cng_parameter;
         Parameter *nw_parameter,  *no_parameter,  *ng_parameter;
 
-        FoamViscosity *foamvisc_;
+//        Parameter *mug0;
+        Parameter *epdry, *fdry, *foil, *fmdry, *fmmob, *fmoil;
     public:
         FoamSubPhysics();
         virtual ~FoamSubPhysics();

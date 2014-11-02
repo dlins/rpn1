@@ -115,6 +115,7 @@ ccSRC +=  \
 	../../../../rpnumerics/physics/ThreePhaseFlowPhysics/Foam/FoamSubPhysics.cc \
 	../../../../rpnumerics/physics/ThreePhaseFlowPhysics/ThreePhaseFlowPermeability.cc \
 	../../../../rpnumerics/physics/ThreePhaseFlowPhysics/StoneSubPhysics/StoneParams.cc \
+	../../../../rpnumerics/physics/ThreePhaseFlowPhysics/StoneSubPhysics/StoneViscosity.cc \
 	../../../../rpnumerics/physics/ThreePhaseFlowPhysics/StoneSubPhysics/Stone_Explicit_Bifurcation_Curves.cc \
 	../../../../rpnumerics/physics/ThreePhaseFlowPhysics/StoneSubPhysics/StoneFluxFunction.cc \
 	../../../../rpnumerics/physics/ThreePhaseFlowPhysics/StoneSubPhysics/StoneAccumulation.cc \
@@ -123,20 +124,23 @@ ccSRC +=  \
 	../../../../rpnumerics/physics/ThreePhaseFlowPhysics/StoneSubPhysics/StonePermParams.cc \
 	../../../../rpnumerics/physics/ThreePhaseFlowPhysics/ThreePhaseFlowSubPhysics.cc \
 	../../../../rpnumerics/physics/ThreePhaseFlowPhysics/CoreyQuadSubPhysics/CoreyQuadSubPhysics.cc \
+	../../../../rpnumerics/physics/ThreePhaseFlowPhysics/CoreyQuadSubPhysics/CoreyQuadViscosity.cc \
 	../../../../rpnumerics/physics/ThreePhaseFlowPhysics/CoreyQuadSubPhysics/CoreyQuadPermeability.cc \
 	../../../../rpnumerics/physics/ThreePhaseFlowPhysics/CoreyQuadSubPhysics/CoreyQuadWaveCurveFactory.cc \
 	../../../../rpnumerics/physics/ThreePhaseFlowPhysics/CoreyQuadSubPhysics/CoreyQuadExplicitHugoniotCurve.cc \
 	../../../../rpnumerics/physics/ThreePhaseFlowPhysics/CoreyQuadSubPhysics/CoreyQuadTransitionalLine.cc \
 	../../../../rpnumerics/physics/ThreePhaseFlowPhysics/ThreePhaseFlowImplicitHugoniotCurve.cc \
 	../../../../rpnumerics/physics/ThreePhaseFlowPhysics/Three_Phase_Flow_Explicit_Bifurcation_Curves.cc \
-	../../../../rpnumerics/physics/ThreePhaseFlowPhysics/ThreePhaseFlowWaveCurveFactory.cc \
+	../../../../rpnumerics/physics/ThreePhaseFlowPhysics/ThreePhaseFlowViscosity.cc \
 	../../../../rpnumerics/physics/ThreePhaseFlowPhysics/ThreePhaseFlowFluxFunction.cc \
+	../../../../rpnumerics/physics/ThreePhaseFlowPhysics/Brooks_CoreySubPhysics/Brooks_CoreyViscosity.cc \
 	../../../../rpnumerics/physics/ThreePhaseFlowPhysics/Brooks_CoreySubPhysics/Brooks_CoreyPermeability.cc \
 	../../../../rpnumerics/physics/ThreePhaseFlowPhysics/Brooks_CoreySubPhysics/Brooks_CoreyFluxFunction.cc \
 	../../../../rpnumerics/physics/ThreePhaseFlowPhysics/Brooks_CoreySubPhysics/Brooks_CoreySubPhysics.cc \
 	../../../../rpnumerics/physics/ThreePhaseFlowPhysics/Koval/KovalFluxFunction.cc \
 	../../../../rpnumerics/physics/ThreePhaseFlowPhysics/Koval/KovalAccumulationFunction.cc \
 	../../../../rpnumerics/physics/ThreePhaseFlowPhysics/Koval/KovalSubPhysics.cc \
+	../../../../rpnumerics/physics/ThreePhaseFlowPhysics/Koval/KovalViscosity.cc \
 	../../../../rpnumerics/physics/ThreePhaseFlowPhysics/Koval/KovalPermeability.cc \
 	../../../../rpnumerics/physics/TrivialTestSubphysics/TrivialTestFluxFunction.cc \
 	../../../../rpnumerics/physics/TrivialTestSubphysics/TrivialTestSubPhysics.cc \
