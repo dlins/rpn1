@@ -19,9 +19,6 @@ class CanvasMenu : public Fl_Group {
         Fl_Button *hidebtn, *showbtn, *deletebtn;
         Fl_Box *infobox;
         
-        Canvas *canvas;
-        GraphicObject *obj;
-
         std::vector<Canvas*> canvas_;
         std::vector<GraphicObject*> object_;
 
