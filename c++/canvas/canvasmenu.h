@@ -21,11 +21,16 @@ class CanvasMenu : public Fl_Group {
         
         Canvas *canvas;
         GraphicObject *obj;
+
+        std::vector<Canvas*> canvas_;
+        std::vector<GraphicObject*> object_;
+
         CanvasMenuPack *cmp;
 
         int dim;
 
         void draw(void);
+        void init(int x, int y, int w, int h, const char *l);
     protected:
         static void hidebtncb(Fl_Widget*, void*);
         static void showbtncb(Fl_Widget*, void*);
@@ -34,6 +39,9 @@ class CanvasMenu : public Fl_Group {
     public:
         //CanvasMenu(int, int, int, int, const char*, Canvas*, GraphicObject*);
         CanvasMenu(int, int, int, int, const char*, Canvas*, GraphicObject*, CanvasMenuPack*);
+
+        CanvasMenu(int, int, int, int, const char*, const std::vector<Canvas*>&, const std::vector<GraphicObject*>&, CanvasMenuPack*);
+
         ~CanvasMenu();
         void resize(int, int, int, int);
 };
