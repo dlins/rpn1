@@ -27,25 +27,14 @@ public class HugoniotCurveCalcND extends ContourCurveCalc implements HugoniotCur
     //
     // Constructors
     //
-//    public HugoniotCurveCalcND(HugoniotParams params) {
-//        super(params);
-//
-//        CurveConfiguration config = (CurveConfiguration) RPNUMERICS.getConfiguration("fundamentalcurve");
-//
-//        configuration_ = config.clone();
-//
-//        String[] parameterToKeep = {"direction"};
-//
-//        configuration_.keepParameters(parameterToKeep);
-//        configuration_.setParamValue("resolution", RPNUMERICS.getParamValue("hugoniotcurve", "resolution"));
-//
-//    }
+
 
     public HugoniotCurveCalcND(PhasePoint input, CurveConfiguration hugoniotConfiguration) {
 
         super(createHugoniotParams(input, hugoniotConfiguration));
 
-        configuration_ = hugoniotConfiguration.clone();
+        Configuration configuration = RPNUMERICS.getConfiguration("hugoniotcurve");
+        configuration_ = ((CurveConfiguration)configuration).clone();
 
     }
 
@@ -109,7 +98,7 @@ public class HugoniotCurveCalcND extends ContourCurveCalc implements HugoniotCur
        
         HugoniotCurve result;
 
-        result = (HugoniotCurve) calc(((HugoniotParams) getParams()).getXZero(), configuration_);
+        result = (HugoniotCurve) calc(((HugoniotParams) getParams()).getXZero(), RPNUMERICS.getConfiguration("hugoniotcurve"));
 
         result.setDirection(((HugoniotParams) getParams()).getDirection());
 

@@ -46,35 +46,7 @@ public class RPNUMERICS {
             setRPnHome(System.getProperty("rpnhome"));
 
             initNative(physicsID);
-            
-       
-//            
-//             String [] hugoniotNames  = getHugoniotNames();
-//             
-//             for (String string : hugoniotNames) {
-//                
-//                 System.out.println("Nome da hugoniot em Java: "+string);
-//                 
-//                 
-//                 String [] hugoniotCases = getHugoniotCaseNames(string)            ;
-//                 
-//                 for (String string1 : hugoniotCases) {
-//                     
-//                     
-//                     System.out.println("caso em Java: " + string1);
-//                     
-//                 }
-//                 
-//                 
-//            }
-             
 
-//                System.out.println("Configuration apos end : " + RPNUMERICS.getConfiguration("hugoniotcurve"));
-                
-//                RPNUMERICS.setConfiguration(configuration.getName(), configuration);
-             
-             
-             
              
              
              PhysicsConfiguration physicsConfiguration = new PhysicsConfiguration(physicsID);
@@ -94,113 +66,7 @@ public class RPNUMERICS {
             
         setConfiguration(physicsID, physicsConfiguration);
    
-        
-        
-        
-        
-//        ArrayList<String> auxFunctionNames = getTransisionalLinesNames();
-//        for (String string : auxFunctionNames) {
-//            
-//            System.out.println("TLines: " + string);
-//            
-//        }
-        
-        
-//        System.out.println("Funcoes auxiliares");
-//        
-//        for (String string : auxFunctionNames) {
-//
-//            
-//            System.out.println(string);
-//                String[] auxParamsNames = getAuxParamsNames(string);
-//                
-//                for (String string1 : auxParamsNames) {
-//
-//                    
-//                    System.out.println("parametro: "+ string1 + " valor:" +getAuxParamValue(string, string1));
-//
-//
-//                
-//            }
-//
-//            
-//        }
-
-
-//
-//
-//            //Processing configuration data
-//            ConfigurationProfile physicsProfile = RPnConfig.getActivePhysicsProfile();
-//
-//            HashMap<String, Configuration> configurationList = RPnConfig.createConfigurationList(physicsProfile);
-//
-//            Configuration physicsConfiguration = new PhysicsConfiguration(physicsProfile, configurationList);
-//
-//
-//            Configuration fluxFunctionConfig = physicsConfiguration.getConfiguration("fluxfunction");
-//
-//            String[] paramsArray = new String[fluxFunctionConfig.getParamsSize()];
-//
-//            for (int i = 0; i < fluxFunctionConfig.getParamsSize(); i++) {
-//
-//                paramsArray[i] = fluxFunctionConfig.getParam(i);
-//
-//            }
-//
-//            setParams(paramsArray);
-//
-//            RPnConfig.addProfile(physicsID, physicsProfile);
-//
-//            ConfigurationProfile boundaryProfile = physicsProfile.getConfigurationProfile(ConfigurationProfile.BOUNDARY);
-//
-//            if (boundaryProfile != null) { //Reading boundary from input file
-//
-//                Configuration boundaryConfiguration = new BoundaryConfiguration(boundaryProfile);
-//
-//                if (boundaryConfiguration.getName().equals("rect")) {
-//                    setBoundary(new RectBoundary(boundaryConfiguration.getParam("limits")));
-//                }
-//
-//                if (boundaryConfiguration.getName().equals("Three_Phase_Boundary")) {
-//                    setBoundary(new IsoTriang2DBoundary(boundaryConfiguration.getParam("limits")));
-//                }
-//
-//                
-//            } else {
-//
-//                Boundary boundary = boundary();
-//
-//                RealVector min = boundary.getMinimums();
-//
-//                ConfigurationProfile defaultBoundaryProfile = null;
-//
-//                if (boundary instanceof RectBoundary) {
-//                    defaultBoundaryProfile = new ConfigurationProfile("rect", ConfigurationProfile.BOUNDARY);
-//                }
-//
-//                if (boundary instanceof IsoTriang2DBoundary) {
-//                    defaultBoundaryProfile = new ConfigurationProfile("Three_Phase_Boundary", ConfigurationProfile.BOUNDARY);
-//
-//                }
-//
-//                defaultBoundaryProfile.addParam("limits", boundary.limits());
-//                defaultBoundaryProfile.addParam("dimension", String.valueOf(min.getSize()));
-//                physicsProfile.addConfigurationProfile(ConfigurationProfile.BOUNDARY, boundaryProfile);
-//
-//                Configuration boundaryConfiguration = new BoundaryConfiguration(defaultBoundaryProfile);
-//                physicsConfiguration.addConfiguration(boundaryConfiguration.getName(), boundaryConfiguration);
-//
-//            }
-//
-//            configMap_.put(physicsID, physicsConfiguration);
-////            errorControl_ = new RpErrorControl(boundary());
-//        } catch (Exception ex) {
-//            Logger.getLogger(RPNUMERICS.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//
-//        
-   
-            
+          
         
         
         
@@ -312,18 +178,6 @@ public class RPNUMERICS {
      */
     public static native void initNative(String physicsName);
 
-//    public static HugoniotCurveCalc createHugoniotCalc(RealVector input) {
-//
-//        int[] resolution = RPnDataModule.processResolution(getParamValue("hugoniotcurve", "resolution"));
-//
-//        Integer direction = new Integer(getParamValue("fundamentalcurve", "direction"));
-//
-//        String methodName = RPNUMERICS.getParamValue("hugoniotcurve", "method");
-//
-//        HugoniotParams params = new HugoniotParams(new PhasePoint(input), direction, resolution, methodName);
-//
-//        return new HugoniotCurveCalcND(params);
-//    }
 
     public static EnvelopeCurveCalc createEnvelopeCurveCalc(Configuration configuration) {
 
@@ -945,9 +799,7 @@ public class RPNUMERICS {
 
     }
 
-    private native void setFamilyIndex(int familyIndex);
-
-    private native void setTimeDirection(int timeDirection);
+  
 
     public static void applyFluxParams() {
 
@@ -995,14 +847,8 @@ public class RPNUMERICS {
     public static native String getPhysicsParam(int paramIndex);
     
     public static native String [] getPhysicsParamsNames();
-    
-    public static native String [] getAuxFunctionNames();
-    
-    public static native String [] getAuxParamsNames(String auxFuncName);
-    
-    public static native String getAuxParamValue(String auxFuncName, String paramName);
-    
-    public static native void setAuxParamValue(String auxFuncName, String paramName, String paramValue);
+ 
+   
 
     public static native FluxParams getFluxParams();
 
@@ -1028,16 +874,13 @@ public class RPNUMERICS {
     public static native List<String> getEigenSortFunctionNames();
     
     public static native void setEigenSortFunction(String functionName);
-    
-    public static native String [] getHugoniotNames();
-    
+   
     
     public static native String getXLabel();
     
     public static native String getYLabel();
     
     
-    public static native String [] getWaveCurveCaseNames();
     
     public static native ArrayList<String> getTransisionalLinesNames();
     

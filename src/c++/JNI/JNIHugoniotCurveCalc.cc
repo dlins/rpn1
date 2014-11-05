@@ -74,12 +74,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
 
 
 
-    //Reading configuration 
-
-    //    jstring methodParam = 
-
-    //cout << "Aqui" << endl;
-
     jstring javaMethodName = (jstring) env->CallObjectMethod(configuration, getParamMethodID, env->NewStringUTF("method"));
 
     jstring javaCaseName = (jstring) env->CallObjectMethod(configuration, getParamMethodID, env->NewStringUTF("case"));
@@ -88,7 +82,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
     string methodName(env->GetStringUTFChars(javaMethodName, NULL));
     string caseName(env->GetStringUTFChars(javaCaseName, NULL));
 
-    //cout << "Method pego no JNI: " << methodName << endl;
+    cout << "Method pego no JNI: " << methodName << endl;
 
     //Input point
 
@@ -97,64 +91,60 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
 
     env->DeleteLocalRef(phasePointArray);
 
-    //Calculations using the input
+  
 
     jobject segmentsArray = env->NewObject(arrayListClass, arrayListConstructor, NULL);
 
     //-------------------------------------------------------------------
 
     RealVector Uref(dimension, input);
-
-
     
     const FluxFunction * flux = RpNumerics::physicsVector_->at(0)->flux();
     const AccumulationFunction * accum = RpNumerics::physicsVector_->at(0)->accumulation();
     
-
 
     vector<RealVector> transitionList;
 
     vector<HugoniotPolyLine> hugoniotPolyLineVector;
 
     ReferencePoint refPoint(Uref,flux, accum, 0);
-
-
-
-    cout << "Tipo do metodo c++" << methodName << endl;   
 //
-    cout << "Caso pego no JNI: " << caseName << endl;
+//    cout << "Tipo do metodo c++" << methodName << endl;   
 //
-//    cout << "Ponto clicado: " << Uref << endl;
+//    cout << "Caso pego no JNI: " << caseName << endl;
 
-
-
-
+    vector<HugoniotCurve *> hugoniotMethods;
+   
     
-   int configIndex = RpNumerics::getHugoniotConfigIndex(methodName);
-   
-   
-   cout<<"Indice do metodo: "<<configIndex<<endl;
-    
-   HugoniotConfig * config =  RpNumerics::getHugoniotConfig(methodName);
-   
-   
-   
-   cout <<"Pont config: "<<config<<endl;
-
-   cout <<"Indice do caso: "<<config->getCase(caseName)<<endl;
-   
-   
-   vector<HugoniotCurve *> hugoniotMethods;
-   
-   
+    //Escolhendo o metodo
     RpNumerics::physicsVector_->at(0)->list_of_Hugoniot_methods(hugoniotMethods);
-    
-    
-    HugoniotCurve * hugoniot = hugoniotMethods.at(configIndex);
- 
-    
-    hugoniot->curve(refPoint,config->getCase(caseName), hugoniotPolyLineVector);
+    HugoniotCurve * method ;
+    for (int i = 0; i < hugoniotMethods.size(); i++) {
+       if (hugoniotMethods[i]->Hugoniot_info().compare(methodName)==0){
+           method=hugoniotMethods[i];
+       }
 
+    }
+    
+    //Escolhendo o caso  (ponto de referencia)
+    std::vector<int> referencePointFlag;
+    std::vector<std::string> referencePointName;
+    
+    int caseNumber=0;
+    
+    method->list_of_reference_points(referencePointFlag,referencePointName);
+    
+    
+    for (int i = 0; i < referencePointName.size(); i++) {
+        
+        if(referencePointName[i].compare(caseName)==0){
+            
+            caseNumber=referencePointFlag[i];
+        }
+
+    }
+    
+    method->curve(refPoint,caseNumber, hugoniotPolyLineVector);
 
     jobject transitionArray = env->NewObject(arrayListClass, arrayListConstructor, NULL);
 

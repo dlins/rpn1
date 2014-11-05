@@ -17,22 +17,6 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_initNative
 
 /*
  * Class:     rpnumerics_RPNUMERICS
- * Method:    setFamilyIndex
- * Signature: (I)V
- */
-JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setFamilyIndex
-  (JNIEnv *, jobject, jint);
-
-/*
- * Class:     rpnumerics_RPNUMERICS
- * Method:    setTimeDirection
- * Signature: (I)V
- */
-JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setTimeDirection
-  (JNIEnv *, jobject, jint);
-
-/*
- * Class:     rpnumerics_RPNUMERICS
  * Method:    clean
  * Signature: ()V
  */
@@ -62,38 +46,6 @@ JNIEXPORT jstring JNICALL Java_rpnumerics_RPNUMERICS_getPhysicsParam
  */
 JNIEXPORT jobjectArray JNICALL Java_rpnumerics_RPNUMERICS_getPhysicsParamsNames
   (JNIEnv *, jclass);
-
-/*
- * Class:     rpnumerics_RPNUMERICS
- * Method:    getAuxFunctionNames
- * Signature: ()[Ljava/lang/String;
- */
-JNIEXPORT jobjectArray JNICALL Java_rpnumerics_RPNUMERICS_getAuxFunctionNames
-  (JNIEnv *, jclass);
-
-/*
- * Class:     rpnumerics_RPNUMERICS
- * Method:    getAuxParamsNames
- * Signature: (Ljava/lang/String;)[Ljava/lang/String;
- */
-JNIEXPORT jobjectArray JNICALL Java_rpnumerics_RPNUMERICS_getAuxParamsNames
-  (JNIEnv *, jclass, jstring);
-
-/*
- * Class:     rpnumerics_RPNUMERICS
- * Method:    getAuxParamValue
- * Signature: (Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
- */
-JNIEXPORT jstring JNICALL Java_rpnumerics_RPNUMERICS_getAuxParamValue
-  (JNIEnv *, jclass, jstring, jstring);
-
-/*
- * Class:     rpnumerics_RPNUMERICS
- * Method:    setAuxParamValue
- * Signature: (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
- */
-JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setAuxParamValue
-  (JNIEnv *, jclass, jstring, jstring, jstring);
 
 /*
  * Class:     rpnumerics_RPNUMERICS
@@ -193,14 +145,6 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setEigenSortFunction
 
 /*
  * Class:     rpnumerics_RPNUMERICS
- * Method:    getHugoniotNames
- * Signature: ()[Ljava/lang/String;
- */
-JNIEXPORT jobjectArray JNICALL Java_rpnumerics_RPNUMERICS_getHugoniotNames
-  (JNIEnv *, jclass);
-
-/*
- * Class:     rpnumerics_RPNUMERICS
  * Method:    getXLabel
  * Signature: ()Ljava/lang/String;
  */
@@ -213,14 +157,6 @@ JNIEXPORT jstring JNICALL Java_rpnumerics_RPNUMERICS_getXLabel
  * Signature: ()Ljava/lang/String;
  */
 JNIEXPORT jstring JNICALL Java_rpnumerics_RPNUMERICS_getYLabel
-  (JNIEnv *, jclass);
-
-/*
- * Class:     rpnumerics_RPNUMERICS
- * Method:    getWaveCurveCaseNames
- * Signature: ()[Ljava/lang/String;
- */
-JNIEXPORT jobjectArray JNICALL Java_rpnumerics_RPNUMERICS_getWaveCurveCaseNames
   (JNIEnv *, jclass);
 
 /*

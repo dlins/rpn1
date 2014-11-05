@@ -117,7 +117,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc
 
 
     jstring jorigin = (jstring) env->CallObjectMethod(configuration, getParamMethodID, env->NewStringUTF("origin"));
-    jstring jcurve = (jstring) env->CallObjectMethod(configuration, getParamMethodID, env->NewStringUTF("curve"));
+
     jstring jdirection = (jstring) env->CallObjectMethod(configuration, getParamMethodID, env->NewStringUTF("direction"));
 
 
@@ -126,7 +126,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc
     jstring jfamily = (jstring) env->CallObjectMethod(configuration, getParamMethodID, env->NewStringUTF("family"));
 
     string origin(env->GetStringUTFChars(jorigin, NULL));
-    string curve(env->GetStringUTFChars(jcurve, NULL));
+
     string direction(env->GetStringUTFChars(jdirection, NULL));
 
     string family(env->GetStringUTFChars(jfamily, NULL));
@@ -138,34 +138,29 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc
     std::stringstream stream(direction);
     stream >> timeDirection;
 
-    int curveNumber;
-    std::stringstream streamCurve(curve);
-    streamCurve >> curveNumber;
-
-
     int familyNumber;
     std::stringstream streamFamily(family);
     streamFamily >> familyNumber;
-
-   
-    //    std::stringstream streamOrigin(origin);
 
 
     WaveCurve * hwc = new WaveCurve();
 
 
-    int originNumber = RpNumerics::waveCurveConfigVector_->at(0)->flag(origin);
-
-
-    cout << "Valor de origin" <<" "<<origin<<"  " <<originNumber << endl;
-    
-    cout << "Valor de family" << familyNumber << endl;
-    
-    cout << "Valor de increase" << timeDirection << endl;
-
-    cout << "Ponto entrado: " << realVectorInput << endl;
-
-    
+//  
+//
+//
+////    cout << "Valor de origin" <<" "<<origin<<"  " <<originNumber << endl;
+//    
+//    
+//    cout << "Valor de origin" <<origin<<endl;
+//    
+//    cout << "Valor de family" << familyNumber << endl;
+//    
+//    cout << "Valor de increase" << timeDirection << endl;
+//
+//    cout << "Ponto entrado: " << realVectorInput << endl;
+//
+//    
 
     
     WaveCurveFactory *factory = RpNumerics::physicsVector_->at(0)->wavecurvefactory();
@@ -174,8 +169,27 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc
     int info;
     int reason_why, s;
 
-  
+    
+    //Escolhendo o caso (ponto de referencia)
+    std::vector<int> caseFlagVector;
+    std::vector<std::string> caseNameVector;
 
+    
+    factory->list_of_initial_points(caseFlagVector,caseNameVector);
+    
+    
+    
+    int originNumber = 0;
+    
+    for (int i = 0; i < caseNameVector.size(); i++) {
+
+        if(origin.compare(caseNameVector[i])==0){
+            originNumber=caseFlagVector[i];
+            
+        }
+    }
+    
+  //Verificando se existe transitional line
     BifurcationCurve * bifurcation = RpNumerics::physicsVector_->at(0)->bifurcation_curve();
 
 
@@ -198,7 +212,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc
 
     }
 
-        cout << "Name index: " << name[index] << endl;
+//        cout << "Transitional line name: " << name[index] << endl;
 
     
 
@@ -303,7 +317,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc
 
     env->SetStaticIntField(modelPlotClass, curveIdField, ++CURVEID);
 
-    //    RpNumerics::increaseCurveID();
 
     jobject waveCurveBranchForward = env->NewObject(classWaveCurve, waveCurveConstructor, familyNumber, timeDirection); //First branch for now
 

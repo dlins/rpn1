@@ -44,6 +44,63 @@ public abstract class Configuration extends Observable{
 
         name_ = profile.getName();
         type_ = profile.getType();
+        
+        
+
+        HashMap<String, String> params = profile.getParams();
+        Set<String> keySet = params.keySet();
+        
+        
+        
+        for (String parameterName : keySet) {
+            
+            
+            
+            if(parameterName.contains("family")){
+                
+                String [] range = new String[2];
+                range[0]="0";
+                range[1]=String.valueOf(rpnumerics.RPNUMERICS.domainDim()-1);
+                
+                
+                RangedParameter parameter = new RangedParameter(parameterName, params.get(parameterName), range, "1");
+                
+                addParameter(parameter);
+                
+                
+            }
+            
+            
+            else  if (parameterName.equals("direction")){
+                
+                
+                ChooseParameter chooseParameter = new ChooseParameter(parameterName, params.get(parameterName));                
+                chooseParameter.addOption("Forward");
+                chooseParameter.addOption("Backward");
+                
+                
+                addParameter(chooseParameter);
+                
+            }
+            
+            else if (!(parameterName.contains("method")|| parameterName.contains("case")||parameterName.contains("origin")||parameterName.contains("name"))) {
+                
+                
+                
+                TextParameter textParameter = new TextParameter(parameterName, params.get(parameterName));
+                
+                if(parameterName.contains("transitionalline")){
+                    textParameter.setVisible(false);
+                }
+                
+                addParameter(textParameter);
+                
+            }
+            
+            
+        }
+        
+        
 
     }
 
@@ -74,7 +131,7 @@ public abstract class Configuration extends Observable{
         return paramList_;
     }
     
-    public void addParameter(Parameter param){
+    public final void addParameter(Parameter param){
         paramList_.add(param);
     }
     
@@ -111,22 +168,7 @@ public abstract class Configuration extends Observable{
         paramOrder_.add(order, paramName);
     }
 
-    public void setParams(ConfigurationProfile profile) {
-        if (!profile.getParams().isEmpty()) {
-
-            for (int i = 0; i < profile.getIndicesSize(); i++) {
-
-                Entry<String, String> param = profile.getParam(i);
-
-                setParamOrder(param.getKey(), i);
-                setParamValue(param.getKey(), param.getValue());
-
-
-            }
-
-        }
-
-    }
+   
 
     public int getParamOrder(String paramName) {
 
@@ -188,6 +230,17 @@ public abstract class Configuration extends Observable{
     }
 
     public void setParamValue(String paramName, String paramValue) {
+
+        for (Parameter parameter : paramList_) {
+            
+            if(parameter.getName().equals(paramName)){
+                parameter.setValue(paramValue);
+            }
+            
+            
+        }
+        
+        
         params_.put(paramName, paramValue);
 
         if (paramOrder_.indexOf(paramName) == -1) {
@@ -200,14 +253,17 @@ public abstract class Configuration extends Observable{
     }
 
     public String getParam(String paramName) {
-
+        
+        for (Parameter parameter : paramList_) {
+            
+            if(parameter.getName().equals(paramName)){
+                return parameter.getValue();
+            }
+        }
         return params_.get(paramName);
     }
 
-    public void addConfiguration(String name, Configuration configuration) {
-
-        configurationMap_.put(name, configuration);
-    }
+   
 
     public Configuration getConfiguration(String name) {
         return configurationMap_.get(name);

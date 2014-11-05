@@ -22,8 +22,7 @@
 #include "JDSubPhysics.h"
 #include "StoneSubPhysics.h"
 #include "CoreyQuadSubPhysics.h"
-#include "HugoniotConfig.h"
-#include "WaveCurveConfig.h"
+
 
 #include "JNIDefs.h"
 
@@ -36,32 +35,22 @@ private:
 
     static vector<StationaryPoint* > * stationaryPointVector_;
 
-   
-
     static double sigma;
-
-   
-
-
 
 
 public:
     static map<int, WaveCurve *> *waveCurveMap_;
-    
+
     static std::vector<SubPhysics*> * physicsVector_;
 
-    static std::vector<HugoniotConfig *> * hugoniotCasesVector_;
-
     static std::vector<Parameter*> * physicsParams_;
-    
-    static std::vector<WaveCurveConfig *> *  waveCurveConfigVector_;
 
-    static std::map<string,AuxiliaryFunction *> * physicsAuxFunctionsMap_;
+    static std::map<string, AuxiliaryFunction *> * physicsAuxFunctionsMap_;
 
     static WaveCurve * getWaveCurve(int);
 
-       
-    
+
+
     static void addWaveCurve(int, WaveCurve *);
 
     static int getCurrentCurveID();
@@ -78,7 +67,6 @@ public:
 
     static double getSigma();
 
-
     static void clean();
 
     static void clearCurveMap();
@@ -89,16 +77,11 @@ public:
 
     static map<string, bool (*)(const eigenpair&, const eigenpair&) > *orderFunctionMap_;
 
-    static void fillHugoniotNames();
+    static void fillPhysicsParams();
 
-    static void fillPhysicsParams() ;
-    
-    static void fillWaveCurveCases();
-    
-    
-    static int  getHugoniotConfigIndex(const string &);
-     
-    static HugoniotConfig *  getHugoniotConfig(const string &);
+
+
+
 
 };
 
@@ -106,25 +89,15 @@ inline WaveCurve * RpNumerics::getWaveCurve(int n) {
     return waveCurveMap_->at(n);
 }
 
-
-
-
-inline void RpNumerics::addWaveCurve(int curveID,WaveCurve * wc) {
+inline void RpNumerics::addWaveCurve(int curveID, WaveCurve * wc) {
     waveCurveMap_->insert(std::pair<int, WaveCurve *>(curveID, wc));
-    
+
 
 }
-
-
-
-
-
 
 inline vector<StationaryPoint *> & RpNumerics::getStationaryPointVector() {
     return *stationaryPointVector_;
 }
-
-
 
 inline void RpNumerics::setEigenOrderFunction(const string & functionName) {
 

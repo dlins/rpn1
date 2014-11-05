@@ -90,7 +90,6 @@
             
                  <CURVECONFIGURATION name="wavecurve">
                 <CURVEPARAM name="origin" value="Generic point"/>
-                <CURVEPARAM name="curve" value="0"/>
                 <CURVEPARAM name="direction" value="10"/>
                 <CURVEPARAM name="family" value="0"/>
                 <CURVEPARAM name="transitionalline" value="None"/>
@@ -166,7 +165,7 @@
                 <CURVEPARAM name="resolution" value="128 128"/>
                 <CURVEPARAM name="extensionfamily" value="1"/>
                 <CURVEPARAM name="characteristic" value="1"/>
-                <CURVEPARAM name="direction" value="20"/>
+                <CURVEPARAM name="direction" value="10"/>
         
             </CURVECONFIGURATION>
         
@@ -175,14 +174,14 @@
                 <CURVEPARAM name="resolution" value="128 128"/>
                 <CURVEPARAM name="singular" value="true"/>
                 <CURVEPARAM name="characteristic" value="0"/>
-<!--                <CURVEPARAM name="domain" value="1"/>-->
+                <!--                <CURVEPARAM name="domain" value="1"/>-->
 
             </CURVECONFIGURATION>
   
             <VIEWCONFIGURATION modeldomain="2">
 
 
-           <PROJDESC name="Axis0 Axis1">
+                <PROJDESC name="Axis0 Axis1">
                     <VIEWPARAM name="axis" value="0 1"/>
                     <VIEWPARAM name="vpwidth" value="700"/>
                     <VIEWPARAM name="vpheight" value="700"/>

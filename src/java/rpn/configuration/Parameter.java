@@ -21,13 +21,17 @@ public abstract class Parameter {
    
     private List<String> options_;
     
-    List<Parameter> parameterList_;
+    protected List<Parameter> parameterList_;
+    
+    
+    private  boolean isVisible_;
     
     public Parameter(String name_, String value_) {
         this.name_ = name_;
         this.value_ = value_;
         options_=new ArrayList<String>();
         parameterList_= new ArrayList<Parameter>();
+        isVisible_=true;
         
     }
 
@@ -35,6 +39,14 @@ public abstract class Parameter {
         return name_;
     }
 
+    public boolean isVisible() {
+        return isVisible_;
+    }
+
+    public void setVisible(boolean isVisible_) {
+        this.isVisible_ = isVisible_;
+    }
+    
 
     public String getValue() {
         return value_;
@@ -46,6 +58,11 @@ public abstract class Parameter {
 
     public List<String> getOptions() {
         return options_;
+    }
+    
+    
+    public String getOption(int optionIndex){
+        return options_.get(optionIndex);
     }
     
     

@@ -21,8 +21,7 @@ import javax.swing.*;
 import rpn.command.ChangeDirectionCommand;
 import rpn.configuration.Configuration;
 import rpn.configuration.ConfigurationProfile;
-import rpn.configuration.Parameter;
-import rpn.ui.UIComponentCreator;
+import rpn.ui.ConfigurationView;
 import rpnumerics.Orbit;
 import rpnumerics.RPNUMERICS;
 
@@ -80,107 +79,25 @@ public class RPnCurvesConfigPanel extends Observable implements PropertyChangeLi
                 
                 Configuration config = entry.getValue();
                 
-                HashMap<String, String> configParams = config.getParams();
-                
-                Set<Entry<String, String>> paramSet = configParams.entrySet();
-                
                 JPanel paramsPanel = new JPanel();
                 
                 BoxLayout box = new BoxLayout(paramsPanel, BoxLayout.X_AXIS);
                 paramsPanel.setLayout(box);
                 paramsPanel.invalidate();
                 paramsPanel.setSize(new Dimension(200,20));
+                 
                 
+                ConfigurationView configView = new ConfigurationView(config);
                 
-                for (Entry<String, String> paramEntry : paramSet) {
-                    if (!paramEntry.getKey().contains("resolution")) {
-                              
-                        UIComponentCreator componentCreator = new UIComponentCreator(config, paramEntry.getKey());
-                        JComponent component = componentCreator.createUIComponent();
-                        paramsPanel.add(component);
-                      
-                    }
-                    
-                }
-                java.util.List<Parameter> parameterList = config.getParameterList();
-                
-                
-                for (Parameter parameter : parameterList) {
-                    
-                    UIComponentCreator componentCreator = new UIComponentCreator(parameter);
-                    JComponent component = componentCreator.createUIComponent();
-                    paramsPanel.add(component);
-                    
-                    
-                }
-                
-                
-                
-                
-                if (paramsPanel.getComponentCount() > 0) {
+
+     
+                if (configView.getParameterViewNumber() > 0) {
+                    paramsPanel.add(configView.getContainer());
                     curvesTabbedPanel_.addTab(config.getName(), paramsPanel);
                     componentMap_.put(config.getName(), paramsPanel);
                 }
                 
             }
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-//            if (!configurationType.equalsIgnoreCase(ConfigurationProfile.PHYSICS_CONFIG) && !configurationType.equalsIgnoreCase("VISUAL") && !configurationType.equalsIgnoreCase("METHOD")) {
-//                
-//                Configuration config = entry.getValue();
-//                
-//                HashMap<String, String> configParams = config.getParams();
-//                
-//                Set<Entry<String, String>> paramSet = configParams.entrySet();
-//                
-//                JPanel paramsPanel = new JPanel();
-//                
-//                BoxLayout box = new BoxLayout(paramsPanel, BoxLayout.X_AXIS);
-//                paramsPanel.setLayout(box);
-//                paramsPanel.invalidate();
-//                paramsPanel.setSize(new Dimension(200,20));
-//                
-//                
-//                for (Entry<String, String> paramEntry : paramSet) {
-//                    if (!paramEntry.getKey().contains("resolution")) {
-//                        UIComponentCreator componentCreator = new UIComponentCreator(config, paramEntry.getKey());
-//                        JComponent component = componentCreator.createUIComponent();
-//                        paramsPanel.add(component);
-//                    }
-//                    
-//                }
-//                
-//                if (paramsPanel.getComponentCount() > 0) {
-//                    curvesTabbedPanel_.addTab(config.getName(), paramsPanel);
-//                    componentMap_.put(config.getName(), paramsPanel);
-//                }
-//                
-//            }
             
         }
         

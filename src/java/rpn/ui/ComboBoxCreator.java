@@ -62,20 +62,22 @@ public class ComboBoxCreator extends UIComponentCreator {
     @Override
     public JComponent createUIComponent() {
 
-        JLabel methodLabel = new JLabel(configurationParameter_);
-
-        HashMap<String, String> paramsValues = new HashMap<String, String>();
-
+//        JLabel methodLabel = new JLabel(configurationParameter_);
+//
+//        HashMap<String, String> paramsValues = new HashMap<String, String>();
+//
         JPanel panel_ = new JPanel();
-
-        List<String> optionsList = parameter_.getOptions();
-
-        String[] optionsArray = new String[optionsList.size()];
-
-        JComboBox casesNameCombo = new JComboBox(optionsList.toArray(optionsArray));
-
-        casesNameCombo.addActionListener(new ComboController(casesNameCombo));
-        panel_.add(casesNameCombo);
+//        
+//        
+//
+//        List<String> optionsList = parameter_.getOptions();
+//
+//        String[] optionsArray = new String[optionsList.size()];
+//
+//        JComboBox casesNameCombo = new JComboBox(optionsList.toArray(optionsArray));
+//
+//        casesNameCombo.addActionListener(new ComboController(casesNameCombo));
+//        panel_.add(casesNameCombo);
 
         return panel_;
 
@@ -205,10 +207,7 @@ public class ComboBoxCreator extends UIComponentCreator {
             } else {
                 int associatedParameterSize = parameter_.getAssociatedParameterSize();
 
-                for (int i = 0; i < par10; i++) {
-
-                }
-
+               
             }
 
             JComponent combo2 = (JComponent) e.getSource();
@@ -236,23 +235,23 @@ public class ComboBoxCreator extends UIComponentCreator {
         @Override
         public void actionPerformed(ActionEvent e) {
 
-            JComboBox combo = (JComboBox) e.getSource();
-
-            String selectedItem = (String) combo.getSelectedItem();
-
-//            System.out.println("Chamando nome item changed" + configuration_.getName() + " " + configurationParameter_ + " " + selectedItem);
-            RPNUMERICS.setParamValue(configuration_.getName(), "method", selectedItem);
-
-            caseCombo_.removeAllItems();
-
-            String[] hugoniotCaseNames = RPNUMERICS.getHugoniotCaseNames(selectedItem);
-
-            for (String string : hugoniotCaseNames) {
-
-                caseCombo_.addItem(string);
-
-//                System.out.println("Adicionando casos: " + string);
-            }
+//            JComboBox combo = (JComboBox) e.getSource();
+//
+//            String selectedItem = (String) combo.getSelectedItem();
+//
+////            System.out.println("Chamando nome item changed" + configuration_.getName() + " " + configurationParameter_ + " " + selectedItem);
+//            RPNUMERICS.setParamValue(configuration_.getName(), "method", selectedItem);
+//
+//            caseCombo_.removeAllItems();
+//
+//            String[] hugoniotCaseNames = RPNUMERICS.getHugoniotCaseNames(selectedItem);
+//
+//            for (String string : hugoniotCaseNames) {
+//
+//                caseCombo_.addItem(string);
+//
+////                System.out.println("Adicionando casos: " + string);
+//            }
 
         }
 

@@ -11,10 +11,7 @@ package rpn.configuration;
  * @author edsonlan
  */
 public class ParameterLeaf extends Parameter{
-    
-    private String name_;
-    private String value_;
-    
+  
 
 
     
@@ -25,19 +22,11 @@ public class ParameterLeaf extends Parameter{
 
     }
 
-    public String getName() {
-        return name_;
-    }
+  
 
 
-    public String getValue() {
-        return value_;
-    }
-
-    public void setValue(String value_) {
-        this.value_ = value_;
-    }
-
+  
+  
     @Override
     public Parameter getAssociatedParameter(int index) {
         return this;

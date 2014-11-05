@@ -127,6 +127,13 @@ int dimension = RpNumerics::physicsVector_->at(0)->boundary()->minimums().size()
             final_direction,
             rar_stopped_because,
             edge);
+    
+    
+     if(info_rar==RAREFACTION_ERROR){
+        return NULL;
+    }
+    
+    
 
     CompositeCurve * cmp = RpNumerics::physicsVector_->at(0)->composite();
  
@@ -148,6 +155,10 @@ int dimension = RpNumerics::physicsVector_->at(0)->boundary()->minimums().size()
             composite_stopped_because,
             edge);
     
+    
+    if(info_cmp==COMPOSITE_ERROR){
+        return NULL;
+    }
 
     ReferencePoint referencePoint(realVectorInput, flux, accum, 0);
 

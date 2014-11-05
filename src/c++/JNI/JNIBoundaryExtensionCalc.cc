@@ -79,7 +79,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_BoundaryExtensionCurveCalc_nativeCalc
     const AccumulationFunction * accum = RpNumerics::physicsVector_->at(0)->accumulation();
 
 
-    //    GridValues * gv = RpNumerics::physicsVector_->at(0)->gridvalues();
+    GridValues * gv = RpNumerics::physicsVector_->at(0)->gridvalues();
 
 
 
@@ -91,18 +91,18 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_BoundaryExtensionCurveCalc_nativeCalc
 
 
 
-    std::vector<int> number_of_cells(2);
-    number_of_cells[0] = 80;
-    number_of_cells[1] = 80;
+//    std::vector<int> number_of_cells(2);
+//    number_of_cells[0] = 80;
+//    number_of_cells[1] = 80;
+//
+//    GridValues gv(RpNumerics::physicsVector_->at(0)->boundary(), RpNumerics::physicsVector_->at(0)->boundary()->minimums(),
+//            RpNumerics::physicsVector_->at(0)->boundary()->maximums(),
+//            number_of_cells);
+//
 
-    GridValues gv(RpNumerics::physicsVector_->at(0)->boundary(), RpNumerics::physicsVector_->at(0)->boundary()->minimums(),
-            RpNumerics::physicsVector_->at(0)->boundary()->maximums(),
-            number_of_cells);
 
 
-
-
-    physicsBoundary->extension_curve(flux, accum, gv, edge, edgeResolution, true, domainFamily, characteristicWhere, curve_segments, domain_segments);
+    physicsBoundary->extension_curve(flux, accum, *gv, edge, edgeResolution, true, domainFamily, characteristicWhere, curve_segments, domain_segments);
 
     cout << "Tamanho da curva: " << curve_segments.size() << endl;
 

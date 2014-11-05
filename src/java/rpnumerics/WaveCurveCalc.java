@@ -29,7 +29,7 @@ public class WaveCurveCalc extends WaveCurveOrbitCalc {
 
         super(new OrbitPoint(input), Integer.parseInt(waveCurveConfiguration.getParam("family")), Integer.parseInt(waveCurveConfiguration.getParam("direction")));
 
-        configuration_ = waveCurveConfiguration.clone();
+        configuration_ = ((CurveConfiguration)RPNUMERICS.getConfiguration("wavecurve")).clone();
 
     }
 
@@ -43,8 +43,7 @@ public class WaveCurveCalc extends WaveCurveOrbitCalc {
     public RpSolution calc() throws RpException {
         WaveCurve result;
 
-//            result = (WaveCurve) nativeCalc(getStart(), getFamilyIndex(), getDirection(), origin_, edge_);
-        result = (WaveCurve) nativeCalc(getStart(), (CurveConfiguration) configuration_);
+        result = (WaveCurve) nativeCalc(getStart(), (CurveConfiguration)RPNUMERICS.getConfiguration("wavecurve"));
 
        
 

@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package rpn.ui;
 
+import java.util.Observable;
 import javax.swing.JComponent;
 import rpn.configuration.Parameter;
 
@@ -13,30 +13,23 @@ import rpn.configuration.Parameter;
  *
  * @author edsonlan
  */
-public abstract class ParameterView {
-    
-private JComponent component_;
-private Parameter parameter_;
+public abstract class ParameterView extends Observable {
 
-    public ParameterView(JComponent component_, Parameter parameter_) {
-        this.component_ = component_;
+    private Parameter parameter_;
+
+    public ParameterView(Parameter parameter_) {
+
         this.parameter_ = parameter_;
     }
 
+    public abstract void associatedChanged(Parameter associatedParameter, Object arg);
 
-public abstract void associatedChanged (Parameter parameter);
-
-    public JComponent getComponent() {
-        return component_;
-    }
+    public abstract JComponent getComponent();
+    
+    protected abstract void decorate(JComponent component);
 
     public Parameter getParameter() {
         return parameter_;
     }
 
-
-
-
-
-    
 }
