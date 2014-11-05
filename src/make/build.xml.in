@@ -20,7 +20,7 @@
     <property name="plugindir" location="${libc++dir}/plugins"/>
 
 
-    <target name="all" depends="compile-java,compile-c++,compile-plugins"/>
+    <target name="all" depends="compile-java,compile-c++"/>
     
     <target name="init">
         <tstamp/>

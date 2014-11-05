@@ -152,7 +152,7 @@ public class PhaseSpacePanel2DController extends ComponentUI implements PhaseSpa
                     RPnCurve curve = (RPnCurve) geomFactory.geomSource();
                     
                     if (!(curve instanceof TransitionalLine)){//TODO To refactor !
-                           System.out.println("Curve mais proxima: "+curve);
+
                     RealVector closestPoint = curve.findClosestPoint(wcCoordsVector);
                     for (int i = 0; i < closestPoint.getSize(); i++) {
                         UIController.instance().globalInputTable().setElement(i, closestPoint.getElement(i));

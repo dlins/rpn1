@@ -31,6 +31,7 @@
 //-------------------------------------
 
 #include "JNIDefs.h"
+#include "physics/ThreePhaseFlowPhysics/Koval/KovalSubPhysics.h"
 
 
 using namespace std;
@@ -809,6 +810,11 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_initNative(JNIEnv * env, jclas
 
         RpNumerics::physicsVector_->push_back(new CoreyQuadSubPhysics());
     }
+    
+    if (physicsStringName.compare("Koval") == 0) {
+        RpNumerics::physicsVector_->push_back(new KovalSubPhysics());
+    }
+    
 
     RpNumerics::waveCurveMap_= new map<int,WaveCurve *>();
     RpNumerics::fillPhysicsParams();
