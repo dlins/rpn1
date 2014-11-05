@@ -13,6 +13,8 @@ ShockCurve::ShockCurve(HugoniotContinuation *h){
     f = hc->flux();
     g = hc->accumulation();
 
+    std::cout << "Shock, flux at " << (void*)f << ", accumulation at " << (void*)g << std::endl;
+
     #ifdef USECANVAS
     canvas = 0;
     scroll = 0;
@@ -580,10 +582,6 @@ void ShockCurve::add_point(Curve &c, const RealVector &p){
     f->jet(p, Fjet, 1);
     g->jet(p, Gjet, 1);
 
-    // Eigenvalues.
-    //
-    std::vector<eigenpair> e;
-
 //    std::cout << "Fjet = \n" << Fjet << std::endl << std::endl;
 //    std::cout << "Gjet = \n" << Gjet << std::endl << std::endl;
 
@@ -595,6 +593,10 @@ void ShockCurve::add_point(Curve &c, const RealVector &p){
         std::cout << "    p = " << p << std::endl;
         exit(0);
     }
+
+    // Eigenvalues.
+    //
+    std::vector<eigenpair> e;
 
     Eigen::eig(n, Fjet.Jacobian().data(), Gjet.Jacobian().data(), e);
 
@@ -766,6 +768,8 @@ int ShockCurve::curve_engine(const ReferencePoint &r, const RealVector &in, cons
     double previous_sigma_between_points = 0.0;
 
     while (true){
+        std::cout << previous_point << std::endl;
+
         RealVector Hugoniot_intersection;
         double sigma_between_points;
         RealVector Hugoniot_direction;

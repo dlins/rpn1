@@ -104,6 +104,8 @@ int GasVolatileDeadCompositeCurve::curve(const AccumulationFunction *RarAccum, c
     compositecurve.final_direction = final_direction = ext_p - old_point;
     normalize(final_direction);
     normalize(compositecurve.final_direction);
+
+    compositecurve.last_point = compositecurve.curve.back();
                     
     reason_why = COMPOSITE_COMPLETED;
     compositecurve.reason_to_stop = COMPOSITE_COMPLETED;

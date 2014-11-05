@@ -59,7 +59,6 @@ int GasVolatileDeadCompositeCurve::curve(const AccumulationFunction *RarAccum, c
         // Update (at the beginnig).
         //
         old_point = ext_p;
-        index_of_corresponding_point_in_rarefaction--;
 
         int infoext = evapext->extension(rarcurve.curve[i], ext_p);
 
@@ -94,6 +93,8 @@ int GasVolatileDeadCompositeCurve::curve(const AccumulationFunction *RarAccum, c
         std::cout << "Before adding the point to the rarefaction curve, index_of_corresponding_point_in_rarefaction = " << index_of_corresponding_point_in_rarefaction << std::endl;
         new_rarcurve.curve.push_back(rarcurve.curve[index_of_corresponding_point_in_rarefaction]);
         std::cout << "After adding the point to the rarefaction curve." << std::endl;
+
+        index_of_corresponding_point_in_rarefaction--;
     }
 
     std::cout << "After for." << std::endl;
@@ -106,6 +107,8 @@ int GasVolatileDeadCompositeCurve::curve(const AccumulationFunction *RarAccum, c
                     
     reason_why = COMPOSITE_COMPLETED;
     compositecurve.reason_to_stop = COMPOSITE_COMPLETED;
+
+    std::cout << "Will leave composite now." << std::endl;
 
     return COMPOSITE_OK;
 }

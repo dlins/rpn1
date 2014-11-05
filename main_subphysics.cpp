@@ -113,8 +113,6 @@ std::vector<Fl_Round_Button*>            optionsbtn;
 std::vector<void (*)(Fl_Widget*, void*)> optionsfnc;
 
 void Hugoniotcb(Fl_Widget*, void*){
-    std::cout << "Hugoniot callback." << std::endl;
-
     RealVector p(3);
     canvas->getxy(p(0), p(1));
     p(2) = 1.0;
@@ -767,6 +765,8 @@ void wavecurvefactioncb(Fl_Widget*, void*){
 
     if (dimension == 3) initial_point(2) = 1.0;
 
+    std::cout << "Wavecurve callback, initial point = " << initial_point << std::endl;
+
 //    initial_point(0) = 0.623883;
 //    initial_point(1) = 0.292079;
 
@@ -793,6 +793,8 @@ void wavecurvefactioncb(Fl_Widget*, void*){
 //    for (int i = 0; i < function.size(); i++) std::cout << (void*)function[i] << std::endl;
 
     int info = wcf->wavecurve(type, initial_point, family, increase, subphysics->Hugoniot_continuation(), 0/*object[bifindex]*/, 0/*function[bifindex]*/, hwc, reason_why, edge);
+
+    std::cout << "After wavecurvefactory." << std::endl;
 
     if (info == WAVECURVEFACTORY_INVALID_PARAMETERS) TestTools::pause("The wavecurve could not be computed because\nthe family and/or the monotonicity are wrong.");
 

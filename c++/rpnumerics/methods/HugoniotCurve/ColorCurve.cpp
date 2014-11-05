@@ -549,9 +549,6 @@ void ColorCurve::classify_segment(RealVector &p, RealVector &q,
     int type_p = classify_point(p, s_p, eigenvalue_p, ct_p);
     int type_q = classify_point(q, s_q, eigenvalue_q, ct_q);
 
-    std::cout << "p = " << p << ", type_p = " << type_p << std::endl;
-    std::cout << "q = " << q << ", type_q = " << type_q << std::endl;
-
     int dim = p.size();
     int fam = eigenvalue_p.size();
 
