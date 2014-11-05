@@ -218,7 +218,7 @@ bool Hugoniot_TP::improvable(void) {
 }
 
 void Hugoniot_TP::curve(const ReferencePoint &ref, int type, std::vector<Curve> &c){
-	if (subphysics_ != 0) gv = subphysics_->gridvalues();
+    if (subphysics_ != 0) gv = subphysics_->gridvalues();
 
     if (gv != 0){
         reference_point = ref;
@@ -242,6 +242,9 @@ void Hugoniot_TP::curve(const ReferencePoint &ref, int type, std::vector<Curve> 
         int info = ContourMethod::contour2d(this, hugoniot_curve, curves, is_circular, method);
 
         for (int i = 0; i < hugoniot_curve.size()/2; i++){
+            hugoniot_curve[2*i].resize(3);
+            hugoniot_curve[2*i + 1].resize(3);
+
             Curve temp;
             temp.curve.push_back(hugoniot_curve[2*i]);
             temp.curve.push_back(hugoniot_curve[2*i + 1]);

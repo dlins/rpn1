@@ -113,9 +113,11 @@ std::vector<Fl_Round_Button*>            optionsbtn;
 std::vector<void (*)(Fl_Widget*, void*)> optionsfnc;
 
 void Hugoniotcb(Fl_Widget*, void*){
+    std::cout << "Hugoniot callback." << std::endl;
+
     RealVector p(3);
     canvas->getxy(p(0), p(1));
-    p(2) = 1;
+    p(2) = 1.0;
 
     if (!subphysics->boundary()->inside(p)) return;
 
@@ -135,6 +137,23 @@ void Hugoniotcb(Fl_Widget*, void*){
         ss << "Hugoniot (" << shock_case_choice->text(shock_case_choice->value()) << ")";
         scroll->add(ss.str().c_str(), canvas, mcc);
     }
+
+//    std::vector<Curve> c;
+//    hugoniot->curve(ref, type, c);
+
+//    WaveCurve w;
+
+//    for (int i = 0; i < c.size(); i++){
+//        w.wavecurve.push_back(c[i]);
+//        w.wavecurve.back().type = SHOCK_CURVE;
+
+////        Curve2D *curve = new Curve2D(c[i].curve, 0.0, 0.0, 1.0);
+////        canvas->add(curve);
+//    }
+
+//    WaveCurvePlot *r = new WaveCurvePlot(w, CURVE2D_SOLID_LINE);
+//    canvas->add(r);
+//    scroll->add("Hugoniot", canvas, r);
 
     return;
 }
@@ -1240,12 +1259,12 @@ void add_double_contact(){
 int main(){
     // Create the subphysics.
     //
-//    subphysics = new GasVolatileDeadSubPhysics;
+    subphysics = new GasVolatileDeadSubPhysics;
 //    subphysics = new JDSubPhysics;
 
 //    subphysics = new StoneSubPhysics;
 //    subphysics = new Brooks_CoreySubPhysics;
-    subphysics = new CoreyQuadSubPhysics;
+//    subphysics = new CoreyQuadSubPhysics;
 //    subphysics = new KovalSubPhysics;
 //    subphysics = new FoamSubPhysics;
 

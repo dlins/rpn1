@@ -198,6 +198,80 @@ void JetTester::populate_JF(void *obj, int (*f)(void *obj, const RealVector &sta
 //    return;
 //}
 
+// Working method!
+//
+//void JetTester::numerical_Jacobian(const MultiArray<RealVector>    &F, 
+//                                   const MultiArray<DoubleMatrix> &JF,
+//                                   int rows, int cols, // rows and columns of the Jacobians, maybe there is a better way to do this.
+//                                   unsigned long int intdelta,
+//                                   const RealVector &pmin, const RealVector &pmax,
+//                                   const std::vector<unsigned long int> &subdivision,
+//                                   /*MultiArray<DoubleMatrix> &numerical_analytic_deviation*/
+//                                   DoubleMatrix &numerical_analytic_abs_deviation_sup,
+//                                   Matrix<std::vector<unsigned int> > &sup_pos,
+//                                   double &synthetic_deviation,
+//                                   double &max_abs_F){
+
+//    // Delta.
+//    //
+//    std::vector<double > inv_2_delta(subdivision.size());
+//    for (int i = 0; i < subdivision.size(); i++) inv_2_delta[i] = 1.0/((double)(2*intdelta)*(pmax[i] - pmin[i])/(double)(subdivision[i] - 1));
+
+//    // Resize numerical_analytic_deviation.
+//    //
+//    std::vector<long unsigned int> range = F.range();
+
+//    numerical_analytic_abs_deviation_sup = DoubleMatrix::zero(rows, cols);
+
+//    sup_pos.resize(rows, cols);
+//    for (int i = 0; i < rows*cols; i++) sup_pos(i).resize(cols);
+
+//    max_abs_F = 0.0;
+
+//    // Proceed.
+//    //
+//    std::vector<double> dev(cols); // ASAP, rows -> number_of_equations, cols -> number_of_variables.
+//    std::vector<unsigned long int> pos(cols);
+
+//    for (int i0 = intdelta; i0 < range[0] - intdelta; i0++){
+//        for (int i1 = intdelta; i1 < range[1] - intdelta; i1++){
+//            for (int i2 = intdelta; i2 < range[2] - intdelta; i2++){
+//                for (int m = 0; m < rows; m++){
+//                    std::vector<unsigned long int> index(cols);
+//                    index[0] = i0;
+//                    index[1] = i1;
+//                    index[2] = i2;
+
+//                    for (int p = 0; p < cols; p++){
+//                        std::vector<unsigned long int> p_shifted(index);
+//                        p_shifted[p] += intdelta;
+
+//                        std::vector<unsigned long int> m_shifted(index);
+//                        m_shifted[p] -= intdelta;
+
+//                        dev[p] = std::abs((F(p_shifted)(m) - F(m_shifted)(m))*inv_2_delta[p] - JF(index)(m, p));
+
+////                        numerical_analytic_abs_deviation_sup(m, p) = std::max(numerical_analytic_abs_deviation_sup(m, p), dev[p]);
+//                        if (dev[p] > numerical_analytic_abs_deviation_sup(m, p)){
+//                            // Store the indices of the variables where the supremum was reached for 
+//                            // the given component of the function.
+//                            //
+//                            for (int v = 0; v < cols; v++) sup_pos(m, p)[v] = index[v];
+//                            numerical_analytic_abs_deviation_sup(m, p) = dev[p];
+//                        }
+//                    }
+
+//                    max_abs_F = std::max(max_abs_F, F(index)(m));
+//                }
+//            } // i2
+//        } // i1
+//    } // i0
+
+//    synthetic_deviation = numerical_analytic_abs_deviation_sup.max();
+//    
+//    return;
+//}
+
 void JetTester::numerical_Jacobian(const MultiArray<RealVector>    &F, 
                                    const MultiArray<DoubleMatrix> &JF,
                                    int rows, int cols, // rows and columns of the Jacobians, maybe there is a better way to do this.
@@ -231,39 +305,78 @@ void JetTester::numerical_Jacobian(const MultiArray<RealVector>    &F,
     std::vector<double> dev(cols); // ASAP, rows -> number_of_equations, cols -> number_of_variables.
     std::vector<unsigned long int> pos(cols);
 
-    for (int i0 = intdelta; i0 < range[0] - intdelta; i0++){
-        for (int i1 = intdelta; i1 < range[1] - intdelta; i1++){
-            for (int i2 = intdelta; i2 < range[2] - intdelta; i2++){
-                for (int m = 0; m < rows; m++){
-                    std::vector<unsigned long int> index(cols);
-                    index[0] = i0;
-                    index[1] = i1;
-                    index[2] = i2;
+    unsigned long int total_number_elements = 1;
+    for (unsigned long int i = 0; i < subdivision.size(); i++) total_number_elements *= subdivision[i];
 
-                    for (int p = 0; p < cols; p++){
-                        std::vector<unsigned long int> p_shifted(index);
-                        p_shifted[p] += intdelta;
+    for (int i = 0; i < total_number_elements; i++){
+        std::vector<unsigned long int> index = F.multiindex(i);
+        bool valid = true;
 
-                        std::vector<unsigned long int> m_shifted(index);
-                        m_shifted[p] -= intdelta;
+        for (int j = 0; j < index.size(); j++){
+            if (index[j] < intdelta || index[j] >= range[j] - intdelta){
+                valid = false;
+                break;
+            }
+        }
 
-                        dev[p] = std::abs((F(p_shifted)(m) - F(m_shifted)(m))*inv_2_delta[p] - JF(index)(m, p));
+        if (!valid) continue;
 
-//                        numerical_analytic_abs_deviation_sup(m, p) = std::max(numerical_analytic_abs_deviation_sup(m, p), dev[p]);
-                        if (dev[p] > numerical_analytic_abs_deviation_sup(m, p)){
-                            // Store the indices of the variables where the supremum was reached for 
-                            // the given component of the function.
-                            //
-                            for (int v = 0; v < cols; v++) sup_pos(m, p)[v] = index[v];
-                            numerical_analytic_abs_deviation_sup(m, p) = dev[p];
-                        }
+        for (int m = 0; m < rows; m++){
+            for (int p = 0; p < cols; p++){
+                std::vector<unsigned long int> p_shifted(index);
+                p_shifted[p] += intdelta;
+
+                std::vector<unsigned long int> m_shifted(index);
+                m_shifted[p] -= intdelta;
+
+                dev[p] = std::abs((F(p_shifted)(m) - F(m_shifted)(m))*inv_2_delta[p] - JF(index)(m, p));
+
+                if (dev[p] > numerical_analytic_abs_deviation_sup(m, p)){
+                    // Store the indices of the variables where the supremum was reached for 
+                    // the given component of the function.
+                    //
+                    for (int v = 0; v < cols; v++) sup_pos(m, p)[v] = index[v];
+                        numerical_analytic_abs_deviation_sup(m, p) = dev[p];
                     }
+            }
 
-                    max_abs_F = std::max(max_abs_F, F(index)(m));
-                }
-            } // i2
-        } // i1
-    } // i0
+            max_abs_F = std::max(max_abs_F, F(index)(m));
+        }
+    }
+
+//    for (int i0 = intdelta; i0 < range[0] - intdelta; i0++){
+//        for (int i1 = intdelta; i1 < range[1] - intdelta; i1++){
+//            for (int i2 = intdelta; i2 < range[2] - intdelta; i2++){
+//                for (int m = 0; m < rows; m++){
+//                    std::vector<unsigned long int> index(cols);
+//                    index[0] = i0;
+//                    index[1] = i1;
+//                    index[2] = i2;
+
+//                    for (int p = 0; p < cols; p++){
+//                        std::vector<unsigned long int> p_shifted(index);
+//                        p_shifted[p] += intdelta;
+
+//                        std::vector<unsigned long int> m_shifted(index);
+//                        m_shifted[p] -= intdelta;
+
+//                        dev[p] = std::abs((F(p_shifted)(m) - F(m_shifted)(m))*inv_2_delta[p] - JF(index)(m, p));
+
+////                        numerical_analytic_abs_deviation_sup(m, p) = std::max(numerical_analytic_abs_deviation_sup(m, p), dev[p]);
+//                        if (dev[p] > numerical_analytic_abs_deviation_sup(m, p)){
+//                            // Store the indices of the variables where the supremum was reached for 
+//                            // the given component of the function.
+//                            //
+//                            for (int v = 0; v < cols; v++) sup_pos(m, p)[v] = index[v];
+//                            numerical_analytic_abs_deviation_sup(m, p) = dev[p];
+//                        }
+//                    }
+
+//                    max_abs_F = std::max(max_abs_F, F(index)(m));
+//                }
+//            } // i2
+//        } // i1
+//    } // i0
 
     synthetic_deviation = numerical_analytic_abs_deviation_sup.max();
     

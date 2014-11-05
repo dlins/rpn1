@@ -15,7 +15,7 @@ int main(){
 
     VLE_Flash_TPCW *flash = new VLE_Flash_TPCW(&mdl, &mdv);
 
-    Thermodynamics *tc = new Thermodynamics(mc, mw, "./hsigmaC_spline.txt");
+    Thermodynamics *tc = new Thermodynamics(mc, mw, "../../CompositionalPhysics/TPCW/hsigmaC_spline.txt");
     tc->set_flash(flash);
 
     double phi = 0.38;
@@ -39,9 +39,9 @@ int main(){
     pmax.component(2) = 2.0;
 
     std::vector<unsigned long int> subdivision;
-    subdivision.push_back(10);
-    subdivision.push_back(10);
-    subdivision.push_back(10);
+    subdivision.push_back(100);
+    subdivision.push_back(100);
+    subdivision.push_back(3);
 
     // JetTester.
     //
@@ -66,7 +66,7 @@ int main(){
 
     // Integer delta.
     //
-    for (int k = 0; k < 2; k++){
+    for (int k = 0; k < 4; k++){
         unsigned long int intdelta = 1;
         for (int i = 0; i < k; i++) intdelta *= 2;
 

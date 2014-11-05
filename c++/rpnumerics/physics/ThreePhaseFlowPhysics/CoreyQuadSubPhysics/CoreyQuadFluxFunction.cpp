@@ -1,8 +1,8 @@
 #include "CoreyQuadFluxFunction.h"
 
 CoreyQuadFluxFunction::CoreyQuadFluxFunction(Parameter *grw, Parameter *gro, Parameter *grg, 
-                  Parameter *muw, Parameter *muo, Parameter *mug,
-                  Parameter *vel){
+                                             Parameter *muw, Parameter *muo, Parameter *mug,
+                                             Parameter *vel){
 
     grw_parameter_ = grw;
     gro_parameter_ = gro;

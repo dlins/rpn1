@@ -85,44 +85,52 @@ int main(){
         pmin(i) = 0.0;
         pmax(i) = 1.0;
 
-        subdivision[i] = 40;
+        subdivision[i] = 100;
     }
 //    subdivision[1] = 4;
 
-//    MultiArray<RealVector>    F;
-//    MultiArray<DoubleMatrix> JF;
+    MultiArray<RealVector>    F;
+    MultiArray<DoubleMatrix> JF;
 
-//    jt.populate_F(0, &f,
-//                  pmin, pmax,
-//                  subdivision,
-//                  F, JF);
+    jt.populate_F(0, &f,
+                  pmin, pmax,
+                  subdivision,
+                  F, JF);
 
 //    std::cout << F << std::endl;
 //    std::cout << "\n" << JF << std::endl;
 
     int rows, cols;
     rows = cols = n;
+    unsigned long int intdelta = 1;
 
     DoubleMatrix numerical_analytic_abs_deviation_sup;
-    double synthetic_deviation;
+    Matrix<std::vector<unsigned int> > sup_pos;
 
-//    jt.numerical_Jacobian(F, 
-//                          JF,
-//                          rows, cols, // rows and columns of the Jacobians, maybe there is a better way to do this.
-//                          pmin, pmax,
-//                          subdivision,
-//                          numerical_analytic_abs_deviation_sup,
-//                          synthetic_deviation);
-//    std::cout << "numerical_analytic_abs_deviation_sup =\n" << numerical_analytic_abs_deviation_sup << std::endl;
-//    std::cout << "synthetic_deviation = " << synthetic_deviation << std::endl;
+    double synthetic_deviation, max_abs_F;
 
-    MultiArray<DoubleMatrix> JF;
-    MultiArray<std::vector<DoubleMatrix> > HF;
 
-    jt.populate_JF(0, &f,
-                   pmin, pmax,
-                   subdivision,
-                   JF, HF);
+    jt.numerical_Jacobian(F, 
+                          JF,
+                          rows, cols, // rows and columns of the Jacobians, maybe there is a better way to do this.
+                          intdelta,
+                          pmin, pmax,
+                          subdivision,
+                          numerical_analytic_abs_deviation_sup,
+                          sup_pos,
+                          synthetic_deviation,
+                          max_abs_F);
+
+    std::cout << "numerical_analytic_abs_deviation_sup =\n" << numerical_analytic_abs_deviation_sup << std::endl;
+    std::cout << "synthetic_deviation = " << synthetic_deviation << std::endl;
+
+//    MultiArray<DoubleMatrix> JF;
+//    MultiArray<std::vector<DoubleMatrix> > HF;
+
+//    jt.populate_JF(0, &f,
+//                   pmin, pmax,
+//                   subdivision,
+//                   JF, HF);
 
 //    std::cout << JF << std::endl;
 
@@ -140,20 +148,20 @@ int main(){
     std::vector<DoubleMatrix> matrix_numerical_analytic_abs_deviation_sup;
     RealVector max_vec;
 
-    jt.numerical_Hessian(JF, 
-                         HF,
-                         rows, cols, // rows and columns of the Jacobians, maybe there is a better way to do this.
-                         pmin, pmax,
-                         subdivision,
-                         matrix_numerical_analytic_abs_deviation_sup,
-                         max_vec,
-                         synthetic_deviation);    
+//    jt.numerical_Hessian(JF, 
+//                         HF,
+//                         rows, cols, // rows and columns of the Jacobians, maybe there is a better way to do this.
+//                         pmin, pmax,
+//                         subdivision,
+//                         matrix_numerical_analytic_abs_deviation_sup,
+//                         max_vec,
+//                         synthetic_deviation);    
 
-    for (int i = 0; i < matrix_numerical_analytic_abs_deviation_sup.size(); i++){
-        std::cout << "component = " << i << ", error = " << std::endl << matrix_numerical_analytic_abs_deviation_sup[i] << std::endl;
-    }
+//    for (int i = 0; i < matrix_numerical_analytic_abs_deviation_sup.size(); i++){
+//        std::cout << "component = " << i << ", error = " << std::endl << matrix_numerical_analytic_abs_deviation_sup[i] << std::endl;
+//    }
 
-    std::cout << "max_vec = " << max_vec << std::endl;
+//    std::cout << "max_vec = " << max_vec << std::endl;
 
     return 0;
 }

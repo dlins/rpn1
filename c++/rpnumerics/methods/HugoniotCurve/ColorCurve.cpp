@@ -539,8 +539,8 @@ void ColorCurve::classify_segment_with_data(
 //
 
 void ColorCurve::classify_segment(RealVector &p, RealVector &q,
-        std::vector<HugoniotPolyLine> &classified_curve,
-        std::vector<RealVector> &transition_list) {
+                                  std::vector<HugoniotPolyLine> &classified_curve,
+                                  std::vector<RealVector> &transition_list) {
 
     double s_p, s_q;
     std::vector<double> eigenvalue_p, eigenvalue_q;
@@ -548,6 +548,9 @@ void ColorCurve::classify_segment(RealVector &p, RealVector &q,
 
     int type_p = classify_point(p, s_p, eigenvalue_p, ct_p);
     int type_q = classify_point(q, s_q, eigenvalue_q, ct_q);
+
+    std::cout << "p = " << p << ", type_p = " << type_p << std::endl;
+    std::cout << "q = " << q << ", type_q = " << type_q << std::endl;
 
     int dim = p.size();
     int fam = eigenvalue_p.size();
@@ -827,7 +830,6 @@ int ColorCurve::classify_point(RealVector &p, double &s, std::vector<double> &ei
     signature.clear();
     int dim = p.size();
 
-
     int complex_ref[dim + 1], complex[dim + 1];
 
     // In order to classify the point, speed and eigenvalues are needed. They are filled in complete:
@@ -912,13 +914,15 @@ int ColorCurve::classify_point(RealVector &p, double &s, std::vector<double> &ei
 }
 
 
-// This method classify a Hugoniot Locus given as a collection of segments, typically from Contour 
-//
+//// This method classify a Hugoniot Locus given as a collection of segments, typically from Contour 
+////
 
 void ColorCurve::classify_segmented_curve(std::vector<RealVector> &original,
-        const ReferencePoint &ref,
-        std::vector<HugoniotPolyLine> &classified_curve,
-        std::vector<RealVector> &transition_list) {
+                                          const ReferencePoint &ref,
+                                          std::vector<HugoniotPolyLine> &classified_curve,
+                                          std::vector<RealVector> &transition_list) {
+
+    std::cout << "Classified 1" << std::endl;
 
     classified_curve.clear();
     transition_list.clear();
@@ -928,6 +932,8 @@ void ColorCurve::classify_segmented_curve(std::vector<RealVector> &original,
     int dim = ref.point.size();
     ref_point.resize(dim);
 //    for (int i = 0; i < dim; i++) ref_point.component(i) = ref.component(i);
+
+    
 
     // Flux, accumulation and viscosity matrix at the reference point.
     //
@@ -1392,12 +1398,12 @@ int ColorCurve::classify_point(RealVector &p, double &s, std::vector<double> &ei
     return type;
 }
 
-// This method classify a Hugoniot Locus given as a collection of segments, typically from Contour 
-//
 void ColorCurve::classify_segmented_curve(std::vector<RealVector> &original,
         /*const RealVector &ref*/ const ReferencePoint &ref,
         std::vector<HugoniotPolyLine> &classified_curve,
         std::vector<RealVector> &transition_list) {
+
+//    std::cout << "This one" << std::endl;
 
     classified_curve.clear();
     transition_list.clear();
@@ -1408,7 +1414,6 @@ void ColorCurve::classify_segmented_curve(std::vector<RealVector> &original,
 //    ref_point.resize(dim);
 //    for (int i = 0; i < dim; i++) ref_point.component(i) = ref.component(i);
 
-    int dim = ref.point.size();
 //    ref_point.resize(dim);
     ref_point = ref.point;
 
@@ -1433,6 +1438,7 @@ void ColorCurve::classify_segmented_curve(std::vector<RealVector> &original,
 //        ref_e_complex[i] = e[i].i;
 //    }
 
+
     ref_eigenvalue.resize(ref.e.size());
     ref_e_complex.resize(ref.e.size());    
 
@@ -1440,7 +1446,6 @@ void ColorCurve::classify_segmented_curve(std::vector<RealVector> &original,
         ref_eigenvalue[i] = ref.e[i].r;
         ref_e_complex[i] = ref.e[i].i;
     }
-
 
     // Process the list
     for (int i = 0; i < original.size() / 2; i++) {
