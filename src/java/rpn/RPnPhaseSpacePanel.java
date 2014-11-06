@@ -438,8 +438,8 @@ public void clearPointSelection(){
         GlyphVector yLabel = font.createGlyphVector(gra.getFontRenderContext(), RPNUMERICS.getYLabel());
         int viewPortMargin =   scene().getViewingTransform().viewPlane().getViewport().getMargin();
         
-        gra.drawGlyphVector(xLabel, 0,(float) getHeight()/2);
-        gra.drawGlyphVector(yLabel, (float) getWidth()/2,(float) getHeight()-viewPortMargin/2);
+        gra.drawGlyphVector(yLabel, 0,(float) getHeight()/2);
+        gra.drawGlyphVector(xLabel, (float) getWidth()/2,(float) getHeight()-viewPortMargin/2);
         
         
         
