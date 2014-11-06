@@ -82,7 +82,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
     string methodName(env->GetStringUTFChars(javaMethodName, NULL));
     string caseName(env->GetStringUTFChars(javaCaseName, NULL));
 
-    cout << "Method pego no JNI: " << methodName << endl;
 
     //Input point
 
@@ -108,10 +107,10 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
     vector<HugoniotPolyLine> hugoniotPolyLineVector;
 
     ReferencePoint refPoint(Uref,flux, accum, 0);
-//
-    cout << "Tipo do metodo c++" << methodName << endl;   
-//
-    cout << "Caso pego no JNI: " << caseName << endl;
+
+//    cout << "Tipo do metodo c++" << methodName << endl;   
+
+//    cout << "Caso pego no JNI: " << caseName << endl;
 
     vector<HugoniotCurve *> hugoniotMethods;
    
@@ -157,8 +156,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
 
             jdoubleArray eigenValRLeft = env->NewDoubleArray(dimension);
             jdoubleArray eigenValRRight = env->NewDoubleArray(dimension);
-
-         
 
             double * leftCoords = (double *) hugoniotPolyLineVector[i].point[j];
             double * rightCoords = (double *) hugoniotPolyLineVector[i].point[j + 1];
