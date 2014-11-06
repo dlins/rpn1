@@ -1261,14 +1261,14 @@ void add_double_contact(){
 int main(){
     // Create the subphysics.
     //
-    subphysics = new GasVolatileDeadSubPhysics;
+//    subphysics = new GasVolatileDeadSubPhysics;
 //    subphysics = new JDSubPhysics;
 
 //    subphysics = new StoneSubPhysics;
 //    subphysics = new Brooks_CoreySubPhysics;
 //    subphysics = new CoreyQuadSubPhysics;
 //    subphysics = new KovalSubPhysics;
-//    subphysics = new FoamSubPhysics;
+    subphysics = new FoamSubPhysics;
 
     std::cout << "SubPhysics \"" << subphysics->info_subphysics() << "\" created successfully." << std::endl;
 

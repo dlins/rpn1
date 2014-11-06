@@ -1,10 +1,10 @@
-#include "StoneAccumulation.h"
+#include "ThreePhaseFlowAccumulation.h"
 
-StoneAccumulation::StoneAccumulation(){}
+ThreePhaseFlowAccumulation::ThreePhaseFlowAccumulation(){}
 
-StoneAccumulation::~StoneAccumulation(){}
+ThreePhaseFlowAccumulation::~ThreePhaseFlowAccumulation(){}
 
-int StoneAccumulation::jet(const WaveState &w, JetMatrix &m, int degree) const {
+int ThreePhaseFlowAccumulation::jet(const WaveState &w, JetMatrix &m, int degree) const {
     m.resize(2);
 
     if (degree >= 0){
@@ -33,6 +33,3 @@ int StoneAccumulation::jet(const WaveState &w, JetMatrix &m, int degree) const {
     return 2;
 }
 
-RpFunction * StoneAccumulation::clone() const {
-    return new StoneAccumulation(*this);
-}

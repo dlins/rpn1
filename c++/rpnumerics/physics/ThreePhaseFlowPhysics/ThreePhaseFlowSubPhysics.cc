@@ -27,7 +27,7 @@ ThreePhaseFlowSubPhysics::ThreePhaseFlowSubPhysics() : SubPhysics() {
     // Flux and accumulation will be instantiated in the derived classes.
     //
     flux_ = 0;
-    accumulation_ = new StoneAccumulation;
+    accumulation_ = new ThreePhaseFlowAccumulation;
 
     // HugoniotContinuation will be instantiated in the derived classes because of the flux and accumulation.
     //

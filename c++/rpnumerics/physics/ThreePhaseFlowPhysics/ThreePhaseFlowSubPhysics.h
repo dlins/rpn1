@@ -8,7 +8,7 @@
 #include "ImplicitHugoniotCurve.h"
 #include "HugoniotContinuation2D2D.h"
 #include "HugoniotContinuation_nDnD.h"
-#include "StoneAccumulation.h"
+#include "ThreePhaseFlowAccumulation.h"
 #include "ThreePhaseFlowPermeability.h"
 #include "ThreePhaseFlowImplicitHugoniotCurve.h"
 //#include "ThreePhaseFlowWaveCurveFactory.h"

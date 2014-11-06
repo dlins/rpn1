@@ -42,10 +42,6 @@ Brooks_CoreySubPhysics::Brooks_CoreySubPhysics() : ThreePhaseFlowSubPhysics(){
     //
     flux_ = new Brooks_CoreyFluxFunction(muw_parameter, muo_parameter, mug_parameter, (Brooks_CoreyPermeability*)permeability_);
 
-    // Accumulation.
-    //
-    accumulation_ = new StoneAccumulation;
-
     // GridValues.
     //
     std::vector<int> number_of_cells(2);
@@ -128,8 +124,6 @@ Brooks_CoreySubPhysics::~Brooks_CoreySubPhysics(){
     delete hugoniotcontinuation_;
 
     delete gridvalues_;
-
-    delete accumulation_;
 
     delete flux_;
 

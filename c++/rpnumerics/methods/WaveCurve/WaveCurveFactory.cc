@@ -542,14 +542,14 @@ int WaveCurveFactory::wavecurve(int type, const RealVector &initial_point, int f
 
     hwc.beginnig_of_second_half = hwc.wavecurve.size();
 
-//    TestTools::pause("Second half");
+    TestTools::pause("Second half");
 
-//    Liu_half_wavecurve(ref, initial_point, family, increase, SHOCK_CURVE,       -initial_direction, linobj, linear_function, hwc, wavecurve_stopped_because, edge);
+    Liu_half_wavecurve(ref, initial_point, family, increase, SHOCK_CURVE,       -initial_direction, linobj, linear_function, hwc, wavecurve_stopped_because, edge);
 
     for (int i = 0; i < hwc.wavecurve.size(); i++) std::cout << "Curve\'s size = " << hwc.wavecurve[i].curve.size() << std::endl;
 
     add_arclength(0, hwc.beginnig_of_second_half - 1, 1.0, hwc);
-//    add_arclength(hwc.beginnig_of_second_half, hwc.wavecurve.size() - 1, -1.0, hwc);
+    add_arclength(hwc.beginnig_of_second_half, hwc.wavecurve.size() - 1, -1.0, hwc);
 
     return WAVECURVE_OK;
 }

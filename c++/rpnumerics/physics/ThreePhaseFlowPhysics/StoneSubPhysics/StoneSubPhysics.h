@@ -3,7 +3,6 @@
 
 #include "ThreePhaseFlowSubPhysics.h"
 #include "StoneFluxFunction.h"
-#include "StoneAccumulation.h"
 #include "Stone_Explicit_Bifurcation_Curves.h"
 #include "LSODE.h"
 #include "StoneViscosity.h"

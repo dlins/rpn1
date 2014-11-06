@@ -78,6 +78,8 @@ int WaveCurveFactory::Liu_half_wavecurve(const ReferencePoint &ref,
     std::vector<int> last_point_in_rarefaction;
 
     while (true){
+        if (hwc.wavecurve.size() > 3) return WAVECURVE_OK;
+
         int current_curve = future_curve;
         RealVector current_curve_initial_point(future_curve_initial_point);
         RealVector current_curve_initial_direction(future_curve_initial_direction);
