@@ -1,14 +1,14 @@
-#include "GasVolatileDeadFluxFunction.h"
+#include "DeadVolatileVolatileGasFluxFunction.h"
 
-GasVolatileDeadFluxFunction::GasVolatileDeadFluxFunction(GasVolatileDeadThermodynamics *th, GasVolatileDeadHydrodynamics *hy) : FluxFunction() {
+DeadVolatileVolatileGasFluxFunction::DeadVolatileVolatileGasFluxFunction(DeadVolatileVolatileGasThermodynamics *th, DeadVolatileVolatileGasHydrodynamics *hy) : FluxFunction() {
     thermo = th;
     hydro  = hy;
 }
 
-GasVolatileDeadFluxFunction::~GasVolatileDeadFluxFunction(){
+DeadVolatileVolatileGasFluxFunction::~DeadVolatileVolatileGasFluxFunction(){
 }
 
-int GasVolatileDeadFluxFunction::reduced_jet(const WaveState &state, JetMatrix &m, int degree) const {
+int DeadVolatileVolatileGasFluxFunction::reduced_jet(const WaveState &state, JetMatrix &m, int degree) const {
     m.resize(2, 3);
 
     double s = state(0);
@@ -93,7 +93,7 @@ int GasVolatileDeadFluxFunction::reduced_jet(const WaveState &state, JetMatrix &
     return degree;
 }
 
-int GasVolatileDeadFluxFunction::jet(const WaveState &state, JetMatrix &m, int degree) const {
+int DeadVolatileVolatileGasFluxFunction::jet(const WaveState &state, JetMatrix &m, int degree) const {
     m.resize(3);
 
     double s = state(0);

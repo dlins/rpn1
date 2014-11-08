@@ -1,0 +1,24 @@
+#ifndef _COREY_QUAD_4PHASE_
+#define _COREY_QUAD_4PHASE_
+
+#include "FluxFunction.h"
+//#include "CoreyQuad4Phase_Params.h"
+
+class CoreyQuad4Phase : public FluxFunction {
+    private:
+    protected:
+        Parameter *grw_parameter_, gro_parameter_, grg_parameter_, grc_parameter_;
+        Parameter *muw_parameter_, muo_parameter_, mug_parameter_, muc_parameter_;
+        Parameter *vel_parameter_;
+
+    public:
+        CoreyQuad4Phase(Parameter *grw, Parameter *gro, Parameter *grg, Parameter *grc,
+                        Parameter *muw, Parameter *muo, Parameter *mug, Parameter *muc,
+                        Parameter *vel);
+
+        virtual ~CoreyQuad4Phase();
+
+        int jet(const WaveState &u, JetMatrix &m, int degree) const;
+};
+
+#endif // _COREY_QUAD_4PHASE_

@@ -1,7 +1,7 @@
-#include "GasVolatileDeadCoincidence.h"
+#include "DeadVolatileVolatileGasCoincidence.h"
 
-GasVolatileDeadCoincidence::GasVolatileDeadCoincidence(GasVolatileDeadThermodynamics *th, 
-                                                       GasVolatileDeadHydrodynamics *hy, 
+DeadVolatileVolatileGasCoincidence::DeadVolatileVolatileGasCoincidence(DeadVolatileVolatileGasThermodynamics *th, 
+                                                       DeadVolatileVolatileGasHydrodynamics *hy, 
                                                        Parameter *re, Parameter *rg, 
                                                        Parameter *phi) : Coincidence() {
     thermo = th;
@@ -13,10 +13,10 @@ GasVolatileDeadCoincidence::GasVolatileDeadCoincidence(GasVolatileDeadThermodyna
     phi_parameter = phi;
 }
 
-GasVolatileDeadCoincidence::~GasVolatileDeadCoincidence(){
+DeadVolatileVolatileGasCoincidence::~DeadVolatileVolatileGasCoincidence(){
 }
 
-void GasVolatileDeadCoincidence::lambdas(const RealVector &p, double &lambda_s, double &lambda_e, double &lambda_diff) const {
+void DeadVolatileVolatileGasCoincidence::lambdas(const RealVector &p, double &lambda_s, double &lambda_e, double &lambda_diff) const {
     double s = p(0);
     double y = p(1);
     double u = p(2);
@@ -50,21 +50,21 @@ void GasVolatileDeadCoincidence::lambdas(const RealVector &p, double &lambda_s, 
     return;
 }
 
-double GasVolatileDeadCoincidence::lambda_s(const RealVector &p) const {
+double DeadVolatileVolatileGasCoincidence::lambda_s(const RealVector &p) const {
     double ls, le, d;
     lambdas(p, ls, le, d);
 
     return ls;
 }
 
-double GasVolatileDeadCoincidence::lambda_e(const RealVector &p) const {
+double DeadVolatileVolatileGasCoincidence::lambda_e(const RealVector &p) const {
     double ls, le, d;
     lambdas(p, ls, le, d);
 
     return le;
 }
 
-double GasVolatileDeadCoincidence::lambda_diff(const RealVector &p) const {
+double DeadVolatileVolatileGasCoincidence::lambda_diff(const RealVector &p) const {
     double ls, le, d;
     lambdas(p, ls, le, d);
 
@@ -72,7 +72,7 @@ double GasVolatileDeadCoincidence::lambda_diff(const RealVector &p) const {
 }
 
 
-bool GasVolatileDeadCoincidence::extension_basis(const RealVector &u, double &fe, double &se) const {
+bool DeadVolatileVolatileGasCoincidence::extension_basis(const RealVector &u, double &fe, double &se) const {
     return true;
 }
 

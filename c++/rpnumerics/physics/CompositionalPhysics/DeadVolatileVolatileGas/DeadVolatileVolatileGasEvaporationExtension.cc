@@ -1,18 +1,18 @@
-#include "GasVolatileDeadEvaporationExtension.h"
+#include "DeadVolatileVolatileGasEvaporationExtension.h"
 
-GasVolatileDeadEvaporationExtension::GasVolatileDeadEvaporationExtension(const GasVolatileDeadFluxFunction *f, 
-                                                                         const GasVolatileDeadAccumulationFunction *a, 
-                                                                         GasVolatileDeadCoincidence *g, Parameter *phi) : Extension(){
+DeadVolatileVolatileGasEvaporationExtension::DeadVolatileVolatileGasEvaporationExtension(const DeadVolatileVolatileGasFluxFunction *f, 
+                                                                         const DeadVolatileVolatileGasAccumulationFunction *a, 
+                                                                         DeadVolatileVolatileGasCoincidence *g, Parameter *phi) : Extension(){
     flux = f;
     accumulation = a;
     god = g;
     phi_parameter = phi;
 }
 
-GasVolatileDeadEvaporationExtension::~GasVolatileDeadEvaporationExtension(){
+DeadVolatileVolatileGasEvaporationExtension::~DeadVolatileVolatileGasEvaporationExtension(){
 }
 
-int GasVolatileDeadEvaporationExtension::extension(const RealVector &p,  RealVector &ext_p){
+int DeadVolatileVolatileGasEvaporationExtension::extension(const RealVector &p,  RealVector &ext_p){
     double sm = p(0);
     double ym = p(1);
     double um = p(2);
@@ -20,7 +20,7 @@ int GasVolatileDeadEvaporationExtension::extension(const RealVector &p,  RealVec
     double phi = phi_parameter->value();
     double lem = (god->lambda_e(p))*(phi/um);
 
-    GasVolatileDeadThermodynamics* thermo = god->thermodynamics();
+    DeadVolatileVolatileGasThermodynamics* thermo = god->thermodynamics();
     JetMatrix R_jet;
     thermo->viscosity_ratio(0, ym, R_jet);
     double rm = R_jet.get(0);

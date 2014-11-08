@@ -1,16 +1,16 @@
-#include "GasVolatileDeadAccumulationFunction.h"
+#include "DeadVolatileVolatileGasAccumulationFunction.h"
 
-GasVolatileDeadAccumulationFunction::GasVolatileDeadAccumulationFunction(Parameter *phi, GasVolatileDeadThermodynamics *th) : AccumulationFunction() {
+DeadVolatileVolatileGasAccumulationFunction::DeadVolatileVolatileGasAccumulationFunction(Parameter *phi, DeadVolatileVolatileGasThermodynamics *th) : AccumulationFunction() {
     phi_parameter = phi;
 
     thermo = th;
 }
 
-GasVolatileDeadAccumulationFunction::~GasVolatileDeadAccumulationFunction(){
+DeadVolatileVolatileGasAccumulationFunction::~DeadVolatileVolatileGasAccumulationFunction(){
 }
 
 
-int GasVolatileDeadAccumulationFunction::reduced_jet(const WaveState &state, JetMatrix &m, int degree) const {
+int DeadVolatileVolatileGasAccumulationFunction::reduced_jet(const WaveState &state, JetMatrix &m, int degree) const {
     m.resize(2, 3);
 
     double s = state(0);
@@ -86,7 +86,7 @@ int GasVolatileDeadAccumulationFunction::reduced_jet(const WaveState &state, Jet
     return degree;
 }
 
-int GasVolatileDeadAccumulationFunction::jet(const WaveState &state, JetMatrix &m, int degree) const {
+int DeadVolatileVolatileGasAccumulationFunction::jet(const WaveState &state, JetMatrix &m, int degree) const {
     m.resize(3);
     
     JetMatrix reduced;

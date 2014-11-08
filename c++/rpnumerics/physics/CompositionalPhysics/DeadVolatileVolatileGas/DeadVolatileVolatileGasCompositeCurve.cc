@@ -1,6 +1,6 @@
-#include "GasVolatileDeadCompositeCurve.h"
+#include "DeadVolatileVolatileGasCompositeCurve.h"
 
-GasVolatileDeadCompositeCurve::GasVolatileDeadCompositeCurve(GasVolatileDeadEvaporationExtension *e,
+DeadVolatileVolatileGasCompositeCurve::DeadVolatileVolatileGasCompositeCurve(DeadVolatileVolatileGasEvaporationExtension *e,
                                                              const AccumulationFunction *a, 
                                                              const FluxFunction *f, 
                                                              const Boundary *b, 
@@ -9,12 +9,12 @@ GasVolatileDeadCompositeCurve::GasVolatileDeadCompositeCurve(GasVolatileDeadEvap
 
 }
 
-GasVolatileDeadCompositeCurve::~GasVolatileDeadCompositeCurve(){
+DeadVolatileVolatileGasCompositeCurve::~DeadVolatileVolatileGasCompositeCurve(){
 }
 
 // TODO: Only deals with COMPOSITE_BEGINS_AT_INFLECTION.
 //
-int GasVolatileDeadCompositeCurve::curve(const AccumulationFunction *RarAccum, const FluxFunction *RarFlux,
+int DeadVolatileVolatileGasCompositeCurve::curve(const AccumulationFunction *RarAccum, const FluxFunction *RarFlux,
                                          const Boundary *RarBoundary, 
                                          const Curve &rarcurve, 
                                          const RealVector &composite_initial_point,
@@ -63,7 +63,7 @@ int GasVolatileDeadCompositeCurve::curve(const AccumulationFunction *RarAccum, c
         int infoext = evapext->extension(rarcurve.curve[i], ext_p);
 
         if (infoext != EXTENSION_OK){
-            std::cout << "GasVolatileDeadCompositeCurve, error while computing the extension of " << rarcurve.curve[i] << std::endl;
+            std::cout << "DeadVolatileVolatileGasCompositeCurve, error while computing the extension of " << rarcurve.curve[i] << std::endl;
             return COMPOSITE_ERROR;
         }
 

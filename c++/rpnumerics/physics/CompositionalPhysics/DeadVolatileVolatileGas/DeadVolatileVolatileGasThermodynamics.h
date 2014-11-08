@@ -1,17 +1,17 @@
-#ifndef _GASVOLATILEDEADTHERMODYNAMICS_
-#define _GASVOLATILEDEADTHERMODYNAMICS_
+#ifndef _DEADVOLATILEVOLATILEGASTHERMODYNAMICS_
+#define _DEADVOLATILEVOLATILEGASTHERMODYNAMICS_
 
 #include "AuxiliaryFunction.h"
 
-class GasVolatileDeadThermodynamics : public AuxiliaryFunction {
+class DeadVolatileVolatileGasThermodynamics : public AuxiliaryFunction {
     private:
     protected:
         Parameter *B_parameter, *D_parameter;
         Parameter *mu_oB_parameter, *mu_oD_parameter, *mu_G_parameter;
         Parameter *rg_parameter, *re_parameter;
     public:
-        GasVolatileDeadThermodynamics(Parameter *B, Parameter *D, Parameter *mu_oB, Parameter *mu_oD, Parameter *mu_G, Parameter *rg, Parameter *re);
-        virtual ~GasVolatileDeadThermodynamics();
+        DeadVolatileVolatileGasThermodynamics(Parameter *B, Parameter *D, Parameter *mu_oB, Parameter *mu_oD, Parameter *mu_G, Parameter *rg, Parameter *re);
+        virtual ~DeadVolatileVolatileGasThermodynamics();
 
         void viscosity_ratio(int degree, double y, JetMatrix &R);
 
@@ -23,5 +23,5 @@ class GasVolatileDeadThermodynamics : public AuxiliaryFunction {
         void oil_molar_density_d(int degree, const JetMatrix &Ro_jet, double y, JetMatrix &Rod_jet);
 };
 
-#endif // _GASVOLATILEDEADTHERMODYNAMICS_
+#endif // _DEADVOLATILEVOLATILEGASTHERMODYNAMICS_
 

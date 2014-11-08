@@ -1,6 +1,6 @@
-#include "GasVolatileDeadSubPhysics.h"
+#include "DeadVolatileVolatileGasSubPhysics.h"
 
-GasVolatileDeadSubPhysics::GasVolatileDeadSubPhysics() : SubPhysics() {
+DeadVolatileVolatileGasSubPhysics::DeadVolatileVolatileGasSubPhysics() : SubPhysics() {
     // Equation parameters.
     //
     re_parameter  = new Parameter(std::string("re"), 44.0);// re_parameter->value(0.0);
@@ -18,12 +18,12 @@ GasVolatileDeadSubPhysics::GasVolatileDeadSubPhysics() : SubPhysics() {
 
     // Thermodynamics proper.
     //
-    thermo = new GasVolatileDeadThermodynamics(B_parameter, D_parameter, mu_oB_parameter, mu_oD_parameter, mu_G_parameter, rg_parameter, re_parameter);
+    thermo = new DeadVolatileVolatileGasThermodynamics(B_parameter, D_parameter, mu_oB_parameter, mu_oD_parameter, mu_G_parameter, rg_parameter, re_parameter);
     auxiliaryfunctions_.push_back(thermo);
     
     // Hydrodynamics proper.
     //
-    hydro  = new GasVolatileDeadHydrodynamics(thermo);
+    hydro  = new DeadVolatileVolatileGasHydrodynamics(thermo);
     auxiliaryfunctions_.push_back(hydro);
 
 //    equation_parameter_.push_back(re_parameter);
@@ -32,8 +32,8 @@ GasVolatileDeadSubPhysics::GasVolatileDeadSubPhysics() : SubPhysics() {
 
     // Flux, accumulation.
     //
-    flux_         = new GasVolatileDeadFluxFunction(thermo, hydro);
-    accumulation_ = new GasVolatileDeadAccumulationFunction(phi_parameter, thermo);
+    flux_         = new DeadVolatileVolatileGasFluxFunction(thermo, hydro);
+    accumulation_ = new DeadVolatileVolatileGasAccumulationFunction(phi_parameter, thermo);
 
     // Boundary.
     //
@@ -73,7 +73,7 @@ GasVolatileDeadSubPhysics::GasVolatileDeadSubPhysics() : SubPhysics() {
 
     // Coincidence, Coincidence contour.
     //
-    coincidence_ = new GasVolatileDeadCoincidence(thermo, hydro,
+    coincidence_ = new DeadVolatileVolatileGasCoincidence(thermo, hydro,
                                                      re_parameter, rg_parameter, 
                                                      phi_parameter);
 
@@ -87,9 +87,9 @@ GasVolatileDeadSubPhysics::GasVolatileDeadSubPhysics() : SubPhysics() {
     //
     inflection_curve_ = new Inflection_Curve;
 
-    evap_ = new GasVolatileDeadEvaporationExtension((const GasVolatileDeadFluxFunction*)flux_, 
-                                                    (const GasVolatileDeadAccumulationFunction*)accumulation_, 
-                                                    (GasVolatileDeadCoincidence*)coincidence_,
+    evap_ = new DeadVolatileVolatileGasEvaporationExtension((const DeadVolatileVolatileGasFluxFunction*)flux_, 
+                                                    (const DeadVolatileVolatileGasAccumulationFunction*)accumulation_, 
+                                                    (DeadVolatileVolatileGasCoincidence*)coincidence_,
                                                     phi_parameter);
     extension_curve.push_back(evap_);
 
@@ -99,7 +99,7 @@ GasVolatileDeadSubPhysics::GasVolatileDeadSubPhysics() : SubPhysics() {
 
     // Composite.
     //
-    compositecurve_ = new GasVolatileDeadCompositeCurve(evap_, accumulation_, flux_, boundary_, shockcurve_, 0/*&bc*/);
+    compositecurve_ = new DeadVolatileVolatileGasCompositeCurve(evap_, accumulation_, flux_, boundary_, shockcurve_, 0/*&bc*/);
 
     odesolver_ = new LSODE;
 
@@ -116,10 +116,10 @@ GasVolatileDeadSubPhysics::GasVolatileDeadSubPhysics() : SubPhysics() {
     
     // Info.
     //
-    info_subphysics_ = std::string("GasVolatileDeadSubPhysics");
+    info_subphysics_ = std::string("DeadVolatileVolatileGasSubPhysics");
 }
 
-GasVolatileDeadSubPhysics::~GasVolatileDeadSubPhysics(){
+DeadVolatileVolatileGasSubPhysics::~DeadVolatileVolatileGasSubPhysics(){
     delete wavecurvefactory_;
 
     delete odesolver_;
@@ -167,11 +167,11 @@ GasVolatileDeadSubPhysics::~GasVolatileDeadSubPhysics(){
     delete B_parameter;
 }
 
-void GasVolatileDeadSubPhysics::shock_cases(std::vector<int> &type, std::vector<std::string> &name) const {
+void DeadVolatileVolatileGasSubPhysics::shock_cases(std::vector<int> &type, std::vector<std::string> &name) const {
     type.clear();
     name.clear();
 
-    type.push_back(GASVOLATILEDEAD_GENERIC_POINT);
+    type.push_back(DEADVOLATILEVOLATILEGAS_GENERIC_POINT);
     name.push_back(std::string("Generic point"));
 
     return;

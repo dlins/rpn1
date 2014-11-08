@@ -1,22 +1,22 @@
-#ifndef _GASVOLATILEDEADCOMPOSITECURVE_
-#define _GASVOLATILEDEADCOMPOSITECURVE_
+#ifndef _DEADVOLATILEVOLATILEGASCOMPOSITECURVE_
+#define _DEADVOLATILEVOLATILEGASCOMPOSITECURVE_
 
 #include "CompositeCurve.h"
-#include "GasVolatileDeadEvaporationExtension.h"
+#include "DeadVolatileVolatileGasEvaporationExtension.h"
 
-class GasVolatileDeadCompositeCurve: public CompositeCurve {
+class DeadVolatileVolatileGasCompositeCurve: public CompositeCurve {
     private:
     protected:
-        GasVolatileDeadEvaporationExtension *evapext;
+        DeadVolatileVolatileGasEvaporationExtension *evapext;
     public:
-        GasVolatileDeadCompositeCurve(GasVolatileDeadEvaporationExtension *e, 
+        DeadVolatileVolatileGasCompositeCurve(DeadVolatileVolatileGasEvaporationExtension *e, 
                                       const AccumulationFunction *a, 
                                       const FluxFunction *f, 
                                       const Boundary *b, 
                                       ShockCurve *s, 
                                       Explicit_Bifurcation_Curves *ebc);
 
-        virtual ~GasVolatileDeadCompositeCurve();
+        virtual ~DeadVolatileVolatileGasCompositeCurve();
 
         int curve(const AccumulationFunction *RarAccum, const FluxFunction *RarFlux,
                   const Boundary *RarBoundary, 
@@ -34,5 +34,5 @@ class GasVolatileDeadCompositeCurve: public CompositeCurve {
                   int &edge);
 };
 
-#endif // _GASVOLATILEDEADCOMPOSITECURVE_
+#endif // _DEADVOLATILEVOLATILEGASCOMPOSITECURVE_
 

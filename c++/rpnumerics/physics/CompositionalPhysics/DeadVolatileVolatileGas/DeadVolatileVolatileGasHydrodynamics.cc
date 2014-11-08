@@ -1,17 +1,17 @@
-#include "GasVolatileDeadHydrodynamics.h"
+#include "DeadVolatileVolatileGasHydrodynamics.h"
 
-GasVolatileDeadHydrodynamics::GasVolatileDeadHydrodynamics(GasVolatileDeadThermodynamics *t){
+DeadVolatileVolatileGasHydrodynamics::DeadVolatileVolatileGasHydrodynamics(DeadVolatileVolatileGasThermodynamics *t){
     thermo = t;
     
     info_auxiliaryfunction_ = std::string("Hydrodynamics");
 }
 
-GasVolatileDeadHydrodynamics::~GasVolatileDeadHydrodynamics(){
+DeadVolatileVolatileGasHydrodynamics::~DeadVolatileVolatileGasHydrodynamics(){
 }
 
 // r is R.get(0).
 //
-void GasVolatileDeadHydrodynamics::oil_fractional_flow(int degree, double s, double r, JetMatrix &fo_jet){
+void DeadVolatileVolatileGasHydrodynamics::oil_fractional_flow(int degree, double s, double r, JetMatrix &fo_jet){
     fo_jet.resize(2, 1);
 
     if (degree >= 0){
@@ -54,7 +54,7 @@ void GasVolatileDeadHydrodynamics::oil_fractional_flow(int degree, double s, dou
     return;
 }
 
-void GasVolatileDeadHydrodynamics::fractional_flow(int degree, double s, double y, JetMatrix &f_jet){
+void DeadVolatileVolatileGasHydrodynamics::fractional_flow(int degree, double s, double y, JetMatrix &f_jet){
     f_jet.resize(2, 1);
 
     JetMatrix R_jet;

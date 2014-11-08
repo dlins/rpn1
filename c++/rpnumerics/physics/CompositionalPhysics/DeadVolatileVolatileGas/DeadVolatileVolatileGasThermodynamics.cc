@@ -1,6 +1,6 @@
-#include "GasVolatileDeadThermodynamics.h"
+#include "DeadVolatileVolatileGasThermodynamics.h"
 
-GasVolatileDeadThermodynamics::GasVolatileDeadThermodynamics(Parameter *B, Parameter *D, Parameter *mu_oB, Parameter *mu_oD, Parameter *mu_G, Parameter *rg, Parameter *re){
+DeadVolatileVolatileGasThermodynamics::DeadVolatileVolatileGasThermodynamics(Parameter *B, Parameter *D, Parameter *mu_oB, Parameter *mu_oD, Parameter *mu_G, Parameter *rg, Parameter *re){
     B_parameter = B;
     D_parameter = D;
 
@@ -22,10 +22,10 @@ GasVolatileDeadThermodynamics::GasVolatileDeadThermodynamics(Parameter *B, Param
     info_auxiliaryfunction_ = std::string("Thermodynamics");
 }
 
-GasVolatileDeadThermodynamics::~GasVolatileDeadThermodynamics(){
+DeadVolatileVolatileGasThermodynamics::~DeadVolatileVolatileGasThermodynamics(){
 }
 
-void GasVolatileDeadThermodynamics::viscosity_ratio(int degree, double y, JetMatrix &R_jet){
+void DeadVolatileVolatileGasThermodynamics::viscosity_ratio(int degree, double y, JetMatrix &R_jet){
     R_jet.resize(1);
 
     if (degree >= 0){
@@ -53,7 +53,7 @@ void GasVolatileDeadThermodynamics::viscosity_ratio(int degree, double y, JetMat
     return;
 }
 
-void GasVolatileDeadThermodynamics::gas_molar_density_a(int degree, double y, JetMatrix &Rga_jet){
+void DeadVolatileVolatileGasThermodynamics::gas_molar_density_a(int degree, double y, JetMatrix &Rga_jet){
     Rga_jet.resize(1);
     
     if (degree >= 0){
@@ -77,7 +77,7 @@ void GasVolatileDeadThermodynamics::gas_molar_density_a(int degree, double y, Je
     return;
 }
 
-void GasVolatileDeadThermodynamics::gas_molar_density_b(int degree, double y, JetMatrix &Rgb_jet){
+void DeadVolatileVolatileGasThermodynamics::gas_molar_density_b(int degree, double y, JetMatrix &Rgb_jet){
     Rgb_jet.resize(1);
     
     if (degree >= 0){
@@ -100,7 +100,7 @@ void GasVolatileDeadThermodynamics::gas_molar_density_b(int degree, double y, Je
     return;
 }
 
-void GasVolatileDeadThermodynamics::oil_molar_density(int degree, double y, JetMatrix &Ro_jet){
+void DeadVolatileVolatileGasThermodynamics::oil_molar_density(int degree, double y, JetMatrix &Ro_jet){
     Ro_jet.resize(1);
 
     if (degree >= 0){
@@ -127,7 +127,7 @@ void GasVolatileDeadThermodynamics::oil_molar_density(int degree, double y, JetM
     return;
 }
 
-void GasVolatileDeadThermodynamics::oil_molar_density_b(int degree, const JetMatrix &Ro_jet, double y,  JetMatrix &Rob_jet){
+void DeadVolatileVolatileGasThermodynamics::oil_molar_density_b(int degree, const JetMatrix &Ro_jet, double y,  JetMatrix &Rob_jet){
     Rob_jet.resize(1);
     
     if (degree >= 0){
@@ -151,7 +151,7 @@ void GasVolatileDeadThermodynamics::oil_molar_density_b(int degree, const JetMat
     return;
 }
 
-void GasVolatileDeadThermodynamics::oil_molar_density_d(int degree, const JetMatrix &Ro_jet, double y,  JetMatrix &Rod_jet){
+void DeadVolatileVolatileGasThermodynamics::oil_molar_density_d(int degree, const JetMatrix &Ro_jet, double y,  JetMatrix &Rod_jet){
     Rod_jet.resize(1);
     
     if (degree >= 0){
