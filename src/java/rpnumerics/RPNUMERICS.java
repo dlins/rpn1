@@ -13,7 +13,10 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
 import rpn.configuration.ConfigurationProfile;
+import rpn.configuration.Parameter;
 import rpn.configuration.PhysicsConfiguration;
+import rpn.configuration.PhysicsConfigurationParams;
+import rpn.configuration.TextParameter;
 import rpn.parser.RPnDataModule;
 import wave.multid.CoordsArray;
 import wave.util.*;
@@ -42,35 +45,47 @@ public class RPNUMERICS {
 
     static public void init(String physicsID) {
 //        try {
-            System.loadLibrary("rpn");
-            setRPnHome(System.getProperty("rpnhome"));
+        System.loadLibrary("rpn");
+        setRPnHome(System.getProperty("rpnhome"));
 
-            initNative(physicsID);
+        initNative(physicsID);
 
-             
-             
-             PhysicsConfiguration physicsConfiguration = new PhysicsConfiguration(physicsID);
-       
-             
-             String[] physicsParamsNames = getPhysicsParamsNames();
-             
-             
-             
-             for (int i = 0; i < physicsParamsNames.length; i++) {
-                 String paramName = physicsParamsNames[i];
-                 physicsConfiguration.setParamValue(paramName, getPhysicsParam(i));
-                 physicsConfiguration.setParamOrder(paramName, i);
-                 
-                 
-             }
+        PhysicsConfiguration physicsConfiguration = (PhysicsConfiguration) getConfiguration(physicsID);
+
+        PhysicsConfigurationParams fluxFunctionConfiguration = (PhysicsConfigurationParams) physicsConfiguration.getConfiguration("fluxfunction");
+
+        if (fluxFunctionConfiguration != null) {//Reading from file
+
+            for (int i = 0; i < fluxFunctionConfiguration.getParameterList().size(); i++) {
+                
+                
+
+                Parameter param = fluxFunctionConfiguration.getParamList().get(i);
+                int paramOrder = fluxFunctionConfiguration.getParamOrder(param.getName());                
+                
+                setPhysicsParams(paramOrder, param.getValue());
+
+            }
+
+        }else {//Reading from library
+
+           PhysicsConfigurationParams  fluxConfiguration = new PhysicsConfigurationParams("fluxfunction");
+           
+           String[] physicsParamsNames = getPhysicsParamsNames();
+
+            for (int i = 0; i < physicsParamsNames.length; i++) {
+
+
+                Parameter param = new TextParameter(physicsParamsNames[i], getPhysicsParam(i));                
+                fluxConfiguration.addParameter(param);
+
+            }
             
-        setConfiguration(physicsID, physicsConfiguration);
-   
-          
-        
-        
-        
-        
+            physicsConfiguration.addConfiguration(fluxConfiguration);
+            
+        }
+
+
     }
 
     public static Set<String> getConfigurationNames() {
@@ -178,7 +193,6 @@ public class RPNUMERICS {
      */
     public static native void initNative(String physicsName);
 
-
     public static EnvelopeCurveCalc createEnvelopeCurveCalc(Configuration configuration) {
 
         int[] resolution = RPnDataModule.processResolution(configuration.getParam("resolution"));
@@ -208,8 +222,6 @@ public class RPNUMERICS {
         Integer direction = new Integer(getParamValue("fundamentalcurve", "direction"));
         return new WaveCurveCalc(orbitPoint, Integer.parseInt(getParamValue("fundamentalcurve", "family")), direction, WaveCurveCalc.BOUNDARY, edge);
     }
-
-   
 
     public static RarefactionCurveCalc createRarefactionCalc(OrbitPoint orbitPoint) {
         Integer direction = new Integer(getParamValue("fundamentalcurve", "direction"));
@@ -255,10 +267,10 @@ public class RPNUMERICS {
         String methodName = HugoniotCurveCalcND.HugoniotMethods.valueOf(configuration.getParam("method")).name();
 
         ContourParams params = new ContourParams(resolution);
-        
+
         int edge = Integer.parseInt(configuration.getParam("edge"));
 
-        return new SecondaryBifurcationCurveCalc(params, methodName,edge);
+        return new SecondaryBifurcationCurveCalc(params, methodName, edge);
 
     }
 
@@ -327,7 +339,6 @@ public class RPNUMERICS {
 
         return new BoundaryExtensionCurveCalc(params, edgeResolution, family, edge, characteristic);
     }
-
 
     public static EnvelopeCurveCalc createEnvelopeCurveCalc() {
 
@@ -502,10 +513,10 @@ public class RPNUMERICS {
         ContourParams params = new ContourParams(resolution);
 
         String methodName = HugoniotCurveCalcND.HugoniotMethods.valueOf(getParamValue("secondarybifurcation", "method")).name();
-         
+
         int edge = Integer.parseInt(getParamValue("secondarybifurcation", "edge"));
 
-        return new SecondaryBifurcationCurveCalc(params, methodName,edge);
+        return new SecondaryBifurcationCurveCalc(params, methodName, edge);
 
     }
 
@@ -799,8 +810,6 @@ public class RPNUMERICS {
 
     }
 
-  
-
     public static void applyFluxParams() {
 
         Configuration physicsConfiguration = configMap_.get(physicsID());
@@ -808,17 +817,13 @@ public class RPNUMERICS {
         HashMap<String, String> params = physicsConfiguration.getParams();
 
         Set<String> keySet = params.keySet();
-        
+
         for (String paramName : keySet) {
-            
-            
+
             setPhysicsParams(physicsConfiguration.getParamOrder(paramName), physicsConfiguration.getParam(paramName));
-            
-            
-            
+
         }
-        
-        
+
 //        
 ////        FluxParams previousParams = getFluxParams();
 ////
@@ -832,7 +837,6 @@ public class RPNUMERICS {
 //        getViscousProfileData().setPreviousSigma(getViscousProfileData().getSigma());
 //        getViscousProfileData().setPreviousXZero(getViscousProfileData().getXZero());
 //        getViscousProfileData().setPreviousPhysicsParams(previousParamArray);
-
 //        setParams(paramsArray);
     }
 
@@ -841,14 +845,11 @@ public class RPNUMERICS {
      */
     public static native void clean();
 
-    
     public static native void setPhysicsParams(int paramIndex, String value);
-    
+
     public static native String getPhysicsParam(int paramIndex);
-    
-    public static native String [] getPhysicsParamsNames();
- 
-   
+
+    public static native String[] getPhysicsParamsNames();
 
     public static native FluxParams getFluxParams();
 
@@ -862,32 +863,26 @@ public class RPNUMERICS {
 
     public static native void setBoundary(Boundary newBoundary);
 
-
     public static native int domainDim();
 
     public static native Space domain();
-    
-    public static native void clearCurvesCache();
-    
-    public static native void removeCurve(int curveID);
-    
-    public static native List<String> getEigenSortFunctionNames();
-    
-    public static native void setEigenSortFunction(String functionName);
-   
-    
-    public static native String getXLabel();
-    
-    public static native String getYLabel();
-    
-    
-    
-    public static native ArrayList<String> getTransisionalLinesNames();
-    
-    
-    public static native void readNativePhysicsConfig();
-    
-    public static native String [] getHugoniotCaseNames(String hugoniotMethodName);
 
-  
+    public static native void clearCurvesCache();
+
+    public static native void removeCurve(int curveID);
+
+    public static native List<String> getEigenSortFunctionNames();
+
+    public static native void setEigenSortFunction(String functionName);
+
+    public static native String getXLabel();
+
+    public static native String getYLabel();
+
+    public static native ArrayList<String> getTransisionalLinesNames();
+
+    public static native void readNativePhysicsConfig();
+
+    public static native String[] getHugoniotCaseNames(String hugoniotMethodName);
+
 }

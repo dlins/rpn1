@@ -136,7 +136,10 @@ public abstract class Configuration extends Observable{
     }
     
     
-    
+    public void addConfiguration(Configuration configuration){
+        
+        configurationMap_.put(configuration.getName(), configuration);        
+    }
     
     public void keepParameters(String [] parametersToKeep){
         

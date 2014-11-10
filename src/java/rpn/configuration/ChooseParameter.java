@@ -15,7 +15,6 @@ public class ChooseParameter extends Parameter{
 
     public ChooseParameter(String name, String value) {
         super(name, value);
-        System.out.println("Nome: "+name + "valor: " + value);
         
     }
     

@@ -7,17 +7,17 @@
         
         
         
-             <!--   <PHYSICSCONFIG name="fluxfunction">
-                    <PHYSICSPARAM name="grw" position="0" value ="1.0" />
+             <!--  <PHYSICSCONFIG name="fluxfunction">
+                    <PHYSICSPARAM name="grw" position="0" value ="1.9" />
                     <PHYSICSPARAM name="grg" position="1" value ="1.0" />
                     <PHYSICSPARAM name="gro" position="2" value ="1.0" />
                     <PHYSICSPARAM name="muw" position="3" value ="2.0" />
                     <PHYSICSPARAM name="mug" position="4" value ="2.0" />
                     <PHYSICSPARAM name="muo" position="5" value ="2.0" />
-                    <PHYSICSPARAM name="vel" position="6" value ="1.0" />
+                    <PHYSICSPARAM name="vel" position="6" value ="1.0" />-->
             
 
-                    <PHYSICSPARAM name="expw" position="7" value ="2.0" />
+                 <!--  <PHYSICSPARAM name="expw" position="7" value ="2.0" />
                     <PHYSICSPARAM name="expg" position="8" value ="2.0" />
                     <PHYSICSPARAM name="expo" position="9" value ="2.0" />
                     <PHYSICSPARAM name="expow" position="10" value ="2.0" />
@@ -30,11 +30,10 @@
                     <PHYSICSPARAM name="lg" position="16" value ="0.0" />
                     <PHYSICSPARAM name="lo" position="17" value ="0.0" />
                     <PHYSICSPARAM name="low" position="18" value ="0.0" />
-                    <PHYSICSPARAM name="log" position="19" value ="0.0" />
-                    <PHYSICSPARAM name="epsl" position="20" value ="0.0" />
+                    <PHYSICSPARAM name="log" position="19" value ="0.0" />-->
 
 
-                </PHYSICSCONFIG>-->
+                </PHYSICSCONFIG>
 
             </PHYSICS>
 

@@ -4,8 +4,8 @@
     <PHASESPACE name="Phase Space">
         <RPNCONFIGURATION>
             <PHYSICS name="CoreyQuad">
-             <!--   <PHYSICSCONFIG name="fluxfunction">
-                    <PHYSICSPARAM name="grw" position="0" value ="0.0" />
+             <!-- <PHYSICSCONFIG name="fluxfunction">
+                    <PHYSICSPARAM name="grw" position="0" value ="1.0" />
                     <PHYSICSPARAM name="grg" position="1" value ="0.0" />
                     <PHYSICSPARAM name="gro" position="2" value ="0.0" />
                     <PHYSICSPARAM name="muw" position="3" value ="1.0" />

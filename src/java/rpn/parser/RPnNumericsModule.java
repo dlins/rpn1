@@ -5,8 +5,6 @@
  */
 package rpn.parser;
 
-import java.util.Map.Entry;
-import java.util.Set;
 import rpn.configuration.ConfigurationProfile;
 import org.xml.sax.Attributes;
 import org.xml.sax.Locator;
@@ -18,11 +16,9 @@ import org.xml.sax.SAXException;
 import org.xml.sax.InputSource;
 import java.io.FileWriter;
 import java.io.InputStream;
-import java.util.HashMap;
 import rpn.configuration.RPnConfig;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.XMLReader;
-import rpn.configuration.Configuration;
 import rpnumerics.RPNUMERICS;
 import wave.util.Boundary;
 

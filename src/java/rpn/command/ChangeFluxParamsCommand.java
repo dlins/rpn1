@@ -61,7 +61,9 @@ public class ChangeFluxParamsCommand extends RpModelConfigChangeCommand {
         RPnFluxParamsSubject[] fluxParamsSubject = RPnConfig.getFluxParamsSubject();
         RPnFluxParamsObserver fluxParamsObserver = RPnConfig.getFluxParamsObserver();
 
-        RPnFluxParamsDialog dialog = new RPnFluxParamsDialog(fluxParamsSubject, fluxParamsObserver);
+//        RPnFluxParamsDialog dialog = new RPnFluxParamsDialog(fluxParamsSubject, fluxParamsObserver);
+        
+        RPnFluxParamsDialog dialog = new RPnFluxParamsDialog();
         dialog.setVisible(true);
 
 

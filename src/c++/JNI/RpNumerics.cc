@@ -429,8 +429,6 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setPhysicsParams
 (JNIEnv * env, jclass cls, jint paramIndex, jstring paramValue) {
 
 
-    jclass stringClass = env->FindClass("Ljava/lang/String;");
-
     const char * paramChar;
 
     paramChar = env->GetStringUTFChars(paramValue, NULL);
@@ -463,9 +461,6 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setPhysicsParams
  */
 JNIEXPORT jstring JNICALL Java_rpnumerics_RPNUMERICS_getPhysicsParam
 (JNIEnv * env, jclass cls, jint paramIndex) {
-
-
-    jclass stringClass = env->FindClass("Ljava/lang/String;");
 
     Parameter * param = RpNumerics::physicsParams_->at(paramIndex);
 
