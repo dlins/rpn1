@@ -125,9 +125,9 @@ int WaveCurveFactory::Liu_half_wavecurve(const ReferencePoint &ref,
                 if (hwc.wavecurve.size() > 0) rarcurve.back_pointer[0] = hwc.wavecurve.back().curve.size() - 1;
             }
 
-            std::ofstream rar_out("rar_out.txt", std::ofstream::out);
-            for (int i = 0; i < rarcurve.curve.size(); i++) rar_out << "Index: " << i << ", curve = " << rarcurve.back_curve_pointer[i] << ", point = " << rarcurve.back_pointer[i] << std::endl;
-            rar_out.close();
+//            std::ofstream rar_out("rar_out.txt", std::ofstream::out);
+//            for (int i = 0; i < rarcurve.curve.size(); i++) rar_out << "Index: " << i << ", curve = " << rarcurve.back_curve_pointer[i] << ", point = " << rarcurve.back_pointer[i] << std::endl;
+//            rar_out.close();
 
             // Store regardless of what happened during the computation.
             //
