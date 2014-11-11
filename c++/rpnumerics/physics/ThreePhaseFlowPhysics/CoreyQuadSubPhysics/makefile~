@@ -250,6 +250,9 @@ subphysics: $(OBJECTS)
 jettester: $(OBJECTS)
 	$(LINK)  $(CPPFLAGS) $(INCLUDE) ../../../../../main_jettester.cpp -o $@ $^  $(LDLIBS) $(LDFLAGS)
 
+tpcw_tester: $(OBJECTS)
+	$(LINK)  $(CPPFLAGS) $(INCLUDE) ../../../../../main_tpcw_tester.cpp -o $@ $^  $(LDLIBS) $(LDFLAGS)
+
 #
 #	Make a library
 #

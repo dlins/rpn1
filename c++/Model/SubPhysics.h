@@ -40,6 +40,8 @@
 
 #include "Double_Contact.h"
 
+//#include "PermeabilityLevelCurve.h" // Only for ThreePhaseFlow so far.
+
 //#include "Extension_Curve.h"
 //#include "Double_Contact.h"
 //#include "Hysteresis.h"

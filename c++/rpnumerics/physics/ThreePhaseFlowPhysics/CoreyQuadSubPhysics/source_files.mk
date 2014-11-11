@@ -97,14 +97,14 @@ ccSRC +=  \
 	../../../../rpnumerics/physics/CompositionalPhysics/TPCW/ShockContinuationMethod3D2D.cc \
 	../../../../rpnumerics/physics/CompositionalPhysics/TPCW/ShockMethod.cc \
 	../../../../rpnumerics/physics/CompositionalPhysics/Hugoniot_TP.cc \
-	../../../../rpnumerics/physics/CompositionalPhysics/GasVolatileDead/GasVolatileDeadCoincidence.cc \
-	../../../../rpnumerics/physics/CompositionalPhysics/GasVolatileDead/GasVolatileDeadHydrodynamics.cc \
-	../../../../rpnumerics/physics/CompositionalPhysics/GasVolatileDead/GasVolatileDeadEvaporationExtension.cc \
-	../../../../rpnumerics/physics/CompositionalPhysics/GasVolatileDead/GasVolatileDeadCompositeCurve.cc \
-	../../../../rpnumerics/physics/CompositionalPhysics/GasVolatileDead/GasVolatileDeadSubPhysics.cc \
-	../../../../rpnumerics/physics/CompositionalPhysics/GasVolatileDead/GasVolatileDeadFluxFunction.cc \
-	../../../../rpnumerics/physics/CompositionalPhysics/GasVolatileDead/GasVolatileDeadThermodynamics.cc \
-	../../../../rpnumerics/physics/CompositionalPhysics/GasVolatileDead/GasVolatileDeadAccumulationFunction.cc \
+	../../../../rpnumerics/physics/CompositionalPhysics/DeadVolatileVolatileGas/DeadVolatileVolatileGasAccumulationFunction.cc \
+	../../../../rpnumerics/physics/CompositionalPhysics/DeadVolatileVolatileGas/DeadVolatileVolatileGasThermodynamics.cc \
+	../../../../rpnumerics/physics/CompositionalPhysics/DeadVolatileVolatileGas/DeadVolatileVolatileGasCoincidence.cc \
+	../../../../rpnumerics/physics/CompositionalPhysics/DeadVolatileVolatileGas/DeadVolatileVolatileGasSubPhysics.cc \
+	../../../../rpnumerics/physics/CompositionalPhysics/DeadVolatileVolatileGas/DeadVolatileVolatileGasHydrodynamics.cc \
+	../../../../rpnumerics/physics/CompositionalPhysics/DeadVolatileVolatileGas/DeadVolatileVolatileGasEvaporationExtension.cc \
+	../../../../rpnumerics/physics/CompositionalPhysics/DeadVolatileVolatileGas/DeadVolatileVolatileGasCompositeCurve.cc \
+	../../../../rpnumerics/physics/CompositionalPhysics/DeadVolatileVolatileGas/DeadVolatileVolatileGasFluxFunction.cc \
 	../../../../rpnumerics/physics/Quad3SubPhysics/Quad3Equations.cc \
 	../../../../rpnumerics/physics/SinglePhase/Thermodynamics.cc \
 	../../../../rpnumerics/physics/Ion/IonAccumulation.cc \
@@ -124,6 +124,7 @@ ccSRC +=  \
 	../../../../rpnumerics/physics/ThreePhaseFlowPhysics/StoneSubPhysics/StonePermeability.cc \
 	../../../../rpnumerics/physics/ThreePhaseFlowPhysics/StoneSubPhysics/StoneSubPhysics.cc \
 	../../../../rpnumerics/physics/ThreePhaseFlowPhysics/StoneSubPhysics/StonePermParams.cc \
+	../../../../rpnumerics/physics/ThreePhaseFlowPhysics/ThreePhaseFlowPermeabilityLevelCurve.cc \
 	../../../../rpnumerics/physics/ThreePhaseFlowPhysics/ThreePhaseFlowSubPhysics.cc \
 	../../../../rpnumerics/physics/ThreePhaseFlowPhysics/CoreyQuadSubPhysics/CoreyQuadSubPhysics.cc \
 	../../../../rpnumerics/physics/ThreePhaseFlowPhysics/CoreyQuadSubPhysics/CoreyQuadViscosity.cc \

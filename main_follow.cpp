@@ -1,4 +1,5 @@
 #include "Brooks_CoreySubPhysics.h"
+#include "CoreyQuadSubPhysics.h"
 
 #include <FL/Fl.H>
 #include <FL/Fl_Double_Window.H>
@@ -7,6 +8,8 @@
 #include "WaveCurvePlot.h"
 #include "LSODE.h"
 #include "Text.h"
+#include "ThreePhaseFlowPermeabilityLevelCurve.h"
+#include "segmentedcurve.h"
 
 #include <ctime>
 #include <sys/time.h>
@@ -41,9 +44,10 @@ private:
 Fl_Double_Window *win;
     Canvas *canvas;
 
-SubPhysics *subphysics;
+ThreePhaseFlowSubPhysics *subphysics;
 MultiColoredCurve *mcc = 0;
 WaveCurvePlot *wcp = 0;
+SegmentedCurve *sc = 0;
 
 void on_move_Hugoniot(Fl_Widget*, void*){
     timer tm;
@@ -149,8 +153,42 @@ void on_move_rarefaction(Fl_Widget*, void*){
     return;
 }
 
+void on_move_perm(Fl_Widget*, void*){
+    timer tm;
+    tm.reset();
+
+    RealVector point(2);
+    canvas->getxy(point(0), point(1));
+
+    if (!subphysics->boundary()->inside(point)) return;
+
+    if (sc != 0) canvas->erase(sc);
+
+    ThreePhaseFlowPermeabilityLevelCurve p(subphysics);
+    std::vector<RealVector> c;
+    p.curve(point, OIL_PERMEABILITY_CURVE, c);
+
+    if (c.size() == 0) return;
+
+    sc = new SegmentedCurve(c, 0.0, 0.0, 1.0);
+    canvas->add(sc);
+
+    double elapsed_time = tm.elapsed();
+    total_time += elapsed_time;
+    n++;
+
+    std::stringstream ss;
+    ss << "Permeability, elapsed time = " << elapsed_time << ", mean time = " << total_time/(double)n;
+    win->copy_label(ss.str().c_str());
+
+    Fl::check();
+
+    return;
+}
+
 int main(){
-    subphysics = new Brooks_CoreySubPhysics;
+//    subphysics = new Brooks_CoreySubPhysics;
+    subphysics = new CoreyQuadSubPhysics;
 
     win = new Fl_Double_Window(10, 10, 800, 800, "Follow");
     {
@@ -175,6 +213,7 @@ int main(){
 
         canvas->on_move(&on_move_Hugoniot, canvas, 0);
 //        canvas->on_move(&on_move_rarefaction, canvas, 0);
+        canvas->on_move(&on_move_perm, canvas, 0);
 
         {
             RealVector pos(2);
