@@ -434,6 +434,8 @@ int StonePermeability::kogden_jet(double sog, int degree, JetMatrix &kogj){
 // Expects that w.size() == 2.
 //
 int StonePermeability::PermeabilityWater_jet(const RealVector &state, int degree, JetMatrix &water){
+    water.resize(1);
+
     double lw_ = lw_parameter->value();
     double lg_ = lg_parameter->value();
 
@@ -593,6 +595,8 @@ void StonePermeability::reduced_permeability(const RealVector &state, RealVector
 // Expects that w.size() == 2.
 //
 int StonePermeability::PermeabilityOil_jet(const RealVector &state, int degree, JetMatrix &oil){
+    oil.resize(1);
+
     double lw_ = lw_parameter->value();
     double lg_ = lg_parameter->value();
 
@@ -700,6 +704,8 @@ int StonePermeability::PermeabilityOil_jet(const RealVector &state, int degree, 
 // Expects that w.size() == 2.
 //
 int StonePermeability::PermeabilityGas_jet(const RealVector &state, int degree, JetMatrix &gas){
+    gas.resize(1);
+
     double lw_ = lw_parameter->value();
     double lg_ = lg_parameter->value();
 

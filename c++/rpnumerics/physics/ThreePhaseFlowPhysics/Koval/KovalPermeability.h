@@ -20,6 +20,7 @@ class KovalPermeability: public ThreePhaseFlowPermeability {
 };
 
 int KovalPermeability::PermeabilityWater_jet(const RealVector &state, int degree, JetMatrix &water){
+    water.resize(1);
     double sw = state(0);
 //    double so = state(1);
 //    double sg = 1.0 - sw - so;
@@ -53,6 +54,7 @@ int KovalPermeability::PermeabilityWater_jet(const RealVector &state, int degree
 }
 
 int KovalPermeability::PermeabilityOil_jet(const RealVector &state, int degree, JetMatrix &oil){
+    oil.resize(1);
 //    double sw = state(0);
     double so = state(1);
 //    double sg = 1.0 - sw - so;
@@ -78,6 +80,8 @@ int KovalPermeability::PermeabilityOil_jet(const RealVector &state, int degree, 
 }
 
 int KovalPermeability::PermeabilityGas_jet(const RealVector &state, int degree, JetMatrix &gas){
+    gas.resize(1);
+
     double sw = state(0);
     double so = state(1);
     double sg = 1.0 - sw - so;
