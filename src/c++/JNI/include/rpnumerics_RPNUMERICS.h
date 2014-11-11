@@ -177,6 +177,22 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_readNativePhysicsConfig
 
 /*
  * Class:     rpnumerics_RPNUMERICS
+ * Method:    getAuxFunctionNames
+ * Signature: ()Ljava/util/List;
+ */
+JNIEXPORT jobject JNICALL Java_rpnumerics_RPNUMERICS_getAuxFunctionNames
+  (JNIEnv *, jclass);
+
+/*
+ * Class:     rpnumerics_RPNUMERICS
+ * Method:    setAuxFuntionParam
+ * Signature: (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
+ */
+JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setAuxFuntionParam
+  (JNIEnv *, jclass, jstring, jstring, jstring);
+
+/*
+ * Class:     rpnumerics_RPNUMERICS
  * Method:    getHugoniotCaseNames
  * Signature: (Ljava/lang/String;)[Ljava/lang/String;
  */

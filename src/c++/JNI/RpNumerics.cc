@@ -51,10 +51,6 @@ map<string, bool (*)(const eigenpair&, const eigenpair&) > * RpNumerics::orderFu
 
 double RpNumerics::sigma = 0;
 
-
-
-
-
 /*
  * Class:     rpnumerics_RPNUMERICS
  * Method:    readNativePhysicsConfig
@@ -65,9 +61,17 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_readNativePhysicsConfig
 
 
     jclass configurationClass = env->FindClass(CONFIGURATION_LOCATION);
+    jclass physicsConfigurationClass = env->FindClass("rpn/configuration/PhysicsConfiguration");
+    
     jclass parameterLeafClass = env->FindClass("rpn/configuration/ParameterLeaf");
     jclass parameterClass = env->FindClass("rpn/configuration/Parameter");
     jclass parameterCompositeClass = env->FindClass("rpn/configuration/ParameterComposite");
+    
+    
+    jclass textParameterClass = env->FindClass("rpn/configuration/TextParameter");
+    
+    jmethodID textParameterConstructorID = env->GetMethodID(textParameterClass, "<init>", "(Ljava/lang/String;)V");
+    
 
     jclass arrayListClass = env->FindClass("java/util/ArrayList");
 
@@ -77,27 +81,33 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_readNativePhysicsConfig
 
 
     jmethodID getConfigurationMethodID = env->GetStaticMethodID(cls, "getConfiguration", "(Ljava/lang/String;)Lrpn/configuration/Configuration;");
+    
+    
+    jmethodID physicsConfigurationConstructorMethodID = env->GetMethodID(physicsConfigurationClass, "<init>", "(Ljava/lang/String;)V");
+    
 
     jmethodID parameterLeafConstructorID = env->GetMethodID(parameterLeafClass, "<init>", "(Ljava/lang/String;Ljava/lang/String;)V");
     jmethodID parameterCompositeConstructorID = env->GetMethodID(parameterCompositeClass, "<init>", "(Ljava/lang/String;Ljava/lang/String;)V");
-    
+
 
 
 
     jmethodID parameterAddOptionID = env->GetMethodID(parameterClass, "addOption", "(Ljava/lang/String;)V");
 
     jmethodID addParameterMethodID = env->GetMethodID(configurationClass, "addParameter", "(Lrpn/configuration/Parameter;)V");
-    
+
     jmethodID addAssociatedParameterMethodID = env->GetMethodID(parameterClass, "addAssociatedParameter", "(Lrpn/configuration/Parameter;)V");
     
-    
+    jmethodID addConfigurationMethodID = env->GetMethodID(configurationClass,"addConfiguration","(Lrpn/configuration/Configuration;)V");
+
+
 
     jmethodID arrayListAddMethod = env->GetMethodID(arrayListClass, "add", "(Ljava/lang/Object;)Z");
 
     jmethodID arrayListConstructor = env->GetMethodID(arrayListClass, "<init>", "()V");
 
 
-    //     public void addParameter(Parameter param){
+
 
 
 
@@ -153,35 +163,35 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_readNativePhysicsConfig
 
 
     RpNumerics::physicsVector_->at(0)->list_of_Hugoniot_methods(hugoniotMethodsVector);
-    
-    
+
+
     jstring hugoniotDefaultParamName = env->NewStringUTF(hugoniotMethodsVector[0]->Hugoniot_info().c_str());
 
 
     jobject methodParameter = env->NewObject(parameterCompositeClass, parameterCompositeConstructorID, hugoniotParamName, hugoniotDefaultParamName);
 
 
-   
+
     env->CallVoidMethod(hugoniotConfiguration, addParameterMethodID, methodParameter);
-    
-    
-    
-        for (int i = 0; i < hugoniotMethodsVector.size(); i++) {
-      
-//
-            jstring hugoniotMethodName = env->NewStringUTF(hugoniotMethodsVector.at(i)->Hugoniot_info().c_str());
-            
-            env->CallVoidMethod(methodParameter, parameterAddOptionID, hugoniotMethodName);
-    
-    
-    
-        }
-    
-    
+
+
+
+    for (int i = 0; i < hugoniotMethodsVector.size(); i++) {
+
+        //
+        jstring hugoniotMethodName = env->NewStringUTF(hugoniotMethodsVector.at(i)->Hugoniot_info().c_str());
+
+        env->CallVoidMethod(methodParameter, parameterAddOptionID, hugoniotMethodName);
+
+
+
+    }
+
+
     //Hugoniot Cases
-       
-    
-    
+
+
+
     for (int i = 0; i < hugoniotMethodsVector.size(); i++) {
 
         vector<int> types;
@@ -192,53 +202,53 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_readNativePhysicsConfig
 
 
         jstring hugoniotCaseName = env->NewStringUTF("case");
-        
+
         jstring hugoniotDefaultCaseName = env->NewStringUTF(typeNames[0].c_str());
 
         jobject caseParameter = env->NewObject(parameterLeafClass, parameterLeafConstructorID, hugoniotCaseName, hugoniotDefaultCaseName);
-        
+
         for (int j = 0; j < typeNames.size(); j++) {
-            
+
             jstring paramOptionName = env->NewStringUTF(typeNames.at(j).c_str());
-            
+
             env->CallVoidMethod(caseParameter, parameterAddOptionID, paramOptionName);
- 
+
 
         }
 
-        env->CallVoidMethod(methodParameter, addAssociatedParameterMethodID,caseParameter);                    
-        
-        if(i==0){
-            env->CallVoidMethod(hugoniotConfiguration, addParameterMethodID, caseParameter);    
+        env->CallVoidMethod(methodParameter, addAssociatedParameterMethodID, caseParameter);
+
+        if (i == 0) {
+            env->CallVoidMethod(hugoniotConfiguration, addParameterMethodID, caseParameter);
 
         }
-        
+
 
 
 
     }
 
     //-------------------------------------------------------------------------------------------
-    
-    
-    
+
+
+
     //Transitional lines 
-    
+
     jstring transitionalName = env->NewStringUTF("transitionalline");
-    
+
     jobject transitionalConfiguration = env->CallStaticObjectMethod(cls, getConfigurationMethodID, transitionalName);
 
     jstring transitionalParamName = env->NewStringUTF("name");
-    
-    
-    
+
+
+
     BifurcationCurve * bifurcation = RpNumerics::physicsVector_->at(0)->bifurcation_curve();
 
     if (bifurcation != NULL) {
-        
-        
+
+
         jstring transionalDefaultValue = env->NewStringUTF(name.at(0).c_str());
-        
+
         jobject transitionalParameter = env->NewObject(parameterLeafClass, parameterLeafConstructorID, transitionalParamName, transionalDefaultValue);
 
         std::vector<int> type;
@@ -255,12 +265,131 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_readNativePhysicsConfig
 
 
         }
-        
+
         env->CallVoidMethod(transitionalConfiguration, addParameterMethodID, transitionalParameter);
+
+    }
+    //-----------------------------------------------------------------------------------------------------------------
+
+
+
+    //AuxiliaryFunctions 
+    
+    jstring physicsName = env->NewStringUTF(RpNumerics::physicsVector_->at(0)->info_subphysics().c_str());
+    
+    jobject physicsConfiguration = env->CallStaticObjectMethod(cls, getConfigurationMethodID, physicsName);
+    
+    
+    vector<AuxiliaryFunction *> auxFuncVector;
+    
+    RpNumerics::physicsVector_->at(0)->auxiliary_functions(auxFuncVector);
+    
+    for (int i = 0; i < auxFuncVector.size(); i++) {
+        
+        AuxiliaryFunction * auxiliarFunction =   auxFuncVector[i];
+        
+        jstring functionName = env->NewStringUTF(auxiliarFunction->info_auxiliary_function().c_str());
+
+        jobject auxFunctionConfiguration = env->NewObject(physicsConfigurationClass,physicsConfigurationConstructorMethodID,functionName);
+        
+        vector<Parameter *> parameterVector ;
+        
+        auxiliarFunction->parameter(parameterVector);
+        
+        
+        for (int j = 0; j < parameterVector.size(); j++) {
+
+            Parameter * parameter = parameterVector.at(j);
+            
+            jstring parameterName = env->NewStringUTF(parameter->name().c_str());
+            
+            stringstream doubleStream;//(parameter->value());
+            
+            doubleStream << parameter->value();
+            
+            string doubleString;
+            
+            doubleStream >> doubleString;
+            
+            jstring parameterValue = env->NewStringUTF(doubleString.c_str());
+//            jmethodID parameterLeafConstructorID = env->GetMethodID(parameterLeafClass, "<init>", "(Ljava/lang/String;Ljava/lang/String;)V");
+            
+            jobject jParameter = env->NewObject(textParameterClass,textParameterConstructorID,parameterName,parameterValue);
+            
+//             jmethodID addParameterMethodID = env->GetMethodID(configurationClass, "addParameter", "(Lrpn/configuration/Parameter;)V");
+             
+             env->CallObjectMethod(auxFunctionConfiguration,addParameterMethodID,jParameter);
+            
+
+        }
+        
+        
+        env->CallObjectMethod(physicsConfiguration,addConfigurationMethodID,auxFunctionConfiguration);
+        
+
+        
+        
+
         
     }
+   
+    
+    
+    
+//    jobject auxFunctionConfiguration
+    
+    
     
 
+
+
+
+
+
+
+}
+
+/*
+ * Class:     rpnumerics_RPNUMERICS
+ * Method:    getAuxFunctionNames
+ * Signature: ()Ljava/util/List;
+ */
+
+JNIEXPORT jobject JNICALL Java_rpnumerics_RPNUMERICS_getAuxFunctionNames
+(JNIEnv * env, jclass cls) {
+    
+    jclass arrayListClass = env->FindClass("java/util/ArrayList");
+    
+    jmethodID arrayListAddMethod = env->GetMethodID(arrayListClass, "add", "(Ljava/lang/Object;)Z");
+    
+    jmethodID arrayListConstructor = env->GetMethodID(arrayListClass, "<init>", "()V");
+    
+    jobject auxFuncArrayList = env->NewObject(arrayListClass, arrayListConstructor, NULL);
+    
+    vector<AuxiliaryFunction *> auxFuncVector;
+
+    RpNumerics::physicsVector_->at(0)->auxiliary_functions(auxFuncVector);
+    
+    for (int i = 0; i < auxFuncVector.size(); i++) {
+
+        jstring functionName = env->NewStringUTF(auxFuncVector[i]->info_auxiliary_function().c_str());
+        
+        env->CallObjectMethod(auxFuncArrayList,arrayListAddMethod,functionName);
+        
+    }
+   
+
+    return auxFuncArrayList;
+
+}
+
+/*
+ * Class:     rpnumerics_RPNUMERICS
+ * Method:    setAuxFuntionParam
+ * Signature: (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
+ */
+JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setAuxFuntionParam
+(JNIEnv * env, jclass cls, jstring auxFuncName, jstring auxFuncParam, jstring paramValue) {
 
 
 
@@ -315,8 +444,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RPNUMERICS_getTransisionalLinesNames
 
 }
 
-
-
 void RpNumerics::fillPhysicsParams() {
 
     physicsParams_ = new vector<Parameter *>();
@@ -336,8 +463,6 @@ void RpNumerics::fillPhysicsParams() {
     }
 
 }
-
-
 
 /*
  * Class:     rpnumerics_RPNUMERICS
@@ -360,30 +485,30 @@ JNIEXPORT jobjectArray JNICALL Java_rpnumerics_RPNUMERICS_getPhysicsParamsNames
 
 }
 
-JNIEXPORT jobjectArray JNICALL Java_rpnumerics_RPNUMERICS_getAuxFunctionNames
-(JNIEnv * env, jclass cls) {
-
-    jclass stringClass = env->FindClass("Ljava/lang/String;");
-
-    jobjectArray auxFuncNamesArray = env->NewObjectArray(RpNumerics::physicsAuxFunctionsMap_->size(), stringClass, NULL);
-
-    int i = 0;
-    for (std::map < string, AuxiliaryFunction * >::iterator it = RpNumerics::physicsAuxFunctionsMap_->begin();
-            it != RpNumerics::physicsAuxFunctionsMap_->end(); ++it) {
-
-        jstring functionName = env->NewStringUTF(it->first.c_str());
-
-
-        env->SetObjectArrayElement(auxFuncNamesArray, i, functionName);
-
-        i++;
-
-    }
-
-
-    return auxFuncNamesArray;
-
-}
+//JNIEXPORT jobjectArray JNICALL Java_rpnumerics_RPNUMERICS_getAuxFunctionNames
+//(JNIEnv * env, jclass cls) {
+//
+//    jclass stringClass = env->FindClass("Ljava/lang/String;");
+//
+//    jobjectArray auxFuncNamesArray = env->NewObjectArray(RpNumerics::physicsAuxFunctionsMap_->size(), stringClass, NULL);
+//
+//    int i = 0;
+//    for (std::map < string, AuxiliaryFunction * >::iterator it = RpNumerics::physicsAuxFunctionsMap_->begin();
+//            it != RpNumerics::physicsAuxFunctionsMap_->end(); ++it) {
+//
+//        jstring functionName = env->NewStringUTF(it->first.c_str());
+//
+//
+//        env->SetObjectArrayElement(auxFuncNamesArray, i, functionName);
+//
+//        i++;
+//
+//    }
+//
+//
+//    return auxFuncNamesArray;
+//
+//}
 
 /*
  * Class:     rpnumerics_RPNUMERICS
@@ -712,13 +837,13 @@ void RpNumerics::clean() {
 
     clearCurveMap();
 
-   
+
 
     for (int i = 0; i < physicsVector_->size(); i++) {
         delete physicsVector_->at(i);
 
     }
-   
+
 
     delete waveCurveMap_;
 
@@ -806,25 +931,25 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_initNative(JNIEnv * env, jclas
 
         RpNumerics::physicsVector_->push_back(new CoreyQuadSubPhysics());
     }
-    
+
     if (physicsStringName.compare("Koval") == 0) {
         RpNumerics::physicsVector_->push_back(new KovalSubPhysics());
     }
-    
+
 
     if (physicsStringName.compare("GVD") == 0) {
         RpNumerics::physicsVector_->push_back(new GasVolatileDeadSubPhysics());
     }
 
-    
-    
-    
-    
-    
-    RpNumerics::waveCurveMap_= new map<int,WaveCurve *>();
+
+
+
+
+
+    RpNumerics::waveCurveMap_ = new map<int, WaveCurve *>();
     RpNumerics::fillPhysicsParams();
-   
-   
+
+
 
 
 }

@@ -7,6 +7,10 @@ package rpn;
 
 import java.awt.*;
 import java.beans.PropertyChangeEvent;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 import javax.swing.BoxLayout;
 
 
@@ -27,7 +31,6 @@ public class RPnFluxParamsDialog extends RPnDialog {
         setTitle(RPNUMERICS.physicsID());
         beginButton.setText("OK");
 
-
         removeDefaultApplyBehavior();
         
         setLocation(400, 400);
@@ -36,16 +39,41 @@ public class RPnFluxParamsDialog extends RPnDialog {
         Configuration physicsConfiguration = RPNUMERICS.getConfiguration(RPNUMERICS.physicsID());
         
         
-        PhysicsConfigurationParams physicsParams  = (PhysicsConfigurationParams) physicsConfiguration.getConfiguration("fluxfunction");
+//        PhysicsConfigurationParams physicsParams  = (PhysicsConfigurationParams) physicsConfiguration.getConfiguration("fluxfunction");
+
+        HashMap<String, Configuration> configurationMap = physicsConfiguration.getConfigurationMap();
         
         
-        ConfigurationView configView = new ConfigurationView(physicsParams);
         
-        BoxLayout boxLayout = new BoxLayout(configView.getContainer(), BoxLayout.Y_AXIS);
         
-        configView.getContainer().setLayout(boxLayout);
         
-        getContentPane().add(configView.getContainer(),BorderLayout.CENTER);
+        Set<Map.Entry<String, Configuration>> entrySet = configurationMap.entrySet();
+        Iterator<Map.Entry<String, Configuration>> iterator = entrySet.iterator();
+        
+        
+//        Iterator<Map.Entry<String, Configuration>> iterator = configurationMap.entrySet().iterator();
+        
+        while (iterator.hasNext()) {
+           
+            Map.Entry<String, Configuration> entry = iterator.next();
+            
+            ConfigurationView configView = new ConfigurationView(entry.getValue());
+            
+            BoxLayout boxLayout = new BoxLayout(configView.getContainer(), BoxLayout.Y_AXIS);
+            
+//            configView.getContainer().setLayout(boxLayout);
+            
+            getContentPane().add(configView.getContainer());
+            
+            
+            
+        }
+        
+        
+        
+        
+        
+        
    
         pack();
 

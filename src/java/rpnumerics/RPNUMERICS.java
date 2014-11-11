@@ -83,7 +83,41 @@ public class RPNUMERICS {
             
             physicsConfiguration.addConfiguration(fluxConfiguration);
             
+            
+            
+            
+            
+            
+            
+            
+            
+            
         }
+        HashMap<String, Configuration> configurationMap = physicsConfiguration.getConfigurationMap();
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        List<String> auxFunctionNames = getAuxFunctionNames();
+        
+        
+        for (String string : auxFunctionNames) {
+            
+            System.out.println("nome func aux:" + string);
+            
+        }
+        
+        
+        
+        
+        
 
 
     }
@@ -882,6 +916,10 @@ public class RPNUMERICS {
     public static native ArrayList<String> getTransisionalLinesNames();
 
     public static native void readNativePhysicsConfig();
+    
+    public static native List<String> getAuxFunctionNames();
+    
+    public static native void setAuxFuntionParam(String auxFuncName, String auxFuncParam, String value);
 
     public static native String[] getHugoniotCaseNames(String hugoniotMethodName);
 

@@ -183,6 +183,7 @@ public abstract class Configuration extends Observable{
     }
 
     public HashMap<String, Configuration> getConfigurationMap() {
+
         return configurationMap_;
     }
 
