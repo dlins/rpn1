@@ -6,6 +6,7 @@
 #include "CoreyQuadSubPhysics.h"
 #include "KovalSubPhysics.h"
 #include "FoamSubPhysics.h"
+#include "ICDOWSubPhysics.h"
 
 #include <FL/Fl.H>
 #include <FL/Fl_Double_Window.H>
@@ -1261,7 +1262,7 @@ void add_double_contact(){
 int main(){
     // Create the subphysics.
     //
-    subphysics = new DeadVolatileVolatileGasSubPhysics;
+//    subphysics = new DeadVolatileVolatileGasSubPhysics;
 //    subphysics = new JDSubPhysics;
 
 //    subphysics = new StoneSubPhysics;
@@ -1269,6 +1270,8 @@ int main(){
 //    subphysics = new CoreyQuadSubPhysics;
 //    subphysics = new KovalSubPhysics;
 //    subphysics = new FoamSubPhysics;
+
+    subphysics = new ICDOWSubPhysics();
 
     std::cout << "SubPhysics \"" << subphysics->info_subphysics() << "\" created successfully." << std::endl;
 

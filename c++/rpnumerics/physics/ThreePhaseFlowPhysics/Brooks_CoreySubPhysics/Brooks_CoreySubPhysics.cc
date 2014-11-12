@@ -103,6 +103,8 @@ Brooks_CoreySubPhysics::Brooks_CoreySubPhysics() : ThreePhaseFlowSubPhysics(){
 }
 
 Brooks_CoreySubPhysics::~Brooks_CoreySubPhysics(){
+    std::cout << "Beginning of BC dtor." << std::endl;
+
     delete viscosity_;
 
     delete wavecurvefactory_;
@@ -120,8 +122,6 @@ Brooks_CoreySubPhysics::~Brooks_CoreySubPhysics(){
     delete rarefactioncurve_;
 
     for (int i = 0; i < hugoniot_curve.size(); i++) delete hugoniot_curve[i];
-
-    delete hugoniotcontinuation_;
 
     delete gridvalues_;
 

@@ -247,6 +247,9 @@ $(PROGNAME): $(OBJECTS)
 subphysics: $(OBJECTS)
 	$(LINK)  $(CPPFLAGS) $(INCLUDE) ../../../../../main_subphysics.cpp -o $@ $^  $(LDLIBS) $(LDFLAGS)
 
+follow: $(OBJECTS)
+	$(LINK)  $(CPPFLAGS) $(INCLUDE) ../../../../../main_follow.cpp -o $@ $^  $(LDLIBS) $(LDFLAGS)
+
 jettester: $(OBJECTS)
 	$(LINK)  $(CPPFLAGS) $(INCLUDE) ../../../../../main_jettester.cpp -o $@ $^  $(LDLIBS) $(LDFLAGS)
 

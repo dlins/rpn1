@@ -13,8 +13,6 @@ ShockCurve::ShockCurve(HugoniotContinuation *h){
     f = hc->flux();
     g = hc->accumulation();
 
-    std::cout << "Shock, flux at " << (void*)f << ", accumulation at " << (void*)g << std::endl;
-
     #ifdef USECANVAS
     canvas = 0;
     scroll = 0;

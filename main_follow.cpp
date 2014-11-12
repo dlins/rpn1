@@ -1,5 +1,6 @@
 #include "Brooks_CoreySubPhysics.h"
 #include "CoreyQuadSubPhysics.h"
+#include "SorbiePermeability.h"
 
 #include <FL/Fl.H>
 #include <FL/Fl_Double_Window.H>
@@ -47,7 +48,12 @@ Fl_Double_Window *win;
 ThreePhaseFlowSubPhysics *subphysics;
 MultiColoredCurve *mcc = 0;
 WaveCurvePlot *wcp = 0;
-SegmentedCurve *sc = 0;
+
+SegmentedCurve *scw = 0;
+SegmentedCurve *sco = 0;
+SegmentedCurve *scg = 0;
+
+ThreePhaseFlowPermeability *permeability;
 
 void on_move_Hugoniot(Fl_Widget*, void*){
     timer tm;
@@ -162,16 +168,30 @@ void on_move_perm(Fl_Widget*, void*){
 
     if (!subphysics->boundary()->inside(point)) return;
 
-    if (sc != 0) canvas->erase(sc);
+//    ThreePhaseFlowPermeabilityLevelCurve p(subphysics);
+    ThreePhaseFlowPermeabilityLevelCurve p(subphysics, permeability);
 
-    ThreePhaseFlowPermeabilityLevelCurve p(subphysics);
+    {
+    std::vector<RealVector> c;
+    p.curve(point, WATER_PERMEABILITY_CURVE, c);
+
+    if (c.size() == 0) return;
+
+    if (scw != 0) canvas->erase(scw);
+    scw = new SegmentedCurve(c, 0.0, 0.0, 1.0);
+    canvas->add(scw);
+    }
+
+    {
     std::vector<RealVector> c;
     p.curve(point, OIL_PERMEABILITY_CURVE, c);
 
     if (c.size() == 0) return;
 
-    sc = new SegmentedCurve(c, 0.0, 0.0, 1.0);
-    canvas->add(sc);
+    if (sco != 0) canvas->erase(sco);
+    sco = new SegmentedCurve(c, 1.0, 0.0, 0.0);
+    canvas->add(sco);
+    }
 
     double elapsed_time = tm.elapsed();
     total_time += elapsed_time;
@@ -187,8 +207,11 @@ void on_move_perm(Fl_Widget*, void*){
 }
 
 int main(){
-//    subphysics = new Brooks_CoreySubPhysics;
-    subphysics = new CoreyQuadSubPhysics;
+    subphysics = new Brooks_CoreySubPhysics;
+//    subphysics = new CoreyQuadSubPhysics;
+    permeability = subphysics->permeability();
+
+    permeability = new SorbiePermeability(0); // TODO Change this, create SorbieSubPhysics.
 
     win = new Fl_Double_Window(10, 10, 800, 800, "Follow");
     {

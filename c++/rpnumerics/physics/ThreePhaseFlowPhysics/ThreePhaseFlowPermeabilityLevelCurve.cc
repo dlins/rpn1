@@ -1,7 +1,9 @@
 #include "ThreePhaseFlowPermeabilityLevelCurve.h"
-#include "ThreePhaseFlowSubPhysics.h"
 
-ThreePhaseFlowPermeabilityLevelCurve::ThreePhaseFlowPermeabilityLevelCurve(ThreePhaseFlowSubPhysics *s): ImplicitFunction(), subphysics_(s) {
+ThreePhaseFlowPermeabilityLevelCurve::ThreePhaseFlowPermeabilityLevelCurve(ThreePhaseFlowSubPhysics *s): ImplicitFunction(), subphysics_(s), permeability_(s->permeability()) {
+}
+
+ThreePhaseFlowPermeabilityLevelCurve::ThreePhaseFlowPermeabilityLevelCurve(ThreePhaseFlowSubPhysics *s, ThreePhaseFlowPermeability *p): ImplicitFunction(), subphysics_(s), permeability_(p) {
 }
 
 ThreePhaseFlowPermeabilityLevelCurve::~ThreePhaseFlowPermeabilityLevelCurve(){
@@ -9,21 +11,21 @@ ThreePhaseFlowPermeabilityLevelCurve::~ThreePhaseFlowPermeabilityLevelCurve(){
 
 double ThreePhaseFlowPermeabilityLevelCurve::water_permeability(ThreePhaseFlowPermeabilityLevelCurve *obj, const RealVector &p){
     JetMatrix permj;
-    obj->subphysics_->permeability()->PermeabilityWater_jet(p, 0, permj);
+    obj->permeability_->PermeabilityWater_jet(p, 0, permj);
 
     return permj.get(0);
 }
 
 double ThreePhaseFlowPermeabilityLevelCurve::oil_permeability(ThreePhaseFlowPermeabilityLevelCurve *obj, const RealVector &p){
     JetMatrix permj;
-    obj->subphysics_->permeability()->PermeabilityOil_jet(p, 0, permj);
+    obj->permeability_->PermeabilityOil_jet(p, 0, permj);
 
     return permj.get(0);
 }
 
 double ThreePhaseFlowPermeabilityLevelCurve::gas_permeability(ThreePhaseFlowPermeabilityLevelCurve *obj, const RealVector &p){
     JetMatrix permj;
-    obj->subphysics_->permeability()->PermeabilityGas_jet(p, 0, permj);
+    obj->permeability_->PermeabilityGas_jet(p, 0, permj);
 
     return permj.get(0);
 }
@@ -34,7 +36,7 @@ int ThreePhaseFlowPermeabilityLevelCurve::function_on_square(double *foncub, int
 
     for (int l = 0; l < 2; l++) {
         for (int k = 0; k < 2; k++) {
-            f_aux[l * 2 + k] = (*permeabilityfunction)(this, gv->grid(i + l, j + k)) - level;
+            f_aux[l * 2 + k] = (*permeabilityfunction)(this, gv->grid(i + l, j + k)) - level_;
         }
     }
 
@@ -57,7 +59,7 @@ void ThreePhaseFlowPermeabilityLevelCurve::curve(const RealVector &ref, int type
         else if (type == OIL_PERMEABILITY_CURVE)   permeabilityfunction = &oil_permeability;
         else if (type == GAS_PERMEABILITY_CURVE)   permeabilityfunction = &gas_permeability;
 
-        level = (*permeabilityfunction)(this, ref);
+        level_ = (*permeabilityfunction)(this, ref);
 
         std::vector<RealVector> curve;
         std::vector< std::deque <RealVector> > deque_curves;
@@ -78,5 +80,11 @@ void ThreePhaseFlowPermeabilityLevelCurve::curve(const RealVector &ref, int type
     }
 
     return;
+}
+
+double ThreePhaseFlowPermeabilityLevelCurve::level(const RealVector &ref, int type){
+    if      (type == WATER_PERMEABILITY_CURVE) return water_permeability(this, ref);
+    else if (type == OIL_PERMEABILITY_CURVE)   return oil_permeability(this, ref);
+    else if (type == GAS_PERMEABILITY_CURVE)   return gas_permeability(this, ref);
 }
 

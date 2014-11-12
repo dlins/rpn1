@@ -105,6 +105,11 @@ ccSRC +=  \
 	../../../../rpnumerics/physics/CompositionalPhysics/DeadVolatileVolatileGas/DeadVolatileVolatileGasEvaporationExtension.cc \
 	../../../../rpnumerics/physics/CompositionalPhysics/DeadVolatileVolatileGas/DeadVolatileVolatileGasCompositeCurve.cc \
 	../../../../rpnumerics/physics/CompositionalPhysics/DeadVolatileVolatileGas/DeadVolatileVolatileGasFluxFunction.cc \
+	../../../../rpnumerics/physics/CompositionalPhysics/ICDOW/ICDOWHydrodynamics.cc \
+	../../../../rpnumerics/physics/CompositionalPhysics/ICDOW/ICDOWAccumulationFunction.cc \
+	../../../../rpnumerics/physics/CompositionalPhysics/ICDOW/ICDOWFluxFunction.cc \
+	../../../../rpnumerics/physics/CompositionalPhysics/ICDOW/ICDOWChemistry.cc \
+	../../../../rpnumerics/physics/CompositionalPhysics/ICDOW/ICDOWSubPhysics.cc \
 	../../../../rpnumerics/physics/Quad3SubPhysics/Quad3Equations.cc \
 	../../../../rpnumerics/physics/SinglePhase/Thermodynamics.cc \
 	../../../../rpnumerics/physics/Ion/IonAccumulation.cc \
@@ -124,6 +129,7 @@ ccSRC +=  \
 	../../../../rpnumerics/physics/ThreePhaseFlowPhysics/StoneSubPhysics/StonePermeability.cc \
 	../../../../rpnumerics/physics/ThreePhaseFlowPhysics/StoneSubPhysics/StoneSubPhysics.cc \
 	../../../../rpnumerics/physics/ThreePhaseFlowPhysics/StoneSubPhysics/StonePermParams.cc \
+	../../../../rpnumerics/physics/ThreePhaseFlowPhysics/Sorbie/SorbiePermeability.cc \
 	../../../../rpnumerics/physics/ThreePhaseFlowPhysics/ThreePhaseFlowPermeabilityLevelCurve.cc \
 	../../../../rpnumerics/physics/ThreePhaseFlowPhysics/ThreePhaseFlowSubPhysics.cc \
 	../../../../rpnumerics/physics/ThreePhaseFlowPhysics/CoreyQuadSubPhysics/CoreyQuadSubPhysics.cc \
