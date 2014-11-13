@@ -80,7 +80,7 @@ public class ChangeFluxParamsCommand extends RpModelConfigChangeCommand {
 
     @Override
     public void actionPerformed(ActionEvent event) {
-        System.out.println("Pronto pra chamar execute()");
+
         execute();
     }
 

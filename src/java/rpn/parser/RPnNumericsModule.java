@@ -16,9 +16,11 @@ import org.xml.sax.SAXException;
 import org.xml.sax.InputSource;
 import java.io.FileWriter;
 import java.io.InputStream;
+import java.util.HashMap;
 import rpn.configuration.RPnConfig;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.XMLReader;
+import rpn.configuration.Configuration;
 import rpnumerics.RPNUMERICS;
 import wave.util.Boundary;
 
@@ -168,17 +170,6 @@ public class RPnNumericsModule {
             
             RPNUMERICS.readNativePhysicsConfig();
             
-
-//            RPNUMERICS.setResolution(min, max, "doublecontactcurve", doubleContactResolution);
-//
-//            RPNUMERICS.setResolution(min, max, "hugoniotcurve", hugoniotResolution);
-//
-//            RPNUMERICS.setResolution(min, max, "bifurcationcurve", bifurcationCurvesResolution);
-//            for (String methodName : METHODNAMES) {
-//                
-//                setMethod(methodName);
-//                
-//            }
         }
 
         public void startPrefixMapping(String prefix, String uri) throws SAXException {

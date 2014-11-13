@@ -75,11 +75,11 @@ public class TextParameterView extends ParameterView {
 
         public void removeUpdate(DocumentEvent arg0) {
             
-            System.out.println("Evento remove");
+//            System.out.println("Evento remove");
         }
 
         public void changedUpdate(DocumentEvent arg0) {
-            System.out.println("Evento update");
+//            System.out.println("Evento update");
         }
     }
 }

@@ -14,20 +14,9 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
-import rpn.ui.physics.RPnBasson;
-import rpn.ui.physics.RPnCorey;
-import rpn.ui.physics.RPnCoreyBrooks;
-import rpn.ui.physics.RPnCoreyToStone;
-import rpn.RPnFluxConvexCombination;
 import rpn.RPnFluxParamsObserver;
 import rpn.RPnFluxParamsSubject;
-import rpn.ui.physics.RPnMLB;
-import rpn.ui.physics.RPnPalmeira;
 import rpn.RPnPhaseSpaceAbstraction;
-import rpn.ui.physics.RPnRadioButtonToStone;
-import rpn.ui.physics.RPnSchearerSchaeffer;
-import rpn.ui.physics.RPnStoneToStone;
-import rpn.RPnViscosityMatrix;
 import rpn.controller.phasespace.NumConfigImpl;
 
 import rpn.parser.RPnDataModule;
@@ -230,14 +219,6 @@ public class RPnConfig {
         
         
         paramObserver = new RPnFluxParamsObserver(physicsConfiguration);
-        
-        
-        
-        
-        
-        
-        
-        
         
         
     }

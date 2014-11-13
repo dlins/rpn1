@@ -26,10 +26,10 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_clean
 /*
  * Class:     rpnumerics_RPNUMERICS
  * Method:    setPhysicsParams
- * Signature: (ILjava/lang/String;)V
+ * Signature: (Ljava/lang/String;Ljava/lang/String;)V
  */
 JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setPhysicsParams
-  (JNIEnv *, jclass, jint, jstring);
+  (JNIEnv *, jclass, jstring, jstring);
 
 /*
  * Class:     rpnumerics_RPNUMERICS
@@ -174,6 +174,22 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RPNUMERICS_getTransisionalLinesNames
  */
 JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_readNativePhysicsConfig
   (JNIEnv *, jclass);
+
+/*
+ * Class:     rpnumerics_RPNUMERICS
+ * Method:    getAuxFunctionNames
+ * Signature: ()Ljava/util/List;
+ */
+JNIEXPORT jobject JNICALL Java_rpnumerics_RPNUMERICS_getAuxFunctionNames
+  (JNIEnv *, jclass);
+
+/*
+ * Class:     rpnumerics_RPNUMERICS
+ * Method:    setAuxFuntionParam
+ * Signature: (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
+ */
+JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setAuxFuntionParam
+  (JNIEnv *, jclass, jstring, jstring, jstring);
 
 /*
  * Class:     rpnumerics_RPNUMERICS
