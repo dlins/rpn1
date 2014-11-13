@@ -26,10 +26,10 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_clean
 /*
  * Class:     rpnumerics_RPNUMERICS
  * Method:    setPhysicsParams
- * Signature: (ILjava/lang/String;)V
+ * Signature: (Ljava/lang/String;Ljava/lang/String;)V
  */
 JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setPhysicsParams
-  (JNIEnv *, jclass, jint, jstring);
+  (JNIEnv *, jclass, jstring, jstring);
 
 /*
  * Class:     rpnumerics_RPNUMERICS

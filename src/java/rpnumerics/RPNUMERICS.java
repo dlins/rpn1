@@ -9,15 +9,20 @@ import rpn.configuration.Configuration;
 import rpnumerics.viscousprofile.ViscousProfileData;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import javax.swing.BoxLayout;
+import javax.swing.JPanel;
 import rpn.configuration.ConfigurationProfile;
 import rpn.configuration.Parameter;
 import rpn.configuration.PhysicsConfiguration;
 import rpn.configuration.PhysicsConfigurationParams;
 import rpn.configuration.TextParameter;
 import rpn.parser.RPnDataModule;
+import rpn.ui.ConfigurationView;
 import wave.multid.CoordsArray;
 import wave.util.*;
 import wave.ode.*;
@@ -57,19 +62,18 @@ public class RPNUMERICS {
         if (fluxFunctionConfiguration != null) {//Reading from file
 
             for (int i = 0; i < fluxFunctionConfiguration.getParameterList().size(); i++) {
-                
-                
 
                 Parameter param = fluxFunctionConfiguration.getParamList().get(i);
-                int paramOrder = fluxFunctionConfiguration.getParamOrder(param.getName());                
-                
-                setPhysicsParams(paramOrder, param.getValue());
+
+                setPhysicsParams(param.getName(), param.getValue());
 
             }
 
         }else {//Reading from library
 
            PhysicsConfigurationParams  fluxConfiguration = new PhysicsConfigurationParams("fluxfunction");
+           
+
            
            String[] physicsParamsNames = getPhysicsParamsNames();
 
@@ -84,37 +88,33 @@ public class RPNUMERICS {
             physicsConfiguration.addConfiguration(fluxConfiguration);
             
             
-            
-            
-            
-            
-            
-            
-            
-            
-        }
-        HashMap<String, Configuration> configurationMap = physicsConfiguration.getConfigurationMap();
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        List<String> auxFunctionNames = getAuxFunctionNames();
-        
-        
-        for (String string : auxFunctionNames) {
-            
-            System.out.println("nome func aux:" + string);
-            
         }
         
-        
+//        HashMap<String, Configuration> configurationMap = physicsConfiguration.getConfigurationMap();
+//        
+//        
+//        Set<Map.Entry<String, Configuration>> entrySet = configurationMap.entrySet();
+//        Iterator<Map.Entry<String, Configuration>> iterator = entrySet.iterator();
+//        
+//        
+//        
+//        while (iterator.hasNext()) {
+//            
+//            Map.Entry<String, Configuration> entry = iterator.next();
+//            
+//            Configuration config = entry.getValue();
+//            
+//            for (Parameter param : config.getParameterList()) {
+//                
+//                setAuxFuntionParam(config.getName(), param.getName(), param.getValue());
+//                
+//                
+//            }
+//            
+//        }
+//        
+//        
+//    
         
         
         
@@ -846,17 +846,17 @@ public class RPNUMERICS {
 
     public static void applyFluxParams() {
 
-        Configuration physicsConfiguration = configMap_.get(physicsID());
-
-        HashMap<String, String> params = physicsConfiguration.getParams();
-
-        Set<String> keySet = params.keySet();
-
-        for (String paramName : keySet) {
-
-            setPhysicsParams(physicsConfiguration.getParamOrder(paramName), physicsConfiguration.getParam(paramName));
-
-        }
+//        Configuration physicsConfiguration = configMap_.get(physicsID());
+//
+//        HashMap<String, String> params = physicsConfiguration.getParams();
+//
+//        Set<String> keySet = params.keySet();
+//
+//        for (String paramName : keySet) {
+//
+//            setPhysicsParams(physicsConfiguration.getParamOrder(paramName), physicsConfiguration.getParam(paramName));
+//
+//        }
 
 //        
 ////        FluxParams previousParams = getFluxParams();
@@ -879,7 +879,7 @@ public class RPNUMERICS {
      */
     public static native void clean();
 
-    public static native void setPhysicsParams(int paramIndex, String value);
+    public static native void setPhysicsParams(String paramName, String value);
 
     public static native String getPhysicsParam(int paramIndex);
 

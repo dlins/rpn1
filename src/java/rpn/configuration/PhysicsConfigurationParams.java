@@ -10,6 +10,7 @@ public class PhysicsConfigurationParams extends Configuration {
     public PhysicsConfigurationParams(String name) {
 
         super(name);
+        setType(ConfigurationProfile.PHYSICS_CONFIG);
 
     }
 
