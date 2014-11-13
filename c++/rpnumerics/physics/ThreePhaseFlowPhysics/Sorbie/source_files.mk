@@ -32,6 +32,7 @@ ccSRC +=  \
 	../../../../rpnumerics/methods/WaveCurve/WaveCurveFactory.cc \
 	../../../../rpnumerics/methods/WaveCurve/WaveCurve.cc \
 	../../../../rpnumerics/methods/RiemannSolver/RiemannProblem.cc \
+	../../../../rpnumerics/methods/EquationFunctionLevelCurve/EquationFunctionLevelCurve.cc \
 	../../../../rpnumerics/methods/TransitionalShock/TransitionalShock.cc \
 	../../../../rpnumerics/methods/HugoniotCurve/ImplicitHugoniotCurve.cc \
 	../../../../rpnumerics/methods/HugoniotCurve/HugoniotCurve.cc \
@@ -105,6 +106,11 @@ ccSRC +=  \
 	../../../../rpnumerics/physics/CompositionalPhysics/DeadVolatileVolatileGas/DeadVolatileVolatileGasEvaporationExtension.cc \
 	../../../../rpnumerics/physics/CompositionalPhysics/DeadVolatileVolatileGas/DeadVolatileVolatileGasCompositeCurve.cc \
 	../../../../rpnumerics/physics/CompositionalPhysics/DeadVolatileVolatileGas/DeadVolatileVolatileGasFluxFunction.cc \
+	../../../../rpnumerics/physics/CompositionalPhysics/ICDOW/ICDOWHydrodynamics.cc \
+	../../../../rpnumerics/physics/CompositionalPhysics/ICDOW/ICDOWAccumulationFunction.cc \
+	../../../../rpnumerics/physics/CompositionalPhysics/ICDOW/ICDOWFluxFunction.cc \
+	../../../../rpnumerics/physics/CompositionalPhysics/ICDOW/ICDOWChemistry.cc \
+	../../../../rpnumerics/physics/CompositionalPhysics/ICDOW/ICDOWSubPhysics.cc \
 	../../../../rpnumerics/physics/Quad3SubPhysics/Quad3Equations.cc \
 	../../../../rpnumerics/physics/SinglePhase/Thermodynamics.cc \
 	../../../../rpnumerics/physics/Ion/IonAccumulation.cc \
@@ -142,6 +148,7 @@ ccSRC +=  \
 	../../../../rpnumerics/physics/ThreePhaseFlowPhysics/Brooks_CoreySubPhysics/Brooks_CoreyPermeability.cc \
 	../../../../rpnumerics/physics/ThreePhaseFlowPhysics/Brooks_CoreySubPhysics/Brooks_CoreyFluxFunction.cc \
 	../../../../rpnumerics/physics/ThreePhaseFlowPhysics/Brooks_CoreySubPhysics/Brooks_CoreySubPhysics.cc \
+	../../../../rpnumerics/physics/ThreePhaseFlowPhysics/ThreePhaseFlowEquationFunctionLevelCurve.cc \
 	../../../../rpnumerics/physics/ThreePhaseFlowPhysics/Koval/KovalFluxFunction.cc \
 	../../../../rpnumerics/physics/ThreePhaseFlowPhysics/Koval/KovalSubPhysics.cc \
 	../../../../rpnumerics/physics/ThreePhaseFlowPhysics/Koval/KovalViscosity.cc \
