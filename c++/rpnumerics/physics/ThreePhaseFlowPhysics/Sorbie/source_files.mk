@@ -54,6 +54,7 @@ ccSRC +=  \
 	../../../../rpnumerics/methods/contour/Contour2x2_Method.cc \
 	../../../../rpnumerics/methods/contour/GPU/Double_Contact_GPU.cc \
 	../../../../rpnumerics/methods/contour/GPU/Contour2x2_Method_GPU.cc \
+	../../../../rpnumerics/methods/contour/ContourMethodPure.cc \
 	../../../../rpnumerics/methods/RarefactionCurve/RarefactionCurve.cc \
 	../../../../rpnumerics/methods/Secondary_Bifurcations/Explicit_Bifurcation_Curves/Explicit_Bifurcation_Curves.cc \
 	../../../../rpnumerics/methods/CharacteristicPolynomialLevels/CharacteristicPolynomialLevels.cc \

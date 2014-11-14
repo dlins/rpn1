@@ -13,6 +13,7 @@
 
 #include <map>
 #include <iostream>
+#include <typeinfo>
 
 ThreePhaseFlowSubPhysics *subphysics;
 ThreePhaseFlowPermeabilityLevelCurve *permlevelcurve;
@@ -25,26 +26,9 @@ void wincb(Fl_Widget*, void*){
     return;
 }
 
-class PermWindow: public Fl_Double_Window {
-    private:
-    protected:
-    public:
-        Canvas *canvas;
-        Fl_Round_Button *rndmove, *rndclick;
-
-        SegmentedCurve *sc;
-        Text *text;
-
-        int type;
-
-        PermWindow(int x, int y, int w, int h, const char *l): Fl_Double_Window(x, y, w, h, l){
-            sc = 0;
-            text = 0;
-
-            canvas = new Canvas(0, 0, w, h - 10 - 25 - 10);
-
-            // Add some stuff to the canvas.
-            //
+// Add some stuff to the canvas.
+//
+void prepare_triangle(Canvas *canvas){
             {
             std::vector<std::vector<RealVector> > b;
             subphysics->boundary()->physical_boundary(b);
@@ -103,6 +87,228 @@ class PermWindow: public Fl_Double_Window {
                 canvas->add(t);
             }
 
+    return;
+}
+
+class MapOutWindow: public Fl_Double_Window {
+    private:
+    protected:
+    public:
+        Canvas *canvas;
+        Curve2D *point;
+
+        MapOutWindow(int x, int y, int w, int h, const char *l): Fl_Double_Window(x, y, w, h, l){
+            point = 0;
+
+            canvas = new Canvas(0, 0, w, h);
+            prepare_triangle(canvas);
+
+            end();
+
+            resizable(canvas);
+            callback(wincb);
+        }
+
+        virtual ~MapOutWindow(){
+        }
+};
+
+MapOutWindow *map_out;
+
+class MapInWindow: public Fl_Double_Window {
+    private:
+    protected:
+        static void on_click_map(Fl_Widget *obj, void*){
+            MapInWindow *local_map_in = (MapInWindow*)obj;
+
+            RealVector temp(2);
+            local_map_in->canvas->getxy(temp(0), temp(1));
+
+            if (!subphysics->boundary()->inside(temp)) return;
+
+            double sw = temp(0);
+            double so = temp(1);
+
+            int n = 50;
+
+            RealVector pmin(2), pmax(2);
+
+            if      (local_map_in->swrnd->value() == 1){
+                pmin(0) = pmax(0) = sw;
+
+                pmin(1) = 0.0;
+                pmax(1) = 1.0 - sw;
+            }
+            else if (local_map_in->sornd->value() == 1){
+                pmin(1) = pmax(1) = so;
+
+                pmin(0) = 0.0;
+                pmax(0) = 1.0 - so;
+            }
+            else if (local_map_in->sgrnd->value() == 1){
+                double sg = 1.0 - sw - so;
+
+                pmin(0) = 0.0;
+                pmin(1) = 1.0 - sg;
+
+                pmax(0) = 1.0 - sg;
+                pmax(1) = 0.0;
+            }
+
+            Curve curve;
+            Utilities::regularly_sampled_segment(pmin, pmax, n, curve);
+
+            std::vector<RealVector> line, map;
+            for (int i = 0; i < curve.curve.size(); i++){
+                line.push_back(curve.curve[i]);
+
+                JetMatrix jm;
+                subphysics->flux()->jet(line.back(), jm, 0);
+
+                map.push_back(jm.function());
+            }
+
+            {
+                Curve2D *c = new Curve2D(line, 1.0, 0.0, 0.0);
+                local_map_in->canvas->add(c);
+            }
+            {
+                Curve2D *c = new Curve2D(map, 1.0, 0.0, 0.0);
+                map_out->canvas->add(c);
+            }
+
+
+            return;
+        }
+
+        static void on_move_map(Fl_Widget *obj, void*){
+            Canvas *canvas = (Canvas*)obj;
+            MapInWindow *local_map_in = (MapInWindow*)canvas->window();
+
+            RealVector point(2);
+            local_map_in->canvas->getxy(point(0), point(1));
+
+            JetMatrix jm;
+            subphysics->flux()->jet(point, jm, 0);
+
+            RealVector out = jm.function();
+
+            if (local_map_in->point != 0) local_map_in->canvas->erase(local_map_in->point);
+            {
+                local_map_in->point = new Curve2D(point, 0.0, 0.0, 0.0, CURVE2D_MARKERS);
+                local_map_in->canvas->add(local_map_in->point);
+            }
+
+            if (map_out->point != 0) map_out->canvas->erase(map_out->point);
+            {
+                map_out->point = new Curve2D(out, 0.0, 0.0, 0.0, CURVE2D_MARKERS);
+                map_out->canvas->add(map_out->point);
+            }
+
+            Fl::check();
+
+            return;
+        }
+
+        static void actioncb(Fl_Widget*, void *obj){
+            MapInWindow *local_map_in = (MapInWindow*)obj;
+            std::cout << "local_map_in = " << (void*)local_map_in << std::endl;
+
+            if (local_map_in->mvrnd->value() == 1){
+                local_map_in->canvas->on_move(&MapInWindow::on_move_map, local_map_in, 0);
+                local_map_in->canvas->setextfunc(0, local_map_in, 0);
+            }
+            else {
+                if (local_map_in->point != 0) local_map_in->canvas->erase(local_map_in->point);
+                local_map_in->canvas->on_move(0, local_map_in, 0);
+                local_map_in->canvas->setextfunc(&MapInWindow::on_click_map, local_map_in, 0);
+            }
+        }
+
+    public:
+        Canvas *canvas;
+        Curve2D *point;
+
+        Fl_Group *componentgrp;
+            Fl_Round_Button *swrnd, *sornd, *sgrnd;
+
+        Fl_Group *actiongrp;
+            Fl_Round_Button *mvrnd, *clickrnd;
+
+        MapInWindow(int x, int y, int w, int h, const char *l): Fl_Double_Window(x, y, w, h, l){
+            std::cout << "Ctor: " << (void*)this << std::endl;
+            point = 0;
+
+            canvas = new Canvas(0, 0, w, h - 80);
+            prepare_triangle(canvas);
+
+            componentgrp = new Fl_Group(canvas->x(), canvas->y() + canvas->h() + 10, canvas->w(), 25);
+            {
+                int rndw = (componentgrp->w() - 40)/3;
+
+                swrnd = new Fl_Round_Button(componentgrp->x() + 10, componentgrp->y(), rndw, 25, "Constant sw");
+                swrnd->type(FL_RADIO_BUTTON);
+                swrnd->value(1);
+
+                sornd = new Fl_Round_Button(swrnd->x() + rndw + 10, swrnd->y(), rndw, 25, "Constant so");
+                sornd->type(FL_RADIO_BUTTON);
+
+                sgrnd = new Fl_Round_Button(sornd->x() + rndw + 10, sornd->y(), rndw, 25, "Constant sg");
+                sgrnd->type(FL_RADIO_BUTTON);
+
+            }
+            componentgrp->end();
+            componentgrp->box(FL_BORDER_BOX);
+
+            actiongrp = new Fl_Group(componentgrp->x(), componentgrp->y() + componentgrp->h() + 10, componentgrp->w(), 25);
+            {
+                int rndw = (actiongrp->w() - 30)/2;
+
+                mvrnd = new Fl_Round_Button(actiongrp->x() + 10, actiongrp->y(), rndw, 25, "Follow mouse");
+                mvrnd->type(FL_RADIO_BUTTON);
+                mvrnd->value(1);
+                mvrnd->callback(actioncb, this);
+
+                clickrnd = new Fl_Round_Button(mvrnd->x() + mvrnd->w() + 10, mvrnd->y(), rndw, 25, "Compute on click");
+                clickrnd->type(FL_RADIO_BUTTON);
+                clickrnd->callback(actioncb, this);
+
+                mvrnd->do_callback();
+            }
+            actiongrp->end();
+            actiongrp->box(FL_BORDER_BOX);
+
+            end();
+
+            resizable(canvas);
+            callback(wincb);
+        }
+
+        virtual ~MapInWindow(){
+        }
+};
+
+MapInWindow *map_in;
+
+class PermWindow: public Fl_Double_Window {
+    private:
+    protected:
+    public:
+        Canvas *canvas;
+        Fl_Round_Button *rndmove, *rndclick;
+
+        SegmentedCurve *sc;
+        Text *text;
+
+        int type;
+
+        PermWindow(int x, int y, int w, int h, const char *l): Fl_Double_Window(x, y, w, h, l){
+            sc = 0;
+            text = 0;
+
+            canvas = new Canvas(0, 0, w, h - 10 - 25 - 10);
+            prepare_triangle(canvas);
+
             // Move & click.
             //
             rndmove = new Fl_Round_Button(10, canvas->y() + canvas->h() + 10, (w - 30)/2, 25, "Follow mouse");
@@ -115,7 +321,7 @@ class PermWindow: public Fl_Double_Window {
             // Finish.
             //
             end();
-            resizable(this);
+            resizable(canvas);
             callback(wincb);
         }
 
@@ -398,6 +604,14 @@ int main(){
             pw->rndmove->do_callback();
         }
     }
+
+    // Mapping.
+    //
+    map_in = new MapInWindow(0, 0, 800, 800, "Map input");
+    map_in->show();
+
+    map_out = new MapOutWindow(0, 0, 800, 800, "Map output");
+    map_out->show();
 
     return Fl::run();
 }

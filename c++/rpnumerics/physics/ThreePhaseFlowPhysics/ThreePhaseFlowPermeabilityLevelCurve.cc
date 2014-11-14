@@ -1,9 +1,31 @@
 #include "ThreePhaseFlowPermeabilityLevelCurve.h"
 
+void ThreePhaseFlowPermeabilityLevelCurve::init(){
+    gv = subphysics_->gridvalues();
+    permeability.resize(gv->grid.rows(), gv->grid.cols());
+
+    for (int i = 0; i < gv->grid.rows(); i++){
+        for (int j = 0; j < gv->grid.cols(); j++){
+//            if (!gv->point_inside(i, j)) continue;
+
+            permeability(i, j).resize(3);
+
+            permeability(i, j)(0) = water_permeability(this, gv->grid(i, j));
+            permeability(i, j)(1) = oil_permeability(this, gv->grid(i, j));
+            permeability(i, j)(2) = gas_permeability(this, gv->grid(i, j));
+
+        }
+    }
+
+    return;
+}
+
 ThreePhaseFlowPermeabilityLevelCurve::ThreePhaseFlowPermeabilityLevelCurve(ThreePhaseFlowSubPhysics *s): ImplicitFunction(), subphysics_(s), permeability_(s->permeability()) {
+    init();
 }
 
 ThreePhaseFlowPermeabilityLevelCurve::ThreePhaseFlowPermeabilityLevelCurve(ThreePhaseFlowSubPhysics *s, ThreePhaseFlowPermeability *p): ImplicitFunction(), subphysics_(s), permeability_(p) {
+    init();
 }
 
 ThreePhaseFlowPermeabilityLevelCurve::~ThreePhaseFlowPermeabilityLevelCurve(){
@@ -36,7 +58,8 @@ int ThreePhaseFlowPermeabilityLevelCurve::function_on_square(double *foncub, int
 
     for (int l = 0; l < 2; l++) {
         for (int k = 0; k < 2; k++) {
-            f_aux[l * 2 + k] = (*permeabilityfunction)(this, gv->grid(i + l, j + k)) - level_;
+//            f_aux[l * 2 + k] = (*permeabilityfunction)(this, gv->grid(i + l, j + k)) - level_;
+            f_aux[l * 2 + k] = permeability(i + l, j + k)(component_) - level_;
         }
     }
 
@@ -52,12 +75,14 @@ int ThreePhaseFlowPermeabilityLevelCurve::function_on_square(double *foncub, int
 }
 
 void ThreePhaseFlowPermeabilityLevelCurve::curve(const RealVector &ref, int type, std::vector<RealVector> &c){
-    gv = subphysics_->gridvalues();
-
     if (gv != 0){
         if      (type == WATER_PERMEABILITY_CURVE) permeabilityfunction = &water_permeability;
         else if (type == OIL_PERMEABILITY_CURVE)   permeabilityfunction = &oil_permeability;
         else if (type == GAS_PERMEABILITY_CURVE)   permeabilityfunction = &gas_permeability;
+
+        if      (type == WATER_PERMEABILITY_CURVE) component_ = 0;
+        else if (type == OIL_PERMEABILITY_CURVE)   component_ = 1;
+        else if (type == GAS_PERMEABILITY_CURVE)   component_ = 2;
 
         level_ = (*permeabilityfunction)(this, ref);
 
@@ -66,17 +91,19 @@ void ThreePhaseFlowPermeabilityLevelCurve::curve(const RealVector &ref, int type
         std::vector <bool> is_circular;
 
         int method = SEGMENTATION_METHOD;
-        int info = ContourMethod::contour2d(this, curve, deque_curves, is_circular, method);
+//        int info = ContourMethod::contour2d(this, curve, deque_curves, is_circular, method);
+
+        double rect[4];
+        rect[0] = subphysics_->boundary()->minimums()(0);
+        rect[1] = subphysics_->boundary()->maximums()(0);
+        rect[2] = subphysics_->boundary()->minimums()(1);
+        rect[3] = subphysics_->boundary()->maximums()(1);
+
+        int res[2] = {128, 128};
+
+        int info = ContourMethodPure::contour2d(this, (Boundary*)subphysics_->boundary(), rect, res, curve);
 
         c = curve;
-
-//        for (int i = 0; i < hugoniot_curve.size()/2; i++){
-//            Curve temp;
-//            temp.curve.push_back(hugoniot_curve[2*i]);
-//            temp.curve.push_back(hugoniot_curve[2*i + 1]);
-
-//            c.push_back(temp);
-//        }
     }
 
     return;

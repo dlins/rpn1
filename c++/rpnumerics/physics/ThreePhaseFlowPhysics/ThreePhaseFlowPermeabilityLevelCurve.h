@@ -6,6 +6,8 @@
 #include "ThreePhaseFlowPermeability.h"
 #include "ThreePhaseFlowSubPhysics.h"
 
+#include "ContourMethodPure.h"
+
 #define WATER_PERMEABILITY_CURVE 0
 #define OIL_PERMEABILITY_CURVE   1
 #define GAS_PERMEABILITY_CURVE   2
@@ -22,6 +24,10 @@ class ThreePhaseFlowPermeabilityLevelCurve: public ImplicitFunction {
 
         double (*permeabilityfunction)(ThreePhaseFlowPermeabilityLevelCurve *obj, const RealVector &p);
         double level_;
+        int component_;
+
+        Matrix<RealVector> permeability;
+        void init();
     public:
         ThreePhaseFlowPermeabilityLevelCurve(ThreePhaseFlowSubPhysics *s);
         ThreePhaseFlowPermeabilityLevelCurve(ThreePhaseFlowSubPhysics *s, ThreePhaseFlowPermeability *p);
