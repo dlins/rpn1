@@ -95,3 +95,19 @@ int SorbiePermeability::PermeabilityGas_jet(const RealVector &state, int degree,
     return degree;
 }
 
+void SorbiePermeability::reduced_permeability(const RealVector &state, RealVector &reduced){
+    double rw, ro, rg;
+
+    JetMatrix water, oil, gas;
+    PermeabilityWater_jet(state, 0, water);
+    PermeabilityGas_jet(state, 0, gas);
+    PermeabilityOil_jet(state, 0, oil);
+
+    reduced.resize(3);
+    reduced(0) = water.get(0)/state(0);
+    reduced(1) = oil.get(0)/state(1);
+    reduced(2) = gas.get(0)/(1.0 - state(0) - state(1));
+
+    return;
+}
+

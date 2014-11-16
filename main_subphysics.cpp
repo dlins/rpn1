@@ -7,6 +7,7 @@
 #include "KovalSubPhysics.h"
 #include "FoamSubPhysics.h"
 #include "ICDOWSubPhysics.h"
+#include "SorbieSubPhysics.h"
 
 #include <FL/Fl.H>
 #include <FL/Fl_Double_Window.H>
@@ -1264,14 +1265,14 @@ int main(){
     //
 //    subphysics = new DeadVolatileVolatileGasSubPhysics;
 //    subphysics = new JDSubPhysics;
+//    subphysics = new ICDOWSubPhysics();
 
 //    subphysics = new StoneSubPhysics;
 //    subphysics = new Brooks_CoreySubPhysics;
 //    subphysics = new CoreyQuadSubPhysics;
 //    subphysics = new KovalSubPhysics;
 //    subphysics = new FoamSubPhysics;
-
-    subphysics = new ICDOWSubPhysics();
+    subphysics = new SorbieSubPhysics();
 
     std::cout << "SubPhysics \"" << subphysics->info_subphysics() << "\" created successfully." << std::endl;
 

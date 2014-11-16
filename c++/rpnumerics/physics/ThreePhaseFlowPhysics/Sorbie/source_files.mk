@@ -131,7 +131,10 @@ ccSRC +=  \
 	../../../../rpnumerics/physics/ThreePhaseFlowPhysics/StoneSubPhysics/StonePermeability.cc \
 	../../../../rpnumerics/physics/ThreePhaseFlowPhysics/StoneSubPhysics/StoneSubPhysics.cc \
 	../../../../rpnumerics/physics/ThreePhaseFlowPhysics/StoneSubPhysics/StonePermParams.cc \
+	../../../../rpnumerics/physics/ThreePhaseFlowPhysics/Sorbie/SorbieViscosity.cc \
+	../../../../rpnumerics/physics/ThreePhaseFlowPhysics/Sorbie/SorbieSubPhysics.cc \
 	../../../../rpnumerics/physics/ThreePhaseFlowPhysics/Sorbie/SorbiePermeability.cc \
+	../../../../rpnumerics/physics/ThreePhaseFlowPhysics/Sorbie/SorbieFluxFunction.cc \
 	../../../../rpnumerics/physics/ThreePhaseFlowPhysics/ThreePhaseFlowPermeabilityLevelCurve.cc \
 	../../../../rpnumerics/physics/ThreePhaseFlowPhysics/ThreePhaseFlowSubPhysics.cc \
 	../../../../rpnumerics/physics/ThreePhaseFlowPhysics/CoreyQuadSubPhysics/CoreyQuadSubPhysics.cc \

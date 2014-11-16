@@ -19,27 +19,5 @@ class SorbiePermeability: public ThreePhaseFlowPermeability {
         inline void reduced_permeability(const RealVector &state, RealVector &rp);
 };
 
-void SorbiePermeability::reduced_permeability(const RealVector &state, RealVector &rp){
-    double sw = state(0);
-    double so = state(1);
-    double sg = 1.0 - sw - so;
-
-    rp.resize(3);
-
-    // Water.
-    //
-    rp(0) = sw;
-
-    // Oil.
-    //
-    rp(1) = so;
-
-    // Gas.
-    //
-    rp(2) = sg;
-
-    return;
-}
-
 #endif // _SORBIEPERMEABILITY_
 
