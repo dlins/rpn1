@@ -17,6 +17,7 @@ import rpn.command.EnvelopeCurveCommand;
 import rpn.command.HysteresisPlotCommand;
 import rpn.command.ImageSelectionCommand;
 import rpn.command.InflectionPlotCommand;
+import rpn.command.RiemannProfileCommand;
 import rpn.command.RiemannResetCommand;
 import rpn.command.SecondaryBifurcationCurveCommand;
 
@@ -30,7 +31,7 @@ public class RiemannProblemConfig extends UI_ACTION_SELECTED {
 
     public RiemannProblemConfig() {
 
-        super(BifurcationPlotCommand.instance());
+        super(RiemannProfileCommand.instance());
         CoincidencePlotCommand.instance().setEnabled(true);
         SubInflectionPlotCommand.instance().setEnabled(true);
         BuckleyLeverettiInflectionCommand.instance().setEnabled(true);

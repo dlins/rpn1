@@ -53,12 +53,19 @@ public class ShockCurveCalc extends WaveCurveOrbitCalc implements RpCalculation 
 
         ShockCurve result ;
         
+        PhasePoint initialPoint = getStart();
+        
+        int family = Integer.parseInt(configuration_.getParam("family"));
+        int direction = Integer.parseInt(configuration_.getParam("direction"));
+        
+        
+        
         if(fromBoundary_){
             result= (ShockCurve) boundaryCalc(getStart(), getFamilyIndex(), getDirection(),edge_);
         }
         
         else {
-            result  = (ShockCurve)calc("methodName_", newtonTolerance_, getStart(), getFamilyIndex(), getDirection());
+            result  = (ShockCurve)calc("methodName_", newtonTolerance_, initialPoint, family,direction);
         }
         
         if (result == null) {

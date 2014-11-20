@@ -14,15 +14,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import javax.swing.BoxLayout;
-import javax.swing.JPanel;
 import rpn.configuration.ConfigurationProfile;
 import rpn.configuration.Parameter;
 import rpn.configuration.PhysicsConfiguration;
 import rpn.configuration.PhysicsConfigurationParams;
-import rpn.configuration.TextParameter;
 import rpn.parser.RPnDataModule;
-import rpn.ui.ConfigurationView;
 import wave.multid.CoordsArray;
 import wave.util.*;
 import wave.ode.*;
@@ -68,57 +64,54 @@ public class RPNUMERICS {
                 setPhysicsParams(param.getName(), param.getValue());
 
             }
-
-        }else {//Reading from library
-
-           PhysicsConfigurationParams  fluxConfiguration = new PhysicsConfigurationParams("fluxfunction");
-           
-
-           
-           String[] physicsParamsNames = getPhysicsParamsNames();
-
-            for (int i = 0; i < physicsParamsNames.length; i++) {
-
-
-                Parameter param = new TextParameter(physicsParamsNames[i], getPhysicsParam(i));                
-                fluxConfiguration.addParameter(param);
-
-            }
-            
-            physicsConfiguration.addConfiguration(fluxConfiguration);
-            
-            
         }
-        
-//        HashMap<String, Configuration> configurationMap = physicsConfiguration.getConfigurationMap();
-//        
-//        
-//        Set<Map.Entry<String, Configuration>> entrySet = configurationMap.entrySet();
-//        Iterator<Map.Entry<String, Configuration>> iterator = entrySet.iterator();
-//        
-//        
-//        
-//        while (iterator.hasNext()) {
-//            
-//            Map.Entry<String, Configuration> entry = iterator.next();
-//            
-//            Configuration config = entry.getValue();
-//            
-//            for (Parameter param : config.getParameterList()) {
-//                
-//                setAuxFuntionParam(config.getName(), param.getName(), param.getValue());
-//                
-//                
+//        }else {//Reading from library
+//
+//           PhysicsConfigurationParams  fluxConfiguration = new PhysicsConfigurationParams("fluxfunction");
+//           
+//
+//           
+//           String[] physicsParamsNames = getPhysicsParamsNames();
+//
+//            for (int i = 0; i < physicsParamsNames.length; i++) {
+//
+//
+//                Parameter param = new TextParameter(physicsParamsNames[i], getPhysicsParam(i));                
+//                fluxConfiguration.addParameter(param);
+//
 //            }
 //            
+//            physicsConfiguration.addConfiguration(fluxConfiguration);
+//            
+//            
 //        }
-//        
-//        
-//    
+        
+        HashMap<String, Configuration> configurationMap = physicsConfiguration.getConfigurationMap();
+        
+        
+        Set<Map.Entry<String, Configuration>> entrySet = configurationMap.entrySet();
+        Iterator<Map.Entry<String, Configuration>> iterator = entrySet.iterator();
         
         
         
-
+        while (iterator.hasNext()) {
+            
+            Map.Entry<String, Configuration> entry = iterator.next();
+            
+            Configuration config = entry.getValue();
+            
+            if(!config.getName().equals("fluxfunction")){
+                 for (Parameter param : config.getParameterList()) {
+                
+                setAuxFuntionParam(config.getName(), param.getName(), param.getValue());
+                
+                
+            }
+            
+            }
+            
+           
+        }
 
     }
 
@@ -245,18 +238,7 @@ public class RPNUMERICS {
 
     }
 
-    public static WaveCurveOrbitCalc createInflectionWaveCurveCalc(OrbitPoint oPoint, int family) {
-
-        Integer direction = new Integer(getParamValue("fundamentalcurve", "direction"));
-        return new WaveCurveCalc(oPoint, family, direction, WaveCurveCalc.INFLECTION, 0);
-
-    }
-
-    public static WaveCurveCalc createBoundaryWaveCurveCalc(OrbitPoint orbitPoint, int origin, int edge) {
-        Integer direction = new Integer(getParamValue("fundamentalcurve", "direction"));
-        return new WaveCurveCalc(orbitPoint, Integer.parseInt(getParamValue("fundamentalcurve", "family")), direction, WaveCurveCalc.BOUNDARY, edge);
-    }
-
+   
     public static RarefactionCurveCalc createRarefactionCalc(OrbitPoint orbitPoint) {
         Integer direction = new Integer(getParamValue("fundamentalcurve", "direction"));
         return new RarefactionCurveCalc(orbitPoint, Integer.parseInt(getParamValue("fundamentalcurve", "family")), direction);

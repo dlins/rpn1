@@ -16,7 +16,7 @@
                 </PHYSICSCONFIG> -->
 
 
-          <!--<PHYSICSCONFIG name="Permeability">       
+          <PHYSICSCONFIG name="Permeability">       
 
                    <PHYSICSPARAM name="expw" position="0" value ="2.5" />
                     <PHYSICSPARAM name="expg" position="1" value ="2.0" />
@@ -34,7 +34,7 @@
                     <PHYSICSPARAM name="log" position="12" value ="0.0" />
 
 
-                </PHYSICSCONFIG>-->
+                </PHYSICSCONFIG>
 
             </PHYSICS>
 

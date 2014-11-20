@@ -281,6 +281,11 @@ public class RPnDataModule {
                 }
 
             }
+            
+            if (currentElement_.equals("CURVEPARAM")) {
+
+                currentConfiguration_.setParamValue(att.getValue(0), att.getValue(1));
+            }
 
             if (currentElement_.equals("SUBCURVE")) {
 
@@ -593,10 +598,10 @@ public class RPnDataModule {
                 }
                 if (curve_name_.equals(rpnumerics.WaveCurve.class.getSimpleName())) {
 
-                    WaveCurveCalc calc = new WaveCurveCalc(startPoint_, Integer.parseInt(currentConfiguration_.getParam("family")),
-                            Integer.parseInt(currentConfiguration_.getParam("direction")),0,0); //TODO Ler de onde a curva esta partindo e o edge se for da fronteira
+                    WaveCurveCalc calc = new WaveCurveCalc(startPoint_, (CurveConfiguration) currentConfiguration_);
 
-                    WaveCurveGeomFactory factory = new WaveCurveGeomFactory(calc);
+
+                    WaveCurveGeomFactory factory = new WaveCurveGeomFactory(calc,waveCurve_,0);
 
                     WaveCurvePlotCommand.instance().execute(factory);
 

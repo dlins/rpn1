@@ -44,6 +44,11 @@ public class WaveCurveGeomFactory extends WaveCurveOrbitGeomFactory {
     }
     
     
+     public WaveCurveGeomFactory(WaveCurveOrbitCalc calc,WaveCurve curve, int waveCurveIndex) {
+        super(calc,curve);
+    }
+    
+    
      public WaveCurveGeomFactory(WaveCurveRRegionsCalc calc,WaveCurve curve,int waveCurveIndex) {
         super(calc,curve);
         waveCurveIndexForRRegions_ = waveCurveIndex;
@@ -191,15 +196,7 @@ public class WaveCurveGeomFactory extends WaveCurveOrbitGeomFactory {
         List<WaveCurveBranch> branchsList = geomSource.getBranchsList();
         
         for (WaveCurveBranch waveCurveBranch : branchsList) {
-            FundamentalCurve fundamentalCurve = (FundamentalCurve)waveCurveBranch;
-            String branch_name = fundamentalCurve.getClass().getSimpleName();
-            
-            buffer.append("<SUBCURVE name=\"").append(branch_name).append("\">\n");
-            buffer.append(fundamentalCurve.toXML());
-            buffer.append("</SUBCURVE>\n");
-                
-            
-
+            buffer.append(waveCurveBranch.toXML());
         }
 
 

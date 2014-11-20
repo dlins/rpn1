@@ -288,7 +288,7 @@ public abstract class RPnCurve implements RpSolution {
 
     
     public String toXML() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return "";
     }
 
     public String toMatlab(int curveIndex) {

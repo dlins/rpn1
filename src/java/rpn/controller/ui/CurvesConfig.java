@@ -96,7 +96,7 @@ public class CurvesConfig extends UI_ACTION_SELECTED {
         SubInflectionPlotCommand.instance().setEnabled(false);
         BuckleyLeverettiInflectionCommand.instance().setEnabled(false);
         DoubleContactCommand.instance().setEnabled(true);
-        BoundaryExtensionCurveCommand.instance().setEnabled(false);
+        BoundaryExtensionCurveCommand.instance().setEnabled(true);
         SubInflectionExtensionCurveCommand.instance().setEnabled(false);
         CoincidenceExtensionCurvePlotAgent.instance().setEnabled(false);
         ChangeFluxParamsCommand.instance().setEnabled(true);

@@ -26,9 +26,10 @@ public class PhysicsConfigurationParams extends Configuration {
         buffer.append("<PHYSICSCONFIG name=\"").append(getName()).append("\">\n");
 
 
-        for (int i = 0; i < getParamsSize(); i++) {
+        for (int i = 0; i < getParameterList().size(); i++) {
 
-            buffer.append("<PHYSICSPARAM name=\"").append(getParamName(i)).append("\" " + "position=\"").append(i).append("\"" + " value= \"").append(getParam(i)).append("\"/>");
+            Parameter parameter = getParameterList().get(i);
+            buffer.append("<PHYSICSPARAM name=\"").append(parameter.getName()).append("\" " + "position=\"").append(i).append("\"" + " value= \"").append(parameter.getValue()).append("\"/>");
             buffer.append("\n");
 
         }

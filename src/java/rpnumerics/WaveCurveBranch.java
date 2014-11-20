@@ -22,6 +22,8 @@ public interface WaveCurveBranch extends RpDiagramCalc{
     
     
     List<RealSegment> segments();
+
+    public String toXML();
     
 
 }

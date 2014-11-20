@@ -94,21 +94,21 @@ public class RPnStringPlotter extends RPn2DMouseController {
 
         } else {
 
-            Iterator<GraphicsUtil> annotationIterator = geometry_.getAnnotationIterator();
-
-            GraphicsUtil lastAnnotation = null;
-            while (annotationIterator.hasNext()) {
-                lastAnnotation = annotationIterator.next();
-
-            }
-            RPnCurve curve = (RPnCurve) geometry_.geomFactory().geomSource();
-            RpCommand command = new RpCommand(lastAnnotation.toXML(), "classify", curve.getId());
-
-            GenericExtensionCurveCommand.instance().logCommand(command);
-
-            if (RPnNetworkStatus.instance().isOnline() && RPnNetworkStatus.instance().isMaster()) {
-                RPnNetworkStatus.instance().sendCommand(rpn.controller.ui.UndoActionController.instance().getLastCommand().toXML());
-            }
+//            Iterator<GraphicsUtil> annotationIterator = geometry_.getAnnotationIterator();
+//
+//            GraphicsUtil lastAnnotation = null;
+//            while (annotationIterator.hasNext()) {
+//                lastAnnotation = annotationIterator.next();
+//
+//            }
+//            RPnCurve curve = (RPnCurve) geometry_.geomFactory().geomSource();
+//            RpCommand command = new RpCommand(lastAnnotation.toXML(), "classify", curve.getId());
+//
+//            GenericExtensionCurveCommand.instance().logCommand(command);
+//
+//            if (RPnNetworkStatus.instance().isOnline() && RPnNetworkStatus.instance().isMaster()) {
+//                RPnNetworkStatus.instance().sendCommand(rpn.controller.ui.UndoActionController.instance().getLastCommand().toXML());
+//            }
 
             addLine_ = false;
         }

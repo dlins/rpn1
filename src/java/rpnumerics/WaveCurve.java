@@ -254,5 +254,41 @@ public class WaveCurve extends RPnCurve implements WaveCurveBranch, RpSolution, 
     public RpSolution updateDiagramSource() {
         return createDiagramSource();
     }
+    
+    
+    
+    
+    
+    
+   
+
+    public String toXML() {
+
+        StringBuilder buf = new StringBuilder();
+        List<WaveCurveBranch> branchsList = getBranchsList();
+
+      
+        for (WaveCurveBranch waveCurveBranch : branchsList) {
+
+            String branch_name = waveCurveBranch.getClass().getSimpleName();
+            buf.append("<SUBCURVE name=\"").append(branch_name).append("\">\n");
+            buf.append(waveCurveBranch.toXML());
+            buf.append("</SUBCURVE>\n");
+
+            
+        }
+        
+        
+        
+        return buf.toString();
+
+    }
+
+    
+    
+    
+    
+    
+    
 
 }

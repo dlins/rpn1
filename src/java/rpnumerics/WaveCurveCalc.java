@@ -19,12 +19,7 @@ public class WaveCurveCalc extends WaveCurveOrbitCalc {
     // Constructors/Initializers
     //
 
-    public WaveCurveCalc(PhasePoint point, int familyIndex, int timeDirection, int origin, int edge) {
-
-        super(new OrbitPoint(point), familyIndex, timeDirection);
-
-    }
-
+    
     public WaveCurveCalc(PhasePoint input, CurveConfiguration waveCurveConfiguration) {
 
         super(new OrbitPoint(input), Integer.parseInt(waveCurveConfiguration.getParam("family")), Integer.parseInt(waveCurveConfiguration.getParam("direction")));
@@ -44,6 +39,9 @@ public class WaveCurveCalc extends WaveCurveOrbitCalc {
         WaveCurve result;
 
         result = (WaveCurve) nativeCalc(getStart(), (CurveConfiguration)RPNUMERICS.getConfiguration("wavecurve"));
+        
+        
+//         result = (WaveCurve) nativeCalc(getStart(), (CurveConfiguration) configuration_);
 
        
 

@@ -62,6 +62,8 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_readNativePhysicsConfig
 
     jclass configurationClass = env->FindClass(CONFIGURATION_LOCATION);
     jclass physicsConfigurationClass = env->FindClass("rpn/configuration/PhysicsConfiguration");
+    
+    jclass physicsConfigurationParamsClass = env->FindClass("rpn/configuration/PhysicsConfigurationParams");
 
     jclass parameterLeafClass = env->FindClass("rpn/configuration/ParameterLeaf");
     jclass parameterClass = env->FindClass("rpn/configuration/Parameter");
@@ -84,6 +86,7 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_readNativePhysicsConfig
 
 
     jmethodID physicsConfigurationConstructorMethodID = env->GetMethodID(physicsConfigurationClass, "<init>", "(Ljava/lang/String;)V");
+    jmethodID physicsConfigurationParamsConstructorMethodID = env->GetMethodID(physicsConfigurationParamsClass, "<init>", "(Ljava/lang/String;)V");
 
 
     jmethodID parameterLeafConstructorID = env->GetMethodID(parameterLeafClass, "<init>", "(Ljava/lang/String;Ljava/lang/String;)V");
@@ -273,11 +276,49 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_readNativePhysicsConfig
 
 
 
-    //AuxiliaryFunctions 
-
     jstring physicsName = env->NewStringUTF(RpNumerics::physicsVector_->at(0)->info_subphysics().c_str());
 
     jobject physicsConfiguration = env->CallStaticObjectMethod(cls, getConfigurationMethodID, physicsName);
+
+    //MainFunctions
+
+    vector<Parameter *> parameters;
+    RpNumerics::physicsVector_->at(0)->equation_parameter(parameters);
+
+    jstring fluxFunctionName = env->NewStringUTF("fluxfunction");
+    
+    jobject fluxFunctionConfiguration = env->NewObject(physicsConfigurationParamsClass, physicsConfigurationParamsConstructorMethodID, fluxFunctionName);
+
+    for (int j = 0; j < parameters.size(); j++) {
+
+        Parameter * parameter = parameters.at(j);
+
+        jstring parameterName = env->NewStringUTF(parameter->name().c_str());
+
+        stringstream doubleStream;
+
+        doubleStream << parameter->value();
+
+        string doubleString;
+
+        doubleStream >> doubleString;
+
+        jstring parameterValue = env->NewStringUTF(doubleString.c_str());
+
+        jobject jParameter = env->NewObject(textParameterClass, textParameterConstructorID, parameterName, parameterValue);
+
+        env->CallObjectMethod(fluxFunctionConfiguration, addParameterMethodID, jParameter);
+
+
+    }
+
+
+    env->CallObjectMethod(physicsConfiguration, addConfigurationMethodID, fluxFunctionConfiguration);
+
+    //AuxiliaryFunctions 
+
+
+
 
 
     vector<AuxiliaryFunction *> auxFuncVector;
@@ -290,7 +331,7 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_readNativePhysicsConfig
 
         jstring functionName = env->NewStringUTF(auxiliarFunction->info_auxiliary_function().c_str());
 
-        jobject auxFunctionConfiguration = env->NewObject(physicsConfigurationClass, physicsConfigurationConstructorMethodID, functionName);
+        jobject auxFunctionConfiguration = env->NewObject(physicsConfigurationParamsClass, physicsConfigurationParamsConstructorMethodID, functionName);
 
         vector<Parameter *> parameterVector;
 
@@ -377,10 +418,10 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RPNUMERICS_getAuxFunctionNames
 JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setAuxFuntionParam
 (JNIEnv * env, jclass cls, jstring auxFuncName, jstring auxParamName, jstring paramValue) {
 
-    
-    
 
-    
+
+
+
 
     const char * auxFuncNameChar;
 
@@ -395,8 +436,8 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setAuxFuntionParam
     const char * auxFuncParamValue;
 
     auxFuncParamValue = env->GetStringUTFChars(paramValue, NULL);
-    
-    
+
+
     string paramValueString(auxFuncParamValue);
 
     stringstream paramStream;
@@ -408,33 +449,33 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setAuxFuntionParam
     paramStream >> paramDoubleValue;
 
     string auxFuncNameString(auxFuncNameChar);
-    
-    AuxiliaryFunction * auxFunction = RpNumerics::physicsAuxFunctionsMap_->at(auxFuncNameString);
-    
-    vector<Parameter *> paramVector;
-    
-    auxFunction->parameter(paramVector);
-    
-    
-    string  paramNameString (auxFuncParam);
-    
-    
-    
 
-    
-    
+    AuxiliaryFunction * auxFunction = RpNumerics::physicsAuxFunctionsMap_->at(auxFuncNameString);
+
+    vector<Parameter *> paramVector;
+
+    auxFunction->parameter(paramVector);
+
+
+    string paramNameString(auxFuncParam);
+
+
+
+
+
+
     for (int i = 0; i < paramVector.size(); i++) {
 
-        if(paramVector[i]->name().compare(paramNameString)==0){
-//            cout<< "Funcao: "<< auxFuncNameString<<" parametro: "<< paramNameString<< "valor: "<< paramDoubleValue<<endl;
+        if (paramVector[i]->name().compare(paramNameString) == 0) {
+            //            cout<< "Funcao: "<< auxFuncNameString<<" parametro: "<< paramNameString<< "valor: "<< paramDoubleValue<<endl;
             paramVector[i]->value(paramDoubleValue);
 
-            
+
         }
 
     }
 
-    
+
     RpNumerics::physicsVector_->at(0)->gridvalues()->clear_computations();
 
 
