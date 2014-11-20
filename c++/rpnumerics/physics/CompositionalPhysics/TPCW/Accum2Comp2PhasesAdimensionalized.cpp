@@ -1,24 +1,31 @@
 #include "Accum2Comp2PhasesAdimensionalized.h"
 
-Accum2Comp2PhasesAdimensionalized::Accum2Comp2PhasesAdimensionalized(const Accum2Comp2PhasesAdimensionalized &a):AccumulationFunction(a.accumulationParams()){
-    TD =  a.TD;
+//Accum2Comp2PhasesAdimensionalized::Accum2Comp2PhasesAdimensionalized(const Accum2Comp2PhasesAdimensionalized &a):AccumulationFunction(a.accumulationParams()){
+//    TD =  a.TD;
 
-    phi = a.accumulationParams().params().component(0);
+//    phi = a.accumulationParams().params().component(0);
 
-    reducedAccum_=new ReducedAccum2Comp2PhasesAdimensionalized(this);
+//    reducedAccum_=new ReducedAccum2Comp2PhasesAdimensionalized(this);
 
 
-}
+//}
 
-Accum2Comp2PhasesAdimensionalized::Accum2Comp2PhasesAdimensionalized(const Accum2Comp2PhasesAdimensionalized_Params &param):AccumulationFunction(param) {
-    TD = param.get_thermodynamics();
-    phi = param.component(0);
+//Accum2Comp2PhasesAdimensionalized::Accum2Comp2PhasesAdimensionalized(const Accum2Comp2PhasesAdimensionalized_Params &param):AccumulationFunction(param) {
+//    TD = param.get_thermodynamics();
+//    phi = param.component(0);
+//    reducedAccum_= new ReducedAccum2Comp2PhasesAdimensionalized(this);
+//}
+
+// RpFunction * Accum2Comp2PhasesAdimensionalized::clone() const {
+
+//    return new Accum2Comp2PhasesAdimensionalized(*this);
+//}
+
+Accum2Comp2PhasesAdimensionalized::Accum2Comp2PhasesAdimensionalized(Parameter *phi, Thermodynamics *td): AccumulationFunction(){
+    phi_parameter = phi;
+    TD = td;
+
     reducedAccum_= new ReducedAccum2Comp2PhasesAdimensionalized(this);
-}
-
- RpFunction * Accum2Comp2PhasesAdimensionalized::clone() const {
-
-    return new Accum2Comp2PhasesAdimensionalized(*this);
 }
 
 Accum2Comp2PhasesAdimensionalized::~Accum2Comp2PhasesAdimensionalized() {
@@ -66,6 +73,8 @@ int Accum2Comp2PhasesAdimensionalized::jet(const WaveState &w, JetMatrix &m, int
 
     // Function
     if (degree >= 0) {
+        double phi = phi_parameter->value();
+
         double Hr     = Hrj.get(0);
         double Ha     = Haj.get(0);
         double Hsi    = Hsij.get(0);
@@ -213,23 +222,26 @@ int Accum2Comp2PhasesAdimensionalized::jet(const WaveState &w, JetMatrix &m, int
 }
 
 
-Accum2Comp2PhasesAdimensionalized::ReducedAccum2Comp2PhasesAdimensionalized::ReducedAccum2Comp2PhasesAdimensionalized(Accum2Comp2PhasesAdimensionalized * outer):AccumulationFunction(outer->accumulationParams()){
-    totalAccum_=outer;
+//Accum2Comp2PhasesAdimensionalized::ReducedAccum2Comp2PhasesAdimensionalized::ReducedAccum2Comp2PhasesAdimensionalized(Accum2Comp2PhasesAdimensionalized * outer):AccumulationFunction(outer->accumulationParams()){
+//    totalAccum_=outer;
 
- }
+// }
+
+Accum2Comp2PhasesAdimensionalized::ReducedAccum2Comp2PhasesAdimensionalized::ReducedAccum2Comp2PhasesAdimensionalized(Accum2Comp2PhasesAdimensionalized *outer){
+    totalAccum_ = outer;
+}
 
 Accum2Comp2PhasesAdimensionalized::ReducedAccum2Comp2PhasesAdimensionalized::~ReducedAccum2Comp2PhasesAdimensionalized(){
-
 }
 
- Accum2Comp2PhasesAdimensionalized::ReducedAccum2Comp2PhasesAdimensionalized * Accum2Comp2PhasesAdimensionalized::getReducedAccumulation()const{
+Accum2Comp2PhasesAdimensionalized::ReducedAccum2Comp2PhasesAdimensionalized * Accum2Comp2PhasesAdimensionalized::getReducedAccumulation()const{
      return reducedAccum_;
 
- }
-
-RpFunction * Accum2Comp2PhasesAdimensionalized::ReducedAccum2Comp2PhasesAdimensionalized::clone() const{
-
 }
+
+//RpFunction * Accum2Comp2PhasesAdimensionalized::ReducedAccum2Comp2PhasesAdimensionalized::clone() const{
+
+//}
 
 int Accum2Comp2PhasesAdimensionalized::ReducedAccum2Comp2PhasesAdimensionalized::jet(const WaveState &w, JetMatrix &m, int degree) const{
     double s     = w(0); // s_{sigma} = sg in FracFlow2PhasesHorizontal & FracFlow2PhasesVertical
@@ -259,6 +271,8 @@ int Accum2Comp2PhasesAdimensionalized::ReducedAccum2Comp2PhasesAdimensionalized:
 
     // Function
     if (degree >= 0){
+        double phi = totalAccum_->phi_parameter->value();
+
         double Hr     = Hrj.get(0);
         double Ha     = Haj.get(0);
         double Hsi    = Hsij.get(0);
@@ -267,9 +281,9 @@ int Accum2Comp2PhasesAdimensionalized::ReducedAccum2Comp2PhasesAdimensionalized:
         double rhoac  = rhoacj.get(0);
         double rhoaw  = rhoawj.get(0);
 
-        double out0 = totalAccum_->phi*(rhosic*s + rhoac*(1.0 - s)); // G1
-        double out1 = totalAccum_->phi*(rhosiw*s + rhoaw*(1.0 - s)); // G2
-        double out2 = Hr + totalAccum_->phi*(Hsi*s + Ha*(1.0 - s) ); // G3
+        double out0 = phi*(rhosic*s + rhoac*(1.0 - s)); // G1
+        double out1 = phi*(rhosiw*s + rhoaw*(1.0 - s)); // G2
+        double out2 = Hr + phi*(Hsi*s + Ha*(1.0 - s) ); // G3
 
         m.set(0, out0);
         m.set(1, out1);
@@ -285,17 +299,17 @@ int Accum2Comp2PhasesAdimensionalized::ReducedAccum2Comp2PhasesAdimensionalized:
             double d_rhoac  = rhoacj.get(0, 0);
             double d_rhoaw  = rhoawj.get(0, 0);
 
-            double out00 = totalAccum_->phi*(rhosic - rhoac); // dG1_ds
-            double out01 = totalAccum_->phi*(d_rhosic*s + d_rhoac*(1.0 - s)); // dG1_dTheta
+            double out00 = phi*(rhosic - rhoac); // dG1_ds
+            double out01 = phi*(d_rhosic*s + d_rhoac*(1.0 - s)); // dG1_dTheta
 
 //            printf("out00 = %g\n", out00);
 //            printf("out01 = %g\n", out01);
 
-            double out10 = totalAccum_->phi*(rhosiw - rhoaw); // dG2_ds
-            double out11 = totalAccum_->phi*(d_rhosiw*s + d_rhoaw*(1.0 - s)); // dG2_dTheta
+            double out10 = phi*(rhosiw - rhoaw); // dG2_ds
+            double out11 = phi*(d_rhosiw*s + d_rhoaw*(1.0 - s)); // dG2_dTheta
 
-            double out20 = totalAccum_->phi*(Hsi-Ha); // dG3_ds
-            double out21 = d_Hr + totalAccum_->phi*( d_Hsi*s + d_Ha*(1.0 - s) ); // dG3_dTheta
+            double out20 = phi*(Hsi-Ha); // dG3_ds
+            double out21 = d_Hr + phi*( d_Hsi*s + d_Ha*(1.0 - s) ); // dG3_dTheta
 
             m.set(0, 0, out00);
             m.set(0, 1, out01);
@@ -324,19 +338,19 @@ int Accum2Comp2PhasesAdimensionalized::ReducedAccum2Comp2PhasesAdimensionalized:
                 double d2_rhoaw  = rhoawj.get(0, 0, 0);
 
                 double out000 = 0.; // d2G1_ds2
-                double out001 = totalAccum_->phi*(d_rhosic - d_rhoac); // d2G1_dsdTheta
+                double out001 = phi*(d_rhosic - d_rhoac); // d2G1_dsdTheta
                 double out010 = out001; // d2G1_dThetads
-                double out011 = totalAccum_->phi*(d2_rhosic*s + d2_rhoac*(1.0 - s)); // d2G1_dTheta2
+                double out011 = phi*(d2_rhosic*s + d2_rhoac*(1.0 - s)); // d2G1_dTheta2
 
                 double out100 = 0.; // d2G2_ds2
-                double out101 = totalAccum_->phi*(d_rhosiw - d_rhoaw); // d2G2_dsdTheta
-                double out110 = totalAccum_->phi*(d_rhosiw - d_rhoaw); // d2G2_dThetads
-                double out111 = totalAccum_->phi*(d2_rhosiw*s + d2_rhoaw*(1.0 - s)); // d2G2_dTheta2
+                double out101 = phi*(d_rhosiw - d_rhoaw); // d2G2_dsdTheta
+                double out110 = phi*(d_rhosiw - d_rhoaw); // d2G2_dThetads
+                double out111 = phi*(d2_rhosiw*s + d2_rhoaw*(1.0 - s)); // d2G2_dTheta2
 
                 double out200 = 0.; // d2G3_ds2
-                double out201 = totalAccum_->phi*(d_Hsi-d_Ha); // d2G3_dsdTheta
+                double out201 = phi*(d_Hsi-d_Ha); // d2G3_dsdTheta
                 double out210 = out201; // d2G3_dThetads
-                double out211 = d2_Hr + totalAccum_->phi*(d2_Hsi*s + d2_Ha*(1.0 - s) ); // d2G3_dTheta2
+                double out211 = d2_Hr + phi*(d2_Hsi*s + d2_Ha*(1.0 - s) ); // d2G3_dTheta2
 
                 m.set(0, 0, 0, out000);
                 m.set(0, 0, 1, out001);

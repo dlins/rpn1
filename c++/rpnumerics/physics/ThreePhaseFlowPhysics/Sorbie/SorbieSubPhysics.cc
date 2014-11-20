@@ -79,10 +79,15 @@ SorbieSubPhysics::SorbieSubPhysics() : ThreePhaseFlowSubPhysics(){
     //
     viscosity_ = new SorbieViscosity(this);
 
+    // Mobility.
+    //
+    mobility_ = new ThreePhaseFlowMobility(this);
+
     info_subphysics_ = std::string("Sorbie");
 }
 
 SorbieSubPhysics::~SorbieSubPhysics(){
+    delete mobility_;
     delete viscosity_;
     delete inflection_curve_;
     delete wavecurvefactory_;

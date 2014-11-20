@@ -1,7 +1,12 @@
 #include "JetSinglePhaseVapor.h"
 
-JetSinglePhaseVapor::JetSinglePhaseVapor(double mc, double mw, double P) : MC(mc), MW(mw){
-    rho_md = new MolarDensity(MOLAR_DENSITY_VAPOR, P);
+//JetSinglePhaseVapor::JetSinglePhaseVapor(double mc, double mw, double P) : MC(mc), MW(mw){
+//    rho_md = new MolarDensity(MOLAR_DENSITY_VAPOR, P);
+//}
+
+JetSinglePhaseVapor::JetSinglePhaseVapor(double mc, double mw, Parameter *P) : MC(mc), MW(mw){
+    P_parameter = P;
+    rho_md = new MolarDensity(MOLAR_DENSITY_VAPOR, P_parameter);
 }
 
 JetSinglePhaseVapor::~JetSinglePhaseVapor(){

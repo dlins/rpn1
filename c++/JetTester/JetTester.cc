@@ -57,7 +57,7 @@ void JetTester::populate_F(void *obj, int (*f)(void *obj, const RealVector &stat
 
         for (int p = 0; p < fine_subdivision.size(); p++) point(p) = coord[p][mi[p]];
 
-        (*f)(obj, point, 1, jm);
+        (*f)(obj, point, 1, jm); 
         fine_F(mi)  = jm.function();
         fine_JF(mi) = jm.Jacobian();
     }

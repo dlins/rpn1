@@ -262,6 +262,9 @@ permtest: $(OBJECTS)
 permgui: $(OBJECTS)
 	$(LINK)  $(CPPFLAGS) $(INCLUDE) ../../../../../main_permgui.cpp -o $@ $^  $(LDLIBS) $(LDFLAGS)
 
+testablejet: $(OBJECTS)
+	$(LINK)  $(CPPFLAGS) $(INCLUDE) ../../../../../main_testablejet.cpp -o $@ $^  $(LDLIBS) $(LDFLAGS)
+
 #
 #	Make a library
 #

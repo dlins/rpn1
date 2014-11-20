@@ -7,6 +7,7 @@
 
 #include "ICDOWFluxFunction.h"
 #include "ICDOWAccumulationFunction.h"
+#include "ICDOWCoincidence.h"
 //#include "ICDOWCompositeCurve.h"
 #include "LSODE.h"
 
@@ -27,11 +28,14 @@ class ICDOWSubPhysics : public SubPhysics {
         Parameter *swc_parameter, *lambda_parameter;
         Parameter *phi_parameter;
 
-        ICDOWHydrodynamics  *hydro;
-        ICDOWChemistry      *chemistry;
+        ICDOWHydrodynamics  *hydrodynamics_;
+        ICDOWChemistry      *chemistry_;
     public:
         ICDOWSubPhysics();
         virtual ~ICDOWSubPhysics();
+
+        ICDOWHydrodynamics *hydrodynamics(){return hydrodynamics_;}
+        ICDOWChemistry *chemistry(){return chemistry_;}
 };
 
 #endif // _ICDOWSUBPHYSICS_

@@ -41,6 +41,8 @@ void HugoniotCurve::curve(const ReferencePoint &ref, int type, std::vector<Hugon
 
             colorcurve.classify_segmented_curve(segmented_curve, ref, temp_classified_curve, transition_list);
 
+            std::cout << temp_classified_curve.size() << std::endl;
+
             for (int j = 0; j < temp_classified_curve.size(); j++) classified_curve.push_back(temp_classified_curve[j]);
         }
     }

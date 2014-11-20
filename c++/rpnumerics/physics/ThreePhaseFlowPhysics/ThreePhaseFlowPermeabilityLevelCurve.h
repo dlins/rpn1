@@ -35,6 +35,7 @@ class ThreePhaseFlowPermeabilityLevelCurve: public ImplicitFunction {
 
         virtual int function_on_square(double *foncub, int i, int j);
         void curve(const RealVector &ref, int type, std::vector<RealVector> &c);
+        void curve(double level, int type, std::vector<RealVector> &c);
 
         double level(const RealVector &ref, int type);
 
@@ -49,6 +50,8 @@ class ThreePhaseFlowPermeabilityLevelCurve: public ImplicitFunction {
             name.push_back(std::string("Oil permeability"));
             name.push_back(std::string("Gas permeability"));
         }
+
+        void prepare_grid(){init(); return;}
 };
 
 #endif // _THREEPHASEFLOWPERMEABILITYLEVELCURVE_

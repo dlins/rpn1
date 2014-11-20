@@ -1,6 +1,10 @@
 #include "ICDOWFluxFunction.h"
 
-ICDOWFluxFunction::ICDOWFluxFunction(ICDOWChemistry *ch, ICDOWHydrodynamics *hy) : FluxFunction() {
+ICDOWFluxFunction::ICDOWFluxFunction(ICDOWChemistry *ch, ICDOWHydrodynamics *hy): FluxFunction()
+                                                                                  #ifdef JETTESTER_ENABLED_ICDOWFLUX
+                                                                                  , TestableJet()
+                                                                                  #endif  
+{
     chemistry = ch;
     hydro     = hy;
 }
@@ -41,6 +45,7 @@ int ICDOWFluxFunction::reduced_jet(const WaveState &state, JetMatrix &m, int deg
         double fw = fw_jet.get(0);
         double fo = fo_jet.get(0);
 
+//        m.set(0, fw/* *rho_CO_jet.get(0)*/);
         m.set(0, fw*rho_CO_jet.get(0));
         m.set(1, fw*rho_H_jet.get(0));
         m.set(2, fo*rho_C_oil_jet.get(0));
@@ -49,8 +54,11 @@ int ICDOWFluxFunction::reduced_jet(const WaveState &state, JetMatrix &m, int deg
             double dfw_dsw = fw_jet.get(0, 0);
             double dfo_dsw = fo_jet.get(0, 0);
 
+//            m.set(0, 0, dfw_dsw/* *rho_CO_jet.get(0)*/);
+//            m.set(0, 1, 0.0 /*fw*rho_CO_jet.get(0, 0)*/);
             m.set(0, 0, dfw_dsw*rho_CO_jet.get(0));
             m.set(0, 1, fw*rho_CO_jet.get(0, 0));
+
 
             m.set(1, 0, dfw_dsw*rho_H_jet.get(0));
             m.set(1, 1, fw*rho_H_jet.get(0, 0));

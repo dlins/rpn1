@@ -127,10 +127,15 @@ FoamSubPhysics::FoamSubPhysics() : ThreePhaseFlowSubPhysics(){
 //    //
 //    bifurcationcurve_ = new FoamTransitionalLine(this);
 
+    // Mobility.
+    //
+    mobility_ = new ThreePhaseFlowMobility(this);
+
     info_subphysics_ = std::string("Foam");
 }
 
 FoamSubPhysics::~FoamSubPhysics(){
+    delete mobility_;
     delete inflection_curve_;
     delete wavecurvefactory_;
     delete odesolver_;

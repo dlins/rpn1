@@ -257,6 +257,9 @@ void RarefactionCurve::add_point_to_curve(const RealVector &p, Curve &curve){
     RealVector point_eigenvalues;
     all_eigenvalues(p, family, point_eigenvalues);
 
+    std::cout.precision(32);
+    std::cout << point_eigenvalues << std::endl;
+
     curve.eigenvalues.push_back(point_eigenvalues);
 
     curve.speed.push_back(point_eigenvalues(family));
@@ -452,7 +455,8 @@ int RarefactionCurve::curve(const RealVector &initial_point,
         }
 
 
-        if (dirdrv*previous_dirdrv < 0.0){
+//        if (dirdrv*previous_dirdrv < 0.0){
+        if (0 == 1){
             double bisection_epsilon = 1e-10; // Must be relative to the flux.
 
             // Output here:

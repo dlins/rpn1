@@ -1,13 +1,20 @@
 #include "Brooks_CoreySubPhysics.h"
 #include "CoreyQuadSubPhysics.h"
-#include "SorbiePermeability.h"
+#include "FoamSubPhysics.h"
+#include "KovalSubPhysics.h"
+#include "SorbieSubPhysics.h"
+#include "StoneSubPhysics.h"
+
+//#include "SorbiePermeability.h"
 
 #include <FL/Fl.H>
 #include <FL/Fl_Double_Window.H>
 #include <FL/Fl_Round_Button.H>
+#include <FL/Fl_Float_Input.H>
 #include "canvas.h"
 #include "Text.h"
 #include "ThreePhaseFlowPermeabilityLevelCurve.h"
+#include "ThreePhaseFlowMobilityLevelCurve.h"
 #include "segmentedcurve.h"
 #include "ThreePhaseFlowEquationFunctionLevelCurve.h"
 
@@ -17,11 +24,18 @@
 
 ThreePhaseFlowSubPhysics *subphysics;
 ThreePhaseFlowPermeabilityLevelCurve *permlevelcurve;
+ThreePhaseFlowMobilityLevelCurve *moblevelcurve;
 ThreePhaseFlowPermeability *permeability;
 ThreePhaseFlowEquationFunctionLevelCurve *flowlevel;
 
-void wincb(Fl_Widget*, void*){
-    exit(0);
+Fl_Double_Window *paramwin;
+    Fl_Button *paramapply, *paramcancel;
+    std::vector<Fl_Float_Input*> paraminput;
+    std::vector<double> parameter_value;
+    std::vector<Parameter*> parameters;
+
+void wincb(Fl_Widget *obj, void*){
+    if ((Fl_Double_Window*)obj != paramwin) exit(0);
 
     return;
 }
@@ -302,6 +316,9 @@ class PermWindow: public Fl_Double_Window {
 
         int type;
 
+        std::vector<double> level;
+        std::vector<GraphicObject*> graphicobject;
+
         PermWindow(int x, int y, int w, int h, const char *l): Fl_Double_Window(x, y, w, h, l){
             sc = 0;
             text = 0;
@@ -329,6 +346,70 @@ class PermWindow: public Fl_Double_Window {
         }
 };
 
+std::vector<PermWindow*> permwindow;
+
+class ViscosityInputWindow: public Fl_Double_Window {
+    private:
+    protected:
+        ThreePhaseFlowSubPhysics *subphysics;
+
+        Canvas *canvas;
+        Curve2D *viscpoint;
+        Text *visctext;
+
+        static void on_move_visc(Fl_Widget *obj, void*){
+            Canvas *canvas = (Canvas*)obj;
+            ViscosityInputWindow *win = (ViscosityInputWindow*)canvas->window();
+
+            RealVector p(2);
+            canvas->getxy(p(0), p(1));
+
+            ThreePhaseFlowSubPhysics *subphysics = win->subphysics;
+
+            if (!subphysics->boundary()->inside(p)) return;
+
+            double muw, muo, mug;
+            muw = p(0);            
+            muo = p(1);
+            mug = 1.0 - muw - muo;
+
+            subphysics->muw()->value(muw);
+            subphysics->muo()->value(muo);
+            subphysics->mug()->value(mug);
+
+            for (int i = 0; i < parameters.size(); i++){
+                parameter_value[i] = parameters[i]->value();
+                
+                std::stringstream ss;
+                ss << parameters[i]->value();
+                paraminput[i]->value(ss.str().c_str());
+            }
+
+            paramapply->do_callback();
+
+            return;
+        }
+
+        static void wincb(Fl_Widget*, void*){return;}
+    public:
+        ViscosityInputWindow(int x, int y, int w, int h, const char *l, ThreePhaseFlowSubPhysics *s): Fl_Double_Window(x, y, w, h, l), subphysics(s){
+            viscpoint = 0;
+
+            canvas = new Canvas(0, 0, w, h);
+            canvas->on_move(&ViscosityInputWindow::on_move_visc, this, 0);
+
+            prepare_triangle(canvas);
+
+            end();
+
+            resizable(canvas);
+            callback(ViscosityInputWindow::wincb);
+        }
+
+        virtual ~ViscosityInputWindow(){
+        }
+};
+
 void on_move_perm(Fl_Widget *obj, void*){
     Canvas *canvas = (Canvas*)obj;
 
@@ -340,7 +421,8 @@ void on_move_perm(Fl_Widget *obj, void*){
     if (!subphysics->boundary()->inside(point)) return;
 
     std::vector<RealVector> c;
-    permlevelcurve->curve(point, pw->type, c);
+//    permlevelcurve->curve(point, pw->type, c);
+    moblevelcurve->curve(point, pw->type, c);
 
     if (c.size() == 0) return;
 
@@ -357,7 +439,8 @@ void on_move_perm(Fl_Widget *obj, void*){
     shift(1) = -10.0;
     std::stringstream ss;
     ss.precision(2);
-    ss << permlevelcurve->level(point, pw->type); // TODO: Use only two digits.
+//    ss << permlevelcurve->level(point, pw->type); // TODO: Use only two digits.
+    ss << moblevelcurve->level(point, pw->type); // TODO: Use only two digits.
 
     pw->text = new Text(ss.str(), point, shift, 1.0, 0.0, 0.0);
     pw->canvas->add(pw->text);
@@ -415,7 +498,8 @@ void on_click_perm(Fl_Widget *obj, void*){
     if (!subphysics->boundary()->inside(point)) return;
 
     std::vector<RealVector> c;
-    permlevelcurve->curve(point, pw->type, c);
+//    permlevelcurve->curve(point, pw->type, c);
+    moblevelcurve->curve(point, pw->type, c);
 
     if (c.size() == 0) return;
 
@@ -431,10 +515,19 @@ void on_click_perm(Fl_Widget *obj, void*){
     shift(1) = -10.0;
     std::stringstream ss;
     ss.precision(2);
-    ss << flowlevel->level(point, pw->type); // TODO: Use only two digits.
+//    ss << permlevelcurve->level(point, pw->type); // TODO: Use only two digits.
+    ss << moblevelcurve->level(point, pw->type); // TODO: Use only two digits.
 
     Text *t = new Text(ss.str(), point, shift, 1.0, 0.0, 0.0);
     canvas->add(t);
+
+//    pw->level.push_back(permlevelcurve->level(point, pw->type));
+    pw->level.push_back(moblevelcurve->level(point, pw->type));
+
+    std::cout << "Stored new level: " << pw->level.back() << std::endl;
+
+    pw->graphicobject.push_back(sc);
+    pw->graphicobject.push_back(t);
 
     Fl::check();
 
@@ -545,12 +638,91 @@ void rcflowcb(Fl_Widget*, void *obj){
     return;
 }
 
-int main(){
-//    subphysics = new Brooks_CoreySubPhysics;
-    subphysics = new CoreyQuadSubPhysics;
-    permeability = subphysics->permeability();
+void applycb(Fl_Widget*, void*){
+    for (int i = 0; i < paraminput.size(); i++){
+        std::stringstream ss;
+        ss << paraminput[i]->value();
 
-    permeability = new SorbiePermeability(0); // TODO Change this, create SorbieSubPhysics.
+        ss >> parameter_value[i];
+        parameters[i]->value(parameter_value[i]);
+    }
+
+    for (int i = 0; i < permwindow.size(); i++){
+        for (int j = 0; j < permwindow[i]->graphicobject.size(); j++){
+            permwindow[i]->canvas->erase(permwindow[i]->graphicobject[j]);
+        }
+        permwindow[i]->graphicobject.clear();
+
+        for (int j = 0; j < permwindow[i]->level.size(); j++){
+            std::vector<RealVector> c;
+//            permlevelcurve->prepare_grid();
+//            permlevelcurve->curve(permwindow[i]->level[j], permwindow[i]->type, c);
+
+            moblevelcurve->prepare_grid();
+            moblevelcurve->curve(permwindow[i]->level[j], permwindow[i]->type, c);
+
+            if (c.size() == 0) return;
+
+            // Add the curve.
+            //
+            SegmentedCurve *sc = new SegmentedCurve(c, 0.0, 0.0, 1.0);
+            permwindow[i]->canvas->add(sc);
+            permwindow[i]->graphicobject.push_back(sc);
+
+//            // Add the level.
+//            //
+//            RealVector shift(2);
+//    shift(0) = -10.0;
+//    shift(1) = -10.0;
+//    std::stringstream ss;
+//    ss.precision(2);
+//    ss << permlevelcurve->level(point, pw->type); // TODO: Use only two digits.
+////    ss << moblevelcurve->level(point, pw->type); // TODO: Use only two digits.
+
+//    Text *t = new Text(ss.str(), point, shift, 1.0, 0.0, 0.0);
+//    canvas->add(t);
+
+        }
+    }
+
+    return;
+}
+
+void cancelcb(Fl_Widget*, void*){
+    for (int i = 0; i < paraminput.size(); i++){
+        std::stringstream ss;
+        ss << parameter_value[i];
+
+        paraminput[i]->value(ss.str().c_str());
+    }
+
+    return;
+}
+
+int main(){
+    std::cout << "Select the subphysics: " << std::endl << std::endl;
+    std::cout << "    1. Brooks-Corey." << std::endl;
+    std::cout << "    2. CoreyQuad." << std::endl;
+    std::cout << "    3. Foam." << std::endl;
+    std::cout << "    4. Koval." << std::endl;
+    std::cout << "    5. Sorbie." << std::endl;
+    std::cout << "    6. Stone." << std::endl;
+
+    int choice;
+    while (true){
+        std::cin >> choice;
+
+        if (choice >= 1 && choice <= 6) break;
+    }
+
+    if      (choice == 1) subphysics = new Brooks_CoreySubPhysics();
+    else if (choice == 2) subphysics = new CoreyQuadSubPhysics();
+    else if (choice == 3) subphysics = new FoamSubPhysics();
+    else if (choice == 4) subphysics = new KovalSubPhysics();
+    else if (choice == 5) subphysics = new SorbieSubPhysics();
+    else if (choice == 6) subphysics = new StoneSubPhysics();
+
+    permeability = subphysics->permeability();
 
     // Size.
     //
@@ -561,6 +733,7 @@ int main(){
     //   
     {
         permlevelcurve = new ThreePhaseFlowPermeabilityLevelCurve(subphysics, permeability);
+        moblevelcurve = new ThreePhaseFlowMobilityLevelCurve(subphysics);
 
         std::vector<std::string>       name;
         std::vector<int>               type;
@@ -578,6 +751,8 @@ int main(){
             pw->rndclick->callback(rccb, pw);
 
             pw->rndmove->do_callback();
+
+            permwindow.push_back(pw);
         }
     }
 
@@ -612,6 +787,54 @@ int main(){
 
     map_out = new MapOutWindow(0, 0, 800, 800, "Map output");
     map_out->show();
+
+    // Parameters.
+    //
+    {
+        subphysics->equation_parameter(parameters);
+        
+        std::vector<AuxiliaryFunction*> vaf;
+        subphysics->auxiliary_functions(vaf);
+        for (int i = 0; i < vaf.size(); i++){
+            std::vector<Parameter*> vp;
+            vaf[i]->parameter(vp);
+            
+            for (int j = 0; j < vp.size(); j++) parameters.push_back(vp[j]);
+        }
+
+        for (int i = 0; i < parameters.size(); i++) parameter_value.push_back(parameters[i]->value());        
+
+        int paramwinh = 10 + parameters.size()*(25 + 10) + 25 + 10;
+        int paramwinw = 500;
+        paramwin = new Fl_Double_Window(10, 10, paramwinw, paramwinh, "Parameters");
+        int px = 50;
+
+        for (int i = 0; i < parameters.size(); i++){
+            Fl_Float_Input *input = new Fl_Float_Input(px, 10 + (25 + 10)*i, paramwinw - 10 - px, 25, parameters[i]->name().c_str());
+            std::stringstream ss;
+            ss << parameters[i]->value();
+            input->value(ss.str().c_str());
+
+            paraminput.push_back(input);
+        }
+
+        paramapply  = new Fl_Button(10, 35*parameters.size() + 10, (paramwinw - 30)/2, 25, "Apply");
+        paramapply->callback(applycb);
+
+        paramcancel = new Fl_Button(paramapply->x() + paramapply->w() + 10, paramapply->y(), paramapply->w(), paramapply->h(), "Cancel");
+        paramcancel->callback(cancelcb);
+
+        paramwin->end();
+        paramwin->callback(wincb);
+        paramwin->show();
+
+        // Viscosity Input.
+        //
+        ViscosityInputWindow *vw = new ViscosityInputWindow(10, 10, 300, 300, "Viscosity input", subphysics);
+        vw->show();
+    }
+
+    Fl::scheme("gtk+");
 
     return Fl::run();
 }

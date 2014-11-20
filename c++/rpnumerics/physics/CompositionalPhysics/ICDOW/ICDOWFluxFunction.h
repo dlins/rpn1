@@ -5,7 +5,18 @@
 #include "ICDOWChemistry.h"
 #include "ICDOWHydrodynamics.h"
 
-class ICDOWFluxFunction : public FluxFunction {
+#define JETTESTER_ENABLED_ICDOWFLUX
+
+#ifdef JETTESTER_ENABLED_ICDOWFLUX
+//#include "JetTester.h"
+#include "TestableJet.h"
+#endif
+
+class ICDOWFluxFunction: public FluxFunction
+                         #ifdef JETTESTER_ENABLED_ICDOWFLUX
+                         , public TestableJet
+                         #endif
+{
     private:
     protected:
         ICDOWChemistry      *chemistry;
@@ -24,6 +35,26 @@ class ICDOWFluxFunction : public FluxFunction {
         }
 
         int jet(const WaveState &u, JetMatrix &m, int degree) const;
+
+        #ifdef JETTESTER_ENABLED_ICDOWFLUX
+        static int testable_flux_jet(void *obj, const RealVector &state, int degree, JetMatrix &jm){
+            const ICDOWFluxFunction *icdowflux = (const ICDOWFluxFunction*)obj;
+
+            int info = icdowflux->jet(state, jm, degree);
+            return info;
+        }
+
+        void list_of_functions(std::vector<int (*)(void*, const RealVector&, int degree, JetMatrix&)> &list,
+                               std::vector<std::string> &name){
+            list.clear();
+            list.push_back(&testable_flux_jet);
+
+            name.clear();
+            name.push_back(std::string("ICDOW Flux"));
+
+            return;
+        }
+        #endif
 };
 
 #endif // _ICDOWFLUXFUNCTION_

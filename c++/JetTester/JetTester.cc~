@@ -57,7 +57,9 @@ void JetTester::populate_F(void *obj, int (*f)(void *obj, const RealVector &stat
 
         for (int p = 0; p < fine_subdivision.size(); p++) point(p) = coord[p][mi[p]];
 
-        (*f)(obj, point, 1, jm);
+        std::cout << "f = " << (void*)f << ", obj = " << (void*)obj << std::endl;
+
+        (*f)(obj, point, 1, jm); 
         fine_F(mi)  = jm.function();
         fine_JF(mi) = jm.Jacobian();
     }
@@ -309,11 +311,11 @@ void JetTester::numerical_Jacobian(const MultiArray<RealVector>    &F,
     for (unsigned long int i = 0; i < subdivision.size(); i++) total_number_elements *= subdivision[i];
 
     for (int i = 0; i < total_number_elements; i++){
-        std::vector<unsigned long int> mi = F.multiindex(i);
+        std::vector<unsigned long int> index = F.multiindex(i);
         bool valid = true;
 
-        for (int j = 0; j < mi.size(); j++){
-            if (mi[j] < intdelta || mi[j] >= range[j] - intdelta){
+        for (int j = 0; j < index.size(); j++){
+            if (index[j] < intdelta || index[j] >= range[j] - intdelta){
                 valid = false;
                 break;
             }
@@ -323,24 +325,24 @@ void JetTester::numerical_Jacobian(const MultiArray<RealVector>    &F,
 
         for (int m = 0; m < rows; m++){
             for (int p = 0; p < cols; p++){
-                std::vector<unsigned long int> p_shifted(mi);
+                std::vector<unsigned long int> p_shifted(index);
                 p_shifted[p] += intdelta;
 
-                std::vector<unsigned long int> m_shifted(mi);
+                std::vector<unsigned long int> m_shifted(index);
                 m_shifted[p] -= intdelta;
 
-                dev[p] = std::abs((F(p_shifted)(m) - F(m_shifted)(m))*inv_2_delta[p] - JF(mi)(m, p));
+                dev[p] = std::abs((F(p_shifted)(m) - F(m_shifted)(m))*inv_2_delta[p] - JF(index)(m, p));
 
                 if (dev[p] > numerical_analytic_abs_deviation_sup(m, p)){
                     // Store the indices of the variables where the supremum was reached for 
                     // the given component of the function.
                     //
-                    for (int v = 0; v < cols; v++) sup_pos(m, p)[v] = mi[v];
+                    for (int v = 0; v < cols; v++) sup_pos(m, p)[v] = index[v];
                         numerical_analytic_abs_deviation_sup(m, p) = dev[p];
                     }
             }
 
-            max_abs_F = std::max(max_abs_F, F(mi)(m));
+            max_abs_F = std::max(max_abs_F, F(index)(m));
         }
     }
 

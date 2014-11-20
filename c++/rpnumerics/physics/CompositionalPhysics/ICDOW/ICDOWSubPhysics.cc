@@ -28,23 +28,23 @@ ICDOWSubPhysics::ICDOWSubPhysics() : SubPhysics() {
 
     // Hydrodynamics.
     //
-    hydro  = new ICDOWHydrodynamics(muw_parameter, muo_parameter,
-                                    grw_parameter, gro_parameter,
-                                    vel_parameter,
-                                    swc_parameter, lambda_parameter);
+    hydrodynamics_  = new ICDOWHydrodynamics(muw_parameter, muo_parameter,
+                                             grw_parameter, gro_parameter,
+                                             vel_parameter,
+                                             swc_parameter, lambda_parameter);
 
 //    auxiliaryfunctions_.push_back(hydro);
 
     // Chemistry.
     //
-    chemistry = new ICDOWChemistry();
+    chemistry_ = new ICDOWChemistry();
 
 //    auxiliaryfunctions_.push_back(chemistry);
 
     // Flux, accumulation.
     //
-    flux_         = new ICDOWFluxFunction(chemistry, hydro);
-    accumulation_ = new ICDOWAccumulationFunction(phi_parameter, chemistry);
+    flux_         = new ICDOWFluxFunction(chemistry_, hydrodynamics_);
+    accumulation_ = new ICDOWAccumulationFunction(phi_parameter, chemistry_);
 
     // Boundary.
     //
@@ -68,12 +68,12 @@ ICDOWSubPhysics::ICDOWSubPhysics() : SubPhysics() {
 
     gridvalues_ = new GridValues(boundary_, boundary_->minimums(), boundary_->maximums(), number_of_cells);
 
-//    // Implicit Hugoniot.
-//    //
-//    Hugoniot_TP *ihc = new Hugoniot_TP(flux_, accumulation_, boundary_);
-//    ihc->subphysics(this);
+    // Implicit Hugoniot.
+    //
+    Hugoniot_TP *ihc = new Hugoniot_TP(flux_, accumulation_, boundary_);
+    ihc->subphysics(this);
 
-//    hugoniot_curve.push_back(ihc);
+    hugoniot_curve.push_back(ihc);
 
 //    // Hugoniot continuation
 
@@ -82,21 +82,19 @@ ICDOWSubPhysics::ICDOWSubPhysics() : SubPhysics() {
 
 //    hugoniot_curve.push_back(hugoniotcontinuation_);
 
-//    // Coincidence, Coincidence contour.
-//    //
-//    coincidence_ = new ICDOWCoincidence(thermo, hydro,
-//                                                     re_parameter, rg_parameter, 
-//                                                     phi_parameter);
+    // Coincidence, Coincidence contour.
+    //
+    coincidence_ = new ICDOWCoincidence(hydrodynamics_, phi_parameter);
 
-//    coincidence_contour_ = new Coincidence_Contour(coincidence_);
+    coincidence_contour_ = new Coincidence_Contour(coincidence_);
 
-//    // Rarefaction.
-//    //
-//    rarefactioncurve_ = new RarefactionCurve(accumulation_, flux_, boundary_);
+    // Rarefaction.
+    //
+    rarefactioncurve_ = new RarefactionCurve(accumulation_, flux_, boundary_);
 
-//    // Inflection.
-//    //
-//    inflection_curve_ = new Inflection_Curve;
+    // Inflection.
+    //
+    inflection_curve_ = new Inflection_Curve;
 
 //    evap_ = new ICDOWEvaporationExtension((const ICDOWFluxFunction*)flux_, 
 //                                                    (const ICDOWAccumulationFunction*)accumulation_, 
@@ -141,12 +139,12 @@ ICDOWSubPhysics::~ICDOWSubPhysics(){
 
 //    for (int i = 0; i < extension_curve.size(); i++) delete extension_curve[i];
 
-//    delete inflection_curve_;
+    delete inflection_curve_;
 
-//    delete rarefactioncurve_;
+    delete rarefactioncurve_;
 
-//    delete coincidence_contour_;
-//    delete coincidence_;
+    delete coincidence_contour_;
+    delete coincidence_;
 
 //    // Not sure if this should really be done like this.
 //    // Perhaps it is best to eliminate only the HugoniotCurves that were instantiated
@@ -160,8 +158,8 @@ ICDOWSubPhysics::~ICDOWSubPhysics(){
     delete accumulation_;
     delete flux_;
 
-    delete chemistry;
-    delete hydro;
+    delete chemistry_;
+    delete hydrodynamics_;
 
     for (int i = equation_parameter_.size() - 1; i >= 0; i--) delete equation_parameter_[i];
 }

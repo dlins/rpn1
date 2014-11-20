@@ -78,10 +78,15 @@ KovalSubPhysics::KovalSubPhysics() : ThreePhaseFlowSubPhysics(){
     //
     viscosity_ = new KovalViscosity(this);
 
+    // Mobility.
+    //
+    mobility_ = new ThreePhaseFlowMobility(this);
+
     info_subphysics_ = std::string("Koval");
 }
 
 KovalSubPhysics::~KovalSubPhysics(){
+    delete mobility_;
     delete viscosity_;
     delete inflection_curve_;
     delete wavecurvefactory_;

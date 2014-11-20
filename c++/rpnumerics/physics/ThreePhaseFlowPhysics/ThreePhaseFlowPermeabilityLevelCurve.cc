@@ -109,6 +109,41 @@ void ThreePhaseFlowPermeabilityLevelCurve::curve(const RealVector &ref, int type
     return;
 }
 
+void ThreePhaseFlowPermeabilityLevelCurve::curve(double level, int type, std::vector<RealVector> &c){
+    if (gv != 0){
+        if      (type == WATER_PERMEABILITY_CURVE) permeabilityfunction = &water_permeability;
+        else if (type == OIL_PERMEABILITY_CURVE)   permeabilityfunction = &oil_permeability;
+        else if (type == GAS_PERMEABILITY_CURVE)   permeabilityfunction = &gas_permeability;
+
+        if      (type == WATER_PERMEABILITY_CURVE) component_ = 0;
+        else if (type == OIL_PERMEABILITY_CURVE)   component_ = 1;
+        else if (type == GAS_PERMEABILITY_CURVE)   component_ = 2;
+
+        level_ = level;
+
+        std::vector<RealVector> curve;
+        std::vector< std::deque <RealVector> > deque_curves;
+        std::vector <bool> is_circular;
+
+        int method = SEGMENTATION_METHOD;
+//        int info = ContourMethod::contour2d(this, curve, deque_curves, is_circular, method);
+
+        double rect[4];
+        rect[0] = subphysics_->boundary()->minimums()(0);
+        rect[1] = subphysics_->boundary()->maximums()(0);
+        rect[2] = subphysics_->boundary()->minimums()(1);
+        rect[3] = subphysics_->boundary()->maximums()(1);
+
+        int res[2] = {128, 128};
+
+        int info = ContourMethodPure::contour2d(this, (Boundary*)subphysics_->boundary(), rect, res, curve);
+
+        c = curve;
+    }
+
+    return;
+}
+
 double ThreePhaseFlowPermeabilityLevelCurve::level(const RealVector &ref, int type){
     if      (type == WATER_PERMEABILITY_CURVE) return water_permeability(this, ref);
     else if (type == OIL_PERMEABILITY_CURVE)   return oil_permeability(this, ref);

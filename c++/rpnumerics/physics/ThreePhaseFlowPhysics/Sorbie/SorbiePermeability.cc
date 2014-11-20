@@ -6,6 +6,8 @@ SorbiePermeability::SorbiePermeability(ThreePhaseFlowSubPhysics *s): ThreePhaseF
 SorbiePermeability::~SorbiePermeability(){
 }
 
+// The reduced permeabilities must be changed after changing this method!
+//
 int SorbiePermeability::PermeabilityWater_jet(const RealVector &state, int degree, JetMatrix &water){
     water.resize(2, 1);
 
@@ -41,6 +43,8 @@ int SorbiePermeability::PermeabilityWater_jet(const RealVector &state, int degre
     return degree;
 }
 
+// The reduced permeabilities must be changed after changing this method!
+//
 int SorbiePermeability::PermeabilityOil_jet(const RealVector &state, int degree, JetMatrix &oil){
     oil.resize(2, 1);
 
@@ -68,6 +72,8 @@ int SorbiePermeability::PermeabilityOil_jet(const RealVector &state, int degree,
     return degree;
 }
 
+// The reduced permeabilities must be changed after changing this method!
+//
 int SorbiePermeability::PermeabilityGas_jet(const RealVector &state, int degree, JetMatrix &gas){
     gas.resize(2, 1);
 
@@ -103,10 +109,18 @@ void SorbiePermeability::reduced_permeability(const RealVector &state, RealVecto
     PermeabilityGas_jet(state, 0, gas);
     PermeabilityOil_jet(state, 0, oil);
 
+//    reduced(0) = water.get(0)/state(0);
+//    reduced(1) = oil.get(0)/state(1);
+//    reduced(2) = gas.get(0)/(1.0 - state(0) - state(1));
+
+    double sw = state(0);
+    double so = state(1);
+    double sg = 1.0 - state(0) - state(1);
+
     reduced.resize(3);
-    reduced(0) = water.get(0)/state(0);
-    reduced(1) = oil.get(0)/state(1);
-    reduced(2) = gas.get(0)/(1.0 - state(0) - state(1));
+    reduced(0) = sg;
+    reduced(1) = so;
+    reduced(2) = sg;
 
     return;
 }

@@ -98,6 +98,8 @@ ccSRC +=  \
 	../../../../rpnumerics/physics/CompositionalPhysics/TPCW/Double_Contact_TP.cc \
 	../../../../rpnumerics/physics/CompositionalPhysics/TPCW/ShockContinuationMethod3D2D.cc \
 	../../../../rpnumerics/physics/CompositionalPhysics/TPCW/ShockMethod.cc \
+	../../../../rpnumerics/physics/CompositionalPhysics/TPCW/Thermodynamics.cc \
+	../../../../rpnumerics/physics/CompositionalPhysics/TPCW/TPCWSubPhysics.cc \
 	../../../../rpnumerics/physics/CompositionalPhysics/Hugoniot_TP.cc \
 	../../../../rpnumerics/physics/CompositionalPhysics/DeadVolatileVolatileGas/DeadVolatileVolatileGasAccumulationFunction.cc \
 	../../../../rpnumerics/physics/CompositionalPhysics/DeadVolatileVolatileGas/DeadVolatileVolatileGasThermodynamics.cc \
@@ -109,16 +111,22 @@ ccSRC +=  \
 	../../../../rpnumerics/physics/CompositionalPhysics/DeadVolatileVolatileGas/DeadVolatileVolatileGasFluxFunction.cc \
 	../../../../rpnumerics/physics/CompositionalPhysics/ICDOW/ICDOWHydrodynamics.cc \
 	../../../../rpnumerics/physics/CompositionalPhysics/ICDOW/ICDOWAccumulationFunction.cc \
+	../../../../rpnumerics/physics/CompositionalPhysics/ICDOW/ICDOWCoincidence.cc \
 	../../../../rpnumerics/physics/CompositionalPhysics/ICDOW/ICDOWFluxFunction.cc \
 	../../../../rpnumerics/physics/CompositionalPhysics/ICDOW/ICDOWChemistry.cc \
 	../../../../rpnumerics/physics/CompositionalPhysics/ICDOW/ICDOWSubPhysics.cc \
 	../../../../rpnumerics/physics/Quad3SubPhysics/Quad3Equations.cc \
-	../../../../rpnumerics/physics/SinglePhase/Thermodynamics.cc \
+	../../../../rpnumerics/physics/Quad2SubPhysics/Quad2HugoniotFunction.cc \
+	../../../../rpnumerics/physics/Quad2SubPhysics/Quad2FluxParams.cc \
+	../../../../rpnumerics/physics/Quad2SubPhysics/Quad2AccumulationFunction.cc \
+	../../../../rpnumerics/physics/Quad2SubPhysics/Quad2FluxFunction.cc \
 	../../../../rpnumerics/physics/Ion/IonAccumulation.cc \
 	../../../../rpnumerics/physics/Ion/IonPermeability.cc \
 	../../../../rpnumerics/physics/Ion/IonRatios.cc \
 	../../../../rpnumerics/physics/Ion/IonAdsorption.cc \
 	../../../../rpnumerics/physics/Ion/IonFlux.cc \
+	../../../../rpnumerics/physics/ThreePhaseFlowPhysics/ThreePhaseFlowMobilityLevelCurve.cc \
+	../../../../rpnumerics/physics/ThreePhaseFlowPhysics/ThreePhaseFlowMobility.cc \
 	../../../../rpnumerics/physics/ThreePhaseFlowPhysics/Foam/FoamPermeability.cc \
 	../../../../rpnumerics/physics/ThreePhaseFlowPhysics/Foam/FoamFluxFunction.cc \
 	../../../../rpnumerics/physics/ThreePhaseFlowPhysics/Foam/FoamViscosity.cc \
@@ -160,13 +168,9 @@ ccSRC +=  \
 	../../../../rpnumerics/physics/quad/Quad3AccumulationFunction.cc \
 	../../../../rpnumerics/physics/quad/Quad3FluxParams.cc \
 	../../../../rpnumerics/physics/quad/Quad4FluxFunction.cc \
-	../../../../rpnumerics/physics/quad/Quad2HugoniotFunction.cc \
 	../../../../rpnumerics/physics/quad/Quad4FluxParams.cc \
 	../../../../rpnumerics/physics/quad/QuadWaveState.cc \
 	../../../../rpnumerics/physics/quad/Quad4AccumulationFunction.cc \
-	../../../../rpnumerics/physics/quad/Quad2FluxParams.cc \
-	../../../../rpnumerics/physics/quad/Quad2AccumulationFunction.cc \
-	../../../../rpnumerics/physics/quad/Quad2FluxFunction.cc \
 	../../../../rpnumerics/physics/quad/Quad3FluxFunction.cc \
 	../../../../rpnumerics/physics/Quad2C1SubPhysics/Quad2C1Equations.cc \
 	../../../../rpnumerics/Implicit_Curve.cc \
@@ -223,10 +227,11 @@ cppSRC +=  \
 	../../../../rpnumerics/physics/CompositionalPhysics/TPCW/Flux2Comp2PhasesAdimensionalized.cpp \
 	../../../../rpnumerics/physics/CompositionalPhysics/TPCW/Thermodynamics_SuperCO2_WaterAdimensionalized.cpp \
 	../../../../rpnumerics/physics/CompositionalPhysics/TPCW/Accum2Comp2PhasesAdimensionalized.cpp \
-	../../../../rpnumerics/physics/CompositionalPhysics/TPCW/Accum2Comp2PhasesAdimensionalized_Params.cpp \
+	../../../../rpnumerics/physics/CompositionalPhysics/TPCW/VLE_Flash_TPCW.cpp \
 	../../../../rpnumerics/physics/CompositionalPhysics/TPCW/TrivialAccumulation_Params.cpp \
 	../../../../rpnumerics/physics/CompositionalPhysics/TPCW/TrivialAccumulation.cpp \
 	../../../../rpnumerics/physics/CompositionalPhysics/TPCW/Flux2Comp2PhasesAdimensionalized_Params.cpp \
+	../../../../rpnumerics/physics/CompositionalPhysics/TPCW/MolarDensity.cpp \
 	../../../../rpnumerics/physics/polydisperse/Polydisperse_Params.cpp \
 	../../../../rpnumerics/physics/polydisperse/Polydisperse.cpp \
 	../../../../rpnumerics/physics/SinglePhase/JetSinglePhaseLiquid.cpp \
@@ -235,13 +240,10 @@ cppSRC +=  \
 	../../../../rpnumerics/physics/SinglePhase/AccumulationSinglePhaseVaporAdimensionalized_Params.cpp \
 	../../../../rpnumerics/physics/SinglePhase/FluxSinglePhaseLiquidAdimensionalized_Params.cpp \
 	../../../../rpnumerics/physics/SinglePhase/JetSinglePhaseVapor.cpp \
-	../../../../rpnumerics/physics/SinglePhase/VLE_Flash_TPCW.cpp \
-	../../../../rpnumerics/physics/SinglePhase/Thermodynamics_SuperCO2_Water_SinglePhases_Adimensionalized.cpp \
 	../../../../rpnumerics/physics/SinglePhase/AccumulationSinglePhaseVaporAdimensionalized.cpp \
 	../../../../rpnumerics/physics/SinglePhase/AccumulationSinglePhaseLiquidAdimensionalized_Params.cpp \
 	../../../../rpnumerics/physics/SinglePhase/FluxSinglePhaseVaporAdimensionalized_Params.cpp \
 	../../../../rpnumerics/physics/SinglePhase/AccumulationSinglePhaseLiquidAdimensionalized.cpp \
-	../../../../rpnumerics/physics/SinglePhase/MolarDensity.cpp \
 	../../../../rpnumerics/physics/ThreePhaseFlowPhysics/CoreyQuadSubPhysics/CoreyQuadFluxFunction.cpp \
 	../../../../rpnumerics/physics/corey/CoreyQuad_Params.cpp \
 	../../../../wave/util/alglib/alglib/safesolve.cpp \

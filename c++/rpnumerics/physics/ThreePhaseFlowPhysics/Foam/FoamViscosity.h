@@ -30,6 +30,8 @@ class FoamViscosity: public ThreePhaseFlowViscosity {
         ~FoamViscosity();
 
         int gas_viscosity_jet(const WaveState &w, int degree, JetMatrix &mug_jet);
+
+        double gas_viscosity(const RealVector &p);
 };
 
 #endif // _FOAMVISCOSITY_

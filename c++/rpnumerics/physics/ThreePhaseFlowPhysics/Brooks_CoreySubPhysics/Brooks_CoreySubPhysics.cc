@@ -97,13 +97,17 @@ Brooks_CoreySubPhysics::Brooks_CoreySubPhysics() : ThreePhaseFlowSubPhysics(){
     //
     viscosity_ = new Brooks_CoreyViscosity(this);
 
+    // Mobility.
+    //
+    mobility_ = new ThreePhaseFlowMobility(this);
+
     // Info.
     //
     info_subphysics_ = std::string("Brooks-Corey");
 }
 
 Brooks_CoreySubPhysics::~Brooks_CoreySubPhysics(){
-    std::cout << "Beginning of BC dtor." << std::endl;
+    delete mobility_;
 
     delete viscosity_;
 

@@ -1,9 +1,15 @@
 #include "ICDOWAccumulationFunction.h"
 
-ICDOWAccumulationFunction::ICDOWAccumulationFunction(Parameter *phi, ICDOWChemistry *ch): AccumulationFunction() {
+ICDOWAccumulationFunction::ICDOWAccumulationFunction(Parameter *phi, ICDOWChemistry *ch): AccumulationFunction()
+                                                                                          #ifdef JETTESTER_ENABLED_ICDOWACCUMULATION
+                                                                                          , TestableJet()
+                                                                                          #endif  
+ {
     phi_parameter = phi;
 
     chemistry = ch;
+
+    std::cout << "Accumulation = " << (void*)this << std::endl;
 }
 
 ICDOWAccumulationFunction::~ICDOWAccumulationFunction(){
