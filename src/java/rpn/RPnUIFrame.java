@@ -29,6 +29,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import rpn.command.ClassifierCommand;
 import rpn.command.VelocityCommand;
 import rpn.component.RpGeometry;
+import rpn.controller.phasespace.RiemanProfileState;
 import rpn.controller.ui.*;
 import rpn.controller.ui.UI_ACTION_SELECTED;
 import rpn.glasspane.RPnGlassPane;
@@ -1610,11 +1611,16 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
             }
             
             if (riemannRadioButton_.isSelected()) {
-                newState = new RiemannProblemConfig();
+//                newState = new RiemannProblemConfig();
+                UIController.instance().getActivePhaseSpace().changeState(new RiemanProfileState());
+                UIController.instance().setState(new GEOM_SELECTION());
                 
+                bifurcationConfigMenu();
                 
-//                curvesConfigPanel_.propertyChange(new PropertyChangeEvent(this, "family", "", "bifurcationcurve"));
-//                curvesConfigPanel_.propertyChange(new PropertyChangeEvent(this, "direction", "", "bifurcationcurve"));
+                toolBar_.removeAll();
+                createRiemmanProblemToolBar();
+                toolBar_.revalidate();
+
             }
             
             UIController.instance().setState(newState);

@@ -2,6 +2,7 @@ package rpn.controller.phasespace.riemannprofile;
 
 
 import rpn.component.RpGeometry;
+import rpn.component.WaveCurveGeom;
 import rpn.component.util.GraphicsUtil;
 
 
@@ -9,7 +10,7 @@ import rpn.component.util.GraphicsUtil;
 public interface  RiemannProfileState  {
     
 
-    public void add(RpGeometry geom);
+    public void add(WaveCurveGeom geom);
 
     
     public void remove(RpGeometry geom);

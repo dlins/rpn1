@@ -38,9 +38,6 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene implements Observer 
     static public String namePhaseSpace = "";
     static public List listResolution = new ArrayList();
     static public int closestCurve;             //indice da curva mais proxima
-    private List stringsToRemove = new ArrayList();
-    private Timer timer_;
-    private CurveFlasher flasher_;
     private List<RpGeometry> selectedGeometries_;
     //
     // Constructors
@@ -53,8 +50,6 @@ public class RPnPhaseSpaceAbstraction extends AbstractScene implements Observer 
         userInputTable_ = new UserInputTable(domain.getDim());
         curvesListFrames_ = new ArrayList<RPnCurvesList>();
         selectedGeometries_ = new ArrayList<RpGeometry>();
-
-//        flasher_ = new CurveFlasher();
     }
 
     //

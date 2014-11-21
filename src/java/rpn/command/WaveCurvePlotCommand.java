@@ -34,7 +34,7 @@ public class WaveCurvePlotCommand extends RpModelPlotCommand {
 
         factory = new WaveCurveGeomFactory(new WaveCurveCalc(oPoint, waveCurveConfiguration));
 
-        RiemannProfileCommand.instance().getState().add(factory.geom());
+//        RiemannProfileCommand.instance().getState().add(factory.geom());
 
         return factory.geom();
 

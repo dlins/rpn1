@@ -32,7 +32,7 @@ public class AllIncreaseRimannProfileState implements RiemannProfileState, Riema
 
     }
 
-    public void add(RpGeometry geom) {
+    public void add(rpn.component.WaveCurveGeom geom) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

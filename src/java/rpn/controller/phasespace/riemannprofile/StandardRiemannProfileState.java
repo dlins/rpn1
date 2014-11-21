@@ -36,7 +36,7 @@ public class StandardRiemannProfileState implements RiemannProfileState, Riemann
     }
 
     @Override
-    public void add(RpGeometry geom) {
+    public void add(rpn.component.WaveCurveGeom geom) {
 
     }
 
