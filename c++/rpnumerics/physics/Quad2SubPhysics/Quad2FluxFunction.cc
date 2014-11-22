@@ -1,7 +1,7 @@
 #include "Quad2FluxFunction.h"
 
 Quad2FluxFunction::Quad2FluxFunction(Parameter *a1, Parameter *b1, Parameter *c1, Parameter *d1, Parameter *e1,
-                                     Parameter *a2, Parameter *b2, Parameter *c2, Parameter *d2, Parameter *e2){
+                                     Parameter *a2, Parameter *b2, Parameter *c2, Parameter *d2, Parameter *e2): FluxFunction(){
     a1_parameter = a1;
     b1_parameter = b1;
     c1_parameter = c1;
@@ -37,7 +37,6 @@ int Quad2FluxFunction::jet(const WaveState & x, JetMatrix & y, int degree) const
         double c2 = c2_parameter->value();
         double d2 = d2_parameter->value();
         double e2 = e2_parameter->value();
-
 
         y.set(0, 0.5 * ((a1 * u * u) + (2.0 * b1 * u * v) + (c1 * v * v)) + d1 * u + e1*v);
 
