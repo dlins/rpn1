@@ -67,8 +67,10 @@ class Thermodynamics {
 //        RealVector minus_A_times_B_times_B;
 
         Parameter *P_parameter;
+        double mc, mw;
+
     public:
-        Thermodynamics(double mc, double mw, const char *hsigmaC_name, Parameter *P);
+        Thermodynamics(const char *hsigmaC_name, Parameter *P);
         virtual ~Thermodynamics();
     
         int RockEnthalpyVol_jet(const double Theta, int degree, JetMatrix &revj) const;

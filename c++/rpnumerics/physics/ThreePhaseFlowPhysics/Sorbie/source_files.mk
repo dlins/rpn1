@@ -117,7 +117,7 @@ ccSRC +=  \
 	../../../../rpnumerics/physics/CompositionalPhysics/ICDOW/ICDOWSubPhysics.cc \
 	../../../../rpnumerics/physics/Quad3SubPhysics/Quad3Equations.cc \
 	../../../../rpnumerics/physics/Quad2SubPhysics/Quad2HugoniotFunction.cc \
-	../../../../rpnumerics/physics/Quad2SubPhysics/Quad2FluxParams.cc \
+	../../../../rpnumerics/physics/Quad2SubPhysics/Quad2SubPhysics.cc \
 	../../../../rpnumerics/physics/Quad2SubPhysics/Quad2AccumulationFunction.cc \
 	../../../../rpnumerics/physics/Quad2SubPhysics/Quad2FluxFunction.cc \
 	../../../../rpnumerics/physics/Ion/IonAccumulation.cc \
@@ -222,7 +222,6 @@ cppSRC +=  \
 	../../../../rpnumerics/Eigenvalue_Contour.cpp \
 	../../../../rpnumerics/methods/HugoniotCurve/ColorCurve.cpp \
 	../../../../rpnumerics/methods/Viscosity_Matrix/DoubleMatrix.cpp \
-	../../../../rpnumerics/CoincidenceTP/CoincidenceTP.cpp \
 	../../../../rpnumerics/physics/CompositionalPhysics/TPCW/SubinflectionTP.cpp \
 	../../../../rpnumerics/physics/CompositionalPhysics/TPCW/Flux2Comp2PhasesAdimensionalized.cpp \
 	../../../../rpnumerics/physics/CompositionalPhysics/TPCW/Thermodynamics_SuperCO2_WaterAdimensionalized.cpp \

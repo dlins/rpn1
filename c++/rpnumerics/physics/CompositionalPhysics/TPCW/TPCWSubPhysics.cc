@@ -9,11 +9,6 @@ TPCWSubPhysics::TPCWSubPhysics(){
 //    equation_parameter_.push_back(mc_parameter);
 //    equation_parameter_.push_back(mw_parameter);
 
-    // Molecular weights.
-    //
-    mc = 0.044;
-    mw = 0.018;
-
     // Flux parameters.
     //
     abs_perm_parameter = new Parameter(std::string("abs_perm"), 3e-12);
@@ -35,7 +30,6 @@ TPCWSubPhysics::TPCWSubPhysics(){
     phi_parameter = new Parameter(std::string("phi"), 0.38);
     equation_parameter_.push_back(phi_parameter);
 
-    double const_gravity = 9.8;
     bool has_gravity = false;
     bool has_horizontal = true;
 
@@ -50,19 +44,76 @@ TPCWSubPhysics::TPCWSubPhysics(){
 
     // Thermodynamics.
     //
-    tc = new Thermodynamics(mc, mw, "./hsigmaC_spline.txt", P_parameter);
+    tc = new Thermodynamics("../../../../../c++/rpnumerics/physics/CompositionalPhysics/TPCW/hsigmaC_spline.txt", P_parameter);
     tc->set_flash(flash);
 
     // Flux.
     //
+    flux_ = new Flux2Comp2PhasesAdimensionalized(abs_perm_parameter, sin_beta_parameter, 
+                                                 cnw_parameter, cng_parameter,
+                                                 expw_parameter, expg_parameter,
+                                                 has_gravity, has_horizontal,
+                                                 tc);
 
     // Accumulation.
     //
     accumulation_ = new Accum2Comp2PhasesAdimensionalized(phi_parameter, tc);
+
+    // Boundary.
+    //
+    double Theta_min = 0.099309;
+    double Theta_max = 0.576511;
+
+    RealVector pmin(3), pmax(3);
+
+    pmin.component(0) = 0.0;
+    pmin.component(1) = Theta_min;
+    pmin.component(2) = 0.0;
+
+    pmax.component(0) = 1.0;
+    pmax.component(1) = Theta_max;
+    pmax.component(2) = 2.0;
+
+    boundary_     = new RectBoundary(pmin, pmax);
+
+    // GridValues.
+    //
+    std::vector<int> number_of_cells(2);
+    number_of_cells[0] = 128;
+    number_of_cells[1] = 128;
+
+    gridvalues_ = new GridValues(boundary_, boundary_->minimums(), boundary_->maximums(), number_of_cells);
+
+    // Implicit Hugoniot.
+    //
+    Hugoniot_TP *ihc = new Hugoniot_TP(flux_, accumulation_, boundary_);
+    ihc->subphysics(this);
+
+    hugoniot_curve.push_back(ihc);
+
+    // Canvas-related.
+    //
+    transformation_matrix_ = DoubleMatrix::eye(2);
+
+    xlabel_ = std::string("s");
+    ylabel_ = std::string("Theta");
+    
+    // Info.
+    //
+    info_subphysics_ = std::string("TPCWSubPhysics");
 }
 
 TPCWSubPhysics::~TPCWSubPhysics(){
+    // Not sure if this should really be done like this.
+    // Perhaps it is best to eliminate only the HugoniotCurves that were instantiated
+    // in this class, and let the rest be deleted at the father's dtor. 
+    //
+    for (int i = 0; i < hugoniot_curve.size(); i++) delete hugoniot_curve[i];
+
+    delete gridvalues_;
+    delete boundary_;
     delete accumulation_;
+    delete flux_;
     delete tc;
     delete flash;
     delete mdl;

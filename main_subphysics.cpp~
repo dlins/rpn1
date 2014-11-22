@@ -8,6 +8,8 @@
 #include "FoamSubPhysics.h"
 #include "ICDOWSubPhysics.h"
 #include "SorbieSubPhysics.h"
+#include "TPCWSubPhysics.h"
+#include "Quad2SubPhysics.h"
 
 #include <FL/Fl.H>
 #include <FL/Fl_Double_Window.H>
@@ -115,9 +117,13 @@ std::vector<Fl_Round_Button*>            optionsbtn;
 std::vector<void (*)(Fl_Widget*, void*)> optionsfnc;
 
 void Hugoniotcb(Fl_Widget*, void*){
-    RealVector p(3);
+    int pointsize = subphysics->boundary()->minimums().size();
+
+    RealVector p(pointsize);
+
+    if (subphysics->boundary()->minumums().size() == 3) p(2) = 1.0;
+
     canvas->getxy(p(0), p(1));
-    p(2) = 1.0;
 
     if (!subphysics->boundary()->inside(p)) return;
 
@@ -1272,7 +1278,9 @@ int main(){
 //    subphysics = new CoreyQuadSubPhysics;
 //    subphysics = new KovalSubPhysics;
 //    subphysics = new FoamSubPhysics;
-    subphysics = new SorbieSubPhysics();
+//    subphysics = new SorbieSubPhysics;
+//    subphysics = new TPCWSubPhysics;
+    subphysics = new Quad2SubPhysics;
 
     std::cout << "SubPhysics \"" << subphysics->info_subphysics() << "\" created successfully." << std::endl;
 

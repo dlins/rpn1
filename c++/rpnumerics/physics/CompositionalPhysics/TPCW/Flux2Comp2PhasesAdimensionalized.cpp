@@ -1,108 +1,126 @@
 #include "Flux2Comp2PhasesAdimensionalized.h"
 
-Flux2Comp2PhasesAdimensionalized::Flux2Comp2PhasesAdimensionalized(const Flux2Comp2PhasesAdimensionalized &a) : FluxFunction(a.FluxFunction::fluxParams()) {
+//Flux2Comp2PhasesAdimensionalized::Flux2Comp2PhasesAdimensionalized(const Flux2Comp2PhasesAdimensionalized &a) : FluxFunction(a.FluxFunction::fluxParams()) {
 
-    //    const Flux2Comp2PhasesAdimensionalized_Params & fluxParams = (const Flux2Comp2PhasesAdimensionalized_Params &) a.fluxParams();
-    cout << "Construtor de copia de Flux2CompPhasesAdimensionalized "<<a.FluxFunction::fluxParams().params() << endl;
+//    //    const Flux2Comp2PhasesAdimensionalized_Params & fluxParams = (const Flux2Comp2PhasesAdimensionalized_Params &) a.fluxParams();
+//    cout << "Construtor de copia de Flux2CompPhasesAdimensionalized "<<a.FluxFunction::fluxParams().params() << endl;
 
 
-    TD = a.TD;
-    FH = new FracFlow2PhasesHorizontalAdimensionalized(this);
-    FV = new FracFlow2PhasesVerticalAdimensionalized(this);
+//    TD = a.TD;
+//    FH = new FracFlow2PhasesHorizontalAdimensionalized(this);
+//    FV = new FracFlow2PhasesVerticalAdimensionalized(this);
 
-    reducedFlux = new ReducedFlux2Comp2PhasesAdimensionalized(this);
-    abs_perm = a.abs_perm;
-    sin_beta = a.sin_beta;
-    const_gravity = a.const_gravity;
-    grav = a.grav;
-    cnw = a.cnw;
-    cng = a.cng;
-    expw = a.expw;
-    expg = a.expg;
-    has_gravity = a.has_gravity;
-    has_horizontal = a.has_horizontal;
-}
+//    reducedFlux = new ReducedFlux2Comp2PhasesAdimensionalized(this);
+//    abs_perm = a.abs_perm;
+//    sin_beta = a.sin_beta;
+//    const_gravity = a.const_gravity;
+//    grav = a.grav;
+//    cnw = a.cnw;
+//    cng = a.cng;
+//    expw = a.expw;
+//    expg = a.expg;
+//    has_gravity = a.has_gravity;
+//    has_horizontal = a.has_horizontal;
 
-Flux2Comp2PhasesAdimensionalized::Flux2Comp2PhasesAdimensionalized(const Flux2Comp2PhasesAdimensionalized_Params &param) : FluxFunction(param) {
+//    const_gravity = 9.8;
+//}
 
-    cout << "Parametros de fluxo: " << param.params()<< endl;
+//Flux2Comp2PhasesAdimensionalized::Flux2Comp2PhasesAdimensionalized(const Flux2Comp2PhasesAdimensionalized_Params &param) : FluxFunction(param) {
 
-    abs_perm = param.component(0);
-    sin_beta = param.component(1);
-    //    const_gravity = param.component(2);
+//    cout << "Parametros de fluxo: " << param.params()<< endl;
+
+//    abs_perm = param.component(0);
+//    sin_beta = param.component(1);
+//    //    const_gravity = param.component(2);
+
+//    const_gravity = 9.8;
+
+//    cnw = param.component(4);
+//    cng = param.component(5);
+//    expw = param.component(6);
+//    expg = param.component(7);
+
+
+//    TD = param.get_thermodynamics();
+
+
+//    FH = new FracFlow2PhasesHorizontalAdimensionalized(this);
+//    FV = new FracFlow2PhasesVerticalAdimensionalized(this);
+//    reducedFlux = new ReducedFlux2Comp2PhasesAdimensionalized(this);
+
+//    has_gravity = param.has_gravity();
+//    has_horizontal = param.has_horizontal();
+
+//    grav = abs_perm * sin_beta*const_gravity;
+//}
+
+Flux2Comp2PhasesAdimensionalized::Flux2Comp2PhasesAdimensionalized(Parameter *abs_perm, Parameter *sin_beta, 
+                                                                   Parameter *cnw, Parameter *cng,
+                                                                   Parameter *expw, Parameter *expg,
+                                                                   bool hasgrav, bool hashor,
+                                                                   Thermodynamics *td): FluxFunction(){
+    abs_perm_parameter = abs_perm;
+    sin_beta_parameter = sin_beta;
+    cnw_parameter      = cnw;
+    cng_parameter      = cng;
+    expw_parameter     = expw;
+    expg_parameter     = expg;
+    has_gravity        = hasgrav;
+    has_horizontal     = hashor;
+    TD                 = td;
 
     const_gravity = 9.8;
 
-    cnw = param.component(4);
-    cng = param.component(5);
-    expw = param.component(6);
-    expg = param.component(7);
-
-
-    TD = param.get_thermodynamics();
-
-
     FH = new FracFlow2PhasesHorizontalAdimensionalized(this);
     FV = new FracFlow2PhasesVerticalAdimensionalized(this);
     reducedFlux = new ReducedFlux2Comp2PhasesAdimensionalized(this);
-
-    has_gravity = param.has_gravity();
-    has_horizontal = param.has_horizontal();
-
-    grav = abs_perm * sin_beta*const_gravity;
-}
-
-RpFunction * Flux2Comp2PhasesAdimensionalized::clone() const {
-
-    return new Flux2Comp2PhasesAdimensionalized(*this);
 }
 
 Flux2Comp2PhasesAdimensionalized::~Flux2Comp2PhasesAdimensionalized() {
-
-    delete FH;
-    delete FV;
     delete reducedFlux;
+    delete FV;
+    delete FH;
 }
 
-void Flux2Comp2PhasesAdimensionalized::fluxParams(const FluxParams & param) {
+//void Flux2Comp2PhasesAdimensionalized::fluxParams(const FluxParams & param) {
 
-    FluxFunction::fluxParams(param);
+//    FluxFunction::fluxParams(param);
 
-    cout <<"Setando parametros de fluxo: "<<endl;
-
-
-    if (param.component(2) == 1.0) {
-        has_gravity = true;
-    } else {
-        has_gravity = false;
-    }
-
-    if (param.component(3) == 1.0) {
-        has_horizontal = true;
-    } else {
-        has_horizontal = false;
-    }
-
-    abs_perm = param.component(0);
-    sin_beta = param.component(1);
+//    cout <<"Setando parametros de fluxo: "<<endl;
 
 
-    const_gravity = 9.8;
+//    if (param.component(2) == 1.0) {
+//        has_gravity = true;
+//    } else {
+//        has_gravity = false;
+//    }
 
-    cnw = param.component(4);
-    cng = param.component(5);
-    expw = param.component(6);
-    expg = param.component(7);
+//    if (param.component(3) == 1.0) {
+//        has_horizontal = true;
+//    } else {
+//        has_horizontal = false;
+//    }
 
-    grav = abs_perm * sin_beta*const_gravity;
+//    abs_perm = param.component(0);
+//    sin_beta = param.component(1);
 
-    cout <<abs_perm<<" "<< sin_beta<<" "<<has_gravity<<" "<<has_horizontal<<" "<< cnw<<" "<<cng<<" "<<expw<<" "<<expg<<endl;
+
+//    const_gravity = 9.8;
+
+//    cnw = param.component(4);
+//    cng = param.component(5);
+//    expw = param.component(6);
+//    expg = param.component(7);
+
+//    grav = abs_perm * sin_beta*const_gravity;
+
+//    cout <<abs_perm<<" "<< sin_beta<<" "<<has_gravity<<" "<<has_horizontal<<" "<< cnw<<" "<<cng<<" "<<expw<<" "<<expg<<endl;
 
 
-}
+//}
 
 int Flux2Comp2PhasesAdimensionalized::ReducedFlux2Comp2PhasesAdimensionalized::jet(const WaveState &w, JetMatrix &m, int degree) const {
-    double s = w(0); // s_{sigma} = sg in FracFlow2PhasesHorizontal & FracFlow2PhasesVertical
+    double s     = w(0); // s_{sigma} = sg in FracFlow2PhasesHorizontal & FracFlow2PhasesVertical
     double Theta = w(1);
 
     // Some auxiliary variables
@@ -234,51 +252,52 @@ int Flux2Comp2PhasesAdimensionalized::ReducedFlux2Comp2PhasesAdimensionalized::j
     return 2; //SUCCESSFUL_PROCEDURE;
 }
 
-Flux2Comp2PhasesAdimensionalized::ReducedFlux2Comp2PhasesAdimensionalized::ReducedFlux2Comp2PhasesAdimensionalized(Flux2Comp2PhasesAdimensionalized * outer) : FluxFunction(outer->FluxFunction::fluxParams()) {
-
-    fluxComplete_ = outer;
-
-}
-
-Flux2Comp2PhasesAdimensionalized::FracFlow2PhasesHorizontalAdimensionalized::FracFlow2PhasesHorizontalAdimensionalized(Flux2Comp2PhasesAdimensionalized * outer) {
+Flux2Comp2PhasesAdimensionalized::ReducedFlux2Comp2PhasesAdimensionalized::ReducedFlux2Comp2PhasesAdimensionalized(Flux2Comp2PhasesAdimensionalized *outer){
     fluxComplete_ = outer;
 }
 
-Flux2Comp2PhasesAdimensionalized::FracFlow2PhasesVerticalAdimensionalized::FracFlow2PhasesVerticalAdimensionalized(Flux2Comp2PhasesAdimensionalized * outer) {
-
+Flux2Comp2PhasesAdimensionalized::FracFlow2PhasesHorizontalAdimensionalized::FracFlow2PhasesHorizontalAdimensionalized(Flux2Comp2PhasesAdimensionalized *outer){
     fluxComplete_ = outer;
-
 }
 
-RpFunction * Flux2Comp2PhasesAdimensionalized::ReducedFlux2Comp2PhasesAdimensionalized::clone() const {
-
+Flux2Comp2PhasesAdimensionalized::FracFlow2PhasesVerticalAdimensionalized::FracFlow2PhasesVerticalAdimensionalized(Flux2Comp2PhasesAdimensionalized *outer){
+    fluxComplete_ = outer;
 }
 
 int Flux2Comp2PhasesAdimensionalized::jet(const WaveState &w, JetMatrix &m, int degree) const {
-    double s = w(0); // s_{sigma} = sg in FracFlow2PhasesHorizontal & FracFlow2PhasesVertical
+    double s     = w(0); // s_{sigma} = sg in FracFlow2PhasesHorizontal & FracFlow2PhasesVertical
     double Theta = w(1);
-    double U = w(2);
+    double U     = w(2);
+
+    int thermo_degree = 2; // To avoid segfaults, after this code is rewritten or organized it can be reverted to degree.
 
     JetMatrix Hrj(1);
-    TD->RockEnthalpyVol_jet(Theta, degree, Hrj);
+    TD->RockEnthalpyVol_jet(Theta, thermo_degree, Hrj);
 
     JetMatrix Haj(1);
-    TD->AqueousEnthalpyVol_jet(Theta, degree, Haj);
+    TD->AqueousEnthalpyVol_jet(Theta, thermo_degree, Haj);
 
     JetMatrix Hsij(1);
-    TD->SuperCriticEnthalpyVol_jet(Theta, degree, Hsij);
+    TD->SuperCriticEnthalpyVol_jet(Theta, thermo_degree, Hsij);
 
     JetMatrix rhosicj(1);
-    TD->Rhosic_jet(Theta, degree, rhosicj);
+    TD->Rhosic_jet(Theta, thermo_degree, rhosicj);
 
     JetMatrix rhosiwj(1);
-    TD->Rhosiw_jet(Theta, degree, rhosiwj);
+    TD->Rhosiw_jet(Theta, thermo_degree, rhosiwj);
 
     JetMatrix rhoacj(1);
-    TD->Rhoac_jet(Theta, degree, rhoacj);
+    TD->Rhoac_jet(Theta, thermo_degree, rhoacj);
 
     JetMatrix rhoawj(1);
-    TD->Rhoaw_jet(Theta, degree, rhoawj);
+    TD->Rhoaw_jet(Theta, thermo_degree, rhoawj);
+
+    // Parameters.
+    //
+    double abs_perm = abs_perm_parameter->value();
+    double sin_beta = sin_beta_parameter->value();
+
+    double grav = abs_perm*sin_beta*const_gravity;
 
     // Fill here, since below will be more complicated.
     double Hr     = Hrj.get(0);
@@ -603,9 +622,9 @@ int Flux2Comp2PhasesAdimensionalized::jet(const WaveState &w, JetMatrix &m, int 
     return 2; //SUCCESSFUL_PROCEDURE;
 }
 
-Thermodynamics * Flux2Comp2PhasesAdimensionalized::getThermo() const {
-    return TD;
-}
+//Thermodynamics * Flux2Comp2PhasesAdimensionalized::getThermo() const {
+//    return TD;
+//}
 
 Flux2Comp2PhasesAdimensionalized::FracFlow2PhasesHorizontalAdimensionalized * Flux2Comp2PhasesAdimensionalized::getHorizontalFlux()const {
     return FH;
@@ -702,14 +721,13 @@ int Flux2Comp2PhasesAdimensionalized::FracFlow2PhasesHorizontalAdimensionalized:
 
 
 
-
-
-
-
-
+    double cnw  = fluxComplete_->cnw_parameter->value();
+    double cng  = fluxComplete_->cng_parameter->value();
+    double expw = fluxComplete_->expw_parameter->value();
+    double expg = fluxComplete_->expg_parameter->value();
 
     // Before evaluating proper
-    if (sw < fluxComplete_->cnw) {
+    if (sw < cnw) {
         law = 0.;
         dlaw_dsw = 0.;
         d2law_dsw2 = 0.;
@@ -720,9 +738,9 @@ int Flux2Comp2PhasesAdimensionalized::FracFlow2PhasesHorizontalAdimensionalized:
         d2law_dswdT = 0.; // remember that d2law_dswdT is equal to d2law_dTdsw
     } else {
 
-        double temp = (sw - fluxComplete_->cnw) / (1. - fluxComplete_->cnw - fluxComplete_->cng);
+        double temp = (sw - cnw) / (1. - cnw - cng);
 
-        pow2 = 0.5 * pow(temp, fluxComplete_->expw - 2.); // 0.5*( (sw-s_{connate water})/(1-s_{connate water}-s_{con gas}) )^{expw-2}
+        pow2 = 0.5 * pow(temp, expw - 2.); // 0.5*( (sw-s_{connate water})/(1-s_{connate water}-s_{con gas}) )^{expw-2}
         // This model coincides with the formulae in Helmut's Thesis. 0.5 is the re-scaling factor.
 
         pow1 = temp*pow2; // 0.5*( (sw-s_{connate water})/(1-s_{connate water}-s_{con gas}) )^{expw-1}
@@ -733,17 +751,17 @@ int Flux2Comp2PhasesAdimensionalized::FracFlow2PhasesHorizontalAdimensionalized:
 
 
         law = pow0*nuw; // k_{rw}/mu_{w}(T) This is equivalent to k_{ra}/mu_{a} in Helmut's thesis.
-        dlaw_dsw = fluxComplete_->expw * pow1*nuw; // expw*( (sw-s_{connate water })/(1.-cnw-cng) )^{expw-1}/mu_{w}  derivation w.r.t sw
-        d2law_dsw2 = (fluxComplete_->expw - 1.) * fluxComplete_->expw * pow2*nuw; // (expw - 1.) * expw*( (sw-s_{connate water })/(1.-cnw-cng) )^{expw-2}/mu_{w}
+        dlaw_dsw = expw * pow1*nuw; // expw*( (sw-s_{connate water })/(1.-cnw-cng) )^{expw-1}/mu_{w}  derivation w.r.t sw
+        d2law_dsw2 = (expw - 1.) * expw * pow2*nuw; // (expw - 1.) * expw*( (sw-s_{connate water })/(1.-cnw-cng) )^{expw-2}/mu_{w}
 
         dlaw_dT = pow0*dnuw_dT; // the value of the derivatives of muw
         // will be passed by the viscosity function.
         d2law_dT2 = pow0*d2nuw_dT2; //
 
-        d2law_dswdT = fluxComplete_->expw * pow1*dnuw_dT;
+        d2law_dswdT = expw * pow1*dnuw_dT;
     }
 
-    if (sg < fluxComplete_->cng) {
+    if (sg < cng) {
         lag = 0.;
         dlag_dsw = 0.;
         d2lag_dsw2 = 0.;
@@ -754,19 +772,19 @@ int Flux2Comp2PhasesAdimensionalized::FracFlow2PhasesHorizontalAdimensionalized:
         d2lag_dswdT = 0.;
     } else {
 
-        double temp = (sg - fluxComplete_->cng) / (1. - fluxComplete_->cnw - fluxComplete_->cng);
-        pow2 = 0.95 * pow(temp, fluxComplete_->expg - 2.); // ( (sg-s_{connate gas})/(1.-cnw-cng) )^{expg-2}
+        double temp = (sg - cng) / (1. - cnw - cng);
+        pow2 = 0.95 * pow(temp, expg - 2.); // ( (sg-s_{connate gas})/(1.-cnw-cng) )^{expg-2}
         pow1 = temp*pow2; // ( (sg-s_{connate gas})/(1.-cnw-cng) )^{expg-1} Observe that pow1 = pow(temp, expg-1)
         pow0 = temp*pow1; // ( (sg-s_{connate gas})/(1.-cnw-cng) )^{expg}   Observe that pow0 = pow(temp, expg) ;
 
         lag = pow0*nug; //  k_{rg}/mu_{g}(T)  this viscosity is function of temperature   ;
-        dlag_dsw = -fluxComplete_->expg * pow1*nug; //  - expg*( (sg-s_{connate gas})/(1.-cnw-cng) )^{expg-1}/mu_{g}
-        d2lag_dsw2 = (fluxComplete_->expg - 1.) * fluxComplete_->expg * pow2*nug; // (expg-1)*expg*( (sg-s_{connate gas})/(1.-cnw-cng) )^{expg-2}/mu_{g}
+        dlag_dsw = -expg * pow1*nug; //  - expg*( (sg-s_{connate gas})/(1.-cnw-cng) )^{expg-1}/mu_{g}
+        d2lag_dsw2 = (expg - 1.) * expg * pow2*nug; // (expg-1)*expg*( (sg-s_{connate gas})/(1.-cnw-cng) )^{expg-2}/mu_{g}
 
         dlag_dT = pow0*dnug_dT; // derivatives given by the viscosity function
         d2lag_dT2 = pow0*d2nug_dT2; //
 
-        d2lag_dswdT = -fluxComplete_->expg * pow1*dnug_dT; //
+        d2lag_dswdT = -expg * pow1*dnug_dT; //
     }
 
     /* Evaluate sum of la's and its first and second derivatives */
@@ -876,9 +894,13 @@ int Flux2Comp2PhasesAdimensionalized::FracFlow2PhasesVerticalAdimensionalized::D
     fluxComplete_->TD->inv_muw(T, nuw, dnuw_dT, d2nuw_dT2);
     fluxComplete_->TD->inv_mug(T, nug, dnug_dT, d2nug_dT2);
 
+    double cnw  = fluxComplete_->cnw_parameter->value();
+    double cng  = fluxComplete_->cng_parameter->value();
+    double expw = fluxComplete_->expw_parameter->value();
+    double expg = fluxComplete_->expg_parameter->value();    
 
     // Before evaluating proper
-    if (sw < fluxComplete_->cnw) {
+    if (sw < cnw) {
         law = 0.;
         dlaw_dsw = 0.;
         d2law_dsw2 = 0.;
@@ -889,9 +911,9 @@ int Flux2Comp2PhasesAdimensionalized::FracFlow2PhasesVerticalAdimensionalized::D
         d2law_dswdT = 0.; // remember that d2law_dswdT is equal to d2law_dTdsw
     } else {
 
-        double temp = (sw - fluxComplete_->cnw) / (1. - fluxComplete_->cnw - fluxComplete_->cng);
+        double temp = (sw - cnw) / (1. - cnw - cng);
 
-        pow2 = 0.5 * pow(temp, fluxComplete_->expw - 2.); // 0.5*( (sw-s_{connate water})/(1-s_{connate water}-s_{con gas}) )^{expw-2}
+        pow2 = 0.5 * pow(temp, expw - 2.); // 0.5*( (sw-s_{connate water})/(1-s_{connate water}-s_{con gas}) )^{expw-2}
         // This model coincides with the formulae in Helmut's Thesis. 0.5 is the re-scaling factor.
 
         pow1 = temp*pow2; // 0.5*( (sw-s_{connate water})/(1-s_{connate water}-s_{con gas}) )^{expw-1}
@@ -902,17 +924,17 @@ int Flux2Comp2PhasesAdimensionalized::FracFlow2PhasesVerticalAdimensionalized::D
 
 
         law = pow0*nuw; // k_{rw}/mu_{w}(T) This is equivalent to k_{ra}/mu_{a} in Helmut's thesis.
-        dlaw_dsw = fluxComplete_->expw * pow1*nuw; // expw*( (sw-s_{connate water })/(1.-cnw-cng) )^{expw-1}/mu_{w}  derivation w.r.t sw
-        d2law_dsw2 = (fluxComplete_->expw - 1.) * fluxComplete_->expw * pow2*nuw; // (expw - 1.) * expw*( (sw-s_{connate water })/(1.-cnw-cng) )^{expw-2}/mu_{w}
+        dlaw_dsw = expw * pow1*nuw; // expw*( (sw-s_{connate water })/(1.-cnw-cng) )^{expw-1}/mu_{w}  derivation w.r.t sw
+        d2law_dsw2 = (expw - 1.) * expw * pow2*nuw; // (expw - 1.) * expw*( (sw-s_{connate water })/(1.-cnw-cng) )^{expw-2}/mu_{w}
 
         dlaw_dT = pow0*dnuw_dT; // the value of the derivatives of muw
         // will be passed by the viscosity function.
         d2law_dT2 = pow0*d2nuw_dT2; //
 
-        d2law_dswdT = fluxComplete_->expw * pow1*dnuw_dT;
+        d2law_dswdT = expw * pow1*dnuw_dT;
     }
 
-    if (sg < fluxComplete_->cng) {
+    if (sg < cng) {
         lag = 0.;
         dlag_dsw = 0.;
         d2lag_dsw2 = 0.;
@@ -923,19 +945,19 @@ int Flux2Comp2PhasesAdimensionalized::FracFlow2PhasesVerticalAdimensionalized::D
         d2lag_dswdT = 0.;
     } else {
 
-        double temp = (sg - fluxComplete_->cng) / (1. - fluxComplete_->cnw - fluxComplete_->cng);
-        pow2 = 0.95 * pow(temp, fluxComplete_->expg - 2.); // ( (sg-s_{connate gas})/(1.-cnw-cng) )^{expg-2}
+        double temp = (sg - cng) / (1. - cnw - cng);
+        pow2 = 0.95 * pow(temp, expg - 2.); // ( (sg-s_{connate gas})/(1.-cnw-cng) )^{expg-2}
         pow1 = temp*pow2; // ( (sg-s_{connate gas})/(1.-cnw-cng) )^{expg-1} Observe that pow1 = pow(temp, expg-1)
         pow0 = temp*pow1; // ( (sg-s_{connate gas})/(1.-cnw-cng) )^{expg}   Observe that pow0 = pow(temp, expg) ;
 
         lag = pow0*nug; //  k_{rg}/mu_{g}(T)  this viscosity is function of temperature   ;
-        dlag_dsw = -fluxComplete_->expg * pow1*nug; //  - expg*( (sg-s_{connate gas})/(1.-cnw-cng) )^{expg-1}/mu_{g}
-        d2lag_dsw2 = (fluxComplete_->expg - 1.) * fluxComplete_->expg * pow2*nug; // (expg-1)*expg*( (sg-s_{connate gas})/(1.-cnw-cng) )^{expg-2}/mu_{g}
+        dlag_dsw = -expg * pow1*nug; //  - expg*( (sg-s_{connate gas})/(1.-cnw-cng) )^{expg-1}/mu_{g}
+        d2lag_dsw2 = (expg - 1.) * expg * pow2*nug; // (expg-1)*expg*( (sg-s_{connate gas})/(1.-cnw-cng) )^{expg-2}/mu_{g}
 
         dlag_dT = pow0*dnug_dT; // derivatives given by the viscosity function
         d2lag_dT2 = pow0*d2nug_dT2; //
 
-        d2lag_dswdT = -fluxComplete_->expg * pow1*dnug_dT; //
+        d2lag_dswdT = -expg * pow1*dnug_dT; //
     }
 
     /* Evaluate sum of la's and its first and second derivatives */
@@ -967,7 +989,7 @@ int Flux2Comp2PhasesAdimensionalized::FracFlow2PhasesVerticalAdimensionalized::D
             /* Evaluate first derivative of Z relative to temperature */
             dflw_dT = (la * dlaw_dT - law * dla_dT) / (la * la);
 
-            m.set(0, 1, (dflw_dT * lag + flw * dlag_dT) * fluxComplete_->getThermo()->T_typical()); // this is double j01 =  dZ_dTheta = dZ_dT*T_typical_  = (dflw_dT*lag + flw*dlag_dT)*T_typical_;
+            m.set(0, 1, (dflw_dT * lag + flw * dlag_dT) * fluxComplete_->TD->T_typical()); // this is double j01 =  dZ_dTheta = dZ_dT*T_typical_  = (dflw_dT*lag + flw*dlag_dT)*T_typical_;
 
             // Hessian
             if (degree == 2) {
@@ -995,7 +1017,7 @@ int Flux2Comp2PhasesAdimensionalized::FracFlow2PhasesVerticalAdimensionalized::D
                         - 2. * la * dla_dT * (la * dlaw_dsw - law * dla_dsw)) / (la * la * la * la);
 
                 double j001 = (-(d2flw_dswdT * lag + dflw_dsw * dlag_dT +
-                        dflw_dT * dlag_dsw + flw * d2lag_dswdT)) * fluxComplete_->getThermo()->T_typical(); // Observe that we are passing really d2Z_dsgdTheta = d2Z_dsgdT*T_typical_
+                        dflw_dT * dlag_dsw + flw * d2lag_dswdT)) * fluxComplete_->TD->T_typical(); // Observe that we are passing really d2Z_dsgdTheta = d2Z_dsgdT*T_typical_
 
                 double j010 = j001;
 
@@ -1005,7 +1027,7 @@ int Flux2Comp2PhasesAdimensionalized::FracFlow2PhasesVerticalAdimensionalized::D
                  */
 
                 double j011 = (d2flw_dT2 * lag + dflw_dT * dlag_dT +
-                        dflw_dT * dlag_dT + flw * d2lag_dT2) * fluxComplete_->getThermo()->T_typical() * fluxComplete_->getThermo()->T_typical(); // d2Z_dTheta2 = d2Z_dT2 * T_typical_^2
+                        dflw_dT * dlag_dT + flw * d2lag_dT2) * fluxComplete_->TD->T_typical() * fluxComplete_->TD->T_typical(); // d2Z_dTheta2 = d2Z_dT2 * T_typical_^2
 
                 m.set(0, 0, 0, j000);
                 m.set(0, 0, 1, j001);

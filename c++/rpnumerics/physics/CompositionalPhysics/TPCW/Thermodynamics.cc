@@ -65,8 +65,14 @@ void Thermodynamics::SetCompositions(double Theta) {
     return;
 }
 
-Thermodynamics::Thermodynamics(double mc, double mw, const char *hsigmaC_name, Parameter *P){
+Thermodynamics::Thermodynamics(const char *hsigmaC_name, Parameter *P){
     P_parameter = P;
+
+    // Molecular weights.
+    //
+    mc = 0.044;
+    mw = 0.018;
+
 
     liquid = new JetSinglePhaseLiquid(mc, mw, P_parameter);
     vapor  = new JetSinglePhaseVapor(mc, mw, P_parameter);

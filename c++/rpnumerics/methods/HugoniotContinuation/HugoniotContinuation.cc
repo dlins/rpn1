@@ -1,4 +1,5 @@
 #include "HugoniotContinuation.h"
+#include "TestTools.h"
 
 // Trivial initialization. It is assumed that the reference point and the initial point
 // are one and the same (in).
@@ -458,7 +459,7 @@ int HugoniotContinuation::curve_engine(const RealVector &in, const RealVector &i
         // If the bifurcation space was crossed, add the point where the space was intersected (found by linear interpolation)
         // to the curve.
 
-        previous_point     = Hugoniot_intersection;
+        previous_point     = Hugoniot_intersection; std::cout << Hugoniot_intersection << std::endl;
         previous_direction = Hugoniot_direction;
         
         // Verify if the new point lies within the domain or not.

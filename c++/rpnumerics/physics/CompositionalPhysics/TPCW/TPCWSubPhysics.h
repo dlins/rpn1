@@ -8,6 +8,8 @@
 
 #include "Accum2Comp2PhasesAdimensionalized.h"
 #include "Flux2Comp2PhasesAdimensionalized.h"
+#include "RectBoundary.h"
+#include "Hugoniot_TP.h"
 
 class TPCWSubPhysics: public SubPhysics {
     private:
