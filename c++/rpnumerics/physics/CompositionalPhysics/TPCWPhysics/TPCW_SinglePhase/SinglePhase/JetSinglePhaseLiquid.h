@@ -6,14 +6,11 @@
 
 class JetSinglePhaseLiquid {
     private:
-    protected:
         double MC, MW; // Molecular weights for CO2 and Water
         MolarDensity *rho_md;
-
-        Parameter *P_parameter;
+    protected:
     public:
-//        JetSinglePhaseLiquid(double mc, double mw, double P);
-        JetSinglePhaseLiquid(double mc, double mw, Parameter *P);
+        JetSinglePhaseLiquid(double mc, double mw, double P);
         ~JetSinglePhaseLiquid();
 
         int rhoac_jet(const double xc, const double T, int degree, JetMatrix &m);

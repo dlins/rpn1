@@ -1279,8 +1279,8 @@ int main(){
 //    subphysics = new KovalSubPhysics;
 //    subphysics = new FoamSubPhysics;
 //    subphysics = new SorbieSubPhysics;
-//    subphysics = new TPCWSubPhysics;
-    subphysics = new Quad2SubPhysics;
+    subphysics = new TPCWSubPhysics;
+//    subphysics = new Quad2SubPhysics;
 
     std::cout << "SubPhysics \"" << subphysics->info_subphysics() << "\" created successfully." << std::endl;
 

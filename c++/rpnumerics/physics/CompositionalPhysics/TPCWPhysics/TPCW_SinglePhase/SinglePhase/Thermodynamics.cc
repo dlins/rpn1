@@ -2,7 +2,7 @@
 
 double Thermodynamics::Tref_rock  = 273.15;
 double Thermodynamics::Tref_water = 274.3775;
-//double Thermodynamics::P          = 100.9e5;
+double Thermodynamics::P          = 100.9e5;
 
 double Thermodynamics::Rock_Cr = 2.029e6;
 double Thermodynamics::Cw_     = 4297.0;
@@ -65,19 +65,11 @@ void Thermodynamics::SetCompositions(double Theta) {
     return;
 }
 
-Thermodynamics::Thermodynamics(const char *hsigmaC_name, Parameter *P){
-    P_parameter = P;
+Thermodynamics::Thermodynamics(double mc, double mw, const char *hsigmaC_name){
+    liquid = new JetSinglePhaseLiquid(mc, mw, P);
+    vapor  = new JetSinglePhaseVapor(mc, mw, P);
 
-    // Molecular weights.
-    //
-    mc = 0.044;
-    mw = 0.018;
-
-
-    liquid = new JetSinglePhaseLiquid(mc, mw, P_parameter);
-    vapor  = new JetSinglePhaseVapor(mc, mw, P_parameter);
-
-    info_hsigmaC = create_spline(hsigmaC_name, "hsigmaC", P_parameter->value(), hsigmaC_);
+    info_hsigmaC = create_spline(hsigmaC_name, "hsigmaC", P, hsigmaC_);
     printf("Thermodynamics ctor: info_hsigmaC = %d\n", info_hsigmaC);
     if (info_hsigmaC == SPLINE_ERROR) exit(0);
 
@@ -139,7 +131,7 @@ int Thermodynamics::create_spline(const char *name, const char *verify, double P
     double Ptest;
     fscanf(fid, "%lf", &Ptest);
 
-    if (strcmp(name_variable, verify) != 0 || Ptest != P_parameter->value()){
+    if (strcmp(name_variable, verify) != 0 || Ptest != P){
         fclose(fid);
 
         std::cout << "***** Thermodynamics::create_spline: Error while creating spline from file \"" << std::string(name) << "\" *****" << std::endl;

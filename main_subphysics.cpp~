@@ -121,7 +121,7 @@ void Hugoniotcb(Fl_Widget*, void*){
 
     RealVector p(pointsize);
 
-    if (subphysics->boundary()->minumums().size() == 3) p(2) = 1.0;
+    if (pointsize == 3) p(2) = 1.0;
 
     canvas->getxy(p(0), p(1));
 

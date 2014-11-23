@@ -265,6 +265,9 @@ permgui: $(OBJECTS)
 testablejet: $(OBJECTS)
 	$(LINK)  $(CPPFLAGS) $(INCLUDE) ../../../../../main_testablejet.cpp -o $@ $^  $(LDLIBS) $(LDFLAGS)
 
+tp_shock2d3d: $(OBJECTS)
+	$(LINK)  $(CPPFLAGS) $(INCLUDE) ../../../../../main_tp_shock2d3d.cpp -o $@ $^  $(LDLIBS) $(LDFLAGS)
+
 #
 #	Make a library
 #

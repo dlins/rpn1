@@ -1,7 +1,9 @@
 #include "MolarDensity.h"
 
-void MolarDensity::init(){
-    R = 8.314472;
+
+MolarDensity::MolarDensity(int t, double Pressure) : type(t), 
+                                                     P(Pressure), 
+                                                     R(8.314472){
 
     Tcc = 304.10;
     Tcw = 647.3 ;
@@ -39,18 +41,8 @@ void MolarDensity::init(){
     C1_c =  4.70560e-9;
     C0_w = -1.07169e-7;
     C1_w = -1.01200e-8;
-}
 
-// TODO: All these members should pass as parameters, that the user may change them.
-//
-MolarDensity::MolarDensity(int t, Parameter *Pressure): type(t), P_parameter(Pressure){
-    init();
 }
-
-//MolarDensity::MolarDensity(int t, double Pressure) : type(t), 
-//                                                     P(Pressure){
-//    init();
-//}
 
 MolarDensity::~MolarDensity(){
 }
@@ -1471,7 +1463,6 @@ int MolarDensity::A_jet(const double x, const double T, int degree, JetMatrix &A
     ////std::cout << "A_jet before degree" << std::endl;
 
     if (degree >= 0){
-        double P = P_parameter->value();
         double inv_R  = 1.0/R;
         double inv_T  = 1.0/T;
         double inv_T2 = inv_T*inv_T;
@@ -1535,8 +1526,6 @@ int MolarDensity::B_jet(const double x, const double T, int degree, JetMatrix &B
     b_jet(x, degree, bj);
 
     if (degree >= 0){
-        double P = P_parameter->value();
-
         double b = bj.get(0);
 
         double inv_R  = 1.0/R;
@@ -1845,8 +1834,6 @@ int MolarDensity::vapor_rho_jet(const double x, const double T, int degree, JetM
         r.set(0, rho);
 
         if (degree >= 1){
-            double P = P_parameter->value();
-
             double dZ_dx = zj.get(0, 0);
             double dZ_dT = zj.get(0, 1);
 
@@ -1929,8 +1916,6 @@ int MolarDensity::liquid_rho_jet(const double x, const double T, int degree, Jet
     Z_jet(x, T, degree, zj);//printf("After Z_jet\n");
 
     if (degree >= 0){
-        double P = P_parameter->value();
-
         double C           = Cj.get(0);
         double Z           = zj.get(0);
         double inv_ZRT_CP  = 1.0/(Z*R*T + C*P);

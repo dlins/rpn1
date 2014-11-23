@@ -135,6 +135,17 @@ class Thermodynamics {
             return thermo->Rhoac_jet(Theta, degree, jm);
         }
 
+        static int Rhoac_jet2_test(void *obj, const RealVector &state, int degree, JetMatrix &jm){
+            Thermodynamics *thermo = (Thermodynamics*)obj;
+
+            double yw    = state(0);
+            double Theta = state(1);
+
+            jm.resize(2, 1);
+
+            return thermo->Rhoac_jet(yw, Theta, degree, jm);
+        }
+
         int Rhoaw_jet(const double xc, const double Theta, int degree, JetMatrix &rhoawj) const;
         int Rhoaw_jet(const double Theta, int degree, JetMatrix &rhoawj) const;
 

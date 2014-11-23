@@ -6,8 +6,8 @@
 #include <algorithm>
 #include <math.h>
 
+
 #include "JetMatrix.h"
-#include "Parameter.h"
 
 #define MOLAR_DENSITY_VAPOR  1
 #define MOLAR_DENSITY_LIQUID 2
@@ -113,13 +113,8 @@ class MolarDensity {
         //int L_jet(double, double, int, JetMatrix&);
         int Q_jet(double, double, double, JetMatrix&, int, JetMatrix&);
     protected:
-        Parameter *P_parameter;
-
-        void init();
     public:
-//        MolarDensity(int t, double Pressure); // TODO: Deprecate ASAP!
-        MolarDensity(int t, Parameter *Pressure);
-
+        MolarDensity(int t, double Pressure);
         ~MolarDensity();
 
         int rho_jet(const double x, const double T, int degree, JetMatrix &r);

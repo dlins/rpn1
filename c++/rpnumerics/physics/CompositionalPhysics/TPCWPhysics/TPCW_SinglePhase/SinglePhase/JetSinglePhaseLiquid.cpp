@@ -1,12 +1,7 @@
 #include "JetSinglePhaseLiquid.h"
 
-//JetSinglePhaseLiquid::JetSinglePhaseLiquid(double mc, double mw, double P) : MC(mc), MW(mw){
-//    rho_md = new MolarDensity(MOLAR_DENSITY_LIQUID, P);
-//}
-
-JetSinglePhaseLiquid::JetSinglePhaseLiquid(double mc, double mw, Parameter *P) : MC(mc), MW(mw){
-    P_parameter = P;
-    rho_md = new MolarDensity(MOLAR_DENSITY_LIQUID, P_parameter);
+JetSinglePhaseLiquid::JetSinglePhaseLiquid(double mc, double mw, double P) : MC(mc), MW(mw){
+    rho_md = new MolarDensity(MOLAR_DENSITY_LIQUID, P);
 }
 
 JetSinglePhaseLiquid::~JetSinglePhaseLiquid(){
