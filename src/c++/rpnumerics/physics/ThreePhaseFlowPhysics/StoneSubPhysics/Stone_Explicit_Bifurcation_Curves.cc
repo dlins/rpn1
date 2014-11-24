@@ -1,5 +1,6 @@
 #include "Stone_Explicit_Bifurcation_Curves.h"
 
+
 /* OK */
 Stone_Explicit_Bifurcation_Curves::Stone_Explicit_Bifurcation_Curves(StoneFluxFunction *ff) : Three_Phase_Flow_Explicit_Bifurcation_Curves((ThreePhaseFlowFluxFunction*)ff), f(ff){
 }

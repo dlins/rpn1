@@ -125,9 +125,9 @@ int WaveCurveFactory::Liu_half_wavecurve(const ReferencePoint &ref,
                 if (hwc.wavecurve.size() > 0) rarcurve.back_pointer[0] = hwc.wavecurve.back().curve.size() - 1;
             }
 
-//            std::ofstream rar_out("rar_out.txt", std::ofstream::out);
-//            for (int i = 0; i < rarcurve.curve.size(); i++) rar_out << "Index: " << i << ", curve = " << rarcurve.back_curve_pointer[i] << ", point = " << rarcurve.back_pointer[i] << std::endl;
-//            rar_out.close();
+            std::ofstream rar_out("rar_out.txt", std::ofstream::out);
+            for (int i = 0; i < rarcurve.curve.size(); i++) rar_out << "Index: " << i << ", curve = " << rarcurve.back_curve_pointer[i] << ", point = " << rarcurve.back_pointer[i] << std::endl;
+            rar_out.close();
 
             // Store regardless of what happened during the computation.
             //
@@ -235,7 +235,6 @@ int WaveCurveFactory::Liu_half_wavecurve(const ReferencePoint &ref,
         } // if (current_curve == RAREFACTION_CURVE)
         else if (current_curve == COMPOSITE_CURVE){
             std::cout << "WaveCurveFactory: entering Composite." << std::endl;
-
 
 //            double deltaxi = 1e-3;
             double deltaxi = 1e-3; //3e-4; // Was: 1e-3
@@ -541,14 +540,14 @@ int WaveCurveFactory::wavecurve(int type, const RealVector &initial_point, int f
 
     hwc.beginnig_of_second_half = hwc.wavecurve.size();
 
-//    TestTools::pause("Second half");
 
-//    Liu_half_wavecurve(ref, initial_point, family, increase, SHOCK_CURVE,       -initial_direction, linobj, linear_function, hwc, wavecurve_stopped_because, edge);
+
+    Liu_half_wavecurve(ref, initial_point, family, increase, SHOCK_CURVE,       -initial_direction, linobj, linear_function, hwc, wavecurve_stopped_because, edge);
 
     for (int i = 0; i < hwc.wavecurve.size(); i++) std::cout << "Curve\'s size = " << hwc.wavecurve[i].curve.size() << std::endl;
 
     add_arclength(0, hwc.beginnig_of_second_half - 1, 1.0, hwc);
-//    add_arclength(hwc.beginnig_of_second_half, hwc.wavecurve.size() - 1, -1.0, hwc);
+    add_arclength(hwc.beginnig_of_second_half, hwc.wavecurve.size() - 1, -1.0, hwc);
 
     return WAVECURVE_OK;
 }

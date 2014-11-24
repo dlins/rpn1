@@ -31,8 +31,8 @@
 //-------------------------------------
 
 #include "JNIDefs.h"
-#include "physics/ThreePhaseFlowPhysics/Koval/KovalSubPhysics.h"
-#include "physics/CompositionalPhysics/GasVolatileDead/GasVolatileDeadSubPhysics.h"
+
+
 
 
 using namespace std;
@@ -1001,8 +1001,15 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_initNative(JNIEnv * env, jclas
     }
 
 
-    if (physicsStringName.compare("GVD") == 0) {
-        RpNumerics::physicsVector_->push_back(new GasVolatileDeadSubPhysics());
+//    if (physicsStringName.compare("GVD") == 0) {
+//        RpNumerics::physicsVector_->push_back(new GasVolatileDeadSubPhysics());
+//    }
+
+    
+    
+    
+    if (physicsStringName.compare("QuadraticR2") == 0) {
+        RpNumerics::physicsVector_->push_back(new Quad2SubPhysics());
     }
 
 

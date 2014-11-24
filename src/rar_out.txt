@@ -93,6 +93,3 @@ Index: 91, curve = 0, point = 90
 Index: 92, curve = 0, point = 91
 Index: 93, curve = 0, point = 92
 Index: 94, curve = 0, point = 93
-Index: 95, curve = 0, point = 94
-Index: 96, curve = 0, point = 95
-Index: 97, curve = 0, point = 96

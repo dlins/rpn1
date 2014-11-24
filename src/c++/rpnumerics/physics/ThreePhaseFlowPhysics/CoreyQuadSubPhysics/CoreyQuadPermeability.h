@@ -20,6 +20,8 @@ class CoreyQuadPermeability: public ThreePhaseFlowPermeability {
 };
 
 int CoreyQuadPermeability::PermeabilityWater_jet(const RealVector &state, int degree, JetMatrix &water){
+    water.resize(2, 1);
+
     double sw = state(0);
 //    double so = state(1);
 //    double sg = 1.0 - sw - so;
@@ -53,6 +55,8 @@ int CoreyQuadPermeability::PermeabilityWater_jet(const RealVector &state, int de
 }
 
 int CoreyQuadPermeability::PermeabilityOil_jet(const RealVector &state, int degree, JetMatrix &oil){
+    oil.resize(2, 1);
+
 //    double sw = state(0);
     double so = state(1);
 //    double sg = 1.0 - sw - so;
@@ -78,6 +82,8 @@ int CoreyQuadPermeability::PermeabilityOil_jet(const RealVector &state, int degr
 }
 
 int CoreyQuadPermeability::PermeabilityGas_jet(const RealVector &state, int degree, JetMatrix &gas){
+    gas.resize(2, 1);
+
     double sw = state(0);
     double so = state(1);
     double sg = 1.0 - sw - so;

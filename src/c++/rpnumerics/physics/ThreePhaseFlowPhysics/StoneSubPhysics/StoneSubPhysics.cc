@@ -82,6 +82,10 @@ StoneSubPhysics::StoneSubPhysics() : ThreePhaseFlowSubPhysics(){
     //
     viscosity_ = new StoneViscosity(this);
 
+    // Mobility.
+    //
+    mobility_ = new ThreePhaseFlowMobility(this);
+
     // Info.
     //
     info_subphysics_ = std::string("Stone");
@@ -89,6 +93,7 @@ StoneSubPhysics::StoneSubPhysics() : ThreePhaseFlowSubPhysics(){
 
 
 StoneSubPhysics::~StoneSubPhysics(){
+    delete mobility_;
     delete viscosity_;
     delete inflection_curve_;
     delete wavecurvefactory_;

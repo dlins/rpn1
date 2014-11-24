@@ -5,7 +5,7 @@
         <RPNCONFIGURATION>
             <PHYSICS name="QuadraticR2">
 
-                <BOUNDARY name="rect">
+            <!--    <BOUNDARY name="rect">
 
 
                     <BOUNDARYPARAM name="dimension" value="2" />
@@ -33,7 +33,7 @@
                     <PHYSICSPARAM name="g1" position="12" value ="0" />
                     <PHYSICSPARAM name="g2" position="13" value ="1" />
             
-                </PHYSICSCONFIG>
+                </PHYSICSCONFIG>-->
         
         
             </PHYSICS>
@@ -48,22 +48,23 @@
             </CURVECONFIGURATION>
 
             
+            
             <CURVECONFIGURATION name="hugoniotcurve">
                 <CURVEPARAM name="resolution" value="120 120"/>
-                <CURVEPARAM name="method" value="IMPLICIT"/>
-                <CURVEPARAM name="case" value="0"/>
-            </CURVECONFIGURATION>
-              
-              
-              
+                <CURVEPARAM name="method" value="Generic Implicit Hugoniot Curve"/>
+                <CURVEPARAM name="case" value="Generic point"/>
+                
+            </CURVECONFIGURATION> 
+           
+                      
             <CURVECONFIGURATION name="wavecurve">
-                <CURVEPARAM name="edge" value="0"/>
-                <CURVEPARAM name="origin" value="13"/>
-                <CURVEPARAM name="curve" value="0"/>
+                <CURVEPARAM name="origin" value="Generic point"/>
                 <CURVEPARAM name="direction" value="10"/>
                 <CURVEPARAM name="family" value="0"/>
-                
-            </CURVECONFIGURATION>
+                <CURVEPARAM name="transitionalline" value="None"/>
+            </CURVECONFIGURATION>           
+              
+           
 
 
             <CURVECONFIGURATION name="fundamentalcurve">
@@ -96,9 +97,9 @@
 
       
             
-            <CURVECONFIGURATION name="eigen sort method">
+          <!--  <CURVECONFIGURATION name="eigen sort method">
                 <CURVEPARAM name="sort by" value="Using families"/>
-            </CURVECONFIGURATION>
+            </CURVECONFIGURATION> -->
             
             
                
@@ -158,7 +159,12 @@
 
             </CURVECONFIGURATION>
 
-
+            <CURVECONFIGURATION name="secondarybifurcation">
+                <CURVEPARAM name="edge" value="0"/>
+                <CURVEPARAM name="numberofsteps" value="128"/>
+                <CURVEPARAM name="method" value="IMPLICIT"/>
+            </CURVECONFIGURATION>
+    
 
 
             <CURVECONFIGURATION name="boundaryextensioncurve">
@@ -178,11 +184,11 @@
                 <CURVEPARAM name="resolution" value="60 60"/>
             </CURVECONFIGURATION>
 
-            <CURVECONFIGURATION name="orbit">
+            <!--<CURVECONFIGURATION name="orbit">
                 <CURVEPARAM name="family" value="0"/>
                 <CURVEPARAM name="level" value="0.5"/>
 
-            </CURVECONFIGURATION>
+            </CURVECONFIGURATION>-->
 
             <VIEWCONFIGURATION modeldomain="2">
 

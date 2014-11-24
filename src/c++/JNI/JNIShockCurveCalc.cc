@@ -25,7 +25,7 @@
 #include <vector>
 #include "ShockCurve.h"
 #include "RarefactionCurve.h"
-#include "ShockContinuationMethod3D2D.h"
+
 
 
 using std::vector;

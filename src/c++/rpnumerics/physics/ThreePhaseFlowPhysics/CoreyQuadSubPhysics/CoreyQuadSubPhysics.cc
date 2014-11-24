@@ -108,17 +108,21 @@ CoreyQuadSubPhysics::CoreyQuadSubPhysics() : ThreePhaseFlowSubPhysics(){
     //
     viscosity_ = new CoreyQuadViscosity(this);
 
+    // Mobility.
+    //
+    mobility_ = new ThreePhaseFlowMobility(this);
+
     info_subphysics_ = std::string("CoreyQuad");
 }
 
 CoreyQuadSubPhysics::~CoreyQuadSubPhysics(){
+    delete mobility_;
     delete viscosity_;
     delete inflection_curve_;
     delete wavecurvefactory_;
     delete odesolver_;
     delete compositecurve_;
     delete shockcurve_;
-    delete hugoniotcontinuation_;
     delete rarefactioncurve_;
     for (int i = 0; i < hugoniot_curve.size(); i++) delete hugoniot_curve[i];
 

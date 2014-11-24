@@ -11,8 +11,6 @@ KovalSubPhysics::KovalSubPhysics() : ThreePhaseFlowSubPhysics(){
 
     vel_parameter = new Parameter(std::string("vel"), 1.0);
 
-    phi_parameter = new Parameter(std::string("phi"), 1.0);
-
     equation_parameter_.push_back(grw_parameter);
     equation_parameter_.push_back(gro_parameter);
     equation_parameter_.push_back(grg_parameter);
@@ -22,7 +20,6 @@ KovalSubPhysics::KovalSubPhysics() : ThreePhaseFlowSubPhysics(){
     equation_parameter_.push_back(mug_parameter);
 
     equation_parameter_.push_back(vel_parameter);
-    equation_parameter_.push_back(phi_parameter);
 
     // Permeability.
     //
@@ -33,9 +30,6 @@ KovalSubPhysics::KovalSubPhysics() : ThreePhaseFlowSubPhysics(){
     flux_ = new KovalFluxFunction(grw_parameter, gro_parameter, grg_parameter,
                                   muw_parameter, muo_parameter, mug_parameter,
                                   vel_parameter);
-
-    delete accumulation_;
-    accumulation_ = new KovalAccumulationFunction(phi_parameter);
 
     // GridValues.
     //
@@ -84,10 +78,15 @@ KovalSubPhysics::KovalSubPhysics() : ThreePhaseFlowSubPhysics(){
     //
     viscosity_ = new KovalViscosity(this);
 
+    // Mobility.
+    //
+    mobility_ = new ThreePhaseFlowMobility(this);
+
     info_subphysics_ = std::string("Koval");
 }
 
 KovalSubPhysics::~KovalSubPhysics(){
+    delete mobility_;
     delete viscosity_;
     delete inflection_curve_;
     delete wavecurvefactory_;
@@ -100,7 +99,6 @@ KovalSubPhysics::~KovalSubPhysics(){
 
     for (int i = 0; i < equation_parameter_.size(); i++) delete equation_parameter_[i];
 
-    delete accumulation_; accumulation_ = 0; // So the base's dtor won't get messed up.
     delete flux_;
 
     delete permeability_;

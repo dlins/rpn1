@@ -60,7 +60,7 @@ class NewRarefactionCurve {
 
         void add_point_to_curve(const RealVector &p, Curve &curve);
 
-       
+      
     public:
         NewRarefactionCurve(Equations *eq, const Boundary *bb);
         NewRarefactionCurve(const AccumulationFunction *gg, const FluxFunction *ff, const Boundary *bb);

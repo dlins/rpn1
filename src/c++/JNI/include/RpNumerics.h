@@ -22,6 +22,8 @@
 #include "JDSubPhysics.h"
 #include "StoneSubPhysics.h"
 #include "CoreyQuadSubPhysics.h"
+#include "KovalSubPhysics.h"
+#include "Quad2SubPhysics.h"
 
 
 #include "JNIDefs.h"

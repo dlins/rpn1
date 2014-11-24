@@ -14,7 +14,7 @@
 #include "RpNumerics.h"
 #include "RealVector.h"
 #include "JNIDefs.h"
-#include "StoneAccumulation.h"
+
 #include "RectBoundary.h"
 
 #include <vector>

@@ -1,6 +1,5 @@
 #include "RiemannProblem.h"
 
-
 RiemannProblem::RiemannProblem(){
 }
 
