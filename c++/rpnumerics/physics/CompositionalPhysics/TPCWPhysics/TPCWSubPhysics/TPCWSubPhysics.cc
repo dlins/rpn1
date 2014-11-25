@@ -36,21 +36,6 @@ TPCWSubPhysics::TPCWSubPhysics(){
     bool has_gravity = false;
     bool has_horizontal = true;
 
-    RealVector fpp(12);
-//    fpp.component(0) = abs_perm;
-//    fpp.component(1) = sin_beta;
-//    fpp.component(2) = (double)has_gravity;
-//    fpp.component(3) = (double)has_horizontal;
-    
-    fpp.component(4) = 0.0;
-    fpp.component(5) = 0.0;
-    fpp.component(6) = 2.0;
-    fpp.component(7) = 2.0;
-//    fpp.component(8) = 0.38;
-//    fpp.component(9) = 304.63;
-//    fpp.component(10) = 998.2;
-//    fpp.component(11) = 4.22e-3;
-
     flux_ = new Flux2Comp2PhasesAdimensionalized(abs_perm_parameter, sin_beta_parameter, 
                                                  cnw_parameter, cng_parameter,
                                                  expw_parameter, expg_parameter,
