@@ -33,6 +33,7 @@
 #include "JNIDefs.h"
 #include "physics/ThreePhaseFlowPhysics/Koval/KovalSubPhysics.h"
 #include "physics/CompositionalPhysics/GasVolatileDead/GasVolatileDeadSubPhysics.h"
+#include "physics/ThreePhaseFlowPhysics/Brooks_CoreySubPhysics/Brooks_CoreySubPhysics.h"
 
 
 using namespace std;
@@ -1015,9 +1016,6 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_initNative(JNIEnv * env, jclas
         return; /* OutOfMemoryError already thrown */
     }
 
-    //    RpNumerics::setPhysics(Physics(physicsID));
-
-
 
     string physicsStringName(physicsID);
 
@@ -1040,11 +1038,16 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_initNative(JNIEnv * env, jclas
     if (physicsStringName.compare("Koval") == 0) {
         RpNumerics::physicsVector_->push_back(new KovalSubPhysics());
     }
-
-
-    if (physicsStringName.compare("GVD") == 0) {
-        RpNumerics::physicsVector_->push_back(new GasVolatileDeadSubPhysics());
+    
+    
+      if (physicsStringName.compare("Brooks-Corey") == 0) {
+        RpNumerics::physicsVector_->push_back(new Brooks_CoreySubPhysics());
     }
+
+//
+//    if (physicsStringName.compare("GVD") == 0) {
+//        RpNumerics::physicsVector_->push_back(new GasVolatileDeadSubPhysics());
+//    }
 
 
 

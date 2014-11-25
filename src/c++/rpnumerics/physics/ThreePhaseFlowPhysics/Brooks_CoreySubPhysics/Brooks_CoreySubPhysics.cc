@@ -27,6 +27,12 @@ Brooks_CoreySubPhysics::Brooks_CoreySubPhysics() : ThreePhaseFlowSubPhysics(){
     equation_parameter_.push_back(muw_parameter);
     equation_parameter_.push_back(muo_parameter);
     equation_parameter_.push_back(mug_parameter);
+    
+    
+    
+    
+    
+    
 
     equation_parameter_.push_back(grw_parameter); // TODO: Add or not?
     equation_parameter_.push_back(gro_parameter); // TODO: Add or not?
@@ -56,7 +62,7 @@ Brooks_CoreySubPhysics::Brooks_CoreySubPhysics() : ThreePhaseFlowSubPhysics(){
 
     // HugoniotContinuation.
     //
-    hugoniotcontinuation_ = new HugoniotContinuation2D2D(flux_, accumulation_, boundary_);
+//    hugoniotcontinuation_ = new HugoniotContinuation2D2D(flux_, accumulation_, boundary_);
 
     // ImplicitHugoniot.
     //
@@ -82,6 +88,8 @@ Brooks_CoreySubPhysics::Brooks_CoreySubPhysics() : ThreePhaseFlowSubPhysics(){
     //
     hugoniotcontinuation_ = new HugoniotContinuation2D2D(flux_, accumulation_, boundary_);
 //    hugoniotcontinuation_ = new HugoniotContinuation_nDnD(flux_, accumulation_, boundary_);
+    
+    hugoniot_curve.push_back(hugoniotcontinuation_);
 
     shockcurve_ = new ShockCurve(hugoniotcontinuation_);
 
@@ -117,30 +125,19 @@ Brooks_CoreySubPhysics::~Brooks_CoreySubPhysics(){
 
     delete shockcurve_;
 
-    delete hugoniotcontinuation_;
-
     delete inflection_curve_;
 
     delete rarefactioncurve_;
 
     for (int i = 0; i < hugoniot_curve.size(); i++) delete hugoniot_curve[i];
 
-    delete hugoniotcontinuation_;
-
     delete gridvalues_;
-
-    delete accumulation_;
 
     delete flux_;
 
     for (int i = 0; i < equation_parameter_.size(); i++) delete equation_parameter_[i];
 
     for (int i = 0; i < auxiliaryfunctions_.size(); i++) delete auxiliaryfunctions_[i];
-
-    delete cng_parameter;
-    delete cno_parameter;
-    delete cnw_parameter;
-    delete lambda_parameter;
 }
 
 void Brooks_CoreySubPhysics::shock_cases(std::vector<int> &type, std::vector<std::string> &name) const {

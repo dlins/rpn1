@@ -48,6 +48,8 @@ JDSubPhysics::JDSubPhysics() : SubPhysics() {
     // HugoniotContinuation.
     //
     hugoniotcontinuation_ = new HugoniotContinuation2D2D(flux_, accumulation_, boundary_);
+    
+    hugoniot_curve.push_back(hugoniotcontinuation_);
 
     // ShockCurve.
     //
@@ -86,7 +88,7 @@ JDSubPhysics::~JDSubPhysics(){
     delete odesolver_;
     delete compositecurve_;
     delete shockcurve_;
-    delete hugoniotcontinuation_;
+//    delete hugoniotcontinuation_;
     delete rarefactioncurve_;
 
     delete evapext;
@@ -103,7 +105,10 @@ JDSubPhysics::~JDSubPhysics(){
     delete boundary_;
     delete accumulation_;
     delete flux_;
-    delete epsilon_parameter;
+    
+    for (int i = equation_parameter_.size() - 1; i >=0; i--) delete equation_parameter_[i];
+    
+
 }
 
 void JDSubPhysics::shock_cases(std::vector<int> &type, std::vector<std::string> &name) const {

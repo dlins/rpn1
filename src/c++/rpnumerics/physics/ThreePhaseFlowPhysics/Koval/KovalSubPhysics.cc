@@ -64,6 +64,7 @@ KovalSubPhysics::KovalSubPhysics() : ThreePhaseFlowSubPhysics(){
     // Shock curve.
     //
     hugoniotcontinuation_ = new HugoniotContinuation2D2D(flux_, accumulation_, boundary_);
+//    hugoniot_curve.push_back(hugoniotcontinuation_);
     shockcurve_ = new ShockCurve(hugoniotcontinuation_);
 
     // Composite.

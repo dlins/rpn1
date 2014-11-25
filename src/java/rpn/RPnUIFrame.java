@@ -189,7 +189,6 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
         toolBar_.add(CompositePlotCommand.instance().getContainer());
         toolBar_.add(WaveCurvePlotCommand.instance().getContainer());
         toolBar_.add(RarefactionExtensionCurvePlotCommand.instance().getContainer());
-        toolBar_.add(HugoniotContinuationPlotCommand.instance().getContainer());
         toolBar_.add(RarefactionExtensionCurvePlotCommand.instance().getContainer());
         toolBar_.add(WaveCurveRRegionsPlotCommand.instance().getContainer());
         
@@ -1593,16 +1592,10 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
             if (phaseDiagramRadioButton_.isSelected()) {
                 
                 newState = new ShockConfig();
-//                RPNUMERICS.getViscousProfileData().setHugoniotMethodName(ViscousProfileData.HUGONIOT_METHOD_NAMES[1]);
-//                curvesConfigPanel_.propertyChange(new PropertyChangeEvent(this, "family", "", "phasediagram"));
-//                curvesConfigPanel_.propertyChange(new PropertyChangeEvent(this, "direction", "", "phasediagram"));
             }
             
             if (curvesRadioButton_.isSelected()) {
                 newState = new CurvesConfig();
-                //                 RPNUMERICS.getViscousProfileData().setHugoniotMethodName(ViscousProfileData.HUGONIOT_METHOD_NAMES[0]);
-//                curvesConfigPanel_.propertyChange(new PropertyChangeEvent(this, "family", "", "wavecurve"));
-//                curvesConfigPanel_.propertyChange(new PropertyChangeEvent(this, "direction", "", "wavecurve"));
 
             }
             
@@ -1611,9 +1604,9 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
             }
             
             if (riemannRadioButton_.isSelected()) {
-//                newState = new RiemannProblemConfig();
+
                 UIController.instance().getActivePhaseSpace().changeState(new RiemanProfileState());
-                UIController.instance().setState(new GEOM_SELECTION());
+                UIController.instance().setState(UIController.instance().getState());
                 
                 bifurcationConfigMenu();
                 

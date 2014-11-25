@@ -547,19 +547,12 @@ public class RPnDataModule {
 
 
                     HugoniotCurve curve = new HugoniotCurve(startPoint_, hugoniotSegments_, transitionPoint_);
-//                    int direction = Integer.parseInt(currentConfiguration_.getParam("direction"));
-//
-//                    int[] resolution = processResolution(currentConfiguration_.getParam("resolution"));
-//                    
-//                    //TODO Replace !!
-//                    
-//                    HugoniotParams params = new HugoniotParams(startPoint_, direction, resolution,"IMPLICIT");
 
                     HugoniotCurveCalcND calc = new HugoniotCurveCalcND(startPoint_, (CurveConfiguration) currentConfiguration_);
 
                     HugoniotCurveGeomFactory factory = new HugoniotCurveGeomFactory(calc, curve);
 
-                    HugoniotContinuationPlotCommand.instance().execute(factory);
+                    HugoniotPlotCommand.instance().execute(factory);
 
                 }
 

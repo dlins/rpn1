@@ -1,4 +1,5 @@
 #include "CoreyQuadSubPhysics.h"
+#include "Hugoniot_Curve.h"
 
 CoreyQuadSubPhysics::CoreyQuadSubPhysics() : ThreePhaseFlowSubPhysics(){
 //    muw_parameter = new Parameter(std::string("muw"), 1.0 + 1e-3);
@@ -82,6 +83,8 @@ CoreyQuadSubPhysics::CoreyQuadSubPhysics() : ThreePhaseFlowSubPhysics(){
     //
     hugoniotcontinuation_ = new HugoniotContinuation2D2D(flux_, accumulation_, boundary_);
     hugoniot_curve.push_back(hugoniotcontinuation_);
+    
+
 
     shockcurve_ = new ShockCurve(hugoniotcontinuation_);
 
@@ -118,7 +121,6 @@ CoreyQuadSubPhysics::~CoreyQuadSubPhysics(){
     delete odesolver_;
     delete compositecurve_;
     delete shockcurve_;
-    delete hugoniotcontinuation_;
     delete rarefactioncurve_;
     for (int i = 0; i < hugoniot_curve.size(); i++) delete hugoniot_curve[i];
 

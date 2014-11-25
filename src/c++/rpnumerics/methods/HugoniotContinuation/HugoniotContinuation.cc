@@ -566,6 +566,7 @@ int HugoniotContinuation::curve_point(const RealVector &previous_point, double p
 // TODO: Subphysics may be included somehow in the reference point.
 void HugoniotContinuation::set_reference_point(const ReferencePoint &r){
     ref = r;
+    reference_point=r;
     return;
 }
 
@@ -604,6 +605,7 @@ int HugoniotContinuation::set_bifurcation_space_coordinate(int Theta_index){
 }
 
 bool HugoniotContinuation::reference_point_near_coincidence(){
+
     if (ref.e.size() == 0) return false;
     else return fabs(ref.e[0].r - ref.e[1].r)/(1.0 + fabs(ref.e[0].r) + fabs(ref.e[1].r)) < 2e-3;
 }
@@ -629,7 +631,7 @@ HugoniotContinuation::~HugoniotContinuation(){
 //
 int HugoniotContinuation::curve(std::vector< std::vector<RealVector> > &curves){
     std::vector<int> edges;
-
+    cout<<"Algo"<< reference_point.point<<"                 "<<ref.point<< endl;
     int info = all_curves(curves, edges);
 
     return info;
@@ -640,9 +642,9 @@ int HugoniotContinuation::disconnected_curve(const RealVector &point_on_edge, in
 }
 
 int HugoniotContinuation::all_curves(std::vector< std::vector<RealVector> > &curves, std::vector<int> &edges){
-
+    cout <<"Em all"<<endl;
     int info = connected_curve(curves, edges);
-
+    cout <<"ddfasdfasd"<<endl;
     std::vector<std::vector<RealVector> > disconnected_temp;
     std::vector<int> disconnected_edges;
 
@@ -675,6 +677,8 @@ int HugoniotContinuation::connected_curve(std::vector< std::vector<RealVector> >
     // If the initial point lies near the coincidence curve, abort.
     // TODO: These lines below need to be improved.
     //
+    
+
     if (reference_point_near_coincidence()){ // TODO: This value must be fine-tuned.
 
 //        initial_step_size = ...;

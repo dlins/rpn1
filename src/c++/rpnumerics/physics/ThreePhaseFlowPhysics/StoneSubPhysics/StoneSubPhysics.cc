@@ -35,7 +35,7 @@ StoneSubPhysics::StoneSubPhysics() : ThreePhaseFlowSubPhysics(){
 
     // HugoniotContinuation.
     //
-    hugoniotcontinuation_ = new HugoniotContinuation_nDnD(flux_, accumulation_, boundary_);
+//    hugoniotcontinuation_ = new HugoniotContinuation_nDnD(flux_, accumulation_, boundary_);
 
     // ImplicitHugoniot.
     //
@@ -60,6 +60,8 @@ StoneSubPhysics::StoneSubPhysics() : ThreePhaseFlowSubPhysics(){
     // Shock curve.
     //
     hugoniotcontinuation_ = new HugoniotContinuation2D2D(flux_, accumulation_, boundary_);
+    
+    hugoniot_curve.push_back(hugoniotcontinuation_);
 //    hugoniotcontinuation_ = new HugoniotContinuation_nDnD(flux_, accumulation_, boundary_);
 
     shockcurve_ = new ShockCurve(hugoniotcontinuation_);
@@ -96,7 +98,6 @@ StoneSubPhysics::~StoneSubPhysics(){
     delete compositecurve_;
     delete explicitbifurcationcurves_;
     delete shockcurve_;
-    delete hugoniotcontinuation_;
     delete rarefactioncurve_;
 
     // Not sure if this should really be done like this.
@@ -104,8 +105,6 @@ StoneSubPhysics::~StoneSubPhysics(){
     // in this class, and let the rest be deleted at the father's dtor. 
     //
     for (int i = 0; i < hugoniot_curve.size(); i++) delete hugoniot_curve[i];
-
-    delete hugoniotcontinuation_;
 
     delete flux_;
 

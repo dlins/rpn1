@@ -24,7 +24,6 @@ import rpn.command.DoubleContactCommand;
 import rpn.command.EllipticBoundaryCommand;
 import rpn.command.EllipticBoundaryExtensionCommand;
 import rpn.command.EnvelopeCurveCommand;
-import rpn.command.HugoniotContinuationPlotCommand;
 import rpn.command.HugoniotPlotCommand;
 import rpn.command.HysteresisPlotCommand;
 import rpn.command.InflectionPlotCommand;
@@ -57,13 +56,10 @@ public class CurvesConfig extends UI_ACTION_SELECTED {
         RarefactionCurvePlotCommand.instance().setEnabled(true);
         HugoniotPlotCommand.instance().setEnabled(true);
         ShockCurvePlotCommand.instance().setEnabled(true);
-        HugoniotContinuationPlotCommand.instance().setEnabled(true);
         ChangeDirectionCommand.instance().setEnabled(true);
         ChangeFluxParamsCommand.instance().setEnabled(true);
         RarefactionExtensionCurvePlotCommand.instance().setEnabled(false);
         IntegralCurvePlotCommand.instance().setEnabled(false);
-
-
         CompositePlotCommand.instance().setEnabled(true);
         PointLevelCurvePlotCommand.instance().setEnabled(true);
         DiscriminantLevelCurvePlotCommand.instance().setEnabled(false);
@@ -85,9 +81,7 @@ public class CurvesConfig extends UI_ACTION_SELECTED {
         ZoomPlotCommand.instance().setEnabled(true);
         ZoomingAreaCommand.instance().setEnabled(true);
         AnnotationSelectionCommand.instance().setEnabled(true);
-        
-//        AreaSelectionCommand.instance().setEnabled(false);
-        
+ 
         
         ReferencePointSelectionCommand.instance().setEnabled(true);
                 
