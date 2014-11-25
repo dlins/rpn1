@@ -109,12 +109,15 @@ void Three_Phase_Boundary::extension_curve(const FluxFunction *f, const Accumula
 
     std::vector<RealVector> seg;
     edge_segments(where_constant, number_of_steps, seg);
-
+    cout<< "Seg size: "<<seg.size()<<endl;
     Extension_Curve extension_curve;
    
     extension_curve.curve(f, a, gv, characteristic, singular, fam,
                               seg,
                               c, d);
+    
+    cout<<"c: "<<c.size()<<endl;
+    cout<<"d: "<<d.size()<<endl;
     return;
 }
 

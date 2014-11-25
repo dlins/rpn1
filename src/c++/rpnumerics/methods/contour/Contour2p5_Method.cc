@@ -118,10 +118,18 @@ void Contour2p5_Method::contour2p5(TwoImplicitFunctions *timpf, std::vector<Real
     allocate_arrays();
 
     curve_vrs.clear();
-    domain_vrs.clear();
+    domain_vrs.clear(); 
+    
+    cout<<"Tamanho de oc : "<<timpf->segment_value()->size()<<endl;
 
     for (int i = 0; i < timpf->segment_value()->size()/2; i++) {
-        if ( !timpf->valid_segment(2*i) ) continue;
+        if ( !timpf->valid_segment(2*i) ){
+            cout<<"Segmento "<<i<<" invalido"<<endl;
+            continue;
+        }
+            
+            
+
         curve2p5(timpf, 2*i, curve_vrs, domain_vrs);
     }
     
