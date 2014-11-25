@@ -24,7 +24,7 @@
 #include "CoreyQuadSubPhysics.h"
 #include "KovalSubPhysics.h"
 #include "Quad2SubPhysics.h"
-
+#include "DeadVolatileVolatileGasSubPhysics.h"
 
 #include "JNIDefs.h"
 

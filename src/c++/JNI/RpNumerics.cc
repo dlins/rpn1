@@ -1001,9 +1001,9 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_initNative(JNIEnv * env, jclas
     }
 
 
-//    if (physicsStringName.compare("GVD") == 0) {
-//        RpNumerics::physicsVector_->push_back(new GasVolatileDeadSubPhysics());
-//    }
+    if (physicsStringName.compare("DeadVolatileVolatileGasSubPhysics") == 0) {
+        RpNumerics::physicsVector_->push_back(new DeadVolatileVolatileGasSubPhysics());
+    }
 
     
     
