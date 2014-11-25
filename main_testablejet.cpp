@@ -6,14 +6,18 @@
 #include "SorbiePermeability.h"
 
 #include "ICDOWSubPhysics.h"
+#include "TPCWSubPhysics.h"
 
 
 //SubPhysics *subphysics;
 //TestableJet *object;
 
 //#define TEST_ACCUMULATION
-#define TEST_FLUX
+//#define TEST_FLUX
 //#define TEST_HYDRODYNAMICS
+
+//#define TEST_TPCWACCUMULATION
+#define TEST_TPCWFLUX
 
 int main(){
     // SubPhysics.
@@ -77,6 +81,40 @@ int main(){
     std::vector<unsigned long int> div(pmin.size());
     for (int i = 0; i < div.size(); i++){
         div[i] = 400;
+    }
+    div[2] = 4;
+    #endif
+
+    #ifdef TEST_TPCWACCUMULATION
+    TPCWSubPhysics *subphysics = new TPCWSubPhysics();
+    Accum2Comp2PhasesAdimensionalized *object = (Accum2Comp2PhasesAdimensionalized*)subphysics->accumulation();
+
+    RealVector pmin = subphysics->boundary()->minimums();
+    RealVector pmax = subphysics->boundary()->maximums();
+
+    objpmin = pmin;
+    objpmax = pmax;
+
+    std::vector<unsigned long int> div(pmin.size());
+    for (int i = 0; i < div.size(); i++){
+        div[i] = 100;
+    }
+    div[2] = 4;    
+    #endif
+
+    #ifdef TEST_TPCWFLUX
+    TPCWSubPhysics *subphysics = new TPCWSubPhysics();
+    Flux2Comp2PhasesAdimensionalized *object = (Flux2Comp2PhasesAdimensionalized*)subphysics->flux();
+
+    RealVector pmin = subphysics->boundary()->minimums();
+    RealVector pmax = subphysics->boundary()->maximums();
+
+    objpmin = pmin;
+    objpmax = pmax;
+
+    std::vector<unsigned long int> div(pmin.size());
+    for (int i = 0; i < div.size(); i++){
+        div[i] = 100;
     }
     div[2] = 4;
     #endif

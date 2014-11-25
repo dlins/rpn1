@@ -268,6 +268,9 @@ testablejet: $(OBJECTS)
 tp_shock2d3d: $(OBJECTS)
 	$(LINK)  $(CPPFLAGS) $(INCLUDE) ../../../../../main_tp_shock2d3d.cpp -o $@ $^  $(LDLIBS) $(LDFLAGS)
 
+3d: $(OBJECTS)
+	$(LINK)  $(CPPFLAGS) $(INCLUDE) ../../../../../main_3d.cpp -o $@ $^  $(LDLIBS) $(LDFLAGS)
+
 #
 #	Make a library
 #

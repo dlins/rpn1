@@ -125,6 +125,8 @@ void Hugoniotcb(Fl_Widget*, void*){
 
     canvas->getxy(p(0), p(1));
 
+    std::cout << p << std::endl;
+
     if (!subphysics->boundary()->inside(p)) return;
 
     ReferencePoint ref(p, subphysics->flux(), subphysics->accumulation(), 0);
@@ -134,6 +136,8 @@ void Hugoniotcb(Fl_Widget*, void*){
 
     std::vector<HugoniotPolyLine> classified_curve;
     hugoniot->curve(ref, type, classified_curve);
+
+    std::cout << "Hugoniot curve size: " << classified_curve.size() << std::endl;
 
     if (classified_curve.size() > 0){
         MultiColoredCurve *mcc = new MultiColoredCurve(classified_curve, -100.0, 100.0, 100);
