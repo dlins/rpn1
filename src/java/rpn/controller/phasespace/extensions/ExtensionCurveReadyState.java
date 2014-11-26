@@ -11,6 +11,7 @@ import rpn.component.util.GraphicsUtil;
 import rpn.parser.RPnDataModule;
 import rpnumerics.ContourParams;
 import rpnumerics.ExtensionCurveCalc;
+import rpnumerics.RPNUMERICS;
 import static rpnumerics.RPNUMERICS.getParamValue;
 import rpnumerics.RpException;
 import wave.multid.Coords2D;
@@ -59,7 +60,7 @@ public class ExtensionCurveReadyState extends ExtensionCalcState {
     public ExtensionCurveCalc createCalc() throws RpException {
         int withImageSelection = 0;
 
-        int[] resolution_ = RPnDataModule.processResolution(getParamValue("extensioncurve", "resolution"));
+        int[] resolution_ = RPNUMERICS.processResolution(getParamValue("extensioncurve", "resolution"));
         int family_ = new Integer(getParamValue("extensioncurve", "family"));
         int characteristic_ = new Integer(getParamValue("extensioncurve", "characteristic"));
         boolean singular_ = Boolean.valueOf(getParamValue("extensioncurve", "singular"));

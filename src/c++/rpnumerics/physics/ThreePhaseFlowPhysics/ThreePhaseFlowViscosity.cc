@@ -7,7 +7,15 @@ ThreePhaseFlowViscosity::ThreePhaseFlowViscosity(ThreePhaseFlowSubPhysics *t): s
 ThreePhaseFlowViscosity::~ThreePhaseFlowViscosity(){
 }
 
-double ThreePhaseFlowViscosity::gas_viscosity(){
+double ThreePhaseFlowViscosity::water_viscosity(const RealVector &p){
+    return subphysics_->muw()->value();
+}
+
+double ThreePhaseFlowViscosity::oil_viscosity(const RealVector &p){
+    return subphysics_->muo()->value();
+}
+
+double ThreePhaseFlowViscosity::gas_viscosity(const RealVector &p){
     return subphysics_->mug()->value();
 }
 

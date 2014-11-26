@@ -8,12 +8,13 @@
 #include "ImplicitHugoniotCurve.h"
 #include "HugoniotContinuation2D2D.h"
 #include "HugoniotContinuation_nDnD.h"
-#include "StoneAccumulation.h"
+#include "ThreePhaseFlowAccumulation.h"
 #include "ThreePhaseFlowPermeability.h"
 #include "ThreePhaseFlowImplicitHugoniotCurve.h"
 //#include "ThreePhaseFlowWaveCurveFactory.h"
 #include "WaveCurveFactory.h"
 #include "ThreePhaseFlowViscosity.h"
+#include "ThreePhaseFlowMobility.h"
 
 class ThreePhaseFlowSubPhysics : public SubPhysics {
     private:
@@ -32,6 +33,7 @@ class ThreePhaseFlowSubPhysics : public SubPhysics {
 
         ThreePhaseFlowPermeability *permeability_;
         ThreePhaseFlowViscosity *viscosity_;
+        ThreePhaseFlowMobility *mobility_;
     public:
         ThreePhaseFlowSubPhysics();
         virtual ~ThreePhaseFlowSubPhysics();
@@ -83,6 +85,10 @@ class ThreePhaseFlowSubPhysics : public SubPhysics {
         // Viscosity.
         //
         ThreePhaseFlowViscosity* viscosity(){return viscosity_;}
+
+        // Mobility.
+        //
+        ThreePhaseFlowMobility* mobility(){return mobility_;}
 };
 
 #endif // _THREEPHASEFLOWSUBPHYSICS_

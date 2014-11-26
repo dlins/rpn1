@@ -95,7 +95,7 @@ public class CurvesConfig extends UI_ACTION_SELECTED {
         CoincidenceExtensionCurvePlotAgent.instance().setEnabled(false);
         ChangeFluxParamsCommand.instance().setEnabled(true);
         InflectionPlotCommand.instance().setEnabled(true);
-        HysteresisPlotCommand.instance().setEnabled(false);
+        HysteresisPlotCommand.instance().setEnabled(true);
         EllipticBoundaryExtensionCommand.instance().setEnabled(true);
         EnvelopeCurveCommand.instance().setEnabled(false);
         SecondaryBifurcationCurveCommand.instance().setEnabled(true);

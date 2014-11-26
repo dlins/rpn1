@@ -14,8 +14,6 @@
 #include "RpNumerics.h"
 #include "RealVector.h"
 #include "JNIDefs.h"
-
-#include "StoneAccumulation.h"
 #include "Implicit_Extension_Curve.h"
 #include "RectBoundary.h"
 

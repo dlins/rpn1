@@ -23,10 +23,11 @@ class ThreePhaseFlowViscosity {
             return gas_viscosity_jet(WaveState(w), degree, mug_jet);
         }
 
-        // TODO: Is this necessary?
+        // Viscosities.
         //
-        virtual double gas_viscosity();
-
+        virtual double water_viscosity(const RealVector &p);
+        virtual double oil_viscosity(const RealVector &p);
+        virtual double gas_viscosity(const RealVector &p);
 };
 
 #endif // _THREEPHASEFLOWVISCOSITY_

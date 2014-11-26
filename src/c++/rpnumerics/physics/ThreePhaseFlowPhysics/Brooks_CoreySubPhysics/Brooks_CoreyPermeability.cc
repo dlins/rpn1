@@ -34,7 +34,7 @@ int Brooks_CoreyPermeability::PermeabilityWater_jet(const RealVector &state, int
 int Brooks_CoreyPermeability::PermeabilityWater_jet(const RealVector &state, int degree, JetMatrix &water, double &reduced_water){
     // std::cout << "Water begins." << std::endl;
 
-    water.resize(2);
+    water.resize(2, 1);
 
     // Kludge.
     //
@@ -137,7 +137,7 @@ int Brooks_CoreyPermeability::PermeabilityGas_jet(const RealVector &state, int d
 int Brooks_CoreyPermeability::PermeabilityGas_jet(const RealVector &state, int degree, JetMatrix &gas, double &reduced_gas){
     // std::cout << "Gas begins." << std::endl;
 
-    gas.resize(2);
+    gas.resize(2, 1);
 
 
     // Kludge.
@@ -240,7 +240,7 @@ int Brooks_CoreyPermeability::PermeabilityOil_jet(const RealVector &state, int d
 int Brooks_CoreyPermeability::PermeabilityOil_jet(const RealVector &state, int degree, JetMatrix &oil, double &reduced_oil){
     // std::cout << "Oil begins." << std::endl;
 
-    oil.resize(2);
+    oil.resize(2, 1);
 
     // Kludge.
     //

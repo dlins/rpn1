@@ -31,9 +31,6 @@
 //-------------------------------------
 
 #include "JNIDefs.h"
-#include "physics/ThreePhaseFlowPhysics/Koval/KovalSubPhysics.h"
-#include "physics/CompositionalPhysics/GasVolatileDead/GasVolatileDeadSubPhysics.h"
-#include "physics/ThreePhaseFlowPhysics/Brooks_CoreySubPhysics/Brooks_CoreySubPhysics.h"
 
 
 using namespace std;
@@ -1038,18 +1035,25 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_initNative(JNIEnv * env, jclas
     if (physicsStringName.compare("Koval") == 0) {
         RpNumerics::physicsVector_->push_back(new KovalSubPhysics());
     }
+
     
     
       if (physicsStringName.compare("Brooks-Corey") == 0) {
         RpNumerics::physicsVector_->push_back(new Brooks_CoreySubPhysics());
+
+      }
+
+    if (physicsStringName.compare("DeadVolatileVolatileGasSubPhysics") == 0) {
+        RpNumerics::physicsVector_->push_back(new DeadVolatileVolatileGasSubPhysics());
     }
 
-//
-//    if (physicsStringName.compare("GVD") == 0) {
-//        RpNumerics::physicsVector_->push_back(new GasVolatileDeadSubPhysics());
-//    }
+    
+    
+    
+    if (physicsStringName.compare("Quad2SubPhysics") == 0) {
+        RpNumerics::physicsVector_->push_back(new Quad2SubPhysics());
 
-
+    }
 
 
 
@@ -1057,7 +1061,7 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_initNative(JNIEnv * env, jclas
     RpNumerics::waveCurveMap_ = new map<int, WaveCurve *>();
     RpNumerics::fillPhysicsParams();
 
-
+      
 
 
 }

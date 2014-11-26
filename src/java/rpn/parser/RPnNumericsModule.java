@@ -161,11 +161,11 @@ public class RPnNumericsModule {
             RealVector min = boundary.getMinimums();
             RealVector max = boundary.getMaximums();
 
-            int[] doubleContactResolution = RPnDataModule.processResolution(RPNUMERICS.getParamValue("doublecontactcurve", "resolution"));
+            int[] doubleContactResolution = RPNUMERICS.processResolution(RPNUMERICS.getParamValue("doublecontactcurve", "resolution"));
 
-            int[] hugoniotResolution = RPnDataModule.processResolution(RPNUMERICS.getParamValue("hugoniotcurve", "resolution"));
+            int[] hugoniotResolution = RPNUMERICS.processResolution(RPNUMERICS.getParamValue("hugoniotcurve", "resolution"));
 
-            int[] bifurcationCurvesResolution = RPnDataModule.processResolution(RPNUMERICS.getParamValue("bifurcationcurve", "resolution"));
+            int[] bifurcationCurvesResolution = RPNUMERICS.processResolution(RPNUMERICS.getParamValue("bifurcationcurve", "resolution"));
             
             
             RPNUMERICS.readNativePhysicsConfig();

@@ -14,6 +14,10 @@
 #define INITIAL_POINT_NOT_FOUND 1
 #endif
 
+#define TEST_PARAMETRICPLOT
+
+
+
 #ifndef SQRT_TWO
 #define SQRT_TWO 1.41421356237
 #endif
@@ -67,7 +71,7 @@ class ParametricPlot {
             return;
         }
 
-      
+       
 };
 
 #endif // _PARAMETRICPLOT_

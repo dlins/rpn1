@@ -101,7 +101,7 @@ double RarefactionCurve::directional_derivative(const RealVector &p, int fam, co
     std::vector<DoubleMatrix> F_H = F_jet.Hessian();
     std::vector<DoubleMatrix> G_H = G_jet.Hessian();
 
-    std::cout << "Rarefaction. point = " << p << ", JetMatrix for flux = " << F_jet << std::endl;
+//    std::cout << "Rarefaction. point = " << p << ", JetMatrix for flux = " << F_jet << std::endl;
 
     std::vector<eigenpair> e; 
     Eigen::eig(n, F_J.data(), G_J.data(), e);
@@ -256,6 +256,9 @@ void RarefactionCurve::add_point_to_curve(const RealVector &p, Curve &curve){
 
     RealVector point_eigenvalues;
     all_eigenvalues(p, family, point_eigenvalues);
+
+    std::cout.precision(32);
+    std::cout << point_eigenvalues << std::endl;
 
     curve.eigenvalues.push_back(point_eigenvalues);
 
@@ -422,6 +425,7 @@ int RarefactionCurve::curve(const RealVector &initial_point,
 
 
         if (dirdrv*previous_dirdrv < 0.0){
+//        if (0 == 1){ // The inflection will not be detected.
             double bisection_epsilon = 1e-10; // Must be relative to the flux.
 
             // Output here:

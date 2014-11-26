@@ -134,6 +134,7 @@ class RarefactionCurve {
         friend class WaveCurveFactory;
         friend class ShockCurve;
 
+       
 
 //        static int curve(RarefactionCurve *obj, const RealVector &initial_point,
 //                  int curve_family,

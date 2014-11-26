@@ -161,3 +161,10 @@ int FoamViscosity::gas_viscosity_jet(const WaveState &w, int degree, JetMatrix &
 //    return VISCOSITY_OK;
 //}
 
+double FoamViscosity::gas_viscosity(const RealVector &p){
+    JetMatrix mug_jet;
+    gas_viscosity_jet(WaveState(p), 0, mug_jet);
+
+    return mug_jet.get(0);
+}
+

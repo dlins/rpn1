@@ -1,6 +1,5 @@
 #include "ParametricPlot.h"
 
-// Angle phi will be updated to the first viable value.
 //
 int ParametricPlot::find_initial_point_within_domain(RealVector (*f)(void*, double), void *obj, double &phi, double phi_final, double delta_phi, const Boundary *b, Curve &curve){
     RealVector point = (*f)(obj, phi);

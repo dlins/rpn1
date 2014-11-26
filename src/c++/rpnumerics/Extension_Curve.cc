@@ -2,7 +2,7 @@
 
 int Extension_Curve::species_physic(Extension_Curve *ec, double *foncub, int domain_i, int domain_j, int kl){
     double lambda;
-
+//    cout<<"em species"<<endl;
     if (ec->characteristic_where == CHARACTERISTIC_ON_CURVE) {
         lambda = ec->segment_lambda[kl];
     } else {
@@ -72,6 +72,8 @@ int Extension_Curve::compositional_physic(Extension_Curve *ec, double *foncub, i
 }
 
 int Extension_Curve::function_on_vertices(double *foncub, int domain_i, int domain_j, int kl) {
+
+//    cout<<"Em function on vertices"<<(void *)gv<<oc <<endl;
     if (gv == 0 || oc == 0) return INVALID_FUNCTION_ON_VERTICES;
 
     if (!gv->eig_is_real(domain_i, domain_j)[family]) return INVALID_FUNCTION_ON_VERTICES;
@@ -244,7 +246,10 @@ bool Extension_Curve::valid_point(int i, double &lambda, RealVector &F, RealVect
 bool Extension_Curve::valid_segment(int i) {
     // This comes from the previous iteration.
     //
+//    cout<<"Point is valid"<<point_is_valid<<endl;
     if (!point_is_valid) return false;
+    
+    
 
     // The magnitudes at the first point of the segment were already computed.
     // Find the magnitudes at the second point of the segment, update. 
@@ -295,7 +300,7 @@ void Extension_Curve::curve(const FluxFunction *df, const AccumulationFunction *
                             std::vector<RealVector> &original_curve,
                             std::vector<RealVector> &extension_on_curve,
                             std::vector<RealVector> &extension_on_domain){
-
+    point_is_valid=true;
     curve_is_continuous = false;
 
     domain_ff = df;
@@ -323,7 +328,7 @@ void Extension_Curve::curve(const FluxFunction *df, const AccumulationFunction *
     if (gv->grid(0, 0).size() == 2) type_of_physic = &species_physic;
     else                            type_of_physic = &compositional_physic;
 
-    //std::cout << "Inside Extension Curve: gv->grid(0, 0).size() = " << gv->grid(0, 0).size() << std::endl;
+    std::cout << "Inside Extension Curve: gv->grid(0, 0).size() = " << gv->grid(0, 0).size() << std::endl;
 
     Contour2p5_Method::contour2p5(this, extension_on_curve, extension_on_domain);
 

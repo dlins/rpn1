@@ -79,7 +79,7 @@ public class BifurcationPlotCommand extends RpModelPlotCommand {
 
         RPnDataModule.LEFTPHASESPACE.join(bifurcationListGeom.get(0));
         RPnDataModule.RIGHTPHASESPACE.join(bifurcationListGeom.get(1));
-        
+//        
         
         
          } catch (NullPointerException rex) {

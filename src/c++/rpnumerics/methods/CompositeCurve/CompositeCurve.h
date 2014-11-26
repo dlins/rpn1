@@ -180,7 +180,7 @@ class CompositeCurve {
 
         int normalize_with_respect_to_whom;
 
-      
+       
     public:
         CompositeCurve(const AccumulationFunction *a, const FluxFunction *f, const Boundary *b, ShockCurve *s, Explicit_Bifurcation_Curves *ebc);
         virtual ~CompositeCurve();
@@ -267,6 +267,7 @@ class CompositeCurve {
 
 //        static int characteristic_shock_signal_event(const RealVector &where, double &diff_lambda, int *obj, int * /*not used*/);
 
+        
 };
 
 #endif // _COMPOSITECURVE_

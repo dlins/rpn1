@@ -40,7 +40,7 @@ public class HugoniotCurveCalcND extends ContourCurveCalc implements HugoniotCur
 
     private static HugoniotParams createHugoniotParams(PhasePoint input, Configuration config) {
 
-        int[] resolution = RPnDataModule.processResolution(getParamValue("hugoniotcurve", "resolution"));
+        int[] resolution = RPNUMERICS.processResolution(getParamValue("hugoniotcurve", "resolution"));
 
         Integer direction = new Integer(getParamValue("fundamentalcurve", "direction"));
 

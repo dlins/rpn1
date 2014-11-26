@@ -60,29 +60,6 @@ public class RPnDataModule {
 
     }
 
-    // TODO move out to somewhere else RPNUMERICS
-    public static int[] processResolution(String resolution) {
-
-        String[] splitedResolution = resolution.split(" ");
-        int[] result = new int[splitedResolution.length];
-
-        try {
-
-            for (int i = 0; i < splitedResolution.length; i++) {
-                String string = splitedResolution[i];
-
-                result[i] = new Integer(string);
-
-            }
-
-        } catch (NumberFormatException ex) {
-            System.out.println("Error in resolution format !");
-
-        }
-
-        return result;
-    }
-
     public static void updatePhaseSpaces() {
 
         PHASESPACE.update();
@@ -411,7 +388,7 @@ public class RPnDataModule {
 
                 if (curve_name_.equals(rpnumerics.CoincidenceCurve.class.getSimpleName())) {
 
-                     int resolution[] = processResolution(currentConfiguration_.getParam("resolution"));
+                     int resolution[] = RPNUMERICS.processResolution(currentConfiguration_.getParam("resolution"));
                     ContourParams params = new ContourParams(resolution);
                     
                     
@@ -468,7 +445,7 @@ public class RPnDataModule {
 
                 if (curve_name_.equals(rpnumerics.BuckleyLeverettInflectionCurve.class.getSimpleName())) {
 
-                    int resolution[] = processResolution(currentConfiguration_.getParam("resolution"));
+                    int resolution[] = RPNUMERICS.processResolution(currentConfiguration_.getParam("resolution"));
                     ContourParams params = new ContourParams(resolution);
                     BuckleyLeverettInflectionCurve curve = new BuckleyLeverettInflectionCurve(leftSegmentsCoords_);
                     BuckleyLeverettinCurveGeomFactory factory = new BuckleyLeverettinCurveGeomFactory(new BuckleyLeverettinInflectionCurveCalc(params), curve);
@@ -483,7 +460,7 @@ public class RPnDataModule {
 
 
                     SubInflectionCurve curve = new SubInflectionCurve(leftSegmentsCoords_);
-                    int resolution[] = processResolution(currentConfiguration_.getParam("resolution"));
+                    int resolution[] = RPNUMERICS.processResolution(currentConfiguration_.getParam("resolution"));
                     ContourParams params = new ContourParams(resolution);
                     SubInflectionCurveGeomFactory factory =
                             new SubInflectionCurveGeomFactory(new SubInflectionCurveCalc(params), curve);
@@ -560,7 +537,7 @@ public class RPnDataModule {
 
                     int family = Integer.parseInt(currentConfiguration_.getParam("family"));
                     double level = Double.parseDouble(currentConfiguration_.getParam("level"));
-                    int[] resolution = processResolution(currentConfiguration_.getParam("resolution"));
+                    int[] resolution = RPNUMERICS.processResolution(currentConfiguration_.getParam("resolution"));
                     ContourParams params = new ContourParams(resolution);
                     EigenValueCurve curve = new EigenValueCurve(family, realSegments_, level);
                     CharacteristicPolynomialLevelCalc calc = null;
@@ -604,7 +581,7 @@ public class RPnDataModule {
 
                 if (curve_name_.equals(rpnumerics.RarefactionExtensionCurve.class.getSimpleName())) {
 
-                    int[] resolution = processResolution(currentConfiguration_.getParam("resolution"));
+                    int[] resolution = RPNUMERICS.processResolution(currentConfiguration_.getParam("resolution"));
                     ContourParams params = new ContourParams(resolution);
 
 

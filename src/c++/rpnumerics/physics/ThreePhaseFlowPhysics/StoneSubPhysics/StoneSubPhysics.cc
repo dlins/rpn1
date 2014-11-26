@@ -1,5 +1,6 @@
 #include "StoneSubPhysics.h"
 #include "HugoniotContinuation_nDnD.h"
+#include "Model/SubPhysics.h"
 
 StoneSubPhysics::StoneSubPhysics() : ThreePhaseFlowSubPhysics(){
     permeability_ = new StonePermeability(this);
@@ -32,6 +33,8 @@ StoneSubPhysics::StoneSubPhysics() : ThreePhaseFlowSubPhysics(){
     number_of_cells[1] = 128;
 
     gridvalues_ = new GridValues(boundary_, boundary_->minimums(), boundary_->maximums(), number_of_cells);
+    
+    cout<<"Em subphysics "<<(void * )gridvalues_<<endl;
 
     // HugoniotContinuation.
     //
@@ -84,6 +87,10 @@ StoneSubPhysics::StoneSubPhysics() : ThreePhaseFlowSubPhysics(){
     //
     viscosity_ = new StoneViscosity(this);
 
+    // Mobility.
+    //
+    mobility_ = new ThreePhaseFlowMobility(this);
+
     // Info.
     //
     info_subphysics_ = std::string("Stone");
@@ -91,6 +98,7 @@ StoneSubPhysics::StoneSubPhysics() : ThreePhaseFlowSubPhysics(){
 
 
 StoneSubPhysics::~StoneSubPhysics(){
+    delete mobility_;
     delete viscosity_;
     delete inflection_curve_;
     delete wavecurvefactory_;
