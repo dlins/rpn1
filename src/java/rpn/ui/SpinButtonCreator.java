@@ -105,7 +105,7 @@ public class SpinButtonCreator extends UIComponentCreator {
         GridBagLayout gridBayLayout = new GridBagLayout();
 
         JPanel familyPanel = new JPanel(gridBayLayout);
-        int[] resolution = RPnDataModule.processResolution(paramValue);
+        int[] resolution = RPNUMERICS.processResolution(paramValue);
 
         gridConstraints.gridx = 0;
         resolutionSpinnerArray_ = new JSpinner[resolution.length];
@@ -211,7 +211,7 @@ public class SpinButtonCreator extends UIComponentCreator {
             RealVector min = boundary.getMinimums();
             RealVector max = boundary.getMaximums();
 
-            RPNUMERICS.setResolution(min, max, configuration_.getName(), RPnDataModule.processResolution(resolution.toString()));
+            RPNUMERICS.setResolution(min, max, configuration_.getName(), RPNUMERICS.processResolution(resolution.toString()));
 
 
         }
@@ -246,7 +246,7 @@ public class SpinButtonCreator extends UIComponentCreator {
             RealVector min = boundary.getMinimums();
             RealVector max = boundary.getMaximums();
 
-            RPNUMERICS.setResolution(min, max, configuration_.getName(), RPnDataModule.processResolution(resolution.toString()));
+            RPNUMERICS.setResolution(min, max, configuration_.getName(), RPNUMERICS.processResolution(resolution.toString()));
 
         }
     }
