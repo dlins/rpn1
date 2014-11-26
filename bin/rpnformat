@@ -1,0 +1,5 @@
+
+
+
+grep -B5 "<REALSEG>" RPNSESSION_OUT1.XML | awk -F"<REALSEG>" '{print $2}'
+cat FILTER_OUT1.XML | sed -e 's/<REALSEG>//g' | sed -e 's/<\/REALSEG>//g' > FILTER_OUT2.TXT

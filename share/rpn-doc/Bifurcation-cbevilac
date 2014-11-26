@@ -1,0 +1,16 @@
+cd /impa/home/g/cbevilac/workspace3/RPN_24_08_2009_1400/trunk
+
+
+./rpnumerics/methods/ContourFactory.java
+./rpnumerics/methods/BifurcationContourMethod.java
+./rpnumerics/methods/contour/samplefunctions/DoubleContact.java
+./rpnumerics/methods/contour/GridGenerator.java
+./rpnumerics/methods/contour/functionsobjects/MultiBifurcationFunction.java
+./rpnumerics/methods/contour/MPGridFunctionOnGridEvaluator.java
+./rpnumerics/methods/contour/GridOnMatrix.java
+./rpnumerics/methods/contour/ContourEdgesMultiPolyline.java
+./rpnumerics/methods/contour/ContourBifurcation.java
+./rpnumerics/BifurcationCurveCalc.java
+./rpn/usecase/BifurcationPlotAgent.java
+
+

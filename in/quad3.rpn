@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+<!DOCTYPE rpnconfiguration >
+<RPNSESSION id="1234">
+ <PHASESPACE name="Phase Space">
+<RPNCONFIGURATION>
+<PHYSICS name="QuadraticR3">
+
+ <BOUNDARY name="rect">
+
+        <BOUNDARYPARAM name="dimension" value="3" />
+        <BOUNDARYPARAM name="iso2equi" value="false" />
+        <BOUNDARYPARAM name="limits" value="-0.5 0.5 -0.5 0.5 -0.5 0.5" />
+
+
+    </BOUNDARY>
+
+<!--<FLUXFUNCTION >
+        <FLUXPARAMS name="param0" position="0" value ="-1" />
+        <FLUXPARAMS name="param1" position="1" value ="0" />
+        <FLUXPARAMS name="param2" position="2" value ="1" />
+        <FLUXPARAMS name="param3" position="3" value ="0" />
+        <FLUXPARAMS name="param4" position="4" value ="0.1" />
+        <FLUXPARAMS name="param5" position="5" value ="0" />
+        <FLUXPARAMS name="param6" position="6" value ="1" />
+        <FLUXPARAMS name="param7" position="7" value ="0" />
+        <FLUXPARAMS name="param8" position="8" value ="-0.1" />
+        <FLUXPARAMS name="param9" position="9" value ="0" />
+
+    </FLUXFUNCTION>-->
+</PHYSICS>
+
+<CURVECONFIGURATION name="shock">
+    <CURVEPARAM name="family" value="0"/>
+    <CURVEPARAM name="xzero" value="3.4 0.5"/>
+    <CURVEPARAM name="sigma" value="0.03"/>
+</CURVECONFIGURATION>
+
+
+<VIEWCONFIGURATION modeldomain="3">
+
+    <PROJDESC name="Axis0 Axis1">
+        <VIEWPARAM name="axis" value="0 1"/>
+        <VIEWPARAM name="vpwidth" value="600"/>
+        <VIEWPARAM name="vpheight" value="650"/>
+        <VIEWPARAM name="iso2equi" value="false"/>
+
+    </PROJDESC>
+
+
+     <PROJDESC name="Axis0 Axis2">
+        <VIEWPARAM name="axis" value="0 2"/>
+        <VIEWPARAM name="vpwidth" value="600"/>
+        <VIEWPARAM name="vpheight" value="650"/>
+        <VIEWPARAM name="iso2equi" value="false"/>
+
+    </PROJDESC>
+
+</VIEWCONFIGURATION>
+
+
+</RPNCONFIGURATION>
+</PHASESPACE>
+</RPNSESSION>

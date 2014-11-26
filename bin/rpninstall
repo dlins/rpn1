@@ -1,0 +1,30 @@
+#!/bin/bash
+#
+# RPn - Riemann Problem N-dimensional
+# Fluid Dinamics Lab - IMPA
+#
+# rpninstall - utility to Install RPn Project.
+#
+
+RPNSERVER="rpn.fluid.impa.br"
+RPNURL="http://$RPNSERVER/repo"
+
+function check_software() {
+	if [ -z "`which $1`" ]; then
+		echo
+		echo "'$1' need to be installed!"
+		echo "use: 'sudo apt-get install $1' or 'yum install $1' (super-user privilege needed)."
+		exit 1
+	fi
+}
+
+# Check if wget is installed
+check_software wget
+# Get rpn utility script
+wget -P . $RPNURL/rpn -O rpn_util > /dev/null 2>&1
+# Run rpn util script with install option
+chmod 755 rpn_util
+./rpn_util -i
+# Clean up
+rm -f ./rpn_util
+

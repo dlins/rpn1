@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="1488.189"
+   height="1052.3622"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.47 r22583"
+   sodipodi:docname="rpn.svg"
+   inkscape:export-filename="/Users/daniel/Desktop/rpn.png"
+   inkscape:export-xdpi="90"
+   inkscape:export-ydpi="90">
+  <defs
+     id="defs4">
+    <inkscape:perspective
+       sodipodi:type="inkscape:persp3d"
+       inkscape:vp_x="0 : 526.18109 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_z="1488.189 : 526.18109 : 1"
+       inkscape:persp3d-origin="744.09448 : 350.78739 : 1"
+       id="perspective13" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.35"
+     inkscape:cx="545.33893"
+     inkscape:cy="520"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="true"
+     inkscape:showpageshadow="false"
+     units="mm"
+     showguides="true"
+     inkscape:window-width="1734"
+     inkscape:window-height="1076"
+     inkscape:window-x="2084"
+     inkscape:window-y="16"
+     inkscape:window-maximized="0" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,3.1956816e-4)">
+    <g
+       id="g2973"
+       inkscape:export-xdpi="10.29"
+       inkscape:export-ydpi="10.29"
+       inkscape:export-filename="/Users/daniel/Desktop/rpn-64px.png">
+      <rect
+         ry="28.428448"
+         y="112.36186"
+         x="380"
+         height="560"
+         width="560"
+         id="rect2819"
+         style="fill:#2e2e2e;fill-opacity:1;fill-rule:nonzero;stroke:none" />
+      <text
+         xml:space="preserve"
+         style="font-size:230.4944458px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:condensed;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#ffcc00;fill-opacity:1;stroke:none;font-family:Myriad Pro;-inkscape-font-specification:Myriad Pro Bold Condensed"
+         x="401.4386"
+         y="372.04016"
+         id="text2821"
+         sodipodi:linespacing="125%"
+         transform="scale(1.0006308,0.99936959)"><tspan
+           sodipodi:role="line"
+           id="tspan2823"
+           x="401.4386"
+           y="372.04016">RPn</tspan></text>
+      <text
+         sodipodi:linespacing="125%"
+         id="text2917"
+         y="473.02094"
+         x="418.45758"
+         style="font-size:48px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#ff5555;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans;-inkscape-font-specification:Bitstream Vera Sans Bold"
+         xml:space="preserve"><tspan
+           y="473.02094"
+           x="418.45758"
+           id="tspan2919"
+           sodipodi:role="line">RIEMANN</tspan><tspan
+           id="tspan2921"
+           y="533.02094"
+           x="418.45758"
+           sodipodi:role="line">PROBLEM</tspan><tspan
+           id="tspan2923"
+           y="593.02094"
+           x="418.45758"
+           sodipodi:role="line">N-DIMENSIONAL</tspan></text>
+    </g>
+  </g>
+</svg>
