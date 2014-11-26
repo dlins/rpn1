@@ -99,7 +99,7 @@
 //
 //     http://www.parashift.com/c++-faq-lite/copy-of-abc-via-clone.html
 //
-class HugoniotContinuation : public HugoniotCurve {
+class HugoniotContinuation: public HugoniotCurve {
     private:
     protected:
         const FluxFunction *f;

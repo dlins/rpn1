@@ -27,6 +27,7 @@
 #include "LSODE.h"
 #include "Inflection_Curve.h"
 #include "CharacteristicPolynomialLevels.h"
+#include "TestTools.h"
 
 SubPhysics *subphysics;
 
