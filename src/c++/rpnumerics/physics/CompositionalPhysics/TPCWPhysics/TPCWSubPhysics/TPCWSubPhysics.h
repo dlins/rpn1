@@ -14,11 +14,6 @@
 class TPCWSubPhysics: public SubPhysics {
     private:
     protected:
-        // Pressure.
-        //
-        Parameter *P_parameter;
-//        Parameter *mc_parameter, *mw_parameter;
-
         // Flux parameters.
         //
         Parameter *abs_perm_parameter, *sin_beta_parameter;
@@ -28,10 +23,6 @@ class TPCWSubPhysics: public SubPhysics {
         // Accumulation parameter.
         //
         Parameter *phi_parameter;
-
-        // Molecular weights for CO2 and Water [kg/mol].
-        //
-        double mc, mw;
 
         MolarDensity *mdv, *mdl;
         VLE_Flash_TPCW *flash;
