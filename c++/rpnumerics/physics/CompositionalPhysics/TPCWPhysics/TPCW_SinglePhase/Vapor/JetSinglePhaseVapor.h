@@ -11,7 +11,7 @@ class JetSinglePhaseVapor {
     protected:
     public:
         JetSinglePhaseVapor(double mc, double mw, double P);
-        ~JetSinglePhaseVapor();
+        virtual ~JetSinglePhaseVapor();
 
         int rhosigmac_jet(const double yw, const double T, int degree, JetMatrix &m);
         int rhosigmaw_jet(const double yw, const double T, int degree, JetMatrix &m);

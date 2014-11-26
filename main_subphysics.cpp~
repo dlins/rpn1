@@ -1275,7 +1275,7 @@ int main(){
     //
 //    subphysics = new DeadVolatileVolatileGasSubPhysics;
 //    subphysics = new JDSubPhysics;
-//    subphysics = new ICDOWSubPhysics();
+    subphysics = new ICDOWSubPhysics();
 
 //    subphysics = new StoneSubPhysics;
 //    subphysics = new Brooks_CoreySubPhysics;
@@ -1283,7 +1283,7 @@ int main(){
 //    subphysics = new KovalSubPhysics;
 //    subphysics = new FoamSubPhysics;
 //    subphysics = new SorbieSubPhysics;
-    subphysics = new TPCWSubPhysics;
+//    subphysics = new TPCWSubPhysics;
 //    subphysics = new Quad2SubPhysics;
 
     std::cout << "SubPhysics \"" << subphysics->info_subphysics() << "\" created successfully." << std::endl;
