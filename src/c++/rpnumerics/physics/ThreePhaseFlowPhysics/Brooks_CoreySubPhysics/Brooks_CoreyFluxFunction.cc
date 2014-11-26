@@ -37,12 +37,6 @@ int Brooks_CoreyFluxFunction::jet(const WaveState &u, JetMatrix &f, int degree) 
         double muo = muo_parameter->value();
         double mug = mug_parameter->value();
 
-//        double grw = grw_parameter->value();
-//        double gro = gro_parameter->value();
-//        double grg = grg_parameter->value();
-
-//        double vel = vel_parameter->value();
-
         double kw = water.get(0);
         double ko = oil.get(0);
         double kg = gas.get(0);
