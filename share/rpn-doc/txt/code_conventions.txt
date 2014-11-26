@@ -1,0 +1,49 @@
+IMPA - Fluid Dynamics 					August 2001
+
+Coding Conventions for Sofware Development at Fluid
+
+
+1- Code Organization
+
+	The code should be divided on blocks 
+following the pattern :
+
+//
+// Constants
+//
+
+//
+// Members
+//
+
+//
+// Constructors/Initializers
+//
+
+//
+// Accessors/Mutators
+//
+
+//
+// Methods
+//
+
+2- Naming Conventions
+
+	We will be following the recommendations
+from Sun for members and methods naming. A complete
+definition of Sun conventions can be found at :
+
+http://java.sun.com/docs/codeconv/
+
+	One extra convention for class members naming
+will be used. An underscored should be added to each 
+member of a class which should also be declared private
+and be accessed by the Accessors/Mutators methods.
+
+3- The use of the keyword "this" should be avoided.
+
+4- The source documentation will be created with Java doc.
+
+
+

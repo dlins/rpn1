@@ -1,0 +1,241 @@
+Documentation on the code providing orbit connection 
+in a system of two autonomous ODE depending on parameters
+
+Differential equation:	y = f(t,y,p), 								(*)
+			double t, GVector(dim m) y, GVector(dim n) p.
+Wave speed is the first component of the parameter vector p.
+
+Class Flux:
+	methods:
+	GVector(dim m) 	F(t,x,p) 	returns the value of the function f(t,x,p)
+	GMatrix(dim m x m)	DFX(t,x,p) 	returns the Jacobean matrix df(t,x,p)/dx
+	GMatrix(dim m x n) 	DFT(t,x,p) 	returns the value of the derivative df(t,x,p)/dt
+	GVector(dim m) 	DFS(t,x,p) 	returns the value of the derivative df(t,x,p)/dp1 
+(with respect to first parameter p1  wave speed)
+
+Class PhasePoint:
+	contains information on a phase point including
+	GVector(dim m) 	Coords		coordinates in the phase space
+	double			Time		time value
+	int			Flag		to be used with other functions
+
+	creator:
+	PhasePoint(GVector Coords, double Time, int Flag)
+	methods:
+	GVector(dim m) 	getCoords() 	returns Coords
+double 		getTime() 	returns	Time 
+int 			getFlag() 	returns Flag
+
+Class PhaseCurve:
+	contains information on a curve in the phase space 
+	in the form of an array of PhasePoint
+
+	creator:
+	PhaseCurve(PhasePoint[] PhasePointArray)
+	methods:
+	PhasePoint[]  	getPoints() 	return PhasePointArray
+
+Class IntOptions:
+	contains parameters for ODE solver
+	double 	maxStepLength	maximal length of an integration step 
+in the phase space
+double 	relError		maximal relative error
+double 	absError		maximal absolute arror
+int 		maxNstep		maximal number of steps in the integration
+
+	creator:
+	IntOptions(double maxStepLength, double relError, double absError, int maxNstep)
+	methods:
+double 	getMaxStepLength() 	returns maxStepLength
+double 	getRelError() 		return 	relError
+double 	getAbsError() 		return absError
+int	  	getMaxNstep() 	return maxNstep
+
+Class Boundary:
+contains information on the phase space boundary and Poincare section
+GMatrix(dim m x k) 	edges		columns contain points on boundary segments 
+(boundary consists of k segments)
+GMatrix(dim m x k) 	norms		norms to boundary segments 
+directed inside the bounded domain
+GVector(dim m) 	pPoint		middle point of the Poincare segment 
+GVector(dim m) 	pNorm		normal to the Poincare segment, its length 
+determines half of the length of Poincare segment
+int 			Flag		flag determines usage of the boundary:
+					Flag = 0 there is no phase space boundary; 
+   there is no Poincare segment
+					Flag = 1 there is only a phase space boundary
+					Flag = 2 there is only a Poincare segment
+					Flag = 3 there is a phase space boundary;
+   there is a Poincare segment
+
+creator:				
+Boundary(GMatrix edges,GMatrix norms, GVector pPoint,GVector pNorm,int Flag)
+methods:
+GMatrix(dim m x k) 	getEdges() 	returns edges
+GMatrix(dim m x k) 	getNorms() 	returns norms
+GVector(dim m) 	getPpoint() 	returns pPoint
+GVector(dim m) 	getPnorm() 	returns pNorm
+int 			getFlag() 	returns Flag
+void 			setPSection(GVector pPoint, GVector pNorm)
+					sets new values of pPoint and pNorm
+boolean 		contains(GVector point)
+					returns true if point lies inside the phase space 
+boundary; false otherwise
+
+Class OdeImplicit
+makes one step in the solution of ODE (*) with 
+PhasePoint 		point0		initial data
+double 		time1		final time
+Boundary 		bound		information on the phase space boundary 
+and Poincare segment 
+GVector(dim n) 	parameters	parameter vector
+
+	creator:
+OdeImplicit(PhasePoint point0, double time1, Boundary bound, GVector parameters)
+methods:
+PhasePoint    	calc()	returns the results of integrations  
+which depend on Flag = calc().getFlag():
+			Flag < 0	no convergence
+			Flag = 0	successful result with time calc().getTime() = time1
+			Flag = 1	successful result with the final point out of the 
+					phase space boundary
+			Flag = 2	successful result with the final point on 
+the Poincare segment, calc().getTime() <= time1
+				
+Class IntCurve
+	creates the integration curve with
+PhasePoint 		point			initial phase point
+int 			TimeDirection		direction of time, can be 1 or -1 
+Boundary 		bound			information on the phase space boundary 
+and Poincare segment 
+GVector(dim n) 	parameters		parameter vector
+IntOptions 		options			ODE solver options
+
+creator:
+IntCurve(PhasePoint point, int TimeDirection, Boundary bound, 
+GVector parameters, IntOptions opt)
+	methods:
+	PhaseCurve 	calc()	returns the integration curve in the phase space
+				Flag of the last phase point denotes the curve type:
+				Flag < 0 no convergence
+				Flag = 1 finishes after intersection of the phase space boundary
+				Flag = 2 finishes on the Poincare segment 
+				Flag = 3 finishes on the attractor 
+				Flag = 4 stop due to a big number of steps
+
+Class StationaryPoint: 
+finds a stationary point using the Newton method with 
+PhasePoint 		point		initial guess for the Newton method
+GVector(dim n) 	parameters	parameter vector
+
+creator:
+StationaryPoint(PhasePoint point, GVector parameters)
+methods:
+PhasePoint 		calc()	returns the stationary point; its Flag indicates:
+				Flag < 0	no convergence
+			Flag = 0	hyperbolic stationary point
+				Flag = 1	attracting stationary point
+				Flag = 2	repelling stationary point
+				Flag = 10	elliptic stationary point
+next methods have to be used after calc()
+GVector(dim m)	Eigenvector1()	returns the unit norm eigenvector 
+of minimal real eigenvalue; 
+in elliptic case returns zero vector
+GVector(dim m)	Eigenvector2()	returns the unit norm eigenvector 
+of maximal real eigenvalue;
+in elliptic case returns zero vector
+
+
+
+
+
+
+
+
+
+
+Class ManifoldSetup:
+contains initial information on the unstable/stable manifold
+PhasePoint 		point			stationary point in the phase space 
+as returned by StationaryPoint class
+GVector(dim m) 	SpaceDirection	approximate direction of the manifold
+int 			TimeDirection		type of manifold (1 unstable , -1 stable) 
+
+creator:
+ManifoldSetup(PhasePoint point, GVector SpaceDirection, int TimeDirection)
+	methods:
+PhasePoint 		getPoint() 	returns point
+GVector(dim m) 	getSDir() 	returns SpaceDirection
+int 			getTDir() 	returns TimeDirection
+
+Class Manifold:
+	calculates the orbit on the stable/unstable manifold with
+	ManifoldSetup 	Manif			initial data on the manifold
+Boundary 		bound			information on the phase space boundary 
+and Poincare segment 
+GVector(dim n) 	parameters		parameter vector
+IntOptions 		options			ODE solver options
+
+creator:
+Manifold(ManifoldSetup Manif, Boundary bound, 
+GVector parameters, IntOptions options)
+	methods:
+	PhaseCurve 	calc()	returns phase curve belonging to the manifold described by Manif;
+				its first point is a stationary point;
+				second point is calculated by approximate formulae;
+				the rest of the curve is calculated using the class IntCurve 
+starting at the second point
+
+Class ManifoldSensitivity:
+Takes the input data:
+PhaseCurve 		Orbit		orbit on the unstable/stable manifold as returned by 
+class Manifold
+GVector(dim m)   	PNorm		direction vector in the phase space
+GVector 		parameters	parameter vector
+and computes the sensitivity (derivative) of the final point of the orbit 
+with respect to the first parameter (wave speed) along the direction PNorm
+
+creator:
+ManifoldSensitivity(PhaseCurve Orbit, GVector PNorm, GVector parameters)
+methods:
+double 	calc()	returns the sensitivity (derivative) as described above
+
+
+
+
+
+
+
+Class ManifoldConnect: 
+Computes the value of the first parameter (wave speed), 
+when given unstable/stable manifolds coincide using the Newton method
+ManifoldSetup 	Manif1		unstable manifold finishing at Poincare segment
+					as given by class Manifold
+ManifoldSetup 	Manif2		stable manifold finishing at Poincare segment
+					as given by class Manifold
+Boundary 		bound		information on the phase space boundary 
+and Poincare segment 
+GVector(dim n) 	parameters	parameter vector
+IntOptions 		options		ODE solver options
+           double 			dsigmaMax	maximal change in the first (wave speed) parameter
+						for one step of the Newton method
+
+	creator:
+ManifoldConnect(ManifoldSetup Manif1, ManifoldSetup Manif2,
+                  Boundary bound, GVector parameters, IntOptions options, double dsigmaMax)
+	methods:
+	int 	calc()	performs all calculations and returns 0 is computation is successful;
+otherwise returns negative number
+next methods have to be used after calc()
+ManifoldSetup 	getManifForw()	returns the setting of the unstable 
+manifold corresponding to connecting orbit
+ManifoldSetup 	getManifBack()	returns the setting of the stable 
+manifold corresponding to connecting orbit
+GVector(dim n) 	getParameters() 	returns the parameter vector, where the first
+component (wave speed) is changed 
+in order to generate a connecting orbit
+Boundary 		getBoundary()		returns new boundary settings, where the 
+							Poincare segment is placed in optimal 
+position
+
+

@@ -1,0 +1,75 @@
+
+1-Descricao Funcional
+
+// TODO
+
+	- Visualizacao Distribuida implementada a partir de aplicacoes de uso
+corrente no meio academico
+ 
+	- Utilizacao de um Whiteboard (nao integrado com as aplicacoes) para compartilhamento de dados (texto e imagem)
+	
+
+2-Especificacao Tecnica da proposta GIGA
+
+	
+	Tendo em vista as motivacoes explicitadas na Descricao Funcional,
+estaremos nesta secao especificando a abordagem tecnica para implementar a
+arquitetura assim como propondo um cronograma para o processo de entrega dos
+modulos de funcionalidades.
+
+
+	O contexto a ser atendido pela Arquitetura , eh o de dois usuarios
+compartilhando uma execucao de uma aplicacao e que devem ter a visualizacao 
+sincronizada e a capacidade de trocar anotacoes textuais simples assim
+como embutidas em resultados graficos provenientes das aplicacoes. 
+
+
+	2.1- A Arquitetura
+
+	Estaremos implementando, nesta versao, a Visualizacao Distribuida
+utilizando a camada de rede como canal de comuinicao sem qualquer sofisticacao
+do ponto de vista de design. Estaremos abrindo portas de comunicacao (Sockets)
+na camada de transporte (TCP/IP) para enviar dados de comando referentes as
+acoes dos usuarios que compartilham uma execucao. 
+
+
+	// TODO um ou dois diagramas
+
+
+	A possibilidade de trocar anotacoes textuais sera' provida por um
+Whiteboard (*referencia literaria) que permite a escrita direta assim como
+sob imagens geradas em formatos padrao. 
+
+	2.2- O Cronograma
+
+
+	1o Trimestre - Agosto - Outubro / 2004
+
+	Entrega da Documentacao Formal (Funcional e Tecnica)
+ 
+	2o Trimestre - Novembro/2004 - Janeiro/2005
+
+	Entregar a versao operacional da Aplicacao Pakman 
+
+	3o Trimestre - Fevereiro - Abril / 2005
+
+	Implementar a Visualizacao Distribuida no GRADS
+
+	4o Trimestre - Maio - Julho / 2005
+
+	Entregar a versao operacional da Aplicacao GRADS
+
+
+	2.3 Planos Futuros
+
+	Implementar uma versao integrada entre o Whiteboard e as aplicacoes,
+assim como aumentar a sofisticacao da comunicacao entre os usuarios atraves
+do uso de Media em Audio (MIDI). Neste ponto podemos ter um contexto persistido
+em que os usuarios poderiam recarregar uma execucao a partir de um determinado
+ponto.
+
+
+
+
+	
+	
