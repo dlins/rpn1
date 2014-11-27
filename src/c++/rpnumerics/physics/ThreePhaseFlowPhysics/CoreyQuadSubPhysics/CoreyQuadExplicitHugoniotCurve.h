@@ -61,7 +61,7 @@ class CoreyQuadExplicitHugoniotCurve : public HugoniotCurve {
         CoreyQuadSubPhysics *corey;
     public:
         CoreyQuadExplicitHugoniotCurve(CoreyQuadSubPhysics *c);
-        ~CoreyQuadExplicitHugoniotCurve();
+        virtual ~CoreyQuadExplicitHugoniotCurve();
 
         void curve(const ReferencePoint &ref, int type, std::vector<Curve> &c);
 

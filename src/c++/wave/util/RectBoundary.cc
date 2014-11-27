@@ -230,12 +230,8 @@ size_(minimums.size()), type_("rect") {
 }
 
 RectBoundary::RectBoundary(const RealVector & minimums, const RealVector & maximums, const std::vector<bool> & test, const double eps) {
-    printf("Here\n");
-
     minimums_ = new RealVector(minimums.size());
     maximums_ = new RealVector(minimums.size());
-
-
 
     for (int i = 0; i < minimums.size(); i++) {
         if (minimums.component(i) < maximums.component(i)) {

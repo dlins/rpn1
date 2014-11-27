@@ -546,8 +546,15 @@ void ColorCurve::classify_segment(RealVector &p, RealVector &q,
     std::vector<double> eigenvalue_p, eigenvalue_q;
     std::string ct_p, ct_q;
 
+    std::cout << "Before classifying p = " << p << std::endl;
     int type_p = classify_point(p, s_p, eigenvalue_p, ct_p);
+    std::cout << "After classifying p" << std::endl;
+
+    std::cout << "Before classifying q = " << q << std::endl;
     int type_q = classify_point(q, s_q, eigenvalue_q, ct_q);
+    std::cout << "After classifying q" << std::endl;
+
+    if (type_p == UNCLASSIFIABLE_POINT || type_q == UNCLASSIFIABLE_POINT) return;
 
     int dim = p.size();
     int fam = eigenvalue_p.size();
@@ -581,9 +588,11 @@ void ColorCurve::classify_segment(RealVector &p, RealVector &q,
         hpl.eigenvalue[0].component(j) = eigenvalue_p[j];
     }
 
+    std::cout << "        Begin classify_segment_with_data: p = " << type_p << ", q = " << type_q << std::endl;
     classify_segment_with_data(p, s_p, eigenvalue_p, ct_p, type_p,
-            q, s_q, eigenvalue_q, ct_q, type_q,
-            hpl, classified_curve, transition_list);
+                               q, s_q, eigenvalue_q, ct_q, type_q,
+                               hpl, classified_curve, transition_list);
+    std::cout << "        End classify_segment_with_data" << std::endl;
 
     return;
 }
@@ -1313,6 +1322,8 @@ int ColorCurve::complete_point(RealVector &p, double &s, std::vector<double> &ei
     else {
         // The speed is just approximated. TODO: This is not a good idea, something is needed.
         s = num * 1e20;
+
+        std::cout << "Point " << p << " is UNCLASSIFIABLE!!!" << std::endl;
         return UNCLASSIFIABLE_POINT;
     }
 
@@ -1400,8 +1411,6 @@ void ColorCurve::classify_segmented_curve(std::vector<RealVector> &original,
         std::vector<HugoniotPolyLine> &classified_curve,
         std::vector<RealVector> &transition_list) {
 
-//    std::cout << "This one" << std::endl;
-
     classified_curve.clear();
     transition_list.clear();
 
@@ -1435,6 +1444,7 @@ void ColorCurve::classify_segmented_curve(std::vector<RealVector> &original,
 //        ref_e_complex[i] = e[i].i;
 //    }
 
+    
 
     ref_eigenvalue.resize(ref.e.size());
     ref_e_complex.resize(ref.e.size());    
@@ -1444,6 +1454,7 @@ void ColorCurve::classify_segmented_curve(std::vector<RealVector> &original,
         ref_e_complex[i] = ref.e[i].i;
     }
 
+//    std::cout << "ref.e.size() = " << ref.e.size() << ", original.size() = " << original.size() << std::endl;
     // Process the list
     for (int i = 0; i < original.size() / 2; i++) {
         classify_segment(original[2 * i], original[2 * i + 1], classified_curve, transition_list);

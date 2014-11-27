@@ -126,6 +126,9 @@ void Hugoniotcb(Fl_Widget*, void*){
 
     canvas->getxy(p(0), p(1));
 
+//    p(0) = -0.00899743;
+//    p(1) =  0.049505;
+
     std::cout << p << std::endl;
 
     if (!subphysics->boundary()->inside(p)) return;
@@ -1280,12 +1283,12 @@ int main(){
 
 //    subphysics = new StoneSubPhysics;
 //    subphysics = new Brooks_CoreySubPhysics;
-    subphysics = new CoreyQuadSubPhysics;
+//    subphysics = new CoreyQuadSubPhysics;
 //    subphysics = new KovalSubPhysics;
 //    subphysics = new FoamSubPhysics;
 //    subphysics = new SorbieSubPhysics;
 //    subphysics = new TPCWSubPhysics;
-//    subphysics = new Quad2SubPhysics;
+    subphysics = new Quad2SubPhysics;
 
     std::cout << "SubPhysics \"" << subphysics->info_subphysics() << "\" created successfully." << std::endl;
 

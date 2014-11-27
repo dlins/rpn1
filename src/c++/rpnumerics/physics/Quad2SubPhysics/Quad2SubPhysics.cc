@@ -55,6 +55,11 @@ Quad2SubPhysics::Quad2SubPhysics(): SubPhysics(){
     //
     rarefactioncurve_ = new RarefactionCurve(accumulation_, flux_, boundary_);
 
+    // Explicit Hugoniot.
+    //
+    Quad2ExplicitHugoniotCurve *ehc = new Quad2ExplicitHugoniotCurve(this);
+    hugoniot_curve.push_back(ehc);
+
     // Implicit Hugoniot.
     //
     ImplicitHugoniotCurve *ihc = new ImplicitHugoniotCurve(flux_, accumulation_, boundary_);

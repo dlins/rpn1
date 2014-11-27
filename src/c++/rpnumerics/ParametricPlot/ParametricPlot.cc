@@ -1,4 +1,5 @@
 #include "ParametricPlot.h"
+#include "TestTools.h"
 
 //
 int ParametricPlot::find_initial_point_within_domain(RealVector (*f)(void*, double), void *obj, double &phi, double phi_final, double delta_phi, const Boundary *b, Curve &curve){
@@ -24,6 +25,9 @@ int ParametricPlot::find_initial_point_within_domain(RealVector (*f)(void*, doub
 
             if (info == BOUNDARY_INTERSECTION_FOUND){
                 curve.curve.push_back(boundary_point);
+
+//                std::cout << "Point at boundary: " << boundary_point << std::endl;
+//                TestTools::pause("Point at boundary found. Check console.");
 
                 double temp_phi;
                 intersection(f, obj, b, 1.0 /*max_distance*/,
@@ -117,9 +121,19 @@ void ParametricPlot::find_curve(RealVector (*f)(void*, double),
             RealVector boundary_point;
             int edge;
 
-            b->intersection(point, old_point, boundary_point, edge);
+            int info = b->intersection(point, old_point, boundary_point, edge);
 
-            curve.curve.push_back(boundary_point);
+//            std::cout << "Info = " << info << ", Segment " << point << "-" << old_point << " should intersect the boundary at " << boundary_point << std::endl;
+//            std::cout << "    point is inside: " << b->inside(point) << ", old_point is inside = " << b->inside(old_point) << std::endl;
+//            TestTools::pause("Intersection found.");
+
+            // ParametricPlot sometimes interacts wrongly with RectBoundary, which sometimes returns a void intersection point.
+            // I hope the if below solves this problem for all cases (it does for Quad2ExplicitHugoniotCurve). Another solution has to be found.
+            // 
+            // Background: Quad2ExplicitHugoniotCurve.
+            //
+            // Morante.
+            if (info == BOUNDARY_INTERSECTION_FOUND) curve.curve.push_back(boundary_point);
 
             return;
         }
