@@ -1054,6 +1054,14 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_initNative(JNIEnv * env, jclas
         RpNumerics::physicsVector_->push_back(new Quad2SubPhysics());
 
     }
+    
+    
+    
+    
+     if (physicsStringName.compare("Foam") == 0) {
+        RpNumerics::physicsVector_->push_back(new FoamSubPhysics());
+
+    }
 
 
 
