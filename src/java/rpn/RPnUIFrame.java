@@ -29,6 +29,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import rpn.command.ClassifierCommand;
 import rpn.command.VelocityCommand;
 import rpn.component.RpGeometry;
+import rpn.controller.phasespace.NumConfigImpl;
 import rpn.controller.phasespace.RiemanProfileState;
 import rpn.controller.ui.*;
 import rpn.controller.ui.UI_ACTION_SELECTED;
@@ -1592,21 +1593,25 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
             if (phaseDiagramRadioButton_.isSelected()) {
                 
                 newState = new ShockConfig();
+                UIController.instance().getActivePhaseSpace().changeState(new NumConfigImpl());
             }
             
             if (curvesRadioButton_.isSelected()) {
                 newState = new CurvesConfig();
+                 UIController.instance().getActivePhaseSpace().changeState(new NumConfigImpl());
+
 
             }
             
             if (extensionRadioButton_.isSelected()) {
                 newState = new ExtensionCurvesConfig();
+                UIController.instance().getActivePhaseSpace().changeState(new NumConfigImpl());
             }
             
             if (riemannRadioButton_.isSelected()) {
 
                 UIController.instance().getActivePhaseSpace().changeState(new RiemanProfileState());
-                UIController.instance().setState(UIController.instance().getState());
+
                 
                 bifurcationConfigMenu();
                 
