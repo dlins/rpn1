@@ -1,0 +1,7 @@
+# env - RPn makefile environment variable settings
+#       If left empty, makefile will get shell settings
+RPGNU=yes
+RPHOSTTYPE=linux_x86_64
+JAVA_HOME=/opt/jdk1.6.0_45
+JAVA_INC=/opt/jdk1.6.0_45/include
+PATH=/home/morante/bin:/usr/lib/lightdm/lightdm:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/home/morante/Downloads/RPn/rpn/bin:/home/morante/IMPA/2014/2014_10_26_RPn_repository/rpnmorante/bin

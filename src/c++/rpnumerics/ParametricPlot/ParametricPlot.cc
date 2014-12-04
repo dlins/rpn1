@@ -1,5 +1,5 @@
 #include "ParametricPlot.h"
-#include "TestTools.h"
+
 
 //
 int ParametricPlot::find_initial_point_within_domain(RealVector (*f)(void*, double), void *obj, double &phi, double phi_final, double delta_phi, const Boundary *b, Curve &curve){

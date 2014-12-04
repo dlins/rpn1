@@ -26,6 +26,7 @@
 #include "Quad2SubPhysics.h"
 #include "DeadVolatileVolatileGasSubPhysics.h"
 #include "Brooks_CoreySubPhysics.h"
+#include "FoamSubPhysics.h"
 
 #include "JNIDefs.h"
 

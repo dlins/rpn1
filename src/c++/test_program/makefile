@@ -22,8 +22,7 @@ LD = $(CXX)
 
 #
 #	Include, C-preprocessor, C, C++ and Fortran compilation flags
-INCFLAGS = -I . -I .. -I ../JNI/include -I ../wave/ode/ -I ../rpnumerics/methods/Coincidence -I  ../wave/util/MultiArray -I /usr/lib/jvm/java-8-oracle/include -I /usr/lib/jvm/java-8-oracle/include/linux -I /opt/jdk1.6.0_45/include -I /opt/jdk1.6.0_45/include/linux
-
+INCFLAGS = -I . -I .. -I ../JNI/include -I ../wave/ode/ -I ../rpnumerics/methods/Coincidence -I  ../wave/util/MultiArray -I /usr/lib/jvm/java-8-oracle/include -I /usr/lib/jvm/java-8-oracle/include/linux
 CPPFLAGS = -g -fPIC
 CXXFLAGS =
 CFLAGS =
@@ -176,8 +175,7 @@ subphysics: $(OBJECTS)
 permgui: $(OBJECTS)
 	$(LINK) -o $@ $(INCLUDE) main_permgui.cpp $^ $(LDLIBS) $(LDFLAGS)
 
-eigen: $(OBJECTS)
-	$(LINK) -o $@ $(INCLUDE) main_eigen.cpp $^ $(LDLIBS) $(LDFLAGS)
+
 
 ##################################################################################
 #
