@@ -43,7 +43,6 @@ import rpn.command.SubInflectionPlotCommand;
 import rpn.command.TransitionalLinePlotCommand;
 import rpn.command.WaveCurvePlotCommand;
 import rpn.configuration.Configuration;
-import rpn.configuration.Parameter;
 
 /**
  * This class configures the initial visualization properties. Reading a XML
@@ -130,6 +129,7 @@ public class RPnInterfaceModule {
                 }
 
                 if (att.getValue("name").equals("derivativediscriminant")) {
+                    auxtoolBar_.add(DerivativeDiscriminantLevelCurvePlotCommand.instance());
                     auxtoolBar_.add(DerivativeDiscriminantLevelCurvePlotCommand.instance());
 
                 }

@@ -58,10 +58,7 @@ public class TextParameterView extends ParameterView {
 
     @Override
     public void changeView(Object obj) {
-        textField_.getDocument().removeDocumentListener(listener_);
-        textField_.setText((String) obj);
-        textField_.getDocument().addDocumentListener(listener_);
-
+   
     }
 
     

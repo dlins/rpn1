@@ -82,8 +82,7 @@ public class ChooseParameterView extends ParameterView {
 
     @Override
     public void changeView(Object obj) {
-        String newValue = (String )obj;
-        
+             
         if(flagMap_.containsKey(obj)){
             Enumeration<AbstractButton> elements = buttonGroup_.getElements();
             while (elements.hasMoreElements()) {

@@ -52,7 +52,7 @@ public class DerivativeDiscriminantLevelCurvePlotCommand extends RpModelPlotComm
     @Override
     public void execute() {
 
-        Double level = new Double(RPNUMERICS.getParamValue("levelcurve", "level"));
+        Double level = new Double(RPNUMERICS.getParamValue("derivativediscriminant", "u"));
         LevelCurveGeomFactory factory = new LevelCurveGeomFactory(RPNUMERICS.createDerivativeDiscriminantLevelCurveCalc());
         logLevelCurvePlotCommand(factory, level);
         UIController.instance().getActivePhaseSpace().plot(factory.geom());
@@ -63,7 +63,7 @@ public class DerivativeDiscriminantLevelCurvePlotCommand extends RpModelPlotComm
     @Override
     public void execute(int curveId) {
         
-        Double level = new Double(RPNUMERICS.getParamValue("levelcurve", "level"));
+        Double level = new Double(RPNUMERICS.getParamValue("derivativediscriminant", "u"));
         LevelCurveGeomFactory factory = new LevelCurveGeomFactory(RPNUMERICS.createLevelCurveCalc(level));
         RpGeometry geometry = factory.geom();
 

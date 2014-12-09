@@ -10,16 +10,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import rpn.configuration.Configuration;
 import rpn.configuration.Parameter;
-import rpn.configuration.ParameterLeaf;
 import rpnumerics.RPNUMERICS;
 
 public class ComboBoxCreator extends UIComponentCreator {
