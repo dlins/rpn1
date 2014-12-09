@@ -294,7 +294,7 @@ public class RPNUMERICS {
 
     public static ExtensionCurveCalc createExtensionCurveCalc(List<RealSegment> segments, CoordsArray[] areaSelected) {
 
-        int[] resolution = processResolution(RPNUMERICS.getParamValue("extensioncurve", "resolution"));
+        int[] resolution = processResolution(RPNUMERICS.getParamValue("bifurcationcurve", "resolution"));
         int family = new Integer(getParamValue("extensioncurve", "family"));
         int characteristic = new Integer(getParamValue("extensioncurve", "characteristic"));
         boolean singular = new Boolean(getParamValue("extensioncurve", "singular"));
@@ -337,7 +337,7 @@ public class RPNUMERICS {
 
     public static EnvelopeCurveCalc createEnvelopeCurveCalc() {
 
-        int[] resolution = processResolution(RPNUMERICS.getParamValue("extensioncurve", "resolution"));
+        int[] resolution = processResolution(RPNUMERICS.getParamValue("hugoniotcurve", "resolution"));
         int whereIsConstant = new Integer(getParamValue("envelopecurve", "edge"));
         int numberOfSteps = new Integer(getParamValue("envelopecurve", "numberofsteps"));
 
@@ -348,6 +348,9 @@ public class RPNUMERICS {
     public static EllipticBoundaryExtensionCalc createEllipticBoundaryExtensionCalc(Configuration configuration) {
 
         int[] resolution = processResolution(configuration.getParam("resolution"));
+        
+        
+        
 
         int curveFamily = new Integer(configuration.getParam("curvefamily"));
         int domainFamily = new Integer(configuration.getParam("domainfamily"));
@@ -427,7 +430,7 @@ public class RPNUMERICS {
 
     public static EllipticBoundaryCalc createEllipticBoundaryCalc() {
 
-        int[] resolution = processResolution(RPNUMERICS.getParamValue("ellipticboundary", "resolution"));
+        int[] resolution = processResolution(RPNUMERICS.getParamValue("bifurcationcurve", "resolution"));
 
         return new EllipticBoundaryCalc(new ContourParams(resolution));
 
@@ -435,11 +438,11 @@ public class RPNUMERICS {
 
     public static EllipticBoundaryExtensionCalc createEllipticExtensionCalc() {
 
-        int[] resolution = processResolution(RPNUMERICS.getParamValue("ellipticextension", "resolution"));
+        int[] resolution = processResolution(RPNUMERICS.getParamValue("bifurcationcurve", "resolution"));
 
-        int family = new Integer(getParamValue("ellipticextension", "family"));
+        int family = new Integer(getParamValue("ellipticboundaryextension", "family"));
 
-        int characteristicWhere = new Integer(getParamValue("ellipticextension", "characteristicwhere"));
+        int characteristicWhere = new Integer(getParamValue("ellipticboundaryextension", "characteristicwhere"));
 
         return new EllipticBoundaryExtensionCalc(new ContourParams(resolution), characteristicWhere, family);
 
@@ -470,9 +473,9 @@ public class RPNUMERICS {
 
         ContourParams params = new ContourParams(resolution);
 
-        String methodName = HugoniotCurveCalcND.HugoniotMethods.valueOf(getParamValue("secondarybifurcation", "method")).name();
+        String methodName = HugoniotCurveCalcND.HugoniotMethods.valueOf(getParamValue("secondarybifurcationcurve", "method")).name();
 
-        int edge = Integer.parseInt(getParamValue("secondarybifurcation", "edge"));
+        int edge = Integer.parseInt(getParamValue("secondarybifurcationcurve", "edge"));
 
         return new SecondaryBifurcationCurveCalc(params, methodName, edge);
 
@@ -507,7 +510,7 @@ public class RPNUMERICS {
 
     public static HysteresisCurveCalc createHysteresisCurveCalc() {
 
-        int[] resolution = processResolution(RPNUMERICS.getParamValue("hysteresiscurve", "resolution"));
+        int[] resolution = processResolution(RPNUMERICS.getParamValue("bifurcationcurve", "resolution"));
 
         ContourParams params = new ContourParams(resolution);
 
@@ -531,7 +534,7 @@ public class RPNUMERICS {
 
     public static BoundaryExtensionCurveCalc createBoundaryExtensionCurveCalc() {
 
-        int[] resolution = processResolution(RPNUMERICS.getParamValue("boundaryextensioncurve", "resolution"));
+        int[] resolution = processResolution(RPNUMERICS.getParamValue("bifurcationcurve", "resolution"));
 
         ContourParams params = new ContourParams(resolution);
 
@@ -621,7 +624,7 @@ public class RPNUMERICS {
 
     public static RarefactionExtensionCalc createRarefactionExtensionCalc(OrbitPoint orbitPoint) {
 
-        int[] resolution = processResolution(RPNUMERICS.getParamValue("rarefactionextension", "resolution"));
+        int[] resolution = processResolution(RPNUMERICS.getParamValue("bifurcationcurve", "resolution"));
 
         int curveFamily = new Integer(getParamValue("rarefactionextension", "curvefamily"));
 

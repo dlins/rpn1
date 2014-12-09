@@ -6,6 +6,7 @@
  */
 package rpn.ui;
 
+import java.awt.event.ActionListener;
 import javax.swing.JComponent;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
@@ -19,6 +20,7 @@ import rpn.configuration.Parameter;
 public class TextParameterView extends ParameterView {
 
     private JFormattedTextField textField_;
+    private DocumentListener listener_;
 
     public TextParameterView(Parameter parameter) {
         super(parameter);
@@ -28,8 +30,10 @@ public class TextParameterView extends ParameterView {
         textField_.setText(parameter.getValue());
 
         textField_.setColumns(8);
+        
+        listener_= new TextValueHandler();
 
-        textField_.getDocument().addDocumentListener(new TextValueHandler());
+        textField_.getDocument().addDocumentListener(listener_);
 
 
     }
@@ -50,6 +54,11 @@ public class TextParameterView extends ParameterView {
          panel_.add(new JLabel(getParameter().getName()));
          
          
+    }
+
+    @Override
+    public void changeView(Object obj) {
+   
     }
 
     

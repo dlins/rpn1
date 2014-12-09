@@ -25,7 +25,7 @@ public class WaveCurveRRegionsPlotCommand extends RpModelPlotCommand {
 
     public WaveCurveRRegionsPlotCommand() {
 
-        super(DESC_TEXT, rpn.configuration.RPnConfig.ORBIT_FWD, new JButton());
+        super(DESC_TEXT, null, new JButton());
     }
 
     @Override

@@ -30,8 +30,8 @@ public class CoincidenceExtensionCurvePlotAgent extends BifurcationPlotCommand {
     // Constructors/Initializers
     //
     protected CoincidenceExtensionCurvePlotAgent() {
-//        super(DESC_TEXT, rpn.RPnConfig.HUGONIOT, new JToggleButton());
-        super(DESC_TEXT, rpn.configuration.RPnConfig.HUGONIOT, new JButton(DESC_TEXT));
+
+        super(DESC_TEXT,null, new JButton(DESC_TEXT));
     }
 
     @Override

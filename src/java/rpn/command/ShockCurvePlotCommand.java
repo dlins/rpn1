@@ -13,7 +13,6 @@ import rpnumerics.PhysicalBoundary;
 import wave.util.RealVector;
 import rpnumerics.RPNUMERICS;
 import rpnumerics.RPnCurve;
-import rpnumerics.ShockCurveCalc;
 
 public class ShockCurvePlotCommand extends RpModelPlotCommand {
     //
@@ -30,7 +29,7 @@ public class ShockCurvePlotCommand extends RpModelPlotCommand {
     // Constructors/Initializers
     //
     protected ShockCurvePlotCommand() {
-        super(DESC_TEXT, rpn.configuration.RPnConfig.ORBIT_FWD, new JToggleButton());
+        super(DESC_TEXT, null,new JToggleButton());
     }
 
     public RpGeometry createRpGeometry(RealVector[] input) {

@@ -49,15 +49,16 @@
             </CURVECONFIGURATION>
 
    
+            <CURVECONFIGURATION name="coincidencecurve">
 
-            <CURVECONFIGURATION name="ellipticboundary">
-                <CURVEPARAM name="resolution" value="128 128"/>
+                <CURVEPARAM name="family" value="0"/>
+
             </CURVECONFIGURATION>
+       
             
-            
-            <CURVECONFIGURATION name="eigen sort method">
+           <!-- <CURVECONFIGURATION name="eigen sort method">
                 <CURVEPARAM name="sort by" value="Using families"/>
-            </CURVECONFIGURATION>
+            </CURVECONFIGURATION> -->
             
             
           
@@ -76,10 +77,7 @@
             </CURVECONFIGURATION>
             
 
-            <CURVECONFIGURATION name="ellipticextension">
-                <CURVEPARAM name="family" value="0"/>
-                <CURVEPARAM name="characteristicwhere" value="0"/>
-            </CURVECONFIGURATION>
+          
 
             <CURVECONFIGURATION name="inflectioncurve">
                 <CURVEPARAM name="family" value="0"/>
@@ -93,13 +91,10 @@
             </CURVECONFIGURATION>
             
             
-            
-               
-            <CURVECONFIGURATION name="derivativediscriminant">
-                <CURVEPARAM name="u" value="0"/>
+                  
+            <CURVECONFIGURATION name="physicalboundary">
             </CURVECONFIGURATION>
-            
-
+          
 
             <CURVECONFIGURATION name="hysteresiscurve">
                 <CURVEPARAM name="family" value="0"/>
@@ -138,7 +133,7 @@
                 <CURVEPARAM name="resolution" value="128 128"/>
                 <CURVEPARAM name="singular" value="true"/>
                 <CURVEPARAM name="characteristic" value="0"/>
-                <!--                <CURVEPARAM name="domain" value="1"/>-->
+         
 
             </CURVECONFIGURATION>
   

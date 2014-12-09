@@ -39,10 +39,13 @@
                 <CURVEPARAM name="level" value="0.5"/>
             </CURVECONFIGURATION>
 
-   
+             <CURVECONFIGURATION name="envelopecurve">
+                <CURVEPARAM name="whereisconstant" value="0"/>
+                <CURVEPARAM name="numberofsteps" value="128"/>
+                <CURVEPARAM name="edge" value="0"/>
+            </CURVECONFIGURATION>
 
             <CURVECONFIGURATION name="ellipticboundary">
-                <CURVEPARAM name="resolution" value="128 128"/>
             </CURVECONFIGURATION>
             
             
@@ -79,14 +82,26 @@
             </CURVECONFIGURATION>
             
             <CURVECONFIGURATION name="envelopecurve">
-                <CURVEPARAM name="resolution" value="128 128"/>
                 <CURVEPARAM name="whereisconstant" value="0"/>
                 <CURVEPARAM name="numberofsteps" value="128"/>
                 <CURVEPARAM name="edge" value="0"/>
-            </CURVECONFIGURATION>
+            </CURVECONFIGURATION> 
+            
+            
+            
+        <CURVECONFIGURATION name="secondarybifurcationcurve">
+            <CURVEPARAM name="edge" value="0"/>
+            <CURVEPARAM name="numberofsteps" value="128"/>
+            <CURVEPARAM name="method" value="IMPLICIT"/>
+        </CURVECONFIGURATION>
             
                
             <CURVECONFIGURATION name="derivativediscriminant">
+                <CURVEPARAM name="u" value="0"/>
+            </CURVECONFIGURATION>
+            
+            
+             <CURVECONFIGURATION name="discriminantlevelcurve">
                 <CURVEPARAM name="u" value="0"/>
             </CURVECONFIGURATION>
             
@@ -94,15 +109,8 @@
 
             <CURVECONFIGURATION name="hysteresiscurve">
                 <CURVEPARAM name="family" value="0"/>
-                <CURVEPARAM name="resolution" value="128 128"/>
             </CURVECONFIGURATION>
-    
-    
-            <CURVECONFIGURATION name="secondarybifurcation">
-                <CURVEPARAM name="edge" value="0"/>
-                <CURVEPARAM name="numberofsteps" value="128"/>
-                <CURVEPARAM name="method" value="IMPLICIT"/>
-            </CURVECONFIGURATION>
+                
     
 
             <CURVECONFIGURATION name="boundaryextensioncurve">
@@ -110,14 +118,12 @@
                 <CURVEPARAM name="family" value="1"/>
                 <CURVEPARAM name="edge" value="0"/>
                 <CURVEPARAM name="edgeres" value="128"/>
-                <CURVEPARAM name="resolution" value="128 128"/>
                 <CURVEPARAM name="characteristicwhere" value="1"/>
 
             </CURVECONFIGURATION>
     
             <CURVECONFIGURATION name="rarefactionextension">
                 <CURVEPARAM name="curvefamily" value="0"/>
-                <CURVEPARAM name="resolution" value="128 128"/>
                 <CURVEPARAM name="extensionfamily" value="1"/>
                 <CURVEPARAM name="characteristic" value="1"/>
                 <CURVEPARAM name="direction" value="10"/>
@@ -129,9 +135,14 @@
                 <CURVEPARAM name="resolution" value="128 128"/>
                 <CURVEPARAM name="singular" value="true"/>
                 <CURVEPARAM name="characteristic" value="0"/>
-                <!--                <CURVEPARAM name="domain" value="1"/>-->
+              
 
             </CURVECONFIGURATION>
+            
+            
+             <CURVECONFIGURATION name="physicalboundary">
+            </CURVECONFIGURATION>
+
   
             <VIEWCONFIGURATION modeldomain="2">
 

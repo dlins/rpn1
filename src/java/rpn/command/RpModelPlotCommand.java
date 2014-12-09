@@ -27,10 +27,9 @@ import rpn.component.RpGeomFactory;
 import rpn.controller.ui.*;
 import rpnumerics.RPnCurve;
 import rpn.message.RPnNetworkStatus;
-import rpnumerics.TransitionalLine;
 import rpnumerics.WaveCurve;
 
-public abstract class RpModelPlotCommand extends RpModelActionCommand implements Observer {
+public abstract class RpModelPlotCommand extends RpModelActionCommand implements Observer,Comparable<RpModelPlotCommand> {
 
     protected AbstractButton button_;
     public static int curveID_;
@@ -219,5 +218,10 @@ public abstract class RpModelPlotCommand extends RpModelActionCommand implements
 
         }
 
+    }
+
+    @Override
+    public int compareTo(RpModelPlotCommand o) {
+        return (o.getContainer().getText().compareTo(this.getContainer().getText()));
     }
 }

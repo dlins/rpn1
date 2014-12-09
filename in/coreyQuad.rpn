@@ -71,13 +71,13 @@
                 <CURVEPARAM name="transitionalline" value="None"/>
             </CURVECONFIGURATION>
 
-             <CURVECONFIGURATION name="secondarybifurcation">
-                <CURVEPARAM name="edge" value="0"/>
+           
+          
+             <CURVECONFIGURATION name="envelopecurve">
+                <CURVEPARAM name="whereisconstant" value="0"/>
                 <CURVEPARAM name="numberofsteps" value="128"/>
-                <CURVEPARAM name="method" value="IMPLICIT"/>
+                <CURVEPARAM name="edge" value="10"/>
             </CURVECONFIGURATION>
-    
-            
             
             <CURVECONFIGURATION name="bifurcationcurve">
 
@@ -90,15 +90,10 @@
                 <CURVEPARAM name="resolution" value="128 128"/>
             </CURVECONFIGURATION>
 
-
-            <CURVECONFIGURATION name="envelopecurve">
-                <CURVEPARAM name="resolution" value="128 128"/>
-                <CURVEPARAM name="whereisconstant" value="0"/>
-                <CURVEPARAM name="numberofsteps" value="128"/>
-            </CURVECONFIGURATION>
+        
 
 
-            <CURVECONFIGURATION name="ellipticextension">
+            <CURVECONFIGURATION name="ellipticboundaryextension">
                 <CURVEPARAM name="resolution" value="128 128"/>
                 <CURVEPARAM name="family" value="0"/>
                 <CURVEPARAM name="characteristicwhere" value="0"/>
@@ -120,21 +115,31 @@
             </CURVECONFIGURATION>
 
 
+      
+            <CURVECONFIGURATION name="physicalboundary">
+            </CURVECONFIGURATION>
+
        
             
             
             <CURVECONFIGURATION name="levelcurve">
                 <CURVEPARAM name="family" value="0"/>
                 <CURVEPARAM name="level" value="0.1"/>
-
             </CURVECONFIGURATION>
-
-            
+          
             
               
+           
             <CURVECONFIGURATION name="derivativediscriminant">
                 <CURVEPARAM name="u" value="0"/>
             </CURVECONFIGURATION>
+            
+            
+            <CURVECONFIGURATION name="discriminantlevelcurve">
+                <CURVEPARAM name="u" value="0"/>
+            </CURVECONFIGURATION>
+            
+                                     
             
 
 
@@ -147,8 +152,8 @@
             
             
             
-            <CURVECONFIGURATION name="secondarybifurcation">
-                <CURVEPARAM name="edge" value="0"/>
+            <CURVECONFIGURATION name="secondarybifurcationcurve">
+                <CURVEPARAM name="edge" value="10"/>
                 <CURVEPARAM name="numberofsteps" value="128"/>
                 <CURVEPARAM name="method" value="IMPLICIT"/>
             </CURVECONFIGURATION>
@@ -183,7 +188,7 @@
        
 
             <CURVECONFIGURATION name="fundamentalcurve">
-                <CURVEPARAM name="direction" value="10"/>
+                <CURVEPARAM name="direction" value="11"/>
                 <CURVEPARAM name="family" value="0"/>
                 <CURVEPARAM name="level" value="0.5"/>
             </CURVECONFIGURATION>

@@ -39,24 +39,20 @@
                 <CURVEPARAM name="edge" value="0"/>
                 <CURVEPARAM name="origin" value="13"/>
                 <CURVEPARAM name="curve" value="0"/>
-                 <CURVEPARAM name="direction" value="10"/>
+                <CURVEPARAM name="direction" value="10"/>
                 <CURVEPARAM name="family" value="0"/>
                 
             </CURVECONFIGURATION>
             
             
             
-              <CURVECONFIGURATION name="riemannprofile">
+            <CURVECONFIGURATION name="riemannprofile">
                 <CURVEPARAM name="speedrange" value="0 1.0"/>
                 <CURVEPARAM name="Yrange" value="0 1.0"/>
                 
             </CURVECONFIGURATION>
 
-                     
-            <CURVECONFIGURATION name="derivativediscriminant">
-                <CURVEPARAM name="u" value="0"/>
-            </CURVECONFIGURATION>
-            
+             
 
             <CURVECONFIGURATION name="bifurcationcurve">
 
@@ -64,7 +60,7 @@
             </CURVECONFIGURATION>
 
             
-             <CURVECONFIGURATION name="hugoniotcurve">
+            <CURVECONFIGURATION name="hugoniotcurve">
                 <CURVEPARAM name="resolution" value="120 120"/>
                 <CURVEPARAM name="method" value="IMPLICIT"/>
                 <CURVEPARAM name="case" value="0"/>
@@ -87,6 +83,22 @@
                 <CURVEPARAM name="family" value="0"/>
                 <CURVEPARAM name="resolution" value="128 128"/>
             </CURVECONFIGURATION>
+          
+
+            <CURVECONFIGURATION name="coincidencecurve">
+            </CURVECONFIGURATION>
+       
+            
+            
+            
+            <CURVECONFIGURATION name="subinflectioncurve">
+            </CURVECONFIGURATION>
+            
+            
+            <CURVECONFIGURATION name="buckleylevertcurve">
+            </CURVECONFIGURATION>
+
+            
     
 
             <CURVECONFIGURATION name="inflectioncurve">
@@ -97,9 +109,9 @@
 
       
             
-            <CURVECONFIGURATION name="eigen sort method">
+            <!--  <CURVECONFIGURATION name="eigen sort method">
                 <CURVEPARAM name="sort by" value="Using families"/>
-            </CURVECONFIGURATION>
+            </CURVECONFIGURATION> -->
             
 
 

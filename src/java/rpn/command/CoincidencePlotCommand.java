@@ -30,7 +30,7 @@ public class CoincidencePlotCommand extends BifurcationPlotCommand {
     // Constructors/Initializers
     //
     protected CoincidencePlotCommand() {
-        super(DESC_TEXT, rpn.configuration.RPnConfig.HUGONIOT,new JButton(DESC_TEXT));
+        super(DESC_TEXT, null,new JButton(DESC_TEXT));
     }
 
 

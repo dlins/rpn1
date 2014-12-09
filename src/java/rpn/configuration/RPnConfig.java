@@ -17,6 +17,7 @@ import javax.swing.ImageIcon;
 import rpn.RPnFluxParamsObserver;
 import rpn.RPnFluxParamsSubject;
 import rpn.RPnPhaseSpaceAbstraction;
+import rpn.command.TransitionalLinePlotCommand;
 import rpn.controller.phasespace.NumConfigImpl;
 
 import rpn.parser.RPnDataModule;
@@ -292,6 +293,8 @@ public class RPnConfig {
             }
 
             RPNUMERICS.setConfiguration(configuration.getName(), configuration);
+            
+
 
           
 

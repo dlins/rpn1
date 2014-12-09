@@ -43,7 +43,7 @@
             </METHOD>
             
             
-             <CURVECONFIGURATION name="hugoniotcurve">
+            <CURVECONFIGURATION name="hugoniotcurve">
                 <CURVEPARAM name="resolution" value="120 120"/>
                 <CURVEPARAM name="method" value="Generic Implicit Hugoniot Curve"/>
                 <CURVEPARAM name="case" value="Generic point"/>
@@ -69,133 +69,134 @@
                 <CURVEPARAM name="family" value="0"/>
                 <CURVEPARAM name="level" value="0.5"/>
             </CURVECONFIGURATION>
-
-   
+            
+             <CURVECONFIGURATION name="envelopecurve">
+                <CURVEPARAM name="whereisconstant" value="0"/>
+                <CURVEPARAM name="numberofsteps" value="128"/>
+                <CURVEPARAM name="edge" value="0"/>
+            </CURVECONFIGURATION>
+            
 
             <CURVECONFIGURATION name="ellipticboundary">
                 <CURVEPARAM name="resolution" value="128 128"/>
             </CURVECONFIGURATION>
             
             
-            
-          
-            <CURVECONFIGURATION name="riemannprofile">
-                <CURVEPARAM name="speedrange" value="0 3"/>
-                <CURVEPARAM name="Yrange" value="0 1.0"/>
-                
-            </CURVECONFIGURATION>
-            
-            
-            
-            
-                 <CURVECONFIGURATION name="wavecurve">
-                <CURVEPARAM name="origin" value="Generic point"/>
-                <CURVEPARAM name="direction" value="10"/>
-                <CURVEPARAM name="family" value="0"/>
-                <CURVEPARAM name="transitionalline" value="None"/>
-            </CURVECONFIGURATION>
-                  
-<!--            
-            <CURVECONFIGURATION name="eigen sort method">
-                <CURVEPARAM name="sort by" value="Using families"/>
-            </CURVECONFIGURATION>
-            -->
-
-
-<!--            <CURVECONFIGURATION name="wavecurve">
-                <CURVEPARAM name="edge" value="0"/>
-                <CURVEPARAM name="origin" value="13"/>
-                <CURVEPARAM name="curve" value="0"/>
-                <CURVEPARAM name="direction" value="10"/>
-                <CURVEPARAM name="family" value="0"/>
-                
-            </CURVECONFIGURATION>-->
-
-
-            <CURVECONFIGURATION name="ellipticextension">
+            <CURVECONFIGURATION name="ellipticboundaryextension">
                 <CURVEPARAM name="family" value="0"/>
                 <CURVEPARAM name="characteristicwhere" value="0"/>
-            </CURVECONFIGURATION>
-
-            <CURVECONFIGURATION name="inflectioncurve">
-                <CURVEPARAM name="family" value="0"/>
-            </CURVECONFIGURATION>
-    
-
-            <CURVECONFIGURATION name="levelcurve">
-                <CURVEPARAM name="family" value="0"/>
-                <CURVEPARAM name="level" value="0.1"/>
-
-            </CURVECONFIGURATION>
-            
-            <CURVECONFIGURATION name="envelopecurve">
                 <CURVEPARAM name="resolution" value="128 128"/>
-                <CURVEPARAM name="whereisconstant" value="0"/>
-                <CURVEPARAM name="numberofsteps" value="128"/>
-                <CURVEPARAM name="edge" value="0"/>
+                
             </CURVECONFIGURATION>
-            
-               
             <CURVECONFIGURATION name="derivativediscriminant">
                 <CURVEPARAM name="u" value="0"/>
             </CURVECONFIGURATION>
+
+            <CURVECONFIGURATION name="discriminantlevelcurve">
+            <CURVEPARAM name="u" value="0"/>
+        </CURVECONFIGURATION>
             
+          
+        <CURVECONFIGURATION name="riemannprofile">
+            <CURVEPARAM name="speedrange" value="0 3"/>
+            <CURVEPARAM name="Yrange" value="0 1.0"/>
+                
+        </CURVECONFIGURATION>
+            
+            
+            
+            
+        <CURVECONFIGURATION name="wavecurve">
+            <CURVEPARAM name="origin" value="Generic point"/>
+            <CURVEPARAM name="direction" value="10"/>
+            <CURVEPARAM name="family" value="0"/>
+            <CURVEPARAM name="transitionalline" value="None"/>
+        </CURVECONFIGURATION>
+                  
+        <!--            
+        <CURVECONFIGURATION name="eigen sort method">
+            <CURVEPARAM name="sort by" value="Using families"/>
+        </CURVECONFIGURATION>
+        -->
+
+       
+
+        <CURVECONFIGURATION name="inflectioncurve">
+            <CURVEPARAM name="family" value="0"/>
+        </CURVECONFIGURATION>
+    
+
+        <CURVECONFIGURATION name="levelcurve">
+            <CURVEPARAM name="family" value="0"/>
+            <CURVEPARAM name="level" value="0.1"/>
+
+        </CURVECONFIGURATION>
+            
+        <CURVECONFIGURATION name="envelopecurve">
+            <CURVEPARAM name="resolution" value="128 128"/>
+            <CURVEPARAM name="whereisconstant" value="0"/>
+            <CURVEPARAM name="numberofsteps" value="128"/>
+            <CURVEPARAM name="edge" value="0"/>
+        </CURVECONFIGURATION>
+            
+               
+      
 
 
-            <CURVECONFIGURATION name="hysteresiscurve">
-                <CURVEPARAM name="family" value="0"/>
-                <CURVEPARAM name="resolution" value="128 128"/>
-            </CURVECONFIGURATION>
+        <CURVECONFIGURATION name="hysteresiscurve">
+            <CURVEPARAM name="family" value="0"/>
+            <CURVEPARAM name="resolution" value="128 128"/>
+        </CURVECONFIGURATION>
     
     
-            <CURVECONFIGURATION name="secondarybifurcation">
-                <CURVEPARAM name="edge" value="0"/>
-                <CURVEPARAM name="numberofsteps" value="128"/>
-                <CURVEPARAM name="method" value="IMPLICIT"/>
-            </CURVECONFIGURATION>
+        <CURVECONFIGURATION name="secondarybifurcation">
+            <CURVEPARAM name="edge" value="0"/>
+            <CURVEPARAM name="numberofsteps" value="128"/>
+            <CURVEPARAM name="method" value="IMPLICIT"/>
+        </CURVECONFIGURATION>
     
 
-            <CURVECONFIGURATION name="boundaryextensioncurve">
+        <CURVECONFIGURATION name="boundaryextensioncurve">
 
-                <CURVEPARAM name="family" value="1"/>
-                <CURVEPARAM name="edge" value="0"/>
-                <CURVEPARAM name="edgeres" value="128"/>
-                <CURVEPARAM name="resolution" value="128 128"/>
-                <CURVEPARAM name="characteristicwhere" value="1"/>
+            <CURVEPARAM name="family" value="1"/>
+            <CURVEPARAM name="edge" value="0"/>
+            <CURVEPARAM name="edgeres" value="128"/>
+            <CURVEPARAM name="resolution" value="128 128"/>
+            <CURVEPARAM name="characteristicwhere" value="1"/>
 
-            </CURVECONFIGURATION>
+        </CURVECONFIGURATION>
     
-            <CURVECONFIGURATION name="rarefactionextension">
-                <CURVEPARAM name="curvefamily" value="0"/>
-                <CURVEPARAM name="resolution" value="128 128"/>
-                <CURVEPARAM name="extensionfamily" value="1"/>
-                <CURVEPARAM name="characteristic" value="1"/>
-                <CURVEPARAM name="direction" value="10"/>
+        <CURVECONFIGURATION name="rarefactionextension">
+            <CURVEPARAM name="curvefamily" value="0"/>
+            <CURVEPARAM name="resolution" value="128 128"/>
+            <CURVEPARAM name="extensionfamily" value="1"/>
+            <CURVEPARAM name="characteristic" value="1"/>
+            <CURVEPARAM name="direction" value="10"/>
         
-            </CURVECONFIGURATION>
+        </CURVECONFIGURATION>
         
-            <CURVECONFIGURATION name="extensioncurve">
-                <CURVEPARAM name="family" value="0"/>
-                <CURVEPARAM name="resolution" value="128 128"/>
-                <CURVEPARAM name="singular" value="true"/>
-                <CURVEPARAM name="characteristic" value="0"/>
-                <!--                <CURVEPARAM name="domain" value="1"/>-->
+        <CURVECONFIGURATION name="extensioncurve">
+            <CURVEPARAM name="family" value="0"/>
+            <CURVEPARAM name="resolution" value="128 128"/>
+            <CURVEPARAM name="singular" value="true"/>
+            <CURVEPARAM name="characteristic" value="0"/>
+            <!--                <CURVEPARAM name="domain" value="1"/>-->
 
-            </CURVECONFIGURATION>
+        </CURVECONFIGURATION>
   
-            <VIEWCONFIGURATION modeldomain="2">
+        <VIEWCONFIGURATION modeldomain="2">
 
 
-                <PROJDESC name="Axis0 Axis1">
-                    <VIEWPARAM name="axis" value="0 1"/>
-                    <VIEWPARAM name="vpwidth" value="700"/>
-                    <VIEWPARAM name="vpheight" value="700"/>
-                    <VIEWPARAM name="iso2equi" value="true"/>
-                </PROJDESC>
+            <PROJDESC name="Axis0 Axis1">
+                <VIEWPARAM name="axis" value="0 1"/>
+                <VIEWPARAM name="vpwidth" value="700"/>
+                <VIEWPARAM name="vpheight" value="700"/>
+                <VIEWPARAM name="iso2equi" value="true"/>
+            </PROJDESC>
 
-            </VIEWCONFIGURATION>
+        </VIEWCONFIGURATION>
 
-        </RPNCONFIGURATION>
+    </RPNCONFIGURATION>
     </PHASESPACE>
 </RPNSESSION>
 

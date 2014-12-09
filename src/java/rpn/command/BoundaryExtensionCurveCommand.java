@@ -28,7 +28,7 @@ public class BoundaryExtensionCurveCommand extends BifurcationPlotCommand {
     // Constructors/Initializers
     //
     protected BoundaryExtensionCurveCommand() {
-        super(DESC_TEXT, rpn.configuration.RPnConfig.HUGONIOT, new JButton(DESC_TEXT));
+        super(DESC_TEXT, null, new JButton(DESC_TEXT));
     }
 
     @Override

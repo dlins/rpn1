@@ -33,7 +33,7 @@ public class BifurcationPlotCommand extends RpModelPlotCommand {
     //
 
     protected BifurcationPlotCommand() {
-        super(DESC_TEXT, rpn.configuration.RPnConfig.HUGONIOT, new JButton());
+        super(DESC_TEXT, null, new JButton());
     }
 
     protected BifurcationPlotCommand(String shortDesc, ImageIcon icon, AbstractButton button) {

@@ -21,7 +21,7 @@ public class WaveCurvePlotCommand extends RpModelPlotCommand {
 
     public WaveCurvePlotCommand() {
 
-        super(DESC_TEXT, rpn.configuration.RPnConfig.ORBIT_FWD, new JToggleButton());
+        super(DESC_TEXT, null, new JToggleButton());
     }
 
     @Override

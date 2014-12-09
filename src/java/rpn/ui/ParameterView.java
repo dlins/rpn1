@@ -26,6 +26,8 @@ public abstract class ParameterView extends Observable {
 
     public abstract JComponent getComponent();
     
+    public abstract void changeView(Object obj);
+    
     protected abstract void decorate(JComponent component);
 
     public Parameter getParameter() {

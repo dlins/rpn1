@@ -1062,6 +1062,12 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_initNative(JNIEnv * env, jclas
         RpNumerics::physicsVector_->push_back(new FoamSubPhysics());
 
     }
+    
+     if (physicsStringName.compare("Sorbie") == 0) {
+        RpNumerics::physicsVector_->push_back(new SorbieSubPhysics());
+
+    }
+
 
 
 

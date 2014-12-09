@@ -38,7 +38,7 @@ public class InvariantPlotCommand extends RpModelPlotCommand {
     // Constructors/Initializers
     //
     protected InvariantPlotCommand() {
-        super(DESC_TEXT, rpn.configuration.RPnConfig.ORBIT_FWD, new JButton());
+        super(DESC_TEXT,null, new JButton());
     }
 
     @Override

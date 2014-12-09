@@ -40,7 +40,7 @@ public class WaveCurveSpeedPlotCommand extends RpModelPlotCommand implements Obs
     // Constructors/Initializers
     //
     protected WaveCurveSpeedPlotCommand() {
-        super(DESC_TEXT, rpn.configuration.RPnConfig.HUGONIOT, new JButton());
+        super(DESC_TEXT, null, new JButton());
 
     }
 
@@ -67,10 +67,13 @@ public class WaveCurveSpeedPlotCommand extends RpModelPlotCommand implements Obs
 
     @Override
     public void update(Observable o, Object arg) {
+        
+        if (UIController.instance().getSelectedGeometriesList().size() == 1){
+            boolean enable = ( UIController.instance().getSelectedGeometriesList().get(0) instanceof WaveCurveGeom);
+            setEnabled(enable);
+        }
 
-        boolean enable = UIController.instance().getSelectedGeometriesList().size() == 1;
 
-        setEnabled(enable);
 
     }
 

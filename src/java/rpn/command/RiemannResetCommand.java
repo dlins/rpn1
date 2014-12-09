@@ -35,7 +35,7 @@ public class RiemannResetCommand extends RpModelPlotCommand  {
     // Constructors/Initializers
     //
     protected RiemannResetCommand() {
-        super(DESC_TEXT, rpn.configuration.RPnConfig.HUGONIOT, new JButton());
+        super(DESC_TEXT, null, new JButton());
     }
 
   

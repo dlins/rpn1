@@ -43,7 +43,7 @@ public class RiemannProfileCommand extends RpModelPlotCommand implements RPnMenu
     // Constructors/Initializers
     //
     protected RiemannProfileCommand() {
-        super(DESC_TEXT, rpn.configuration.RPnConfig.HUGONIOT, new JButton());
+        super(DESC_TEXT, null, new JButton());
         state_ = new RiemannProfileWaitState();
     }
 

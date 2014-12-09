@@ -34,6 +34,7 @@ using namespace std;
 
 JNIEXPORT jobject JNICALL Java_rpnumerics_DiscriminantPointLevelCalc_calcNative(JNIEnv * env, jobject obj, jobject initialPoint) {
 
+    
 
     jclass realVectorClass = env->FindClass(REALVECTOR_LOCATION);
 
@@ -71,15 +72,10 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_DiscriminantPointLevelCalc_calcNative(
         realVectorInput.component(i) = input[i];
 
     }
+    
+  
 
-    string id = RpNumerics::physicsVector_->at(0)->info_subphysics();
-
-    if (id.compare("TPCW") == 0 || id.compare("Quad2")) {
-        return NULL;
-
-    }
-
-
+    
     const FluxFunction * flux = RpNumerics::physicsVector_->at(0)->flux();
     const AccumulationFunction * accum = RpNumerics::physicsVector_->at(0)->accumulation();
     GridValues * gv = RpNumerics::physicsVector_->at(0)->gridvalues();
@@ -104,7 +100,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_DiscriminantPointLevelCalc_calcNative(
 
     ec.discriminant_curve(flux, accum,
             *gv, realVectorInput, eigen_contours, vec_levels);
-
+    
+    
     if (eigen_contours.size() == 0)
         return NULL;
 
@@ -173,14 +170,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_DiscriminantLevelCurveCalc_calcNative(
 
     jobject segmentsArray = env->NewObject(arrayListClass, arrayListConstructor, NULL);
 
-    string id = RpNumerics::physicsVector_->at(0)->info_subphysics();
-
-
-    if (id.compare("TPCW") == 0 || id.compare("Quad2")) {
-        return NULL;
-
-    }
-
 
     int dimension = RpNumerics::physicsVector_->at(0)->boundary()->minimums().size();
 
@@ -197,7 +186,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_DiscriminantLevelCurveCalc_calcNative(
 
     ec.discriminant_curve(flux, accum,
             *gv, level, eigen_contours);
-
+    
     if (eigen_contours.size() == 0)
         return NULL;
 
@@ -267,12 +256,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_DerivativeDiscriminantLevelCurveCalc_c
 
     jobject segmentsArray = env->NewObject(arrayListClass, arrayListConstructor, NULL);
 
-
-    string id = RpNumerics::physicsVector_->at(0)->info_subphysics();
-
-    if (id.compare("TPCW") == 0 || id.compare("Quad2")) {
-        return NULL;
-    }
 
     CharacteristicPolynomialLevels ec;
 

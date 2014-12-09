@@ -28,7 +28,7 @@ public class DoubleContactCommand extends BifurcationPlotCommand {
     // Constructors/Initializers
     //
     protected DoubleContactCommand() {
-        super(DESC_TEXT, rpn.configuration.RPnConfig.HUGONIOT, new JButton());
+        super(DESC_TEXT, null, new JButton());
     }
 
     @Override
