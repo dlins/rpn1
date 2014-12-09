@@ -25,7 +25,7 @@ public class ForwardShockCurvePlotCommand extends RpModelPlotCommand {
     // Constructors/Initializers
     //
     protected ForwardShockCurvePlotCommand() {
-        super(DESC_TEXT, rpn.configuration.RPnConfig.HUGONIOT,new JToggleButton());
+        super(DESC_TEXT, null,new JToggleButton());
     }
 
     public RpGeometry createRpGeometry(RealVector[] input) {

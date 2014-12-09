@@ -10,7 +10,6 @@ import javax.swing.JButton;
 import rpn.component.*;
 import rpn.controller.ui.UIController;
 import rpn.controller.ui.UI_ACTION_SELECTED;
-import rpn.parser.RPnDataModule;
 import rpnumerics.*;
 import wave.util.RealVector;
 
@@ -29,7 +28,7 @@ public class InflectionPlotCommand extends BifurcationPlotCommand {
     // Constructors/Initializers
     //
     protected InflectionPlotCommand() {
-        super(DESC_TEXT, rpn.configuration.RPnConfig.HUGONIOT, new JButton(DESC_TEXT));
+        super(DESC_TEXT, null, new JButton(DESC_TEXT));
     }
 
     @Override

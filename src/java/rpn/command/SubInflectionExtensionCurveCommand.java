@@ -33,7 +33,7 @@ public class SubInflectionExtensionCurveCommand extends RpModelPlotCommand {
     // Constructors/Initializers
     //
     protected SubInflectionExtensionCurveCommand() {
-        super(DESC_TEXT, rpn.configuration.RPnConfig.HUGONIOT, new JButton(DESC_TEXT));
+        super(DESC_TEXT, null, new JButton(DESC_TEXT));
     }
 
     @Override

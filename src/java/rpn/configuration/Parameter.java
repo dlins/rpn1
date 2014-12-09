@@ -9,12 +9,13 @@ package rpn.configuration;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Observable;
 
 /**
  *
  * @author edsonlan
  */
-public abstract class Parameter {
+public abstract class Parameter extends Observable{
     
     private String name_;
     private String value_;
@@ -54,6 +55,8 @@ public abstract class Parameter {
 
     public void setValue(String value) {
         this.value_ = value;
+        setChanged();
+        notifyObservers();
     }
 
     public List<String> getOptions() {

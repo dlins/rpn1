@@ -20,7 +20,7 @@ public class RarefactionCurvePlotCommand extends RpModelPlotCommand {
 
     public RarefactionCurvePlotCommand() {
 
-        super(DESC_TEXT, rpn.configuration.RPnConfig.ORBIT_FWD,new JToggleButton());
+        super(DESC_TEXT, null,new JToggleButton());
     }
 
     public RpGeometry createRpGeometry(RealVector[] input) {

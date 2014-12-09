@@ -66,6 +66,14 @@ public class ComboParameterView extends ParameterView {
        
     }
 
+    @Override
+    public void changeView(Object obj) {
+       
+        comboBox_.setSelectedItem(obj);
+        
+        
+    }
+
     private class ComboEventHandler implements ActionListener{
 
         @Override

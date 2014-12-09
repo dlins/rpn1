@@ -8,9 +8,11 @@ package rpn.ui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
+import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
@@ -41,6 +43,7 @@ public class ChooseParameterView extends ParameterView {
         for (String option : options) {
 
             JRadioButton radionButton = new JRadioButton(option);
+            radionButton.setName(option);
             String value = flagMap_.get(Integer.parseInt(parameter.getValue()));
 
             if (value != null) {
@@ -75,6 +78,27 @@ public class ChooseParameterView extends ParameterView {
     @Override
     protected  void decorate(JComponent component) {
 
+    }
+
+    @Override
+    public void changeView(Object obj) {
+        String newValue = (String )obj;
+        
+        if(flagMap_.containsKey(obj)){
+            Enumeration<AbstractButton> elements = buttonGroup_.getElements();
+            while (elements.hasMoreElements()) {
+                AbstractButton abstractButton = elements.nextElement();
+                if(abstractButton.getName().equals(obj))
+                    abstractButton.setSelected(true);
+                
+                
+            }
+            
+        }
+        
+        
+        
+        
     }
 
     private class OrbitDirectionListener implements ActionListener {

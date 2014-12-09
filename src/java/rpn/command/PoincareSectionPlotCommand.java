@@ -34,7 +34,7 @@ public class PoincareSectionPlotCommand extends RpModelPlotCommand {
     // Constructors/Initializers
     //
     protected PoincareSectionPlotCommand() {
-        super(DESC_TEXT, RPnConfig.POINCARE,new JToggleButton());
+        super(DESC_TEXT,null,new JToggleButton());
     }
 
 

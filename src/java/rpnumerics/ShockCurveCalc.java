@@ -55,8 +55,8 @@ public class ShockCurveCalc extends WaveCurveOrbitCalc implements RpCalculation 
         
         PhasePoint initialPoint = getStart();
         
-        int family = Integer.parseInt(configuration_.getParam("family"));
-        int direction = Integer.parseInt(configuration_.getParam("direction"));
+        int family = Integer.parseInt(RPNUMERICS.getParamValue("fundamentalcurve","family"));
+        int direction = Integer.parseInt(RPNUMERICS.getParamValue("fundamentalcurve","direction"));
         
         
         

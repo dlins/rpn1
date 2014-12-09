@@ -70,12 +70,7 @@
                 <CURVEPARAM name="level" value="0.5"/>
             </CURVECONFIGURATION>
 
-   
-
-            <CURVECONFIGURATION name="ellipticboundary">
-                <CURVEPARAM name="resolution" value="128 128"/>
-            </CURVECONFIGURATION>
-            
+             
             
             
           
@@ -100,22 +95,17 @@
                 <CURVEPARAM name="sort by" value="Using families"/>
             </CURVECONFIGURATION>
             -->
-
-
-<!--            <CURVECONFIGURATION name="wavecurve">
+            
+             <CURVECONFIGURATION name="envelopecurve">
+                <CURVEPARAM name="whereisconstant" value="0"/>
+                <CURVEPARAM name="numberofsteps" value="128"/>
                 <CURVEPARAM name="edge" value="0"/>
-                <CURVEPARAM name="origin" value="13"/>
-                <CURVEPARAM name="curve" value="0"/>
-                <CURVEPARAM name="direction" value="10"/>
-                <CURVEPARAM name="family" value="0"/>
-                
-            </CURVECONFIGURATION>-->
-
-
-            <CURVECONFIGURATION name="ellipticextension">
-                <CURVEPARAM name="family" value="0"/>
-                <CURVEPARAM name="characteristicwhere" value="0"/>
             </CURVECONFIGURATION>
+                  
+            <CURVECONFIGURATION name="physicalboundary">
+            </CURVECONFIGURATION>
+
+
 
             <CURVECONFIGURATION name="inflectioncurve">
                 <CURVEPARAM name="family" value="0"/>
@@ -128,19 +118,14 @@
 
             </CURVECONFIGURATION>
             
-             <CURVECONFIGURATION name="envelopecurve">
+         <!--    <CURVECONFIGURATION name="envelopecurve">
                 <CURVEPARAM name="resolution" value="128 128"/>
                 <CURVEPARAM name="whereisconstant" value="0"/>
                 <CURVEPARAM name="numberofsteps" value="128"/>
                 <CURVEPARAM name="edge" value="0"/>
-            </CURVECONFIGURATION>
+            </CURVECONFIGURATION> -->
             
-               
-            <CURVECONFIGURATION name="derivativediscriminant">
-                <CURVEPARAM name="u" value="0"/>
-            </CURVECONFIGURATION>
-            
-
+        
 
             <CURVECONFIGURATION name="hysteresiscurve">
                 <CURVEPARAM name="family" value="0"/>
@@ -179,8 +164,7 @@
                 <CURVEPARAM name="resolution" value="128 128"/>
                 <CURVEPARAM name="singular" value="true"/>
                 <CURVEPARAM name="characteristic" value="0"/>
-                <!--                <CURVEPARAM name="domain" value="1"/>-->
-
+             
             </CURVECONFIGURATION>
   
             <VIEWCONFIGURATION modeldomain="2">

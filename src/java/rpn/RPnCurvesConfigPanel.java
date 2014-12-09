@@ -17,6 +17,8 @@ import java.util.Map.Entry;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import javax.swing.*;
 import rpn.command.ChangeDirectionCommand;
 import rpn.configuration.Configuration;
@@ -67,17 +69,21 @@ public class RPnCurvesConfigPanel extends Observable implements PropertyChangeLi
         
         HashMap<String, Configuration> configMap = RPNUMERICS.getConfigurations();
         curvesTabbedPanel_.setTabLayoutPolicy(JTabbedPane.WRAP_TAB_LAYOUT);
+
+
+        SortedSet <Configuration> configSorted = new TreeSet();
         
-        Set<Entry<String, Configuration>> configSet = configMap.entrySet();
+        configSorted.addAll(configMap.values());
         
-        for (Entry<String, Configuration> entry : configSet) {
+        for (Configuration configuration : configSorted) {
+
             
-            String configurationType = entry.getValue().getType();
+            String configurationType = configuration.getType();
             
             
             if (configurationType.equalsIgnoreCase(ConfigurationProfile.CURVECONFIGURATION)){
                 
-                Configuration config = entry.getValue();
+                Configuration config = configuration;
                 
                 JPanel paramsPanel = new JPanel();
                 

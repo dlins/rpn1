@@ -114,6 +114,7 @@ public class RPnDesktopPlotter implements RPnMenuCommand {
             rpnUIFrame_ = new RPnUIFrame(plotter);
 
             rpnUIFrame_.setMainToolBarButtons(RPnInterfaceModule.getMainToolSelectedButtons());
+            rpnUIFrame_.setAuxToolBarButtons(RPnInterfaceModule.getAuxToolSelectedButtons());
 
             rpnUIFrame_.pack();
 

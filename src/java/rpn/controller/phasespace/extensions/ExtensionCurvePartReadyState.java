@@ -1,13 +1,11 @@
 package rpn.controller.phasespace.extensions;
 
-import java.awt.Polygon;
 import java.util.ArrayList;
 import java.util.List;
 import rpn.command.GenericExtensionCurveCommand;
 import rpn.command.ImageSelectionCommand;
 import rpn.component.util.AreaSelected;
 import rpn.component.util.GraphicsUtil;
-import rpn.parser.RPnDataModule;
 import rpnumerics.ContourParams;
 import rpnumerics.ExtensionCurveCalc;
 import rpnumerics.RPNUMERICS;
@@ -24,9 +22,6 @@ public class ExtensionCurvePartReadyState extends ExtensionCurveReadyState {
         super(geom);
 
         area_ = area;
-        System.out.println("Em Extension Curve Part Ready");
-
-       
 
         GenericExtensionCurveCommand.instance().setEnabled(true);
         ImageSelectionCommand.instance().setEnabled(true);
@@ -43,7 +38,7 @@ public class ExtensionCurvePartReadyState extends ExtensionCurveReadyState {
     public ExtensionCurveCalc createCalc() throws RpException {
         int withImageSelection = 0;
         System.out.println("Chamando curve part ready");
-        int[] resolution_ = RPNUMERICS.processResolution(getParamValue("extensioncurve", "resolution"));
+        int[] resolution_ = RPNUMERICS.processResolution(getParamValue("bifurcationcurve", "resolution"));
         int family_ = new Integer(getParamValue("extensioncurve", "family"));
         int characteristic_ = new Integer(getParamValue("extensioncurve", "characteristic"));
         boolean singular_ = Boolean.valueOf(getParamValue("extensioncurve", "singular"));

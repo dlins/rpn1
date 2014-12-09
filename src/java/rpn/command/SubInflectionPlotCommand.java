@@ -40,7 +40,7 @@ public class SubInflectionPlotCommand extends BifurcationPlotCommand {
     }
 
     protected SubInflectionPlotCommand() {
-        super(DESC_TEXT, rpn.configuration.RPnConfig.HUGONIOT, new JButton(DESC_TEXT));
+        super(DESC_TEXT, null, new JButton(DESC_TEXT));
     }
 
     public RpGeometry createRpGeometry(RealVector[] input) {

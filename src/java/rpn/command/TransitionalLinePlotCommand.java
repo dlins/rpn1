@@ -6,8 +6,10 @@
 package rpn.command;
 
 import java.awt.event.ActionEvent;
+import java.util.Observable;
 import javax.swing.JButton;
 import rpn.component.*;
+import rpn.configuration.Parameter;
 import rpn.controller.ui.UIController;
 import rpn.controller.ui.UI_ACTION_SELECTED;
 import rpnumerics.RPNUMERICS;
@@ -29,7 +31,8 @@ public class TransitionalLinePlotCommand extends RpModelPlotCommand {
     // Constructors/Initializers
     //
     protected TransitionalLinePlotCommand() {
-        super(DESC_TEXT, rpn.configuration.RPnConfig.ORBIT_FWD, new JButton());
+        super(DESC_TEXT, null, new JButton());
+
     }
 
     public RpGeometry createRpGeometry(RealVector[] input) {
@@ -39,13 +42,11 @@ public class TransitionalLinePlotCommand extends RpModelPlotCommand {
         OrbitGeomFactory factory = new OrbitGeomFactory(calc);
         return factory.geom();
     }
-    
-    
-  @Override
+
+    @Override
     public void actionPerformed(ActionEvent event) {
 
         UI_ACTION_SELECTED action = new UI_ACTION_SELECTED(this);
-
 
         action.userInputComplete(UIController.instance());// No input needed
 
@@ -54,7 +55,27 @@ public class TransitionalLinePlotCommand extends RpModelPlotCommand {
     static public TransitionalLinePlotCommand instance() {
         if (instance_ == null) {
             instance_ = new TransitionalLinePlotCommand();
+
         }
         return instance_;
     }
+
+    @Override
+    public void update(Observable o, Object arg) {
+
+        rpn.configuration.Configuration config = RPNUMERICS.getConfiguration("transitionalline");
+
+        
+        Parameter parameter = config.getParameter("name");
+        
+        if (!parameter.getValue().equals("None")){
+            setEnabled(true);
+        }
+        else {
+            setEnabled(false);
+        }
+        
+
+    }
+
 }

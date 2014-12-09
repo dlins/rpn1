@@ -6,7 +6,6 @@
  */
 package rpn.ui;
 
-import java.awt.GridLayout;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -16,13 +15,12 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import rpn.configuration.Parameter;
-import rpn.configuration.ParameterLeaf;
 import rpn.configuration.RangedParameter;
-import rpnumerics.RPNUMERICS;
 
 public class RangedParameterView extends ParameterView {
 
     private JSpinner spinner_;
+    private ChangeListener listener_;
 
 
     public RangedParameterView(Parameter parameter) {
@@ -39,7 +37,9 @@ public class RangedParameterView extends ParameterView {
 
         ((DefaultEditor) spinner_.getEditor()).getTextField().setEditable(false);
 
-        spinner_.addChangeListener(new FamilyChangeHandler());
+        
+        listener_ = new FamilyChangeHandler();
+        spinner_.addChangeListener(listener_);
 
         spinner_.setValue(new Integer(parameter.getValue()));
 
@@ -64,6 +64,14 @@ public class RangedParameterView extends ParameterView {
         JPanel panel = (JPanel)component;
         panel.add(new JLabel(getParameter().getName()));
         
+    }
+
+    @Override
+    public void changeView(Object obj) {
+        spinner_.removeChangeListener(listener_);
+        spinner_.setValue(Integer.parseInt((String)obj));
+        spinner_.addChangeListener(listener_);
+     
     }
 
     private class FamilyChangeHandler implements ChangeListener {

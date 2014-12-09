@@ -30,7 +30,7 @@ using std::vector;
 using namespace std;
 
 JNIEXPORT jobject JNICALL Java_rpnumerics_PhysicalBoundaryCalc_calcNative
-  (JNIEnv * env, jobject obj){
+(JNIEnv * env, jobject obj) {
 
     jclass realVectorClass = env->FindClass(REALVECTOR_LOCATION);
 
@@ -51,69 +51,61 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_PhysicalBoundaryCalc_calcNative
 
     jmethodID physicalBoundaryConstructor = env->GetMethodID(physicalBoundaryClass, "<init>", "(Ljava/util/List;)V");
 
-
-
-    
     jobject segmentsArray = env->NewObject(arrayListClass, arrayListConstructor, NULL);
-    
-    
+
+
     int dimension = RpNumerics::physicsVector_->at(0)->boundary()->minimums().size();
 
     Boundary * physicsBoundary = (Boundary *) RpNumerics::physicsVector_->at(0)->boundary();
-   
+
     std::vector<vector<RealVector> > left_vrs;
-    
-    
-//    std::vector<RealVector> insideVector;
-//    
-//    left_vrs.push_back(insideVector);
-    
-    
+
 
     physicsBoundary->physical_boundary(left_vrs);
 
-    int tamanho = left_vrs.size();
+   
+   
+    if (left_vrs.size() == 0)
+        return NULL;
+
+    for (int i = 0; i < left_vrs.size(); i++) {
+
+        for (int j = 0; j < left_vrs[i].size()/2; j++) {
+            
+            
+             jdoubleArray eigenValRLeft = env->NewDoubleArray(dimension);
+             jdoubleArray eigenValRRight = env->NewDoubleArray(dimension);
 //
-////    if ( Debug::get_debug_level() == 5 ) {
-////        ////cout << "Tamanho do vetor de pontos: " << tamanho << endl;
-////    }
-//
-//    if (left_vrs.size()==0)
-//        return NULL;
-//
-//    for (int i = 0; i < left_vrs.size() / 2; i++) {
-//
-//        jdoubleArray eigenValRLeft = env->NewDoubleArray(dimension);
-//        jdoubleArray eigenValRRight = env->NewDoubleArray(dimension);
-//
-//        double * leftCoords = (double *) left_vrs[2 * i];
-//        double * rightCoords = (double *) left_vrs[2 * i + 1];
-//
-//
-//        env->SetDoubleArrayRegion(eigenValRLeft, 0, dimension, leftCoords);
-//        env->SetDoubleArrayRegion(eigenValRRight, 0, dimension, rightCoords);
-//
-//
-//        //Construindo left e right points
-//        jobject realVectorLeftPoint = env->NewObject(realVectorClass, realVectorConstructorDoubleArray, eigenValRLeft);
-//        jobject realVectorRightPoint = env->NewObject(realVectorClass, realVectorConstructorDoubleArray, eigenValRRight);
-//
-//
-//        jobject realSegment = env->NewObject(realSegmentClass, realSegmentConstructor, realVectorLeftPoint, realVectorRightPoint);
-//        env->CallObjectMethod(segmentsArray, arrayListAddMethod, realSegment);
-//    }
-//
-//
-//    jobject result = env->NewObject(physicalBoundaryClass, physicalBoundaryConstructor, segmentsArray);
-//
-//    // Limpando
-//
-//    env->DeleteLocalRef(realSegmentClass);
-//    env->DeleteLocalRef(realVectorClass);
-//    env->DeleteLocalRef(arrayListClass);
+            
+            double * leftCoords = (double *) left_vrs[i].at(2 * j);
+            double * rightCoords = (double *) left_vrs[i].at(2 * j + 1);
 
 
-//    return result;
+            env->SetDoubleArrayRegion(eigenValRLeft, 0, dimension, leftCoords);
+            env->SetDoubleArrayRegion(eigenValRRight, 0, dimension, rightCoords);
+
+
+            //Construindo left e right points
+            jobject realVectorLeftPoint = env->NewObject(realVectorClass, realVectorConstructorDoubleArray, eigenValRLeft);
+            jobject realVectorRightPoint = env->NewObject(realVectorClass, realVectorConstructorDoubleArray, eigenValRRight);
+
+
+            jobject realSegment = env->NewObject(realSegmentClass, realSegmentConstructor, realVectorLeftPoint, realVectorRightPoint);
+            env->CallObjectMethod(segmentsArray, arrayListAddMethod, realSegment);
+        }
+    }
+
+
+    jobject result = env->NewObject(physicalBoundaryClass, physicalBoundaryConstructor, segmentsArray);
+
+    // Limpando
+
+    env->DeleteLocalRef(realSegmentClass);
+    env->DeleteLocalRef(realVectorClass);
+    env->DeleteLocalRef(arrayListClass);
+
+
+    return result;
 
 
 }

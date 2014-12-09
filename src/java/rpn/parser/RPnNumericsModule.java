@@ -155,18 +155,6 @@ public class RPnNumericsModule {
         }
 
         public void endDocument() throws SAXException {//Setando a resolucao dos grids.Usando tres grids . Um para Hugoniot, um para DoubleContact e um para as demais curvas (com resolucao da inflexao)
-
-            Boundary boundary = RPNUMERICS.boundary();
-
-            RealVector min = boundary.getMinimums();
-            RealVector max = boundary.getMaximums();
-
-            int[] doubleContactResolution = RPNUMERICS.processResolution(RPNUMERICS.getParamValue("doublecontactcurve", "resolution"));
-
-            int[] hugoniotResolution = RPNUMERICS.processResolution(RPNUMERICS.getParamValue("hugoniotcurve", "resolution"));
-
-            int[] bifurcationCurvesResolution = RPNUMERICS.processResolution(RPNUMERICS.getParamValue("bifurcationcurve", "resolution"));
-            
             
             RPNUMERICS.readNativePhysicsConfig();
             

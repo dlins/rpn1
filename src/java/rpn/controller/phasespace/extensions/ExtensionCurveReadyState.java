@@ -60,7 +60,7 @@ public class ExtensionCurveReadyState extends ExtensionCalcState {
     public ExtensionCurveCalc createCalc() throws RpException {
         int withImageSelection = 0;
 
-        int[] resolution_ = RPNUMERICS.processResolution(getParamValue("extensioncurve", "resolution"));
+        int[] resolution_ = RPNUMERICS.processResolution(getParamValue("bifurcationcurve", "resolution"));
         int family_ = new Integer(getParamValue("extensioncurve", "family"));
         int characteristic_ = new Integer(getParamValue("extensioncurve", "characteristic"));
         boolean singular_ = Boolean.valueOf(getParamValue("extensioncurve", "singular"));

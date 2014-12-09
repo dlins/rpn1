@@ -11,9 +11,8 @@ import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 import org.xml.sax.InputSource;
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
-import javax.swing.AbstractButton;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import org.xml.sax.ContentHandler;
 import org.xml.sax.XMLReader;
@@ -21,20 +20,30 @@ import rpn.command.BoundaryExtensionCurveCommand;
 import rpn.command.BuckleyLeverettiInflectionCommand;
 import rpn.command.CoincidencePlotCommand;
 import rpn.command.CompositePlotCommand;
+import rpn.command.DerivativeDiscriminantLevelCurvePlotCommand;
+import rpn.command.DiscriminantLevelCurvePlotCommand;
+import rpn.command.DiscriminantPointLevelCurvePlotCommand;
 import rpn.command.DoubleContactCommand;
+import rpn.command.EllipticBoundaryCommand;
+import rpn.command.EllipticBoundaryExtensionCommand;
 import rpn.command.EnvelopeCurveCommand;
 import rpn.command.HugoniotPlotCommand;
 import rpn.command.HysteresisPlotCommand;
 import rpn.command.InflectionPlotCommand;
 import rpn.command.IntegralCurvePlotCommand;
+import rpn.command.LevelCurvePlotCommand;
+import rpn.command.PhysicalBoundaryPlotCommand;
+import rpn.command.PointLevelCurvePlotCommand;
 import rpn.command.RarefactionCurvePlotCommand;
 import rpn.command.RarefactionExtensionCurvePlotCommand;
+import rpn.command.RpModelPlotCommand;
 import rpn.command.SecondaryBifurcationCurveCommand;
 import rpn.command.ShockCurvePlotCommand;
 import rpn.command.SubInflectionPlotCommand;
+import rpn.command.TransitionalLinePlotCommand;
 import rpn.command.WaveCurvePlotCommand;
-import rpnumerics.RPNUMERICS;
-import static rpnumerics.RPNUMERICS.setParamValue;
+import rpn.configuration.Configuration;
+import rpn.configuration.Parameter;
 
 /**
  * This class configures the initial visualization properties. Reading a XML
@@ -43,7 +52,8 @@ import static rpnumerics.RPNUMERICS.setParamValue;
  */
 public class RPnInterfaceModule {
 
-    private static List<AbstractButton> toolBar_;
+    private static SortedSet<RpModelPlotCommand> toolBar_;
+    private static SortedSet<RpModelPlotCommand> auxtoolBar_;
 
     private static class RPnInterfaceParser implements ContentHandler {
 
@@ -52,80 +62,113 @@ public class RPnInterfaceModule {
             if (localName.equals("CURVECONFIGURATION")) {
 
                 if (att.getValue("name").equals("hugoniotcurve")) {
-                    toolBar_.add(HugoniotPlotCommand.instance().getContainer());
+                    toolBar_.add(HugoniotPlotCommand.instance());
 
                 }
 
                 if (att.getValue("name").equals("fundamentalcurve")) {
 
-                    toolBar_.add(ShockCurvePlotCommand.instance().getContainer());
-                    toolBar_.add(RarefactionCurvePlotCommand.instance().getContainer());
-                    toolBar_.add(IntegralCurvePlotCommand.instance().getContainer());
-                    toolBar_.add(CompositePlotCommand.instance().getContainer());
-                    toolBar_.add(WaveCurvePlotCommand.instance().getContainer());
+                    toolBar_.add(ShockCurvePlotCommand.instance());
+                    toolBar_.add(RarefactionCurvePlotCommand.instance());
+                    toolBar_.add(IntegralCurvePlotCommand.instance());
+                    toolBar_.add(CompositePlotCommand.instance());
+                    toolBar_.add(WaveCurvePlotCommand.instance());
 
                 }
 
                 if (att.getValue("name").equals("doublecontactcurve")) {
-                    toolBar_.add(DoubleContactCommand.instance().getContainer());
+                    toolBar_.add(DoubleContactCommand.instance());
                 }
                 if (att.getValue("name").equals("inflectioncurve")) {
-                    toolBar_.add(InflectionPlotCommand.instance().getContainer());
+                    toolBar_.add(InflectionPlotCommand.instance());
                 }
 
                 if (att.getValue("name").equals("envelopecurve")) {
-                    toolBar_.add(EnvelopeCurveCommand.instance().getContainer());
+                    toolBar_.add(EnvelopeCurveCommand.instance());
                 }
 
                 if (att.getValue("name").equals("hysteresiscurve")) {
-                    toolBar_.add(HysteresisPlotCommand.instance().getContainer());
+                    toolBar_.add(HysteresisPlotCommand.instance());
                 }
 
                 if (att.getValue("name").equals("boundaryextensioncurve")) {
-                    toolBar_.add(BoundaryExtensionCurveCommand.instance().getContainer());
+                    toolBar_.add(BoundaryExtensionCurveCommand.instance());
                 }
 
                 if (att.getValue("name").equals("coincidencecurve")) {
-                    toolBar_.add(CoincidencePlotCommand.instance().getContainer());
-              
+                    toolBar_.add(CoincidencePlotCommand.instance());
+
                 }
-                
-                
+
                 if (att.getValue("name").equals("subinflectioncurve")) {
-                    toolBar_.add(SubInflectionPlotCommand.instance().getContainer());
-                    
+                    toolBar_.add(SubInflectionPlotCommand.instance());
 
                 }
-                
+
                 if (att.getValue("name").equals("secondarybifurcationcurve")) {
-                    toolBar_.add(SecondaryBifurcationCurveCommand.instance().getContainer());
+                    toolBar_.add(SecondaryBifurcationCurveCommand.instance());
 
                 }
-                
-                
+
                 if (att.getValue("name").equals("buckleylevertcurve")) {
-                    toolBar_.add(BuckleyLeverettiInflectionCommand.instance().getContainer());
+                    toolBar_.add(BuckleyLeverettiInflectionCommand.instance());
 
                 }
-                
-              
+
                 if (att.getValue("name").equals("rarefactionextensioncurve")) {
-                     toolBar_.add(RarefactionExtensionCurvePlotCommand.instance().getContainer());
+                    toolBar_.add(RarefactionExtensionCurvePlotCommand.instance());
                 }
-                
+
+                //Aux tool bar
+                if (att.getValue("name").equals("ellipticboundary")) {
+                    auxtoolBar_.add(EllipticBoundaryCommand.instance());
+
+                }
+
+                if (att.getValue("name").equals("ellipticboundaryextension")) {
+                    auxtoolBar_.add(EllipticBoundaryExtensionCommand.instance());
+                }
+
+                if (att.getValue("name").equals("derivativediscriminant")) {
+                    auxtoolBar_.add(DerivativeDiscriminantLevelCurvePlotCommand.instance());
+
+                }
+
+                if (att.getValue("name").equals("discriminantlevelcurve")) {
+                    auxtoolBar_.add(DiscriminantPointLevelCurvePlotCommand.instance());
+                    auxtoolBar_.add(DiscriminantLevelCurvePlotCommand.instance());
+
+                }
+
+                if (att.getValue("name").equals("physicalboundary")) {
+                    auxtoolBar_.add(PhysicalBoundaryPlotCommand.instance());
+
+                }
+
+                if (att.getValue("name").equals("levelcurve")) {
+                    auxtoolBar_.add(LevelCurvePlotCommand.instance());
+                    auxtoolBar_.add(PointLevelCurvePlotCommand.instance());
+                }
+
+                if (att.getValue("name").equals("transitionalline")) {
+                    auxtoolBar_.add(TransitionalLinePlotCommand.instance());
+                    Configuration config = rpnumerics.RPNUMERICS.getConfiguration("transitionalline");
+
+                    
+                    config.addObserver(TransitionalLinePlotCommand.instance());
+                    
+//                    for (Parameter parameter : config.getParamList()) {
+//                        parameter.addObserver(TransitionalLinePlotCommand.instance());
+//                    }
+
+                }
+
             }
 
         }
 
         public void endElement(String uri, String localName, String qName) throws SAXException {
 
-            
-            
-            
-            
-            
-            
-            
         }
 
         public void setDocumentLocator(Locator locator) {
@@ -135,16 +178,6 @@ public class RPnInterfaceModule {
         }
 
         public void endDocument() throws SAXException {
-            
-            
-          
-            
-            
-            
-            
-            
-            
-            
 
         }
 
@@ -193,8 +226,10 @@ public class RPnInterfaceModule {
 
             parser.setContentHandler(new RPnInterfaceParser());
 
-            toolBar_ = new ArrayList<AbstractButton>();
-                        System.out.println("Interface Module parsing started...");
+            toolBar_ = new TreeSet();
+            auxtoolBar_ = new TreeSet();
+
+            System.out.println("Interface Module parsing started...");
             parser.parse(new InputSource(configFileStream));
 
             System.out.println("Interface Module parsing finished sucessfully !");
@@ -205,8 +240,12 @@ public class RPnInterfaceModule {
         }
     }
 
-    public static List<AbstractButton> getMainToolSelectedButtons() {
+    public static SortedSet<RpModelPlotCommand> getMainToolSelectedButtons() {
         return toolBar_;
+    }
+
+    public static SortedSet<RpModelPlotCommand> getAuxToolSelectedButtons() {
+        return auxtoolBar_;
     }
 
 }

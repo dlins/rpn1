@@ -99,6 +99,10 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ShockCurveCalc_calc(JNIEnv * env, jobj
     for (int i = 0; i < n; i++) r(i) = ref.e[familyIndex].vrr[i];
 
 
+    
+    
+    cout<<"familia em C++ : "<<familyIndex<<endl;
+    
 
     Curve shkcurve;
 

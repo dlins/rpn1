@@ -62,13 +62,13 @@ public class CurvesConfig extends UI_ACTION_SELECTED {
         IntegralCurvePlotCommand.instance().setEnabled(false);
         CompositePlotCommand.instance().setEnabled(true);
         PointLevelCurvePlotCommand.instance().setEnabled(true);
-        DiscriminantLevelCurvePlotCommand.instance().setEnabled(false);
-        DiscriminantPointLevelCurvePlotCommand.instance().setEnabled(false);
-        DerivativeDiscriminantLevelCurvePlotCommand.instance().setEnabled(false);
+        DiscriminantLevelCurvePlotCommand.instance().setEnabled(true);
+        DiscriminantPointLevelCurvePlotCommand.instance().setEnabled(true);
+        DerivativeDiscriminantLevelCurvePlotCommand.instance().setEnabled(true);
         LevelCurvePlotCommand.instance().setEnabled(true);
         ChangeOrbitLevelCommand.instance().setEnabled(true);
         EllipticBoundaryCommand.instance().setEnabled(true);
-        PhysicalBoundaryPlotCommand.instance().setEnabled(false);
+        PhysicalBoundaryPlotCommand.instance().setEnabled(true);
         RiemannProfileCommand.instance().setEnabled(false);
         WaveCurvePlotCommand.instance().setEnabled(true);
         WaveCurveRRegionsPlotCommand.instance().setEnabled(false);
@@ -86,18 +86,18 @@ public class CurvesConfig extends UI_ACTION_SELECTED {
         ReferencePointSelectionCommand.instance().setEnabled(true);
                 
         
-        CoincidencePlotCommand.instance().setEnabled(false);
+        CoincidencePlotCommand.instance().setEnabled(true);
         SubInflectionPlotCommand.instance().setEnabled(false);
-        BuckleyLeverettiInflectionCommand.instance().setEnabled(false);
+        BuckleyLeverettiInflectionCommand.instance().setEnabled(true);
         DoubleContactCommand.instance().setEnabled(true);
         BoundaryExtensionCurveCommand.instance().setEnabled(true);
-        SubInflectionExtensionCurveCommand.instance().setEnabled(false);
-        CoincidenceExtensionCurvePlotAgent.instance().setEnabled(false);
+        SubInflectionExtensionCurveCommand.instance().setEnabled(true);
+        CoincidenceExtensionCurvePlotAgent.instance().setEnabled(true);
         ChangeFluxParamsCommand.instance().setEnabled(true);
         InflectionPlotCommand.instance().setEnabled(true);
         HysteresisPlotCommand.instance().setEnabled(true);
         EllipticBoundaryExtensionCommand.instance().setEnabled(true);
-        EnvelopeCurveCommand.instance().setEnabled(false);
+        EnvelopeCurveCommand.instance().setEnabled(true);
         SecondaryBifurcationCurveCommand.instance().setEnabled(true);
 
         
@@ -106,8 +106,11 @@ public class CurvesConfig extends UI_ACTION_SELECTED {
             TransitionalLinePlotCommand.instance().setEnabled(false);            
         }
         else {
+
             TransitionalLinePlotCommand.instance().setEnabled(true);
         }
+
+        
 
         
         

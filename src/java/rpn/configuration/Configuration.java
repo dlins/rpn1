@@ -10,9 +10,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Observable;
+import java.util.Observer;
 import java.util.Set;
 
-public abstract class Configuration extends Observable{
+public abstract class Configuration extends Observable implements Comparable<Configuration>,Observer{
 
     private HashMap<String, String> params_;
     private ArrayList<String> paramOrder_;
@@ -133,6 +134,9 @@ public abstract class Configuration extends Observable{
     
     public final void addParameter(Parameter param){
         paramList_.add(param);
+        param.addObserver(this);
+
+        
     }
     
     
@@ -232,6 +236,19 @@ public abstract class Configuration extends Observable{
     public HashMap<String, String> getParams() {
         return params_;
     }
+    
+    
+    public Parameter getParameter(String parameterName){
+        
+        for (Parameter parameter : paramList_) {
+            
+            if(parameter.getName().equals(parameterName))
+                return parameter;
+        }
+        return null;
+
+        
+    }
 
     public void setParamValue(String paramName, String paramValue) {
 
@@ -300,8 +317,8 @@ public abstract class Configuration extends Observable{
         StringBuilder stringBuffer = new StringBuilder();
         stringBuffer.append("Configuration name: ").append(name_).append(" Configuration type: ").append(type_).append("\n");
         Set<Entry<String, String>> paramsSet = params_.entrySet();
-        for (Entry<String, String> paramsEntry : paramsSet) {
-            stringBuffer.append(paramsEntry.getKey()).append(" ").append(paramsEntry.getValue()).append("\n");
+        for (Parameter param : paramList_) {
+            stringBuffer.append(param.getName()).append(" ").append(param.getValue()).append("\n");
         }
 
         Set<Entry<String, Configuration>> configurationSet = configurationMap_.entrySet();
@@ -315,5 +332,16 @@ public abstract class Configuration extends Observable{
     }
 
     public abstract  String toXML();
+
+    @Override
+    public int compareTo(Configuration o) {
+     return o.getName().compareTo(name_);
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+setChanged();
+notifyObservers();
+    }
 
   }

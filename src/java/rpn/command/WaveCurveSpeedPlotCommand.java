@@ -40,7 +40,7 @@ public class WaveCurveSpeedPlotCommand extends RpModelPlotCommand implements Obs
     // Constructors/Initializers
     //
     protected WaveCurveSpeedPlotCommand() {
-        super(DESC_TEXT, rpn.configuration.RPnConfig.HUGONIOT, new JButton());
+        super(DESC_TEXT, null, new JButton());
 
     }
 

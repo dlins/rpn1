@@ -120,6 +120,17 @@ public class ConfigurationView extends Observable implements Observer {
     public void update(Observable o, Object arg) {
 
         if (o instanceof Configuration) {
+            Configuration config = (Configuration) o;
+            for (Parameter parameter : config.getParamList()) {
+                
+                if (componentMap_.containsKey(parameter.getName())){
+                    componentMap_.get(parameter.getName()).changeView(parameter.getValue());
+                }
+                
+                
+            }
+            
+          
 
         }
 

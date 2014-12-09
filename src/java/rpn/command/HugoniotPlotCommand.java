@@ -27,7 +27,7 @@ public class HugoniotPlotCommand extends RpModelPlotCommand {
     // Constructors/Initializers
     //
     protected HugoniotPlotCommand() {
-        super(DESC_TEXT, rpn.configuration.RPnConfig.HUGONIOT,new JToggleButton());
+        super(DESC_TEXT, null,new JToggleButton());
     }
 
     public RpGeometry createRpGeometry(RealVector[] input) {
