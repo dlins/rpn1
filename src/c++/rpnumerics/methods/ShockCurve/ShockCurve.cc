@@ -1,4 +1,5 @@
 #include "ShockCurve.h"
+#include "TestTools.h"
 
 ShockCurve::ShockCurve(HugoniotContinuation *h){
     hc = h;
@@ -738,7 +739,7 @@ int ShockCurve::curve_engine(const ReferencePoint &r, const RealVector &in, cons
     double previous_sigma_between_points = 0.0;
 
     while (true){
-        std::cout << previous_point << std::endl;
+//        std::cout << "Inside while, previous_point = " <<  previous_point << std::endl;
 
         RealVector Hugoniot_intersection;
         double sigma_between_points;
@@ -746,11 +747,13 @@ int ShockCurve::curve_engine(const ReferencePoint &r, const RealVector &in, cons
 
 //        std::cout << "Shock. Prev. point = " << previous_point << ", prev. dir. = " << previous_direction << std::endl;
 
+//        std::cout << "    Bef." << std::endl;
         int info_curve_point = hc->curve_point(previous_point, previous_sigma_between_points,
                                                previous_direction, 
                                                step_size_increased, step_size, number_of_steps_with_unchanged_size, 
                                                Hugoniot_intersection, sigma_between_points,
                                                Hugoniot_direction);
+//        std::cout << "    Aft." << std::endl;
 
 //        std::cout << "       Curr. point = " << Hugoniot_intersection << ", curr. dir. = " << Hugoniot_direction << std::endl;
 //        std::cout << "       sigma_between_points = " << sigma_between_points << std::endl;
@@ -778,6 +781,7 @@ int ShockCurve::curve_engine(const ReferencePoint &r, const RealVector &in, cons
         //
         previous_lambdaref_minus_sigma = lambdaref_minus_sigma;
             
+
         for (int i = 0; i < n; i++) lambdaref_minus_sigma(i) = r.e[i].r - sigma;
 
         // Update previous_lambda_minus_sigma & lambda_minus_sigma.

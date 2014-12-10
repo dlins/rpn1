@@ -141,7 +141,14 @@ int WaveCurveFactory::Liu_half_wavecurve(const ReferencePoint &ref,
                 future_curve_initial_point = rarcurve.last_point;
                 future_curve_initial_direction = rarcurve.final_direction;
 
-                if (rar_stopped_because == RAREFACTION_REACHED_INFLECTION){
+                if (rar_stopped_because == RAREFACTION_REACHED_ELLIPTIC_REGION){
+                    wavecurve_stopped_because = WAVECURVE_COMPLEX_EIGENVALUE_AT_FAMILY;
+
+                    std::cout << "Wavecurve stopped because the rarefaction reached the elliptic region." << std::endl;
+
+                    return WAVECURVE_OK;
+                }
+                else if (rar_stopped_because == RAREFACTION_REACHED_INFLECTION){
                     future_curve = COMPOSITE_CURVE;
                     future_composite_type = COMPOSITE_BEGINS_AT_INFLECTION;
 

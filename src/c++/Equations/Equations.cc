@@ -6,6 +6,8 @@ Equations::Equations(){
 Equations::~Equations(){
 }
 
+// TODO: Add the Hessian, maybe the flux, both completed.
+//
 int Equations::constrained_conservation_laws_jet(const RealVector &p, DoubleMatrix &DFcompleted, DoubleMatrix &DGcompleted){
     // Use the flux and the accumulation.
     //

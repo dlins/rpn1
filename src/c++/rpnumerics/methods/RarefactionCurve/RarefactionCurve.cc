@@ -1,4 +1,5 @@
 #include "RarefactionCurve.h"
+#include "TestTools.h"
 
 RarefactionCurve::RarefactionCurve(const AccumulationFunction *gg, const FluxFunction *ff, const Boundary *bb){
     f = ff;
@@ -33,7 +34,16 @@ int RarefactionCurve::field(int *neq, double *xi, double *in, double *out, int *
     Eigen::eig(*neq, F_jet.Jacobian().data(), G_jet.Jacobian().data(), e);
  
     // TODO: Verify that the eigenvalue is not complex.
+    // DO NOT return FIELD_ERROR, as this will prevent LSODE from computing the point
+    // within the elliptic region. Let LSODE compute it, but also set here a flag,
+    // or member, say, bool Rarefaction::curve.reached_elliptic_region to true.
+    // Then, when LSODE returns, in the while cycle, said member is to be checked.
+    // If true, use the last point (incorrect) and the previous point (correct)
+    // to perform a bisection to find the rarefaction point on the elliptic region's
+    // boundary.
   
+    if (e[rar->family].i != 0.0) rar->reached_elliptic_region = true;
+
     // Extract right-eigenvector, verify that it points in the correct direction.
     //
     RealVector rm(*neq, e[rar->family].vrr.data());
@@ -183,49 +193,68 @@ int RarefactionCurve::inflection_signal_event(const RealVector & where, double &
     return BISECTION_FUNCTION_OK;
 }
 
-int RarefactionCurve::elliptic_region_signal_event_2D2D(const RealVector & where, double &discriminant, int *signal_object, int * /* reference_direction */){
+int RarefactionCurve::elliptic_region_signal_event(const RealVector & where, double &er_measure, int *signal_object, int * /* reference_direction */){
     RarefactionCurve *rar = (RarefactionCurve*)signal_object;
 
-    JetMatrix F_jet(2), G_jet(2);
-    rar->f->jet(where, F_jet, 1);
-    rar->g->jet(where, G_jet, 1);
+    // er_measure = 1  if lambda is real
+    // er_measure = -1 if lambda is complex
 
-    DoubleMatrix JF = F_jet.Jacobian();
-    DoubleMatrix JG = G_jet.Jacobian();
+    std::vector<eigenpair> e;
+    JetMatrix JF, JG;
+    rar->f->jet(where, JF, 1);
+    rar->g->jet(where, JG, 1);
 
-    double A = JG(0, 0)*JG(1, 1) - JG(0, 1)*JG(1, 0);
-    double B = (JG(0, 1)*JF(1, 0) + JF(0, 1)*JG(1, 0)) - (JG(0, 0)*JF(1, 1) + JF(0, 0)*JG(1, 1));
-    double C = JF(0, 0)*JF(1, 1) - JF(0, 1)*JF(1, 0);
+    Eigen::eig(where.size(), JF.Jacobian().data(), JG.Jacobian().data(), e);
 
-    discriminant = B*B - 4.0*A*C;
+    if (std::abs(e[rar->family].i) < 1e-10*max(std::abs(e[rar->family].r), 1.0)) er_measure =  1.0;
+    else                                                                         er_measure = -1.0;
 
     return BISECTION_FUNCTION_OK;
 }
 
-// 3D2D
-int RarefactionCurve::elliptic_region_signal_event_3D2D(const RealVector & where, double &discriminant, int *signal_object, int * /* reference_direction */){
-    return BISECTION_FUNCTION_ERROR;
+//int RarefactionCurve::elliptic_region_signal_event_2D2D(const RealVector & where, double &discriminant, int *signal_object, int * /* reference_direction */){
+//    RarefactionCurve *rar = (RarefactionCurve*)signal_object;
 
-    RarefactionCurve *rar = (RarefactionCurve*)signal_object;
+//    JetMatrix F_jet(2), G_jet(2);
+//    rar->f->jet(where, F_jet, 1);
+//    rar->g->jet(where, G_jet, 1);
 
-    JetMatrix F_jet(2), G_jet(2);
-    rar->f->jet(where, F_jet, 1);
-    rar->g->jet(where, G_jet, 1);
+//    DoubleMatrix JF = F_jet.Jacobian();
+//    DoubleMatrix JG = G_jet.Jacobian();
 
-    DoubleMatrix JF = F_jet.Jacobian();
-    DoubleMatrix JG = G_jet.Jacobian();
+//    double A = JG(0, 0)*JG(1, 1) - JG(0, 1)*JG(1, 0);
+//    double B = (JG(0, 1)*JF(1, 0) + JF(0, 1)*JG(1, 0)) - (JG(0, 0)*JF(1, 1) + JF(0, 0)*JG(1, 1));
+//    double C = JF(0, 0)*JF(1, 1) - JF(0, 1)*JF(1, 0);
 
-    double A = JG(0, 0)*JF(2, 2)*JG(1, 1) - JG(0, 0)*JF(1, 2)*JG(2, 1) + JG(1, 0)*JF(0, 2)*JG(2, 1) - JG(1, 0)*JF(2, 2)*JG(0, 1) + JG(2, 0)*JF(1, 2)*JG(0, 1) - JG(2, 0)*JF(0, 2)*JG(1, 1);
+//    discriminant = B*B - 4.0*A*C;
 
-    double B = JF(0, 0)*JF(2, 2)*JG(1, 1) + JF(1, 2)*JF(0, 1)*JG(2, 0) + JF(2, 2)*JF(1, 1)*JG(0, 0) + JF(1, 0)*JF(0, 2)*JG(2, 1) - JF(1, 2)*JF(2, 1)*JG(0, 0) - JF(1, 0)*JF(2, 2)*JG(0, 1) +
-               JF(0, 2)*JF(2, 1)*JG(1, 0) + JF(2, 0)*JF(1, 2)*JG(0, 1) - JF(2, 2)*JF(0, 1)*JG(1, 0) - JF(2, 0)*JF(0, 2)*JG(1, 1) - JF(0, 0)*JF(1, 2)*JG(2, 1) - JF(0, 2)*JF(1, 1)*JG(2, 0);
+//    return BISECTION_FUNCTION_OK;
+//}
 
-    double C = JF(0, 0)*JF(2, 2)*JF(1, 1) - JF(2, 0)*JF(0, 2)*JF(1, 1) - JF(0, 0)*JF(1, 2)*JF(2, 1) + JF(2, 0)*JF(1, 2)*JF(0, 1) + JF(1, 0)*JF(0, 2)*JF(2, 1) - JF(1, 0)*JF(2, 2)*JF(0, 1);
+//// 3D2D
+//int RarefactionCurve::elliptic_region_signal_event_3D2D(const RealVector & where, double &discriminant, int *signal_object, int * /* reference_direction */){
+//    return BISECTION_FUNCTION_ERROR;
 
-    discriminant = B*B - 4.0*A*C;
+//    RarefactionCurve *rar = (RarefactionCurve*)signal_object;
 
-    return BISECTION_FUNCTION_OK;
-}
+//    JetMatrix F_jet(2), G_jet(2);
+//    rar->f->jet(where, F_jet, 1);
+//    rar->g->jet(where, G_jet, 1);
+
+//    DoubleMatrix JF = F_jet.Jacobian();
+//    DoubleMatrix JG = G_jet.Jacobian();
+
+//    double A = JG(0, 0)*JF(2, 2)*JG(1, 1) - JG(0, 0)*JF(1, 2)*JG(2, 1) + JG(1, 0)*JF(0, 2)*JG(2, 1) - JG(1, 0)*JF(2, 2)*JG(0, 1) + JG(2, 0)*JF(1, 2)*JG(0, 1) - JG(2, 0)*JF(0, 2)*JG(1, 1);
+
+//    double B = JF(0, 0)*JF(2, 2)*JG(1, 1) + JF(1, 2)*JF(0, 1)*JG(2, 0) + JF(2, 2)*JF(1, 1)*JG(0, 0) + JF(1, 0)*JF(0, 2)*JG(2, 1) - JF(1, 2)*JF(2, 1)*JG(0, 0) - JF(1, 0)*JF(2, 2)*JG(0, 1) +
+//               JF(0, 2)*JF(2, 1)*JG(1, 0) + JF(2, 0)*JF(1, 2)*JG(0, 1) - JF(2, 2)*JF(0, 1)*JG(1, 0) - JF(2, 0)*JF(0, 2)*JG(1, 1) - JF(0, 0)*JF(1, 2)*JG(2, 1) - JF(0, 2)*JF(1, 1)*JG(2, 0);
+
+//    double C = JF(0, 0)*JF(2, 2)*JF(1, 1) - JF(2, 0)*JF(0, 2)*JF(1, 1) - JF(0, 0)*JF(1, 2)*JF(2, 1) + JF(2, 0)*JF(1, 2)*JF(0, 1) + JF(1, 0)*JF(0, 2)*JF(2, 1) - JF(1, 0)*JF(2, 2)*JF(0, 1);
+
+//    discriminant = B*B - 4.0*A*C;
+
+//    return BISECTION_FUNCTION_OK;
+//}
 
 void RarefactionCurve::all_eigenvalues(const RealVector &p, int fam, std::vector<std::complex<double> > &lambda){
     std::vector<eigenpair> e;
@@ -348,6 +377,10 @@ int RarefactionCurve::curve(const RealVector &initial_point,
     RealVector point(initial_point);
     RealVector next_point;
 
+    // For the detection of the elliptic region.
+    //
+    reached_elliptic_region = false;
+
     while (true){
         if (rarcurve.curve.size() > 8000) return RAREFACTION_OK;
 
@@ -392,13 +425,8 @@ int RarefactionCurve::curve(const RealVector &initial_point,
             return RAREFACTION_OK;
         }
 
-        // Has the rarefaction curve reached an inflection? 
-        // Update the directional derivative first.
+        // Intersection with a line.
         //
-        dirdrv = directional_derivative(next_point, family, reference_vector);
-
-       
-
         if (linear_function != 0){
             linear_function_value = (*linear_function)(linobj, next_point);
 
@@ -423,6 +451,77 @@ int RarefactionCurve::curve(const RealVector &initial_point,
             else old_linear_function_value = linear_function_value;
         }
 
+        // Has the rarefaction reached the elliptic region?
+        //
+        if (reached_elliptic_region){
+//            TestTools::pause("Reached elliptic boundary");
+
+            double bisection_epsilon = 1e-10; // Must be relative to the flux.
+
+            // Output here:
+            double c_t;
+            RealVector p_c;
+
+            // Invoke Bisection
+            int info_bisection = Bisection::bisection_method(xi,      point,
+                                                             next_xi, next_point,
+                                                             bisection_epsilon, 
+                                                             c_t,     p_c,
+                                                             &field, (int*)this, (double*)0,
+                                                             odesolver, // Should a different solver be used here? Another object of the same class?
+                                                             &elliptic_region_signal_event, (int*)this, (int*)0);
+
+            if (info_bisection == BISECTION_FUNCTION_ERROR){
+                std::cout << "An error was reported by the signal function when called by Bisection. Leaving..." << std::endl;
+
+                rarcurve.reason_to_stop = RAREFACTION_ERROR;
+                return RAREFACTION_ERROR;
+            }
+            else if (info_bisection == BISECTION_EQUAL_SIGN){
+                std::cout << "Bisection detected that the signal event function has the same sign in both points. Leaving..." << std::endl;
+
+                rarcurve.reason_to_stop = RAREFACTION_ERROR;
+                return RAREFACTION_ERROR;
+            }
+            else if (info_bisection == BISECTION_CONVERGENCE_ERROR){
+                std::cout << "Bisection did not converge when computing the elliptic region. Leaving..." << std::endl;
+
+                rarcurve.reason_to_stop = RAREFACTION_ERROR;
+                return RAREFACTION_ERROR;
+            }
+            else {
+                std::cout << "Bisection converged when computing the elliptic region." << std::endl;
+
+                add_point_to_curve(p_c, rarcurve);
+
+                if (type_of_rarefaction == RAREFACTION){
+                    reason_why = RAREFACTION_REACHED_ELLIPTIC_REGION;
+                    rarcurve.reason_to_stop = RAREFACTION_REACHED_ELLIPTIC_REGION;
+
+                    rarcurve.last_point = p_c;
+                    rarcurve.final_direction = next_point - point; //rarcurve.curve.back() - rarcurve.curve[rarcurve.curve.size() - 2];
+                    normalize(rarcurve.final_direction);
+
+                    final_direction = rarcurve.final_direction;
+
+                    return RAREFACTION_OK;
+                }
+//                else if (type_of_rarefaction == INTEGRAL_CURVE){
+//                    inflection_points.push_back(p_c);
+//                    next_point = p_c;
+//                    dirdrv = 0.0;
+//                }
+            }
+
+
+            return RAREFACTION_OK;
+        }
+
+
+        // Has the rarefaction curve reached an inflection? 
+        // Update the directional derivative first.
+        //
+        dirdrv = directional_derivative(next_point, family, reference_vector);
 
         if (dirdrv*previous_dirdrv < 0.0){
 //        if (0 == 1){ // The inflection will not be detected.

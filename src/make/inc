@@ -1,8 +1,6 @@
 
 VPATH = \
 	c++ \
-	c++/test_program \
-	c++/test_program/linux_x86_64 \
 	c++/Model \
 	c++/JNI \
 	c++/JNI/include \
@@ -83,8 +81,6 @@ VPATH = \
 
 INCLUDE = \
 	-I c++ \
-	-I c++/test_program \
-	-I c++/test_program/linux_x86_64 \
 	-I c++/Model \
 	-I c++/JNI \
 	-I c++/JNI/include \
@@ -401,7 +397,6 @@ CCSRC = \
 	Equations.cc
 
 CPPSRC = \
-	main_eigen.cpp \
 	Eigenvalue_Contour.cpp \
 	ColorCurve.cpp \
 	DoubleMatrix.cpp \

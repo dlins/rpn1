@@ -106,6 +106,10 @@ Fl_Group *ellipticregionboundarygrp;
     Fl_Round_Button *ellipticregionboundaryrnd;
     Fl_Button *ellipticregionboundarybtn;
 
+Fl_Group *discriminantcontourgrp;
+    Fl_Round_Button *discriminantcontourrnd;
+    Fl_Box *discriminantcontourbox;
+
 Fl_Group *doublecontactgrp;
     Fl_Round_Button *doublecontactrnd;
     Fl_Button *doublecontactbtn;
@@ -781,6 +785,9 @@ void wavecurvefactioncb(Fl_Widget*, void*){
 
     if (dimension == 3) initial_point(2) = 1.0;
 
+//    initial_point(0) = 0.14106683804627251355157113721361;
+//    initial_point(1) = 0.25;
+
     std::cout << "Wavecurve callback, initial point = " << initial_point << std::endl;
 
 //    initial_point(0) = 0.623883;
@@ -1190,7 +1197,7 @@ void add_exact_eigenvalue_contour_group(){
 
 // Elliptic region.
 //
-void add_eliptic_region(){
+void add_elliptic_region(){
     int x, y, w;
     if (lastgrp == 0){
         x = sidescroll->x() + 15;
@@ -1227,6 +1234,75 @@ void add_eliptic_region(){
     optionsfnc.push_back(0);
 
     lastgrp = ellipticregionboundarygrp;
+
+    return;
+}
+
+// Discriminant contour.
+//
+void discriminantcontourcb(Fl_Widget*, void*){
+    RealVector point(2);
+    canvas->getxy(point(0), point(1));
+
+    CharacteristicPolynomialLevels cpl;
+
+    double level;
+    std::vector<RealVector> curve;
+
+    cpl.discriminant_curve(subphysics->flux(), subphysics->accumulation(), 
+                           *(subphysics->gridvalues()), 
+                           point,
+                           curve, level);
+
+    if (curve.size() > 0){
+        SegmentedCurve *sc = new SegmentedCurve(curve, 0.0, 0.0, 1.0);
+        canvas->add(sc);
+
+        std::stringstream ss;
+        ss << "Discriminant contour, p = " << point << ", level = " << level;
+
+        scroll->add(ss.str().c_str(), canvas, sc);
+    }
+
+    return;
+}
+
+void add_discriminant_contour(){
+    int x, y, w;
+    if (lastgrp == 0){
+        x = sidescroll->x() + 15;
+        y = sidescroll->y();
+        w = sidescroll->w() - 40;
+    }
+    else {
+        x = lastgrp->x();
+        y = lastgrp->y() + lastgrp->h();
+        w = lastgrp->w();
+    }
+
+    discriminantcontourgrp = new Fl_Group(x, y + 35, w, 45);
+    {
+        discriminantcontourbox = new Fl_Box(discriminantcontourgrp->x() + 10,
+                                            discriminantcontourgrp->y() + 10,
+                                            discriminantcontourgrp->w() - 20,
+                                            discriminantcontourgrp->h() - 20,
+                                            "Click on the canvas");
+    }
+    discriminantcontourgrp->end();
+    discriminantcontourgrp->box(FL_EMBOSSED_BOX);
+
+    discriminantcontourrnd = new Fl_Round_Button(discriminantcontourgrp->x(), discriminantcontourgrp->y() - 25, discriminantcontourgrp->w(), 25, "Discriminant contour");
+    discriminantcontourrnd->type(FL_RADIO_BUTTON);
+    discriminantcontourrnd->value(0);
+    discriminantcontourrnd->callback(opcb);
+
+    // It is always possible to compute the discriminant contour.
+    //
+    optionsgrp.push_back(discriminantcontourgrp);
+    optionsbtn.push_back(discriminantcontourrnd);
+    optionsfnc.push_back(discriminantcontourcb);
+
+    lastgrp = discriminantcontourgrp;
 
     return;
 }
@@ -1285,10 +1361,10 @@ int main(){
 //    subphysics = new Brooks_CoreySubPhysics;
 //    subphysics = new CoreyQuadSubPhysics;
 //    subphysics = new KovalSubPhysics;
-//    subphysics = new FoamSubPhysics;
+    subphysics = new FoamSubPhysics;
 //    subphysics = new SorbieSubPhysics;
 //    subphysics = new TPCWSubPhysics;
-    subphysics = new Quad2SubPhysics;
+//    subphysics = new Quad2SubPhysics;
 
     std::cout << "SubPhysics \"" << subphysics->info_subphysics() << "\" created successfully." << std::endl;
 
@@ -1396,8 +1472,13 @@ int main(){
 
             // Elliptic region.
             //
-            add_eliptic_region();
-            std::cout << "Added eliptic region." << std::endl;
+            add_elliptic_region();
+            std::cout << "Added elliptic region." << std::endl;
+
+            // Discriminant contour.
+            //
+            add_discriminant_contour();
+            std::cout << "Added discriminant contour." << std::endl;
 
             // Double contact.
             //

@@ -12,6 +12,7 @@
 #define RAREFACTION_COMPLEX_EIGENVALUE_AT_FAMILY 6
 #define RAREFACTION_REACHED_COINCIDENCE_CURVE    7
 #define RAREFACTION_REACHED_LINE                 8
+#define RAREFACTION_REACHED_ELLIPTIC_REGION      9
 
 // Options.
 //
@@ -58,7 +59,7 @@ class RarefactionCurve {
 
         void add_point_to_curve(const RealVector &p, Curve &curve);
 
-       
+        bool reached_elliptic_region;       
     public:
         RarefactionCurve(const AccumulationFunction *gg, const FluxFunction *ff, const Boundary *bb);
         virtual ~RarefactionCurve();
@@ -124,9 +125,10 @@ class RarefactionCurve {
         static int Jacobian_field();
 
         static int inflection_signal_event(const RealVector & where, double & directional_derivative_measure, int *signal_object, int * /* reference_direction */);
+        static int elliptic_region_signal_event(const RealVector & where, double &er_measure, int *signal_object, int * /* reference_direction */);
 
-        static int elliptic_region_signal_event_2D2D(const RealVector & where, double &discriminant, int *signal_object, int * /* reference_direction */);
-        static int elliptic_region_signal_event_3D2D(const RealVector & where, double &discriminant, int *signal_object, int * /* reference_direction */);
+//        static int elliptic_region_signal_event_2D2D(const RealVector & where, double &discriminant, int *signal_object, int * /* reference_direction */);
+//        static int elliptic_region_signal_event_3D2D(const RealVector & where, double &discriminant, int *signal_object, int * /* reference_direction */);
 
         int initialize(const RealVector &p, int family, const RealVector &direction, RealVector &ref, double &dd);
         int initialize(const RealVector &p, int family, int increase, RealVector &ref, double &dd);

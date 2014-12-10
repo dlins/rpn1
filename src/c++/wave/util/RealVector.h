@@ -62,6 +62,15 @@ public:
     // Return a vector of zeroes
     static RealVector zeroes(int m);
 
+    // Normalize this vector (using norm2)
+    //
+    void normalize(){
+        double invn = 1.0/norm(*this);
+        for (int i = 0; i < size_; i++) data[i] *= invn;
+
+        return;
+    }
+
     // Output to stream
     friend std::ostream & operator<<(std::ostream &out, const RealVector &r);
 

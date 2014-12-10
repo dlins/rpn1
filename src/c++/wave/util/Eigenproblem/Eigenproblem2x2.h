@@ -3,6 +3,9 @@
 
 #include "Eigenproblem.h"
 
+#define EIGENPROBLEM_MULTIPLICITY_1 1
+#define EIGENPROBLEM_MULTIPLICITY_2 2
+
 class Eigenproblem2x2: public Eigenproblem {
     private:
     protected:
@@ -12,19 +15,19 @@ class Eigenproblem2x2: public Eigenproblem {
 
         // Standard problem.
         //
-        virtual void find_eigenpair(const DoubleMatrix &A, int index, Eigenpair &ep);
-        virtual void find_eigenpairs(const DoubleMatrix &A, std::vector<Eigenpair> &eps);
+        virtual int find_eigenpair(const DoubleMatrix &A, int index, Eigenpair &ep);
+        virtual int find_eigenpairs(const DoubleMatrix &A, std::vector<Eigenpair> &eps);
 
-        virtual void find_eigenvalue(const DoubleMatrix &A, int index, Eigenvalue &ev);
-        virtual void find_eigenvalues(const DoubleMatrix &A, std::vector<Eigenvalue> &evs);
+        virtual int find_eigenvalue(const DoubleMatrix &A, int index, Eigenvalue &ev);
+        virtual int find_eigenvalues(const DoubleMatrix &A, std::vector<Eigenvalue> &evs);
 
         // Generalized problem.
         //
-        virtual void find_eigenpair(const DoubleMatrix &A, const DoubleMatrix &B, int index, Eigenpair &ep);
-        virtual void find_eigenpairs(const DoubleMatrix &A, const DoubleMatrix &B, std::vector<Eigenpair> &eps);
+        virtual int find_eigenpair(const DoubleMatrix &A, const DoubleMatrix &B, int index, Eigenpair &ep);
+        virtual int find_eigenpairs(const DoubleMatrix &A, const DoubleMatrix &B, std::vector<Eigenpair> &eps);
 
-        virtual void find_eigenvalue(const DoubleMatrix &A, const DoubleMatrix &B, int index, Eigenvalue &ev);
-        virtual void find_eigenvalues(const DoubleMatrix &A, const DoubleMatrix &B, std::vector<Eigenvalue> &evs);
+        virtual int find_eigenvalue(const DoubleMatrix &A, const DoubleMatrix &B, int index, Eigenvalue &ev);
+        virtual int find_eigenvalues(const DoubleMatrix &A, const DoubleMatrix &B, std::vector<Eigenvalue> &evs);
 };
 
 #endif // _EIGENPROBLEM2X2_

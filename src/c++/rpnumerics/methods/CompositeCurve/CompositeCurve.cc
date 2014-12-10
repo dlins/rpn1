@@ -1,5 +1,6 @@
 #include "CompositeCurve.h"
 #include "WaveCurve.h"
+#include "TestTools.h"
 
 int CompositeCurve::composite_field(int *two_n, double *xi, double *pointpair, double *field, int *obj, double* /* Not used */){
     CompositeCurve *composite_object = (CompositeCurve*)obj;
@@ -655,6 +656,9 @@ int CompositeCurve::curve(const AccumulationFunction *RarAccum, const FluxFuncti
                                                      shock_stopped_because,
                                                      edge);
 
+                std::cout << "info_shock = " << info_shock << std::endl;
+                TestTools::pause("info shock on console");
+
                 if (info_shock == SHOCKCURVE_OK){
                     first_backwards_rarefaction_point = initial_point_for_shock;
                     first_composite_point = shockcurve.curve.back();
@@ -704,6 +708,8 @@ int CompositeCurve::curve(const AccumulationFunction *RarAccum, const FluxFuncti
         //
         index_of_corresponding_point_in_rarefaction = last_point_in_rarefaction - 1;
     }
+
+//    TestTools::pause("Composite first ok.");
 
     // Compute the rest of the composite curve.
 

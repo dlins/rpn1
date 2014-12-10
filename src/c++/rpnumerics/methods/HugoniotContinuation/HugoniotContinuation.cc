@@ -204,6 +204,8 @@ void HugoniotContinuation::Newton_system_for_Hugoniot(const RealVector &p, const
 //    jet_Hugoniot(F, JF, G, JG, error, nablaH);
     jet_Hugoniot(Fjet.function(), Fjet.Jacobian(), Gjet.function(), Gjet.Jacobian(), error, nablaH);
 
+//    std::cout << "nablaH =\n" << nablaH << "hyperplane =\n" << hyperplane << "error = " << error << std::endl;
+
     Newton_matrix = transpose(nablaH)*hyperplane;
 
     return;
@@ -216,7 +218,7 @@ int HugoniotContinuation::Newton_in_hyperplane(const RealVector &origin, const D
     int max_number_iterations = 10; // TODO: This parameter should receive a default value in the ctor.
     int iterations = 0;
     
-    double min_norm = 1e-6; // TODO: This parameter should receive a default value in the ctor.
+    double min_norm = 1e-5; // TODO: This parameter should receive a default value in the ctor.
     
     double norm_correction = 0.0;
     
@@ -227,6 +229,8 @@ int HugoniotContinuation::Newton_in_hyperplane(const RealVector &origin, const D
         RealVector error;
 
         Newton_system_for_Hugoniot(hyperplane_point, hyperplane, Newton_matrix, error);
+
+//        std::cout << "Newton_matrix =\n" << Newton_matrix << std::endl;
 
         int info_correction = solve(Newton_matrix, error, correction);
         
@@ -242,6 +246,8 @@ int HugoniotContinuation::Newton_in_hyperplane(const RealVector &origin, const D
         
     } while (iterations < max_number_iterations && norm_correction > min_norm && norm_correction < 10.0); // TODO: 10.0 was fixed here, it must be fine-tuned, perhaps it should become a member.
     
+//    std::cout << "Newton_in_hyperplane, iterations = " << iterations << std::endl;
+
     if (iterations >= max_number_iterations) return HUGONIOTCONTINUATION_NEWTON_ERROR;
     
     // Output.
@@ -268,6 +274,8 @@ int HugoniotContinuation::Newton_step(const RealVector &previous_point, double &
 
     DoubleMatrix hyperplane;
 
+//    std::cout << "    Newton_step: previous_point = " << previous_point << ", previous_direction = " << previous_direction << std::endl;
+
     do {
         step_size *= 0.5;
         step_size_iterations++;
@@ -290,6 +298,8 @@ int HugoniotContinuation::Newton_step(const RealVector &previous_point, double &
         // Find the intersection of the Hugoniot curve with the hyperplane.
         //
         info_newton = Newton_in_hyperplane(hyperplane_origin, hyperplane, Hugoniot_intersection);
+
+//        std::cout << "info_newton = " << info_newton << ", hyperplane_origin = " << hyperplane_origin << ", Hugoniot_intersection = " << Hugoniot_intersection << std::endl;
 
         // Check that the angle between previous_direction and (Hugoniot_intersection - previous_point) does not exceed arccos(MAX_COS_ANGLE). 
         // If so, reduce shift.
@@ -512,9 +522,13 @@ int HugoniotContinuation::curve_point(const RealVector &previous_point, double p
 
     int info_Newton_step = Newton_step(previous_point, step_size, number_of_steps_with_unchanged_size, direction, Hugoniot_intersection);
 
-//    std::cout << "Hugoniot_intersection = " << Hugoniot_intersection << std::endl;
+//    std::cout << "info_Newton_step = " << info_Newton_step << ", Hugoniot_intersection = " << Hugoniot_intersection << std::endl;
 
-    sigma_between_points = shockspeed(f, g, previous_point, f, g, Hugoniot_intersection);
+    sigma_between_points = shockspeed(f, g, previous_point, f, g, Hugoniot_intersection); // WHY???
+
+//    if (info_Newton_step == HUGONIOTCONTINUATION_NEWTON_OK) sigma_between_points = shockspeed(f, g, previous_point, f, g, Hugoniot_intersection); // WHY???
+//    else return HUGONIOTCONTINUATION_NEWTON_STEP_ERROR;
+
     if (std::abs(sigma_between_points - previous_sigma_between_points) < .1*(std::abs(sigma_between_points) + std::abs(previous_sigma_between_points))){
 
         // Check if size_steps remains the same after a few steps.
@@ -632,7 +646,7 @@ HugoniotContinuation::~HugoniotContinuation(){
 //
 int HugoniotContinuation::curve(std::vector< std::vector<RealVector> > &curves){
     std::vector<int> edges;
-    cout<<"Algo"<< reference_point.point<<"                 "<<ref.point<< endl;
+//    cout<<"Algo"<< reference_point.point<<"                 "<<ref.point<< endl;
     int info = all_curves(curves, edges);
 
     return info;
@@ -643,9 +657,9 @@ int HugoniotContinuation::disconnected_curve(const RealVector &point_on_edge, in
 }
 
 int HugoniotContinuation::all_curves(std::vector< std::vector<RealVector> > &curves, std::vector<int> &edges){
-    cout <<"Em all"<<endl;
+//    cout <<"Em all"<<endl;
     int info = connected_curve(curves, edges);
-    cout <<"ddfasdfasd"<<endl;
+//    cout <<"ddfasdfasd"<<endl;
     std::vector<std::vector<RealVector> > disconnected_temp;
     std::vector<int> disconnected_edges;
 
