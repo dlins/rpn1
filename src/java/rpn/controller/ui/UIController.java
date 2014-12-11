@@ -57,7 +57,6 @@ public class UIController extends ComponentUI {
     private MouseMotionController mouseMotionController_;
     private rpn.controller.ui.UserInputTable globalInputTable_;
     private static UIController instance_ = null;
-    private String clientID_;
     private RPnPhaseSpacePanel focusPanel_;
     private StateInputController stateController_;
     private boolean auxPanelsEnabled_;

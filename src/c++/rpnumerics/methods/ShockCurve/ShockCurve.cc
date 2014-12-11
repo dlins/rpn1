@@ -1,5 +1,4 @@
 #include "ShockCurve.h"
-#include "TestTools.h"
 
 ShockCurve::ShockCurve(HugoniotContinuation *h){
     hc = h;

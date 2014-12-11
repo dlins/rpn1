@@ -77,7 +77,6 @@
    
 
             <CURVECONFIGURATION name="ellipticboundaryextension">
-                <CURVEPARAM name="resolution" value="128 128"/>
                 <CURVEPARAM name="family" value="0"/>
                 <CURVEPARAM name="characteristicwhere" value="0"/>
         

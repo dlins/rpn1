@@ -158,6 +158,8 @@ int dimension = RpNumerics::physicsVector_->at(0)->boundary()->minimums().size()
     if(info_cmp==COMPOSITE_ERROR){
         return NULL;
     }
+    
+
 
     ReferencePoint referencePoint(realVectorInput, flux, accum, 0);
 
@@ -170,6 +172,8 @@ int dimension = RpNumerics::physicsVector_->at(0)->boundary()->minimums().size()
         nativeEigenValues[i] = referencePoint.e[i].r;
 
     }
+    
+    
 
     jdoubleArray eigenValuesArray = (env)->NewDoubleArray(dimension);
 
@@ -185,7 +189,7 @@ int dimension = RpNumerics::physicsVector_->at(0)->boundary()->minimums().size()
     jobjectArray orbitPointArray = (jobjectArray) (env)->NewObjectArray(cmpcurve.curve.size() - 1, classOrbitPoint, NULL);
 
     for (int i = 1; i < cmpcurve.curve.size(); i++) {
-
+  
         RealVector tempVector = cmpcurve.curve[i];
 
         

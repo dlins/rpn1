@@ -14,14 +14,12 @@ import rpn.command.DoubleContactCommand;
 import rpn.command.BoundaryExtensionCurveCommand;
 import rpn.command.EllipticBoundaryExtensionCommand;
 import rpn.command.EnvelopeCurveCommand;
-import rpn.command.GenericExtensionCurveCommand;
 import rpn.command.HysteresisPlotCommand;
 import rpn.command.InflectionPlotCommand;
 import rpn.command.SecondaryBifurcationCurveCommand;
 
 import rpn.command.SubInflectionExtensionCurveCommand;
 import rpn.command.SubInflectionPlotCommand;
-import rpn.controller.phasespace.extensions.ExtensionCalcWaitState;
 
 import wave.util.RealVector;
 

@@ -1,5 +1,5 @@
 #include "RarefactionCurve.h"
-#include "TestTools.h"
+
 
 RarefactionCurve::RarefactionCurve(const AccumulationFunction *gg, const FluxFunction *ff, const Boundary *bb){
     f = ff;
