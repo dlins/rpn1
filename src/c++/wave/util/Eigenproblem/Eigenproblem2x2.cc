@@ -6,6 +6,7 @@ Eigenproblem2x2::Eigenproblem2x2(): Eigenproblem(){
 Eigenproblem2x2::~Eigenproblem2x2(){
 }
 
+
 // Standard problem.
 //
 int Eigenproblem2x2::find_eigenpair(const DoubleMatrix &A, int index, Eigenpair &ep){
@@ -111,6 +112,13 @@ int Eigenproblem2x2::find_eigenpair(const DoubleMatrix &A, const DoubleMatrix &B
 
 int Eigenproblem2x2::find_eigenpairs(const DoubleMatrix &A, const DoubleMatrix &B, std::vector<Eigenpair> &eps){
     eps.resize(2);
+    for (int i = 0; i < 2; i++){
+        eps[i].right_eigenvector.real.resize(2);
+        eps[i].right_eigenvector.imaginary.resize(2);
+
+        eps[i].left_eigenvector.real.resize(2);
+        eps[i].left_eigenvector.imaginary.resize(2);
+    }
 
     std::vector<Eigenvalue> evs;
     find_eigenvalues(A, evs);
@@ -121,37 +129,103 @@ int Eigenproblem2x2::find_eigenpairs(const DoubleMatrix &A, const DoubleMatrix &
         // Real.
         //
         for (int i = 0; i < 2; i++){
+            eps[i].eigenvalue = evs[i];
+
             double lambda = evs[i].real;
             DoubleMatrix C = A - lambda*B;
 
             if (C(1, 0) != 0.0){
-                eps[i].right_eigenvector.real.resize(2);
                 eps[i].right_eigenvector.real(0) = -C(1, 1);
                 eps[i].right_eigenvector.real(1) =  C(1, 0);
-
                 eps[i].right_eigenvector.real.normalize();
+
+                eps[i].left_eigenvector.real(0) = -C(1, 0);
+                eps[i].left_eigenvector.real(1) =  C(0, 0); // C(1, 1)
+                eps[i].left_eigenvector.real.normalize();
             }
             else if (C(0, 1) != 0.0){
-                eps[i].right_eigenvector.real.resize(2);
                 eps[i].right_eigenvector.real(0) = -C(0, 1);
                 eps[i].right_eigenvector.real(1) =  C(0, 0);
-
                 eps[i].right_eigenvector.real.normalize();
+
+                eps[i].left_eigenvector.real(0) = -C(0, 0);
+                eps[i].left_eigenvector.real(1) =  C(1, 0); // C(0, 1)
+                eps[i].left_eigenvector.real.normalize();
             }
             else { // A(0, 1) == A(1, 0) == 0.0
-                if (C(0, 0) == C(1, 1)) return EIGENPROBLEM_MULTIPLICITY_2;
-             
                 eps[0].right_eigenvector.real(0) = 1.0;
                 eps[0].right_eigenvector.real(1) = 0.0;
 
+                eps[0].left_eigenvector.real(0) = 0.0;
+                eps[0].left_eigenvector.real(1) = 1.0;
+
+
+
                 eps[1].right_eigenvector.real(0) = 0.0;
                 eps[1].right_eigenvector.real(1) = 1.0;
+
+                eps[1].left_eigenvector.real(0) = 1.0;
+                eps[1].left_eigenvector.real(1) = 0.0;
+
+                if (C(0, 0) == C(1, 1)) return EIGENPROBLEM_MULTIPLICITY_2;
             }
         }
     }
     else{
         // Complex.
         //
+        double lambdar = evs[i].real;
+        double lambdai = evs[i].imaginary;
+
+        DoubleMatrix Cr = A - lambdar*B;
+        DoubleMatrix Ci = A - lambdai*B;
+
+        if (Cr(1, 0) != 0.0 || Ci(1, 0) != 0.0){
+            for (int i = 0; i < 2; i++){ 
+                eps[i].right_eigenvector.real(0) = -Cr(1, 1);
+                eps[i].right_eigenvector.real(1) =  Cr(1, 0);
+
+                eps[i].left_eigenvector.real(0) = -Cr(1, 0);
+                eps[i].left_eigenvector.real(1) =  Cr(0, 0);
+            }
+
+            eps[0].right_eigenvector.imaginary(0) = -Ci(1, 1);
+            eps[0].right_eigenvector.imaginary(1) =  Ci(1, 0);
+
+            eps[0].left_eigenvector.imaginary(0) = -Ci(1, 0);
+            eps[0].left_eigenvector.imaginary(1) =  Ci(0, 0);
+
+            eps[0].normalize();
+
+            eps[1].right_eigenvector.imaginary = -eps[0].right_eigenvector.imaginary;
+            eps[1].left_eigenvector.imaginary = -eps[0].left_eigenvector.imaginary;
+        }
+            else if (C(0, 1) != 0.0){
+                eps[i].right_eigenvector.real(0) = -C(0, 1);
+                eps[i].right_eigenvector.real(1) =  C(0, 0);
+                eps[i].right_eigenvector.real.normalize();
+
+                eps[i].left_eigenvector.real(0) = -C(0, 0);
+                eps[i].left_eigenvector.real(1) =  C(1, 0); // C(0, 1)
+                eps[i].left_eigenvector.real.normalize();
+            }
+            else { // A(0, 1) == A(1, 0) == 0.0
+                eps[0].right_eigenvector.real(0) = 1.0;
+                eps[0].right_eigenvector.real(1) = 0.0;
+
+                eps[0].left_eigenvector.real(0) = 0.0;
+                eps[0].left_eigenvector.real(1) = 1.0;
+
+
+
+                eps[1].right_eigenvector.real(0) = 0.0;
+                eps[1].right_eigenvector.real(1) = 1.0;
+
+                eps[1].left_eigenvector.real(0) = 1.0;
+                eps[1].left_eigenvector.real(1) = 0.0;
+
+                if (C(0, 0) == C(1, 1)) return EIGENPROBLEM_MULTIPLICITY_2;
+            }
     }
 
     return EIGENPROBLEM_MULTIPLICITY_1;

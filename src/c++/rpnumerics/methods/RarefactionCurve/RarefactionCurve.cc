@@ -1,5 +1,6 @@
 #include "RarefactionCurve.h"
 #include "TestTools.h"
+#include "Eigenproblem2x2.h"
 
 RarefactionCurve::RarefactionCurve(const AccumulationFunction *gg, const FluxFunction *ff, const Boundary *bb){
     f = ff;
@@ -47,11 +48,27 @@ int RarefactionCurve::field(int *neq, double *xi, double *in, double *out, int *
     // Extract right-eigenvector, verify that it points in the correct direction.
     //
     RealVector rm(*neq, e[rar->family].vrr.data());
+
     if (rm*rar->reference_vector < 0.0) rm = -rm;
 
     // Output.
     //
     for (int i = 0; i < *neq; i++) out[i] = rm(i);
+
+    // Test Eigenproblem2x2.
+    //
+    Eigenproblem2x2 e2x2;
+    std::vector<Eigenpair> eps;
+    e2x2.find_eigenpairs(F_jet.Jacobian(), G_jet.Jacobian(), eps);
+
+    std::cout.precision(16);
+    std::cout << "Right:" << std::endl;
+    std::cout << "LAPACK:          " << rm << std::endl;
+    std::cout << "Eigenproblem2x2: " << eps[rar->family].right_eigenvector.real << std::endl << std::endl;
+
+    std::cout << "Left:" << std::endl;
+    std::cout << "LAPACK:          " << RealVector(*neq, e[rar->family].vlr.data()) << std::endl;
+    std::cout << "Eigenproblem2x2: " << eps[rar->family].left_eigenvector.real << std::endl << std::endl;
 
     return FIELD_OK;
 }

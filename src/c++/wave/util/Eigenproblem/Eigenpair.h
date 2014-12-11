@@ -37,7 +37,7 @@ class Eigenvalue {
         }
 };
 
-class Eigenvector {
+class Eigenvector { // Possibly this means that a ComplexVector is needed, etc.
     private:
     protected:
         void copy(const Eigenvector &orig){
@@ -62,6 +62,19 @@ class Eigenvector {
             if (this != &orig) copy(orig);
 
             return *this;
+        }
+
+        void normalize(){
+            double norm2 = 0.0;
+            for (int i = 0; i < real.size(); i++){
+                norm2 += real(i)*real(i) + imaginary(i)*imaginary(i);
+            }
+            double invnorm = 1.0/sqrt(norm2);
+
+            real      *= invnorm;
+            imaginary *= invnorm;
+
+            return;
         }
 };
 
