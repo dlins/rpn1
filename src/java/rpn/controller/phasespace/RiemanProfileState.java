@@ -58,6 +58,7 @@ public class RiemanProfileState implements PhaseSpaceState {
     public void plot(RPnPhaseSpaceAbstraction phaseSpace, RpGeometry geom) {
 
         phaseSpace.join(geom);
+        if(geom instanceof WaveCurveGeom)
         RiemannProfileCommand.instance().getState().add((WaveCurveGeom) geom);
 
     }

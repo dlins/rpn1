@@ -21,7 +21,6 @@
 
           
             <CURVECONFIGURATION name="bifurcationcurve">
-
                 <CURVEPARAM name="resolution" value="128 128"/>
             </CURVECONFIGURATION>
     
@@ -48,7 +47,12 @@
             <CURVECONFIGURATION name="ellipticboundary">
             </CURVECONFIGURATION>
             
-            
+             <CURVECONFIGURATION name="ellipticboundaryextension">
+                <CURVEPARAM name="family" value="0"/>
+                <CURVEPARAM name="characteristicwhere" value="0"/>
+        
+            </CURVECONFIGURATION>
+
             
           
             <CURVECONFIGURATION name="riemannprofile">
@@ -65,10 +69,6 @@
             </CURVECONFIGURATION>
                   
 
-            <CURVECONFIGURATION name="ellipticextension">
-                <CURVEPARAM name="family" value="0"/>
-                <CURVEPARAM name="characteristicwhere" value="0"/>
-            </CURVECONFIGURATION>
 
             <CURVECONFIGURATION name="inflectioncurve">
                 <CURVEPARAM name="family" value="0"/>
@@ -130,14 +130,14 @@
         
             </CURVECONFIGURATION>
         
-            <CURVECONFIGURATION name="extensioncurve">
+         <!--   <CURVECONFIGURATION name="extensioncurve">
                 <CURVEPARAM name="family" value="0"/>
                 <CURVEPARAM name="resolution" value="128 128"/>
                 <CURVEPARAM name="singular" value="true"/>
                 <CURVEPARAM name="characteristic" value="0"/>
               
 
-            </CURVECONFIGURATION>
+            </CURVECONFIGURATION> -->
             
             
              <CURVECONFIGURATION name="physicalboundary">

@@ -154,7 +154,7 @@
             <sysproperty key="rpnhome" path="${basedir}"/>
             <sysproperty key="RPHOSTTYPE" value="${hosttype}"/>
             <jvmarg value="-Xmx256m"/>
-            <arg value="${basedir}/in/triphase.xml"/>
+            <arg value="${basedir}/in/foam.rpn"/>
 
 
         </java>

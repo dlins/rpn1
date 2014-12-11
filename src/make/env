@@ -2,6 +2,6 @@
 #       If left empty, makefile will get shell settings
 RPGNU=yes
 RPHOSTTYPE=linux_x86_64
-JAVA_HOME=/opt/jdk1.6.0_45
-JAVA_INC=/opt/jdk1.6.0_45/include
-PATH=/home/morante/bin:/usr/lib/lightdm/lightdm:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/home/morante/IMPA/2014/2014_10_26_RPn_repository/rpnmorante/bin:/opt/jdk1.6.0_45/bin:/home/morante/IMPA/2014/2014_10_26_RPn_repository/rpnmorante/bin:/opt/jdk1.6.0_45/bin:/home/morante/IMPA/2014/2014_10_26_RPn_repository/rpnmorante/bin
+JAVA_HOME=/usr/lib/jvm/java-7-oracle
+JAVA_INC=/usr/lib/jvm/java-7-oracle/include
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/home/edsonlan/Java/rpn/bin:/usr/lib/jvm/java-7-oracle/bin:/home/edsonlan/Java/rpn/bin:/usr/lib/jvm/java-7-oracle/bin:/home/edsonlan/Java/rpn/bin

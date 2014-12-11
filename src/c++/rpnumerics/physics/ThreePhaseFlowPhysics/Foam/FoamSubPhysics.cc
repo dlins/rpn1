@@ -141,7 +141,6 @@ FoamSubPhysics::~FoamSubPhysics(){
     delete odesolver_;
     delete compositecurve_;
     delete shockcurve_;
-    delete hugoniotcontinuation_;
     delete rarefactioncurve_;
     for (int i = 0; i < hugoniot_curve.size(); i++) delete hugoniot_curve[i];
 
