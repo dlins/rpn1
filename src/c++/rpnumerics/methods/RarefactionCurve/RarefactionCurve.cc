@@ -1,5 +1,4 @@
 #include "RarefactionCurve.h"
-#include "TestTools.h"
 #include "Eigenproblem2x2.h"
 
 RarefactionCurve::RarefactionCurve(const AccumulationFunction *gg, const FluxFunction *ff, const Boundary *bb){
