@@ -111,6 +111,9 @@ int Eigenproblem2x2::find_eigenpair(const DoubleMatrix &A, const DoubleMatrix &B
 }
 
 int Eigenproblem2x2::find_eigenpairs(const DoubleMatrix &A, const DoubleMatrix &B, std::vector<Eigenpair> &eps){
+    std::vector<Eigenvalue> evs;
+    find_eigenvalues(A, B, evs);
+
     eps.resize(2);
     for (int i = 0; i < 2; i++){
         eps[i].right_eigenvector.real.resize(2);
@@ -118,10 +121,9 @@ int Eigenproblem2x2::find_eigenpairs(const DoubleMatrix &A, const DoubleMatrix &
 
         eps[i].left_eigenvector.real.resize(2);
         eps[i].left_eigenvector.imaginary.resize(2);
-    }
 
-    std::vector<Eigenvalue> evs;
-    find_eigenvalues(A, evs);
+        eps[i].is_real = evs[i].is_real;
+    }
 
     // http://www.math.harvard.edu/archive/21b_fall_04/exhibits/2dmatrices/index.html
     //
@@ -131,6 +133,15 @@ int Eigenproblem2x2::find_eigenpairs(const DoubleMatrix &A, const DoubleMatrix &
         for (int i = 0; i < 2; i++){
             eps[i].eigenvalue = evs[i];
 
+            // Zero imaginary part.
+            //
+            for (int j = 0; j < 2; j++){
+                eps[i].right_eigenvector.imaginary(j) = 0.0;
+                eps[i].left_eigenvector.imaginary(j)  = 0.0;
+            }
+
+            // Proceed...
+            //
             double lambda = evs[i].real;
             DoubleMatrix C = A - lambda*B;
 
@@ -174,64 +185,124 @@ int Eigenproblem2x2::find_eigenpairs(const DoubleMatrix &A, const DoubleMatrix &
     else{
         // Complex.
         //
-        double lambdar = evs[i].real;
-        double lambdai = evs[i].imaginary;
+        double lambdar = evs[0].real;
+        double lambdai = evs[0].imaginary;
 
         DoubleMatrix Cr = A - lambdar*B;
         DoubleMatrix Ci = A - lambdai*B;
 
         if (Cr(1, 0) != 0.0 || Ci(1, 0) != 0.0){
-            for (int i = 0; i < 2; i++){ 
-                eps[i].right_eigenvector.real(0) = -Cr(1, 1);
-                eps[i].right_eigenvector.real(1) =  Cr(1, 0);
-
-                eps[i].left_eigenvector.real(0) = -Cr(1, 0);
-                eps[i].left_eigenvector.real(1) =  Cr(0, 0);
-            }
-
+            // Eigenvectors are pairs of complex conjugated.
+            //
+            eps[0].right_eigenvector.real(0)      = -Cr(1, 1);
+            eps[0].right_eigenvector.real(1)      =  Cr(1, 0);
             eps[0].right_eigenvector.imaginary(0) = -Ci(1, 1);
             eps[0].right_eigenvector.imaginary(1) =  Ci(1, 0);
 
-            eps[0].left_eigenvector.imaginary(0) = -Ci(1, 0);
-            eps[0].left_eigenvector.imaginary(1) =  Ci(0, 0);
+            eps[0].left_eigenvector.real(0)       = -Cr(1, 0);
+            eps[0].left_eigenvector.real(1)       =  Cr(0, 0);
+            eps[0].left_eigenvector.imaginary(0)  = -Ci(1, 0);
+            eps[0].left_eigenvector.imaginary(1)  =  Ci(0, 0);
 
-            eps[0].normalize();
+            eps[0].right_eigenvector.normalize();
+            eps[0].left_eigenvector.normalize();
+
+            // Copy the real part, invert the imaginary part.
+            // 
+            eps[1].right_eigenvector.real      = -eps[0].right_eigenvector.real;
+            eps[1].left_eigenvector.real       = -eps[0].left_eigenvector.real;
 
             eps[1].right_eigenvector.imaginary = -eps[0].right_eigenvector.imaginary;
-            eps[1].left_eigenvector.imaginary = -eps[0].left_eigenvector.imaginary;
+            eps[1].left_eigenvector.imaginary  = -eps[0].left_eigenvector.imaginary;
         }
-            else if (C(0, 1) != 0.0){
-                eps[i].right_eigenvector.real(0) = -C(0, 1);
-                eps[i].right_eigenvector.real(1) =  C(0, 0);
-                eps[i].right_eigenvector.real.normalize();
+        else if (Cr(0, 1) != 0.0 || Ci(0, 1) != 0.0){
+            // Eigenvectors are pairs of complex conjugated.
+            //
+            eps[0].right_eigenvector.real(0)      = -Cr(0, 1);
+            eps[0].right_eigenvector.real(1)      =  Cr(0, 0);
+            eps[0].right_eigenvector.imaginary(0) = -Ci(0, 1);
+            eps[0].right_eigenvector.imaginary(1) =  Ci(0, 0);
 
-                eps[i].left_eigenvector.real(0) = -C(0, 0);
-                eps[i].left_eigenvector.real(1) =  C(1, 0); // C(0, 1)
-                eps[i].left_eigenvector.real.normalize();
-            }
-            else { // A(0, 1) == A(1, 0) == 0.0
-                eps[0].right_eigenvector.real(0) = 1.0;
-                eps[0].right_eigenvector.real(1) = 0.0;
+            eps[0].left_eigenvector.real(0)       = -Cr(0, 0);
+            eps[0].left_eigenvector.real(1)       =  Cr(1, 0);
+            eps[0].left_eigenvector.imaginary(0)  = -Ci(0, 0);
+            eps[0].left_eigenvector.imaginary(1)  =  Ci(1, 0);
 
-                eps[0].left_eigenvector.real(0) = 0.0;
-                eps[0].left_eigenvector.real(1) = 1.0;
+            eps[0].right_eigenvector.normalize();
+            eps[0].left_eigenvector.normalize();
+
+            // Copy the real part, invert the imaginary part.
+            // 
+            eps[1].right_eigenvector.real      = -eps[0].right_eigenvector.real;
+            eps[1].left_eigenvector.real       = -eps[0].left_eigenvector.real;
+
+            eps[1].right_eigenvector.imaginary = -eps[0].right_eigenvector.imaginary;
+            eps[1].left_eigenvector.imaginary  = -eps[0].left_eigenvector.imaginary;
+        }
+        else { // A(0, 1) == A(1, 0) == 0.0
+            // 
+            eps[0].right_eigenvector.real(0)      = 1.0;
+            eps[0].right_eigenvector.real(1)      = 0.0;
+            eps[0].right_eigenvector.imaginary(0) = 0.0;
+            eps[0].right_eigenvector.imaginary(1) = 0.0;
 
 
+            eps[0].left_eigenvector.real(0)       = 0.0;
+            eps[0].left_eigenvector.real(1)       = 1.0;
+            eps[0].left_eigenvector.imaginary(0)  = 0.0;
+            eps[0].left_eigenvector.imaginary(1)  = 0.0;
 
-                eps[1].right_eigenvector.real(0) = 0.0;
-                eps[1].right_eigenvector.real(1) = 1.0;
+            // 
+            eps[1].right_eigenvector.real(0)      = 0.0;
+            eps[1].right_eigenvector.real(1)      = 1.0;
+            eps[1].right_eigenvector.imaginary(0) = 0.0;
+            eps[1].right_eigenvector.imaginary(1) = 0.0;
 
-                eps[1].left_eigenvector.real(0) = 1.0;
-                eps[1].left_eigenvector.real(1) = 0.0;
+            eps[1].left_eigenvector.real(0)       = 1.0;
+            eps[1].left_eigenvector.real(1)       = 0.0;
+            eps[1].left_eigenvector.imaginary(0)  = 0.0;
+            eps[1].left_eigenvector.imaginary(1)  = 0.0;
 
-                if (C(0, 0) == C(1, 1)) return EIGENPROBLEM_MULTIPLICITY_2;
-            }
+            if (Cr(0, 0) == Cr(1, 1)) return EIGENPROBLEM_MULTIPLICITY_2;
+        }
     }
 
     return EIGENPROBLEM_MULTIPLICITY_1;
 }
 
 int Eigenproblem2x2::find_eigenvalue(const DoubleMatrix &A, const DoubleMatrix &B, int index, Eigenvalue &ev){
+}
+
+// Only for real eigenpairs!
+//
+int Eigenproblem2x2::find_eigenvalue(const DoubleMatrix &A, const DoubleMatrix &B, 
+                                     const std::vector<DoubleMatrix> &dA, const std::vector<DoubleMatrix> &dB,
+                                     int index, JetMatrix &ev){
+    // Number of variables == columns of A or B, interpreted as Jacobians of a certain function.
+    //
+    int var = A.cols();
+    ev.resize(var, 1);
+
+    std::vector<Eigenpair> eps;
+    int info = find_eigenpairs(A, B, eps);
+
+    // Set the eigenvalue.
+    //
+    double lambda = eps[index].eigenvalue.real;
+    ev.set(0, lambda);
+
+    RealVector l = eps[index].left_eigenvector.real;
+    RealVector r = eps[index].right_eigenvector.real;
+
+    RealVector dlambda(var);
+
+    double inv_den = 1.0/(l*(B*r));
+
+    for (int i = 0; i < dlambda.size(); i++) dlambda(i) = inv_den*(  l*(dA[i] - lambda*dB[i])*r  );
+
+    for (int i = 0; i < var; i++) ev.set(0, i, dlambda(i));
+
+    return info;
 }
 
 int Eigenproblem2x2::find_eigenvalues(const DoubleMatrix &A, const DoubleMatrix &B, std::vector<Eigenvalue> &evs){

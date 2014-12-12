@@ -27,6 +27,10 @@ class Eigenproblem2x2: public Eigenproblem {
         virtual int find_eigenpairs(const DoubleMatrix &A, const DoubleMatrix &B, std::vector<Eigenpair> &eps);
 
         virtual int find_eigenvalue(const DoubleMatrix &A, const DoubleMatrix &B, int index, Eigenvalue &ev);
+        virtual int find_eigenvalue(const DoubleMatrix &A, const DoubleMatrix &B, 
+                                    const std::vector<DoubleMatrix> &dA, const std::vector<DoubleMatrix> &dB,
+                                    int index, JetMatrix &ev);
+
         virtual int find_eigenvalues(const DoubleMatrix &A, const DoubleMatrix &B, std::vector<Eigenvalue> &evs);
 };
 

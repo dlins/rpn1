@@ -1,10 +1,6 @@
 #include "RarefactionCurve.h"
-<<<<<<< HEAD
 #include "TestTools.h"
 #include "Eigenproblem2x2.h"
-=======
-
->>>>>>> ce7e80c525fec45e24ddd8cbf930d0ad7008d9b6
 
 RarefactionCurve::RarefactionCurve(const AccumulationFunction *gg, const FluxFunction *ff, const Boundary *bb){
     f = ff;
@@ -59,20 +55,20 @@ int RarefactionCurve::field(int *neq, double *xi, double *in, double *out, int *
     //
     for (int i = 0; i < *neq; i++) out[i] = rm(i);
 
-    // Test Eigenproblem2x2.
-    //
-    Eigenproblem2x2 e2x2;
-    std::vector<Eigenpair> eps;
-    e2x2.find_eigenpairs(F_jet.Jacobian(), G_jet.Jacobian(), eps);
+//    // Test Eigenproblem2x2.
+//    //
+//    Eigenproblem2x2 e2x2;
+//    std::vector<Eigenpair> eps;
+//    e2x2.find_eigenpairs(F_jet.Jacobian(), G_jet.Jacobian(), eps);
 
-    std::cout.precision(16);
-    std::cout << "Right:" << std::endl;
-    std::cout << "LAPACK:          " << rm << std::endl;
-    std::cout << "Eigenproblem2x2: " << eps[rar->family].right_eigenvector.real << std::endl << std::endl;
+//    std::cout.precision(16);
+//    std::cout << "Right:" << std::endl;
+//    std::cout << "LAPACK:          " << rm << std::endl;
+//    std::cout << "Eigenproblem2x2: " << eps[rar->family].right_eigenvector.real << std::endl << std::endl;
 
-    std::cout << "Left:" << std::endl;
-    std::cout << "LAPACK:          " << RealVector(*neq, e[rar->family].vlr.data()) << std::endl;
-    std::cout << "Eigenproblem2x2: " << eps[rar->family].left_eigenvector.real << std::endl << std::endl;
+//    std::cout << "Left:" << std::endl;
+//    std::cout << "LAPACK:          " << RealVector(*neq, e[rar->family].vlr.data()) << std::endl;
+//    std::cout << "Eigenproblem2x2: " << eps[rar->family].left_eigenvector.real << std::endl << std::endl;
 
     return FIELD_OK;
 }
@@ -149,7 +145,33 @@ double RarefactionCurve::directional_derivative(const RealVector &p, int fam, co
     RealVector h(F_H.size());
 
     for (int i = 0; i < F_H.size(); i++) h(i) = rm*((F_H[i] - lambda*G_H[i])*rm);
+
+    // Test
+    Eigenproblem2x2 e2x2;
+    JetMatrix ev;
+
+    std::vector<DoubleMatrix> numF(rm.size()), numG(rm.size());
+    for (int i = 0; i < numF.size(); i++){
+        numF[i] = F_jet.extract_matrix_from_Hessian(i);
+        numG[i] = G_jet.extract_matrix_from_Hessian(i);
+    }
+
+    e2x2.find_eigenvalue(F_J, G_J, 
+                         numF, numG,
+                         fam, ev);
+
+    double dd = (lm*h)/(lm*(G_J*rm));
+
+
+    std::cout.precision(16);
+    std::cout << "Dirdrv (classical) = " << dd << std::endl;
+
+    RealVector dlambda(rm.size());
+    for (int i = 0; i < rm.size(); i++) dlambda(i) = ev.get(0, i);
+    std::cout << "Dirdrv (new)       = " << dlambda*rm << std::endl;
     
+    // Test
+
     return (lm*h)/(lm*(G_J*rm));
 }
 

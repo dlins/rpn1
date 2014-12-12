@@ -38,6 +38,12 @@ int Eigenproblem::find_eigenvalue(const DoubleMatrix &A, const DoubleMatrix &B, 
     return 1;
 }
 
+int Eigenproblem::find_eigenvalue(const DoubleMatrix &A, const DoubleMatrix &B, 
+                                  const std::vector<DoubleMatrix> &dA, const std::vector<DoubleMatrix> &dB,
+                                  int index, JetMatrix &ev){
+    return 1;
+}
+
 int Eigenproblem::find_eigenvalues(const DoubleMatrix &A, const DoubleMatrix &B, std::vector<Eigenvalue> &evs){
     return 1;
 }

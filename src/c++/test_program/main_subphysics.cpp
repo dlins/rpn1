@@ -1361,17 +1361,10 @@ int main(){
 //    subphysics = new Brooks_CoreySubPhysics;
 //    subphysics = new CoreyQuadSubPhysics;
 //    subphysics = new KovalSubPhysics;
-<<<<<<< HEAD
 //    subphysics = new FoamSubPhysics;
 //    subphysics = new SorbieSubPhysics;
 //    subphysics = new TPCWSubPhysics;
     subphysics = new Quad2SubPhysics;
-=======
-    subphysics = new FoamSubPhysics;
-//    subphysics = new SorbieSubPhysics;
-//    subphysics = new TPCWSubPhysics;
-//    subphysics = new Quad2SubPhysics;
->>>>>>> c5065a8e79e0ffb1c74f80d0b410a44d119e0888
 
     std::cout << "SubPhysics \"" << subphysics->info_subphysics() << "\" created successfully." << std::endl;
 
