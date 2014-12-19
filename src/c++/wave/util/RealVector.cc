@@ -265,13 +265,25 @@ RealVector normalize(RealVector &x){
     return x;
 }
 
-// Inner product of two RealVectors
+
 double operator*(const RealVector &x, const RealVector &y){
     double p = 0.0;
 
     for (int i = 0; i < x.size(); i++) p += x(i)*y(i);
 
     return p;
+}
+
+// Outer product of two RealVectors.
+//
+DoubleMatrix outer_product(const RealVector &x, const RealVector &y){
+    DoubleMatrix ep(x.size(), y.size());
+
+    for (int i = 0; i < x.size(); i++){
+        for (int j = 0; j < y.size(); j++) ep(i, j) = x(i)*y(j);
+    }
+
+    return ep;
 }
 
 // Vector product of two 3D RealVectors

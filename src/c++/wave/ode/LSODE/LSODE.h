@@ -3,10 +3,17 @@
 
 #include "ODE_Solver.h"
 
+//extern "C"{
+//    int lsode_(int (*)(int *, double *, double *, double *, int *, double *), int *, double *, double *, double *,
+//               int *, double *, double *, int *, int *, int *, double *, int *,
+//               int *, int *, int(*)(int *, double *, double *, int *, int *, double *, int *), int *, int*, double*);
+//}
+
+
 extern "C"{
     int lsode_(int (*)(int *, double *, double *, double *, int *, double *), int *, double *, double *, double *,
                int *, double *, double *, int *, int *, int *, double *, int *,
-               int *, int *, int(*)(int *, double *, double *, int *, int *, double *, int *), int *, int*, double*);
+               int *, int *, int(*)(int*, double*, double*, int*, int*, double*, int*, int*, double*), int *, int*, double*);
 }
 
 class LSODE : public ODE_Solver {
@@ -18,7 +25,7 @@ class LSODE : public ODE_Solver {
         virtual ~LSODE();
 
         int integrate_step(int (*field)(int*, double*, double*, double*, int*, double*),
-                           int (*jacobianfield)(int *, double *, double *, int *, int *, double *, int *),  
+                           int (*jacobianfield)(int*, double*, double*, int*, int*, double*, int*, int*, double*),  
                            int *function_object, double *function_data, 
                            const double init_time,  const RealVector &init_point,  
                            const double final_time,       RealVector &final_point/*,

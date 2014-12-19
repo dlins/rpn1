@@ -178,6 +178,9 @@ permgui: $(OBJECTS)
 eigen: $(OBJECTS)
 	$(LINK) -o $@ $(INCLUDE) main_eigen.cpp $^ $(LDLIBS) $(LDFLAGS)
 
+rarefaction: $(OBJECTS)
+	$(LINK) -o $@ $(INCLUDE) main_rarefaction.cpp $^ $(LDLIBS) $(LDFLAGS)
+
 ##################################################################################
 #
 #	Compilation Rules

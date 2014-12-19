@@ -46,6 +46,6 @@ int Equations::constrained_conservation_laws_jet(const RealVector &p, DoubleMatr
         }
     }
 
-    return CONSTRAINEDCONVECTION_OK;
+    return CONSTRAINED_OK;
 }
 

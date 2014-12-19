@@ -73,24 +73,33 @@ void ThreePhaseFlowMobilityLevelCurve::curve(const RealVector &ref, int type, st
         else if (type == OIL_MOBILITY_CURVE)   component_ = 1;
         else if (type == GAS_MOBILITY_CURVE)   component_ = 2;
 
+        init();
+
         level_ = (*mobilityfunction)(this, ref);
+
+//        std::vector<RealVector> curve;
+//        std::vector< std::deque <RealVector> > deque_curves;
+//        std::vector <bool> is_circular;
+
+//        int method = SEGMENTATION_METHOD;
+//        int info = ContourMethod::contour2d(this, curve, deque_curves, is_circular, method);
+
+//        double rect[4];
+//        rect[0] = subphysics_->boundary()->minimums()(0);
+//        rect[1] = subphysics_->boundary()->maximums()(0);
+//        rect[2] = subphysics_->boundary()->minimums()(1);
+//        rect[3] = subphysics_->boundary()->maximums()(1);
+
+//        int res[2] = {128, 128};
+
+//        int info = ContourMethodPure::contour2d(this, (Boundary*)subphysics_->boundary(), rect, res, curve);
 
         std::vector<RealVector> curve;
         std::vector< std::deque <RealVector> > deque_curves;
         std::vector <bool> is_circular;
 
         int method = SEGMENTATION_METHOD;
-//        int info = ContourMethod::contour2d(this, curve, deque_curves, is_circular, method);
-
-        double rect[4];
-        rect[0] = subphysics_->boundary()->minimums()(0);
-        rect[1] = subphysics_->boundary()->maximums()(0);
-        rect[2] = subphysics_->boundary()->minimums()(1);
-        rect[3] = subphysics_->boundary()->maximums()(1);
-
-        int res[2] = {128, 128};
-
-        int info = ContourMethodPure::contour2d(this, (Boundary*)subphysics_->boundary(), rect, res, curve);
+        int info = ContourMethod::contour2d(this, curve, deque_curves, is_circular, method);
 
         c = curve;
     }
@@ -100,7 +109,6 @@ void ThreePhaseFlowMobilityLevelCurve::curve(const RealVector &ref, int type, st
 
 void ThreePhaseFlowMobilityLevelCurve::curve(double level, int type, std::vector<RealVector> &c){
     c.clear();
-    init();
 
     if (gv != 0){
         if      (type == WATER_MOBILITY_CURVE) mobilityfunction = &water_mobility;
@@ -111,24 +119,34 @@ void ThreePhaseFlowMobilityLevelCurve::curve(double level, int type, std::vector
         else if (type == OIL_MOBILITY_CURVE)   component_ = 1;
         else if (type == GAS_MOBILITY_CURVE)   component_ = 2;
 
+        init();
+
         level_ = level;
+
+//        std::vector<RealVector> curve;
+//        std::vector< std::deque <RealVector> > deque_curves;
+//        std::vector <bool> is_circular;
+
+//        int method = SEGMENTATION_METHOD;
+//        int info = ContourMethod::contour2d(this, curve, deque_curves, is_circular, method);
+
+//        double rect[4];
+//        rect[0] = subphysics_->boundary()->minimums()(0);
+//        rect[1] = subphysics_->boundary()->maximums()(0);
+//        rect[2] = subphysics_->boundary()->minimums()(1);
+//        rect[3] = subphysics_->boundary()->maximums()(1);
+
+//        int res[2] = {128, 128};
+
+//        int info = ContourMethodPure::contour2d(this, (Boundary*)subphysics_->boundary(), rect, res, curve);
 
         std::vector<RealVector> curve;
         std::vector< std::deque <RealVector> > deque_curves;
         std::vector <bool> is_circular;
 
         int method = SEGMENTATION_METHOD;
-//        int info = ContourMethod::contour2d(this, curve, deque_curves, is_circular, method);
+        int info = ContourMethod::contour2d(this, curve, deque_curves, is_circular, method);
 
-        double rect[4];
-        rect[0] = subphysics_->boundary()->minimums()(0);
-        rect[1] = subphysics_->boundary()->maximums()(0);
-        rect[2] = subphysics_->boundary()->minimums()(1);
-        rect[3] = subphysics_->boundary()->maximums()(1);
-
-        int res[2] = {128, 128};
-
-        int info = ContourMethodPure::contour2d(this, (Boundary*)subphysics_->boundary(), rect, res, curve);
 
         c = curve;
     }

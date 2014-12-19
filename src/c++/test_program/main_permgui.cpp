@@ -319,7 +319,8 @@ class PermWindow: public Fl_Double_Window {
         std::vector<double> level;
         std::vector<GraphicObject*> graphicobject;
 
-        PermWindow(int x, int y, int w, int h, const char *l): Fl_Double_Window(x, y, w, h, l){
+        PermWindow(int x, int y, int w, int h, const char *l): Fl_Double_Window(x, y, w, h){
+            copy_label(l);
             sc = 0;
             text = 0;
 
@@ -347,6 +348,7 @@ class PermWindow: public Fl_Double_Window {
 };
 
 std::vector<PermWindow*> permwindow;
+std::vector<PermWindow*> flowwindow;
 
 class ViscosityInputWindow: public Fl_Double_Window {
     private:
@@ -565,6 +567,13 @@ void on_click_flow(Fl_Widget *obj, void*){
     Text *t = new Text(ss.str(), point, shift, 1.0, 0.0, 0.0);
     canvas->add(t);
 
+    pw->level.push_back(flowlevel->level(point, pw->type));
+
+    std::cout << "Stored new level: " << pw->level.back() << std::endl;
+
+    pw->graphicobject.push_back(sc);
+    pw->graphicobject.push_back(t);
+
     Fl::check();
 
     return;
@@ -647,6 +656,8 @@ void applycb(Fl_Widget*, void*){
         parameters[i]->value(parameter_value[i]);
     }
 
+    // Update the mobilities components.
+    //
     for (int i = 0; i < permwindow.size(); i++){
         for (int j = 0; j < permwindow[i]->graphicobject.size(); j++){
             permwindow[i]->canvas->erase(permwindow[i]->graphicobject[j]);
@@ -655,8 +666,6 @@ void applycb(Fl_Widget*, void*){
 
         for (int j = 0; j < permwindow[i]->level.size(); j++){
             std::vector<RealVector> c;
-//            permlevelcurve->prepare_grid();
-//            permlevelcurve->curve(permwindow[i]->level[j], permwindow[i]->type, c);
 
             moblevelcurve->prepare_grid();
             moblevelcurve->curve(permwindow[i]->level[j], permwindow[i]->type, c);
@@ -668,20 +677,29 @@ void applycb(Fl_Widget*, void*){
             SegmentedCurve *sc = new SegmentedCurve(c, 0.0, 0.0, 1.0);
             permwindow[i]->canvas->add(sc);
             permwindow[i]->graphicobject.push_back(sc);
+        }
+    }
 
-//            // Add the level.
-//            //
-//            RealVector shift(2);
-//    shift(0) = -10.0;
-//    shift(1) = -10.0;
-//    std::stringstream ss;
-//    ss.precision(2);
-//    ss << permlevelcurve->level(point, pw->type); // TODO: Use only two digits.
-////    ss << moblevelcurve->level(point, pw->type); // TODO: Use only two digits.
+    // Update the flow components.
+    //
+    for (int i = 0; i < flowwindow.size(); i++){
+        for (int j = 0; j < flowwindow[i]->graphicobject.size(); j++){
+            flowwindow[i]->canvas->erase(flowwindow[i]->graphicobject[j]);
+        }
+        flowwindow[i]->graphicobject.clear();
 
-//    Text *t = new Text(ss.str(), point, shift, 1.0, 0.0, 0.0);
-//    canvas->add(t);
+        for (int j = 0; j < flowwindow[i]->level.size(); j++){
+            std::vector<RealVector> c;
 
+            flowlevel->curve(flowwindow[i]->level[j], flowwindow[i]->type, c);
+
+            if (c.size() == 0) return;
+
+            // Add the curve.
+            //
+            SegmentedCurve *sc = new SegmentedCurve(c, 0.0, 0.0, 1.0);
+            flowwindow[i]->canvas->add(sc);
+            flowwindow[i]->graphicobject.push_back(sc);
         }
     }
 
@@ -737,7 +755,7 @@ int main(){
 
         std::vector<std::string>       name;
         std::vector<int>               type;
-        permlevelcurve->list_of_types(type, name); 
+        moblevelcurve->list_of_types(type, name); 
 
         for (int j = 0; j < name.size(); j++){
             PermWindow *pw = new PermWindow(10 + w*j, 10, w, h, name[j].c_str());
@@ -777,6 +795,8 @@ int main(){
             pw->rndclick->callback(rcflowcb, pw);
 
             pw->rndmove->do_callback();
+
+            flowwindow.push_back(pw); //
         }
     }
 

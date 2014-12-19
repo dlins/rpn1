@@ -42,7 +42,7 @@ FoamSubPhysics::FoamSubPhysics() : ThreePhaseFlowSubPhysics(){
     fdry  = new Parameter(std::string("fdry"), 0.0);
     foil  = new Parameter(std::string("foil"), 0.0);
     fmdry = new Parameter(std::string("fmdry"), 0.0);
-    fmmob = new Parameter(std::string("fmmob"), 55000.0);
+    fmmob = new Parameter(std::string("fmmob"), 2.0); // Was: 55000.0
     fmoil = new Parameter(std::string("fmoil"), 0.0);
 
     equation_parameter_.push_back(epdry);
@@ -84,6 +84,7 @@ FoamSubPhysics::FoamSubPhysics() : ThreePhaseFlowSubPhysics(){
     number_of_cells[1] = 2048;
 
     gridvalues_ = new GridValues(boundary_, boundary_->minimums(), boundary_->maximums(), number_of_cells);
+    for (int i = 0; i < equation_parameter_.size(); i++) equation_parameter_[i]->add(gridvalues_);
 
     // ImplicitHugoniot.
     //
@@ -144,6 +145,7 @@ FoamSubPhysics::~FoamSubPhysics(){
     delete rarefactioncurve_;
     for (int i = 0; i < hugoniot_curve.size(); i++) delete hugoniot_curve[i];
 
+    delete gridvalues_;
     delete flux_;
 
     delete viscosity_;

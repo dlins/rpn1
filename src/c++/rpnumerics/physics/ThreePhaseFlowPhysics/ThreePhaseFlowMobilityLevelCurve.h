@@ -7,6 +7,7 @@
 #include "ThreePhaseFlowSubPhysics.h"
 
 #include "ContourMethodPure.h"
+#include "ContourMethod.h"
 
 #define WATER_MOBILITY_CURVE 0
 #define OIL_MOBILITY_CURVE   1

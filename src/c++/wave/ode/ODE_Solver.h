@@ -12,7 +12,8 @@ class ODE_Solver {
     public:
         virtual ~ODE_Solver(){}
 
-        virtual int integrate_step(int (*field)(int*, double*, double*, double*, int*, double*), int (*jacobian_field)(int *, double *, double *, int *, int *, double *, int *),
+        virtual int integrate_step(int (*field)(int*, double*, double*, double*, int*, double*), 
+                                   int (*jacobian_field)(int*, double*, double*, int*, int*, double*, int*, int*, double*),
                                    int *function_object, double *function_data, 
                                    const double init_time,  const RealVector &init_point,  
                                    const double final_time,       RealVector &final_point/*,

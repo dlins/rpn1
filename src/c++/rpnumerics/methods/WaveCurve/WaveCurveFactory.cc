@@ -78,8 +78,6 @@ int WaveCurveFactory::Liu_half_wavecurve(const ReferencePoint &ref,
     std::vector<int> last_point_in_rarefaction;
 
     while (true){
-        if (hwc.wavecurve.size() > 3) return WAVECURVE_OK;
-
         int current_curve = future_curve;
         RealVector current_curve_initial_point(future_curve_initial_point);
         RealVector current_curve_initial_direction(future_curve_initial_direction);
@@ -96,11 +94,13 @@ int WaveCurveFactory::Liu_half_wavecurve(const ReferencePoint &ref,
             int rar_stopped_because;
             RealVector final_direction;
 
+            int rar_init = (is_first) ? RAREFACTION_INITIALIZE : RAREFACTION_DONT_INITIALIZE;
+
             int info_rar = rarefactioncurve->curve(current_curve_initial_point,
                                                    family,
                                                    increase,
                                                    RAREFACTION,
-                                                   RAREFACTION_INITIALIZE, //RAREFACTION_DONT_INITIALIZE,
+                                                   rar_init, // RAREFACTION_INITIALIZE, //RAREFACTION_DONT_INITIALIZE,
                                                    &current_curve_initial_direction,
                                                    odesolver,
                                                    deltaxi,
@@ -376,7 +376,8 @@ int WaveCurveFactory::Liu_half_wavecurve(const ReferencePoint &ref,
             std::cout << "WaveCurveFactory. shck_info = " << shck_info << ", shock_stopped_because = " << shock_stopped_because << std::endl;
 
             std::cout << "Speed at first shockpoint = " << shkcurve.speed[0] << std::endl;
-
+            std::cout << "Direction: " << shkcurve.final_direction << std::endl;
+            TestTools::pause("Shock finished, check console.");
 
             shkcurve.back_curve_index = hwc.wavecurve.size() - 1;
             hwc.wavecurve.push_back(shkcurve);

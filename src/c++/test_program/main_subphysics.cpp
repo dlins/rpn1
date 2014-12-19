@@ -278,7 +278,11 @@ void rarefactioncb(Fl_Widget*, void*){
 void wincb(Fl_Widget *w, void*){
     Fl_Double_Window *thiswindow = (Fl_Double_Window*)w;
 
-    if (thiswindow == win) exit(0);
+    if (thiswindow == win){
+        delete subphysics;
+
+        exit(0);
+    }
 
     return;
 }
@@ -785,10 +789,14 @@ void wavecurvefactioncb(Fl_Widget*, void*){
 
     if (dimension == 3) initial_point(2) = 1.0;
 
-//    initial_point(0) = 0.14106683804627251355157113721361;
-//    initial_point(1) = 0.25;
+    initial_point(0) = 0.16106;
+    initial_point(1) = 0.220297;
 
     std::cout << "Wavecurve callback, initial point = " << initial_point << std::endl;
+
+    #ifdef TESTCOMPOSITE
+    subphysics->composite()->set_graphics(canvas, scroll);
+    #endif
 
 //    initial_point(0) = 0.623883;
 //    initial_point(1) = 0.292079;
@@ -1361,10 +1369,10 @@ int main(){
 //    subphysics = new Brooks_CoreySubPhysics;
 //    subphysics = new CoreyQuadSubPhysics;
 //    subphysics = new KovalSubPhysics;
-//    subphysics = new FoamSubPhysics;
+    subphysics = new FoamSubPhysics;
 //    subphysics = new SorbieSubPhysics;
 //    subphysics = new TPCWSubPhysics;
-    subphysics = new Quad2SubPhysics;
+//    subphysics = new Quad2SubPhysics;
 
     std::cout << "SubPhysics \"" << subphysics->info_subphysics() << "\" created successfully." << std::endl;
 
