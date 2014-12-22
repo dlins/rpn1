@@ -168,7 +168,6 @@ double RarefactionCurve::directional_derivative(const RealVector &p, int fam, co
 
     double dd = (lm*h)/(lm*(G_J*rm));
 
-
     std::cout.precision(16);
 //    std::cout << "Dirdrv (classical) = " << dd << std::endl;
 
@@ -411,9 +410,6 @@ int RarefactionCurve::curve(const RealVector &initial_point,
 
         return RAREFACTION_ERROR;
     }
-
-    std::cout << "Rarefaction, direction = " << *direction << ", reference_vector = " << reference_vector << std::endl;
-    TestTools::pause("Rarefaction after initilization.");
 
     // Initialize previous_dirdrv.
     //

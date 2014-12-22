@@ -86,6 +86,10 @@ int CompositeCurve::composite_field(int *two_n, double *xi, double *pointpair, d
     
     double dirdrv = (lm*h)/(lm*(GmJac*rm));
 
+    std::cout.precision(8);
+    std::cout << "Composite's field. Point: " << RealVector(*two_n, pointpair) << std::endl;
+    std::cout << "Dirdrv: num = " << (lm*h) << ", den = " << (lm*(GmJac*rm)) << ", dd = " << dirdrv << std::endl;
+
     // Now compute the composite part of the field.
     // Notice that the flux and accumulation used are those associated with the
     // composite.
