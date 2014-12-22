@@ -65,13 +65,13 @@ int Boundary::intersection(const RealVector &p, const RealVector &q, RealVector 
         //
         int count = 0;
 
-        while (norm(pp - qq) > d && count < 100) {
+        do {
             count++;
             r = .5*(pp + qq);
 
             if (inside(r)) pp = r;
             else           qq = r;
-        }
+        } while (norm(pp - qq) > d && count < 100);
 
 
         std::cout << "Boundary. Before returning, r = " << r << std::endl;
