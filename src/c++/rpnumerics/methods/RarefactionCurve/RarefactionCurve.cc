@@ -334,8 +334,8 @@ void RarefactionCurve::add_point_to_curve(const RealVector &p, Curve &curve){
     RealVector point_eigenvalues;
     all_eigenvalues(p, family, point_eigenvalues);
 
-    std::cout.precision(32);
-    std::cout << point_eigenvalues << std::endl;
+//    std::cout.precision(32);
+//    std::cout << point_eigenvalues << std::endl;
 
     curve.eigenvalues.push_back(point_eigenvalues);
 
@@ -437,7 +437,7 @@ int RarefactionCurve::curve(const RealVector &initial_point,
         if (rarcurve.curve.size() > 8000) return RAREFACTION_OK;
 
         int info_odesolver = odesolver->integrate_step(&RarefactionCurve::field, 
-                                                       &RarefactionCurve::Jacobian_field,
+                                                       0, //&RarefactionCurve::Jacobian_field,
                                                       (int*)this, 0 /*double *function_data*/,
                                                       xi,      point,
                                                       next_xi, next_point);
