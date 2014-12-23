@@ -1,5 +1,4 @@
 #include "RarefactionCurve.h"
-#include "TestTools.h"
 #include "Eigenproblem2x2.h"
 
 RarefactionCurve::RarefactionCurve(const AccumulationFunction *gg, const FluxFunction *ff, const Boundary *bb){
@@ -437,7 +436,7 @@ int RarefactionCurve::curve(const RealVector &initial_point,
         if (rarcurve.curve.size() > 8000) return RAREFACTION_OK;
 
         int info_odesolver = odesolver->integrate_step(&RarefactionCurve::field, 
-                                                       0, //&RarefactionCurve::Jacobian_field,
+                                                       0,
                                                       (int*)this, 0 /*double *function_data*/,
                                                       xi,      point,
                                                       next_xi, next_point);

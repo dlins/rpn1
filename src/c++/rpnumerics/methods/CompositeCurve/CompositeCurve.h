@@ -17,7 +17,7 @@
 #include "ODE_Solver.h"
 #include "Bisection.h"
 #include "Curve.h"
-#include "TestTools.h"
+//#include "TestTools.h"
 
 // Forward declaration.
 //
@@ -123,12 +123,12 @@ class WaveCurve;
             }
     };
 
-#define TESTCOMPOSITE
-#ifdef TESTCOMPOSITE
-#include "canvas.h"
-#include "canvasmenuscroll.h"
-#include "curve2d.h"
-#endif
+//#define TESTCOMPOSITE
+//#ifdef TESTCOMPOSITE
+//#include "canvas.h"
+//#include "canvasmenuscroll.h"
+//#include "curve2d.h"
+//#endif
 
 class CompositeCurve {
     private:

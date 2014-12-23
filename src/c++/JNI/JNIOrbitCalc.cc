@@ -20,7 +20,7 @@ NOTE :
 
 #include "rpnumerics_OrbitCalc.h"
 
-#include "Rarefaction.h"
+//#include "Rarefaction.h"
 #include "RpNumerics.h"
 #include "JNIDefs.h"
 #include <vector>

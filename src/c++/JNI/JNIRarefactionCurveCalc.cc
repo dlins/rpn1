@@ -83,7 +83,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionCurveCalc_calc(JNIEnv * env
     int dimension = realVectorInput.size();
 
 
-    //cout << "Ponto de entrada: " << realVectorInput << endl;
+    cout << "Ponto de entrada: " << realVectorInput << endl;
 
 
     const FluxFunction * flux = RpNumerics::physicsVector_->at(0)->flux();

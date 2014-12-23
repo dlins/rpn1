@@ -575,15 +575,7 @@ int CompositeCurve::curve(const AccumulationFunction *RarAccum, const FluxFuncti
                           int &reason_why,
                           int &edge){
 
-        #ifdef TESTCOMPOSITE
-        {
-            Curve2D *cmpc = new Curve2D(composite_initial_point, 0.0, 0.0, 0.0, CURVE2D_MARKERS);
-            canvas->add(cmpc);
-            scroll->add("Initial Cmp point (test)", canvas, cmpc);
-
-            TestTools::pause("Initial Composite point added.");
-        }
-        #endif
+        
 
     normalize_with_respect_to_whom = NORMALIZE_WITH_RESPECT_TO_RAREFACTION;
     compute_first_determinant = true;
@@ -656,7 +648,7 @@ int CompositeCurve::curve(const AccumulationFunction *RarAccum, const FluxFuncti
             int info = shock->find_point_for_sigma_equal_reference_lambda(p, rarcurve.speed[retreat_index], first_composite_point);
 
             if (info == SHOCKCURVE_NEWTON_DID_NOT_CONVERGE){
-                TestTools::pause("Composite, SHOCKCURVE_NEWTON_DID_NOT_CONVERGE");
+//                TestTools::pause("Composite, SHOCKCURVE_NEWTON_DID_NOT_CONVERGE");
                 // In this case, try to retreat even more and create a new shockcurve.
                 Curve shockcurve;
                 std::vector<int> transition_current_index, transition_current_family, transition_reference_index, transition_reference_family;
