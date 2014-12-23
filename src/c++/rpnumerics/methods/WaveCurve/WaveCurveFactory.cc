@@ -377,7 +377,7 @@ int WaveCurveFactory::Liu_half_wavecurve(const ReferencePoint &ref,
 
             std::cout << "Speed at first shockpoint = " << shkcurve.speed[0] << std::endl;
             std::cout << "Direction: " << shkcurve.final_direction << std::endl;
-            TestTools::pause("Shock finished, check console.");
+//            TestTools::pause("Shock finished, check console.");
 
             shkcurve.back_curve_index = hwc.wavecurve.size() - 1;
             hwc.wavecurve.push_back(shkcurve);

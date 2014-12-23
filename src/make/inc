@@ -73,6 +73,7 @@ VPATH = \
 	c++/rpnumerics/methods/WaveCurve \
 	c++/rpnumerics/ParametricPlot \
 	c++/rpnumerics/Curve \
+	c++/Observer_Subject \
 	c++/Model \
 	c++/JetTester \
 	c++/wave \
@@ -161,6 +162,7 @@ INCLUDE = \
 	-I c++/rpnumerics/methods/WaveCurve \
 	-I c++/rpnumerics/ParametricPlot \
 	-I c++/rpnumerics/Curve \
+	-I c++/Observer_Subject \
 	-I c++/Model \
 	-I c++/JetTester \
 	-I c++/wave \
@@ -371,7 +373,6 @@ CCSRC = \
 	WaveCurve.cc \
 	Newton_Improvement.cc \
 	PhasePoint.cc \
-	Rarefaction.cc \
 	FluxFunction.cc \
 	FluxParams.cc \
 	WavePoint.cc \
@@ -379,6 +380,8 @@ CCSRC = \
 	RpSolution.cc \
 	Hysteresis.cc \
 	Curve.cc \
+	Subject.cc \
+	Observer.cc \
 	SubPhysics.cc \
 	Physics.cc \
 	TrivialAccumulationFunction.cc \

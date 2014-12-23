@@ -16,7 +16,7 @@
 
 #include "WaveCurve.h"
 #include "HyperOctree.h"
-#include "TestTools.h"
+//#include "TestTools.h"
 
 #define WAVECURVE_OK                    0
 #define WAVECURVE_ERROR                 1
