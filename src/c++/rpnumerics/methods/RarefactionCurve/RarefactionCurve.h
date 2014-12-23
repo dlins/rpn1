@@ -122,7 +122,7 @@ class RarefactionCurve {
                   int &edge);
 
         static int field(int *neq, double *xi, double *in, double *out, int *obj, double* /* Not used */);
-        static int Jacobian_field();
+        static int Jacobian_field(int *neq, double *xi, double *in, int *ml, int *mu, double *pd, int *nrowpd, int *obj, double* /* Not used */);
 
         static int inflection_signal_event(const RealVector & where, double & directional_derivative_measure, int *signal_object, int * /* reference_direction */);
         static int elliptic_region_signal_event(const RealVector & where, double &er_measure, int *signal_object, int * /* reference_direction */);

@@ -72,7 +72,7 @@ int RarefactionCurve::field(int *neq, double *xi, double *in, double *out, int *
     return FIELD_OK;
 }
 
-int RarefactionCurve::Jacobian_field(){
+int RarefactionCurve::Jacobian_field(int *neq, double *xi, double *in, int *ml, int *mu, double *pd, int *nrowpd, int *obj, double* /* Not used */){
 
 //subroutine jac (neq, t, y, ml, mu, pd, nrowpd)
 //c   dimension y(neq), pd(nrowpd,neq)
@@ -105,9 +105,15 @@ int RarefactionCurve::Jacobian_field(){
 //        }
 //    }
 
-//    return JACOBIAN_FIELD_OK;
-//}
+//    Eigenproblem e;
+//    DoubleMatrix dr;
+//    e.find_eigenvector(RealVector(*neq, in), dr);
 
+//    for (int i = 0; i < *neq; i++){
+//        for (int j = 0; j < *neq; j++) pd[j*(*neq) + i] = dr(i, j); // Transposed!
+//    }
+
+    return JACOBIAN_FIELD_OK;
 }
 
 // TODO: Remember this method will ultimately be moved to another class.
@@ -161,13 +167,12 @@ double RarefactionCurve::directional_derivative(const RealVector &p, int fam, co
 
     double dd = (lm*h)/(lm*(G_J*rm));
 
-
     std::cout.precision(16);
-    std::cout << "Dirdrv (classical) = " << dd << std::endl;
+//    std::cout << "Dirdrv (classical) = " << dd << std::endl;
 
     RealVector dlambda(rm.size());
     for (int i = 0; i < rm.size(); i++) dlambda(i) = ev.get(0, i);
-    std::cout << "Dirdrv (new)       = " << dlambda*rm << std::endl;
+//    std::cout << "Dirdrv (new)       = " << dlambda*rm << std::endl;
     
     // Test
 
@@ -388,11 +393,15 @@ int RarefactionCurve::curve(const RealVector &initial_point,
     //
     int info_initialize;
 
+    std::cout << "Rarefaction, should_initialize = " << should_initialize << ", family = " << family << std::endl;
+
     if (should_initialize == RAREFACTION_INITIALIZE){
         info_initialize = initialize(initial_point, family, increase, reference_vector, dirdrv);
+        std::cout << "Rarefaction, initialized." << std::endl;
     }
     else {
         info_initialize = initialize(initial_point, family, *direction, reference_vector, dirdrv);
+        std::cout << "Rarefaction, did not initialize." << std::endl;
     }
 
     if (info_initialize == RAREFACTION_INIT_ERROR){
@@ -427,6 +436,7 @@ int RarefactionCurve::curve(const RealVector &initial_point,
         if (rarcurve.curve.size() > 8000) return RAREFACTION_OK;
 
         int info_odesolver = odesolver->integrate_step(&RarefactionCurve::field, 
+                                                       &RarefactionCurve::Jacobian_field,
                                                       (int*)this, 0 /*double *function_data*/,
                                                       xi,      point,
                                                       next_xi, next_point);

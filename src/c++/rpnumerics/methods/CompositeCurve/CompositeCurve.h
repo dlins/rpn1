@@ -17,6 +17,7 @@
 #include "ODE_Solver.h"
 #include "Bisection.h"
 #include "Curve.h"
+#include "TestTools.h"
 
 // Forward declaration.
 //
@@ -122,6 +123,13 @@ class WaveCurve;
             }
     };
 
+#define TESTCOMPOSITE
+#ifdef TESTCOMPOSITE
+#include "canvas.h"
+#include "canvasmenuscroll.h"
+#include "curve2d.h"
+#endif
+
 class CompositeCurve {
     private:
     protected:
@@ -135,7 +143,7 @@ class CompositeCurve {
         // For integrating as a ODE.
         int family;        
         double tolerance;
-        RealVector reference_vector;
+        RealVector reference_vector, composite_reference_vector;
         double referencedeterminant; // If referencedeterminant
         
         // TODO: This should be replaced by a pointer to the rarefaction curve as a whole. A class RarefactionCurvePoints should be created
@@ -180,7 +188,10 @@ class CompositeCurve {
 
         int normalize_with_respect_to_whom;
 
-       
+        #ifdef TESTCOMPOSITE
+        Canvas *canvas;
+        CanvasMenuScroll *scroll;
+        #endif
     public:
         CompositeCurve(const AccumulationFunction *a, const FluxFunction *f, const Boundary *b, ShockCurve *s, Explicit_Bifurcation_Curves *ebc);
         virtual ~CompositeCurve();
@@ -267,7 +278,14 @@ class CompositeCurve {
 
 //        static int characteristic_shock_signal_event(const RealVector &where, double &diff_lambda, int *obj, int * /*not used*/);
 
-        
+        #ifdef TESTCOMPOSITE
+        void set_graphics(Canvas *c, CanvasMenuScroll *s){
+            canvas = c;
+            scroll = s;
+
+            return;
+        }
+        #endif
 };
 
 #endif // _COMPOSITECURVE_

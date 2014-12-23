@@ -3,12 +3,10 @@
 
 #include "Eigenproblem.h"
 
-#define EIGENPROBLEM_MULTIPLICITY_1 1
-#define EIGENPROBLEM_MULTIPLICITY_2 2
-
 class Eigenproblem2x2: public Eigenproblem {
     private:
     protected:
+        virtual int solve_system(const DoubleMatrix &A, const RealVector &b, RealVector &x);
     public:
         Eigenproblem2x2();
         virtual ~Eigenproblem2x2();

@@ -305,6 +305,21 @@ int Eigenproblem2x2::find_eigenvalue(const DoubleMatrix &A, const DoubleMatrix &
     return info;
 }
 
+// Assume x.size() == 2.
+//
+int Eigenproblem2x2::solve_system(const DoubleMatrix &A, const RealVector &b, RealVector &x){
+    double Delta = A(0, 0)*A(1, 1) - A(0, 1)*A(1, 0);
+    
+    if (abs(Delta) <= 1e-20) return EIGENPROBLEM_SOLVE_ERROR;
+
+    double invDelta = 1.0/Delta;
+
+    x(0) = invDelta*(b(0)*A(1, 1) - b(1)*A(0, 1));
+    x(1) = invDelta*(b(1)*A(0, 0) - b(0)*A(1, 0));
+
+    return EIGENPROBLEM_SOLVE_OK;
+}
+
 int Eigenproblem2x2::find_eigenvalues(const DoubleMatrix &A, const DoubleMatrix &B, std::vector<Eigenvalue> &evs){
     evs.resize(2);
 

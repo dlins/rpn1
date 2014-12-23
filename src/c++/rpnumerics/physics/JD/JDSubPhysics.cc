@@ -24,6 +24,7 @@ JDSubPhysics::JDSubPhysics() : SubPhysics() {
     number_of_cells[1] = 256;
 
     gridvalues_ = new GridValues(boundary_, pmin, pmax, number_of_cells);
+    for (int i = 0; i < equation_parameter_.size(); i++) equation_parameter_[i]->add(gridvalues_);
 
     // Implicit Hugoniot.
     //

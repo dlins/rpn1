@@ -1,8 +1,8 @@
 #ifndef _EQUATIONS_
 #define _EQUATIONS_
 
-#define CONSTRAINEDCONVECTION_OK    0
-#define CONSTRAINEDCONVECTION_ERROR 1
+#define CONSTRAINED_OK    0
+#define CONSTRAINED_ERROR 1
 
 #define CONSTRAINED_VARIABLES_OK      0
 #define CONSTRAINED_VARIABLES_ERROR (-1)
@@ -17,6 +17,8 @@
 class Equations {
     private:
     protected:
+        virtual int compute(const RealVector &p, int degree, JetMatrix &Fjet) = 0;
+        virtual int compute(const RealVector &p, int degree, JetMatrix &Fjet, JetMatrix &Gjet) = 0;
         virtual int compute(const RealVector &p, int degree, JetMatrix &Fjet, JetMatrix &Gjet, JetMatrix &Cjet) = 0;
 
         // Derived classes must set these.

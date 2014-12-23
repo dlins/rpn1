@@ -86,6 +86,10 @@ int CompositeCurve::composite_field(int *two_n, double *xi, double *pointpair, d
     
     double dirdrv = (lm*h)/(lm*(GmJac*rm));
 
+    std::cout.precision(8);
+    std::cout << "Composite's field. Point: " << RealVector(*two_n, pointpair) << std::endl;
+    std::cout << "Dirdrv: num = " << (lm*h) << ", den = " << (lm*(GmJac*rm)) << ", dd = " << dirdrv << std::endl;
+
     // Now compute the composite part of the field.
     // Notice that the flux and accumulation used are those associated with the
     // composite.
@@ -113,6 +117,15 @@ int CompositeCurve::composite_field(int *two_n, double *xi, double *pointpair, d
         return FIELD_ERROR;
     }
 
+    // Check the orientation of cf. (THIS IS ONLY A TEST).
+    //
+    if (cf*composite_object->composite_reference_vector < 0.0){
+        cf *= -1.0;
+    }
+
+    //
+    // Check the orientation of cf. (THIS IS ONLY A TEST).
+
     if (composite_object->normalize_with_respect_to_whom == NORMALIZE_WITH_RESPECT_TO_COMPOSITE){
         double inv_nrm = 1.0/norm(cf);
 
@@ -127,6 +140,8 @@ int CompositeCurve::composite_field(int *two_n, double *xi, double *pointpair, d
     // The last part of the field:
      //
     for (int i = 0; i < n; i++) field[i + n] = cf(i);
+
+    std::cout << "Rar+Comp. field = " << RealVector(2*n, field) << std::endl;
 
 //    // TODO: This normalization does not appear to improve the quality of the solutions.
 //    //       The curves are longer, though, which produces better-looking curves.
@@ -560,6 +575,16 @@ int CompositeCurve::curve(const AccumulationFunction *RarAccum, const FluxFuncti
                           int &reason_why,
                           int &edge){
 
+        #ifdef TESTCOMPOSITE
+        {
+            Curve2D *cmpc = new Curve2D(composite_initial_point, 0.0, 0.0, 0.0, CURVE2D_MARKERS);
+            canvas->add(cmpc);
+            scroll->add("Initial Cmp point (test)", canvas, cmpc);
+
+            TestTools::pause("Initial Composite point added.");
+        }
+        #endif
+
     normalize_with_respect_to_whom = NORMALIZE_WITH_RESPECT_TO_RAREFACTION;
     compute_first_determinant = true;
     cmp_deltaxi = deltaxi;
@@ -631,6 +656,7 @@ int CompositeCurve::curve(const AccumulationFunction *RarAccum, const FluxFuncti
             int info = shock->find_point_for_sigma_equal_reference_lambda(p, rarcurve.speed[retreat_index], first_composite_point);
 
             if (info == SHOCKCURVE_NEWTON_DID_NOT_CONVERGE){
+                TestTools::pause("Composite, SHOCKCURVE_NEWTON_DID_NOT_CONVERGE");
                 // In this case, try to retreat even more and create a new shockcurve.
                 Curve shockcurve;
                 std::vector<int> transition_current_index, transition_current_family, transition_reference_index, transition_reference_family;
@@ -740,12 +766,32 @@ int CompositeCurve::curve(const AccumulationFunction *RarAccum, const FluxFuncti
 
     field = &composite_field;
 
+    // Reference for the composite.
+//    composite_reference_vector = RealVector(n, n, rarcmp_point) - rarcurve.curve.back();
+    composite_reference_vector = -reference_vector;
+
     while (true){
 //        std::cout << "CompositeCurve, inside while. compositecurve.curve.size() = " << compositecurve.curve.size() << std::endl;
 
         int info_odesolver = odesolver->integrate_step(field, (int*)this, (double*)0 /*function_data*/, 
                                                        init_time,  rarcmp_point,
                                                        final_time, out);
+
+        #ifdef TESTCOMPOSITE
+        {
+            RealVector rarpointgraph(0, n, rarcmp_point);
+            Curve2D *rarc = new Curve2D(rarpointgraph, 1.0, 0.0, 0.0, CURVE2D_MARKERS);
+            canvas->add(rarc);
+            scroll->add("Rar point (test)", canvas, rarc);
+
+            RealVector cmppointgraph(n, n, rarcmp_point);
+            Curve2D *cmpc = new Curve2D(rarpointgraph, 0.0, 1.0, 0.0, CURVE2D_MARKERS);
+            canvas->add(cmpc);
+            scroll->add("Cmp point (test)", canvas, cmpc);
+
+            TestTools::pause("Composite point added.");
+        }
+        #endif
 
         if (use_field_near_double_contact){
             field = &composite_field_near_double_contact;
@@ -965,6 +1011,11 @@ int CompositeCurve::curve(const AccumulationFunction *RarAccum, const FluxFuncti
         //
         for (int i = 0; i < n; i++) reference_vector(i) = out(i) - rarcmp_point(i);
         normalize(reference_vector);
+
+        // Update the composite's reference.
+        //
+        for (int i = 0; i < n; i++) composite_reference_vector(i) = out(i + n) - rarcmp_point(i + n);
+        normalize(composite_reference_vector);
 
         init_time = final_time;
         final_time += deltaxi;

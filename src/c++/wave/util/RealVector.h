@@ -114,6 +114,10 @@ public:
     // Inner product of two RealVectors
     friend double operator*(const RealVector &x, const RealVector &y);
 
+    // Outer product.
+    //
+    friend DoubleMatrix outer_product(const RealVector &x, const RealVector &y);
+
     // Vector product of two 3D RealVectors
     friend RealVector vector_product(const RealVector &x, const RealVector &y);
 

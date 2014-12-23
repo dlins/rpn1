@@ -278,7 +278,11 @@ void rarefactioncb(Fl_Widget*, void*){
 void wincb(Fl_Widget *w, void*){
     Fl_Double_Window *thiswindow = (Fl_Double_Window*)w;
 
-    if (thiswindow == win) exit(0);
+    if (thiswindow == win){
+        delete subphysics;
+
+        exit(0);
+    }
 
     return;
 }
@@ -295,18 +299,31 @@ void nozoomcb(Fl_Widget*, void*){
     return;
 }
 
-void parametercb(Fl_Widget*, void*){
-    for (int i = 0; i < parameters_input.size(); i++){
-        std::stringstream ss;
-        ss << parameters_input[i]->value();
-        
-        double v;
-        ss >> v;
-        parameters[i]->value(v);
-    }
+void parametercb(Fl_Widget *w, void *param_obj){
+//    for (int i = 0; i < parameters_input.size(); i++){
+//        std::stringstream ss;
+//        ss << parameters_input[i]->value();
+//        
+//        double v;
+//        ss >> v;
+//        parameters[i]->value(v);
+//    }
 
-    subphysics->gridvalues()->clear_computations();
-    
+//    subphysics->gridvalues()->clear_computations();
+
+    // The observer-subject paradigm is tested here. Only the Parameter that was changed
+    // notifies of it to the GridValues.
+    //
+    Fl_Float_Input *input = (Fl_Float_Input*)w;
+    Parameter *parameter = (Parameter*)param_obj;
+
+    std::stringstream ss;
+    ss << input->value();
+        
+    double v;
+    ss >> v;
+    parameter->value(v);
+
     return;
 }
 
@@ -316,7 +333,7 @@ void add_parameters(int px, const std::vector<Parameter*> &vp){
         std::stringstream ss;
         ss << vp[i]->value();
         input->value(ss.str().c_str());
-        input->callback(parametercb);
+        input->callback(parametercb, (void*)vp[i]);
 
         parametersgrp->add(input);
 
@@ -785,10 +802,17 @@ void wavecurvefactioncb(Fl_Widget*, void*){
 
     if (dimension == 3) initial_point(2) = 1.0;
 
-//    initial_point(0) = 0.14106683804627251355157113721361;
-//    initial_point(1) = 0.25;
+//    initial_point(0) = 0.16106;
+//    initial_point(1) = 0.220297;
+
+    initial_point(0) = 0.266444;
+    initial_point(1) = 0.657434;
 
     std::cout << "Wavecurve callback, initial point = " << initial_point << std::endl;
+
+    #ifdef TESTCOMPOSITE
+    subphysics->composite()->set_graphics(canvas, scroll);
+    #endif
 
 //    initial_point(0) = 0.623883;
 //    initial_point(1) = 0.292079;
@@ -1361,10 +1385,10 @@ int main(){
 //    subphysics = new Brooks_CoreySubPhysics;
 //    subphysics = new CoreyQuadSubPhysics;
 //    subphysics = new KovalSubPhysics;
-//    subphysics = new FoamSubPhysics;
+    subphysics = new FoamSubPhysics;
 //    subphysics = new SorbieSubPhysics;
 //    subphysics = new TPCWSubPhysics;
-    subphysics = new Quad2SubPhysics;
+//    subphysics = new Quad2SubPhysics;
 
     std::cout << "SubPhysics \"" << subphysics->info_subphysics() << "\" created successfully." << std::endl;
 

@@ -7,7 +7,8 @@ LSODE::~LSODE(){
 }
 
 int LSODE::integrate_step(int (*field)(int*, double*, double*, double*, int*, double*),
-                          int (*jacobianfield)(int *, double *, double *, int *, int *, double *, int *),
+//                          int (*jacobianfield)(int *, double *, double *, int *, int *, double *, int *),
+                          int (*jacobianfield)(int*, double*, double*, int*, int*, double*, int*, int*, double*),
                           int *function_object, double *function_data, 
                           const double init_time,  const RealVector &init_point,  
                           const double final_time,       RealVector &final_point/*,

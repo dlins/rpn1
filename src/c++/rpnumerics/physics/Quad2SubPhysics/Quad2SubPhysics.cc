@@ -50,6 +50,7 @@ Quad2SubPhysics::Quad2SubPhysics(): SubPhysics(){
     number_of_cells[1] = 128;
 
     gridvalues_ = new GridValues(boundary_, boundary_->minimums(), boundary_->maximums(), number_of_cells);
+    for (int i = 0; i < equation_parameter_.size(); i++) equation_parameter_[i]->add(gridvalues_);
 
     // Rarefaction.
     //
