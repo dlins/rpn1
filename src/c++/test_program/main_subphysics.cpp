@@ -805,8 +805,8 @@ void wavecurvefactioncb(Fl_Widget*, void*){
 //    initial_point(0) = 0.16106;
 //    initial_point(1) = 0.220297;
 
-    initial_point(0) = 0.266444;
-    initial_point(1) = 0.657434;
+//    initial_point(0) = 0.266444;
+//    initial_point(1) = 0.657434;
 
     std::cout << "Wavecurve callback, initial point = " << initial_point << std::endl;
 
