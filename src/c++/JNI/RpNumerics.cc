@@ -382,9 +382,6 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_readNativePhysicsConfig
 
     //Grid Resolution 
 
-
-    cout << "Resolucao do grid" << RpNumerics::physicsVector_->at(0)->gridvalues()->grid_resolution << endl;
-
     const Boundary * boundary = RpNumerics::physicsVector_->at(0)->boundary();
 
     RealVector gridRes = RpNumerics::physicsVector_->at(0)->gridvalues()->grid_resolution;
@@ -393,9 +390,6 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_readNativePhysicsConfig
 
 
     double nCelsY = (boundary->maximums()(1) - boundary->minimums()(1)) / gridRes(1);
-
-
-
 
     stringstream doubleStream;
 
@@ -422,30 +416,19 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_readNativePhysicsConfig
 
         env->CallStaticVoidMethod(cls, setParamValueMethodID, gridName, gridParamName, newResolutionString);
 
-    } else {
+    } else {//TODO Resolver para o caso do Configuration nao existir no arquivo de entrada
 
-        jobject resConfiguration = env->NewObject(curveConfigurationClass, physicsConfigurationParamsConstructorMethodID, gridName);
-
-        jobject resolutionParameter = env->NewObject(textParameterClass, textParameterConstructorID, gridParamName, newResolutionString);
-
-        env->CallObjectMethod(resConfiguration, addParameterMethodID, resolutionParameter);
-        
-        env->CallStaticVoidMethod(cls, setConfigurationMethodID,gridName,resConfiguration);
+//        jobject resConfiguration = env->NewObject(curveConfigurationClass, physicsConfigurationParamsConstructorMethodID, gridName);
+//
+//        jobject resolutionParameter = env->NewObject(textParameterClass, textParameterConstructorID, gridParamName, newResolutionString);
+//
+//        env->CallObjectMethod(resConfiguration, addParameterMethodID, resolutionParameter);
+//        
+//        env->CallStaticVoidMethod(cls, setConfigurationMethodID,gridName,resConfiguration);
 
 
 
     }
-
-
-
-
-
-
-
-
-    cout << "x do grid " << nCelsX << " " << nCelsY << endl;
-
-
 
 }
 
@@ -846,32 +829,7 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setResolution
 (JNIEnv * env, jclass cls, jobject min, jobject max, jstring gridName, jintArray newResolution) {
 
 
-    cout << "Chamando set resolution" << endl;
-
-
-
-    jclass realVectorClass = env->FindClass(REALVECTOR_LOCATION);
-    //
-    jmethodID toDoubleMethodID = (env)->GetMethodID(realVectorClass, "toDouble", "()[D");
-    //
-    //
     int dimension = env->GetArrayLength(newResolution);
-    //
-    //    //    //min  processing
-    //        jdoubleArray minLimit = (jdoubleArray) (env)->CallObjectMethod(min, toDoubleMethodID);
-    //    //
-    //        double minNativeArray[dimension];
-    //        env->GetDoubleArrayRegion(minLimit, 0, dimension, minNativeArray);
-    //    //    //max processing
-    //    //
-    //        jdoubleArray maxLimit = (jdoubleArray) (env)->CallObjectMethod(max, toDoubleMethodID);
-    //    //
-    //        double maxNativeArray[dimension];
-    //    //
-    //        env->GetDoubleArrayRegion(maxLimit, 0, dimension, maxNativeArray);
-    //
-    //
-    //        Processing resolution
     vector<int>newResolutionVector;
 
     int tempResolutionArray[dimension];
@@ -884,22 +842,9 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setResolution
         newResolutionVector.push_back(tempResolutionArray[i]);
 
     }
-    //
-    //    const char * gridNameNative = env->GetStringUTFChars(gridName, NULL);
-
-
-
-
-    //    const Boundary * boundary = RpNumerics::getPhysics().getSubPhysics(0).getPreProcessedBoundary();
-
-
-
     const Boundary * boundary = RpNumerics::physicsVector_->at(0)->boundary();
 
     RpNumerics::physicsVector_->at(0)->gridvalues()->set_grid(boundary, boundary->minimums(), boundary->maximums(), newResolutionVector);
-
-
-    //        grid->set_grid(boundary, boundary->minimums(), boundary->maximums(), newResolutionVector);
 
 }
 

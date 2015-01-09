@@ -157,9 +157,9 @@ public class RPnNumericsModule {
         public void endDocument() throws SAXException {
             
             try { 
-            RPNUMERICS.getParamValue("gridresolution", "resolution");
+            RPNUMERICS.getParamValue("grid", "resolution");
 
-            int [] gridResolution = RPNUMERICS.processResolution(RPNUMERICS.getParamValue("gridresolution", "resolution"));
+            int [] gridResolution = RPNUMERICS.processResolution(RPNUMERICS.getParamValue("grid", "resolution"));
             
             RPNUMERICS.setResolution(RPNUMERICS.boundary().getMinimums(), RPNUMERICS.boundary().getMaximums(),"gridname", gridResolution);
                 

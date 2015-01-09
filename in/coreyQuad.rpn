@@ -38,7 +38,9 @@
                 
             </CURVECONFIGURATION>
             
-            
+            <CURVECONFIGURATION name="grid">
+                <CURVEPARAM name="resolution" value="128 128"/>
+            </CURVECONFIGURATION>
             
             
             <CURVECONFIGURATION name="transitionalline">

@@ -43,7 +43,7 @@
             </METHOD>
             
             
-             <CURVECONFIGURATION name="hugoniotcurve">
+            <CURVECONFIGURATION name="hugoniotcurve">
                 <CURVEPARAM name="resolution" value="120 120"/>
                 <CURVEPARAM name="method" value="Generic Implicit Hugoniot Curve"/>
                 <CURVEPARAM name="case" value="Generic point"/>
@@ -55,6 +55,12 @@
 
                 <CURVEPARAM name="resolution" value="128 128"/>
             </CURVECONFIGURATION>
+    
+            <CURVECONFIGURATION name="grid">
+                <CURVEPARAM name="resolution" value="128 128"/>
+            </CURVECONFIGURATION>
+
+    
     
     
             <CURVECONFIGURATION name="doublecontactcurve">
@@ -83,20 +89,20 @@
             
             
             
-                 <CURVECONFIGURATION name="wavecurve">
+            <CURVECONFIGURATION name="wavecurve">
                 <CURVEPARAM name="origin" value="Generic point"/>
                 <CURVEPARAM name="direction" value="10"/>
                 <CURVEPARAM name="family" value="0"/>
                 <CURVEPARAM name="transitionalline" value="None"/>
             </CURVECONFIGURATION>
                   
-<!--            
+            <!--            
             <CURVECONFIGURATION name="eigen sort method">
                 <CURVEPARAM name="sort by" value="Using families"/>
             </CURVECONFIGURATION>
             -->
             
-             <CURVECONFIGURATION name="envelopecurve">
+            <CURVECONFIGURATION name="envelopecurve">
                 <CURVEPARAM name="whereisconstant" value="0"/>
                 <CURVEPARAM name="numberofsteps" value="128"/>
                 <CURVEPARAM name="edge" value="0"/>
@@ -118,7 +124,7 @@
 
             </CURVECONFIGURATION>
             
-         <!--    <CURVECONFIGURATION name="envelopecurve">
+            <!--    <CURVECONFIGURATION name="envelopecurve">
                 <CURVEPARAM name="resolution" value="128 128"/>
                 <CURVEPARAM name="whereisconstant" value="0"/>
                 <CURVEPARAM name="numberofsteps" value="128"/>

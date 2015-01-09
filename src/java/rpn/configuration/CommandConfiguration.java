@@ -45,7 +45,7 @@ public class CommandConfiguration extends Configuration {
 
         }
 
-        System.out.println("Tamanho do map:" + getConfigurationMap().size());
+
 
         return buffer.toString();
     }

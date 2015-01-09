@@ -19,6 +19,12 @@
                 
             </CURVECONFIGURATION> 
 
+            <CURVECONFIGURATION name="grid">
+                <CURVEPARAM name="resolution" value="128 128"/>
+            </CURVECONFIGURATION>
+
+
+
           
             <CURVECONFIGURATION name="bifurcationcurve">
                 <CURVEPARAM name="resolution" value="128 128"/>
@@ -140,7 +146,7 @@
             </CURVECONFIGURATION> -->
             
             
-             <CURVECONFIGURATION name="physicalboundary">
+            <CURVECONFIGURATION name="physicalboundary">
             </CURVECONFIGURATION>
 
   

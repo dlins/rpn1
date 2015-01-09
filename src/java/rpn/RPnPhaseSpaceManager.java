@@ -51,7 +51,7 @@ public class RPnPhaseSpaceManager {
         eraseConfiguration.setParamValue("curveid", String.valueOf(curve.getId()));
         eraseConfiguration.setParamValue("phasespace", phaseSpace.getName());
         
-        System.out.println(eraseConfiguration.toXML());
+//        System.out.println(eraseConfiguration.toXML());
         
         PropertyChangeEvent event = new PropertyChangeEvent(CurveRemoveCommand.instance(), null, null, eraseConfiguration);
         UndoActionController.instance().addAction(new RpCommand(event));

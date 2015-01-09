@@ -288,7 +288,7 @@ public class RPNUMERICS {
 
     public static ExtensionCurveCalc createExtensionCurveCalc(List<RealSegment> segments, CoordsArray[] areaSelected) {
 
-        int[] resolution = processResolution(RPNUMERICS.getParamValue("bifurcationcurve", "resolution"));
+        int[] resolution = processResolution(RPNUMERICS.getParamValue("grid", "resolution"));
         int family = new Integer(getParamValue("extensioncurve", "family"));
         int characteristic = new Integer(getParamValue("extensioncurve", "characteristic"));
         boolean singular = new Boolean(getParamValue("extensioncurve", "singular"));
@@ -354,7 +354,7 @@ public class RPNUMERICS {
 
     public static CharacteristicPolynomialLevelCalc createLevelCurveCalc(double level) {
 
-        int[] resolution = processResolution(RPNUMERICS.getParamValue("bifurcationcurve", "resolution"));
+        int[] resolution = processResolution(RPNUMERICS.getParamValue("grid", "resolution"));
 
         int family = new Integer(getParamValue("levelcurve", "family"));
 
@@ -364,7 +364,7 @@ public class RPNUMERICS {
 
     public static CharacteristicPolynomialLevelCalc createDiscriminantLevelCurveCalc(Double level) {
 
-        int[] resolution = processResolution(RPNUMERICS.getParamValue("bifurcationcurve", "resolution"));
+        int[] resolution = processResolution(RPNUMERICS.getParamValue("grid", "resolution"));
 
         return new DiscriminantLevelCurveCalc(level, new ContourParams(resolution));
 
@@ -372,14 +372,14 @@ public class RPNUMERICS {
 
     public static CharacteristicPolynomialLevelCalc createDiscriminantPointLevelCurveCalc(RealVector realVector) {
 
-        int[] resolution = processResolution(RPNUMERICS.getParamValue("bifurcationcurve", "resolution"));
+        int[] resolution = processResolution(RPNUMERICS.getParamValue("grid", "resolution"));
 
         return new DiscriminantPointLevelCalc(realVector, new ContourParams(resolution));
 
     }
 
     public static CharacteristicPolynomialLevelCalc createDerivativeDiscriminantLevelCurveCalc() {
-        int[] resolution = processResolution(RPNUMERICS.getParamValue("bifurcationcurve", "resolution"));
+        int[] resolution = processResolution(RPNUMERICS.getParamValue("grid", "resolution"));
         int u = Integer.parseInt(getParamValue("derivativediscriminant", "u"));
         return new DerivativeDiscriminantLevelCurveCalc(u, new ContourParams(resolution));
 
@@ -421,7 +421,7 @@ public class RPNUMERICS {
 
     public static EllipticBoundaryCalc createEllipticBoundaryCalc() {
 
-        int[] resolution = processResolution(RPNUMERICS.getParamValue("bifurcationcurve", "resolution"));
+        int[] resolution = processResolution(RPNUMERICS.getParamValue("grid", "resolution"));
 
         return new EllipticBoundaryCalc(new ContourParams(resolution));
 
@@ -429,7 +429,7 @@ public class RPNUMERICS {
 
     public static EllipticBoundaryExtensionCalc createEllipticExtensionCalc() {
 
-        int[] resolution = processResolution(RPNUMERICS.getParamValue("bifurcationcurve", "resolution"));
+        int[] resolution = processResolution(RPNUMERICS.getParamValue("grid", "resolution"));
 
         int family = new Integer(getParamValue("ellipticboundaryextension", "family"));
 
@@ -498,7 +498,7 @@ public class RPNUMERICS {
 
     public static HysteresisCurveCalc createHysteresisCurveCalc() {
 
-        int[] resolution = processResolution(RPNUMERICS.getParamValue("bifurcationcurve", "resolution"));
+        int[] resolution = processResolution(RPNUMERICS.getParamValue("grid", "resolution"));
 
         ContourParams params = new ContourParams(resolution);
 
@@ -522,7 +522,7 @@ public class RPNUMERICS {
 
     public static BoundaryExtensionCurveCalc createBoundaryExtensionCurveCalc() {
 
-        int[] resolution = processResolution(RPNUMERICS.getParamValue("bifurcationcurve", "resolution"));
+        int[] resolution = processResolution(RPNUMERICS.getParamValue("grid", "resolution"));
 
         ContourParams params = new ContourParams(resolution);
 
@@ -595,7 +595,7 @@ public class RPNUMERICS {
 
     public static InflectionCurveCalc createInflectionCurveCalc() {
 
-        int[] resolution = processResolution(RPNUMERICS.getParamValue("bifurcationcurve", "resolution"));
+        int[] resolution = processResolution(RPNUMERICS.getParamValue("grid", "resolution"));
 
         ContourParams params = new ContourParams(resolution);
 
@@ -612,7 +612,7 @@ public class RPNUMERICS {
 
     public static RarefactionExtensionCalc createRarefactionExtensionCalc(OrbitPoint orbitPoint) {
 
-        int[] resolution = processResolution(RPNUMERICS.getParamValue("bifurcationcurve", "resolution"));
+        int[] resolution = processResolution(RPNUMERICS.getParamValue("grid", "resolution"));
 
         int curveFamily = new Integer(getParamValue("rarefactionextension", "curvefamily"));
 

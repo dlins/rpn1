@@ -49,6 +49,12 @@
                 <CURVEPARAM name="case" value="Generic point"/>
                 
             </CURVECONFIGURATION> 
+            
+            
+            
+  <CURVECONFIGURATION name="grid">
+                <CURVEPARAM name="resolution" value="128 128"/>
+            </CURVECONFIGURATION>
 
           
             <CURVECONFIGURATION name="bifurcationcurve">

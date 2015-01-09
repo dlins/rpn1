@@ -315,7 +315,7 @@ public class RPnCurvesList extends Observable implements ActionListener, ListSel
     @Override
     public void actionPerformed(ActionEvent e) {
 
-        System.out.println("Comando: " + e.paramString());
+//        System.out.println("Comando: " + e.paramString());
 
         if (e.getSource() instanceof JButton) {
             JButton button = (JButton) e.getSource();

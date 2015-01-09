@@ -12,7 +12,6 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Set;
 import rpn.configuration.Configuration;
-import rpn.ui.ConfigurationView;
 import rpn.ui.SpinButtonCreator;
 import rpnumerics.RPNUMERICS;
 
@@ -35,7 +34,7 @@ public class RPnResolutionDialog extends RPnDialog {
      *
      */
     private void jbInit() throws Exception {
-        setTitle("Configuration");
+        setTitle("Grid Resolution");
         extensionPanel_ = new JTabbedPane();
         applyButton.setText("OK");
         extensionPanel_.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
@@ -54,20 +53,14 @@ public class RPnResolutionDialog extends RPnDialog {
 //                extensionPanel_.addTab("DoubleContact and SecondaryBifurcation", input.createUIComponent());
 //            }
 
-            if (entry.getValue().getName().equals("gridresolution")) {
-                
-                ConfigurationView configView = new ConfigurationView(RPNUMERICS.getConfiguration("gridresolution"));
-                
-                System.out.println(RPNUMERICS.getConfiguration("gridresolution"));
-                
-                getContentPane().add(configView.getContainer());
-//                extensionPanel_.addTab(entry.getKey(), configView.getContainer());
+            if (entry.getValue().getName().equals("grid")) {
+                extensionPanel_.addTab(entry.getKey(), input.createUIComponent());
 
             }
 
         }
 
-        setMinimumSize(new Dimension(getTitle().length() * 50, 40));
+        setMinimumSize(new Dimension(getTitle().length() * 20, 40));
 
         getContentPane().add(extensionPanel_, BorderLayout.CENTER);
 

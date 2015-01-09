@@ -57,9 +57,9 @@
             </CURVECONFIGURATION>
 
     
-<!--            <CURVECONFIGURATION name="gridresolution">
-                <CURVEPARAM name="resolution" value="20 20"/>
-            </CURVECONFIGURATION>-->
+            <CURVECONFIGURATION name="grid">
+                <CURVEPARAM name="resolution" value="128 128"/>
+            </CURVECONFIGURATION>
 
             
                 

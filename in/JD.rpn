@@ -20,6 +20,11 @@
             
             
             
+              <CURVECONFIGURATION name="grid">
+                <CURVEPARAM name="resolution" value="128 128"/>
+            </CURVECONFIGURATION>
+
+            
                  
             <CURVECONFIGURATION name="hugoniotcurve">
                 <CURVEPARAM name="resolution" value="120 120"/>
