@@ -66,30 +66,25 @@ public class RPNUMERICS {
         }
 
         HashMap<String, Configuration> configurationMap = physicsConfiguration.getConfigurationMap();
-        
-        
+
         Set<Map.Entry<String, Configuration>> entrySet = configurationMap.entrySet();
         Iterator<Map.Entry<String, Configuration>> iterator = entrySet.iterator();
-        
-        
-        
+
         while (iterator.hasNext()) {
-            
+
             Map.Entry<String, Configuration> entry = iterator.next();
-            
+
             Configuration config = entry.getValue();
-            
-            if(!config.getName().equals("fluxfunction")){
-                 for (Parameter param : config.getParameterList()) {
-                
-                setAuxFuntionParam(config.getName(), param.getName(), param.getValue());
-                
-                
+
+            if (!config.getName().equals("fluxfunction")) {
+                for (Parameter param : config.getParameterList()) {
+
+                    setAuxFuntionParam(config.getName(), param.getName(), param.getValue());
+
+                }
+
             }
-            
-            }
-            
-           
+
         }
 
     }
@@ -217,7 +212,6 @@ public class RPNUMERICS {
 
     }
 
-   
     public static RarefactionCurveCalc createRarefactionCalc(OrbitPoint orbitPoint) {
         Integer direction = new Integer(getParamValue("fundamentalcurve", "direction"));
         return new RarefactionCurveCalc(orbitPoint, Integer.parseInt(getParamValue("fundamentalcurve", "family")), direction);
@@ -348,9 +342,6 @@ public class RPNUMERICS {
     public static EllipticBoundaryExtensionCalc createEllipticBoundaryExtensionCalc(Configuration configuration) {
 
         int[] resolution = processResolution(configuration.getParam("resolution"));
-        
-        
-        
 
         int curveFamily = new Integer(configuration.getParam("curvefamily"));
         int domainFamily = new Integer(configuration.getParam("domainfamily"));
@@ -448,7 +439,6 @@ public class RPNUMERICS {
 
     }
 
-
     public static DoubleContactCurveCalc createDoubleContactCurveCalc() {
 
         int[] resolution = processResolution(RPNUMERICS.getParamValue("doublecontactcurve", "resolution"));
@@ -465,9 +455,7 @@ public class RPNUMERICS {
 
     }
 
-
     public static SecondaryBifurcationCurveCalc createSecondaryBifurcationCurveCalc() {
-
 
         int[] resolution = processResolution(RPNUMERICS.getParamValue("doublecontactcurve", "resolution"));
 
@@ -649,8 +637,8 @@ public class RPNUMERICS {
         direction_ = integer;
 
     }
-    
-     public static int[] processResolution(String resolution) {
+
+    public static int[] processResolution(String resolution) {
         String[] splitedResolution = resolution.split(" ");
         int[] result = new int[splitedResolution.length];
         try {
@@ -663,7 +651,6 @@ public class RPNUMERICS {
         }
         return result;
     }
-
 
     public static void updateUplus(List<RealVector> eqPoints) {
         RealVector newUPlus = null;
@@ -711,11 +698,9 @@ public class RPNUMERICS {
 
     }
 
-  
     //
     // Accessors
     //
-
     public static ViscousProfileData getViscousProfileData() {
         return shockProfile_;
 
@@ -770,7 +755,6 @@ public class RPNUMERICS {
 //            setPhysicsParams(physicsConfiguration.getParamOrder(paramName), physicsConfiguration.getParam(paramName));
 //
 //        }
-
 //        
 ////        FluxParams previousParams = getFluxParams();
 ////
@@ -829,13 +813,11 @@ public class RPNUMERICS {
     public static native ArrayList<String> getTransisionalLinesNames();
 
     public static native void readNativePhysicsConfig();
-    
+
     public static native List<String> getAuxFunctionNames();
-    
+
     public static native void setAuxFuntionParam(String auxFuncName, String auxFuncParam, String value);
 
     public static native String[] getHugoniotCaseNames(String hugoniotMethodName);
 
-    
-   
 }

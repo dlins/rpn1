@@ -6,7 +6,6 @@
  */
 package rpn.ui;
 
-import java.awt.event.ActionListener;
 import javax.swing.JComponent;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;

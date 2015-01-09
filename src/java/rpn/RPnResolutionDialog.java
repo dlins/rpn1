@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Set;
 import rpn.configuration.Configuration;
+import rpn.ui.ConfigurationView;
 import rpn.ui.SpinButtonCreator;
 import rpnumerics.RPNUMERICS;
 
@@ -45,16 +46,22 @@ public class RPnResolutionDialog extends RPnDialog {
 
         for (Entry<String, Configuration> entry : configSet) {
             SpinButtonCreator input = new SpinButtonCreator(entry.getValue(),"resolution");
-            if (entry.getValue().getName().equals("bifurcationcurve")) {
-                extensionPanel_.addTab("Bifurcation Curves", input.createUIComponent());
-            }
+//            if (entry.getValue().getName().equals("bifurcationcurve")) {
+//                extensionPanel_.addTab("Bifurcation Curves", input.createUIComponent());
+//            }
+//
+//            if (entry.getValue().getName().equals("doublecontactcurve")) {
+//                extensionPanel_.addTab("DoubleContact and SecondaryBifurcation", input.createUIComponent());
+//            }
 
-            if (entry.getValue().getName().equals("doublecontactcurve")) {
-                extensionPanel_.addTab("DoubleContact and SecondaryBifurcation", input.createUIComponent());
-            }
-
-            if (entry.getValue().getName().equals("hugoniotcurve")) {
-                extensionPanel_.addTab(entry.getKey(), input.createUIComponent());
+            if (entry.getValue().getName().equals("gridresolution")) {
+                
+                ConfigurationView configView = new ConfigurationView(RPNUMERICS.getConfiguration("gridresolution"));
+                
+                System.out.println(RPNUMERICS.getConfiguration("gridresolution"));
+                
+                getContentPane().add(configView.getContainer());
+//                extensionPanel_.addTab(entry.getKey(), configView.getContainer());
 
             }
 

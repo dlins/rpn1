@@ -55,7 +55,16 @@
 
                 <CURVEPARAM name="resolution" value="128 128"/>
             </CURVECONFIGURATION>
+
     
+<!--            <CURVECONFIGURATION name="gridresolution">
+                <CURVEPARAM name="resolution" value="20 20"/>
+            </CURVECONFIGURATION>-->
+
+            
+                
+                    
+                            
     
             <CURVECONFIGURATION name="doublecontactcurve">
                 <CURVEPARAM name="curvefamily" value="1"/>

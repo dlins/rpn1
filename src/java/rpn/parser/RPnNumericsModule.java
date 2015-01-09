@@ -154,7 +154,20 @@ public class RPnNumericsModule {
         public void startDocument() throws SAXException {
         }
 
-        public void endDocument() throws SAXException {//Setando a resolucao dos grids.Usando tres grids . Um para Hugoniot, um para DoubleContact e um para as demais curvas (com resolucao da inflexao)
+        public void endDocument() throws SAXException {
+            
+            try { 
+            RPNUMERICS.getParamValue("gridresolution", "resolution");
+
+            int [] gridResolution = RPNUMERICS.processResolution(RPNUMERICS.getParamValue("gridresolution", "resolution"));
+            
+            RPNUMERICS.setResolution(RPNUMERICS.boundary().getMinimums(), RPNUMERICS.boundary().getMaximums(),"gridname", gridResolution);
+                
+            }
+            catch (NullPointerException ex){
+                System.out.println("Excessao no end document");
+            }
+            
             
             RPNUMERICS.readNativePhysicsConfig();
             

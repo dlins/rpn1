@@ -60,7 +60,13 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_readNativePhysicsConfig
 
     jclass configurationClass = env->FindClass(CONFIGURATION_LOCATION);
     jclass physicsConfigurationClass = env->FindClass("rpn/configuration/PhysicsConfiguration");
-    
+
+    jclass curveConfigurationClass = env->FindClass("rpn/configuration/CurveConfiguration");
+
+
+
+
+
     jclass physicsConfigurationParamsClass = env->FindClass("rpn/configuration/PhysicsConfigurationParams");
 
     jclass parameterLeafClass = env->FindClass("rpn/configuration/ParameterLeaf");
@@ -82,8 +88,17 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_readNativePhysicsConfig
 
     jmethodID getConfigurationMethodID = env->GetStaticMethodID(cls, "getConfiguration", "(Ljava/lang/String;)Lrpn/configuration/Configuration;");
 
+    jmethodID setConfigurationMethodID = env->GetStaticMethodID(cls, "setConfiguration", "(Ljava/lang/String;Lrpn/configuration/Configuration;)V");
+
 
     jmethodID physicsConfigurationConstructorMethodID = env->GetMethodID(physicsConfigurationClass, "<init>", "(Ljava/lang/String;)V");
+    
+    
+    jmethodID curveConfigurationConstructorMethodID = env->GetMethodID(curveConfigurationClass, "<init>", "(Ljava/lang/String;)V");
+    
+    
+    
+    
     jmethodID physicsConfigurationParamsConstructorMethodID = env->GetMethodID(physicsConfigurationParamsClass, "<init>", "(Ljava/lang/String;)V");
 
 
@@ -100,6 +115,9 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_readNativePhysicsConfig
     jmethodID addAssociatedParameterMethodID = env->GetMethodID(parameterClass, "addAssociatedParameter", "(Lrpn/configuration/Parameter;)V");
 
     jmethodID addConfigurationMethodID = env->GetMethodID(configurationClass, "addConfiguration", "(Lrpn/configuration/Configuration;)V");
+
+
+    jmethodID setParamValueMethodID = env->GetStaticMethodID(cls, "setParamValue", "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V");
 
 
 
@@ -179,7 +197,6 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_readNativePhysicsConfig
 
     for (int i = 0; i < hugoniotMethodsVector.size(); i++) {
 
-        //
         jstring hugoniotMethodName = env->NewStringUTF(hugoniotMethodsVector.at(i)->Hugoniot_info().c_str());
 
         env->CallVoidMethod(methodParameter, parameterAddOptionID, hugoniotMethodName);
@@ -284,7 +301,7 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_readNativePhysicsConfig
     RpNumerics::physicsVector_->at(0)->equation_parameter(parameters);
 
     jstring fluxFunctionName = env->NewStringUTF("fluxfunction");
-    
+
     jobject fluxFunctionConfiguration = env->NewObject(physicsConfigurationParamsClass, physicsConfigurationParamsConstructorMethodID, fluxFunctionName);
 
     for (int j = 0; j < parameters.size(); j++) {
@@ -314,9 +331,6 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_readNativePhysicsConfig
     env->CallObjectMethod(physicsConfiguration, addConfigurationMethodID, fluxFunctionConfiguration);
 
     //AuxiliaryFunctions 
-
-
-
 
 
     vector<AuxiliaryFunction *> auxFuncVector;
@@ -363,12 +377,73 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_readNativePhysicsConfig
         env->CallObjectMethod(physicsConfiguration, addConfigurationMethodID, auxFunctionConfiguration);
 
 
+    }
 
+
+    //Grid Resolution 
+
+
+    cout << "Resolucao do grid" << RpNumerics::physicsVector_->at(0)->gridvalues()->grid_resolution << endl;
+
+    const Boundary * boundary = RpNumerics::physicsVector_->at(0)->boundary();
+
+    RealVector gridRes = RpNumerics::physicsVector_->at(0)->gridvalues()->grid_resolution;
+
+    double nCelsX = (boundary->maximums()(0) - boundary->minimums()(0)) / gridRes(0);
+
+
+    double nCelsY = (boundary->maximums()(1) - boundary->minimums()(1)) / gridRes(1);
+
+
+
+
+    stringstream doubleStream;
+
+    doubleStream << nCelsX << " " << nCelsY;
+
+    string doubleString;
+
+    doubleStream >> doubleString;
+
+
+    jstring gridName = env->NewStringUTF("gridresolution");
+
+
+    jstring gridParamName = env->NewStringUTF("resolution");
+
+    jstring newResolutionString = env->NewStringUTF(doubleString.c_str());
+
+
+
+    jobject resolutionConfiguration = env->CallStaticObjectMethod(cls, getConfigurationMethodID, gridName);
+
+
+    if (resolutionConfiguration != NULL) {
+
+        env->CallStaticVoidMethod(cls, setParamValueMethodID, gridName, gridParamName, newResolutionString);
+
+    } else {
+
+        jobject resConfiguration = env->NewObject(curveConfigurationClass, physicsConfigurationParamsConstructorMethodID, gridName);
+
+        jobject resolutionParameter = env->NewObject(textParameterClass, textParameterConstructorID, gridParamName, newResolutionString);
+
+        env->CallObjectMethod(resConfiguration, addParameterMethodID, resolutionParameter);
+        
+        env->CallStaticVoidMethod(cls, setConfigurationMethodID,gridName,resConfiguration);
 
 
 
     }
 
+
+
+
+
+
+
+
+    cout << "x do grid " << nCelsX << " " << nCelsY << endl;
 
 
 
@@ -770,40 +845,45 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RPNUMERICS_getFluxParams
 JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setResolution
 (JNIEnv * env, jclass cls, jobject min, jobject max, jstring gridName, jintArray newResolution) {
 
-    //    jclass realVectorClass = env->FindClass(REALVECTOR_LOCATION);
+
+    cout << "Chamando set resolution" << endl;
+
+
+
+    jclass realVectorClass = env->FindClass(REALVECTOR_LOCATION);
     //
-    //    jmethodID toDoubleMethodID = (env)->GetMethodID(realVectorClass, "toDouble", "()[D");
-    //
-    //
-    //    int dimension = env->GetArrayLength(newResolution);
-    //
-    //    //min  processing
-    //    jdoubleArray minLimit = (jdoubleArray) (env)->CallObjectMethod(min, toDoubleMethodID);
-    //
-    //    double minNativeArray[dimension];
-    //    env->GetDoubleArrayRegion(minLimit, 0, dimension, minNativeArray);
-    //    //max processing
-    //
-    //    jdoubleArray maxLimit = (jdoubleArray) (env)->CallObjectMethod(max, toDoubleMethodID);
-    //
-    //    double maxNativeArray[dimension];
-    //
-    //    env->GetDoubleArrayRegion(maxLimit, 0, dimension, maxNativeArray);
+    jmethodID toDoubleMethodID = (env)->GetMethodID(realVectorClass, "toDouble", "()[D");
     //
     //
-    //    //Processing resolution
-    //    vector<int>newResolutionVector;
+    int dimension = env->GetArrayLength(newResolution);
     //
-    //    int tempResolutionArray[dimension];
+    //    //    //min  processing
+    //        jdoubleArray minLimit = (jdoubleArray) (env)->CallObjectMethod(min, toDoubleMethodID);
+    //    //
+    //        double minNativeArray[dimension];
+    //        env->GetDoubleArrayRegion(minLimit, 0, dimension, minNativeArray);
+    //    //    //max processing
+    //    //
+    //        jdoubleArray maxLimit = (jdoubleArray) (env)->CallObjectMethod(max, toDoubleMethodID);
+    //    //
+    //        double maxNativeArray[dimension];
+    //    //
+    //        env->GetDoubleArrayRegion(maxLimit, 0, dimension, maxNativeArray);
     //
     //
-    //    env->GetIntArrayRegion(newResolution, 0, dimension, tempResolutionArray);
-    //
-    //
-    //    for (int i = 0; i < dimension; i++) {
-    //        newResolutionVector.push_back(tempResolutionArray[i]);
-    //
-    //    }
+    //        Processing resolution
+    vector<int>newResolutionVector;
+
+    int tempResolutionArray[dimension];
+
+
+    env->GetIntArrayRegion(newResolution, 0, dimension, tempResolutionArray);
+
+
+    for (int i = 0; i < dimension; i++) {
+        newResolutionVector.push_back(tempResolutionArray[i]);
+
+    }
     //
     //    const char * gridNameNative = env->GetStringUTFChars(gridName, NULL);
 
@@ -814,7 +894,12 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setResolution
 
 
 
-    //    grid->set_grid(boundary, boundary->minimums(), boundary->maximums(), newResolutionVector);
+    const Boundary * boundary = RpNumerics::physicsVector_->at(0)->boundary();
+
+    RpNumerics::physicsVector_->at(0)->gridvalues()->set_grid(boundary, boundary->minimums(), boundary->maximums(), newResolutionVector);
+
+
+    //        grid->set_grid(boundary, boundary->minimums(), boundary->maximums(), newResolutionVector);
 
 }
 
@@ -1036,34 +1121,34 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_initNative(JNIEnv * env, jclas
         RpNumerics::physicsVector_->push_back(new KovalSubPhysics());
     }
 
-    
-    
-      if (physicsStringName.compare("Brooks-Corey") == 0) {
+
+
+    if (physicsStringName.compare("Brooks-Corey") == 0) {
         RpNumerics::physicsVector_->push_back(new Brooks_CoreySubPhysics());
 
-      }
+    }
 
     if (physicsStringName.compare("DeadVolatileVolatileGasSubPhysics") == 0) {
         RpNumerics::physicsVector_->push_back(new DeadVolatileVolatileGasSubPhysics());
     }
 
-    
-    
-    
+
+
+
     if (physicsStringName.compare("Quad2SubPhysics") == 0) {
         RpNumerics::physicsVector_->push_back(new Quad2SubPhysics());
 
     }
-    
-    
-    
-    
-     if (physicsStringName.compare("Foam") == 0) {
+
+
+
+
+    if (physicsStringName.compare("Foam") == 0) {
         RpNumerics::physicsVector_->push_back(new FoamSubPhysics());
 
     }
-    
-     if (physicsStringName.compare("Sorbie") == 0) {
+
+    if (physicsStringName.compare("Sorbie") == 0) {
         RpNumerics::physicsVector_->push_back(new SorbieSubPhysics());
 
     }
@@ -1075,7 +1160,7 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_initNative(JNIEnv * env, jclas
     RpNumerics::waveCurveMap_ = new map<int, WaveCurve *>();
     RpNumerics::fillPhysicsParams();
 
-      
+
 
 
 }
