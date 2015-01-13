@@ -184,6 +184,12 @@ rarefaction: $(OBJECTS)
 transitional: $(OBJECTS)
 	$(LINK) -o $@ $(INCLUDE) main_transitional.cpp $^ $(LDLIBS) $(LDFLAGS)
 
+riemann: $(OBJECTS)
+	$(LINK) -o $@ $(INCLUDE) main_riemann.cpp $^ $(LDLIBS) $(LDFLAGS)
+
+foam_fdry: $(OBJECTS)
+	$(LINK) -o $@ $(INCLUDE) main_foam_fdry.cpp $^ $(LDLIBS) $(LDFLAGS)
+
 ##################################################################################
 #
 #	Compilation Rules

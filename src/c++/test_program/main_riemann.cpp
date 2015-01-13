@@ -1,7 +1,8 @@
-#include "StoneFluxFunction.h"
-#include "StoneAccumulation.h"
+//#include "StoneFluxFunction.h"
+//#include "StoneAccumulation.h"
 #include "IsoTriang2DBoundary.h"
 #include "Stone_Explicit_Bifurcation_Curves.h"
+#include "TestTools.h" 
 
 #include "RarefactionCurve.h"
 #include "CompositeCurve.h"
@@ -142,7 +143,7 @@ void comp(Fl_Widget*, void*){
         family = 1;
         increase = RAREFACTION_SPEED_SHOULD_DECREASE;
 
-        liuwavecurve(point, THREEPHASEFLOWWAVECURVEFACTORY_O_TO_W, wavecurve2);
+        liuwavecurve(point, WAVECURVEFACTORY_GENERIC_POINT/*THREEPHASEFLOWWAVECURVEFACTORY_O_TO_W*/, wavecurve2);
 
         TestTools::pause("Done here.");
 

@@ -827,7 +827,7 @@ int main(){
         int paramwinh = 10 + parameters.size()*(25 + 10) + 25 + 10;
         int paramwinw = 500;
         paramwin = new Fl_Double_Window(10, 10, paramwinw, paramwinh, "Parameters");
-        int px = 50;
+        int px = 100;
 
         for (int i = 0; i < parameters.size(); i++){
             Fl_Float_Input *input = new Fl_Float_Input(px, 10 + (25 + 10)*i, paramwinw - 10 - px, 25, parameters[i]->name().c_str());

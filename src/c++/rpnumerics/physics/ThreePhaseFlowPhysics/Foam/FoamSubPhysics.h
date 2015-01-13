@@ -15,6 +15,9 @@ class FoamSubPhysics : public ThreePhaseFlowSubPhysics {
 
 //        Parameter *mug0;
         Parameter *epdry, *fdry, *foil, *fmdry, *fmmob, *fmoil, *floil, *epoil;
+
+        // TEMPORARY HACK, KILL IT LATER!
+        Parameter *fdry_switch, *fo_switch;
     public:
         FoamSubPhysics();
         virtual ~FoamSubPhysics();
