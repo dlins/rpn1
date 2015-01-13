@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project basedir="../.." name="RPN-IDE">
+    <import file="../build.xml"/>
+    <!-- TODO: edit the following target according to your needs -->
+    <!-- (more info: http://www.netbeans.org/kb/articles/freeform-config.html#debugj2se) -->
+    <target description="Runs the program" name="debug-nb">
+        <property name="run.class" value="rpn.RPnDesktopPlotter"/>
+        <path id="run.classpath">
+            <pathelement path="${libdir}/rpn.jar"/>
+        </path>
+        <!-- this path tag is not necessary !
+        <path id="run.endorsed.dir">
+            <fileset dir="${libdir}">
+                <include name="*.jar"/>
+            </fileset>
+        </path> -->
+        <nbjpdastart addressproperty="jpda.address" name="RPN" transport="dt_socket"/>
+        <java classname="${run.class}" classpathref="run.classpath" dir="${srcdir}" fork="true">
+            <sysproperty key="java.library.path" path="${libdir}/${hosttype}"/>
+            <sysproperty key="rpnhome" path="${basedir}"/>
+            <sysproperty key="RPHOSTTYPE" value="${hosttype}"/>
+            <jvmarg value="-Xmx256m"/>
+            <arg value="${basedir}/in/coreyQuad.rpn"/>
+            <jvmarg value="-Xdebug"/>
+            <jvmarg value="-Xrunjdwp:transport=dt_socket,address=${jpda.address}"/>
+        </java>
+    </target>
+    <target name="-profile-check">
+        <startprofiler freeform="true"/>
+    </target>
+    <!-- TODO: edit the following target according to your needs -->
+    <!-- (more info: http://netbeans.org/kb/articles/freeform-config.html#profilej2se) -->
+    <target depends="-profile-check" description="Runs the program" if="profiler.configured" name="profile-nb">
+        <property name="run.class" value="rpn.RPnDesktopPlotter"/>
+        <path id="run.classpath">
+            <pathelement path="${libdir}/rpn.jar"/>
+        </path>
+        <!-- this path tag is not necessary !
+        <path id="run.endorsed.dir">
+            <fileset dir="${libdir}">
+                <include name="*.jar"/>
+            </fileset>
+        </path> -->
+        <java classname="${run.class}" classpathref="run.classpath" dir="${srcdir}" fork="true">
+            <sysproperty key="java.library.path" path="${libdir}/${hosttype}"/>
+            <sysproperty key="rpnhome" path="${basedir}"/>
+            <sysproperty key="RPHOSTTYPE" value="${hosttype}"/>
+            <jvmarg value="-Xmx1g"/>
+            <arg value="${basedir}/in/quad2.rpn"/>
+            <jvmarg line="${agent.jvmargs}"/>
+        </java>
+    </target>
+</project>

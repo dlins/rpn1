@@ -1,0 +1,657 @@
+#include "HugoniotContinuation3D2D.h"
+
+// Trivial initialization. It is assumed that the reference point and the initial point
+// are one and the same (in).
+//
+// TODO: Accumulations should be able to declare if they are trivial or not.
+//       If a trivial accumulation is used, see below to modify some parts accordingly.
+//
+int HugoniotContinuation3D2D::find_initial_direction(const RealVector &in, const RealVector &hint_direction, int fam, RealVector &initial_direction){
+    int n = in.size();
+
+    DoubleMatrix A(n, n), B(n, n);
+    f->fill_with_jet(n, in.components(), 1, 0, A.data(), 0);
+    g->fill_with_jet(n, in.components(), 1, 0, B.data(), 0);
+    //if (g != 0) g->fill_with_jet(n, in.components(), 1, 0, B.data(), 0);
+    
+    RealVector r;
+
+    // TODO: If the accumulation is trivial this method should
+    //       be replaced by the one that only takes one matrix as input.
+    //
+    int info;
+    info = Eigen::eig(n, A.data(), B.data(), fam, r); // TODO: Verify if lambda is complex, return error. Make similar for eigenvalue. Error not fatal in that case.
+    
+    //if (g != 0) info = Eigen::eig(n, A.data(), B.data(), fam, r);
+    //else        info = Eigen::eig(n, A.data(), fam, r);
+
+    // TODO: Pensar como corrigir de modo a tornar hyperplane paraledo aos autovetores distintos do de fam. (Dan)
+
+//    A.print();
+//    B.print();
+
+    //std::cout << "r = " << r << std::endl;
+
+    if (info == COMPLEX_EIGENVALUE) return HUGONIOTCONTINUATION3D2D_INITIALIZE_ERROR; 
+
+    if (r*hint_direction > 0.0) initial_direction = r;
+    else                        initial_direction = -r;
+
+    return HUGONIOTCONTINUATION3D2D_INITIALIZED_OK;
+}
+
+// For the case when the reference point is not point where the continuation is found.
+// Also, when the wavecurve is computed, this method will be used to compute a shock.
+// Therefore, this method must be public.
+//
+int HugoniotContinuation3D2D::find_continuation_direction(const RealVector &Hugoniot_point, const RealVector &hint, RealVector &Hugoniot_direction){
+
+    DoubleMatrix hyperplane;
+    int info_fill_hyperplane = fill_hyperplane(Hugoniot_point, hyperplane);
+    if (info_fill_hyperplane != HUGONIOTCONTINUATION3D2D_HYPERPLANE_OK) return info_fill_hyperplane;
+    
+    int info_fill_Hugoniot_direction = fill_Hugoniot_direction(hint, hyperplane, Hugoniot_direction);
+    if (info_fill_Hugoniot_direction != HUGONIOTCONTINUATION3D2D_DIRECTION_OK) return info_fill_Hugoniot_direction;
+}
+
+// Shockspeed. Not used right now. TODO: Create a version that uses the ReferencePoint.
+// 
+double HugoniotContinuation3D2D::shockspeed(const FluxFunction *fp, const AccumulationFunction *gp, const RealVector &Up,
+                                            const FluxFunction *fm, const AccumulationFunction *gm, const RealVector &Um){
+
+    int n = Up.size();
+
+    RealVector Fp(n), Fm(n), Gp(n), Gm(n);
+
+    fp->fill_with_jet(n, Up.components(), 0, Fp.components(), 0, 0);
+    fm->fill_with_jet(n, Um.components(), 0, Fm.components(), 0, 0);
+
+    gp->fill_with_jet(n, Up.components(), 0, Gp.components(), 0, 0);
+    gm->fill_with_jet(n, Um.components(), 0, Gm.components(), 0, 0);
+
+    double s = 0.0, d = 0.0;
+
+    for (int i = 0; i < n; i++){
+        double dd = Gp(i) - Gm(i);
+
+        s += (Fp(i) - Fm(i))*dd;
+
+        d += dd*dd;
+    }
+
+    return s/d; 
+}
+
+//// TODO: Create a jet_H(int j, const RealVector &p, double &H, RealVector &nabla_H);
+////       to consolidate jet_H1 and jet_H2.
+////
+//// From here onwards this is Helmut's. It works exclusively for carbon & water.
+////
+//void HugoniotContinuation3D2D::jet_H1(const RealVector &p, double &H1, RealVector &nabla_H1){
+//    RealVector F(3), G(3);
+//    DoubleMatrix JF(3, 3), JG(3, 3);
+//    double J2F[3][3][3], J2G[3][3][3];
+
+//    f->fill_with_jet(3, p.components(), 2, F.components(), JF.data(), &J2F[0][0][0]);
+//    g->fill_with_jet(3, p.components(), 2, G.components(), JG.data(), &J2G[0][0][0]);
+
+//    // [F] & [G]
+//    //
+//    RealVector diff_F = F - ref.F;
+//    RealVector diff_G = G - ref.G;
+
+//    // H1
+//    //
+//    H1 = diff_F(0)*diff_G(2) - diff_F(2)*diff_G(0);
+
+//    // nablaH1
+//    //
+//    nabla_H1.resize(3);
+
+//    for (int i = 0; i < 3; i++) nabla_H1(i) = JF(0, i)*diff_G(2) + JG(2, i)*diff_F(0) - JF(2, i)*diff_G(0) - JG(0, i)*diff_F(2);
+
+//    return;
+//}
+
+//// Nabla H2. 
+////
+//void HugoniotContinuation3D2D::jet_H2(const RealVector &p, double &H2, RealVector &nabla_H2) {
+//    RealVector F(3), G(3);
+//    DoubleMatrix JF(3, 3), JG(3, 3);
+//    double J2F[3][3][3], J2G[3][3][3];
+
+//    f->fill_with_jet(3, p.components(), 2, F.components(), JF.data(), &J2F[0][0][0]);
+//    g->fill_with_jet(3, p.components(), 2, G.components(), JG.data(), &J2G[0][0][0]);
+
+//    // [F] & [G]
+//    //
+//    RealVector diff_F = F - ref.F;
+//    RealVector diff_G = G - ref.G;
+
+//    // H2
+//    //
+//    H2 = diff_F(1)*diff_G(2) - diff_F(2)*diff_G(1);
+
+//    // nablaH2
+//    //
+//    nabla_H2.resize(3);
+
+//    for (int i = 0; i < 3; i++) nabla_H2(i) = JF(1, i)*diff_G(2) + JG(2, i)*diff_F(1) - JF(2, i)*diff_G(1) - JG(1, i)*diff_F(2);
+
+//    return; 
+//}
+
+//// THIS METHOD ONLY WORKS FOR n = 3!!!!!
+//// i must be 0 or 1.
+////
+//void HugoniotContinuation3D2D::jet_H(const RealVector &p, int i, double &H, RealVector &nablaH){
+//    int n = p.size();
+
+//    RealVector F(n), G(n);
+//    DoubleMatrix JF(n, n), JG(n, n);
+
+//    f->fill_with_jet(n, p.components(), 1, F.components(), JF.data(), 0);
+//    g->fill_with_jet(n, p.components(), 1, G.components(), JG.data(), 0);
+
+//    // [F] & [G]
+//    //
+//    RealVector diff_F = F - ref.F;
+//    RealVector diff_G = G - ref.G;
+
+//    H = diff_F(i)*diff_G(2) - diff_F(2)*diff_G(i);
+
+//    nablaH.resize(n);
+//    for (int j = 0; j < 3; j++) nablaH(j) = JF(i, j)*diff_G(2) + JG(2, j)*diff_F(i) - JF(2, j)*diff_G(i) - JG(i, j)*diff_F(2);
+
+//    return;
+//}
+
+void HugoniotContinuation3D2D::jet_Hugoniot(const RealVector &p, RealVector &H, DoubleMatrix &nablaH){
+    int n = p.size();
+
+    H.resize(n - 1); // Was: n
+    nablaH.resize(n, n - 1);
+
+    RealVector F(n), G(n);
+    DoubleMatrix JF(n, n), JG(n, n);
+
+    f->fill_with_jet(n, p.components(), 1, F.components(), JF.data(), 0);
+    g->fill_with_jet(n, p.components(), 1, G.components(), JG.data(), 0);
+
+    // [F] & [G]
+    //
+    RealVector diff_F = F - ref.F;
+    RealVector diff_G = G - ref.G;
+
+    // TODO: Find out why these lines below only work for eq_number = 2.
+    //       URGENT!!! DUE YESTERDAY!!!
+    //
+//    int eq_number = n - 1; // = 2.
+    int eq_number = 1; // = 2.
+    int i = 0;
+
+//    for (int i = 0; i < n - 1; i++){
+    for (int ii = 0; ii < n; ii++){
+        if (ii != eq_number){
+//            H(i) = diff_F(i)*diff_G(eq_number) - diff_F(eq_number)*diff_G(i);
+
+//            for (int j = 0; j < n; j++) nablaH(j, i) = JF(i, j)*diff_G(eq_number) + JG(eq_number, j)*diff_F(i) - 
+//                                                       JF(eq_number, j)*diff_G(i) - JG(i, j)*diff_F(eq_number);
+
+            H(i) = diff_F(ii)*diff_G(eq_number) - diff_F(eq_number)*diff_G(ii);
+
+            for (int j = 0; j < n; j++) nablaH(j, i) = JF(ii, j)*diff_G(eq_number) + JG(eq_number, j)*diff_F(ii) - 
+                                                       JF(eq_number, j)*diff_G(ii) - JG(ii, j)*diff_F(eq_number);
+
+
+            i++;
+        }
+        
+    }
+
+    return;
+}
+
+int HugoniotContinuation3D2D::fill_hyperplane(const RealVector &origin, DoubleMatrix &hyperplane){
+    RealVector H;
+    jet_Hugoniot(origin, H, hyperplane);
+
+    // Normalize by cols.
+    //
+    for (int i = 0; i < hyperplane.cols(); i++){
+        double nrm = 0.0;
+        for (int j = 0; j < hyperplane.rows(); j++) nrm += hyperplane(j, i)*hyperplane(j, i);
+
+        double inv_nrm = 1.0/sqrt(nrm);
+
+        for (int j = 0; j < hyperplane.rows(); j++) hyperplane(j, i) *= inv_nrm;
+    }
+
+    return HUGONIOTCONTINUATION3D2D_HYPERPLANE_OK;
+}
+
+int HugoniotContinuation3D2D::fill_Hugoniot_direction(const RealVector &previous_direction, const DoubleMatrix &hyperplane, RealVector &Hugoniot_direction){
+
+    Hugoniot_direction = vector_product(matrix_column(hyperplane, 0), matrix_column(hyperplane, 1));
+    
+    double norm_Hugoniot_direction = norm(Hugoniot_direction);
+    
+    // TODO: The 1e-4 below should be variable and should come from outside somehow.
+    //
+    if (norm_Hugoniot_direction < 1e-4) return HUGONIOTCONTINUATION3D2D_DIRECTION_ERROR;
+    else {
+        double inv = 1.0/norm_Hugoniot_direction;
+        Hugoniot_direction = Hugoniot_direction*inv;
+    
+        if (current_point >= print_point){
+            std::cout << "fill_Hugoniot_direction: previous_direction = " << previous_direction << ", norm = " << norm(previous_direction) << std::endl;
+        }
+
+        if (Hugoniot_direction*previous_direction < 0.0) Hugoniot_direction = -Hugoniot_direction;
+
+        return HUGONIOTCONTINUATION3D2D_DIRECTION_OK;
+    }
+}
+
+void HugoniotContinuation3D2D::Newton_system_for_Hugoniot(const RealVector &p, const DoubleMatrix &hyperplane, DoubleMatrix &Newton_matrix, RealVector &error){
+    DoubleMatrix nablaH;
+
+    jet_Hugoniot(p, error, nablaH);
+
+    Newton_matrix = transpose(nablaH)*hyperplane;
+
+    if (current_point >= print_point){
+        std::cout << "Newton_system_for_Hugoniot: nablaH = \n" << nablaH << " hyperplane = \n" << hyperplane << std::endl;
+        std::cout << "Newton_system_for_Hugoniot: Newton_matrix =\n" << Newton_matrix << "error = " << error << std::endl;
+    }
+
+    return;
+}
+
+int HugoniotContinuation3D2D::Newton_in_hyperplane(const RealVector &origin, const DoubleMatrix &hyperplane, RealVector &Hugoniot_intersection){
+
+    RealVector correction(RealVector::zeroes(origin.size() - 1));
+//    RealVector correction;
+    
+    int max_number_iterations = 10; // TODO: This parameter should receive a default value in the ctor.
+    int iterations = 0;
+    
+    double min_norm = 1e-6; // TODO: This parameter should receive a default value in the ctor.
+    
+    double norm_correction = 0.0;
+    
+    RealVector hyperplane_point = origin;
+    
+    do {
+        DoubleMatrix Newton_matrix;
+        RealVector error;
+
+        Newton_system_for_Hugoniot(hyperplane_point, hyperplane, Newton_matrix, error);
+
+        int info_correction = solve(Newton_matrix, error, correction);
+
+        if (current_point >= print_point){
+            std::cout << "Newton_in_hyperplane. Newton matrix = \n" << Newton_matrix << " error = " << error << ", correction = " << correction << ", info = " << info_correction << std::endl;
+        }
+        
+        if (info_correction == REALVECTOR_SOLVE_LINEAR_SYSTEM_ERROR) return REALVECTOR_SOLVE_LINEAR_SYSTEM_ERROR;
+        
+        // Update the point in the hyperplane.
+        //
+        hyperplane_point = hyperplane_point - hyperplane*correction;
+
+        iterations++;
+        
+        norm_correction = norm(correction);
+        
+    } while (iterations < max_number_iterations && norm_correction > min_norm && norm_correction < 10.0); // TODO: 10.0 was fixed here, it must be fine-tuned, perhaps it should become a member.
+    
+    if (iterations >= max_number_iterations) return HUGONIOTCONTINUATION3D2D_NEWTON_ERROR;
+    
+    // Output.
+    //
+    Hugoniot_intersection = hyperplane_point;
+    
+    return HUGONIOTCONTINUATION3D2D_NEWTON_OK;
+}
+
+// TODO: Chamar rotina para evitar cruzar secondary bifurcation entre previous hyperplane origin e ne hyperplane origin.
+// Corrigir a direcao do hyperplane, talvez. (Dan)
+//
+// A nomenclatura esta desatualizada: bifurcation_plane deve virar bifurcation_space, etc.
+//
+int HugoniotContinuation3D2D::Newton_step(const RealVector &previous_point, double &step_size, int &number_of_steps_with_unchanged_size,
+                                          const RealVector &previous_direction,
+                                          DoubleMatrix &hyperplane, RealVector &Hugoniot_intersection){
+    int step_size_iterations = 0;
+    int max_number_step_size_iterations = 10;
+    int info_newton;
+    double cos_angle = 1.0;
+
+    RealVector hyperplane_origin;
+
+    step_size *= 2.0; 
+
+    if (current_point >= print_point){
+        std::cout << "Newton_step, entering. step_size = " << step_size << std::endl;
+    }
+
+    do {
+        step_size *= 0.5;
+        step_size_iterations++;
+
+//        // Find the origin of the new plane
+//        //
+//        // TODO: Chamar rotina para evitar cruzar secondary bifurcation entre previous hyperplane origin e ne hyperplane origin.
+//        // Corrigir a direcao do hyperplane, talvez. (Dan)
+//        hyperplane_origin = previous_point + step_size*previous_direction;
+
+        // TEST //
+
+//        // If there is a known bifurcation plane, verify that this iteration does not cross said plane.
+//        if (there_is_a_bifurcation_space){
+
+
+//            double previous_delta  = previous_point(bifurcation_plane_coordinate_index) - bifurcation_plane_coordinate;
+//            double candidate_delta = hyperplane_origin(bifurcation_plane_coordinate_index) - bifurcation_plane_coordinate;
+
+//            // The plane was crossed:
+//            if (previous_delta*candidate_delta < 0.0){
+//                
+//            }
+//            
+//            // The plane was crossed:
+//            //
+            /*double*/ 
+////            if (alpha >= 0.0 && alpha < 1.0){
+                
+////                step_size *= 4.0;
+
+////                hyperplane_origin = previous_point + step_size*previous_direction;
+
+////                // Hugoniot_intersection = alpha*hyperplane_origin + (1.0 - alpha)*previous_point;
+////                
+////                //return HUGONIOTCONTINUATION3D2D_NEWTON_STEP_OK;
+////            }
+//        }
+
+//        // TEST //
+        
+//        if (there_is_a_bifurcation_space){
+//            double previous_delta  = previous_point(bifurcation_plane_coordinate_index) - bifurcation_plane_coordinate;
+//            if (fabs(previous_delta) < step_size){
+//                step_size *= 2.0;
+//            }
+
+////            while (true){
+//                
+
+////                hyperplane_origin = previous_point + step_size*previous_direction;
+
+//                
+////            }print_point
+//        }
+
+        hyperplane_origin = previous_point + step_size*previous_direction;
+
+        // The hyperplane where the Hugoniot Locus point will be found via Newton.
+        // (The columns are the basis' vectors).
+        //
+        int info_fill_hyperplane = fill_hyperplane(hyperplane_origin, hyperplane);
+        
+        if (info_fill_hyperplane == HUGONIOTCONTINUATION3D2D_HYPERPLANE_ERROR){
+            return HUGONIOTCONTINUATION3D2D_HYPERPLANE_ERROR;
+        } 
+        
+        // Find the intersection of the Hugoniot curve with the hyperplane.
+        //
+        info_newton = Newton_in_hyperplane(hyperplane_origin, hyperplane, Hugoniot_intersection);
+
+        // Check that the angle between previous_direction and (Hugoniot_intersection - previous_point) does not exceed arccos(MAX_COS_ANGLE). 
+        // If so, reduce shift.
+        //
+        RealVector new_candidate_direction = Hugoniot_intersection - previous_point;
+        normalize(new_candidate_direction);
+
+        cos_angle = new_candidate_direction*previous_direction;
+
+    } while (step_size_iterations < max_number_step_size_iterations && (info_newton == HUGONIOTCONTINUATION3D2D_NEWTON_ERROR || cos_angle <= MAX_COS_ANGLE) );
+
+    // If only one step was needed, increase number_of_steps_with_unchanged_size.
+    // Hopefully step_size will increase also in the near future.
+    //
+    if (step_size_iterations == 1) number_of_steps_with_unchanged_size++;
+    else                           number_of_steps_with_unchanged_size = 0;
+
+    if (current_point >= print_point){
+        std::cout << "Newton_step, leaving. cos_angle = " << cos_angle << ", Hugoniot_intersection = " << Hugoniot_intersection << std::endl;
+        std::cout << "             step_size_iterations =  " << step_size_iterations << std::endl;
+    }
+
+    // TODO: Here, if convergence is not achieved, the shift should be
+    //       reduced. When the moment comes this region will go
+    //       inside a do-while loop.
+    //
+    if (info_newton != HUGONIOTCONTINUATION3D2D_NEWTON_OK){ // Was == HUGONIOTCONTINUATION3D2D_NEWTON_ERROR
+        return HUGONIOTCONTINUATION3D2D_NEWTON_ERROR;
+    } 
+    else return HUGONIOTCONTINUATION3D2D_NEWTON_STEP_OK;
+}
+
+// TODO: When the curve is initialized the initial point should be added to the curve.
+//
+int HugoniotContinuation3D2D::curve_engine(const RealVector &in, const RealVector &initial_direction, 
+                                           RealVector &final_direction, std::vector<RealVector> &shockcurve, int &edge){
+
+//    print_point = 0;
+    print_point = 412;
+
+    // This is the distance between two consecutive hyperplanes.
+    //
+    double default_step_size = 0.00005 /*0.005*/, step_size; // The order of magnitude of f and g must be known, so as to declare a correct value for default_shift.
+    double max_default_step_size = 100.0*default_step_size;
+
+    RealVector previous_point = in;
+    RealVector previous_direction = initial_direction;
+
+    step_size = default_step_size;
+    int number_of_steps_with_unchanged_size = 0;
+    int step_size_increased = 0;
+
+    while (true){
+        // TODO: For testing purposes only. Remove afterwards.
+        current_point = shockcurve.size();
+        // TODO: For testing purposes only. Remove afterwards.
+
+        RealVector Hugoniot_intersection;
+        RealVector Hugoniot_direction;
+
+        DoubleMatrix hyperplane;
+        
+        int info_Newton_step = Newton_step(previous_point, step_size, number_of_steps_with_unchanged_size, previous_direction, hyperplane, Hugoniot_intersection);
+
+        // Check if size_steps remains the same after a few steps.
+        // If so, increase step_size;
+        //
+        if (number_of_steps_with_unchanged_size == 5){
+            number_of_steps_with_unchanged_size = 0;
+            
+            // TODO: See if something is missing here.
+            step_size_increased++;
+            //std::cout << "Curve engine. step_size_increased = " << step_size_increased << std::endl;
+
+            if (step_size_increased < 16){ // Was: 8
+                //std::cout << "Curve engine. step_size was " << step_size;
+                step_size = min(step_size*SQRT_TWO, max_default_step_size);
+                //std::cout << ", will be " << step_size << std::endl;
+            }
+        }
+        
+//        std::cout << "Curve engine. number_of_steps_with_unchanged_size = " << number_of_steps_with_unchanged_size << ", step_size = " << step_size << std::endl;
+
+        if (info_Newton_step != HUGONIOTCONTINUATION3D2D_NEWTON_STEP_OK){
+            //std::cout << "    Curve_engine. Error in Newton_step: " << info_Newton_step << std::endl;
+            return info_Newton_step;
+        } 
+        
+//        std::cout << "curve_engine, after Newton_step." << std::endl;
+        
+        // Find the hyperplane.
+        //
+        fill_hyperplane(Hugoniot_intersection, hyperplane);
+        
+//        std::cout << "curve_engine, after fill_hyperplane." << std::endl;
+
+        // Find the direction of the Hugoniot curve.
+        //
+        int info_fill_Hugoniot_direction = fill_Hugoniot_direction(previous_direction, hyperplane, Hugoniot_direction);
+
+        if (current_point >= print_point){
+            std::cout << "Curve engine. Point " << shockcurve.size() << "." << std::endl;
+            std::cout << "    previous_direction = " << previous_direction << ", new direction = " << Hugoniot_direction << std::endl;
+
+           // if (shockcurve.size() == 417) return HUGONIOTCONTINUATION3D2D_CURVE_OK;
+        }
+        
+//        std::cout << "curve_engine, after fill_Hugoniot_direction." << std::endl;
+        
+        if (info_fill_Hugoniot_direction == HUGONIOTCONTINUATION3D2D_DIRECTION_ERROR){
+            //std::cout << "    Curve_engine. Error in fill_Hugoniot_direction." << std::endl;
+
+            Hugoniot_direction = previous_direction;
+//            return HUGONIOTCONTINUATION3D2D_DIRECTION_ERROR;
+        }
+        
+        // Something's missing here...Newton_step, leaving.
+
+        // If the bifurcation space was crossed, add the point where the space was intersected (found by linear interpolation)
+        // to the curve.
+
+        previous_point     = Hugoniot_intersection;
+        previous_direction = Hugoniot_direction;
+        
+        // Verify if the new point lies within the domain or not.
+        // TODO: Why is it that this is not working correctly for the Liquid?
+        //
+        if (shockcurve.size() > 1){
+            RealVector r; //std::cout << "curve_engine, before boundary->intersection." << std::endl;
+            int info_intersect = boundary->intersection(shockcurve[shockcurve.size() - 1], Hugoniot_intersection, r, edge);
+            //std::cout << "curve_engine, after boundary->intersection." << std::endl;
+
+            // Both points are inside: carry on.
+            if (info_intersect == 1)       shockcurve.push_back(Hugoniot_intersection);
+            // Both outside (this really should not happen).
+            else if (info_intersect == -1) return HUGONIOTCONTINUATION3D2D_CURVE_ERROR;
+            // New point outside: the curve reached the domain's boundary.
+            else { 
+                shockcurve.push_back(r);
+
+                return HUGONIOTCONTINUATION3D2D_CURVE_OK;
+            }
+        }
+        else shockcurve.push_back(Hugoniot_intersection);
+
+
+
+//        // Add the point to the curve and update tstep_size_increasedhe last correct final_direction.
+//        //
+//        shockcurve.push_back(Hugoniot_intersection);
+    }
+
+    return HUGONIOTCONTINUATION3D2D_CURVE_OK;
+}
+
+// TODO: Subphysics may be included somehow in the reference point.
+void HugoniotContinuation3D2D::set_reference_point(const ReferencePoint &r){
+    ref = r;
+    return;
+}
+
+// ATTENTION!!!
+//
+// Theta_index depends on how the SubPhysics was coded!!!
+// So far Theta_index = 1 (the second variable), but it can be any other, since there is no
+// standard or agreed form to code SubPhysics' FluxFunction & AccumulationFunction.
+//
+// This method CANNOT be called before a reference point is set!
+//
+int HugoniotContinuation3D2D::set_bifurcation_space_coordinate(int Theta_index){
+    if (Theta_index < 0) there_is_a_bifurcation_space = false; // This serves as a reset.
+    else {
+        if (Theta_index != 1) return HUGONIOTCONTINUATION3D2D_SET_BIFURCATION_PLANE_ERROR;
+
+        bifurcation_space_coordinate = ref.point(Theta_index); // Get Theta.
+        bifurcation_space_coordinate_index = Theta_index;
+    
+        // Not used right now:
+
+//        int n = ref.point.size();
+//        bifurcation_space_basis.resize(n, n - 1);
+//        bifurcation_space_basis(0, 0) = 1.0;
+//        bifurcation_space_basis(1, 0) = 0.0;
+//        bifurcation_space_basis(2, 0) = 0.0;
+//    
+//        bifurcation_space_basis(0, 1) = 0.0;
+//        bifurcation_space_basis(1, 1) = 0.0;
+//        bifurcation_space_basis(2, 1) = 1.0;
+    
+        there_is_a_bifurcation_space = true;
+    }    
+    
+    return HUGONIOTCONTINUATION3D2D_SET_BIFURCATION_PLANE_OK;
+}
+
+bool HugoniotContinuation3D2D::reference_point_near_coincidence(){
+    if (ref.e.size() == 0) return false;
+    else return fabs(ref.e[0].r - ref.e[1].r)/(1.0 + fabs(ref.e[0].r) + fabs(ref.e[1].r)) < 2e-3;
+}
+
+HugoniotContinuation3D2D::HugoniotContinuation3D2D(const FluxFunction *ff, const AccumulationFunction *gg, const Boundary *bb){
+    f = ff;
+    g = gg;
+    boundary = bb;
+    
+    there_is_a_bifurcation_space = false;
+}
+
+HugoniotContinuation3D2D::~HugoniotContinuation3D2D(){
+//    std::cout << "HugoniotContinuation3D2D at " << this << " will be destroyed now. Bye." << std::endl;
+}
+
+// The initial point is not added yet.
+//
+int HugoniotContinuation3D2D::curve(std::vector< std::vector<RealVector> > &curve){
+    curve.clear();
+
+    int n = ref.point.size();
+
+    // If the initial point lies near the coincidence curve, abort.
+    // TODO: These lines below need to be improved.
+    //
+    if (reference_point_near_coincidence()){ // TODO: This value must be fine-tuned.
+
+//        initial_step_size = ...;
+        return HUGONIOTCONTINUATION3D2D_NEAR_COINCIDENCE_CURVE;
+    }
+
+    for (int family = 0; family < ref.e.size(); family++){
+        // Find the eigenvector of this family.
+        RealVector r(n);
+        for (int i = 0; i < n; i++) r(i) = ref.e[family].vrr[i];
+
+        RealVector final_direction;
+        int edge;
+
+        std::vector<RealVector> temp;
+
+        curve_engine(ref.point, r, final_direction, temp, edge);
+        if (temp.size() > 0) curve.push_back(temp);
+
+        temp.clear();
+        curve_engine(ref.point, -r, final_direction, temp, edge);
+        if (temp.size() > 0) curve.push_back(temp);
+    }
+
+    return HUGONIOTCONTINUATION3D2D_CURVE_OK;
+}
+

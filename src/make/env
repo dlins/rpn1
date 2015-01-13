@@ -1,7 +1,0 @@
-# env - RPn makefile environment variable settings
-#       If left empty, makefile will get shell settings
-RPGNU=yes
-RPHOSTTYPE=linux_x86_64
-JAVA_HOME=/usr/lib/jvm/java-7-oracle
-JAVA_INC=/usr/lib/jvm/java-7-oracle/include
-PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/home/edsonlan/Java/rpn/bin:/usr/lib/jvm/java-7-oracle/bin:/home/edsonlan/Java/rpn/bin:/usr/lib/jvm/java-7-oracle/bin:/home/edsonlan/Java/rpn/bin

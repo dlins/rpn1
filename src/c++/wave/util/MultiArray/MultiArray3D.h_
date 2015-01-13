@@ -1,0 +1,26 @@
+#ifndef _MULTIARRAY3D_
+#define _MULTIARRAY3D_
+
+#include "MultiArray.h"
+
+class MultiArray3D: public MultiArray {
+    private:
+    protected:
+    public:
+        MultiArray3D(int rx, int ry, int rz);
+
+        virtual ~MultiArray3D();
+
+        const double& operator()(int nx, int ny, int nz) const;
+              double& operator()(int nx, int ny, int nz);
+};
+
+inline const double& MultiArray3D::operator()(int nx, int ny, int nz) const {
+    return storage_[range_[1]*range_[2]*nx + range_[2]*ny + nz];
+}
+
+inline double& MultiArray3D::operator()(int nx, int ny, int nz){
+    return storage_[range_[1]*range_[2]*nx + range_[2]*ny + nz];
+}
+#endif // _MULTIARRAY3D_
+
