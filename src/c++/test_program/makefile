@@ -181,6 +181,9 @@ eigen: $(OBJECTS)
 rarefaction: $(OBJECTS)
 	$(LINK) -o $@ $(INCLUDE) main_rarefaction.cpp $^ $(LDLIBS) $(LDFLAGS)
 
+transitional: $(OBJECTS)
+	$(LINK) -o $@ $(INCLUDE) main_transitional.cpp $^ $(LDLIBS) $(LDFLAGS)
+
 ##################################################################################
 #
 #	Compilation Rules

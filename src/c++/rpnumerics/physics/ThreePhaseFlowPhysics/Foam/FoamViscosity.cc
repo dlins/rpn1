@@ -7,6 +7,8 @@ FoamViscosity::FoamViscosity(Parameter *mug0,
                              Parameter *fmdry,
                              Parameter *fmmob,
                              Parameter *fmoil,
+                             Parameter *floil,
+                             Parameter *epoil,
                              ThreePhaseFlowSubPhysics *t):
                              ThreePhaseFlowViscosity(t),
                              mug0_parameter(mug0),
@@ -15,7 +17,9 @@ FoamViscosity::FoamViscosity(Parameter *mug0,
                              foil_parameter(foil),
                              fmdry_parameter(fmdry),
                              fmmob_parameter(fmmob),
-                             fmoil_parameter(fmoil){
+                             fmoil_parameter(fmoil),
+                             floil_parameter(floil),
+                             epoil_parameter(epoil){
 }
 
 FoamViscosity::~FoamViscosity(){
@@ -48,9 +52,8 @@ void FoamViscosity::Fdry(double x, int degree, JetMatrix &fdry_jet){
 }
 
 void FoamViscosity::Fo(double so, int degree, JetMatrix &fo_jet){
-    double epoil = 2.0;
-    double fmoil = 1.0;
-    double floil = 0.0;
+    double fmoil = fmoil_parameter->value();
+    double floil = floil_parameter->value();
 
     fo_jet.resize(1);
 
@@ -65,20 +68,23 @@ void FoamViscosity::Fo(double so, int degree, JetMatrix &fo_jet){
         fo_jet.set(0, 0, 0, 0.0);
     }
     else {
-        double inv = 1.0/(fmoil - floil);
-        double y = (fmoil - so)*inv;
-        double fo2 = pow(y, epoil - 2.0);
-        double fo1 = fo2*y;
-        double fo  = fo2*fo2;
-
         if (degree >= 0){
+            double epoil = epoil_parameter->value();
+            double inv = 1.0/(fmoil - floil);
+            double y  = (fmoil - so)*inv;
+            double fo = pow(y, epoil);
+
             fo_jet.set(0, fo);
 
             if (degree >= 1){
-                fo_jet.set(0, 0, -epoil*fo1*inv);
+                double dy = -inv;
+                double dfo_dso   = epoil*pow(y, epoil - 1.0)*dy;
+
+                fo_jet.set(0, 0, dfo_dso);
 
                 if (degree >= 2){
-                    fo_jet.set(0, 0, 0, epoil*(epoil - 1.0)*fo2*inv*inv);
+                    double d2fo_dso2 = epoil*(epoil - 1.0)*pow(y, epoil - 2.0)*dy*dy;
+                    fo_jet.set(0, 0, 0, d2fo_dso2);
                 }
             }
         }

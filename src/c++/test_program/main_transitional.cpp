@@ -1,6 +1,6 @@
 #include <iostream>
 #include "StoneSubPhysics.h"
-#include "GasVolatileDeadSubPhysics.h"
+//#include "GasVolatileDeadSubPhysics.h"
 #include "JDSubPhysics.h"
 #include "Brooks_CoreySubPhysics.h"
 #include "CoreyQuadSubPhysics.h"
