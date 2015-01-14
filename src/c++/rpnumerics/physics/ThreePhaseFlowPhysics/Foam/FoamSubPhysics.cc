@@ -38,10 +38,10 @@ FoamSubPhysics::FoamSubPhysics() : ThreePhaseFlowSubPhysics(){
     equation_parameter_.push_back(ng_parameter);
 
     // TODO: These values must be set correctly!
-    epdry = new Parameter(std::string("epdry"), 0.0);
+    epdry = new Parameter(std::string("epdry"), 100.0);
     fdry  = new Parameter(std::string("fdry"), 0.0);
     foil  = new Parameter(std::string("foil"), 0.0);
-    fmdry = new Parameter(std::string("fmdry"), 0.0);
+    fmdry = new Parameter(std::string("fmdry"), 0.3);
     fmmob = new Parameter(std::string("fmmob"), 2.0); // Was: 55000.0
     fmoil = new Parameter(std::string("fmoil"), 0.3);
     epoil = new Parameter(std::string("epoil"), 0.0, 5.0, 2.0); // The author of the model lets this parameter 
@@ -68,6 +68,12 @@ FoamSubPhysics::FoamSubPhysics() : ThreePhaseFlowSubPhysics(){
 
     // Gas viscosity.
     //
+    fdry_switch = new Parameter(std::string("fdry switch"), 1.0);
+    equation_parameter_.push_back(fdry_switch);
+
+    fo_switch = new Parameter(std::string("fo switch"), 1.0);
+    equation_parameter_.push_back(fo_switch);
+
     viscosity_ = new FoamViscosity(mug_parameter, 
                                    epdry,
                                    fdry,
@@ -77,6 +83,7 @@ FoamSubPhysics::FoamSubPhysics() : ThreePhaseFlowSubPhysics(){
                                    fmoil,
                                    floil, 
                                    epoil,
+                                   fdry_switch, fo_switch, // KILL IT LATER!
                                    this);
 
     // Flux.

@@ -9,6 +9,7 @@ FoamViscosity::FoamViscosity(Parameter *mug0,
                              Parameter *fmoil,
                              Parameter *floil,
                              Parameter *epoil,
+                             Parameter *fdry_switch, Parameter *fo_switch, // TEMPORARY HACK, KILL IT LATER! 
                              ThreePhaseFlowSubPhysics *t):
                              ThreePhaseFlowViscosity(t),
                              mug0_parameter(mug0),
@@ -19,7 +20,9 @@ FoamViscosity::FoamViscosity(Parameter *mug0,
                              fmmob_parameter(fmmob),
                              fmoil_parameter(fmoil),
                              floil_parameter(floil),
-                             epoil_parameter(epoil){
+                             epoil_parameter(epoil),
+                             fdry_switch_parameter(fdry_switch),
+                             fo_switch_parameter(fo_switch){
 }
 
 FoamViscosity::~FoamViscosity(){
@@ -30,23 +33,55 @@ FoamViscosity::~FoamViscosity(){
 // The first and second derivatives are zero at the interval's
 // endpoints.
 //
-void FoamViscosity::Fdry(double x, int degree, JetMatrix &fdry_jet){
+void FoamViscosity::Fdry_normalized(double x, int degree, JetMatrix &fdry_jet){
     fdry_jet.resize(1);
 
-    if (degree >= 0){
-        double x2 = x*x;
-        double x4 = x2*x2;
+    if (x >= 1.0){
+        fdry_jet.set(0, 1.0);
+        fdry_jet.set(0, 0, 0.0);
+        fdry_jet.set(0, 0, 0, 0.0);
+    }
+    else if (x <= -1.0){
+        fdry_jet.set(0, -1.0);
+        fdry_jet.set(0, 0, 0.0);
+        fdry_jet.set(0, 0, 0, 0.0);
+    }
+    else {
+        if (degree >= 0){
+            double x2 = x*x;
+            double x4 = x2*x2;
 
-        fdry_jet.set(0, .375*x*(5.0 - 10.0*x2/3.0 + x4));
+            fdry_jet.set(0, .375*x*(5.0 - 10.0*x2/3.0 + x4));
 
-        if (degree >= 1){
-            fdry_jet.set(0, 0, 1.875 - 3.75*x2 + 1.875*x4);
+            if (degree >= 1){
+                fdry_jet.set(0, 0, 1.875 - 3.75*x2 + 1.875*x4);
 
-            if (degree >= 2){
-                fdry_jet.set(0, 0, 0, 7.5*(x2*x - x));
+                if (degree >= 2){
+                    fdry_jet.set(0, 0, 0, 7.5*(x2*x - x));
+                }
             }
         }
     }
+
+    return;
+}
+
+void FoamViscosity::Fdry_positive(double x, int degree, JetMatrix &fdry_jet){
+    Fdry_normalized(2.0*x - 1.0, degree, fdry_jet);
+
+    fdry_jet.set(0, (fdry_jet.get(0) + 1.0)*.5);
+    fdry_jet.set(0, 0, fdry_jet.get(0, 0)*.5);
+    fdry_jet.set(0, 0, 0, fdry_jet.get(0, 0, 0)*.5);
+
+    return;
+}
+
+void FoamViscosity::Fdry(double sw, int degree, JetMatrix &fdry_jet){
+    double epdry = epdry_parameter->value();
+    double fmdry = fmdry_parameter->value();
+
+    // Fdry_normalized(epdry*(sw - fmdry), degree, fdry_jet);
+    Fdry_positive(epdry*(sw - fmdry), degree, fdry_jet);
 
     return;
 }
@@ -93,26 +128,65 @@ void FoamViscosity::Fo(double so, int degree, JetMatrix &fo_jet){
     return;
 }
 
-int FoamViscosity::gas_viscosity_jet(const WaveState &w, int degree, JetMatrix &mug_jet){
-    double epdry = epdry_parameter->value();
-    double fdry  = fdry_parameter->value();
-    double foil  = foil_parameter->value();
-    double fmdry = fmdry_parameter->value();
-    double fmmob = fmmob_parameter->value();
-    double fmoil = fmoil_parameter->value();
+void FoamViscosity::viscosity_increase(const WaveState &u, int degree, JetMatrix &vi){
+    double sw = u(0);
+    double so = u(1);
 
+    vi.resize(2, 1);
+
+    JetMatrix fdry_jet;
+    Fdry(sw, degree, fdry_jet);
+
+    JetMatrix fo_jet;
+    Fo(so, degree, fo_jet);
+
+    if (degree >= 0){
+        double fmmob = fmmob_parameter->value();
+        double fdry  = fdry_jet.get(0);
+        double fo    = fo_jet.get(0);
+
+        vi.set(0, fmmob*fdry*fo);
+
+        if (degree >= 1){
+            double dfdry_dsw = fdry_jet.get(0, 0);
+            double dfo_dso   = fo_jet.get(0, 0);
+
+            vi.set(0, 0, fmmob*dfdry_dsw*fo);
+            vi.set(0, 1, fmmob*fdry*dfo_dso);
+
+            if (degree >= 2){
+                double d2fdry_dsw2 = fdry_jet.get(0, 0, 0);
+                double d2fo_dso2   = fo_jet.get(0, 0, 0);
+
+                vi.set(0, 0, 0, fmmob*d2fdry_dsw2*fo);
+
+                vi.set(0, 0, 1, fmmob*dfdry_dsw*dfo_dso);
+                vi.set(0, 1, 0, vi.get(0, 0, 1));
+
+                vi.set(0, 1, 1, fmmob*fdry*d2fo_dso2);
+            }
+        }
+    }
+
+    return;
+}
+
+int FoamViscosity::gas_viscosity_jet(const WaveState &w, int degree, JetMatrix &mug_jet){
     mug_jet.resize(2, 1);
 
     JetMatrix fdry_jet;
-    Fdry(w(0) - fmdry, degree, fdry_jet);
+    if (fdry_switch_parameter->value() < 0.0) trivial_jet(fdry_jet);
+    else                                        Fdry(w(0)/* - fmdry*/, degree, fdry_jet);
 
     JetMatrix fo_jet;
-    Fo(w(1), degree, fo_jet);
+    if (fo_switch_parameter->value() < 0.0) trivial_jet(fo_jet);
+    else                                    Fo(w(1), degree, fo_jet);
 
     if (degree >= 0){
-        double mug0 = mug0_parameter->value();
-        double fdry = fdry_jet.get(0);
-        double fo   = fo_jet.get(0);
+        double fmmob = fmmob_parameter->value();
+        double mug0  = mug0_parameter->value();
+        double fdry  = fdry_jet.get(0);
+        double fo    = fo_jet.get(0);
 
         double mug  = mug0*(1.0 + fmmob*fdry*fo); // Fs is missing.
 
