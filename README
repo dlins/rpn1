@@ -1,0 +1,63 @@
+/**
+ *
+ * IMPA - Fluid Dynamics Laboratory
+ *
+ * RPn Project
+ */
+
+--------------------------------------------------------------------
+1. INSTALL
+
+Ubuntu or Debian:
+
+
+- JAVA
+
+First you need to remove openjdk for this run the following command from your terminal:
+
+> sudo apt-get purge openjdk*
+
+If you installed java 7 from any other PPA and you are having problem with java then you have to do following steps before installing the PPA menctioned here:
+
+> sudo rm /var/lib/dpkg/info/oracle-java7-installer*
+> sudo apt-get purge oracle-java7-installer*
+> sudo rm /etc/apt/sources.list.d/*java*
+> sudo apt-get update
+
+To install oracle java 7 in ubuntu 13.04/12.10/12.04, open the terminal and run the following commands:
+
+> sudo add-apt-repository ppa:webupd8team/java
+> sudo apt-get update
+> sudo apt-get install oracle-java7-installer
+
+You can check the java version by searching java in dashboard.
+
+
+- GFORTRAN, BLAS & LAPACK
+
+> sudo apt-get install libblas-dev liblapack-dev gfortran
+
+
+--------------------------------------------------------------------
+2. COMPILE
+
+Edit ./etc/rpn-csh-env (or ./etc/rpn-bash-env) and set up RPNHOME variable to reflect 
+your current RPn home directory.
+
+To compile RPN, type:
+
+> source ./etc/rpn-csh-env     (or source ./etc/rpn-bash-env if you use bash)
+> cd src
+> ant
+
+
+--------------------------------------------------------------------
+3. RUN
+
+To run RPN, type:
+
+> rpn <xml-input-file>
+
+You will find some input file examples in share/rpn-examples directory.
+
+
