@@ -15,6 +15,8 @@ class FoamViscosity: public ThreePhaseFlowViscosity {
         Parameter *fmdry_parameter;
         Parameter *fmmob_parameter;
         Parameter *fmoil_parameter;
+        Parameter *floil_parameter;
+        Parameter *epoil_parameter;
 
         void Fdry(double x, int degree, JetMatrix &fdry_jet);
         void Fo(double so, int degree, JetMatrix &fo_jet);
@@ -26,6 +28,8 @@ class FoamViscosity: public ThreePhaseFlowViscosity {
                       Parameter *fmdry,
                       Parameter *fmmob,
                       Parameter *fmoil,
+                      Parameter *floil,
+                      Parameter *epoil,
                       ThreePhaseFlowSubPhysics *t);
         ~FoamViscosity();
 

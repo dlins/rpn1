@@ -12,7 +12,7 @@ FoamSubPhysics::FoamSubPhysics() : ThreePhaseFlowSubPhysics(){
     vel_parameter = new Parameter(std::string("vel"), 1.0);
 
     cnw_parameter = new Parameter(std::string("cnw"), 0.0);
-    cno_parameter = new Parameter(std::string("cno"), 0.0);
+    cno_parameter = new Parameter(std::string("cno"), 0.1);
     cng_parameter = new Parameter(std::string("cng"), 0.0);
 
     nw_parameter = new Parameter(std::string("nw"), 2.0);
@@ -43,7 +43,14 @@ FoamSubPhysics::FoamSubPhysics() : ThreePhaseFlowSubPhysics(){
     foil  = new Parameter(std::string("foil"), 0.0);
     fmdry = new Parameter(std::string("fmdry"), 0.0);
     fmmob = new Parameter(std::string("fmmob"), 2.0); // Was: 55000.0
-    fmoil = new Parameter(std::string("fmoil"), 0.0);
+    fmoil = new Parameter(std::string("fmoil"), 0.3);
+    epoil = new Parameter(std::string("epoil"), 0.0, 5.0, 2.0); // The author of the model lets this parameter 
+                                                                // vary between 0 and 5, but it is effectively varying between 2 and 5.
+
+    floil = cno_parameter; // This will remain thus until the difference between floil and cno is figured out.
+                           // TODO: When that happens, add floil to the list of parameters.
+                           //       Right now adding it would cause a segfault at dtor-time.
+
 
     equation_parameter_.push_back(epdry);
     equation_parameter_.push_back(fdry);
@@ -51,6 +58,7 @@ FoamSubPhysics::FoamSubPhysics() : ThreePhaseFlowSubPhysics(){
     equation_parameter_.push_back(fmdry);
     equation_parameter_.push_back(fmmob);
     equation_parameter_.push_back(fmoil);
+    equation_parameter_.push_back(epoil);
 
     // Permeability.
     //
@@ -67,6 +75,8 @@ FoamSubPhysics::FoamSubPhysics() : ThreePhaseFlowSubPhysics(){
                                    fmdry,
                                    fmmob,
                                    fmoil,
+                                   floil, 
+                                   epoil,
                                    this);
 
     // Flux.
@@ -80,8 +90,8 @@ FoamSubPhysics::FoamSubPhysics() : ThreePhaseFlowSubPhysics(){
     // GridValues.
     //
     std::vector<int> number_of_cells(2);
-    number_of_cells[0] = 1024;
-    number_of_cells[1] = 1024;
+    number_of_cells[0] = 256;
+    number_of_cells[1] = 256;
 
     gridvalues_ = new GridValues(boundary_, boundary_->minimums(), boundary_->maximums(), number_of_cells);
     for (int i = 0; i < equation_parameter_.size(); i++) equation_parameter_[i]->add(gridvalues_);
@@ -153,5 +163,9 @@ FoamSubPhysics::~FoamSubPhysics(){
     delete permeability_;
 
     for (int i = 0; i < equation_parameter_.size(); i++) delete equation_parameter_[i];
+}
+
+bool FoamSubPhysics::parameter_consistency(){
+    return fmoil->value() > floil->value();
 }
 

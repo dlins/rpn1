@@ -200,7 +200,12 @@ public:
         return compositecurve_;
     }
 
-
+    // Check if the values of the parameters are
+    // consistent. 
+    //
+    virtual bool parameter_consistency(){
+        return true;
+    }
 
 
 

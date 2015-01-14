@@ -14,10 +14,12 @@ class FoamSubPhysics : public ThreePhaseFlowSubPhysics {
         Parameter *nw_parameter,  *no_parameter,  *ng_parameter;
 
 //        Parameter *mug0;
-        Parameter *epdry, *fdry, *foil, *fmdry, *fmmob, *fmoil;
+        Parameter *epdry, *fdry, *foil, *fmdry, *fmmob, *fmoil, *floil, *epoil;
     public:
         FoamSubPhysics();
         virtual ~FoamSubPhysics();
+
+        virtual bool parameter_consistency();
 };
 
 #endif // _FOAMSUBPHYSICS_
