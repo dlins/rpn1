@@ -355,7 +355,7 @@ public class StationaryPoint extends PhasePoint  {
 
     }
     
-    public String toMatlab(int curveIndex) {
+    public String toMatlab() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 

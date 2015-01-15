@@ -36,6 +36,8 @@ public class RPnDiagramFrame extends JFrame implements WindowListener {
     JPanel southPanel_ = new JPanel();
     JPanel westPanel_ = new JPanel();
     
+    JButton saveButton_=new JButton("Save to Matlab file ...");
+    
 
     BorderLayout borderLayout2 = new BorderLayout(10, 10);
 //    BorderLayout borderLayout2 = new BorderLayout();
@@ -85,7 +87,7 @@ public class RPnDiagramFrame extends JFrame implements WindowListener {
 
     public void updateScene(RealVector profileMin, RealVector profileMax) {
 
-//        profileMax.setElement(1, profileMax.getElement(1) + (0.2 * profileMax.getElement(1)));
+
 
         RectBoundary boundary = new RectBoundary(profileMin, profileMax);
         Space riemanProfileSpace = new Space("SpeedGraphics", 2);
@@ -116,6 +118,7 @@ public class RPnDiagramFrame extends JFrame implements WindowListener {
         contentPane = (JPanel) this.getContentPane();
         contentPane.setLayout(borderLayout2);
 
+
         contentPane.add(phaseSpacePanel_, BorderLayout.CENTER);
 
         southPanel_.add(cursorMonitor_.getSpeed());
@@ -123,6 +126,7 @@ public class RPnDiagramFrame extends JFrame implements WindowListener {
         contentPane.add(southPanel_, BorderLayout.SOUTH);
 
         westPanel_.setLayout(new BorderLayout(10, 10));
+        westPanel_.add(saveButton_,BorderLayout.EAST);
         
         westPanel_.setLayout(new BorderLayout());
         westPanel_.add(yMonitor_.getTextField(), BorderLayout.NORTH);

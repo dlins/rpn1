@@ -48,7 +48,7 @@ public class PhasePoint extends RealVector implements RpSolution {
         return str.toString();
     }
 
-    public String toMatlab(int curveIndex) {
+    public String toMatlab() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 

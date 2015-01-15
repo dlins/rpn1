@@ -43,7 +43,7 @@ public class CoincidenceCurve extends BifurcationCurve{// RPnCurve implements Rp
 
     }
 
-    public String toMatlab(int curveIndex) {
+    public String toMatlab() {
 
         StringBuffer buffer = new StringBuffer();    
         buffer.append("%%\nclose all;clear all;\n");

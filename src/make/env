@@ -4,4 +4,4 @@ RPGNU=yes
 RPHOSTTYPE=linux_x86_64
 JAVA_HOME=/usr/lib/jvm/java-7-oracle
 JAVA_INC=/usr/lib/jvm/java-7-oracle/include
-PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/lib/jvm/java-7-oracle/bin:/usr/lib/jvm/java-7-oracle/db/bin:/usr/lib/jvm/java-7-oracle/jre/bin:/home/edsonlan/Java/rpn/bin:/usr/lib/jvm/java-7-oracle/bin:/home/edsonlan/Java/rpn/bin:/usr/lib/jvm/java-7-oracle/bin:/home/edsonlan/Java/rpn/bin:/usr/lib/jvm/java-7-oracle/bin:/home/edsonlan/Java/rpn/bin
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/lib/jvm/java-7-oracle/bin:/usr/lib/jvm/java-7-oracle/db/bin:/usr/lib/jvm/java-7-oracle/jre/bin:/home/edsonlan/Java/rpn/bin:/usr/lib/jvm/java-7-oracle/bin:/home/edsonlan/Java/rpn/bin:/usr/lib/jvm/java-7-oracle/bin:/home/edsonlan/Java/rpn/bin

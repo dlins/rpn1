@@ -36,7 +36,7 @@ public class InflectionCurve extends BifurcationCurve {
     // ---
 
     @Override
-    public String toMatlab(int curveIndex) {
+    public String toMatlab() {
 
         StringBuilder buffer = new StringBuilder();
         buffer.append("%%\nclose all;clear all;\n");

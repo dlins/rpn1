@@ -162,25 +162,30 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RiemannProfileCalc_nativeCalc
         return NULL;
     }
 
-
-    //        
-    //                cout << "Coordenadas do perfil" << endl;
-    //                for (int i = 0; i < profile.size(); i++) {
-    //                    
-    ////                    cout<<"Tamanho de um ponto do profile: "<<profile.at(i).size()<<endl;
-    //    //                cout  << profile.at(i)(0) << " " << profile.at(i)(1) << endl;
-    //                    cout  << profile.at(i) << endl;
-    //                }
-    ////                for (int i = 0; i < speedVector.size(); i++) {
-    ////            
-    ////                    cout  << speedVector.at(i)<< endl;
-    ////            
-    ////                }
-    ////
+//
+//            
+//                    cout << "Coordenadas do perfil" << endl;
+//                    for (int i = 0; i < profile.size(); i++) {
+//                        
+//                        cout<<"Tamanho de um ponto do profile: "<<profile.at(i).size()<<endl;
+//        //                cout  << profile.at(i)(0) << " " << profile.at(i)(1) << endl;
+//                        cout  << profile.at(i) << endl;
+//                    }
+//                    
+//                    cout<<"Velocidade "<<endl;
+//                    for (int i = 0; i < speedVector.size(); i++) {
+//                
+//                        cout  << speedVector.at(i)<< endl;
+//                
+//                    }
+//    
 
 
 
     int numberOfLines = profile.at(0).size();
+    
+    
+//    cout<<"numero de linhas: "<<numberOfLines<<endl;
 
 
     jobject diagramLinesList = env->NewObject(arrayListClass, arrayListConstructor, NULL); //Linhas do diagrama

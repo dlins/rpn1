@@ -38,6 +38,6 @@ public interface RpSolution {
     /*
      * Matlab formatted output
      */
-    String toMatlab(int curveIndex);
+    String toMatlab();
 
 }

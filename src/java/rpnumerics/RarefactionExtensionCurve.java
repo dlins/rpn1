@@ -105,7 +105,7 @@ public class RarefactionExtensionCurve extends BifurcationCurve {
 
     }*/
 
-    public String toMatlab(int curveIndex) {
+    public String toMatlab() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
