@@ -1,0 +1,30 @@
+#ifndef _WAVECURVEPLOT_
+#define _WAVECURVEPLOT_
+
+#include "graphicobject.h"
+#include "curve2d.h"
+#include "WaveCurve.h"
+#include "canvas.h"
+#include "canvasmenuscroll.h"
+
+class WaveCurvePlot : public GraphicObject {
+    private:
+    protected:
+        std::vector<GraphicObject*> sons;
+
+        void transform(const double *matrix);
+    public:
+        WaveCurvePlot(const WaveCurve &w, int type, double min_speed, double max_speed, int speed_steps);
+        WaveCurvePlot(const WaveCurve &w, const RealVector &orig, const std::vector<std::vector<std::string> > &str, int = CURVE2D_SOLID_LINE);
+        WaveCurvePlot(const WaveCurve &w, const RealVector &orig, int = CURVE2D_SOLID_LINE);
+//        WaveCurvePlot(const WaveCurve &w, const RealVector &orig, Canvas *canvas, CanvasMenuScroll *scroll, int = CURVE2D_SOLID_LINE);
+
+        ~WaveCurvePlot();
+
+        void draw();
+        void minmax(Point2D &, Point2D &);
+        void pstricks(ofstream *){}
+};
+
+#endif // _WAVECURVEPLOT_
+
