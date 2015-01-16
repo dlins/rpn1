@@ -5,13 +5,15 @@
  */
 package rpn.ui.diagram;
 
-import rpn.ui.diagram.DiagramLabel;
 import java.awt.AWTEvent;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.io.File;
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -20,8 +22,11 @@ import rpn.RPnMenuCommand;
 import rpn.RPnPhaseSpaceAbstraction;
 import rpn.RPnPhaseSpacePanel;
 import rpn.RPnProjDescriptor;
+import static rpn.RPnUIFrame.RPN_SESSION_FILENAME;
+import rpn.component.DiagramGeom;
 import rpn.component.RpGeometry;
 import rpn.controller.ui.UIController;
+import rpnumerics.Diagram;
 import rpnumerics.RPNUMERICS;
 import wave.multid.DimMismatchEx;
 import wave.multid.Space;
@@ -40,7 +45,7 @@ public class RPnDiagramFrame extends JFrame implements WindowListener {
     
 
     BorderLayout borderLayout2 = new BorderLayout(10, 10);
-//    BorderLayout borderLayout2 = new BorderLayout();
+
     RPnMenuCommand commandMenu_ = null;
 
     private DiagramLabel cursorMonitor_;
@@ -120,26 +125,91 @@ public class RPnDiagramFrame extends JFrame implements WindowListener {
 
 
         contentPane.add(phaseSpacePanel_, BorderLayout.CENTER);
+        
+        southPanel_.setLayout(new BorderLayout());
+        
+        
+        JPanel southWestPanel = new JPanel();
+        JPanel southCenterPanel = new JPanel();
+        southCenterPanel.setBackground(Color.BLACK);
+        
+        southWestPanel.add(saveButton_);
+        southCenterPanel.add(cursorMonitor_.getSpeed());
+        
+        southPanel_.add(southWestPanel,BorderLayout.WEST);
+        southPanel_.add(southCenterPanel,BorderLayout.CENTER);
 
-        southPanel_.add(cursorMonitor_.getSpeed());
+        
+        
         southPanel_.setBackground(Color.black);
         contentPane.add(southPanel_, BorderLayout.SOUTH);
 
         westPanel_.setLayout(new BorderLayout(10, 10));
-        westPanel_.add(saveButton_,BorderLayout.EAST);
-        
         westPanel_.setLayout(new BorderLayout());
         westPanel_.add(yMonitor_.getTextField(), BorderLayout.NORTH);
         westPanel_.add(relaterPoint_.getTextField(), BorderLayout.SOUTH);
+
         westPanel_.setBackground(Color.black);
 
         contentPane.add(westPanel_, BorderLayout.WEST);
-
+        
+        
+        
+        
+        saveButton_.addActionListener(
+                new java.awt.event.ActionListener() {
+                    
+                    public void actionPerformed(ActionEvent e) {
+                        saveToMatlab(e);
+                        
+                        
+                    }
+                });
+        
+        
         setSize(400, 400);
 
         setFocusable(true);
 
     }
+    
+    
+    
+    private void  saveToMatlab(ActionEvent e) {
+        try {
+            
+            JFileChooser chooser = new JFileChooser();
+//            chooser.setSelectedFile(new File(RPN_SESSION_FILENAME));
+            if (chooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
+                
+                
+                FileWriter fWriter = new FileWriter(chooser.getSelectedFile().getAbsolutePath());
+                
+                
+                Iterator curvesListIterator = ((RPnPhaseSpaceAbstraction)phaseSpacePanel_.scene().getAbstractGeom()).getGeomObjIterator();
+                
+                
+                while (curvesListIterator.hasNext()) {
+                    DiagramGeom diagram = (DiagramGeom) curvesListIterator.next();
+                    Diagram d =(Diagram) diagram.geomFactory().geomSource();
+                    fWriter.write(d.toMatlab());
+                }
+                
+                
+                
+                fWriter.close();
+                
+
+                
+            }
+            
+        } catch (java.io.IOException ioex) {
+            ioex.printStackTrace();
+        } catch (java.lang.NullPointerException nullEx) {
+            nullEx.printStackTrace();
+        }
+    }
+    
 
     public RPnPhaseSpacePanel phaseSpacePanel() {
         return phaseSpacePanel_;
