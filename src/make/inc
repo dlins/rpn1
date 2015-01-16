@@ -85,6 +85,10 @@ VPATH = \
 	c++/JNI \
 	c++/JNI/include \
 	c++/JetTester \
+	c++/test_program \
+	c++/test_program/linux_x86_64 \
+	c++/test_program/canvas \
+	c++/test_program/canvas/Dump_Fl_Widget \
 	c++/Observer_Subject \
 	plugins
 
@@ -174,6 +178,10 @@ INCLUDE = \
 	-I c++/JNI \
 	-I c++/JNI/include \
 	-I c++/JetTester \
+	-I c++/test_program \
+	-I c++/test_program/linux_x86_64 \
+	-I c++/test_program/canvas \
+	-I c++/test_program/canvas/Dump_Fl_Widget \
 	-I c++/Observer_Subject \
 	-I plugins
 
@@ -412,6 +420,8 @@ CCSRC = \
 	JetTester2D.cc \
 	TestableJet.cc \
 	JetTester.cc \
+	TestTools.cc \
+	DoubleMatrixDisplay.cc \
 	Observer.cc \
 	Subject.cc
 
@@ -540,7 +550,100 @@ CPPSRC = \
 	gkq.cpp \
 	correlation.cpp \
 	nearestneighbor.cpp \
-	expintegrals.cpp
+	expintegrals.cpp \
+	main_ion.cpp \
+	main_boundary_working.cpp \
+	main_thermo_with_sines.cpp \
+	main_tpcw_liuwavecurve.cpp \
+	main_test_no_gui.cpp \
+	main_boundary_extension_tpcw_common_singlephase.cpp \
+	main_2d.cpp \
+	main_testablejet.cpp \
+	main_total_thermo_gui.cpp \
+	main_classify_3d.cpp \
+	main_rarefaction.cpp \
+	main_nonconvex.cpp \
+	main_transitional.cpp \
+	main_injection_to_side.cpp \
+	main_tpcw_tester.cpp \
+	main_god_hydro.cpp \
+	main_equilibria.cpp \
+	main_riemann.cpp \
+	main_permgui.cpp \
+	main_xml.cpp \
+	main_raytrace.cpp \
+	main_corey_extensioncurve.cpp \
+	main_ion_flux_u.cpp \
+	main_corey_doublecontact.cpp \
+	main.cpp \
+	main_secondary_bifurcation_no_gui.cpp \
+	main_follow.cpp \
+	main_splineflux.cpp \
+	main_eigen.cpp \
+	main_gui_working.cpp \
+	main_test_jet1d.cpp \
+	main_boundary_extension_total.cpp \
+	main_pablo_gui_ok.cpp \
+	main_helmut_test.cpp \
+	main_corey_wavecurve_speed.cpp \
+	main_equations.cpp \
+	main_hyperoctree.cpp \
+	main_test_Dan_jets.cpp \
+	main_hugoniot_no_gui.cpp \
+	main_plot.cpp \
+	main_splineflux_liuwavecurve.cpp \
+	main_singlephase_boundary.cpp \
+	main_test_thermos.cpp \
+	main_hysteresis_gui.cpp \
+	main_rec.cpp \
+	main_continuation_shock.cpp \
+	main_corey_explicit_hugoniot.cpp \
+	main_permtest.cpp \
+	main_komposite_2d.cpp \
+	main_wavecurve_from_wavecurve.cpp \
+	main_coreyquadwavecurve.cpp \
+	main_new_rarefaction_curve.cpp \
+	main_old.cpp \
+	main_jetmatrix.cpp \
+	main_test_thermo_gui.cpp \
+	main_subphysics_working.cpp \
+	main_extension_subdomain_2d.cpp \
+	main_3d.cpp \
+	main_bisection.cpp \
+	main_tp_shock2d3d.cpp \
+	main_boundary_extension_total_old.cpp \
+	main_permgui_old.cpp \
+	main_md.cpp \
+	main_jettester.cpp \
+	main_shock.cpp \
+	main_rar.cpp \
+	main_stone_liuwavecurve.cpp \
+	main_circle.cpp \
+	main_polygon_test.cpp \
+	main_subphysics.cpp \
+	WaveCurvePlot.cpp \
+	MultiColoredCurve.cpp \
+	point2d.cpp \
+	ArrowHead.cpp \
+	canvasmenupack.cpp \
+	canvasmenuscroll.cpp \
+	marchingsquares.cpp \
+	canvasmenu.cpp \
+	Text.cpp \
+	segmentedcurve.cpp \
+	quiverplot.cpp \
+	Dump_Fl_Widget.cpp \
+	graphicobject.cpp \
+	GridValuesPlot.cpp \
+	canvas.cpp \
+	curve2d.cpp \
+	main_euler_solver.cpp \
+	main_gui.cpp \
+	main_test_jets.cpp \
+	main_hugoniot_side.cpp \
+	main_double_contact.cpp \
+	main_simpleflux.cpp \
+	main_boundary_extension_tpcw.cpp
 
 FSRC = \
 	lsode2.F \
