@@ -3,27 +3,32 @@
 
 // Return values.
 //
-#define RAREFACTION_OK                           0
-#define RAREFACTION_ERROR                        1
-#define RAREFACTION_REACHED_INFLECTION           2
-#define RAREFACTION_REACHED_BOUNDARY             3
-#define RAREFACTION_INIT_OK                      4
-#define RAREFACTION_INIT_ERROR                   5
-#define RAREFACTION_COMPLEX_EIGENVALUE_AT_FAMILY 6
-#define RAREFACTION_REACHED_COINCIDENCE_CURVE    7
-#define RAREFACTION_REACHED_LINE                 8
-#define RAREFACTION_REACHED_ELLIPTIC_REGION      9
+#define RAREFACTION_OK                                      0
+#define RAREFACTION_ERROR                                   1
+#define RAREFACTION_REACHED_INFLECTION                      2
+#define RAREFACTION_REACHED_BOUNDARY                        3
+#define RAREFACTION_INIT_OK                                 4
+#define RAREFACTION_INIT_ERROR                              5
+#define RAREFACTION_COMPLEX_EIGENVALUE_AT_FAMILY            6
+#define RAREFACTION_REACHED_COINCIDENCE_CURVE               7
+#define RAREFACTION_REACHED_LINE                            8
+#define RAREFACTION_REACHED_ELLIPTIC_REGION                 9
+#define RAREFACTION_REACHED_MULTIPLE_FAMILY_CONTACT_REGION 10
 
 // Options.
 //
-#define RAREFACTION_SPEED_SHOULD_INCREASE 10
-#define RAREFACTION_SPEED_SHOULD_DECREASE 11
+#define RAREFACTION_SPEED_SHOULD_INCREASE 20
+#define RAREFACTION_SPEED_SHOULD_DECREASE 21
 
 #define RAREFACTION    40
 #define INTEGRAL_CURVE 41
+#define CONTACT        42
 
 #define RAREFACTION_INITIALIZE                   50
 #define RAREFACTION_DONT_INITIALIZE              51
+
+#define CONTACT_OK    100
+#define CONTACT_ERROR 101
 
 #include "ODE_Solver.h"
 #include "Bisection.h"
@@ -36,9 +41,8 @@
 
 #include <complex> // To handle complex eigenpairs.
 
-
-
 class WaveCurveFactory;
+class SubPhysics;
 
 class RarefactionCurve {
     private:
@@ -59,9 +63,12 @@ class RarefactionCurve {
 
         void add_point_to_curve(const RealVector &p, Curve &curve);
 
-        bool reached_elliptic_region;       
+        bool reached_elliptic_region;
+
+        SubPhysics *subphysics;
     public:
-        RarefactionCurve(const AccumulationFunction *gg, const FluxFunction *ff, const Boundary *bb);
+//        RarefactionCurve(const AccumulationFunction *gg, const FluxFunction *ff, const Boundary *bb);
+        RarefactionCurve(SubPhysics *s);
         virtual ~RarefactionCurve();
 
         int curve(const RealVector &initial_point,
@@ -159,6 +166,19 @@ class RarefactionCurve {
 //            plot(rarcurve);
 //            return info;
 //        }
+
+    int contact(const RealVector &initial_point,
+                int curve_family,
+                const ODE_Solver *odesolver,
+                double deltaxi,
+                void *linobj, double (*linear_function)(void *o, const RealVector &p),
+                Curve &contactcurve);
+
+    void set_subphysics(SubPhysics *s){
+        subphysics = s;
+
+        return;
+    }
 };
 
 #endif // _RAREFACTIONCURVE_

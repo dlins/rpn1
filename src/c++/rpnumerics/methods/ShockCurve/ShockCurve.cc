@@ -1,6 +1,9 @@
 #include "ShockCurve.h"
+#include "SubPhysics.h"
 
-ShockCurve::ShockCurve(HugoniotContinuation *h){
+void ShockCurve::init(HugoniotContinuation *h){
+    distance_to_contact_region_ = 1e-1;
+
     hc = h;
 
     boundary = hc->boundary();
@@ -13,7 +16,19 @@ ShockCurve::ShockCurve(HugoniotContinuation *h){
     f = hc->flux();
     g = hc->accumulation();
 
-    
+    return;
+}
+
+ShockCurve::ShockCurve(SubPhysics *s){
+    subphysics = s;
+
+    init(subphysics->Hugoniot_continuation());
+}
+
+ShockCurve::ShockCurve(HugoniotContinuation *h){
+    subphysics = 0;
+
+    init(h);
 }
 
 ShockCurve::~ShockCurve(){
@@ -737,8 +752,13 @@ int ShockCurve::curve_engine(const ReferencePoint &r, const RealVector &in, cons
     //
     double previous_sigma_between_points = 0.0;
 
+    int num = 0;
+    int maxnum = 1000;
     while (true){
-//        std::cout << "Inside while, previous_point = " <<  previous_point << std::endl;
+//        num++;
+//        if (num > maxnum) return SHOCKCURVE_OK;
+
+        std::cout << "Shock, inside while, previous_point = " <<  previous_point << std::endl;
 
         RealVector Hugoniot_intersection;
         double sigma_between_points;
@@ -747,15 +767,47 @@ int ShockCurve::curve_engine(const ReferencePoint &r, const RealVector &in, cons
 //        std::cout << "Shock. Prev. point = " << previous_point << ", prev. dir. = " << previous_direction << std::endl;
 
 //        std::cout << "    Bef." << std::endl;
+
+//        std::cout << "Distance to the contact region: " << subphysics->distance_to_contact_region(previous_point) << std::endl;
+        if (subphysics->distance_to_contact_region(previous_point) < distance_to_contact_region_){
+            shock_stopped_because = SHOCK_REACHED_CONTACT;
+
+            if (shockcurve.curve.size() > 1){
+                shockcurve.final_direction = shockcurve.curve.back() - shockcurve.curve[shockcurve.curve.size() - 2];
+                normalize(shockcurve.final_direction);
+
+                shockcurve.last_point = shockcurve.curve.back();
+
+                TestTools::pause("Shock: near contact");
+
+                return SHOCKCURVE_OK;
+            }
+            else {
+                TestTools::pause("Shock: near contact. The user is adviced to relax the proximity-to-contact condition.");
+
+                return SHOCKCURVE_ERROR;
+            }
+        }
+
         int info_curve_point = hc->curve_point(previous_point, previous_sigma_between_points,
                                                previous_direction, 
                                                step_size_increased, step_size, number_of_steps_with_unchanged_size, 
                                                Hugoniot_intersection, sigma_between_points,
                                                Hugoniot_direction);
-//        std::cout << "    Aft." << std::endl;
+        std::cout << "    Aft." << std::endl;
 
 //        std::cout << "       Curr. point = " << Hugoniot_intersection << ", curr. dir. = " << Hugoniot_direction << std::endl;
 //        std::cout << "       sigma_between_points = " << sigma_between_points << std::endl;
+
+        if (info_curve_point == HUGONIOTCONTINUATION_NEWTON_ERROR){
+            std::cout << "info_curve_point = " << info_curve_point << std::endl;
+
+            std::stringstream ss;
+            ss << "HUGONIOTCONTINUATION_NEWTON_ERROR. Hugoniot_intersection = " << Hugoniot_intersection;
+            TestTools::pause(ss);
+
+            return SHOCKCURVE_ERROR;
+        }
 
         // Update sigma_between_points
         previous_sigma_between_points = sigma_between_points;

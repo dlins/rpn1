@@ -7,7 +7,6 @@
 package rpnumerics;
 
 import java.util.List;
-import wave.util.RealVector;
 
 public class Diagram implements RpSolution {
     //
@@ -70,27 +69,8 @@ public class Diagram implements RpSolution {
     }
 
     @Override
-    public String toMatlab() {
-
-        StringBuilder output = new StringBuilder();
-        
-        for (int i = 0; i < lines_.size(); i++) {
-            DiagramLine line = lines_.get(i);
-            output.append(line.getSize()).append(" ").append("2").append("\n");
-            List<List<RealVector>> parts = line.getCoords();
-            
-            for (List<RealVector> part : parts) {
-                
-                for (RealVector coord : part) {
-                    
-                    output.append(coord).append("\n");
-                    
-                }
-                
-            }
-        }
-        return output.toString();
-       
+    public String toMatlab(int curveIndex) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-        
+
 }

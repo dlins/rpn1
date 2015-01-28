@@ -51,6 +51,7 @@ ccSRC +=  \
 	../rpnumerics/methods/NewRarefactionCurve/NewRarefactionCurve.cc \
 	../rpnumerics/methods/ReferencePoint.cc \
 	../rpnumerics/methods/RiemannSolver/RiemannProblem.cc \
+	../rpnumerics/methods/ContactRegionBoundary/ContactRegionBoundary.cc \
 	../rpnumerics/methods/RarefactionCurve/RarefactionCurve.cc \
 	../rpnumerics/methods/Bisection/Bisection.cc \
 	../rpnumerics/methods/Coincidence_Contour/Coincidence_Contour.cc \
@@ -80,7 +81,6 @@ ccSRC +=  \
 	../rpnumerics/characteristics/plotter.cc \
 	../rpnumerics/characteristics/interpol.cc \
 	../rpnumerics/characteristics/curvegen.cc \
-	../rpnumerics/Rarefaction.cc \
 	../rpnumerics/HugoniotSegment.cc \
 	../rpnumerics/ParametricPlot/ParametricPlot.cc \
 	../rpnumerics/Double_Contact.cc \
@@ -156,6 +156,7 @@ ccSRC +=  \
 	../rpnumerics/physics/ThreePhaseFlowPhysics/StoneSubPhysics/StoneFluxFunction.cc \
 	../rpnumerics/physics/ThreePhaseFlowPhysics/StoneSubPhysics/Stone_Explicit_Bifurcation_Curves.cc \
 	../rpnumerics/physics/ThreePhaseFlowPhysics/Foam/FoamSubPhysics.cc \
+	../rpnumerics/physics/ThreePhaseFlowPhysics/Foam/FoamShockObserver.cc \
 	../rpnumerics/physics/ThreePhaseFlowPhysics/Foam/FoamViscosity.cc \
 	../rpnumerics/physics/ThreePhaseFlowPhysics/Foam/FoamPermeability.cc \
 	../rpnumerics/physics/ThreePhaseFlowPhysics/Foam/FoamFluxFunction.cc \

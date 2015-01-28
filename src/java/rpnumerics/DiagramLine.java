@@ -23,7 +23,7 @@ public class DiagramLine {
 
     private List<RealSegment> segments_;
 
-//    private int size_;
+    private int size_;
 
     private int partsNumber_;
 
@@ -40,6 +40,11 @@ public class DiagramLine {
         partsNumber_ = coords.size();
         typesID_ = new HashMap<Integer, Integer>(partsNumber_);
 
+        for (List<RealVector> list : coords) {
+
+            size_ += list.size();
+
+        }
 
         segments_ = createSegmentsList();
 
@@ -54,51 +59,34 @@ public class DiagramLine {
         partsNumber_ = coords_.size();
         typesID_ = new HashMap<Integer, Integer>();
 
+        for (List<RealVector> list : coords_) {
+
+            size_ += list.size();
+
+        }
+
         segments_ = createSegmentsList();
 
     }
 
     public DiagramLine() {
+
+        
         name_= "no name";
         coords_ = new ArrayList<List<RealVector>>();
 
         partsNumber_ = coords_.size();
         typesID_ = new HashMap<Integer, Integer>();
 
+        for (List<RealVector> list : coords_) {
+
+            size_ += list.size();
+
+        }
+
         segments_ = createSegmentsList();
 
     }
-    
-    
-    
-    public void setFirstCoord(RealVector newFirstCoord){
-
-        List<RealVector> firstPart = coords_.get(0);
-        
-        List<RealVector> newFirstPart = new ArrayList<RealVector>();
-        
-        newFirstPart.add(newFirstCoord);
-        
-        newFirstPart.addAll(firstPart);
-
-        coords_.set(0, newFirstPart);
-
-        segments_ = createSegmentsList();
-        
-    }
-    
-    
-    
-    public void setLastCoord(RealVector newLastCoord){
-
-        List<RealVector> lastPart = coords_.get(coords_.size()-1);
-        
-        lastPart.add(newLastCoord);
-
-        segments_ = createSegmentsList();
-        
-    }
-    
 
     public RealVector getMin() {
 
@@ -198,17 +186,7 @@ public class DiagramLine {
     }
 
     public int getSize() {
-
-        int   size=0;
-        for (List<RealVector> coords_1 : coords_) {
-            
-            size+=coords_1.size();
-            
-        }
-        
-        return size;
-        
-
+        return size_;
     }
 
     public void setType(int partIndex, int partType) {

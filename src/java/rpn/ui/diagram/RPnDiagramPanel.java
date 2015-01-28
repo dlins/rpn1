@@ -25,7 +25,6 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import javax.swing.JButton;
 import rpn.RPnPhaseSpaceAbstraction;
 import rpn.RPnPhaseSpacePanel;
 import rpn.component.ClosestDistanceCalculator;
@@ -59,7 +58,7 @@ public class RPnDiagramPanel extends RPnPhaseSpacePanel implements Printable {
     private final DiagramLabel yMonitor_;
     private final DiagramLabel relaterPoint_;
     
-    
+
     private NumberFormat formatter_;
 
     private Font font_;
@@ -154,6 +153,7 @@ public class RPnDiagramPanel extends RPnPhaseSpacePanel implements Printable {
 
                     List<RealSegment> segments = d.getLine(i).getSegments();
 
+                    // TODO Usar valores dcWindow e viewPort para definir o ponto a partir do qual sera achado o mais proximo.
                     pointOnXAxis.setElement(0, cursorWC.getElement(0));
 
                     pointOnXAxis.setElement(1, 0);

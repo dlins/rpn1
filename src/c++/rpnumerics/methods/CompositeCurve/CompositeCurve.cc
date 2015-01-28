@@ -86,9 +86,9 @@ int CompositeCurve::composite_field(int *two_n, double *xi, double *pointpair, d
     
     double dirdrv = (lm*h)/(lm*(GmJac*rm));
 
-    std::cout.precision(8);
-    std::cout << "Composite's field. Point: " << RealVector(*two_n, pointpair) << std::endl;
-    std::cout << "Dirdrv: num = " << (lm*h) << ", den = " << (lm*(GmJac*rm)) << ", dd = " << dirdrv << std::endl;
+//    std::cout.precision(8);
+//    std::cout << "Composite's field. Point: " << RealVector(*two_n, pointpair) << std::endl;
+//    std::cout << "Dirdrv: num = " << (lm*h) << ", den = " << (lm*(GmJac*rm)) << ", dd = " << dirdrv << std::endl;
 
     // Now compute the composite part of the field.
     // Notice that the flux and accumulation used are those associated with the
@@ -1080,12 +1080,8 @@ int CompositeCurve::correct_last_point(const ODE_Solver *odesolver, double delta
     // The point in the rarefaction-composite space.
     //
     int corresponding_index_in_rarefaction = wavecurve.wavecurve.back().back_pointer.back();
-    
-    
-
     int corresponding_rarefaction = wavecurve.wavecurve.back().back_curve_index;
 
-        cout<<"Tamanho em correct_last_point: "<<wavecurve.wavecurve.back().back_pointer.size()<<" "<< corresponding_rarefaction<<"  "<< corresponding_index_in_rarefaction<<endl;
     RealVector previous_composite_point   = wavecurve.wavecurve.back().curve.back();
     RealVector previous_rarefaction_point = wavecurve.wavecurve[corresponding_rarefaction].curve[corresponding_index_in_rarefaction];
 
@@ -1101,8 +1097,6 @@ int CompositeCurve::correct_last_point(const ODE_Solver *odesolver, double delta
 
     // The output of the iteration.
     //
-    
-    cout<<"Correct_last_point::Previous point: "<<previous_point<<endl;
     RealVector point(previous_point);
 
     double init_time = 0.0;

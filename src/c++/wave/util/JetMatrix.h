@@ -18,6 +18,10 @@ class JetMatrix {
         long int vec_size;
         double *vec;
 
+        double *f_vec;
+        double *df_vec;
+        double *d2f_vec;
+
         void resize();
         void copy(const JetMatrix &o);
     public:

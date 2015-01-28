@@ -1,4 +1,5 @@
 #include "HugoniotContinuation_nD_nm1D.h"
+#include "SubPhysics.h"
 
 // Dan and Morante finished this code on Sept. 5, 2013. It should work ok when JetMatrix deals correctly
 // with different number of equations and of variables.

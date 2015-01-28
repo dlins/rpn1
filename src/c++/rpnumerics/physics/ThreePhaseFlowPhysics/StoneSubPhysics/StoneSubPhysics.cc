@@ -14,6 +14,14 @@ StoneSubPhysics::StoneSubPhysics() : ThreePhaseFlowSubPhysics(){
     mug_parameter = new Parameter(std::string("mug"), 1.0);
     muo_parameter = new Parameter(std::string("muo"), 1.0);
 
+    // TODO: Introduce these parameters into the flux's equations. When
+    //       When that happens, add these parameters to the parameter list
+    //       so the user can access them.
+    //
+    cnw_parameter = new Parameter(std::string("cnw"), 0.1);
+    cno_parameter = new Parameter(std::string("cno"), 0.1);
+    cng_parameter = new Parameter(std::string("cng"), 0.0);
+
     vel_parameter = new Parameter(std::string("vel"), 1.0);
 
     equation_parameter_.push_back(grw_parameter);
@@ -59,7 +67,8 @@ StoneSubPhysics::StoneSubPhysics() : ThreePhaseFlowSubPhysics(){
 
     // Rarefaction.
     //
-    rarefactioncurve_ = new RarefactionCurve(accumulation_, flux_, boundary_);
+//    rarefactioncurve_ = new RarefactionCurve(accumulation_, flux_, boundary_);
+    rarefactioncurve_ = new RarefactionCurve(this);
 
     // Shock curve.
     //
@@ -78,7 +87,8 @@ StoneSubPhysics::StoneSubPhysics() : ThreePhaseFlowSubPhysics(){
 
     // WaveCurve.
     //
-    wavecurvefactory_ = new WaveCurveFactory(accumulation_, flux_, boundary_, odesolver_, rarefactioncurve_, shockcurve_, compositecurve_);
+//    wavecurvefactory_ = new WaveCurveFactory(accumulation_, flux_, boundary_, odesolver_, rarefactioncurve_, shockcurve_, compositecurve_);
+    wavecurvefactory_ = new WaveCurveFactory(this);
 
     // Inflection.
     //
@@ -116,6 +126,11 @@ StoneSubPhysics::~StoneSubPhysics(){
     for (int i = 0; i < hugoniot_curve.size(); i++) delete hugoniot_curve[i];
 
     delete flux_;
+
+    // When these parameters are active in the flux, eliminate these lines.
+    delete cng_parameter;
+    delete cno_parameter;
+    delete cnw_parameter;
 
     for (int i = equation_parameter_.size() - 1; i >=0; i--) delete equation_parameter_[i];
 

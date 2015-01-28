@@ -16,6 +16,9 @@
 #define SUBDIVISION_OK      0
 #define SUBDIVISION_ERROR (-1)
 
+#define TRANSITIONAL_WITH_CONTACTS    10
+#define TRANSITIONAL_WITHOUT_CONTACTS 11
+
 class ExplicitTransitionalWavecurve {
     private:
     protected:
@@ -43,7 +46,7 @@ class ExplicitTransitionalWavecurve {
         static int L_function(void *obj, double L, double &C2);
         static int U_side_function(void *obj, double L, double &sl);
 
-        int subdivide_curve(int type, std::vector<double> &s_param, std::vector<RealVector> &extpts);
+        int subdivide_curve(int type, std::vector<double> &s_param, std::vector<RealVector> &extpts, std::vector<std::string> &name);
         int find_subdivision(int type, const RealVector &M, const std::vector<double> &s_param, RealVector &point_sl, RealVector &point_sr);
 };
 

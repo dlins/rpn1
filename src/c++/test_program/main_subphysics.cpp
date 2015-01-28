@@ -12,6 +12,7 @@
 #include "Quad2SubPhysics.h"
 
 #include <FL/Fl.H>
+#include <FL/fl_ask.H>
 #include <FL/Fl_Double_Window.H>
 #include <FL/Fl_Round_Button.H>
 #include <FL/Fl_Choice.H>
@@ -28,6 +29,7 @@
 #include "Inflection_Curve.h"
 #include "CharacteristicPolynomialLevels.h"
 #include "TestTools.h"
+#include "ContactRegionBoundary.h"
 
 SubPhysics *subphysics;
 
@@ -37,6 +39,7 @@ Fl_Double_Window *win;
 
     Fl_Group *scroll_grp;
     CanvasMenuScroll *scroll;
+    Fl_Box *point_box;
     Fl_Button        *clear_all_curves, *nozoom;
 
 Fl_Double_Window *sidewin;
@@ -113,6 +116,10 @@ Fl_Group *discriminantcontourgrp;
 Fl_Group *doublecontactgrp;
     Fl_Round_Button *doublecontactrnd;
     Fl_Button *doublecontactbtn;
+
+Fl_Group *contactregionboundarygrp;
+    Fl_Round_Button *contactregionboundaryrnd;
+    Fl_Button *contactregionboundarybtn;
     
 std::vector<HugoniotCurve*> Hugoniot_methods;
 std::vector<int>            reference_point_cases;
@@ -204,13 +211,13 @@ void rarefactioncb(Fl_Widget*, void*){
 
     if (dimension == 3) initial_point(2) = 1.0;
 
-//    initial_point(0) = 0.7126;
-//    initial_point(1) = 0.1974;
+//    initial_point(0) = 0.425506;
+//    initial_point(1) = 0.169554;
 
     LSODE lsode;
     ODE_Solver *odesolver = &lsode;
 
-    double deltaxi = 1e-3;
+    double deltaxi = 1e-4;
     std::vector<RealVector> inflection_point;
     Curve rarcurve;
 
@@ -453,7 +460,7 @@ void eigennumericalcb(Fl_Widget*, void*){
         canvas->add(sc);
 
         std::stringstream ss;
-        ss << "Lambda, fam = " << fam;
+        ss << "Lambda = " << lev << ", fam = " << fam << ", size = " << curve.size();
 
         scroll->add(ss.str().c_str(), canvas, sc);
     }
@@ -543,7 +550,7 @@ void add_parameters_group(){
 
     parametersgrp = new Fl_Group(parametersgrplabel->x(), parametersgrplabel->y() + parametersgrplabel->h() + 1, parametersgrplabel->w(), 10 + parameters.size()*(25 + 10) + (25 + 10));
             
-    int px = 100;
+    int px = 130;
     add_parameters(px, parameters);
 
     restore_parameters = new Fl_Button(px, 
@@ -800,13 +807,48 @@ void wavecurvefactioncb(Fl_Widget*, void*){
     RealVector initial_point(dimension);
     canvas->getxy(initial_point(0), initial_point(1));
 
+//    // Test only, can be eliminated afterwards.
+//    //
+//    {
+//        std::stringstream ss;
+//        ss << "At " << initial_point << ", inside contact region = " << subphysics->inside_contact_region(initial_point, family);
+//        TestTools::pause(ss);
+//    }
+
     if (dimension == 3) initial_point(2) = 1.0;
 
 //    initial_point(0) = 0.16106;
 //    initial_point(1) = 0.220297;
 
-    initial_point(0) = 0.266444;
-    initial_point(1) = 0.657434;
+//    initial_point(0) = 0.266444;
+//    initial_point(1) = 0.657434;
+
+//    initial_point(0) = 0.35;
+//    initial_point(1) = 0.101;
+
+//    // Initial point, wavecurve enters the contact region.
+//    initial_point(0) = 0.425506;
+//    initial_point(1) = 0.169554;
+
+//    Robert's 27-01-2015, mug0 = .02. The wavecurves initiated at both this and the next points 
+//    are valid now, with a contact following the shock. At FoamSubPhysics:     shockcurve_->distance_to_contact_region(2e-2);
+//    initial_point(0) = 0.3778;
+//    initial_point(1) = 0.1516;
+
+//    // The shock following a composite ends not followed by a contact. (SOLVED)
+//    initial_point(0) = 0.369902;
+//    initial_point(1) = 0.152228;
+
+    // The shock following a composite changes direction.
+//    initial_point(0) = 0.351431;
+//    initial_point(1) = 0.160891;
+
+
+
+    // The composite returns.
+    initial_point(0) = 0.448215;
+    initial_point(1) = 0.214109;
+    
 
     std::cout << "Wavecurve callback, initial point = " << initial_point << std::endl;
 
@@ -814,14 +856,6 @@ void wavecurvefactioncb(Fl_Widget*, void*){
     subphysics->composite()->set_graphics(canvas, scroll);
     #endif
 
-//    initial_point(0) = 0.623883;
-//    initial_point(1) = 0.292079;
-
-//    initial_point(0) = 0.2237;
-//    initial_point(1) = 0.4173;
-
-//    initial_point(0) = 0.7126;
-//    initial_point(1) = 0.1974;
     WaveCurve hwc;
     int reason_why, edge;
     int type = wavecurve_points[wavecurvechoice->value()];
@@ -1374,7 +1408,84 @@ void add_double_contact(){
     return;
 }
 
+// Contact region boundary.
+//
+void contactregionboundarycb(Fl_Widget*, void*){
+    ContactRegionBoundary crb(subphysics);
+
+    for (int fam = 0; fam < subphysics->number_of_families(); fam++){
+        std::vector<RealVector> curve;
+        crb.curve(fam, curve);
+
+        if (curve.size() > 1){
+            SegmentedCurve *c = new SegmentedCurve(curve, 0.0, 0.0, 1.0);
+            canvas->add(c);
+
+            std::stringstream ss;
+            ss << "Contact region, family = " << fam;
+            scroll->add(ss.str().c_str(), canvas, c);
+        }
+    }
+
+    return;
+}
+
+void add_contact_region_boundary(){
+    int x, y, w;
+    if (lastgrp == 0){
+        x = sidescroll->x() + 15;
+        y = sidescroll->y();
+        w = sidescroll->w() - 40;
+    }
+    else {
+        x = lastgrp->x();
+        y = lastgrp->y() + lastgrp->h();
+        w = lastgrp->w();
+    }
+
+    contactregionboundarygrp = new Fl_Group(x, y + 35, w, 45);
+    {
+        contactregionboundarybtn = new Fl_Button(contactregionboundarygrp->x() + 10,
+                                                 contactregionboundarygrp->y() + 10,
+                                                 contactregionboundarygrp->w() - 20,
+                                                 contactregionboundarygrp->h() - 20,
+                                                 "Compute the boundary of the contact region");
+        contactregionboundarybtn->callback(contactregionboundarycb);
+    }
+    contactregionboundarygrp->end();
+    contactregionboundarygrp->box(FL_EMBOSSED_BOX);
+
+    contactregionboundaryrnd = new Fl_Round_Button(contactregionboundarygrp->x(), contactregionboundarygrp->y() - 25, contactregionboundarygrp->w(), 25, "Boundary of the contact region");
+    contactregionboundaryrnd->type(FL_RADIO_BUTTON);
+    contactregionboundaryrnd->value(0);
+    contactregionboundaryrnd->callback(opcb);
+
+    // It is always possible to compute the boundary of the contact region.
+    //
+    optionsgrp.push_back(contactregionboundarygrp);
+    optionsbtn.push_back(contactregionboundaryrnd);
+    optionsfnc.push_back(0);
+
+    lastgrp = contactregionboundarygrp;
+
+    return;
+}
+
+void on_move_coords(Fl_Widget*, void*){
+    RealVector p(2);
+    canvas->getxy(p(0), p(1));
+
+    std::stringstream s;
+    s << "Mouse over " << p;
+
+    point_box->copy_label(s.str().c_str());    
+
+    return;
+}
+
 int main(){
+    subphysics = 0;
+
     // Create the subphysics.
     //
 //    subphysics = new DeadVolatileVolatileGasSubPhysics;
@@ -1389,6 +1500,11 @@ int main(){
 //    subphysics = new SorbieSubPhysics;
 //    subphysics = new TPCWSubPhysics;
 //    subphysics = new Quad2SubPhysics;
+
+    if (subphysics == 0) {
+        fl_alert("No subphysics was loaded. Aborting...");
+        exit(0);
+    }
 
     std::cout << "SubPhysics \"" << subphysics->info_subphysics() << "\" created successfully." << std::endl;
 
@@ -1422,9 +1538,15 @@ int main(){
         // Scroll.
         //
         scroll_grp = new Fl_Group(canvas->x() + canvas->w() + 1, canvas->y(), scrollwidth, canvas->h());
-        scroll = new CanvasMenuScroll(canvas->x() + canvas->w() + 10, 20, scrollwidth, win->h() - 40 - 25, "Curves");
+        scroll = new CanvasMenuScroll(canvas->x() + canvas->w() + 10, 20, scrollwidth, win->h() - 40 - 25 - 35, "Curves");
 
-        clear_all_curves = new Fl_Button(scroll->x(), scroll->y() + scroll->h() + 10, (scroll->w() - 10)/2, 25, "Clear all curves");
+        // Show the point under the mouse.
+        //
+        point_box = new Fl_Box(scroll->x(), scroll->y() + scroll->h() + 10, scroll->w(), 25);
+        point_box->box(FL_EMBOSSED_BOX);
+        canvas->on_move(&on_move_coords, canvas, 0);
+
+        clear_all_curves = new Fl_Button(point_box->x(), point_box->y() + point_box->h() + 10, (point_box->w() - 10)/2, 25, "Clear all curves");
         clear_all_curves->callback(clear_curves);
 
         nozoom = new Fl_Button(clear_all_curves->x() + clear_all_curves->w() + 10, 
@@ -1435,6 +1557,12 @@ int main(){
         nozoom->callback(nozoomcb);
 
         scroll_grp->end();
+
+        // For test-plotting.
+        #ifdef TESTWAVECURVEFACTORY
+        subphysics->wavecurvefactory()->canvas = canvas;
+        subphysics->wavecurvefactory()->scroll = scroll;
+        #endif
     }
 //    tile->end();
     win->end();
@@ -1508,6 +1636,11 @@ int main(){
             //
             add_double_contact();
             std::cout << "Added double contact." << std::endl;
+
+            // Contact region boundary.
+            //
+            add_contact_region_boundary();
+            std::cout << "Added contact region boundary." << std::endl;
         }
         sidescroll->end();
         
@@ -1547,6 +1680,17 @@ int main(){
 //            Curve2D *c = new Curve2D(v, 0.0, 0.0, 0.0);
 //            canvas->add(c);
 //        }
+//    }
+
+//    // Test.
+//    //
+//    {
+//        RealVector pp(2);
+//        pp(0) = 0.30934054;
+//        pp(1) = 0.11556151;
+
+//        Curve2D *c = new Curve2D(pp, 0.0, 0.0, 0.0, CURVE2D_MARKERS);
+//        canvas->add(c);
 //    }
 
     return Fl::run();

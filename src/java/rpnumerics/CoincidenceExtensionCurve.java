@@ -18,7 +18,7 @@ public class CoincidenceExtensionCurve extends BifurcationCurve{
 //        super(leftSegments);
 
     }
-      public String toMatlab() {
+      public String toMatlab(int curveIndex) {
 
         StringBuffer buffer = new StringBuffer();
 

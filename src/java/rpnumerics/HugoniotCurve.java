@@ -599,7 +599,7 @@ public class HugoniotCurve extends SegmentedCurve {
     }
 
 
-    public String toMatlab() {
+    public String toMatlab(int curveIndex) {
         return null;
     }
 

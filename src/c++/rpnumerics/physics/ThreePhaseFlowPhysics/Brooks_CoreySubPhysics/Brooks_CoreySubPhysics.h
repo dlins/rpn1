@@ -13,7 +13,6 @@ class Brooks_CoreySubPhysics : public ThreePhaseFlowSubPhysics {
     private:
     protected:
         Parameter *lambda_parameter;
-        Parameter *cnw_parameter, *cno_parameter, *cng_parameter;
 
     public:
         Brooks_CoreySubPhysics();

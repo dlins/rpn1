@@ -1,6 +1,8 @@
 #include "TPCWSubPhysics.h"
 
 TPCWSubPhysics::TPCWSubPhysics(){
+    number_of_families_ = 2;
+
     // Flux parameters.
     //
     abs_perm_parameter = new Parameter(std::string("abs_perm"), 3e-12);

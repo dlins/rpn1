@@ -1,4 +1,5 @@
 #include "WaveCurveFactory.h"
+#include "SubPhysics.h"
 
 // Find the intesection between two segments: p1-p2 and q1-q2, store the answer in r.
 // If there is no intersection, return false (and r is useless), otherwise return true.
@@ -27,6 +28,28 @@ bool WaveCurveFactory::segment_intersection(double *p1, double *p2, double *q1, 
     return (alpha >= 0.0 && alpha <= 1.0) && (beta >= 0.0 && beta <= 1.0);
 }
 
+WaveCurveFactory::WaveCurveFactory(SubPhysics *s): subphysics(s){
+    g = subphysics->accumulation();
+    f = subphysics->flux();
+    b = subphysics->boundary();
+
+    odesolver = subphysics->ode_solver();
+
+    rarefactioncurve = subphysics->rarefaction_curve();
+    shockcurve       = subphysics->shock();
+    compositecurve   = subphysics->composite();
+
+    type.resize(3);
+    type[0] = std::string("Rarefaction Curve");
+    type[1] = std::string("Composite Curve");
+    type[2] = std::string("Shock Curve");
+
+    #ifdef TESTWAVECURVEFACTORY
+    canvas = 0;
+    scroll = 0;
+    #endif 
+}
+
 WaveCurveFactory::WaveCurveFactory(const AccumulationFunction *gg, const FluxFunction *ff, const Boundary *bb, const ODE_Solver *o,
                                    RarefactionCurve *r, ShockCurve *s, CompositeCurve *c){
     g = gg;
@@ -43,6 +66,11 @@ WaveCurveFactory::WaveCurveFactory(const AccumulationFunction *gg, const FluxFun
     type[0] = std::string("Rarefaction Curve");
     type[1] = std::string("Composite Curve");
     type[2] = std::string("Shock Curve");
+
+    #ifdef TESTWAVECURVEFACTORY
+    canvas = 0;
+    scroll = 0;
+    #endif 
 }
 
 WaveCurveFactory::~WaveCurveFactory(){
@@ -63,6 +91,10 @@ int WaveCurveFactory::Liu_half_wavecurve(const ReferencePoint &ref,
     // which messes up with the Riemann Profile.
     //
     bool is_first = true;
+
+    // Treat next rarefaction as a contact.
+    //
+    bool next_is_contact = false;
 
     // This changes if the rarefaction reaches a coincidence.
     //
@@ -123,6 +155,14 @@ int WaveCurveFactory::Liu_half_wavecurve(const ReferencePoint &ref,
                 for (int i = 1; i < rarcurve.curve.size(); i++) rarcurve.back_curve_pointer[i] = hwc.wavecurve.size();
                 
                 if (hwc.wavecurve.size() > 0) rarcurve.back_pointer[0] = hwc.wavecurve.back().curve.size() - 1;
+
+                // Check if it is a contact. FOR THE TIME BEING, ONLY CHANGE THE TYPE TO SHOCKCURVE.
+                //
+                if (next_is_contact){
+                    rarcurve.type = CONTACT_CURVE;
+                    next_is_contact = false;
+                }
+
             }
 
             // Store regardless of what happened during the computation.
@@ -133,6 +173,23 @@ int WaveCurveFactory::Liu_half_wavecurve(const ReferencePoint &ref,
 //            return WAVECURVE_OK;
 
             if (info_rar == RAREFACTION_OK){
+                #ifdef TESTWAVECURVEFACTORY
+                {
+                    if (canvas != 0){
+                        Curve2D *c = new Curve2D(rarcurve.curve, 1.0, 0.0, 0.0);
+                        canvas->add(c);
+
+                        if (scroll != 0){
+                            std::stringstream ss;
+                            ss << "Rar., " << rarcurve.curve.size();
+                            scroll->add(ss.str().c_str(), canvas, c);
+                        }
+
+                        TestTools::pause("Rarefaction plotted.");
+                    }
+                }
+                #endif
+
                 // The rarefaction is its own reference curve.
                 //
                 rarcurve.back_curve_index = hwc.wavecurve.size();
@@ -219,6 +276,19 @@ int WaveCurveFactory::Liu_half_wavecurve(const ReferencePoint &ref,
 
                     return WAVECURVE_OK;
                 }
+                else if (rar_stopped_because == RAREFACTION_REACHED_MULTIPLE_FAMILY_CONTACT_REGION){
+                    wavecurve_stopped_because = WAVECURVE_REACHED_BOUNDARY; // Change this return value.
+
+                    // In multidomains this will change.
+
+                    // There could be non-connected Composites associated with this rarefaction.
+                    // In that case, something should be here.
+
+                    std::cout << "WaveCurveFactory: exiting at Rarefaction (reached multiple family contact region)." << std::endl;
+
+                    return WAVECURVE_OK;
+
+                }
                 // TODO: add Panters' case. lambda = 0!!!
 //                else{
 //                }
@@ -272,6 +342,23 @@ int WaveCurveFactory::Liu_half_wavecurve(const ReferencePoint &ref,
 //            hwc.wavecurve.push_back(cmpcurve);
 
             if (info_cmp == COMPOSITE_OK){
+                #ifdef TESTWAVECURVEFACTORY
+                {
+                    if (canvas != 0){
+                        Curve2D *c = new Curve2D(cmpcurve.curve, 0.0, 1.0, 0.0);
+                        canvas->add(c);
+
+                        if (scroll != 0){
+                            std::stringstream ss;
+                            ss << "Cmp., " << cmpcurve.curve.size();
+                            scroll->add(ss.str().c_str(), canvas, c);
+                        }
+
+                        TestTools::pause("Composite plotted.");
+                    }
+                }
+                #endif
+
                 cmpcurve.back_curve_index = rarefaction_list.back();
 
                 cmpcurve.back_curve_pointer.resize(cmpcurve.curve.size());
@@ -382,6 +469,24 @@ int WaveCurveFactory::Liu_half_wavecurve(const ReferencePoint &ref,
             shkcurve.back_curve_index = hwc.wavecurve.size() - 1;
             hwc.wavecurve.push_back(shkcurve);
 
+                #ifdef TESTWAVECURVEFACTORY
+                {
+                if (shkcurve.curve.size() > 0)
+                    if (canvas != 0){
+                        Curve2D *c = new Curve2D(shkcurve.curve, 0.0, 0.0, 1.0);
+                        canvas->add(c);
+
+                        if (scroll != 0){
+                            std::stringstream ss;
+                            ss << "Shk., " << shkcurve.curve.size();
+                            scroll->add(ss.str().c_str(), canvas, c);
+                        }
+
+                        TestTools::pause("Shock plotted.");
+                    }
+                }
+                #endif
+
             if (shck_info == SHOCKCURVE_OK){
                 future_curve_initial_point = shkcurve.last_point;
                 future_curve_initial_direction = shkcurve.final_direction;
@@ -491,6 +596,10 @@ int WaveCurveFactory::Liu_half_wavecurve(const ReferencePoint &ref,
 
                     return WAVECURVE_OK;
                 }
+                else if (shock_stopped_because == SHOCK_REACHED_CONTACT){
+                    future_curve = RAREFACTION_CURVE;
+                    next_is_contact = true;
+                }
                 else {
 
                     return WAVECURVE_OK;
@@ -517,6 +626,13 @@ int WaveCurveFactory::wavecurve(int type, const RealVector &initial_point, int f
                                 void *linobj, double (*linear_function)(void *o, const RealVector &p),
                                 WaveCurve &hwc, 
                                 int &wavecurve_stopped_because, int &edge){
+
+    if (subphysics->inside_contact_region(initial_point, family)){
+        TestTools::pause("Contact region");
+    }
+    else {
+        TestTools::pause("Non-contact region");
+    }
 
     // Initialize.
     //

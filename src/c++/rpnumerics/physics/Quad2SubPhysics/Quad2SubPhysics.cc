@@ -1,6 +1,8 @@
 #include "Quad2SubPhysics.h"
 
 Quad2SubPhysics::Quad2SubPhysics(): SubPhysics(){
+    number_of_families_ = 2;
+
     // Parameters.
     //
     double a = -1.0;
@@ -54,7 +56,8 @@ Quad2SubPhysics::Quad2SubPhysics(): SubPhysics(){
 
     // Rarefaction.
     //
-    rarefactioncurve_ = new RarefactionCurve(accumulation_, flux_, boundary_);
+//    rarefactioncurve_ = new RarefactionCurve(accumulation_, flux_, boundary_);
+    rarefactioncurve_ = new RarefactionCurve(this);
 
     // Explicit Hugoniot.
     //

@@ -22,7 +22,7 @@ class Subject {
         }
 
         virtual void notify(){
-             std::set<Observer*>::iterator it;
+            std::set<Observer*>::iterator it;
             for (it = observer_.begin(); it != observer_.end(); it++) (*it)->change();
 
             return;

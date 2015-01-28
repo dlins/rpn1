@@ -4,59 +4,6 @@
     <PHASESPACE name="Phase Space">
         <RPNCONFIGURATION>
             <PHYSICS name="Foam">
-                
-                
-                <PHYSICSCONFIG name="fluxfunction">
-                    <PHYSICSPARAM name="grw" position="0" value ="1.0" />
-                    <PHYSICSPARAM name="grg" position="1" value ="1.0" />
-                    <PHYSICSPARAM name="gro" position="2" value ="1.0" />
-                    <PHYSICSPARAM name="muw" position="3" value ="1.0" />
-                    <PHYSICSPARAM name="mug0" position="4" value ="1e-3" />
-                    <PHYSICSPARAM name="muo" position="5" value ="1.0" />
-                    <PHYSICSPARAM name="vel" position="6" value ="1.0" />
-
-
-
-                    <PHYSICSPARAM name="cnw" position="7" value ="0.1" />
-                    <PHYSICSPARAM name="cng" position="8" value ="0.0" />
-                    <PHYSICSPARAM name="cno" position="9" value ="0.1" />
-
-                    <PHYSICSPARAM name="nw" position="10" value ="2.0" />
-                    <PHYSICSPARAM name="ng" position="11" value ="2.0" />
-                    <PHYSICSPARAM name="no" position="12" value ="2.0" />
-
-                    
-                    <PHYSICSPARAM name="epdry" position="13" value ="100" />
-                    <PHYSICSPARAM name="fdry" position="14" value ="0" />
-                    <PHYSICSPARAM name="foil" position="15" value ="0" />
-                    <PHYSICSPARAM name="fmdry" position="16" value ="0.3" />
-                    <PHYSICSPARAM name="fmmob" position="17" value ="2000" />
-                 
-                    
-                    
-                    
-                                     
-                 <PHYSICSPARAM name="fmoil" position="18" value ="0.3" />
-                 <PHYSICSPARAM name="epoil" position="19" value ="2.0" />
-                 <PHYSICSPARAM name="fdyswitch" position="20" value ="1" />
-                 <PHYSICSPARAM name="foswitch" position="21" value ="1.0" />
-
-
-                </PHYSICSCONFIG>       
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
         
             </PHYSICS>
 
@@ -115,7 +62,7 @@
             
           
             <CURVECONFIGURATION name="riemannprofile">
-                <CURVEPARAM name="speedrange" value="-10 40"/>
+                <CURVEPARAM name="speedrange" value="0 3"/>
                 <CURVEPARAM name="Yrange" value="0 1.0"/>
                 
             </CURVECONFIGURATION>

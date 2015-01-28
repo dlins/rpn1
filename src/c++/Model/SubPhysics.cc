@@ -22,10 +22,10 @@ SubPhysics::SubPhysics(){
     bifurcationcurve_ = 0;
 
     doublecontact_ = 0;
+
+    number_of_families_ = 0;
 }
 
 SubPhysics::~SubPhysics(){
 }
-
-
 

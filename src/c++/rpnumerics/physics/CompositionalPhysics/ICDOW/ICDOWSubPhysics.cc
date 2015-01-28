@@ -1,6 +1,8 @@
 #include "ICDOWSubPhysics.h"
 
 ICDOWSubPhysics::ICDOWSubPhysics() : SubPhysics() {
+    number_of_families_ = 2;
+
     // Equation parameters.
     //
     muw_parameter = new Parameter(std::string("muw"), 1e-3); // Pa*s
@@ -91,7 +93,8 @@ ICDOWSubPhysics::ICDOWSubPhysics() : SubPhysics() {
 
     // Rarefaction.
     //
-    rarefactioncurve_ = new RarefactionCurve(accumulation_, flux_, boundary_);
+//    rarefactioncurve_ = new RarefactionCurve(accumulation_, flux_, boundary_);
+    rarefactioncurve_ = new RarefactionCurve(this);
 
     // Inflection.
     //
