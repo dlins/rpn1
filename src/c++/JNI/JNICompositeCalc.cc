@@ -98,7 +98,7 @@ int dimension = RpNumerics::physicsVector_->at(0)->boundary()->minimums().size()
 
     vector<RealVector> inflectionPoints;
 
-    RarefactionCurve rc(accum, flux, tempBoundary);
+    RarefactionCurve rc(RpNumerics::physicsVector_->at(0));
 
     double deltaxi = 1e-3;
     std::vector<RealVector> inflection_point;

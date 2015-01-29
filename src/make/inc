@@ -26,7 +26,6 @@ VPATH = \
 	c++/rpnumerics/physics/ThreePhaseFlowPhysics/Sorbie \
 	c++/rpnumerics/physics/JD \
 	c++/rpnumerics/physics/SimpleFlux \
-	c++/rpnumerics/physics/CoreyQuad4Phase \
 	c++/rpnumerics/physics/Quad2C1SubPhysics \
 	c++/rpnumerics/physics/CompositionalPhysics \
 	c++/rpnumerics/physics/CompositionalPhysics/DeadVolatileVolatileGas \
@@ -45,6 +44,7 @@ VPATH = \
 	c++/rpnumerics/characteristics \
 	c++/rpnumerics/methods \
 	c++/rpnumerics/methods/ShockCurve \
+	c++/rpnumerics/methods/ContactRegionBoundary \
 	c++/rpnumerics/methods/EquationFunctionLevelCurve \
 	c++/rpnumerics/methods/CharacteristicPolynomialLevels \
 	c++/rpnumerics/methods/Coincidence \
@@ -119,7 +119,6 @@ INCLUDE = \
 	-I c++/rpnumerics/physics/ThreePhaseFlowPhysics/Sorbie \
 	-I c++/rpnumerics/physics/JD \
 	-I c++/rpnumerics/physics/SimpleFlux \
-	-I c++/rpnumerics/physics/CoreyQuad4Phase \
 	-I c++/rpnumerics/physics/Quad2C1SubPhysics \
 	-I c++/rpnumerics/physics/CompositionalPhysics \
 	-I c++/rpnumerics/physics/CompositionalPhysics/DeadVolatileVolatileGas \
@@ -138,6 +137,7 @@ INCLUDE = \
 	-I c++/rpnumerics/characteristics \
 	-I c++/rpnumerics/methods \
 	-I c++/rpnumerics/methods/ShockCurve \
+	-I c++/rpnumerics/methods/ContactRegionBoundary \
 	-I c++/rpnumerics/methods/EquationFunctionLevelCurve \
 	-I c++/rpnumerics/methods/CharacteristicPolynomialLevels \
 	-I c++/rpnumerics/methods/Coincidence \
@@ -241,6 +241,7 @@ CCSRC = \
 	FoamPermeability.cc \
 	FoamSubPhysics.cc \
 	FoamViscosity.cc \
+	FoamShockObserver.cc \
 	FoamFluxFunction.cc \
 	ThreePhaseFlowMobility.cc \
 	Brooks_CoreySubPhysics.cc \
@@ -267,8 +268,6 @@ CCSRC = \
 	CoincidenceJD.cc \
 	JDFluxFunction.cc \
 	SimpleFlux.cc \
-	ZeroImplicit.cc \
-	CoreyQuad4PhaseHugoniotZeroImplicit.cc \
 	Quad2C1Equations.cc \
 	DeadVolatileVolatileGasHydrodynamics.cc \
 	DeadVolatileVolatileGasAccumulationFunction.cc \
@@ -311,6 +310,7 @@ CCSRC = \
 	ShockFlowParams.cc \
 	ShockCurve.cc \
 	ClassifyShockCurve.cc \
+	ContactRegionBoundary.cc \
 	EquationFunctionLevelCurve.cc \
 	CharacteristicPolynomialLevels.cc \
 	Explicit_Bifurcation_Curves.cc \

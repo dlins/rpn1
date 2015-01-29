@@ -7,14 +7,22 @@ CoreyQuadSubPhysics::CoreyQuadSubPhysics() : ThreePhaseFlowSubPhysics(){
 //    mug_parameter = new Parameter(std::string("mug"), 1.0 - 3e-3);
 
     muw_parameter = new Parameter(std::string("muw"), 1.0);
-    muo_parameter = new Parameter(std::string("muo"), 1.0);
-    mug_parameter = new Parameter(std::string("mug"), 1.0);
+    muo_parameter = new Parameter(std::string("muo"), 2.0);
+    mug_parameter = new Parameter(std::string("mug"), 0.5);
 
     vel_parameter = new Parameter(std::string("vel"), 1.0);
 
     grw_parameter = new Parameter(std::string("grw"), 1.0);
     gro_parameter = new Parameter(std::string("gro"), 1.0);
     grg_parameter = new Parameter(std::string("grg"), 1.0);
+
+    // TODO: Introduce these parameters into the flux's equations. When
+    //       When that happens, add these parameters to the parameter list
+    //       so the user can access them.
+    //
+    cnw_parameter = new Parameter(std::string("cnw"), 0.0);
+    cno_parameter = new Parameter(std::string("cno"), 0.0);
+    cng_parameter = new Parameter(std::string("cng"), 0.0);
 
 //    // Panters.
 //    //
@@ -51,8 +59,8 @@ CoreyQuadSubPhysics::CoreyQuadSubPhysics() : ThreePhaseFlowSubPhysics(){
     // GridValues.
     //
     std::vector<int> number_of_cells(2);
-    number_of_cells[0] = 128;
-    number_of_cells[1] = 128;
+    number_of_cells[0] = 512;
+    number_of_cells[1] = 512;
 
     gridvalues_ = new GridValues(boundary_, boundary_->minimums(), boundary_->maximums(), number_of_cells);
     for (int i = 0; i < equation_parameter_.size(); i++) equation_parameter_[i]->add(gridvalues_);
@@ -78,7 +86,8 @@ CoreyQuadSubPhysics::CoreyQuadSubPhysics() : ThreePhaseFlowSubPhysics(){
 
     // Rarefaction.
     //
-    rarefactioncurve_ = new RarefactionCurve(accumulation_, flux_, boundary_);
+//    rarefactioncurve_ = new RarefactionCurve(accumulation_, flux_, boundary_);
+    rarefactioncurve_ = new RarefactionCurve(this);
 
     // Shock curve.
     //
@@ -129,6 +138,11 @@ CoreyQuadSubPhysics::~CoreyQuadSubPhysics(){
     delete shockcurve_;
     delete rarefactioncurve_;
     for (int i = 0; i < hugoniot_curve.size(); i++) delete hugoniot_curve[i];
+
+    // When these parameters are active in the flux, eliminate these lines.
+    delete cng_parameter;
+    delete cno_parameter;
+    delete cnw_parameter;
 
     for (int i = 0; i < equation_parameter_.size(); i++) delete equation_parameter_[i];
 

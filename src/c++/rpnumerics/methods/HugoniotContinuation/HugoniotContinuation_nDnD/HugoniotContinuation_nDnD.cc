@@ -1,4 +1,5 @@
 #include "HugoniotContinuation_nDnD.h"
+#include "SubPhysics.h"
 
 // TODO: Move this method upwards, into SubPhysics.
 //

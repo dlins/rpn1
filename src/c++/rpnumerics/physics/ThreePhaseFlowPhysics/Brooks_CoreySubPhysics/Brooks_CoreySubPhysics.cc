@@ -28,12 +28,6 @@ Brooks_CoreySubPhysics::Brooks_CoreySubPhysics() : ThreePhaseFlowSubPhysics(){
     equation_parameter_.push_back(muo_parameter);
     equation_parameter_.push_back(mug_parameter);
     
-    
-    
-    
-    
-    
-
     equation_parameter_.push_back(grw_parameter); // TODO: Add or not?
     equation_parameter_.push_back(gro_parameter); // TODO: Add or not?
     equation_parameter_.push_back(grg_parameter); // TODO: Add or not?
@@ -75,7 +69,8 @@ Brooks_CoreySubPhysics::Brooks_CoreySubPhysics() : ThreePhaseFlowSubPhysics(){
 
     // Rarefaction.
     //
-    rarefactioncurve_ = new RarefactionCurve(accumulation_, flux_, boundary_);
+//    rarefactioncurve_ = new RarefactionCurve(accumulation_, flux_, boundary_);
+    rarefactioncurve_ = new RarefactionCurve(this);
 
     // Inflection.
     //

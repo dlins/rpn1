@@ -11,6 +11,8 @@
 #include "JetMatrix.h"
 #include "HugoniotCurve.h"
 
+class SubPhysics;
+
 #ifndef HUGONIOTCONTINUATION_INITIALIZE_NO
 #define HUGONIOTCONTINUATION_INITIALIZE_NO 0
 #endif
@@ -102,6 +104,8 @@
 class HugoniotContinuation: public HugoniotCurve {
     private:
     protected:
+        SubPhysics *subphysics;
+
         const FluxFunction *f;
         const AccumulationFunction *g;
         const Boundary *b;

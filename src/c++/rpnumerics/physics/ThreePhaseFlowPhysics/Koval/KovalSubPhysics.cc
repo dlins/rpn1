@@ -9,6 +9,14 @@ KovalSubPhysics::KovalSubPhysics() : ThreePhaseFlowSubPhysics(){
     muo_parameter = new Parameter(std::string("muo"), 1.0 + 2e-3);
     mug_parameter = new Parameter(std::string("mug"), 1.0 - 3e-3);
 
+    // TODO: Introduce these parameters into the flux's equations. When
+    //       When that happens, add these parameters to the parameter list
+    //       so the user can access them.
+    //
+    cnw_parameter = new Parameter(std::string("cnw"), 0.0);
+    cno_parameter = new Parameter(std::string("cno"), 0.0);
+    cng_parameter = new Parameter(std::string("cng"), 0.0);
+
     vel_parameter = new Parameter(std::string("vel"), 1.0);
 
     equation_parameter_.push_back(grw_parameter);
@@ -54,7 +62,8 @@ KovalSubPhysics::KovalSubPhysics() : ThreePhaseFlowSubPhysics(){
 
     // Rarefaction.
     //
-    rarefactioncurve_ = new RarefactionCurve(accumulation_, flux_, boundary_);
+//    rarefactioncurve_ = new RarefactionCurve(accumulation_, flux_, boundary_);
+    rarefactioncurve_ = new RarefactionCurve(this);
 
     // Shock curve.
     //
@@ -98,6 +107,11 @@ KovalSubPhysics::~KovalSubPhysics(){
     delete hugoniotcontinuation_;
     delete rarefactioncurve_;
     for (int i = 0; i < hugoniot_curve.size(); i++) delete hugoniot_curve[i];
+
+    // When these parameters are active in the flux, eliminate these lines.
+    delete cng_parameter;
+    delete cno_parameter;
+    delete cnw_parameter;
 
     for (int i = 0; i < equation_parameter_.size(); i++) delete equation_parameter_[i];
 

@@ -1,6 +1,8 @@
 #ifndef _SUBPHYSICS_
 #define _SUBPHYSICS_
 
+#include <limits>
+
 #include "Parameter.h"
 #include "AuxiliaryFunction.h"
 #include "FluxFunction.h"
@@ -53,6 +55,8 @@ private:
     // Users should not add any private members.
 protected:
     std::string info_subphysics_;
+
+    unsigned int number_of_families_;
 
     const FluxFunction *flux_;
     const AccumulationFunction *accumulation_;
@@ -168,6 +172,18 @@ public:
         return rarefactioncurve_;
     }
 
+    virtual ShockCurve *shock() {
+        return shockcurve_;
+    }
+
+    virtual CompositeCurve *composite() {
+        return compositecurve_;
+    }
+
+    virtual ODE_Solver* ode_solver(){
+        return odesolver_;
+    }
+
     virtual HugoniotContinuation * Hugoniot_continuation() {
         return hugoniotcontinuation_;
     }
@@ -192,14 +208,6 @@ public:
         return doublecontact_;
     }
 
-    virtual ShockCurve *shock() {
-        return shockcurve_;
-    }
-
-    virtual CompositeCurve *composite() {
-        return compositecurve_;
-    }
-
     // Check if the values of the parameters are
     // consistent. 
     //
@@ -207,8 +215,25 @@ public:
         return true;
     }
 
+    // Contact region. This method is not enough when there are contacts
+    // for more than one family. TODO: Create a new method that characterizes
+    // this situation, to be used by the rarefaction, wavecurve, etc.
+    //
+    // Right now the question to be asked is if the point lies in
+    // a contact region for all families.
+    //
+    virtual bool inside_contact_region(const RealVector &p, int family){
+        return false;
+    }
 
+//    virtual double distance_to_contact_region(const RealVector &p, int family) = 0;
+    virtual double distance_to_contact_region(const RealVector &p){
+        return std::numeric_limits<double>::infinity();
+    }
 
+    virtual unsigned int number_of_families(){
+        return number_of_families_;
+    }
 
 };
 

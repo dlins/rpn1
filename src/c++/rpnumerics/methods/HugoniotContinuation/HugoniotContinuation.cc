@@ -1,5 +1,5 @@
 #include "HugoniotContinuation.h"
-
+#include "SubPhysics.h"
 
 // Trivial initialization. It is assumed that the reference point and the initial point
 // are one and the same (in).
@@ -230,7 +230,7 @@ int HugoniotContinuation::Newton_in_hyperplane(const RealVector &origin, const D
 
         Newton_system_for_Hugoniot(hyperplane_point, hyperplane, Newton_matrix, error);
 
-//        std::cout << "Newton_matrix =\n" << Newton_matrix << std::endl;
+        std::cout << "Newton_matrix =\n" << Newton_matrix << std::endl;
 
         int info_correction = solve(Newton_matrix, error, correction);
         
@@ -243,10 +243,11 @@ int HugoniotContinuation::Newton_in_hyperplane(const RealVector &origin, const D
         iterations++;
         
         norm_correction = norm(correction);
+        std::cout << "    correction = " << correction << ", norm_correction = " << norm_correction << std::endl;
         
     } while (iterations < max_number_iterations && norm_correction > min_norm && norm_correction < 10.0); // TODO: 10.0 was fixed here, it must be fine-tuned, perhaps it should become a member.
     
-//    std::cout << "Newton_in_hyperplane, iterations = " << iterations << std::endl;
+    std::cout << "Newton_in_hyperplane, iterations = " << iterations << std::endl;
 
     if (iterations >= max_number_iterations) return HUGONIOTCONTINUATION_NEWTON_ERROR;
     
@@ -278,6 +279,8 @@ int HugoniotContinuation::Newton_step(const RealVector &previous_point, double &
 
     do {
         step_size *= 0.5;
+//        step_size = std::max(step_size*.5, 1e-3);
+
         step_size_iterations++;
 
         hyperplane_origin = previous_point + step_size*previous_direction;
@@ -299,7 +302,10 @@ int HugoniotContinuation::Newton_step(const RealVector &previous_point, double &
         //
         info_newton = Newton_in_hyperplane(hyperplane_origin, hyperplane, Hugoniot_intersection);
 
-//        std::cout << "info_newton = " << info_newton << ", hyperplane_origin = " << hyperplane_origin << ", Hugoniot_intersection = " << Hugoniot_intersection << std::endl;
+        std::cout << "info_newton = " << info_newton << ", hyperplane_origin = " << hyperplane_origin << ", Hugoniot_intersection = " << Hugoniot_intersection << std::endl;
+        if (info_newton != HUGONIOTCONTINUATION_NEWTON_OK){
+            return HUGONIOTCONTINUATION_NEWTON_STEP_ERROR;
+        } 
 
         // Check that the angle between previous_direction and (Hugoniot_intersection - previous_point) does not exceed arccos(MAX_COS_ANGLE). 
         // If so, reduce shift.
@@ -322,11 +328,12 @@ int HugoniotContinuation::Newton_step(const RealVector &previous_point, double &
     //       inside a do-while loop.
     //
     if (info_newton != HUGONIOTCONTINUATION_NEWTON_OK){ // Was == HUGONIOTCONTINUATION_NEWTON_ERROR
-        return HUGONIOTCONTINUATION_NEWTON_ERROR;
+        return HUGONIOTCONTINUATION_NEWTON_STEP_ERROR;
     } 
     else return HUGONIOTCONTINUATION_NEWTON_STEP_OK;
 }
 
+// NOT USED.
 int HugoniotContinuation::Newton_step(const RealVector &previous_point, double &step_size, int &number_of_steps_with_unchanged_size,
                                       const RealVector &previous_direction,
                                       DoubleMatrix &hyperplane, RealVector &Hugoniot_intersection){
@@ -522,7 +529,12 @@ int HugoniotContinuation::curve_point(const RealVector &previous_point, double p
 
     int info_Newton_step = Newton_step(previous_point, step_size, number_of_steps_with_unchanged_size, direction, Hugoniot_intersection);
 
-//    std::cout << "info_Newton_step = " << info_Newton_step << ", Hugoniot_intersection = " << Hugoniot_intersection << std::endl;
+    std::cout << "info_Newton_step = " << info_Newton_step << ", Hugoniot_intersection = " << Hugoniot_intersection << std::endl;
+    if (info_Newton_step != HUGONIOTCONTINUATION_NEWTON_STEP_OK){
+//        TestTools::pause("Hug. 1");
+
+        return HUGONIOTCONTINUATION_NEWTON_ERROR;
+    }
 
     sigma_between_points = shockspeed(f, g, previous_point, f, g, Hugoniot_intersection); // WHY???
 
@@ -549,9 +561,12 @@ int HugoniotContinuation::curve_point(const RealVector &previous_point, double p
         // TODO: The step_size should be decreased here!
     }
 
+    std::cout << "step_size = " << step_size << std::endl;
+
         
     if (info_Newton_step != HUGONIOTCONTINUATION_NEWTON_STEP_OK){
-        return info_Newton_step;
+//        TestTools::pause("Hug. 2");
+        return HUGONIOTCONTINUATION_NEWTON_ERROR;
     } 
 
     // Find the hyperplane.
@@ -575,7 +590,7 @@ int HugoniotContinuation::curve_point(const RealVector &previous_point, double p
 //    previous_point     = Hugoniot_intersection;
 //    previous_direction = Hugoniot_direction;
 
-    return HUGONIOTCONTINUATION_NEWTON_STEP_OK; // Find a better return code.
+    return HUGONIOTCONTINUATION_NEWTON_OK; // Find a better return code.
 }
 
 // TODO: Subphysics may be included somehow in the reference point.
@@ -632,7 +647,7 @@ HugoniotContinuation::HugoniotContinuation(const FluxFunction *ff, const Accumul
 
 //    there_is_a_bifurcation_space = false;
 
-    default_step_size_ = 1.0e-4 /*0.00005*/;
+    default_step_size_ = 1.0e-3 /*0.00005*/;
     max_default_step_size_ = 100.0*default_step_size_;
 
     info_ = std::string("HugoniotContinuation");

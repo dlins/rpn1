@@ -13,8 +13,6 @@ import org.xml.sax.SAXException;
 import rpn.parser.*;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
-import rpn.plugininterface.PluginInfoController;
-import rpn.plugininterface.PluginInfoParser;
 
 /** This class contains methods to configure the applet and the desktop versions. */
 public abstract class RPnConfigReader {
@@ -102,8 +100,6 @@ public abstract class RPnConfigReader {
             RPnInterfaceModule.init(xmlReader, configStream);
 
 
-            PluginInfoParser pluginParser = new PluginInfoParser();
-            PluginInfoController.updatePluginInfo(pluginParser);
 
         } catch (Throwable any) {
 

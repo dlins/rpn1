@@ -62,6 +62,7 @@
 #define SHOCK_COMPLEX_EIGENVALUE_AT_FAMILY                               305
 #define SHOCK_REACHED_BOUNDARY                                           306
 #define SHOCK_REACHED_LINE                                               307
+#define SHOCK_REACHED_CONTACT                                            308
 
 
 
@@ -167,10 +168,15 @@ class ExtensionPoint {
         ~ExtensionPoint(){}
 };
 
+class SubPhysics;
+
 class ShockCurve {
     private:
     protected:
+        SubPhysics *subphysics;
         HugoniotContinuation *hc;
+
+        double distance_to_contact_region_;
 
         const FluxFunction *f;
         const AccumulationFunction *g;
@@ -235,7 +241,10 @@ class ShockCurve {
                                         int &transition_reference_found);
 
         void add_point(Curve &c, const RealVector &p);
+
+        void init(HugoniotContinuation *h);
     public:
+        ShockCurve(SubPhysics *s);
         ShockCurve(HugoniotContinuation *h);
         virtual ~ShockCurve();
 
@@ -330,7 +339,20 @@ class ShockCurve {
 
         HugoniotContinuation * get_HugoniotContinuation(){return hc;}
 
-       
+
+        // Set/get the maximum distance to the contact region allowed.
+        //
+        void distance_to_contact_region(double d){
+            distance_to_contact_region_ = d;
+
+            std::cout << "New distance: " << distance_to_contact_region_ << std::endl;
+            return;
+        }
+
+        double distance_to_contact_region(){
+            return distance_to_contact_region_;
+        }
+
 };
 
 #endif // _SHOCKCURVE_

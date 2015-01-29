@@ -89,8 +89,8 @@ StonePermeability::StonePermeability(ThreePhaseFlowSubPhysics *s) : ThreePhaseFl
     expow_parameter = new Parameter(std::string("expow"), 2.0);
     expog_parameter = new Parameter(std::string("expog"), 2.0);
 
-    cnw_parameter = new Parameter(std::string("cnw"), 0.0);
-    cno_parameter = new Parameter(std::string("cno"), 0.0);
+    cnw_parameter = new Parameter(std::string("cnw"), 0.1);
+    cno_parameter = new Parameter(std::string("cno"), 0.1);
     cng_parameter = new Parameter(std::string("cng"), 0.0);
 
     lw_parameter = new Parameter(std::string("lw"), 0.0);

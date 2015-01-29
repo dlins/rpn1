@@ -10,8 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import rpn.plugininterface.PluginProfile;
-import rpn.plugininterface.PluginTableModel;
 import rpnumerics.PhasePoint;
 import rpnumerics.RPNUMERICS;
 import rpnumerics.RpException;
@@ -66,10 +64,11 @@ public class ViscousProfileData extends ShockRarefactionProfile {
     }
 
     public PhasePoint getUminus() {
-//        return uminus_;
-        PluginProfile profile = PluginTableModel.getPluginConfig(SHOCKFLOW_NAME);
-        String data = profile.getParamValue("xzero");
-        return new PhasePoint(new RealVector(data));
+        return null;
+        //return uminus_;
+//        PluginProfile profile = PluginTableModel.getPluginConfig(SHOCKFLOW_NAME);
+//        String data = profile.getParamValue("xzero");
+//        return new PhasePoint(new RealVector(data));
     }
 
     public SimplexPoincareSection getPoincare() {

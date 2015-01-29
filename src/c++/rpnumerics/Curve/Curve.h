@@ -10,6 +10,7 @@
 #define RAREFACTION_CURVE 1
 #define COMPOSITE_CURVE   2
 #define SHOCK_CURVE       3
+#define CONTACT_CURVE     4
 
 #define SPEED_INCREASE   10
 #define SPEED_DECREASE   11

@@ -1112,16 +1112,6 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
             }
         });
         
-        shockMenuItem_.addActionListener(
-                new java.awt.event.ActionListener() {
-                    
-                    public void actionPerformed(ActionEvent e) {
-                        RPnShockConfigDialog shockConfigDialog = new RPnShockConfigDialog(false, false);
-                        shockConfigDialog.setVisible(true);
-                        
-                    }
-                });
-        
         matlabExportMenuItem_.addActionListener(new java.awt.event.ActionListener() {
             
             public void actionPerformed(ActionEvent e) {

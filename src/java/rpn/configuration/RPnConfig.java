@@ -17,12 +17,9 @@ import javax.swing.ImageIcon;
 import rpn.RPnFluxParamsObserver;
 import rpn.RPnFluxParamsSubject;
 import rpn.RPnPhaseSpaceAbstraction;
-import rpn.command.TransitionalLinePlotCommand;
 import rpn.controller.phasespace.NumConfigImpl;
 
 import rpn.parser.RPnDataModule;
-import rpn.plugininterface.PluginInfoController;
-import rpn.plugininterface.PluginInfoParser;
 import rpnumerics.RPNUMERICS;
 
 public class RPnConfig {
@@ -40,7 +37,6 @@ public class RPnConfig {
 
         activePhysics_ = physicsName;
         RPNUMERICS.init((String) physicsName);//PHYSICS is INITIALIZATED
-        numericsConfig();
         visualConfig();
 
     }
@@ -243,10 +239,7 @@ public class RPnConfig {
 
     }
 
-    private static void numericsConfig() {
-        PluginInfoParser pluginParser = new PluginInfoParser();
-        PluginInfoController.updatePluginInfo(pluginParser);
-    }
+    
 
     static public void remoteImage() {
 

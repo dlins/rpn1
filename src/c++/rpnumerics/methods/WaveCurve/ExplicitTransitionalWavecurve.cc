@@ -91,6 +91,7 @@ int ExplicitTransitionalWavecurve::U_side_function(void *obj, double L, double &
 RealVector ExplicitTransitionalWavecurve::EW_line(double sM){
     RealVector p(2);
 
+    double muw = corey_->muw()->value();
     double muo = corey_->muo()->value();
     double mug = corey_->mug()->value(); 
 
@@ -276,9 +277,13 @@ double ExplicitTransitionalWavecurve::DG_s(const RealVector &M){
 //
 // This method should be cleaned up, by abstracting the mu's.
 //
-int ExplicitTransitionalWavecurve::subdivide_curve(int type, std::vector<double> &s_param, std::vector<RealVector> &extpts){
+int ExplicitTransitionalWavecurve::subdivide_curve(int type,
+                                                   std::vector<double> &s_param,
+                                                   std::vector<RealVector> &extpts,
+                                                   std::vector<std::string> &name){
     s_param.clear();
     extpts.clear();
+    name.clear();
 
     double muw = corey_->muw()->value();
     double muo = corey_->muo()->value();
@@ -286,72 +291,218 @@ int ExplicitTransitionalWavecurve::subdivide_curve(int type, std::vector<double>
 
     double mu_total = muw + muo + mug;
 
-    // Vertex (all cases are treated equally).
-    //
-    double s_vertex = 0.0;
+//    // Vertex (all cases are treated equally).
+//    //
+//    double s_vertex = 0.0;
 
-    // E2 and E1.
-    //
-    double s_E2, s_E1;
+//    s_param.push_back(s_vertex);
+
+//    // E2 and E1.
+//    //
+//    double s_E2, s_E1;
+
+//    if (type == EW){
+//        s_E1 = (muo + mug)/(mu_total + muw); // Was: (muw + mug)/(mu_total + muw) (WRONG)
+//        s_E2 = 1.0 - sqrt(muw/mu_total);
+
+//        // r (class member).
+//        //
+//        r = (mug + muo)/muw;
+//    }
+//    else if (type == DG){
+//        s_E1 = (muw + muo)/(mu_total + mug); // (muo + mug)/(mu_total + mug)
+//        s_E2 = 1.0 - sqrt(mug/mu_total);
+
+//        // r (class member).
+//        //
+//        r = (muw + muo)/mug;
+//    }
+//    else if (type == BO){
+//        s_E1 = (muw + mug)/(mu_total + muo); // (muw + muo)/(mu_total + muo)
+//        s_E2 = 1.0 - sqrt(muo/mu_total);
+
+//        // r (class member).
+//        //
+//        r = (muw + mug)/muo;
+//    }
+
+////    s_param.push_back(s_E2);
+////    s_param.push_back(s_E1);
+//    
+////    // C2 and C1.
+////    // Find the only root that is supposed to exist in the interval [0, 1].
+////    //
+////    double root = sqrt(2.0*r/(1.0 + r));
+////    double s_C2 = root*.5;
+////    double s_C1 = -.5*root/(root - 2.0);
+
+//    double s_umbilic;
+//    if      (type == EW) s_umbilic = (mug + muo)/mu_total;
+//    else if (type == DG) s_umbilic = (muo + muw)/mu_total;
+//    else if (type == BO) s_umbilic = (mug + muw)/mu_total;
+
+////    // Point on side opposing vertex (all cases are treated equally).
+////    //
+////    double s_side = 1.0;
+
+
+////    s_param.push_back(s_C2);
+////    s_param.push_back(s_umbilic);
+////    s_param.push_back(s_C1);
+////    s_param.push_back(s_side);
 
     if (type == EW){
-        s_E1 = (muw + mug)/(mu_total + muw);
+        // Vertex (all cases are treated equally).
+        //
+        double s_vertex = 0.0;
+        s_param.push_back(s_vertex);
+        name.push_back(std::string("W"));
+
+        // E2 and E1.
+        //
+        double s_E2, s_E1;
+        s_E1 = (muo + mug)/(mu_total + muw);
         s_E2 = 1.0 - sqrt(muw/mu_total);
+
+        s_param.push_back(s_E2);
+        name.push_back(std::string("E2"));
+
+        s_param.push_back(s_E1);
+        name.push_back(std::string("E1"));
 
         // r (class member).
         //
         r = (mug + muo)/muw;
-    }
-    else if (type == DG){
-        s_E1 = (muo + mug)/(mu_total + mug);
-        s_E2 = 1.0 - sqrt(mug/mu_total);
 
-        // r (class member).
+        double s_umbilic = (mug + muo)/mu_total;
+
+        if (mug + muo > muw) {
+            double root = sqrt(2.0*r/(1.0 + r));
+            double s_C2 = root*.5;
+            double s_C1 = -.5*root/(root - 2.0);
+
+            s_param.push_back(s_C2);
+            name.push_back(std::string("C2"));
+
+            s_param.push_back(s_umbilic);
+            name.push_back(std::string("U"));
+
+            s_param.push_back(s_C1);
+            name.push_back(std::string("C1"));
+        }
+        else {
+            s_param.push_back(s_umbilic);
+            name.push_back(std::string("U"));
+        }
+        
+        // Point on side opposing vertex (all cases are treated equally).
         //
-        r = (muw + muo)/mug;
+        double s_side = 1.0;
+        s_param.push_back(s_side);
+        name.push_back(std::string("E"));
+
+        for (int i = 0; i < s_param.size(); i++) extpts.push_back(EW_line(s_param[i]));
     }
     else if (type == BO){
-        s_E1 = (muw + muo)/(mu_total + muo);
-        s_E2 = 1.0 - sqrt(muo/mu_total);
+        // Vertex (all cases are treated equally).
+        //
+        double s_vertex = 0.0;
+        s_param.push_back(s_vertex);
+        name.push_back(std::string("O"));
+
+        // E2 and E1.
+        //
+        double s_E1 = (muw + mug)/(mu_total + muo); // (muw + muo)/(mu_total + muo)
+        double s_E2 = 1.0 - sqrt(muo/mu_total);
+
+        s_param.push_back(s_E2);
+        name.push_back(std::string("B2"));
+
+        s_param.push_back(s_E1);
+        name.push_back(std::string("B1"));
 
         // r (class member).
         //
         r = (muw + mug)/muo;
-    }
-    
-    // C2 and C1.
-    // Find the only root that is supposed to exist in the interval [0, 1].
-    //
-    double root = sqrt(2.0*r/(1.0 + r));
 
-    double s_C2 = root*.5;
+        double s_umbilic = (mug + muw)/mu_total;
 
-    double s_C1 = -.5*root/(root - 2.0);
+        if (mug + muw > muo) {
+            double root = sqrt(2.0*r/(1.0 + r));
+            double s_C2 = root*.5;
+            double s_C1 = -.5*root/(root - 2.0);
 
-    double s_umbilic;
-    if      (type == EW) s_umbilic = (mug + muo)/mu_total;
-    else if (type == DG) s_umbilic = (muo + muw)/mu_total;
-    else if (type == BO) s_umbilic = (mug + muw)/mu_total;
+            s_param.push_back(s_C2);
+            name.push_back(std::string("C2"));
 
-    // Point on side opposing vertex (all cases are treated equally).
-    //
-    double s_side = 1.0;
+            s_param.push_back(s_umbilic);
+            name.push_back(std::string("U"));
 
-    s_param.push_back(s_vertex);
-    s_param.push_back(s_E2);
-    s_param.push_back(s_E1);
-    s_param.push_back(s_C2);
-    s_param.push_back(s_umbilic);
-    s_param.push_back(s_C1);
-    s_param.push_back(s_side);
+            s_param.push_back(s_C1);
+            name.push_back(std::string("C1"));
+        }
+        else {
+            s_param.push_back(s_umbilic);
+            name.push_back(std::string("U"));
+        }
+        
+        // Point on side opposing vertex (all cases are treated equally).
+        //
+        double s_side = 1.0;
+        s_param.push_back(s_side);
+        name.push_back(std::string("B"));
 
-    if (type == EW){
-        for (int i = 0; i < s_param.size(); i++) extpts.push_back(EW_line(s_param[i]));
-    }
-    else if (type == BO){
         for (int i = 0; i < s_param.size(); i++) extpts.push_back(BO_line(s_param[i]));
     }
     if (type == DG){
+        // Vertex (all cases are treated equally).
+        //
+        double s_vertex = 0.0;
+        s_param.push_back(s_vertex);
+        name.push_back(std::string("G"));
+
+        // E2 and E1.
+        //
+        double s_E1 = (muw + muo)/(mu_total + mug);
+        double s_E2 = 1.0 - sqrt(mug/mu_total);
+
+        s_param.push_back(s_E2);
+        name.push_back(std::string("D2"));
+
+        s_param.push_back(s_E1);
+        name.push_back(std::string("D1"));
+
+        // r (class member).
+        //
+        r = (muw + muo)/mug;
+
+        double s_umbilic = (muo + muw)/mu_total;
+
+        if (muo + muw > mug) {
+            double root = sqrt(2.0*r/(1.0 + r));
+            double s_C2 = root*.5;
+            double s_C1 = -.5*root/(root - 2.0);
+
+            s_param.push_back(s_C2);
+            name.push_back(std::string("C2"));
+
+            s_param.push_back(s_umbilic);
+            name.push_back(std::string("U"));
+
+            s_param.push_back(s_C1);
+            name.push_back(std::string("C1"));
+        }
+        else {
+            s_param.push_back(s_umbilic);
+            name.push_back(std::string("U"));
+        }
+        
+        // Point on side opposing vertex (all cases are treated equally).
+        //
+        double s_side = 1.0;
+        s_param.push_back(s_side);
+        name.push_back(std::string("D"));
+
         for (int i = 0; i < s_param.size(); i++) extpts.push_back(DG_line(s_param[i]));
     }
 
@@ -389,6 +540,12 @@ int ExplicitTransitionalWavecurve::find_subdivision(int type, const RealVector &
         r = (muw + muo)/mug;
     }
 
+    // Almost hard-wired, it is assumed these are the cases and no others.
+    //
+    int transitional_case;
+    if (s_param.size() == 7) transitional_case = TRANSITIONAL_WITH_CONTACTS;
+    else                     transitional_case = TRANSITIONAL_WITHOUT_CONTACTS;
+
     int pos = 0;
     bool found = false;
     while (pos < s_param.size() - 1 && !found){
@@ -396,11 +553,20 @@ int ExplicitTransitionalWavecurve::find_subdivision(int type, const RealVector &
         else pos++;
     }
 
-    if (!found) return SUBDIVISION_ERROR;
+    std::cout << "find_subdivision, sM = " << sM << ", pos = " << pos << std::endl;
 
+    if (!found){
+        std::cout << "find_subdivision could not find a division, aborting..." << std::endl;
+        return SUBDIVISION_ERROR;
+    }
+	
     double sl, sr;
     bool interval_found = false;
-    double s_umbilic = s_param[4];
+    double s_umbilic;
+    if (transitional_case == TRANSITIONAL_WITH_CONTACTS) s_umbilic = s_param[4];
+    else                                                 s_umbilic = s_param[3];
+
+
 
     if (pos == 0){
         // M lies between V and E2.
@@ -428,7 +594,6 @@ int ExplicitTransitionalWavecurve::find_subdivision(int type, const RealVector &
         std::cout << "s_umbilic = " << s_umbilic << std::endl;
 
         double s_umbilic_line = s_umbilic;
-//        s_umbilic_line = 0.0; // Hack.
 
         if ((x1 >= s_umbilic_line && x1 <= 1.0) &&
             (x2 >= s_umbilic_line && x2 <= 1.0)) return SUBDIVISION_ERROR;
@@ -440,63 +605,10 @@ int ExplicitTransitionalWavecurve::find_subdivision(int type, const RealVector &
         sr = 1.0;
 
         interval_found = true;
-
-//        // Fast Lambda @ M:
-//        //
-//        const FluxFunction *f = corey_->flux();
-//        JetMatrix fMjet(2);
-//        f->jet(M, fMjet, 1);
-
-//        std::vector<eigenpair> e;
-//        Eigen::eig(2, fMjet.Jacobian().data(), e);
-
-//        double fast_lambda_M = e[1].r;
-
-//        // Find the point where sigma == fast_lambda_M.
-//        //
-//        double s_min = 0.0, s_max = 1.0;
-//        int n = 100;
-//        int j = 0;
-//        double delta = (s_max - s_min)/(int)(n - 1);
-//        bool found = false;
-//        double lambda_minus_sigma_prev;
-
-//        while (j < n && !found){
-//            double s_sigma = s_min + delta*(double)j;
-
-//            RealVector candidate;
-//            if      (type == EW) candidate = EW_line(s_sigma);
-//            else if (type == DG) candidate = DG_line(s_sigma);
-//            else if (type == BO) candidate = BO_line(s_sigma);
-
-//            JetMatrix Cjet(2);
-//            f->jet(candidate, Cjet, 0);
-
-//            double den = 0.0;
-//            double num = 0.0;
-
-//            for (int i = 0; i < 2; i++){
-//                den += (candidate(i) - M(i))*(candidate(i) - M(i));
-//                num += (candidate(i) - M(i))*(Cjet.function()(i) - fMjet.function()(i));
-//            }
-
-//            double sigma = num/den;
-//            double lambda_minus_sigma = fast_lambda_M - sigma;
-
-//            if (j > 0){
-//                if (lambda_minus_sigma_prev*lambda_minus_sigma < 0.0) {
-//                    std::cout << "Found! s_sigma = " << s_sigma << std::endl;
-//                }
-//            }
-
-//            j++;
-
-//            lambda_minus_sigma_prev = lambda_minus_sigma;
-//        }
-
     }
-    else if (pos == 2){
-        // M lies between E1 and C2.
+    else if ((pos == 2 && transitional_case == TRANSITIONAL_WITH_CONTACTS) ||
+             (pos == 2 && transitional_case == TRANSITIONAL_WITHOUT_CONTACTS)){
+        // M lies between E1 and C2 (with contacts) or E1 and U (without contacts).
         //
         double sigma = 2.0*sM*(1.0 - sM)/(r*pow(sM*sM/r + pow(1.0 - sM, 2.0), 2.0));
         double aux = sigma*(pow(sM, 2.0) + r*pow(1.0 - sM, 2.0));
@@ -511,13 +623,24 @@ int ExplicitTransitionalWavecurve::find_subdivision(int type, const RealVector &
 
         if (info != BHASKARA_TWO_DIFFERENT_ROOTS) return SUBDIVISION_ERROR;
 
-        double s_C1 = s_param[5];
+//        double s_C1 = s_param[5];
 
-        if ((x1 >= s_C1 && x1 <= 1.0) &&
-            (x2 >= s_C1 && x2 <= 1.0)) return SUBDIVISION_ERROR;
+//        if ((x1 >= s_C1 && x1 <= 1.0) &&
+//            (x2 >= s_C1 && x2 <= 1.0)) return SUBDIVISION_ERROR;
 
-        if      (x1 >= s_C1 && x1 <= 1.0) sl = x1;
-        else if (x2 >= s_C1 && x2 <= 1.0) sl = x2;
+//        if      (x1 >= s_C1 && x1 <= 1.0) sl = x1;
+//        else if (x2 >= s_C1 && x2 <= 1.0) sl = x2;
+//        else return SUBDIVISION_ERROR;
+
+        double s_min;
+        if (transitional_case == TRANSITIONAL_WITH_CONTACTS) s_min = s_param[5]; // s_C1
+        else                                                 s_min = s_umbilic;
+
+        if ((x1 >= s_min && x1 <= 1.0) &&
+            (x2 >= s_min && x2 <= 1.0)) return SUBDIVISION_ERROR;
+
+        if      (x1 >= s_min && x1 <= 1.0) sl = x1;
+        else if (x2 >= s_min && x2 <= 1.0) sl = x2;
         else return SUBDIVISION_ERROR;
 
         std::cout << "E1--C2. sl = " << sl << std::endl;
@@ -543,7 +666,7 @@ int ExplicitTransitionalWavecurve::find_subdivision(int type, const RealVector &
 
         interval_found = true;
     }
-    else if (pos == 3){
+    else if (pos == 3 && transitional_case == TRANSITIONAL_WITH_CONTACTS){
         // M lies between C2 and U.
         //
         double A = -2.0*(sM*sM + r*pow(1.0 - sM, 2.0)) + r - 2.0*r*sM;

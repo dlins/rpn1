@@ -16,7 +16,8 @@
 
 #include "WaveCurve.h"
 #include "HyperOctree.h"
-//#include "TestTools.h"
+
+class SubPhysics;
 
 #define WAVECURVE_OK                    0
 #define WAVECURVE_ERROR                 1
@@ -34,6 +35,8 @@
 #define WAVECURVEFACTORY_GENERIC_POINT                          1000
 
 #define WAVECURVEFACTORY_INVALID_PARAMETERS                     (-100)
+
+
 
 class WaveCurveSegment {
     private:
@@ -87,6 +90,8 @@ class WaveCurveFactory {
         CompositeCurve       *compositecurve;
         HugoniotContinuation *hugoniot;
 
+        SubPhysics *subphysics;
+
         std::vector<std::string> type;
 
         int family_for_directional_derivative;
@@ -94,6 +99,7 @@ class WaveCurveFactory {
 
         static bool segment_intersection(double *p1, double *p2, double *q1, double *q2, double *r);
     public:
+        WaveCurveFactory(SubPhysics *s);
         WaveCurveFactory(const AccumulationFunction *gg, const FluxFunction *ff, const Boundary *bb, const ODE_Solver *o, RarefactionCurve *r, ShockCurve *s, CompositeCurve *c);
         virtual ~WaveCurveFactory();
 
@@ -173,6 +179,11 @@ class WaveCurveFactory {
 
             return;
         }
+
+        #ifdef TESTWAVECURVEFACTORY
+        Canvas *canvas;
+        CanvasMenuScroll *scroll;
+        #endif
 };
 
 #endif // _WAVECURVEFACTORY_

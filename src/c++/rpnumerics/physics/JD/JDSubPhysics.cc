@@ -44,7 +44,8 @@ JDSubPhysics::JDSubPhysics() : SubPhysics() {
 
     // RarefactionCurve.
     //
-    rarefactioncurve_ = new RarefactionCurve(accumulation_, flux_, boundary_);
+//    rarefactioncurve_ = new RarefactionCurve(accumulation_, flux_, boundary_);
+    rarefactioncurve_ = new RarefactionCurve(this);
 
     // HugoniotContinuation.
     //

@@ -1,10 +1,22 @@
 #include "RarefactionCurve.h"
 #include "Eigenproblem2x2.h"
+#include "SubPhysics.h"
 
-RarefactionCurve::RarefactionCurve(const AccumulationFunction *gg, const FluxFunction *ff, const Boundary *bb){
-    f = ff;
-    g = gg;
-    b = bb;
+
+//RarefactionCurve::RarefactionCurve(const AccumulationFunction *gg, const FluxFunction *ff, const Boundary *bb){
+//    f = ff;
+//    g = gg;
+//    b = bb;
+
+//    subphysics = 0;
+//}
+
+RarefactionCurve::RarefactionCurve(SubPhysics *s){
+    subphysics = s;
+
+    f = s->flux();
+    g = s->accumulation();
+    b = s->boundary();
 }
 
 RarefactionCurve::~RarefactionCurve(){
@@ -333,8 +345,8 @@ void RarefactionCurve::add_point_to_curve(const RealVector &p, Curve &curve){
     RealVector point_eigenvalues;
     all_eigenvalues(p, family, point_eigenvalues);
 
-    std::cout.precision(32);
-    std::cout << point_eigenvalues << std::endl;
+//    std::cout.precision(32);
+//    std::cout << point_eigenvalues << std::endl;
 
     curve.eigenvalues.push_back(point_eigenvalues);
 
@@ -366,6 +378,17 @@ int RarefactionCurve::curve(const RealVector &initial_point,
 
         return RAREFACTION_ERROR;
     }
+
+//    // Verify if the initial point lies within the contact region.
+//    //
+//    if (subphysics->inside_contact_region(initial_point, curve_family)){
+//        TestTools::pause("Inside contact region: aborting...");
+//        return RAREFACTION_ERROR;
+//    }
+
+    f = subphysics->flux();
+    g = subphysics->accumulation();
+    b = subphysics->boundary();
 
     // Clear the curve, add some info.
     //
@@ -433,7 +456,7 @@ int RarefactionCurve::curve(const RealVector &initial_point,
     reached_elliptic_region = false;
 
     while (true){
-        if (rarcurve.curve.size() > 8000) return RAREFACTION_OK;
+//        if (rarcurve.curve.size() > 8000) return RAREFACTION_OK;
 
         int info_odesolver = odesolver->integrate_step(&RarefactionCurve::field, 
                                                        0,
@@ -575,6 +598,16 @@ int RarefactionCurve::curve(const RealVector &initial_point,
         //
         dirdrv = directional_derivative(next_point, family, reference_vector);
 
+        // For contacts only.
+        //
+        if (type_of_rarefaction == CONTACT){
+            if (std::abs(dirdrv) > 1e-6){
+                return RAREFACTION_OK;
+            }
+
+            // ***
+        }
+
         if (dirdrv*previous_dirdrv < 0.0){
 //        if (0 == 1){ // The inflection will not be detected.
             double bisection_epsilon = 1e-10; // Must be relative to the flux.
@@ -634,6 +667,22 @@ int RarefactionCurve::curve(const RealVector &initial_point,
                 }
             }
         
+        }
+
+        // Multiple-family contact region. TODO: Remember this is only a temporary solution.
+        //
+        {
+            int mfcr = 0;
+            for (int contact_family = 0; contact_family < subphysics->number_of_families(); contact_family++){
+                if (subphysics->inside_contact_region(next_point, contact_family)) mfcr++;
+            }
+
+            if (mfcr > 1){
+                reason_why = RAREFACTION_REACHED_MULTIPLE_FAMILY_CONTACT_REGION;
+                rarcurve.reason_to_stop = RAREFACTION_REACHED_MULTIPLE_FAMILY_CONTACT_REGION;
+                
+                return RAREFACTION_OK;
+            }
         }
 
 //        // Has the rarefaction curve reached the coincidence? 
@@ -787,5 +836,45 @@ int RarefactionCurve::curve_from_boundary(const RealVector &initial_point, int s
                      reason_why, edge);
 
     return info;
+}
+
+int RarefactionCurve::contact(const RealVector &initial_point,
+                              int curve_family,
+                              const ODE_Solver *odesolver,
+                              double deltaxi,
+                              void *linobj, double (*linear_function)(void *o, const RealVector &p),
+                              Curve &contactcurve){
+//    contactcurve.clear();
+
+//    double dd;
+//    RealVector ref;
+//    int increase = RAREFACTION_SPEED_SHOULD_INCREASE;
+
+//    int info = initialize(initial_point, curve_family, increase, ref, dd);
+//    if (info != RAREFACTION_INIT_OK) return CONTACT_ERROR;
+
+//    if (std::abs(dd) < 1e-6){
+//        // First half (ref).
+//        //
+//        int info_half_1 = curve(initial_point,
+//                                curve_family,
+//                                increase,
+//                  int type_of_rarefaction, // For itself or as engine for integral curve.
+//                  int should_initialize,
+//                  const RealVector *direction,
+//                  const ODE_Solver *odesolver, // Should it be another one for the Bisection? Can it really be const? If so, how to use initialize()?
+//                  double deltaxi,
+//                  void *linobj, double (*linear_function)(void *o, const RealVector &p),
+//                  Curve &rarcurve,
+//                  std::vector<RealVector> &inflection_points, // Will these survive/be added to the Curve class?
+//                  RealVector &final_direction,
+//                  int &reason_why, // Similar to Composite.
+//                  int &edge);
+
+//        return CONTACT_OK;
+//    }
+//    else return CONTACT_ERROR;
+
+    return CONTACT_ERROR;
 }
 

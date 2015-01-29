@@ -34,7 +34,7 @@ WaveCurvePlot::WaveCurvePlot(const WaveCurve &w, int type, double min_speed, dou
         double r = 0.0, g = 0.0, b = 0.0;
 
         if (w.wavecurve[i].type == RAREFACTION_CURVE) r = 1.0;
-        else if (w.wavecurve[i].type == SHOCK_CURVE)  b = 1.0;
+        else if (w.wavecurve[i].type == SHOCK_CURVE || w.wavecurve[i].type == CONTACT_CURVE)  b = 1.0;
         else                                          g = 1.0;
 
         std::vector<Point2D> p;
@@ -86,7 +86,7 @@ WaveCurvePlot::WaveCurvePlot(const WaveCurve &w, const RealVector &orig, int typ
         double r = 0.0, g = 0.0, b = 0.0;
 
         if (w.wavecurve[i].type == RAREFACTION_CURVE) r = 1.0;
-        else if (w.wavecurve[i].type == SHOCK_CURVE)  b = 1.0;
+        else if (w.wavecurve[i].type == SHOCK_CURVE || w.wavecurve[i].type == CONTACT_CURVE)  b = 1.0;
         else                                          g = 1.0;
 
         std::vector<Point2D> p;
@@ -141,7 +141,7 @@ WaveCurvePlot::WaveCurvePlot(const WaveCurve &w, const RealVector &orig, const s
         double r = 0.0, g = 0.0, b = 0.0;
 
         if (w.wavecurve[i].type == RAREFACTION_CURVE) r = 1.0;
-        else if (w.wavecurve[i].type == SHOCK_CURVE)  b = 1.0;
+        else if (w.wavecurve[i].type == SHOCK_CURVE || w.wavecurve[i].type == CONTACT_CURVE)  b = 1.0;
         else                                g = 1.0;
 
         std::vector<Point2D> p;

@@ -1,6 +1,8 @@
 #include "DeadVolatileVolatileGasSubPhysics.h"
 
 DeadVolatileVolatileGasSubPhysics::DeadVolatileVolatileGasSubPhysics() : SubPhysics() {
+    number_of_families_ = 2;
+
     // Equation parameters.
     //
     re_parameter  = new Parameter(std::string("re"), 44.0);// re_parameter->value(0.0);
@@ -82,7 +84,8 @@ DeadVolatileVolatileGasSubPhysics::DeadVolatileVolatileGasSubPhysics() : SubPhys
 
     // Rarefaction.
     //
-    rarefactioncurve_ = new RarefactionCurve(accumulation_, flux_, boundary_);
+//    rarefactioncurve_ = new RarefactionCurve(accumulation_, flux_, boundary_);
+    rarefactioncurve_ = new RarefactionCurve(this);
 
     // Inflection.
     //

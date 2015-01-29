@@ -146,21 +146,21 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc
     WaveCurve * hwc = new WaveCurve();
 
 
-//  
-//
-//
-////    cout << "Valor de origin" <<" "<<origin<<"  " <<originNumber << endl;
-//    
-//    
-//    cout << "Valor de origin" <<origin<<endl;
-//    
-//    cout << "Valor de family" << familyNumber << endl;
-//    
-//    cout << "Valor de increase" << timeDirection << endl;
-//
-//    cout << "Ponto entrado: " << realVectorInput << endl;
-//
-//    
+  
+
+
+//    cout << "Valor de origin" <<" "<<origin<<"  " <<originNumber << endl;
+    
+    
+    cout << "Valor de origin" <<origin<<endl;
+    
+    cout << "Valor de family" << familyNumber << endl;
+    
+    cout << "Valor de increase" << timeDirection << endl;
+
+    cout << "Ponto entrado: " << realVectorInput << endl;
+
+    
 
     
     WaveCurveFactory *factory = RpNumerics::physicsVector_->at(0)->wavecurvefactory();
@@ -251,6 +251,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc
 
     if (info == WAVECURVEFACTORY_INVALID_PARAMETERS) {
 
+        cout<<"Wave curve factory : parametros invalidos "<<endl;
+        
         delete hwc;
 
         return NULL;
@@ -340,6 +342,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc
         (env)->SetDoubleArrayRegion(xiArray, 0, xiVector.size(), nativeXi);
 
         std::vector<RealVector> coords = wc.curve;
+        if (coords.size() >1 ){
         int relatedCurvesIndexVector = wc.back_curve_index;
         std::vector<int> correspondingPointIndexVector = wc.back_pointer;
         if (coords.size() > 0) {
@@ -405,6 +408,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc
 
 
                 case 3:
+                case 4:
                 {
                     //cout << "No shock" << endl;
                     jobject shockCurve = (env)->NewObject(shockCurveClass, shockCurveConstructor, orbitPointArray, familyNumber, timeDirection);
@@ -416,15 +420,18 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc
                 }
                     break;
 
-                default:
-
-                    return NULL; //cout << "Tipo de curva nao conhecido !!" << endl;
+                
+                
+                default :
+                    cout << "Tipo de curva nao conhecido !!" << endl;
+                    return NULL; 
 
             }
 
         } else {
             //cout << "CURVA " << i << " VAZIA !! tipo: " << wc.type << endl;
         }
+    }
     }
 
     env->CallObjectMethod(waveCurve, waveCurveAddBranch, waveCurveBranchForward);

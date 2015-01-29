@@ -15,6 +15,9 @@
 #include "WaveCurveFactory.h"
 #include "ThreePhaseFlowViscosity.h"
 #include "ThreePhaseFlowMobility.h"
+#include "ThreePhaseFlowHugoniotContinuation.h"
+
+#include <limits>
 
 class ThreePhaseFlowSubPhysics : public SubPhysics {
     private:
@@ -29,6 +32,7 @@ class ThreePhaseFlowSubPhysics : public SubPhysics {
 
         Parameter *muw_parameter, *muo_parameter, *mug_parameter;
         Parameter *grw_parameter, *gro_parameter, *grg_parameter;
+        Parameter *cnw_parameter, *cno_parameter, *cng_parameter;
         Parameter *vel_parameter;
 
         ThreePhaseFlowPermeability *permeability_;
@@ -73,6 +77,9 @@ class ThreePhaseFlowSubPhysics : public SubPhysics {
         Parameter* muw(){return muw_parameter;}
         Parameter* muo(){return muo_parameter;}
         Parameter* mug(){return mug_parameter;}
+        Parameter* cnw(){return muw_parameter;}
+        Parameter* cno(){return muo_parameter;}
+        Parameter* cng(){return mug_parameter;}
         Parameter* grw(){return grw_parameter;}
         Parameter* gro(){return gro_parameter;}
         Parameter* grg(){return grg_parameter;}
@@ -89,6 +96,10 @@ class ThreePhaseFlowSubPhysics : public SubPhysics {
         // Mobility.
         //
         ThreePhaseFlowMobility* mobility(){return mobility_;}
+
+        virtual bool inside_contact_region(const RealVector &p, int family);
+
+        virtual double distance_to_contact_region(const RealVector &p);
 };
 
 #endif // _THREEPHASEFLOWSUBPHYSICS_

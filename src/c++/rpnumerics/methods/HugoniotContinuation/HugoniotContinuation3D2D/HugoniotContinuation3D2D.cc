@@ -1,4 +1,5 @@
 #include "HugoniotContinuation3D2D.h"
+#include "SubPhysics.h"
 
 //void HugoniotContinuation3D2D::jet_Hugoniot(const RealVector &p, RealVector &H, DoubleMatrix &nablaH){
 void HugoniotContinuation3D2D::jet_Hugoniot(const RealVector &F, const DoubleMatrix &JF, 

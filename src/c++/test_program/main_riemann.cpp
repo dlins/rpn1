@@ -1,5 +1,3 @@
-#include "StoneFluxFunction.h"
-#include "StoneAccumulation.h"
 #include "IsoTriang2DBoundary.h"
 #include "Stone_Explicit_Bifurcation_Curves.h"
 
@@ -31,8 +29,11 @@
 
 #include "StoneSubPhysics.h"
 #include "CoreyQuadSubPhysics.h"
+#include "FoamSubPhysics.h"
 
 #include <time.h>
+#include "TestTools.h"
+#include <cassert>
 
 ThreePhaseFlowSubPhysics *subphysics;
 
@@ -97,8 +98,13 @@ void comp(Fl_Widget*, void*){
 //        point(0) = 0.309591;
 //        point(1) = 0.0268362;
 
-        point(0) = 0.3009;
-        point(1) = 0.5724;
+//        point(0) = 0.3009;
+//        point(1) = 0.5724;
+
+        // Foam, Riemann profile unavailable.
+        //
+//        point(0) = .4162;
+//        point(1) = .0034;
 
         init0 = point;
 
@@ -130,8 +136,13 @@ void comp(Fl_Widget*, void*){
 //        point(0) = 0.390482;
 //        point(1) = 0.16003;
 
-        point(0) = 0.203594;
-        point(1) = 0.532812;
+//        point(0) = 0.203594;
+//        point(1) = 0.532812;
+
+        // Foam, Riemann profile unavailable.
+        //
+//        point(0) = .677;
+//        point(1) = .3088;
 
         init1 = point;
 
@@ -142,7 +153,7 @@ void comp(Fl_Widget*, void*){
         family = 1;
         increase = RAREFACTION_SPEED_SHOULD_DECREASE;
 
-        liuwavecurve(point, THREEPHASEFLOWWAVECURVEFACTORY_O_TO_W, wavecurve2);
+        liuwavecurve(point, WAVECURVEFACTORY_GENERIC_POINT /*THREEPHASEFLOWWAVECURVEFACTORY_O_TO_W */, wavecurve2);
 
         TestTools::pause("Done here.");
 
@@ -662,7 +673,37 @@ int main(){
     instructions.push_back(std::string("The Riemann profile is shown.\nClick again to start anew."));
 
 //    subphysics = new StoneSubPhysics;
-    subphysics = new CoreyQuadSubPhysics;
+//    subphysics = new CoreyQuadSubPhysics;
+    subphysics = new FoamSubPhysics;
+//    {
+//        std::vector<Parameter*> parameter;
+//        subphysics->equation_parameter(parameter);
+
+//        assert(parameter.size() == 22);
+
+//        parameter[0]->value(1.0);
+//        parameter[1]->value(1.0);
+//        parameter[2]->value(1e-3);
+//        parameter[3]->value(1.0);
+//        parameter[4]->value(1.0);
+//        parameter[5]->value(1.0);
+//        parameter[6]->value(1.0);
+//        parameter[7]->value(.1);
+//        parameter[8]->value(.1);
+//        parameter[9]->value(0.0);
+//        parameter[10]->value(2.0);
+//        parameter[11]->value(2.0);
+//        parameter[12]->value(2.0);
+//        parameter[13]->value(100.0);
+//        parameter[14]->value(0.0);
+//        parameter[15]->value(0.0);
+//        parameter[16]->value(.3);
+//        parameter[17]->value(2000.0); // 2000.0
+//        parameter[18]->value(.3);
+//        parameter[19]->value(2.0);
+//        parameter[20]->value(1.0);
+//        parameter[21]->value(1.0);
+//    }
 
     flux = subphysics->flux();
     accum = subphysics->accumulation();

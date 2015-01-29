@@ -740,6 +740,36 @@ int main(){
     else if (choice == 5) subphysics = new SorbieSubPhysics();
     else if (choice == 6) subphysics = new StoneSubPhysics();
 
+    if (choice == 3){
+        std::vector<Parameter*> parameter;
+        subphysics->equation_parameter(parameter);
+
+//        assert(parameter.size() == 22);
+
+        parameter[0]->value(1.0);
+        parameter[1]->value(1.0);
+        parameter[2]->value(1e-3);
+        parameter[3]->value(1.0);
+        parameter[4]->value(1.0);
+        parameter[5]->value(1.0);
+        parameter[6]->value(1.0);
+        parameter[7]->value(.1);
+        parameter[8]->value(.1);
+        parameter[9]->value(0.0);
+        parameter[10]->value(2.0);
+        parameter[11]->value(2.0);
+        parameter[12]->value(2.0);
+        parameter[13]->value(100.0);
+        parameter[14]->value(0.0);
+        parameter[15]->value(0.0);
+        parameter[16]->value(.3);
+        parameter[17]->value(2000.0); // 2000.0
+        parameter[18]->value(.3);
+        parameter[19]->value(2.0);
+        parameter[20]->value(1.0);
+        parameter[21]->value(1.0);
+    }
+
     permeability = subphysics->permeability();
 
     // Size.

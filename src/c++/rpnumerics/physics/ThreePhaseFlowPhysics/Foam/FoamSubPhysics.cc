@@ -3,7 +3,7 @@
 FoamSubPhysics::FoamSubPhysics() : ThreePhaseFlowSubPhysics(){
     muw_parameter = new Parameter(std::string("muw"), 1.0);
     muo_parameter = new Parameter(std::string("muo"), 1.0);
-    mug_parameter = new Parameter(std::string("mug0"), 1.0); // Notice that, even though the name is changed, this parameter is just mug.
+    mug_parameter = new Parameter(std::string("mug0"), 8e-3); // Notice that, even though the name is changed, this parameter is just mug.
 
     grw_parameter = new Parameter(std::string("grw"), 1.0);
     gro_parameter = new Parameter(std::string("gro"), 1.0);
@@ -11,7 +11,7 @@ FoamSubPhysics::FoamSubPhysics() : ThreePhaseFlowSubPhysics(){
 
     vel_parameter = new Parameter(std::string("vel"), 1.0);
 
-    cnw_parameter = new Parameter(std::string("cnw"), 0.0);
+    cnw_parameter = new Parameter(std::string("cnw"), 0.1);
     cno_parameter = new Parameter(std::string("cno"), 0.1);
     cng_parameter = new Parameter(std::string("cng"), 0.0);
 
@@ -42,9 +42,9 @@ FoamSubPhysics::FoamSubPhysics() : ThreePhaseFlowSubPhysics(){
     fdry  = new Parameter(std::string("fdry"), 0.0);
     foil  = new Parameter(std::string("foil"), 0.0);
     fmdry = new Parameter(std::string("fmdry"), 0.3);
-    fmmob = new Parameter(std::string("fmmob"), 2.0); // Was: 55000.0
+    fmmob = new Parameter(std::string("fmmob"), 2000.0); // Was: 55000.0
     fmoil = new Parameter(std::string("fmoil"), 0.3);
-    epoil = new Parameter(std::string("epoil"), 0.0, 5.0, 2.0); // The author of the model lets this parameter 
+    epoil = new Parameter(std::string("epoil"), 0.0, 5.0, 3.0); // The author of the model lets this parameter 
                                                                 // vary between 0 and 5, but it is effectively varying between 2 and 5.
 
     floil = cno_parameter; // This will remain thus until the difference between floil and cno is figured out.
@@ -97,8 +97,8 @@ FoamSubPhysics::FoamSubPhysics() : ThreePhaseFlowSubPhysics(){
     // GridValues.
     //
     std::vector<int> number_of_cells(2);
-    number_of_cells[0] = 256;
-    number_of_cells[1] = 256;
+    number_of_cells[0] = 513;
+    number_of_cells[1] = 513;
 
     gridvalues_ = new GridValues(boundary_, boundary_->minimums(), boundary_->maximums(), number_of_cells);
     for (int i = 0; i < equation_parameter_.size(); i++) equation_parameter_[i]->add(gridvalues_);
@@ -117,14 +117,26 @@ FoamSubPhysics::FoamSubPhysics() : ThreePhaseFlowSubPhysics(){
 
     // Rarefaction.
     //
-    rarefactioncurve_ = new RarefactionCurve(accumulation_, flux_, boundary_);
+//    rarefactioncurve_ = new RarefactionCurve(accumulation_, flux_, boundary_);
+    rarefactioncurve_ = new RarefactionCurve(this);
 
     // Shock curve.
     //
-    hugoniotcontinuation_ = new HugoniotContinuation2D2D(flux_, accumulation_, boundary_);
+    hugoniotcontinuation_ = new ThreePhaseFlowHugoniotContinuation(this);
     hugoniot_curve.push_back(hugoniotcontinuation_);
 
-    shockcurve_ = new ShockCurve(hugoniotcontinuation_);
+    shockcurve_ = new ShockCurve(this);
+    shockcurve_->distance_to_contact_region(2e-2);
+
+    // Parameter to control the maximum distance to the contact region,
+    // and its observer to change said distance in the shokcurve.
+    //
+    fso = new FoamShockObserver(this);
+    max_distance_to_contact_region_parameter_ = new Parameter(std::string("Dist. contact"), 2e-2);
+    max_distance_to_contact_region_parameter_->add(fso);
+    equation_parameter_.push_back(max_distance_to_contact_region_parameter_);
+
+//    shockcurve_ = new ShockCurve(hugoniotcontinuation_);
 
     // Composite.
 //    Stone_Explicit_Bifurcation_Curves bc((StoneFluxFunction*)flux);
@@ -135,7 +147,8 @@ FoamSubPhysics::FoamSubPhysics() : ThreePhaseFlowSubPhysics(){
     // WaveCurve.
     //
 //    wavecurvefactory_ = new WaveCurveFactory(accumulation_, flux_, boundary_, odesolver_, rarefactioncurve_, shockcurve_, compositecurve_);
-    wavecurvefactory_ = new WaveCurveFactory(accumulation_, flux_, boundary_, odesolver_, rarefactioncurve_, shockcurve_, compositecurve_);
+//    wavecurvefactory_ = new WaveCurveFactory(accumulation_, flux_, boundary_, odesolver_, rarefactioncurve_, shockcurve_, compositecurve_);
+    wavecurvefactory_ = new WaveCurveFactory(this);
 
     // Inflection.
     //
@@ -158,6 +171,7 @@ FoamSubPhysics::~FoamSubPhysics(){
     delete wavecurvefactory_;
     delete odesolver_;
     delete compositecurve_;
+    delete fso;
     delete shockcurve_;
     delete rarefactioncurve_;
     for (int i = 0; i < hugoniot_curve.size(); i++) delete hugoniot_curve[i];
