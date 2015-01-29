@@ -822,6 +822,7 @@ void wavecurvefactioncb(Fl_Widget*, void*){
 
 //    initial_point(0) = 0.266444;
 //    initial_point(1) = 0.657434;
+<<<<<<< HEAD
 
 //    initial_point(0) = 0.35;
 //    initial_point(1) = 0.101;
@@ -846,9 +847,11 @@ void wavecurvefactioncb(Fl_Widget*, void*){
 
 
     // The composite returns.
-//    initial_point(0) = 0.448215;
-//    initial_point(1) = 0.214109;
+    initial_point(0) = 0.448215;
+    initial_point(1) = 0.214109;
     
+=======
+>>>>>>> 0295e12a10306a44123f1a1e3bc059a919ca3f8c
 
     std::cout << "Wavecurve callback, initial point = " << initial_point << std::endl;
 
