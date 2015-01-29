@@ -84,6 +84,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionCurveCalc_calc(JNIEnv * env
 
 
     cout << "Ponto de entrada: " << realVectorInput << endl;
+    cout << "Direcao : " << timeDirection << endl;
 
 
     const FluxFunction * flux = RpNumerics::physicsVector_->at(0)->flux();
