@@ -76,31 +76,18 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_RarefactionCurveCalc_calc(JNIEnv * env
 
     RarefactionCurve *rarefaction_curve = RpNumerics::physicsVector_->at(0)->rarefaction_curve();
 
-
     //    double deltaxi = 1e-3; // This is the original value (Rodrigo/ Panters)
-
 
     int dimension = realVectorInput.size();
 
-
-    cout << "Ponto de entrada: " << realVectorInput << endl;
-    cout << "Direcao : " << timeDirection << endl;
+    //    cout << "Ponto de entrada: " << realVectorInput << endl;
+//    cout << "Direcao : " << timeDirection << endl;
 
 
     const FluxFunction * flux = RpNumerics::physicsVector_->at(0)->flux();
     const AccumulationFunction * accum = RpNumerics::physicsVector_->at(0)->accumulation();
 
-
-
     vector<RealVector> inflectionPoints;
-
-
-
-
-    //cout << "Ponto de entrada apos pos process: " << realVectorInput << endl;
-
-//    RarefactionCurve rc(accum, flux, tempBoundary);
-
 
     double deltaxi = 1e-3;
     std::vector<RealVector> inflection_point;
