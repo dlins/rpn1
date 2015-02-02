@@ -845,12 +845,25 @@ void wavecurvefactioncb(Fl_Widget*, void*){
 
 
 
-    // The composite returns.
-    initial_point(0) = 0.448215;
-    initial_point(1) = 0.214109;
-    
+//    // The composite returns.
+//    initial_point(0) = 0.448215;
+//    initial_point(1) = 0.214109;
+
+    // Composite ends and the next shock only has one point.    
+//    initial_point(0) = 0.6109;
+//    initial_point(1) = 0.1751;
+
+//    initial_point(0) = 0.15;
+//    initial_point(1) = 0.15;
 
     std::cout << "Wavecurve callback, initial point = " << initial_point << std::endl;
+    if (!subphysics->boundary()->inside(initial_point)){
+        std::stringstream ss;
+        ss << "Initial point " << initial_point << " lies outside boundary! Aborting.";
+
+        TestTools::pause(ss);
+        return;
+    }
 
     #ifdef TESTCOMPOSITE
     subphysics->composite()->set_graphics(canvas, scroll);
@@ -1484,6 +1497,7 @@ void on_move_coords(Fl_Widget*, void*){
 }
 
 int main(){
+    Fl::scheme("gtk+");
     subphysics = 0;
 
     // Create the subphysics.
@@ -1494,9 +1508,9 @@ int main(){
 
 //    subphysics = new StoneSubPhysics;
 //    subphysics = new Brooks_CoreySubPhysics;
-//    subphysics = new CoreyQuadSubPhysics;
+    subphysics = new CoreyQuadSubPhysics;
 //    subphysics = new KovalSubPhysics;
-    subphysics = new FoamSubPhysics;
+//    subphysics = new FoamSubPhysics;
 //    subphysics = new SorbieSubPhysics;
 //    subphysics = new TPCWSubPhysics;
 //    subphysics = new Quad2SubPhysics;
@@ -1653,8 +1667,6 @@ int main(){
     sidewin->end();
     sidewin->callback(wincb);
     sidewin->show();
-
-    Fl::scheme("gtk+");
 
 //    // Test purposes!
 //    {

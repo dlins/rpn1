@@ -150,15 +150,15 @@ linux_x86_64/DeadVolatileVolatileGasSubPhysics.o linux_x86_64/DeadVolatileVolati
  ../rpnumerics/methods/ShockCurve/ShockCurve.h \
  ../rpnumerics/methods/HugoniotContinuation/HugoniotContinuation.h \
  ../rpnumerics/methods/Secondary_Bifurcations/Explicit_Bifurcation_Curves/Explicit_Bifurcation_Curves.h \
- ../rpnumerics/methods/WaveCurve/WaveCurveFactory.h \
- ../rpnumerics/methods/WaveCurve/WaveCurve.h canvas/TestTools.h \
- /usr/include/FL/Fl.H /usr/include/FL/Enumerations.H \
+ canvas/TestTools.h /usr/include/FL/Fl.H /usr/include/FL/Enumerations.H \
  /usr/include/FL/Fl_Export.H /usr/include/FL/Fl_Double_Window.H \
  /usr/include/FL/Fl_Window.H /usr/include/FL/Fl_Group.H \
  /usr/include/FL/Fl_Widget.H /usr/include/FL/Fl_Button.H \
  /usr/include/FL/Fl_Multiline_Output.H /usr/include/FL/Fl_Output.H \
  /usr/include/FL/Fl_Input.H /usr/include/FL/Fl_Input_.H \
- /usr/include/FL/Fl_Box.H /usr/include/FL/fl_draw.H canvas/canvas.h \
+ /usr/include/FL/Fl_Box.H /usr/include/FL/fl_draw.H \
+ ../rpnumerics/methods/WaveCurve/WaveCurveFactory.h \
+ ../rpnumerics/methods/WaveCurve/WaveCurve.h canvas/canvas.h \
  /usr/include/FL/Fl_Widget.H /usr/include/FL/x.H /usr/include/X11/Xlib.h \
  /usr/include/X11/X.h /usr/include/X11/Xfuncproto.h \
  /usr/include/X11/Xosdefs.h /usr/include/X11/Xutil.h \

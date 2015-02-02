@@ -29,10 +29,12 @@ class CoreyQuadWaveCurveFactory: public WaveCurveFactory {
     protected:
         CoreyQuadSubPhysics *coreyquadsubphysics_;
     public:
-        CoreyQuadWaveCurveFactory(const FluxFunction *ff, const AccumulationFunction *gg, 
-                                       const Boundary *bb, const ODE_Solver *o, 
-                                       RarefactionCurve *r, ShockCurve *s, CompositeCurve *c, 
-                                       CoreyQuadSubPhysics *tpfsp);
+//        CoreyQuadWaveCurveFactory(const FluxFunction *ff, const AccumulationFunction *gg, 
+//                                       const Boundary *bb, const ODE_Solver *o, 
+//                                       RarefactionCurve *r, ShockCurve *s, CompositeCurve *c, 
+//                                       CoreyQuadSubPhysics *tpfsp);
+
+        CoreyQuadWaveCurveFactory(CoreyQuadSubPhysics *tpfsp);
         virtual ~CoreyQuadWaveCurveFactory();
 
         virtual int wavecurve(int type, const RealVector &initial_point, int family, int increase, HugoniotContinuation *h, WaveCurve &hwc, 

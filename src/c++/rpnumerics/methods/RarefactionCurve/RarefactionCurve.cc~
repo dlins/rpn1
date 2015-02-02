@@ -673,7 +673,7 @@ int RarefactionCurve::curve(const RealVector &initial_point,
         //
         {
             int mfcr = 0;
-            for (int contact_family = 0; i < subphysics->number_of_families(); contact_family++){
+            for (int contact_family = 0; contact_family < subphysics->number_of_families(); contact_family++){
                 if (subphysics->inside_contact_region(next_point, contact_family)) mfcr++;
             }
 

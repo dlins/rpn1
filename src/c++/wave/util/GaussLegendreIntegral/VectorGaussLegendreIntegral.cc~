@@ -1,0 +1,53 @@
+#include "VectorGaussLegendreIntegral.h"
+
+VectorGaussLegendreIntegral::VectorGaussLegendreIntegral(){
+    position.resize(5);
+    position[0] = -(1.0/3.0)*sqrt(5.0 + 2.0*sqrt(10.0/7.0));
+    position[1] = -(1.0/3.0)*sqrt(5.0 - 2.0*sqrt(10.0/7.0));
+    position[2] = 0.0;
+    position[3] = -position[1];
+    position[4] = -position[0];
+
+    weight.resize(5);
+    weight[0] = (322.0 - 13.0*sqrt(70.0))/900.0;
+    weight[1] = (322.0 + 13.0*sqrt(70.0))/900.0;
+    weight[2] = 128/225.0;
+    weight[3] = weight[1];
+    weight[4] = weight[0];
+}
+
+VectorGaussLegendreIntegral::~VectorGaussLegendreIntegral(){
+}
+
+// With object-passing.
+//
+RealVector VectorGaussLegendreIntegral::integrate(RealVector (*f)(int*, double), int *obj, 
+                                                  double a, const RealVector &apoint, 
+                                                  double b, const RealVector &bpoint){
+
+    RealVector avrg = average(*f, obj, a, b);
+    for (int j = 0; j < apoint.size(); j++) avrg(j) *= (bpoint(j) - apoint(j));
+
+    return avrg;
+}
+
+RealVector VectorGaussLegendreIntegral::average(RealVector (*f)(int*, double x), int *obj, 
+                                                double apoint, 
+                                                double bpoint){
+
+    double w = (bpoint - apoint)*.5;
+    double s = (bpoint + apoint)*.5;
+
+    // To initialize sum.
+    //
+    RealVector sum = weight[0]*(    (*f)(obj, position[0]*w + s)    );
+
+    for (int i = 1; i < weight.size(); i++){
+        double p = (position[i]*w + s);
+
+        sum += weight[i]*(    (*f)(obj, p)    );
+    }
+
+    return sum*.5;
+}
+

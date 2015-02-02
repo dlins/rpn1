@@ -78,16 +78,20 @@ linux_x86_64/HugoniotContinuation2D2D.o linux_x86_64/HugoniotContinuation2D2D.d 
  /usr/include/c++/4.9/bits/basic_ios.tcc \
  /usr/include/c++/4.9/bits/ostream.tcc /usr/include/c++/4.9/istream \
  /usr/include/c++/4.9/bits/istream.tcc \
- ../rpnumerics/methods/HugoniotContinuation/HugoniotContinuation_nDnD/HugoniotContinuation_nDnD.h \
- ../rpnumerics/methods/HugoniotContinuation/HugoniotContinuation.h \
- ../rpnumerics/FluxFunction.h ../rpnumerics/RpFunction.h \
- ../wave/util/JetMatrix.h /usr/include/c++/4.9/vector \
- /usr/include/c++/4.9/bits/stl_construct.h \
+ ../wave/util/GaussLegendreIntegral/GaussLegendreIntegral.h \
+ /usr/include/c++/4.9/vector /usr/include/c++/4.9/bits/stl_construct.h \
  /usr/include/c++/4.9/ext/alloc_traits.h \
  /usr/include/c++/4.9/bits/stl_uninitialized.h \
  /usr/include/c++/4.9/bits/stl_vector.h \
  /usr/include/c++/4.9/bits/stl_bvector.h \
- /usr/include/c++/4.9/bits/vector.tcc ../wave/util/RealVector.h \
+ /usr/include/c++/4.9/bits/vector.tcc /usr/include/math.h \
+ /usr/include/x86_64-linux-gnu/bits/huge_val.h \
+ /usr/include/x86_64-linux-gnu/bits/huge_valf.h \
+ /usr/include/x86_64-linux-gnu/bits/huge_vall.h \
+ /usr/include/x86_64-linux-gnu/bits/inf.h \
+ /usr/include/x86_64-linux-gnu/bits/nan.h \
+ /usr/include/x86_64-linux-gnu/bits/mathdef.h \
+ /usr/include/x86_64-linux-gnu/bits/mathcalls.h ../wave/util/RealVector.h \
  /usr/include/c++/4.9/fstream /usr/include/c++/4.9/bits/codecvt.h \
  /usr/include/c++/4.9/cstdio /usr/include/libio.h \
  /usr/include/_G_config.h /usr/include/x86_64-linux-gnu/bits/stdio_lim.h \
@@ -95,13 +99,6 @@ linux_x86_64/HugoniotContinuation2D2D.o linux_x86_64/HugoniotContinuation2D2D.d 
  /usr/include/x86_64-linux-gnu/c++/4.9/bits/basic_file.h \
  /usr/include/x86_64-linux-gnu/c++/4.9/bits/c++io.h \
  /usr/include/c++/4.9/bits/fstream.tcc /usr/include/c++/4.9/cmath \
- /usr/include/math.h /usr/include/x86_64-linux-gnu/bits/huge_val.h \
- /usr/include/x86_64-linux-gnu/bits/huge_valf.h \
- /usr/include/x86_64-linux-gnu/bits/huge_vall.h \
- /usr/include/x86_64-linux-gnu/bits/inf.h \
- /usr/include/x86_64-linux-gnu/bits/nan.h \
- /usr/include/x86_64-linux-gnu/bits/mathdef.h \
- /usr/include/x86_64-linux-gnu/bits/mathcalls.h \
  /usr/include/c++/4.9/algorithm /usr/include/c++/4.9/utility \
  /usr/include/c++/4.9/bits/stl_relops.h \
  /usr/include/c++/4.9/bits/stl_algo.h /usr/include/c++/4.9/cstdlib \
@@ -120,7 +117,11 @@ linux_x86_64/HugoniotContinuation2D2D.o linux_x86_64/HugoniotContinuation2D2D.d 
  /usr/include/c++/4.9/sstream /usr/include/c++/4.9/bits/sstream.tcc \
  /usr/include/c++/4.9/limits \
  ../rpnumerics/methods/Viscosity_Matrix/Matrix.h \
- ../rpnumerics/WaveState.h ../wave/util/RealVector.h ../Model/Parameter.h \
+ ../rpnumerics/methods/HugoniotContinuation/HugoniotContinuation_nDnD/HugoniotContinuation_nDnD.h \
+ ../rpnumerics/methods/HugoniotContinuation/HugoniotContinuation.h \
+ ../rpnumerics/FluxFunction.h ../rpnumerics/RpFunction.h \
+ ../wave/util/JetMatrix.h ../wave/util/RealVector.h \
+ ../rpnumerics/WaveState.h ../Model/Parameter.h \
  ../Observer_Subject/Subject.h /usr/include/c++/4.9/set \
  /usr/include/c++/4.9/bits/stl_tree.h /usr/include/c++/4.9/bits/stl_set.h \
  /usr/include/c++/4.9/bits/stl_multiset.h ../Observer_Subject/Observer.h \
@@ -152,15 +153,15 @@ linux_x86_64/HugoniotContinuation2D2D.o linux_x86_64/HugoniotContinuation2D2D.d 
  ../rpnumerics/methods/CompositeCurve/CompositeCurve.h \
  ../rpnumerics/methods/ShockCurve/ShockCurve.h \
  ../rpnumerics/methods/Secondary_Bifurcations/Explicit_Bifurcation_Curves/Explicit_Bifurcation_Curves.h \
- ../rpnumerics/methods/WaveCurve/WaveCurveFactory.h \
- ../rpnumerics/methods/WaveCurve/WaveCurve.h canvas/TestTools.h \
- /usr/include/FL/Fl.H /usr/include/FL/Enumerations.H \
+ canvas/TestTools.h /usr/include/FL/Fl.H /usr/include/FL/Enumerations.H \
  /usr/include/FL/Fl_Export.H /usr/include/FL/Fl_Double_Window.H \
  /usr/include/FL/Fl_Window.H /usr/include/FL/Fl_Group.H \
  /usr/include/FL/Fl_Widget.H /usr/include/FL/Fl_Button.H \
  /usr/include/FL/Fl_Multiline_Output.H /usr/include/FL/Fl_Output.H \
  /usr/include/FL/Fl_Input.H /usr/include/FL/Fl_Input_.H \
- /usr/include/FL/Fl_Box.H /usr/include/FL/fl_draw.H canvas/canvas.h \
+ /usr/include/FL/Fl_Box.H /usr/include/FL/fl_draw.H \
+ ../rpnumerics/methods/WaveCurve/WaveCurveFactory.h \
+ ../rpnumerics/methods/WaveCurve/WaveCurve.h canvas/canvas.h \
  /usr/include/FL/Fl_Widget.H /usr/include/FL/x.H /usr/include/X11/Xlib.h \
  /usr/include/X11/X.h /usr/include/X11/Xfuncproto.h \
  /usr/include/X11/Xosdefs.h /usr/include/X11/Xutil.h \

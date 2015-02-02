@@ -20,8 +20,8 @@ CoreyQuadSubPhysics::CoreyQuadSubPhysics() : ThreePhaseFlowSubPhysics(){
     //       When that happens, add these parameters to the parameter list
     //       so the user can access them.
     //
-    cnw_parameter = new Parameter(std::string("cnw"), 0.1);
-    cno_parameter = new Parameter(std::string("cno"), 0.1);
+    cnw_parameter = new Parameter(std::string("cnw"), 0.0);
+    cno_parameter = new Parameter(std::string("cno"), 0.0);
     cng_parameter = new Parameter(std::string("cng"), 0.0);
 
 //    // Panters.
@@ -96,7 +96,9 @@ CoreyQuadSubPhysics::CoreyQuadSubPhysics() : ThreePhaseFlowSubPhysics(){
     
 
 
-    shockcurve_ = new ShockCurve(hugoniotcontinuation_);
+//    shockcurve_ = new ShockCurve(hugoniotcontinuation_);
+    shockcurve_ = new ShockCurve(this);
+    shockcurve_->distance_to_contact_region(0.0);
 
     // Composite.
 //    Stone_Explicit_Bifurcation_Curves bc((StoneFluxFunction*)flux);
@@ -107,7 +109,8 @@ CoreyQuadSubPhysics::CoreyQuadSubPhysics() : ThreePhaseFlowSubPhysics(){
     // WaveCurve.
     //
 //    wavecurvefactory_ = new WaveCurveFactory(accumulation_, flux_, boundary_, odesolver_, rarefactioncurve_, shockcurve_, compositecurve_);
-    wavecurvefactory_ = new CoreyQuadWaveCurveFactory(flux_, accumulation_, boundary_, odesolver_, rarefactioncurve_, shockcurve_, compositecurve_, this);
+//    wavecurvefactory_ = new CoreyQuadWaveCurveFactory(flux_, accumulation_, boundary_, odesolver_, rarefactioncurve_, shockcurve_, compositecurve_, this);
+    wavecurvefactory_ = new WaveCurveFactory(this);
 
     // Inflection.
     //

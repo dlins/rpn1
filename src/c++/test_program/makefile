@@ -190,6 +190,9 @@ riemann: $(OBJECTS)
 foam_fdry: $(OBJECTS)
 	$(LINK) -o $@ $(INCLUDE) main_foam_fdry.cpp $^ $(LDLIBS) $(LDFLAGS)
 
+integral: $(OBJECTS)
+	$(LINK) -o $@ $(INCLUDE) main_integral.cpp $^ $(LDLIBS) $(LDFLAGS)
+
 
 ##################################################################################
 #

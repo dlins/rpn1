@@ -146,4 +146,11 @@ linux_x86_64/CompositeCurve.o linux_x86_64/CompositeCurve.d : ../rpnumerics/meth
  ../wave/util/Eigenproblem/Eigenproblem2x2.h \
  ../wave/util/Eigenproblem/Eigenproblem.h \
  ../wave/util/Eigenproblem/Eigenpair.h \
- ../rpnumerics/methods/Secondary_Bifurcations/Explicit_Bifurcation_Curves/Explicit_Bifurcation_Curves.h
+ ../rpnumerics/methods/Secondary_Bifurcations/Explicit_Bifurcation_Curves/Explicit_Bifurcation_Curves.h \
+ canvas/TestTools.h /usr/include/FL/Fl.H /usr/include/FL/Enumerations.H \
+ /usr/include/FL/Fl_Export.H /usr/include/FL/Fl_Double_Window.H \
+ /usr/include/FL/Fl_Window.H /usr/include/FL/Fl_Group.H \
+ /usr/include/FL/Fl_Widget.H /usr/include/FL/Fl_Button.H \
+ /usr/include/FL/Fl_Multiline_Output.H /usr/include/FL/Fl_Output.H \
+ /usr/include/FL/Fl_Input.H /usr/include/FL/Fl_Input_.H \
+ /usr/include/FL/Fl_Box.H /usr/include/FL/fl_draw.H
