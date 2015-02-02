@@ -4,37 +4,23 @@
     <PHASESPACE name="Phase Space">
         <RPNCONFIGURATION>
             <PHYSICS name="DeadVolatileVolatileGasSubPhysics">
+              
         
-        
-        
-             <!--   <PHYSICSCONFIG name="fluxfunction">
-                    <PHYSICSPARAM name="grw" position="0" value ="1.0" />
-                    <PHYSICSPARAM name="grg" position="1" value ="1.0" />
-                    <PHYSICSPARAM name="gro" position="2" value ="1.0" />
-                    <PHYSICSPARAM name="muw" position="3" value ="2.0" />
-                    <PHYSICSPARAM name="mug" position="4" value ="2.0" />
-                    <PHYSICSPARAM name="muo" position="5" value ="2.0" />
-                    <PHYSICSPARAM name="vel" position="6" value ="1.0" />
-            
+                <PHYSICSCONFIG name="fluxfunction">
+                   
+                    <PHYSICSPARAM name="phi" position="0" value ="0.2" />
+                </PHYSICSCONFIG>
 
-                    <PHYSICSPARAM name="expw" position="7" value ="2.0" />
-                    <PHYSICSPARAM name="expg" position="8" value ="2.0" />
-                    <PHYSICSPARAM name="expo" position="9" value ="2.0" />
-                    <PHYSICSPARAM name="expow" position="10" value ="2.0" />
-                    <PHYSICSPARAM name="expog" position="11" value ="2.0" />
+               <PHYSICSCONFIG name="Thermodynamics">
+		 <PHYSICSPARAM name="B" position="0" value ="120.0" />
+                 <PHYSICSPARAM name="D" position="1" value ="40.0" />
+                 <PHYSICSPARAM name="mu_oB" position="2" value ="4.0" />
+                 <PHYSICSPARAM name="mu_oD" position="3" value ="6.0" />
+                 <PHYSICSPARAM name="mu_G" position="4" value ="1.0" />
+                 <PHYSICSPARAM name="re" position="5" value ="1.0" />
+                 <PHYSICSPARAM name="rg" position="6" value ="1.6" />
 
-                    <PHYSICSPARAM name="cnw" position="12" value ="0.0" />
-                    <PHYSICSPARAM name="cng" position="13" value ="0.0" />
-                    <PHYSICSPARAM name="cno" position="14" value ="0.0" />
-                    <PHYSICSPARAM name="lw" position="15" value ="0.0" />
-                    <PHYSICSPARAM name="lg" position="16" value ="0.0" />
-                    <PHYSICSPARAM name="lo" position="17" value ="0.0" />
-                    <PHYSICSPARAM name="low" position="18" value ="0.0" />
-                    <PHYSICSPARAM name="log" position="19" value ="0.0" />
-                    <PHYSICSPARAM name="epsl" position="20" value ="0.0" />
-
-
-                </PHYSICSCONFIG>-->
+                </PHYSICSCONFIG>
 
             </PHYSICS>
 
@@ -71,7 +57,7 @@
   
 
             <CURVECONFIGURATION name="fundamentalcurve">
-                <CURVEPARAM name="direction" value="10"/>
+                <CURVEPARAM name="direction" value="20"/>
                 <CURVEPARAM name="family" value="0"/>
                 <CURVEPARAM name="level" value="0.5"/>
             </CURVECONFIGURATION>
@@ -84,7 +70,7 @@
 
             <CURVECONFIGURATION name="wavecurve">
                 <CURVEPARAM name="origin" value="Generic point"/>
-                <CURVEPARAM name="direction" value="10"/>
+                <CURVEPARAM name="direction" value="20"/>
                 <CURVEPARAM name="family" value="0"/>
                 <CURVEPARAM name="transitionalline" value="None"/>
             </CURVECONFIGURATION>
@@ -170,8 +156,8 @@
 
                 <PROJDESC name="Axis0 Axis1">
                     <VIEWPARAM name="axis" value="0 1"/>
-                    <VIEWPARAM name="vpwidth" value="700"/>
-                    <VIEWPARAM name="vpheight" value="700"/>
+                    <VIEWPARAM name="vpwidth" value="1000"/>
+                    <VIEWPARAM name="vpheight" value="1000"/>
                     <VIEWPARAM name="iso2equi" value="false"/>
                 </PROJDESC>
             
