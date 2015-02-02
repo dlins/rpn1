@@ -16,6 +16,7 @@
 
 #include "WaveCurve.h"
 #include "HyperOctree.h"
+//#include "TestTools.h"
 
 class SubPhysics;
 
@@ -36,7 +37,12 @@ class SubPhysics;
 
 #define WAVECURVEFACTORY_INVALID_PARAMETERS                     (-100)
 
-
+//#define TESTWAVECURVEFACTORY
+//#ifdef TESTWAVECURVEFACTORY
+//#include "canvas.h"
+//#include "canvasmenuscroll.h"
+//#include "curve2d.h"
+//#endif
 
 class WaveCurveSegment {
     private:

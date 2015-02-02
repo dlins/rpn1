@@ -778,12 +778,12 @@ int ShockCurve::curve_engine(const ReferencePoint &r, const RealVector &in, cons
 
                 shockcurve.last_point = shockcurve.curve.back();
 
-         
+//                TestTools::pause("Shock: near contact");
 
                 return SHOCKCURVE_OK;
             }
             else {
-            
+//                TestTools::pause("Shock: near contact. The user is adviced to relax the proximity-to-contact condition.");
 
                 return SHOCKCURVE_ERROR;
             }
@@ -804,7 +804,7 @@ int ShockCurve::curve_engine(const ReferencePoint &r, const RealVector &in, cons
 
             std::stringstream ss;
             ss << "HUGONIOTCONTINUATION_NEWTON_ERROR. Hugoniot_intersection = " << Hugoniot_intersection;
-          
+//            TestTools::pause(ss);
 
             return SHOCKCURVE_ERROR;
         }

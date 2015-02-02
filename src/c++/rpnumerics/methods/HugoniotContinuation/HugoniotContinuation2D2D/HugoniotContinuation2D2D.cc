@@ -3,18 +3,61 @@
 
 // TODO: Move this method upwards, into SubPhysics.
 //
-//void HugoniotContinuation2D2D::jet_Hugoniot(const RealVector &p, RealVector &H, DoubleMatrix &nablaH){
+//void HugoniotContinuation2D2D::jet_Hugoniot(const RealVector &F, const DoubleMatrix &JF, 
+//                                            const RealVector &G, const DoubleMatrix &JG,
+//                                            const RealVector &C, const DoubleMatrix &JC,
+//                                            RealVector &H, DoubleMatrix &nablaH){
+//    int n = 2;
+
+////    RealVector F(n), G(n);
+////    DoubleMatrix JF(n, n), JG(n, n);
+
+////    f->fill_with_jet(n, p.components(), 1, F.components(), JF.data(), 0);
+////    g->fill_with_jet(n, p.components(), 1, G.components(), JG.data(), 0);
+
+//    // [F] & [G]
+//    //
+//    RealVector diff_F = F - ref.F;
+//    RealVector diff_G = G - ref.G;
+
+//    H.resize(1);
+//    H(0) = diff_F(0)*diff_G(1) - diff_F(1)*diff_G(0);
+
+//    // nablaH = 2 x 1
+//    nablaH.resize(2, 1);
+//    for (int j = 0; j < 2; j++) nablaH(j, 0) = JF(0, j)*diff_G(1) + JG(1, j)*diff_F(0) - JF(1, j)*diff_G(0) - JG(0, j)*diff_F(1);
+
+//    return;
+//}
+
+//double HugoniotContinuation2D2D::average_function(double s, int *obj){
+//    HugoniotContinuation2D2D *hug = (HugoniotContinuation2D2D*)obj;
+
+//    RealVector Uref = hug->ref.point;
+//    RealVector U = hug->U;
+//    int i = hug->function_component;
+//    int j = hug->variable_component;
+
+//    RealVector p = Uref + s*(U - Uref);
+//    JetMatrix Fjet;
+//    hug->f->jet(p, 1, Fjet);
+
+//    DoubleMatrix Fjac = Fjet.Jacobian();
+
+//    return Fjac(function_component, variable_component);
+//}
+
+//double HugoniotContinuation2D2D::fill_H(const RealVector &U, const RealVector &Uref){
+//    GaussLegendreIntegral gli;
+//    
+//    return gli.average(&average_function, (int*)this, 0.0, 1.0);
+//}
+
 void HugoniotContinuation2D2D::jet_Hugoniot(const RealVector &F, const DoubleMatrix &JF, 
                                             const RealVector &G, const DoubleMatrix &JG,
                                             const RealVector &C, const DoubleMatrix &JC,
                                             RealVector &H, DoubleMatrix &nablaH){
     int n = 2;
-
-//    RealVector F(n), G(n);
-//    DoubleMatrix JF(n, n), JG(n, n);
-
-//    f->fill_with_jet(n, p.components(), 1, F.components(), JF.data(), 0);
-//    g->fill_with_jet(n, p.components(), 1, G.components(), JG.data(), 0);
 
     // [F] & [G]
     //

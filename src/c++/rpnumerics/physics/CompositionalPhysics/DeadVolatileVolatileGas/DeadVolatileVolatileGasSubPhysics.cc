@@ -43,7 +43,6 @@ DeadVolatileVolatileGasSubPhysics::DeadVolatileVolatileGasSubPhysics() : SubPhys
     RealVector min(3), max(3);
     min(0) = 0.0 + eps;
     min(1) = 0.0 + eps; 
-    
     min(2) = 0.0;
 
     max(0) = 1.0 - eps;

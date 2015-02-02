@@ -1,7 +1,7 @@
 #include "RarefactionCurve.h"
 #include "Eigenproblem2x2.h"
 #include "SubPhysics.h"
-
+//#include "TestTools.h"
 
 //RarefactionCurve::RarefactionCurve(const AccumulationFunction *gg, const FluxFunction *ff, const Boundary *bb){
 //    f = ff;
@@ -379,12 +379,14 @@ int RarefactionCurve::curve(const RealVector &initial_point,
         return RAREFACTION_ERROR;
     }
 
-//    // Verify if the initial point lies within the contact region.
-//    //
-//    if (subphysics->inside_contact_region(initial_point, curve_family)){
-//        TestTools::pause("Inside contact region: aborting...");
-//        return RAREFACTION_ERROR;
-//    }
+    // Verify if the initial point lies within the contact region.
+    //
+    if (subphysics->inside_contact_region(initial_point, family)){
+//        TestTools::pause("Contact region");
+    }
+    else {
+//        TestTools::pause("Non-contact region");
+    }
 
     f = subphysics->flux();
     g = subphysics->accumulation();

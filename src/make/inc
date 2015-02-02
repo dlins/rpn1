@@ -21,11 +21,11 @@ VPATH = \
 	c++/rpnumerics/physics/ThreePhaseFlowPhysics/StoneSubPhysics \
 	c++/rpnumerics/physics/ThreePhaseFlowPhysics/CoreyQuadSubPhysics \
 	c++/rpnumerics/physics/ThreePhaseFlowPhysics/Foam \
-	c++/rpnumerics/physics/ThreePhaseFlowPhysics/Foam/linux_x86_64 \
 	c++/rpnumerics/physics/ThreePhaseFlowPhysics/Brooks_CoreySubPhysics \
 	c++/rpnumerics/physics/ThreePhaseFlowPhysics/Sorbie \
 	c++/rpnumerics/physics/JD \
 	c++/rpnumerics/physics/SimpleFlux \
+	c++/rpnumerics/physics/CoreyQuad4Phase \
 	c++/rpnumerics/physics/Quad2C1SubPhysics \
 	c++/rpnumerics/physics/CompositionalPhysics \
 	c++/rpnumerics/physics/CompositionalPhysics/DeadVolatileVolatileGas \
@@ -38,7 +38,6 @@ VPATH = \
 	c++/rpnumerics/physics/CompositionalPhysics/TPCWPhysics/TPCW_SinglePhase/Common \
 	c++/rpnumerics/physics/CompositionalPhysics/TPCWPhysics/TPCWSubPhysics \
 	c++/rpnumerics/physics/Quad3SubPhysics \
-	c++/rpnumerics/CoincidenceTP \
 	c++/rpnumerics/Discriminant_Contour \
 	c++/rpnumerics/Curve \
 	c++/rpnumerics/characteristics \
@@ -76,6 +75,7 @@ VPATH = \
 	c++/wave/ode/LSODE \
 	c++/wave/ode/EulerSolver \
 	c++/wave/util \
+	c++/wave/util/GaussLegendreIntegral \
 	c++/wave/util/Eigenproblem \
 	c++/wave/util/MultiArray \
 	c++/wave/util/alglib \
@@ -110,11 +110,11 @@ INCLUDE = \
 	-I c++/rpnumerics/physics/ThreePhaseFlowPhysics/StoneSubPhysics \
 	-I c++/rpnumerics/physics/ThreePhaseFlowPhysics/CoreyQuadSubPhysics \
 	-I c++/rpnumerics/physics/ThreePhaseFlowPhysics/Foam \
-	-I c++/rpnumerics/physics/ThreePhaseFlowPhysics/Foam/linux_x86_64 \
 	-I c++/rpnumerics/physics/ThreePhaseFlowPhysics/Brooks_CoreySubPhysics \
 	-I c++/rpnumerics/physics/ThreePhaseFlowPhysics/Sorbie \
 	-I c++/rpnumerics/physics/JD \
 	-I c++/rpnumerics/physics/SimpleFlux \
+	-I c++/rpnumerics/physics/CoreyQuad4Phase \
 	-I c++/rpnumerics/physics/Quad2C1SubPhysics \
 	-I c++/rpnumerics/physics/CompositionalPhysics \
 	-I c++/rpnumerics/physics/CompositionalPhysics/DeadVolatileVolatileGas \
@@ -127,7 +127,6 @@ INCLUDE = \
 	-I c++/rpnumerics/physics/CompositionalPhysics/TPCWPhysics/TPCW_SinglePhase/Common \
 	-I c++/rpnumerics/physics/CompositionalPhysics/TPCWPhysics/TPCWSubPhysics \
 	-I c++/rpnumerics/physics/Quad3SubPhysics \
-	-I c++/rpnumerics/CoincidenceTP \
 	-I c++/rpnumerics/Discriminant_Contour \
 	-I c++/rpnumerics/Curve \
 	-I c++/rpnumerics/characteristics \
@@ -165,6 +164,7 @@ INCLUDE = \
 	-I c++/wave/ode/LSODE \
 	-I c++/wave/ode/EulerSolver \
 	-I c++/wave/util \
+	-I c++/wave/util/GaussLegendreIntegral \
 	-I c++/wave/util/Eigenproblem \
 	-I c++/wave/util/MultiArray \
 	-I c++/wave/util/alglib \
@@ -347,6 +347,7 @@ CCSRC = \
 	RealSegment.cc \
 	except.cc \
 	Boundary.cc \
+	GaussLegendreIntegral.cc \
 	Eigenproblem2x2.cc \
 	Eigenpair.cc \
 	Eigenproblem.cc \

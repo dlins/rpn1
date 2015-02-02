@@ -1,9 +1,0 @@
-#include "CoreyQuadHugoniotCurve.h"
-
-CoreyQuadHugoniotCurve::CoreyQuadHugoniotCurve(ThreePhaseFlowSubPhysics *t) : ThreePhaseFlowHugoniotCurve(t){
-    flux = (const CoreyQuad*)t->flux();
-}
-
-CoreyQuadHugoniotCurve::~CoreyQuadHugoniotCurve(){
-}
-

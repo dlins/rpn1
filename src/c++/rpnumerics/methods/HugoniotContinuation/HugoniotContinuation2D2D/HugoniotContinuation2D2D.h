@@ -3,6 +3,7 @@
 
 #include <iostream>
 
+#include "GaussLegendreIntegral.h"
 #include "HugoniotContinuation_nDnD.h"
 
 class HugoniotContinuation2D2D : public HugoniotContinuation_nDnD {

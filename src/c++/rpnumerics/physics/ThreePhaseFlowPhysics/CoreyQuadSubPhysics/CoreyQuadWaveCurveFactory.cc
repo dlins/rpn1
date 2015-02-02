@@ -1,9 +1,12 @@
 #include "CoreyQuadWaveCurveFactory.h"
 
-CoreyQuadWaveCurveFactory::CoreyQuadWaveCurveFactory(const FluxFunction *ff, const AccumulationFunction *gg, 
-                                                               const Boundary *bb, const ODE_Solver *o, 
-                                                               RarefactionCurve *r, ShockCurve *s, CompositeCurve *c, 
-                                                               CoreyQuadSubPhysics *tpfsp): WaveCurveFactory(gg, ff, bb, o, r, s, c), coreyquadsubphysics_(tpfsp){
+//CoreyQuadWaveCurveFactory::CoreyQuadWaveCurveFactory(const FluxFunction *ff, const AccumulationFunction *gg, 
+//                                                               const Boundary *bb, const ODE_Solver *o, 
+//                                                               RarefactionCurve *r, ShockCurve *s, CompositeCurve *c, 
+//                                                               CoreyQuadSubPhysics *tpfsp): WaveCurveFactory(gg, ff, bb, o, r, s, c), coreyquadsubphysics_(tpfsp){
+//}
+
+CoreyQuadWaveCurveFactory::CoreyQuadWaveCurveFactory(CoreyQuadSubPhysics *tpfsp): WaveCurveFactory(tpfsp), coreyquadsubphysics_(tpfsp){
 }
 
 CoreyQuadWaveCurveFactory::~CoreyQuadWaveCurveFactory(){
