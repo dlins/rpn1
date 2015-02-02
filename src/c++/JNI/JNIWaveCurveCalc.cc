@@ -214,9 +214,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc
 
 //        cout << "Transitional line name: " << name[index] << endl;
 
-    
-    realVectorInput.component(0)=0.26629;
-    realVectorInput.component(1)=0.73193;
+   
     
 
    info=factory->wavecurve(originNumber, realVectorInput, familyNumber, timeDirection, shock,object[index],function[index],
@@ -378,7 +376,6 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc
 
                 RealVector eigenValue = wc.eigenvalues[j];
                 
-                cout<<"Autovalor : "<<eigenValue<<endl;
 
                 (env)->SetDoubleArrayRegion(jeigenValuesArray, 0, eigenValue.size(), (double *) eigenValue);
 
@@ -388,7 +385,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc
                 env->CallObjectMethod(orbitPoint, setCorrespondingPointIndexID, correspondingPointIndexVector[j]);
                 (env)->SetObjectArrayElement(orbitPointArray, j, orbitPoint);
 
-                cout<<"56456"<<endl;
+
             }
 
 
