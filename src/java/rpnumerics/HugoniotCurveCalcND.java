@@ -42,7 +42,7 @@ public class HugoniotCurveCalcND extends ContourCurveCalc implements HugoniotCur
 
         int[] resolution = RPNUMERICS.processResolution(getParamValue("hugoniotcurve", "resolution"));
 
-        Integer direction = new Integer(getParamValue("fundamentalcurve", "direction"));
+        Integer direction = new Integer(getParamValue("hugoniotcurve", "direction"));
 
         String methodName =RPNUMERICS.getParamValue("hugoniotcurve", "method");
 

@@ -11,14 +11,14 @@
                     <PHYSICSPARAM name="phi" position="0" value ="0.2" />
                 </PHYSICSCONFIG>
 
-               <PHYSICSCONFIG name="Thermodynamics">
-		 <PHYSICSPARAM name="B" position="0" value ="120.0" />
-                 <PHYSICSPARAM name="D" position="1" value ="40.0" />
-                 <PHYSICSPARAM name="mu_oB" position="2" value ="4.0" />
-                 <PHYSICSPARAM name="mu_oD" position="3" value ="6.0" />
-                 <PHYSICSPARAM name="mu_G" position="4" value ="1.0" />
-                 <PHYSICSPARAM name="re" position="5" value ="1.0" />
-                 <PHYSICSPARAM name="rg" position="6" value ="1.6" />
+                <PHYSICSCONFIG name="Thermodynamics">
+                    <PHYSICSPARAM name="B" position="0" value ="120.0" />
+                    <PHYSICSPARAM name="D" position="1" value ="40.0" />
+                    <PHYSICSPARAM name="mu_oB" position="2" value ="4.0" />
+                    <PHYSICSPARAM name="mu_oD" position="3" value ="6.0" />
+                    <PHYSICSPARAM name="mu_G" position="4" value ="1.0" />
+                    <PHYSICSPARAM name="re" position="5" value ="1.0" />
+                    <PHYSICSPARAM name="rg" position="6" value ="1.6" />
 
                 </PHYSICSCONFIG>
 
@@ -33,12 +33,13 @@
                 <CURVEPARAM name="resolution" value="120 120"/>
                 <CURVEPARAM name="method" value="Hugoniot_TP"/>
                 <CURVEPARAM name="case" value="Generic point"/>
+                <CURVEPARAM name="direction" value="20"/>
                 
             </CURVECONFIGURATION> 
             
             
             
-  <CURVECONFIGURATION name="grid">
+            <CURVECONFIGURATION name="grid">
                 <CURVEPARAM name="resolution" value="128 128"/>
             </CURVECONFIGURATION>
 
@@ -97,7 +98,7 @@
 
             </CURVECONFIGURATION>
             
-       <!--     <CURVECONFIGURATION name="envelopecurve">
+            <!--     <CURVECONFIGURATION name="envelopecurve">
                 <CURVEPARAM name="resolution" value="128 128"/>
                 <CURVEPARAM name="whereisconstant" value="0"/>
                 <CURVEPARAM name="numberofsteps" value="128"/>
@@ -118,7 +119,7 @@
                 <CURVEPARAM name="method" value="IMPLICIT"/>
             </CURVECONFIGURATION>
             
-             <CURVECONFIGURATION name="physicalboundary">
+            <CURVECONFIGURATION name="physicalboundary">
             </CURVECONFIGURATION>
 
     

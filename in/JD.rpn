@@ -30,6 +30,7 @@
                 <CURVEPARAM name="resolution" value="120 120"/>
                 <CURVEPARAM name="method" value="Generic Implicit Hugoniot Curve"/>
                 <CURVEPARAM name="case" value="Generic point"/>
+                <CURVEPARAM name="direction" value="20"/>
                 
             </CURVECONFIGURATION> 
             
@@ -48,7 +49,7 @@
   
 
             <CURVECONFIGURATION name="fundamentalcurve">
-                <CURVEPARAM name="direction" value="10"/>
+                <CURVEPARAM name="direction" value="20"/>
                 <CURVEPARAM name="family" value="0"/>
                 <CURVEPARAM name="level" value="0.5"/>
             </CURVECONFIGURATION>

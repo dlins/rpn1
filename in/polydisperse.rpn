@@ -33,7 +33,7 @@
             </METHOD>
 
 
-       <CURVECONFIGURATION name="wavecurve">
+            <CURVECONFIGURATION name="wavecurve">
                 <CURVEPARAM name="edge" value="0"/>
                 <CURVEPARAM name="origin" value="13"/>
                 <CURVEPARAM name="curve" value="0"/>
@@ -43,13 +43,15 @@
             </CURVECONFIGURATION>
     
     
+    
+    
             <CURVECONFIGURATION name="hugoniotcurve">
                 <CURVEPARAM name="resolution" value="120 120"/>
-                <CURVEPARAM name="method" value="IMPLICIT"/>
-                <CURVEPARAM name="case" value="0"/>
+                <CURVEPARAM name="method" value="Generic Implicit Hugoniot Curve"/>
+                <CURVEPARAM name="case" value="Generic point"/>
+                <CURVEPARAM name="direction" value="20"/>
                 
-            </CURVECONFIGURATION>
-    
+            </CURVECONFIGURATION> 
     
     
             <CURVECONFIGURATION name="fundamentalcurve">
