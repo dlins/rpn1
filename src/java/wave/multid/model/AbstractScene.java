@@ -49,6 +49,7 @@ public class AbstractScene implements AbstractGeomObj {
     }
 
     public Iterator getGeomObjIterator() {
+//        System.out.println("geomList_.size() em AbstractScene : " +geomList_.size());       //*** Informa a quantidade de curvas
         return geomList_.iterator();
     }
 

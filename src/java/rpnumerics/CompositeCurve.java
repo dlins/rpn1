@@ -48,7 +48,7 @@ public class CompositeCurve extends FundamentalCurve implements RpSolution {
 //
 //    }
 
-    public String toMatlab() {
+    public String toMatlab(int curveIndex) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 

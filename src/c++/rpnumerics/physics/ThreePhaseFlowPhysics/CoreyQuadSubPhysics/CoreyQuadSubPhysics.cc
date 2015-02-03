@@ -154,3 +154,6 @@ CoreyQuadSubPhysics::~CoreyQuadSubPhysics(){
     delete permeability_;
 }
 
+bool CoreyQuadSubPhysics::inside_contact_region(const RealVector &p, int family){
+    return false;
+}

@@ -1,0 +1,9 @@
+*~
+*.d
+*.o
+*.txt
+*.log
+*.xml
+nbproject
+subphysics
+integral

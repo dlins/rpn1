@@ -44,10 +44,6 @@ WaveCurveFactory::WaveCurveFactory(SubPhysics *s): subphysics(s){
     type[1] = std::string("Composite Curve");
     type[2] = std::string("Shock Curve");
 
-//    #ifdef TESTWAVECURVEFACTORY
-//    canvas = 0;
-//    scroll = 0;
-//    #endif 
 }
 
 WaveCurveFactory::WaveCurveFactory(const AccumulationFunction *gg, const FluxFunction *ff, const Boundary *bb, const ODE_Solver *o,
@@ -67,10 +63,6 @@ WaveCurveFactory::WaveCurveFactory(const AccumulationFunction *gg, const FluxFun
     type[1] = std::string("Composite Curve");
     type[2] = std::string("Shock Curve");
 
-//    #ifdef TESTWAVECURVEFACTORY
-//    canvas = 0;
-//    scroll = 0;
-//    #endif 
 }
 
 WaveCurveFactory::~WaveCurveFactory(){
@@ -86,8 +78,6 @@ int WaveCurveFactory::Liu_half_wavecurve(const ReferencePoint &ref,
                                          WaveCurve &hwc,
                                          int &wavecurve_stopped_because, 
                                          int &edge){
-
-//    TestTools::pause("Liu");
 
     // Kludge to solve the fact that the shockspeed at the reference point is being returned as NaN, 
     // which messes up with the Riemann Profile.
@@ -175,22 +165,6 @@ int WaveCurveFactory::Liu_half_wavecurve(const ReferencePoint &ref,
 //            return WAVECURVE_OK;
 
             if (info_rar == RAREFACTION_OK){
-//                #ifdef TESTWAVECURVEFACTORY
-//                {
-//                    if (canvas != 0){
-//                        Curve2D *c = new Curve2D(rarcurve.curve, 1.0, 0.0, 0.0);
-//                        canvas->add(c);
-//
-//                        if (scroll != 0){
-//                            std::stringstream ss;
-//                            ss << "Rar., " << rarcurve.curve.size();
-//                            scroll->add(ss.str().c_str(), canvas, c);
-//                        }
-//
-////                        TestTools::pause("Rarefaction plotted.");
-//                    }
-//                }
-//                #endif
 
                 // The rarefaction is its own reference curve.
                 //
@@ -344,22 +318,6 @@ int WaveCurveFactory::Liu_half_wavecurve(const ReferencePoint &ref,
 //            hwc.wavecurve.push_back(cmpcurve);
 
             if (info_cmp == COMPOSITE_OK){
-//                #ifdef TESTWAVECURVEFACTORY
-//                {
-//                    if (canvas != 0){
-//                        Curve2D *c = new Curve2D(cmpcurve.curve, 0.0, 1.0, 0.0);
-//                        canvas->add(c);
-//
-//                        if (scroll != 0){
-//                            std::stringstream ss;
-//                            ss << "Cmp., " << cmpcurve.curve.size();
-//                            scroll->add(ss.str().c_str(), canvas, c);
-//                        }
-//
-////                        TestTools::pause("Composite plotted.");
-//                    }
-//                }
-//                #endif
 
                 cmpcurve.back_curve_index = rarefaction_list.back();
 
@@ -471,23 +429,6 @@ int WaveCurveFactory::Liu_half_wavecurve(const ReferencePoint &ref,
             shkcurve.back_curve_index = hwc.wavecurve.size() - 1;
             hwc.wavecurve.push_back(shkcurve);
 
-//                #ifdef TESTWAVECURVEFACTORY
-//                {
-//                if (shkcurve.curve.size() > 0)
-//                    if (canvas != 0){
-//                        Curve2D *c = new Curve2D(shkcurve.curve, 0.0, 0.0, 1.0);
-//                        canvas->add(c);
-//
-//                        if (scroll != 0){
-//                            std::stringstream ss;
-//                            ss << "Shk., " << shkcurve.curve.size();
-//                            scroll->add(ss.str().c_str(), canvas, c);
-//                        }
-//
-//                        TestTools::pause("Shock plotted.");
-//                    }
-//                }
-//                #endif
 
             if (shck_info == SHOCKCURVE_OK){
                 future_curve_initial_point = shkcurve.last_point;
@@ -630,10 +571,7 @@ int WaveCurveFactory::wavecurve(int type, const RealVector &initial_point, int f
                                 int &wavecurve_stopped_because, int &edge){
 
     if (subphysics->inside_contact_region(initial_point, family)){
-//        TestTools::pause("WaveCurveFactory: Contact region");
-    }
-    else {
-//        TestTools::pause("WaveCurveFactory: Non-contact region");
+
     }
 
     // Initialize.

@@ -6,7 +6,7 @@
             <PHYSICS name="CoreyQuad">
               <PHYSICSCONFIG name="fluxfunction">
                     <PHYSICSPARAM name="grw" position="0" value ="1.0" />
-                    <PHYSICSPARAM name="grg" position="1" value ="0.8" />
+                    <PHYSICSPARAM name="grg" position="1" value ="0.6" />
                     <PHYSICSPARAM name="gro" position="2" value ="0.7" />
                     <PHYSICSPARAM name="muw" position="3" value ="1.0" />
                     <PHYSICSPARAM name="mug" position="4" value ="1.0" />

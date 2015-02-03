@@ -38,7 +38,7 @@ public class WaveCurveRRegions implements RpSolution {
     }
 
     @Override
-    public String toMatlab() {
+    public String toMatlab(int curveIndex) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

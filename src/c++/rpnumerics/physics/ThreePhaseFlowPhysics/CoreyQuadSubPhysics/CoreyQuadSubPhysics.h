@@ -42,6 +42,8 @@ class CoreyQuadSubPhysics : public ThreePhaseFlowSubPhysics {
 
             return Dp;
         }
+        
+         bool inside_contact_region(const RealVector &p, int family);
 };
 
 #endif // _COREYQUADSUBPHYSICS_

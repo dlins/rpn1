@@ -2,8 +2,9 @@
 
 FoamSubPhysics::FoamSubPhysics() : ThreePhaseFlowSubPhysics(){
     muw_parameter = new Parameter(std::string("muw"), 1.0);
-    muo_parameter = new Parameter(std::string("muo"), 1.0);
-    mug_parameter = new Parameter(std::string("mug0"), 8e-3); // Notice that, even though the name is changed, this parameter is just mug.
+    muo_parameter = new Parameter(std::string("muo"), 5.0);
+    mug_parameter = new Parameter(std::string("mug0"), 2e-2); // Notice that, even though the name is changed, this parameter is just mug.
+
 
     grw_parameter = new Parameter(std::string("grw"), 1.0);
     gro_parameter = new Parameter(std::string("gro"), 1.0);

@@ -647,7 +647,6 @@ int CompositeCurve::curve(const AccumulationFunction *RarAccum, const FluxFuncti
             RealVector first_composite_point;
             int info = shock->find_point_for_sigma_equal_reference_lambda(p, rarcurve.speed[retreat_index], first_composite_point);
             std::cout << "Composite, first point: info = " << info << std::endl;
-//            TestTools::pause("Composite, check console.");
 
             if (info == SHOCKCURVE_NEWTON_DID_NOT_CONVERGE){
 //                TestTools::pause("Composite, SHOCKCURVE_NEWTON_DID_NOT_CONVERGE");
