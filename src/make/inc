@@ -25,7 +25,6 @@ VPATH = \
 	c++/rpnumerics/physics/ThreePhaseFlowPhysics/Sorbie \
 	c++/rpnumerics/physics/JD \
 	c++/rpnumerics/physics/SimpleFlux \
-	c++/rpnumerics/physics/CoreyQuad4Phase \
 	c++/rpnumerics/physics/Quad2C1SubPhysics \
 	c++/rpnumerics/physics/CompositionalPhysics \
 	c++/rpnumerics/physics/CompositionalPhysics/DeadVolatileVolatileGas \
@@ -114,7 +113,6 @@ INCLUDE = \
 	-I c++/rpnumerics/physics/ThreePhaseFlowPhysics/Sorbie \
 	-I c++/rpnumerics/physics/JD \
 	-I c++/rpnumerics/physics/SimpleFlux \
-	-I c++/rpnumerics/physics/CoreyQuad4Phase \
 	-I c++/rpnumerics/physics/Quad2C1SubPhysics \
 	-I c++/rpnumerics/physics/CompositionalPhysics \
 	-I c++/rpnumerics/physics/CompositionalPhysics/DeadVolatileVolatileGas \
