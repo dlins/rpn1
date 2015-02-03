@@ -206,7 +206,7 @@ int RarefactionCurve::initialize(const RealVector &p, int fam, int increase, Rea
 
     JetMatrix F_jet(n), G_jet(n);
     f->jet(p, F_jet, 2);
-    g->jet(p, G_jet, 2);    
+    g->jet(p, G_jet, 2);
 
     DoubleMatrix F_J = F_jet.Jacobian();
     DoubleMatrix G_J = G_jet.Jacobian();
@@ -217,15 +217,22 @@ int RarefactionCurve::initialize(const RealVector &p, int fam, int increase, Rea
     std::vector<eigenpair> e;
     Eigen::eig(n, F_J.data(), G_J.data(), e);
 
+    std::cout << (void*)f << std::endl;
+    TestTools::pause("rar init1");
+
     double lambda = e[fam].r;
     RealVector rm(n, e[fam].vrr.data()); // Right eigenvector
     RealVector lm(n, e[fam].vlr.data()); // Left  eigenvector
 
     RealVector h(F_H.size());
 
+    TestTools::pause("rar init2");
+
     for (int i = 0; i < F_H.size(); i++) h(i) = rm*((F_H[i] - lambda*G_H[i])*rm);
     
     dd = (lm*h)/(lm*(G_J*rm));
+
+    TestTools::pause("rar init3");
 
     if (((increase == RAREFACTION_SPEED_SHOULD_INCREASE) && (dd > 0.0)) ||
         ((increase == RAREFACTION_SPEED_SHOULD_DECREASE) && (dd < 0.0))){
@@ -235,6 +242,8 @@ int RarefactionCurve::initialize(const RealVector &p, int fam, int increase, Rea
         ref = -rm;
         dd  = -dd;
     }
+
+    TestTools::pause("rar init4");
 
 //    std::cout << "F = " << F_jet.function() << ", G = " << G_jet.function() << std::endl;
 //    std::cout << "F_J =\n" << F_J << std::endl;
@@ -379,12 +388,14 @@ int RarefactionCurve::curve(const RealVector &initial_point,
         return RAREFACTION_ERROR;
     }
 
-//    // Verify if the initial point lies within the contact region.
-//    //
-//    if (subphysics->inside_contact_region(initial_point, curve_family)){
-//        TestTools::pause("Inside contact region: aborting...");
-//        return RAREFACTION_ERROR;
-//    }
+    // Verify if the initial point lies within the contact region.
+    //
+    if (subphysics->inside_contact_region(initial_point, family)){
+        TestTools::pause("Contact region");
+    }
+    else {
+        TestTools::pause("Non-contact region");
+    }
 
     f = subphysics->flux();
     g = subphysics->accumulation();

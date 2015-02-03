@@ -214,6 +214,13 @@ void rarefactioncb(Fl_Widget*, void*){
 //    initial_point(0) = 0.425506;
 //    initial_point(1) = 0.169554;
 
+//    initial_point(0) = 0.1;
+//    initial_point(1) = 0.1;
+
+//    RealVector initial_direction(2);
+//    initial_direction(0) = 1.0;
+//    initial_direction(1) = 0.0;
+
     LSODE lsode;
     ODE_Solver *odesolver = &lsode;
 
@@ -230,8 +237,8 @@ void rarefactioncb(Fl_Widget*, void*){
                                             family,
                                             increase,
                                             RAREFACTION /* INTEGRAL_CURVE */,
-                                            RAREFACTION_INITIALIZE,
-                                            0,
+                                            RAREFACTION_INITIALIZE /*RAREFACTION_DONT_INITIALIZE*/,
+                                            0 /*&initial_direction*/,
                                             odesolver,
                                             deltaxi,
                                             0, 0,
@@ -856,8 +863,11 @@ void wavecurvefactioncb(Fl_Widget*, void*){
 //    initial_point(0) = 0.15;
 //    initial_point(1) = 0.15;
 
-    initial_point(0) = 0.5397248593753976;
-    initial_point(1) = 0.4603960396039605;
+//    initial_point(0) = 0.1;
+//    initial_point(1) = 0.1;
+
+//    initial_point(0) = 0.26629;
+//    initial_point(1) = 0.73193;
 
     std::cout << "Wavecurve callback, initial point = " << initial_point << std::endl;
     if (!subphysics->boundary()->inside(initial_point)){
@@ -1511,9 +1521,9 @@ int main(){
 
 //    subphysics = new StoneSubPhysics;
 //    subphysics = new Brooks_CoreySubPhysics;
-    subphysics = new CoreyQuadSubPhysics;
+//    subphysics = new CoreyQuadSubPhysics;
 //    subphysics = new KovalSubPhysics;
-//    subphysics = new FoamSubPhysics;
+    subphysics = new FoamSubPhysics;
 //    subphysics = new SorbieSubPhysics;
 //    subphysics = new TPCWSubPhysics;
 //    subphysics = new Quad2SubPhysics;

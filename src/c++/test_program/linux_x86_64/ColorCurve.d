@@ -129,7 +129,4 @@ linux_x86_64/ColorCurve.o linux_x86_64/ColorCurve.d : ../rpnumerics/methods/Hugo
  ../rpnumerics/methods/Viscosity_Matrix/Viscosity_Matrix.h \
  ../rpnumerics/methods/Viscosity_Matrix/ViscosityJetMatrix.h \
  ../rpnumerics/methods/ReferencePoint.h \
- ../rpnumerics/methods/Viscosity_Matrix/Matrix.h \
- ../wave/util/Eigenproblem/Eigenproblem2x2.h \
- ../wave/util/Eigenproblem/Eigenproblem.h \
- ../wave/util/Eigenproblem/Eigenpair.h
+ ../rpnumerics/methods/Viscosity_Matrix/Matrix.h

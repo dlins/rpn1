@@ -87,6 +87,8 @@ int WaveCurveFactory::Liu_half_wavecurve(const ReferencePoint &ref,
                                          int &wavecurve_stopped_because, 
                                          int &edge){
 
+    TestTools::pause("Liu");
+
     // Kludge to solve the fact that the shockspeed at the reference point is being returned as NaN, 
     // which messes up with the Riemann Profile.
     //
@@ -628,10 +630,10 @@ int WaveCurveFactory::wavecurve(int type, const RealVector &initial_point, int f
                                 int &wavecurve_stopped_because, int &edge){
 
     if (subphysics->inside_contact_region(initial_point, family)){
-        TestTools::pause("Contact region");
+        TestTools::pause("WaveCurveFactory: Contact region");
     }
     else {
-        TestTools::pause("Non-contact region");
+        TestTools::pause("WaveCurveFactory: Non-contact region");
     }
 
     // Initialize.

@@ -142,9 +142,6 @@ linux_x86_64/ThreePhaseFlowHugoniotContinuation.o linux_x86_64/ThreePhaseFlowHug
  /usr/include/c++/4.9/deque /usr/include/c++/4.9/bits/stl_deque.h \
  /usr/include/c++/4.9/bits/deque.tcc \
  ../rpnumerics/methods/Viscosity_Matrix/ViscosityJetMatrix.h \
- ../wave/util/Eigenproblem/Eigenproblem2x2.h \
- ../wave/util/Eigenproblem/Eigenproblem.h \
- ../wave/util/Eigenproblem/Eigenpair.h \
  ../rpnumerics/physics/ThreePhaseFlowPhysics/ThreePhaseFlowSubPhysics.h \
  ../Model/SubPhysics.h ../Model/Parameter.h ../Model/AuxiliaryFunction.h \
  ../rpnumerics/methods/Extension/Extension.h \

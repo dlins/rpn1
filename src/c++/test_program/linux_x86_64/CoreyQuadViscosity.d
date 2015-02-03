@@ -143,9 +143,6 @@ linux_x86_64/CoreyQuadViscosity.o linux_x86_64/CoreyQuadViscosity.d : \
  /usr/include/c++/4.9/deque /usr/include/c++/4.9/bits/stl_deque.h \
  /usr/include/c++/4.9/bits/deque.tcc \
  ../rpnumerics/methods/Viscosity_Matrix/ViscosityJetMatrix.h \
- ../wave/util/Eigenproblem/Eigenproblem2x2.h \
- ../wave/util/Eigenproblem/Eigenproblem.h \
- ../wave/util/Eigenproblem/Eigenpair.h \
  ../rpnumerics/methods/Extension/Extension.h \
  ../rpnumerics/methods/RarefactionCurve/RarefactionCurve.h \
  ../wave/ode/ODE_Solver.h ../wave/ode/ODE_Solver_Return_Codes.h \

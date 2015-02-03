@@ -7,14 +7,14 @@ CoreyQuadSubPhysics::CoreyQuadSubPhysics() : ThreePhaseFlowSubPhysics(){
 //    mug_parameter = new Parameter(std::string("mug"), 1.0 - 3e-3);
 
     muw_parameter = new Parameter(std::string("muw"), 1.0);
-    muo_parameter = new Parameter(std::string("muo"), 2.0);
-    mug_parameter = new Parameter(std::string("mug"), 0.5);
+    muo_parameter = new Parameter(std::string("muo"), 1.0);
+    mug_parameter = new Parameter(std::string("mug"), 1.0);
 
-    vel_parameter = new Parameter(std::string("vel"), 1.0);
+    vel_parameter = new Parameter(std::string("vel"), 0.0);
 
     grw_parameter = new Parameter(std::string("grw"), 1.0);
-    gro_parameter = new Parameter(std::string("gro"), 1.0);
-    grg_parameter = new Parameter(std::string("grg"), 1.0);
+    gro_parameter = new Parameter(std::string("gro"), .8);
+    grg_parameter = new Parameter(std::string("grg"), .7);
 
     // TODO: Introduce these parameters into the flux's equations. When
     //       When that happens, add these parameters to the parameter list

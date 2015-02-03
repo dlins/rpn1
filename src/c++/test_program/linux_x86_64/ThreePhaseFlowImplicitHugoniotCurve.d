@@ -134,14 +134,11 @@ linux_x86_64/ThreePhaseFlowImplicitHugoniotCurve.o linux_x86_64/ThreePhaseFlowIm
  ../rpnumerics/methods/Viscosity_Matrix/ViscosityJetMatrix.h \
  ../rpnumerics/methods/ReferencePoint.h \
  ../rpnumerics/methods/Viscosity_Matrix/Matrix.h \
- ../wave/util/Eigenproblem/Eigenproblem2x2.h \
- ../wave/util/Eigenproblem/Eigenproblem.h \
- ../wave/util/Eigenproblem/Eigenpair.h ../rpnumerics/Curve/Curve.h \
- ../wave/util/HyperOctree.h ../wave/util/BoxND.h ../wave/util/PointND.h \
- ../rpnumerics/GridValues.h ../rpnumerics/FluxFunction.h \
- ../rpnumerics/AccumulationFunction.h ../Observer_Subject/Observer.h \
- ../rpnumerics/ImplicitFunction.h ../rpnumerics/GridValues.h \
- ../rpnumerics/methods/contour/ContourMethod.h \
+ ../rpnumerics/Curve/Curve.h ../wave/util/HyperOctree.h \
+ ../wave/util/BoxND.h ../wave/util/PointND.h ../rpnumerics/GridValues.h \
+ ../rpnumerics/FluxFunction.h ../rpnumerics/AccumulationFunction.h \
+ ../Observer_Subject/Observer.h ../rpnumerics/ImplicitFunction.h \
+ ../rpnumerics/GridValues.h ../rpnumerics/methods/contour/ContourMethod.h \
  ../rpnumerics/methods/contour/HyperCube.h ../wave/util/RealSegment.h \
  ../rpnumerics/methods/contour/HugoniotFunctionClass.h \
  ../rpnumerics/Newton_Improvement.h ../rpnumerics/ImplicitFunction.h \

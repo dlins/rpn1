@@ -122,4 +122,93 @@ linux_x86_64/StonePermeability.o linux_x86_64/StonePermeability.d : \
  ../Model/AuxiliaryFunction.h ../Model/Parameter.h \
  ../Observer_Subject/Subject.h /usr/include/c++/4.9/set \
  /usr/include/c++/4.9/bits/stl_tree.h /usr/include/c++/4.9/bits/stl_set.h \
- /usr/include/c++/4.9/bits/stl_multiset.h ../Observer_Subject/Observer.h
+ /usr/include/c++/4.9/bits/stl_multiset.h ../Observer_Subject/Observer.h \
+ ../rpnumerics/physics/ThreePhaseFlowPhysics/ThreePhaseFlowSubPhysics.h \
+ ../Model/SubPhysics.h ../Model/AuxiliaryFunction.h \
+ ../rpnumerics/FluxFunction.h ../rpnumerics/RpFunction.h \
+ ../rpnumerics/WaveState.h ../Model/Parameter.h \
+ ../rpnumerics/FluxParams.h ../rpnumerics/AccumulationFunction.h \
+ ../rpnumerics/AccumulationParams.h ../wave/util/Boundary.h \
+ ../wave/util/mathutil.h ../rpnumerics/GridValues.h \
+ ../rpnumerics/FluxFunction.h ../rpnumerics/AccumulationFunction.h \
+ ../wave/util/eigen.h ../Observer_Subject/Observer.h \
+ ../rpnumerics/methods/Viscosity_Matrix/Matrix.h \
+ ../rpnumerics/Curve/Curve.h ../rpnumerics/methods/ReferencePoint.h \
+ ../rpnumerics/methods/Viscosity_Matrix/Viscosity_Matrix.h \
+ ../rpnumerics/methods/Viscosity_Matrix/ViscosityJetMatrix.h \
+ ../rpnumerics/methods/Viscosity_Matrix/DoubleMatrix.h \
+ ../wave/util/HyperOctree.h ../wave/util/BoxND.h ../wave/util/PointND.h \
+ ../rpnumerics/methods/HugoniotCurve/HugoniotCurve.h \
+ ../rpnumerics/methods/HugoniotCurve/ColorCurve.h \
+ /usr/include/c++/4.9/deque /usr/include/c++/4.9/bits/stl_deque.h \
+ /usr/include/c++/4.9/bits/deque.tcc \
+ ../rpnumerics/methods/Viscosity_Matrix/ViscosityJetMatrix.h \
+ ../rpnumerics/methods/Extension/Extension.h \
+ ../rpnumerics/methods/RarefactionCurve/RarefactionCurve.h \
+ ../wave/ode/ODE_Solver.h ../wave/ode/ODE_Solver_Return_Codes.h \
+ ../rpnumerics/methods/Bisection/Bisection.h ../wave/util/Utilities.h \
+ ../rpnumerics/methods/WaveCurve/WaveCurve.h /usr/include/c++/4.9/complex \
+ ../rpnumerics/methods/CompositeCurve/CompositeCurve.h \
+ ../rpnumerics/methods/ShockCurve/ShockCurve.h \
+ ../rpnumerics/methods/HugoniotContinuation/HugoniotContinuation.h \
+ ../rpnumerics/methods/Secondary_Bifurcations/Explicit_Bifurcation_Curves/Explicit_Bifurcation_Curves.h \
+ canvas/TestTools.h /usr/include/FL/Fl.H /usr/include/FL/Enumerations.H \
+ /usr/include/FL/Fl_Export.H /usr/include/FL/Fl_Double_Window.H \
+ /usr/include/FL/Fl_Window.H /usr/include/FL/Fl_Group.H \
+ /usr/include/FL/Fl_Widget.H /usr/include/FL/Fl_Button.H \
+ /usr/include/FL/Fl_Multiline_Output.H /usr/include/FL/Fl_Output.H \
+ /usr/include/FL/Fl_Input.H /usr/include/FL/Fl_Input_.H \
+ /usr/include/FL/Fl_Box.H /usr/include/FL/fl_draw.H \
+ ../rpnumerics/methods/WaveCurve/WaveCurveFactory.h \
+ ../rpnumerics/methods/WaveCurve/WaveCurve.h canvas/canvas.h \
+ /usr/include/FL/Fl_Widget.H /usr/include/FL/x.H /usr/include/X11/Xlib.h \
+ /usr/include/X11/X.h /usr/include/X11/Xfuncproto.h \
+ /usr/include/X11/Xosdefs.h /usr/include/X11/Xutil.h \
+ /usr/include/X11/keysym.h /usr/include/X11/keysymdef.h \
+ /usr/include/X11/Xatom.h canvas/graphicobject.h canvas/point2d.h \
+ /usr/include/string.h canvas/canvasmenuscroll.h \
+ /usr/include/FL/Fl_Scroll.H /usr/include/FL/Fl_Scrollbar.H \
+ /usr/include/FL/Fl_Slider.H /usr/include/FL/Fl_Valuator.H \
+ /usr/include/FL/Fl_Pack.H /usr/include/FL/Fl_Group.H canvas/canvas.h \
+ canvas/canvasmenu.h canvas/canvasmenupack.h canvas/curve2d.h \
+ ../rpnumerics/methods/Coincidence/Coincidence.h \
+ ../rpnumerics/methods/Coincidence_Contour/Coincidence_Contour.h \
+ ../rpnumerics/ImplicitFunction.h ../rpnumerics/GridValues.h \
+ ../rpnumerics/methods/contour/ContourMethod.h \
+ ../rpnumerics/methods/contour/HyperCube.h ../wave/util/RealSegment.h \
+ ../rpnumerics/methods/contour/HugoniotFunctionClass.h \
+ ../rpnumerics/Newton_Improvement.h ../rpnumerics/ImplicitFunction.h \
+ ../rpnumerics/Inflection_Curve.h \
+ ../rpnumerics/methods/BifurcationCurve/BifurcationCurve.h \
+ ../rpnumerics/Double_Contact.h ../rpnumerics/ThreeImplicitFunctions.h \
+ ../rpnumerics/methods/contour/Contour2x2_Method.h \
+ ../rpnumerics/ThreeImplicitFunctions.h \
+ ../rpnumerics/Double_Contact_Function.h \
+ ../wave/util/IsoTriang2DBoundary.h ../wave/util/Boundary.h \
+ ../rpnumerics/Envelope_Curve.h ../rpnumerics/TwoImplicitFunctions.h \
+ ../rpnumerics/methods/contour/Contour2p5_Method.h \
+ ../rpnumerics/TwoImplicitFunctions.h ../rpnumerics/Extension_Curve.h \
+ ../rpnumerics/methods/Extension/Implicit_Extension_Curve.h \
+ ../rpnumerics/methods/Extension/Extension.h \
+ ../rpnumerics/methods/HugoniotCurve/ImplicitHugoniotCurve.h \
+ ../rpnumerics/methods/HugoniotCurve/HugoniotCurve.h \
+ ../rpnumerics/methods/HugoniotContinuation/HugoniotContinuation2D2D/HugoniotContinuation2D2D.h \
+ ../wave/util/GaussLegendreIntegral/GaussLegendreIntegral.h \
+ ../rpnumerics/methods/HugoniotContinuation/HugoniotContinuation_nDnD/HugoniotContinuation_nDnD.h \
+ ../rpnumerics/physics/ThreePhaseFlowPhysics/ThreePhaseFlowAccumulation.h \
+ ../rpnumerics/physics/ThreePhaseFlowPhysics/ThreePhaseFlowPermeability.h \
+ ../rpnumerics/physics/ThreePhaseFlowPhysics/ThreePhaseFlowImplicitHugoniotCurve.h \
+ ../rpnumerics/physics/ThreePhaseFlowPhysics/ThreePhaseFlowSubPhysics.h \
+ ../rpnumerics/physics/ThreePhaseFlowPhysics/ThreePhaseFlowViscosity.h \
+ ../rpnumerics/WaveState.h \
+ ../rpnumerics/physics/ThreePhaseFlowPhysics/ThreePhaseFlowMobility.h \
+ ../rpnumerics/physics/ThreePhaseFlowPhysics/ThreePhaseFlowHugoniotContinuation.h \
+ ../rpnumerics/physics/ThreePhaseFlowPhysics/StoneSubPhysics/StoneSubPhysics.h \
+ ../rpnumerics/physics/ThreePhaseFlowPhysics/StoneSubPhysics/StoneFluxFunction.h \
+ ../rpnumerics/physics/ThreePhaseFlowPhysics/ThreePhaseFlowFluxFunction.h \
+ ../rpnumerics/physics/ThreePhaseFlowPhysics/StoneSubPhysics/Stone_Explicit_Bifurcation_Curves.h \
+ ../rpnumerics/physics/ThreePhaseFlowPhysics/Three_Phase_Flow_Explicit_Bifurcation_Curves.h \
+ ../rpnumerics/physics/ThreePhaseFlowPhysics/ThreePhaseFlowFluxFunction.h \
+ ../wave/ode/LSODE/LSODE.h \
+ ../rpnumerics/physics/ThreePhaseFlowPhysics/StoneSubPhysics/StoneViscosity.h \
+ ../rpnumerics/physics/ThreePhaseFlowPhysics/ThreePhaseFlowViscosity.h

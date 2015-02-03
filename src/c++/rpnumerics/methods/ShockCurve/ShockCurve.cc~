@@ -769,29 +769,24 @@ int ShockCurve::curve_engine(const ReferencePoint &r, const RealVector &in, cons
 //        std::cout << "    Bef." << std::endl;
 
 //        std::cout << "Distance to the contact region: " << subphysics->distance_to_contact_region(previous_point) << std::endl;
-        if (subphysics->distance_to_contact_region(previous_point) < distance_to_contact_region_){
-            shock_stopped_because = SHOCK_REACHED_CONTACT;
+//        if (subphysics->distance_to_contact_region(previous_point) < distance_to_contact_region_){
+//            shock_stopped_because = SHOCK_REACHED_CONTACT;
 
-            if (shockcurve.curve.size() > 1){
-                shockcurve.final_direction = shockcurve.curve.back() - shockcurve.curve[shockcurve.curve.size() - 2];
-                normalize(shockcurve.final_direction);
+//            if (shockcurve.curve.size() > 1){
+//                shockcurve.final_direction = shockcurve.curve.back() - shockcurve.curve[shockcurve.curve.size() - 2];
+//                normalize(shockcurve.final_direction);
 
-                shockcurve.last_point = shockcurve.curve.back();
+//                shockcurve.last_point = shockcurve.curve.back();
 
-                TestTools::pause("Shock: near contact");
+//                TestTools::pause("Shock: near contact");
 
-                return SHOCKCURVE_OK;
-            }
-            else {
-                TestTools::pause("Shock: near contact. The user is adviced to relax the proximity-to-contact condition.");
+//                return SHOCKCURVE_OK;
+//            }
+//            else {
+//                TestTools::pause("Shock: near contact. The user is adviced to relax the proximity-to-contact condition.");
 
-                return SHOCKCURVE_ERROR;
-            }
-        }
-//        else {
-//            std::stringstream ss;
-//            ss << "Shock, distance to contact: " << subphysics->distance_to_contact_region(previous_point);
-//            TestTools::pause(ss);
+//                return SHOCKCURVE_ERROR;
+//            }
 //        }
 
         int info_curve_point = hc->curve_point(previous_point, previous_sigma_between_points,

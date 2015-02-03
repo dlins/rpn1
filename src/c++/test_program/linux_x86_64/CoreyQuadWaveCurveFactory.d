@@ -145,9 +145,6 @@ linux_x86_64/CoreyQuadWaveCurveFactory.o linux_x86_64/CoreyQuadWaveCurveFactory.
  /usr/include/c++/4.9/deque /usr/include/c++/4.9/bits/stl_deque.h \
  /usr/include/c++/4.9/bits/deque.tcc \
  ../rpnumerics/methods/Viscosity_Matrix/ViscosityJetMatrix.h \
- ../wave/util/Eigenproblem/Eigenproblem2x2.h \
- ../wave/util/Eigenproblem/Eigenproblem.h \
- ../wave/util/Eigenproblem/Eigenpair.h \
  ../rpnumerics/methods/Secondary_Bifurcations/Explicit_Bifurcation_Curves/Explicit_Bifurcation_Curves.h \
  canvas/TestTools.h /usr/include/FL/Fl.H /usr/include/FL/Enumerations.H \
  /usr/include/FL/Fl_Export.H /usr/include/FL/Fl_Double_Window.H \

@@ -18,21 +18,28 @@ StoneSubPhysics::StoneSubPhysics() : ThreePhaseFlowSubPhysics(){
     //       When that happens, add these parameters to the parameter list
     //       so the user can access them.
     //
-    cnw_parameter = new Parameter(std::string("cnw"), 0.1);
-    cno_parameter = new Parameter(std::string("cno"), 0.1);
+    cnw_parameter = new Parameter(std::string("cnw"), 0.0);
+    cno_parameter = new Parameter(std::string("cno"), 0.0);
     cng_parameter = new Parameter(std::string("cng"), 0.0);
 
     vel_parameter = new Parameter(std::string("vel"), 1.0);
 
     equation_parameter_.push_back(grw_parameter);
-    equation_parameter_.push_back(grg_parameter);
     equation_parameter_.push_back(gro_parameter);
+    equation_parameter_.push_back(grg_parameter);
+
     equation_parameter_.push_back(muw_parameter);
-    equation_parameter_.push_back(mug_parameter);
     equation_parameter_.push_back(muo_parameter);
+    equation_parameter_.push_back(mug_parameter);
+
+    equation_parameter_.push_back(cnw_parameter);
+    equation_parameter_.push_back(cno_parameter);
+    equation_parameter_.push_back(cng_parameter);
+
     equation_parameter_.push_back(vel_parameter);
 
     flux_ = new StoneFluxFunction(grw_parameter, grg_parameter, gro_parameter, muw_parameter, mug_parameter, muo_parameter, vel_parameter, (StonePermeability*)permeability_);
+    std::cout << "Stone flux: " << (void*)flux_ << std::endl;
 
     // GridValues.
     //
@@ -72,12 +79,18 @@ StoneSubPhysics::StoneSubPhysics() : ThreePhaseFlowSubPhysics(){
 
     // Shock curve.
     //
-    hugoniotcontinuation_ = new HugoniotContinuation2D2D(flux_, accumulation_, boundary_);
-    
-    hugoniot_curve.push_back(hugoniotcontinuation_);
-//    hugoniotcontinuation_ = new HugoniotContinuation_nDnD(flux_, accumulation_, boundary_);
+//    hugoniotcontinuation_ = new HugoniotContinuation2D2D(flux_, accumulation_, boundary_);
+//    
+//    hugoniot_curve.push_back(hugoniotcontinuation_);
+////    hugoniotcontinuation_ = new HugoniotContinuation_nDnD(flux_, accumulation_, boundary_);
 
-    shockcurve_ = new ShockCurve(hugoniotcontinuation_);
+//    shockcurve_ = new ShockCurve(hugoniotcontinuation_);
+
+    hugoniotcontinuation_ = new ThreePhaseFlowHugoniotContinuation(this);
+    hugoniot_curve.push_back(hugoniotcontinuation_);
+
+    shockcurve_ = new ShockCurve(this);
+    shockcurve_->distance_to_contact_region(2e-2);
 
     // Composite.
     explicitbifurcationcurves_ = new Stone_Explicit_Bifurcation_Curves((StoneFluxFunction*)flux_);
@@ -87,7 +100,8 @@ StoneSubPhysics::StoneSubPhysics() : ThreePhaseFlowSubPhysics(){
 
     // WaveCurve.
     //
-    wavecurvefactory_ = new WaveCurveFactory(accumulation_, flux_, boundary_, odesolver_, rarefactioncurve_, shockcurve_, compositecurve_);
+//    wavecurvefactory_ = new WaveCurveFactory(accumulation_, flux_, boundary_, odesolver_, rarefactioncurve_, shockcurve_, compositecurve_);
+    wavecurvefactory_ = new WaveCurveFactory(this);
 
     // Inflection.
     //
@@ -126,10 +140,10 @@ StoneSubPhysics::~StoneSubPhysics(){
 
     delete flux_;
 
-    // When these parameters are active in the flux, eliminate these lines.
-    delete cng_parameter;
-    delete cno_parameter;
-    delete cnw_parameter;
+//    // When these parameters are active in the flux, eliminate these lines.
+//    delete cng_parameter;
+//    delete cno_parameter;
+//    delete cnw_parameter;
 
     for (int i = equation_parameter_.size() - 1; i >=0; i--) delete equation_parameter_[i];
 

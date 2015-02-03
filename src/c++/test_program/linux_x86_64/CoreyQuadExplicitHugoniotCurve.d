@@ -133,12 +133,10 @@ linux_x86_64/CoreyQuadExplicitHugoniotCurve.o linux_x86_64/CoreyQuadExplicitHugo
  ../rpnumerics/methods/Viscosity_Matrix/ViscosityJetMatrix.h \
  ../rpnumerics/methods/ReferencePoint.h \
  ../rpnumerics/methods/Viscosity_Matrix/Matrix.h \
- ../wave/util/Eigenproblem/Eigenproblem2x2.h \
- ../wave/util/Eigenproblem/Eigenproblem.h \
- ../wave/util/Eigenproblem/Eigenpair.h ../rpnumerics/Curve/Curve.h \
- ../wave/util/HyperOctree.h ../wave/util/BoxND.h ../wave/util/PointND.h \
- ../rpnumerics/GridValues.h ../rpnumerics/FluxFunction.h \
- ../rpnumerics/AccumulationFunction.h ../Observer_Subject/Observer.h \
+ ../rpnumerics/Curve/Curve.h ../wave/util/HyperOctree.h \
+ ../wave/util/BoxND.h ../wave/util/PointND.h ../rpnumerics/GridValues.h \
+ ../rpnumerics/FluxFunction.h ../rpnumerics/AccumulationFunction.h \
+ ../Observer_Subject/Observer.h \
  ../rpnumerics/ParametricPlot/ParametricPlot.h ../wave/util/Boundary.h \
  ../wave/util/mathutil.h ../wave/util/Utilities.h \
  ../rpnumerics/methods/WaveCurve/WaveCurve.h \

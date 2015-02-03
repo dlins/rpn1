@@ -469,9 +469,9 @@ int WaveCurveFactory::Liu_half_wavecurve(const ReferencePoint &ref,
             shkcurve.back_curve_index = hwc.wavecurve.size() - 1;
             hwc.wavecurve.push_back(shkcurve);
 
-            if (shck_info == SHOCKCURVE_OK){
                 #ifdef TESTWAVECURVEFACTORY
                 {
+                if (shkcurve.curve.size() > 0)
                     if (canvas != 0){
                         Curve2D *c = new Curve2D(shkcurve.curve, 0.0, 0.0, 1.0);
                         canvas->add(c);
@@ -487,6 +487,7 @@ int WaveCurveFactory::Liu_half_wavecurve(const ReferencePoint &ref,
                 }
                 #endif
 
+            if (shck_info == SHOCKCURVE_OK){
                 future_curve_initial_point = shkcurve.last_point;
                 future_curve_initial_direction = shkcurve.final_direction;
 
@@ -627,10 +628,10 @@ int WaveCurveFactory::wavecurve(int type, const RealVector &initial_point, int f
                                 int &wavecurve_stopped_because, int &edge){
 
     if (subphysics->inside_contact_region(initial_point, family)){
-        TestTools::pause("Contact region");
+        TestTools::pause("WaveCurveFactory: Contact region");
     }
     else {
-        TestTools::pause("Non-contact region");
+        TestTools::pause("WaveCurveFactory: Non-contact region");
     }
 
     // Initialize.
