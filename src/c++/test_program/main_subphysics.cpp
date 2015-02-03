@@ -1521,9 +1521,9 @@ int main(){
 
 //    subphysics = new StoneSubPhysics;
 //    subphysics = new Brooks_CoreySubPhysics;
-    subphysics = new CoreyQuadSubPhysics;
+//    subphysics = new CoreyQuadSubPhysics;
 //    subphysics = new KovalSubPhysics;
-//    subphysics = new FoamSubPhysics;
+    subphysics = new FoamSubPhysics;
 //    subphysics = new SorbieSubPhysics;
 //    subphysics = new TPCWSubPhysics;
 //    subphysics = new Quad2SubPhysics;
