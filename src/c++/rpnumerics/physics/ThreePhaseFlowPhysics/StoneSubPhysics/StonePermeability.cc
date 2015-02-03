@@ -11,6 +11,7 @@
  * Includes:
  */
 #include "StonePermeability.h"
+#include "StoneSubPhysics.h"
 #include <iostream>
 
 using namespace std;
@@ -89,9 +90,9 @@ StonePermeability::StonePermeability(ThreePhaseFlowSubPhysics *s) : ThreePhaseFl
     expow_parameter = new Parameter(std::string("expow"), 2.0);
     expog_parameter = new Parameter(std::string("expog"), 2.0);
 
-    cnw_parameter = new Parameter(std::string("cnw"), 0.1);
-    cno_parameter = new Parameter(std::string("cno"), 0.1);
-    cng_parameter = new Parameter(std::string("cng"), 0.0);
+//    cnw_parameter = new Parameter(std::string("cnw"), 0.1);
+//    cno_parameter = new Parameter(std::string("cno"), 0.1);
+//    cng_parameter = new Parameter(std::string("cng"), 0.0);
 
     lw_parameter = new Parameter(std::string("lw"), 0.0);
     lg_parameter = new Parameter(std::string("lg"), 0.0);
@@ -108,9 +109,9 @@ StonePermeability::StonePermeability(ThreePhaseFlowSubPhysics *s) : ThreePhaseFl
     parameters_.push_back(expow_parameter);
     parameters_.push_back(expog_parameter);
 
-    parameters_.push_back(cnw_parameter);
-    parameters_.push_back(cno_parameter);
-    parameters_.push_back(cng_parameter);
+//    parameters_.push_back(cnw_parameter);
+//    parameters_.push_back(cno_parameter);
+//    parameters_.push_back(cng_parameter);
 
     parameters_.push_back(lw_parameter);
     parameters_.push_back(lg_parameter);
@@ -141,9 +142,9 @@ void StonePermeability::Diff_PermabilityWater(double sw, double so, double sg, d
     double expow_ = expow_parameter->value();
     double expog_ = expog_parameter->value();
 
-    double cnw_ = cnw_parameter->value();
-    double cng_ = cng_parameter->value();
-    double cno_ = cno_parameter->value();
+    double cnw_ = subphysics_->cnw()->value();
+    double cng_ = subphysics_->cng()->value();
+    double cno_ = subphysics_->cno()->value();
 
     double epsl_ = epsl_parameter->value();
 
@@ -190,9 +191,9 @@ void StonePermeability::Diff_PermabilityOil(double sw, double so, double sg, dou
     double expow_ = expow_parameter->value();
     double expog_ = expog_parameter->value();
 
-    double cnw_ = cnw_parameter->value();
-    double cng_ = cng_parameter->value();
-    double cno_ = cno_parameter->value();
+    double cnw_ = subphysics_->cnw()->value();
+    double cng_ = subphysics_->cng()->value();
+    double cno_ = subphysics_->cno()->value();
 
     double epsl_ = epsl_parameter->value();
 
@@ -268,9 +269,9 @@ void StonePermeability::Diff_PermabilityGas(double sw, double so, double sg, dou
     double expow_ = expow_parameter->value();
     double expog_ = expog_parameter->value();
 
-    double cnw_ = cnw_parameter->value();
-    double cng_ = cng_parameter->value();
-    double cno_ = cno_parameter->value();
+    double cnw_ = subphysics_->cnw()->value();
+    double cng_ = subphysics_->cng()->value();
+    double cno_ = subphysics_->cno()->value();
 
     double epsl_ = epsl_parameter->value();
 
@@ -319,9 +320,9 @@ int StonePermeability::kowden_jet(double sow, int degree, JetMatrix &kowj){
     double expow_ = expow_parameter->value();
     double expog_ = expog_parameter->value();
 
-    double cnw_ = cnw_parameter->value();
-    double cng_ = cng_parameter->value();
-    double cno_ = cno_parameter->value();
+    double cnw_ = subphysics_->cnw()->value();
+    double cng_ = subphysics_->cng()->value();
+    double cno_ = subphysics_->cno()->value();
 
     double epsl_ = epsl_parameter->value();
 
@@ -383,9 +384,9 @@ int StonePermeability::kogden_jet(double sog, int degree, JetMatrix &kogj){
     double expow_ = expow_parameter->value();
     double expog_ = expog_parameter->value();
 
-    double cnw_ = cnw_parameter->value();
-    double cng_ = cng_parameter->value();
-    double cno_ = cno_parameter->value();
+    double cnw_ = subphysics_->cnw()->value();
+    double cng_ = subphysics_->cng()->value();
+    double cno_ = subphysics_->cno()->value();
 
     double epsl_ = epsl_parameter->value();
 
@@ -449,9 +450,9 @@ int StonePermeability::PermeabilityWater_jet(const RealVector &state, int degree
     double expow_ = expow_parameter->value();
     double expog_ = expog_parameter->value();
 
-    double cnw_ = cnw_parameter->value();
-    double cng_ = cng_parameter->value();
-    double cno_ = cno_parameter->value();
+    double cnw_ = subphysics_->cnw()->value();
+    double cng_ = subphysics_->cng()->value();
+    double cno_ = subphysics_->cno()->value();
 
     double epsl_ = epsl_parameter->value();
 
@@ -539,9 +540,9 @@ void StonePermeability::reduced_permeability(const RealVector &state, RealVector
     double expow_ = expow_parameter->value();
     double expog_ = expog_parameter->value();
 
-    double cnw_ = cnw_parameter->value();
-    double cng_ = cng_parameter->value();
-    double cno_ = cno_parameter->value();
+    double cnw_ = subphysics_->cnw()->value();
+    double cng_ = subphysics_->cng()->value();
+    double cno_ = subphysics_->cno()->value();
 
     double epsl_ = epsl_parameter->value();
 
@@ -610,9 +611,9 @@ int StonePermeability::PermeabilityOil_jet(const RealVector &state, int degree, 
     double expow_ = expow_parameter->value();
     double expog_ = expog_parameter->value();
 
-    double cnw_ = cnw_parameter->value();
-    double cng_ = cng_parameter->value();
-    double cno_ = cno_parameter->value();
+    double cnw_ = subphysics_->cnw()->value();
+    double cng_ = subphysics_->cng()->value();
+    double cno_ = subphysics_->cno()->value();
 
     double epsl_ = epsl_parameter->value();
 
@@ -719,9 +720,9 @@ int StonePermeability::PermeabilityGas_jet(const RealVector &state, int degree, 
     double expow_ = expow_parameter->value();
     double expog_ = expog_parameter->value();
 
-    double cnw_ = cnw_parameter->value();
-    double cng_ = cng_parameter->value();
-    double cno_ = cno_parameter->value();
+    double cnw_ = subphysics_->cnw()->value();
+    double cng_ = subphysics_->cng()->value();
+    double cno_ = subphysics_->cno()->value();
 
     double epsl_ = epsl_parameter->value();
 

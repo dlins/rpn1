@@ -17,6 +17,7 @@
 #include "StonePermParams.h"
 #include "JetMatrix.h"
 #include "ThreePhaseFlowPermeability.h"
+#include "ThreePhaseFlowSubPhysics.h"
 
 /*
  * ---------------------------------------------------------------
@@ -29,7 +30,7 @@ class StonePermeability : public ThreePhaseFlowPermeability {
     protected:
         Parameter *expw_parameter,  *expg_parameter, *expo_parameter;
         Parameter *expow_parameter, *expog_parameter;
-        Parameter *cnw_parameter, *cng_parameter, *cno_parameter;
+//        Parameter *cnw_parameter, *cng_parameter, *cno_parameter;
         Parameter *lw_parameter, *lg_parameter;
         Parameter *low_parameter, *log_parameter;
         Parameter *epsl_parameter;
@@ -57,9 +58,9 @@ class StonePermeability : public ThreePhaseFlowPermeability {
         Parameter* expow(){return expow_parameter;}
         Parameter* expog(){return expog_parameter;}
 
-        Parameter* cnw(){return cnw_parameter;}
-        Parameter* cno(){return cno_parameter;}
-        Parameter* cng(){return cng_parameter;}
+        Parameter* cnw(){return subphysics_->cnw();}
+        Parameter* cno(){return subphysics_->cno();}
+        Parameter* cng(){return subphysics_->cng();}
 
         Parameter* lw(){return lw_parameter;}
         Parameter* lg(){return lg_parameter;}

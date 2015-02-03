@@ -37,7 +37,7 @@ class SubPhysics;
 
 #define WAVECURVEFACTORY_INVALID_PARAMETERS                     (-100)
 
-//#define TESTWAVECURVEFACTORY
+#define TESTWAVECURVEFACTORY
 //#ifdef TESTWAVECURVEFACTORY
 //#include "canvas.h"
 //#include "canvasmenuscroll.h"
@@ -186,10 +186,10 @@ class WaveCurveFactory {
             return;
         }
 
-        #ifdef TESTWAVECURVEFACTORY
-        Canvas *canvas;
-        CanvasMenuScroll *scroll;
-        #endif
+//        #ifdef TESTWAVECURVEFACTORY
+//        Canvas *canvas;
+//        CanvasMenuScroll *scroll;
+//        #endif
 };
 
 #endif // _WAVECURVEFACTORY_

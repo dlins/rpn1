@@ -12,7 +12,6 @@
 #include "ViscosityJetMatrix.h"
 #include "Viscosity_Matrix.h"
 #include "ReferencePoint.h"
-#include "Eigenproblem2x2.h"
 
 #define INTERPOLATION_ERROR -1
 #define INTERPOLATION_OK     0

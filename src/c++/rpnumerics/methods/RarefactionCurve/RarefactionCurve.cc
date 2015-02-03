@@ -206,7 +206,7 @@ int RarefactionCurve::initialize(const RealVector &p, int fam, int increase, Rea
 
     JetMatrix F_jet(n), G_jet(n);
     f->jet(p, F_jet, 2);
-    g->jet(p, G_jet, 2);    
+    g->jet(p, G_jet, 2);
 
     DoubleMatrix F_J = F_jet.Jacobian();
     DoubleMatrix G_J = G_jet.Jacobian();
@@ -216,6 +216,8 @@ int RarefactionCurve::initialize(const RealVector &p, int fam, int increase, Rea
 
     std::vector<eigenpair> e;
     Eigen::eig(n, F_J.data(), G_J.data(), e);
+
+    std::cout << (void*)f << std::endl;
 
     double lambda = e[fam].r;
     RealVector rm(n, e[fam].vrr.data()); // Right eigenvector

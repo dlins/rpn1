@@ -77,12 +77,15 @@ class ThreePhaseFlowSubPhysics : public SubPhysics {
         Parameter* muw(){return muw_parameter;}
         Parameter* muo(){return muo_parameter;}
         Parameter* mug(){return mug_parameter;}
-        Parameter* cnw(){return muw_parameter;}
-        Parameter* cno(){return muo_parameter;}
-        Parameter* cng(){return mug_parameter;}
+
+        Parameter* cnw(){return cnw_parameter;}
+        Parameter* cno(){return cno_parameter;}
+        Parameter* cng(){return cng_parameter;}
+
         Parameter* grw(){return grw_parameter;}
         Parameter* gro(){return gro_parameter;}
         Parameter* grg(){return grg_parameter;}
+
         Parameter* vel(){return vel_parameter;}
 
         // Permeability.

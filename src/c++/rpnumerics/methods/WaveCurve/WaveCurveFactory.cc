@@ -44,10 +44,10 @@ WaveCurveFactory::WaveCurveFactory(SubPhysics *s): subphysics(s){
     type[1] = std::string("Composite Curve");
     type[2] = std::string("Shock Curve");
 
-    #ifdef TESTWAVECURVEFACTORY
-    canvas = 0;
-    scroll = 0;
-    #endif 
+//    #ifdef TESTWAVECURVEFACTORY
+//    canvas = 0;
+//    scroll = 0;
+//    #endif 
 }
 
 WaveCurveFactory::WaveCurveFactory(const AccumulationFunction *gg, const FluxFunction *ff, const Boundary *bb, const ODE_Solver *o,
@@ -67,10 +67,10 @@ WaveCurveFactory::WaveCurveFactory(const AccumulationFunction *gg, const FluxFun
     type[1] = std::string("Composite Curve");
     type[2] = std::string("Shock Curve");
 
-    #ifdef TESTWAVECURVEFACTORY
-    canvas = 0;
-    scroll = 0;
-    #endif 
+//    #ifdef TESTWAVECURVEFACTORY
+//    canvas = 0;
+//    scroll = 0;
+//    #endif 
 }
 
 WaveCurveFactory::~WaveCurveFactory(){
@@ -86,6 +86,8 @@ int WaveCurveFactory::Liu_half_wavecurve(const ReferencePoint &ref,
                                          WaveCurve &hwc,
                                          int &wavecurve_stopped_because, 
                                          int &edge){
+
+//    TestTools::pause("Liu");
 
     // Kludge to solve the fact that the shockspeed at the reference point is being returned as NaN, 
     // which messes up with the Riemann Profile.
@@ -354,7 +356,7 @@ int WaveCurveFactory::Liu_half_wavecurve(const ReferencePoint &ref,
 //                            scroll->add(ss.str().c_str(), canvas, c);
 //                        }
 //
-//                        TestTools::pause("Composite plotted.");
+////                        TestTools::pause("Composite plotted.");
 //                    }
 //                }
 //                #endif
@@ -628,10 +630,10 @@ int WaveCurveFactory::wavecurve(int type, const RealVector &initial_point, int f
                                 int &wavecurve_stopped_because, int &edge){
 
     if (subphysics->inside_contact_region(initial_point, family)){
-//        TestTools::pause("Contact region");
+//        TestTools::pause("WaveCurveFactory: Contact region");
     }
     else {
-//        TestTools::pause("Non-contact region");
+//        TestTools::pause("WaveCurveFactory: Non-contact region");
     }
 
     // Initialize.
@@ -662,7 +664,7 @@ int WaveCurveFactory::wavecurve(int type, const RealVector &initial_point, int f
 
     Liu_half_wavecurve(ref, initial_point, family, increase, SHOCK_CURVE,       -initial_direction, linobj, linear_function, hwc, wavecurve_stopped_because, edge);
 
-    for (int i = 0; i < hwc.wavecurve.size(); i++) std::cout << "Curve\'s size = " << hwc.wavecurve[i].curve.size() <<"type: "<<hwc.wavecurve[i].type<< std::endl;
+    for (int i = 0; i < hwc.wavecurve.size(); i++) std::cout << "Curve\'s size = " << hwc.wavecurve[i].curve.size() << std::endl;
 
     add_arclength(0, hwc.beginnig_of_second_half - 1, 1.0, hwc);
     add_arclength(hwc.beginnig_of_second_half, hwc.wavecurve.size() - 1, -1.0, hwc);

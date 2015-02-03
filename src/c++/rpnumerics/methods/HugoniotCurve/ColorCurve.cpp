@@ -546,9 +546,13 @@ void ColorCurve::classify_segment(RealVector &p, RealVector &q,
     std::vector<double> eigenvalue_p, eigenvalue_q;
     std::string ct_p, ct_q;
 
+    std::cout << "Before classifying p = " << p << std::endl;
     int type_p = classify_point(p, s_p, eigenvalue_p, ct_p);
+    std::cout << "After classifying p" << std::endl;
 
+    std::cout << "Before classifying q = " << q << std::endl;
     int type_q = classify_point(q, s_q, eigenvalue_q, ct_q);
+    std::cout << "After classifying q" << std::endl;
 
     if (type_p == UNCLASSIFIABLE_POINT || type_q == UNCLASSIFIABLE_POINT) return;
 
@@ -584,9 +588,11 @@ void ColorCurve::classify_segment(RealVector &p, RealVector &q,
         hpl.eigenvalue[0].component(j) = eigenvalue_p[j];
     }
 
+    std::cout << "        Begin classify_segment_with_data: p = " << type_p << ", q = " << type_q << std::endl;
     classify_segment_with_data(p, s_p, eigenvalue_p, ct_p, type_p,
                                q, s_q, eigenvalue_q, ct_q, type_q,
                                hpl, classified_curve, transition_list);
+    std::cout << "        End classify_segment_with_data" << std::endl;
 
     return;
 }
@@ -618,13 +624,8 @@ int ColorCurve::interpolate(const RealVector &p, double &s_p,
     // TODO: Pensar em mandar isto na chamada
     std::vector<eigenpair> ep, eq;
 
-//    Eigen::eig(dim, (JF_ref - s_p * JG_ref).data(), B_ref.M().data(), ep);
-//    Eigen::eig(dim, (JF_ref - s_q * JG_ref).data(), B_ref.M().data(), eq);
-
-    std::vector<Eigenvalue> evp, evq;
-    Eigenproblem2x2 e2x2;
-    e2x2.find_eigenvalues(JF_ref - s_p*JG_ref, evp);
-    e2x2.find_eigenvalues(JF_ref - s_q*JG_ref, evq);
+    Eigen::eig(dim, (JF_ref - s_p * JG_ref).data(), B_ref.M().data(), ep);
+    Eigen::eig(dim, (JF_ref - s_q * JG_ref).data(), B_ref.M().data(), eq);
 
     // Number of inequalities
     int noi = 0;
@@ -634,12 +635,8 @@ int ColorCurve::interpolate(const RealVector &p, double &s_p,
     //
     for (int i = 0; i < fam; i++) {
         if (abs_ineq % 2) {
-//            fp = ep[i].r - s_p;
-//            fq = eq[i].r - s_q;
-
-            fp = evp[i].real - s_p;
-            fq = evq[i].real - s_q;
-
+            fp = ep[i].r - s_p;
+            fq = eq[i].r - s_q;
             if (fabs(fq - fp) < epsilon) return INTERPOLATION_ERROR;
             alpha.push_back(fq / (fq - fp));
             rtype.push_back(increase);
@@ -648,7 +645,7 @@ int ColorCurve::interpolate(const RealVector &p, double &s_p,
         abs_ineq /= 2;
         increase *= 2;
 
-        /*        // Here the alphas are organized in increasing order
+        /*        // Here the alphas are orginized in increasing order
                 // (Thus alpha[0] will be closer to zero, and r[noi-1] closer one).        
                 if (noi > 1) {
                     for (int j = noi; j > 0; j--) {
@@ -768,10 +765,7 @@ int ColorCurve::complete_point(RealVector &p, double &s, std::vector<double> &ei
     ViscosityJetMatrix B(dim, dim, dim);
     if (vm != 0) vm->fill_viscous_matrix(p, B, 0);
 
-//    Eigen::eig(dim, (JF - s * JG).data(), B.M().data(), e);
-    Eigenproblem2x2 e2x2;
-    std::vector<Eigenvalue> evs;
-    e2x2.find_eigenvalues(JF - s * JG, evs);
+    Eigen::eig(dim, (JF - s * JG).data(), B.M().data(), e); 
 
     {
 //        std::cout << "ColorCurve::complete_point. e.size() = " << e.size() << std::endl;
@@ -784,18 +778,15 @@ int ColorCurve::complete_point(RealVector &p, double &s, std::vector<double> &ei
 //        std::cout << "B.M() = " << std::endl; B.M().print();
     }
 
-//    eigenvalue.resize(e.size());
-//    for (int i = 0; i < e.size(); i++) eigenvalue[i] = e[i].r + s;
-
-    eigenvalue.resize(evs.size());
-    for (int i = 0; i < evs.size(); i++) eigenvalue[i] = evs[i].real + s;
+    eigenvalue.resize(e.size());
+    for (int i = 0; i < e.size(); i++) eigenvalue[i] = e[i].r + s;
 
     // This routine gives the possible pairs that are complex, just one position is stored.
     // For that reason, when such a pair is found, it jumps twice (i++) to look for new pairs.
     int complex_count = 0;
     complex[0] = 0;
-    for (int i = 0; i < evs.size();) {
-        if (fabs(evs[i].imaginary) > 0) {
+    for (int i = 0; i < e.size();) {
+        if (fabs(e[i].i) > 0) {
             // The complex notation ("+." or "-.") will be introduced on the second eigenvalue.
             i++;
             complex[complex_count] = i;
@@ -865,11 +856,7 @@ int ColorCurve::classify_point(RealVector &p, double &s, std::vector<double> &ei
 
 
 
-//    Eigen::eig(dim, (JF_ref - s * JG_ref).data(), B_ref.M().data(), e);
-    Eigenproblem2x2 e2x2;
-    std::vector<Eigenvalue> e;
-    e2x2.find_eigenvalues(JF_ref - s * JG_ref, e);
-
+    Eigen::eig(dim, (JF_ref - s * JG_ref).data(), B_ref.M().data(), e);
 //    std::cout << "    e.size() = " << e.size() << std::endl;
 
     int increment = 1;
@@ -883,7 +870,7 @@ int ColorCurve::classify_point(RealVector &p, double &s, std::vector<double> &ei
     //
     for (int fam = 0; fam < dim; fam++) {
         // Assing increments for left side (reference point)
-        if (e[fam].real > 0.0) {
+        if (e[fam].r > 0.0) {
             type += increment;
             signature += sp;
         } else signature += sm;
@@ -904,7 +891,7 @@ int ColorCurve::classify_point(RealVector &p, double &s, std::vector<double> &ei
     int complex_count = 0;
     complex_ref[0] = 0;
     for (int i = 0; i < dim;) {
-        if (fabs(e[i].imaginary) > 0) {
+        if (fabs(e[i].i) > 0) {
             // The complex notation ("+." or "-.") will be introduced on the second eigenvalue.
             i++;
             complex_ref[complex_count] = i;
@@ -1291,22 +1278,17 @@ int ColorCurve::complete_point(RealVector &p, double &s, std::vector<double> &ei
 
     // Eigenvalues.
     //
-//    std::vector<eigenpair> e;
-//    Eigen::eig(dim, &JF[0][0], &JG[0][0], e);
-
-    Eigenproblem2x2 e2x2;
-    std::vector<Eigenvalue> e;
-    e2x2.find_eigenvalues(DoubleMatrix(2, 2, &JF[0][0]), e);
-
+    std::vector<eigenpair> e;
+    Eigen::eig(dim, &JF[0][0], &JG[0][0], e);
     eigenvalue.resize(e.size());
-    for (int i = 0; i < e.size(); i++) eigenvalue[i] = e[i].real;
+    for (int i = 0; i < e.size(); i++) eigenvalue[i] = e[i].r;
 
     // This routine gives the possible pairs that are complex, just one position is stored.
     // For that reason, when such a pair is found, it jumps twice (i++) to look for new pairs.
     int complex_count = 0;
     complex[0] = 0;
     for (int i = 0; i < e.size();) {
-        if (fabs(e[i].imaginary) > 0) {
+        if (fabs(e[i].i) > 0) {
             // The complex notation ("+." or "-.") will be introduced on the second eigenvalue.
             i++;
             complex[complex_count] = i;
