@@ -144,6 +144,11 @@ FoamSubPhysics::FoamSubPhysics() : ThreePhaseFlowSubPhysics(){
 
     odesolver_ = new LSODE;
 
+    // TEST HugoniotODE
+//    EulerSolver *euler = new EulerSolver(boundary_, 5);
+    HugoniotODE *hode = new HugoniotODE(this, odesolver_);
+    hugoniot_curve.push_back(hode);
+
     // WaveCurve.
     //
 //    wavecurvefactory_ = new WaveCurveFactory(accumulation_, flux_, boundary_, odesolver_, rarefactioncurve_, shockcurve_, compositecurve_);

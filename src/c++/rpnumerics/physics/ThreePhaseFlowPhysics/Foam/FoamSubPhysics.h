@@ -8,6 +8,8 @@
 #include "FoamViscosity.h"
 #include "FoamShockObserver.h"
 
+#include "HugoniotODE.h"
+
 class FoamSubPhysics : public ThreePhaseFlowSubPhysics {
     private:
     protected:

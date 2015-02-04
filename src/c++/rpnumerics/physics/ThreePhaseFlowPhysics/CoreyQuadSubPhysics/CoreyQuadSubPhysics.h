@@ -10,6 +10,9 @@
 #include "CoreyQuadViscosity.h"
 #include "CoreyQuadWaveCurveFactory.h" 
 
+#include "EulerSolver.h"
+#include "HugoniotODE.h"
+
 class CoreyQuadSubPhysics : public ThreePhaseFlowSubPhysics {
     private:
     protected:
@@ -42,6 +45,11 @@ class CoreyQuadSubPhysics : public ThreePhaseFlowSubPhysics {
 
             return Dp;
         }
+
+        // Kludge (both of them)!
+        virtual bool inside_contact_region(const RealVector &p, int family);
+
+        virtual double distance_to_contact_region(const RealVector &p);
 };
 
 #endif // _COREYQUADSUBPHYSICS_

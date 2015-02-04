@@ -69,7 +69,7 @@ void CoreyQuadExplicitHugoniotCurve::curve(const ReferencePoint &ref, int type, 
             }
             case COREYQUAD_G_VERTEX:
             {
-                // This stays here (and not at the ctor) because the user may have change the parameters.
+                // This stays here (and not at the ctor) because the user may have changed the parameters.
                 //
                 std::vector<RealVector> vertex(3), point_on_side(3);
                 for (int i = 0; i < 3; i++){

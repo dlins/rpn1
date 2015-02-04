@@ -137,9 +137,6 @@ void Hugoniotcb(Fl_Widget*, void*){
 
     canvas->getxy(p(0), p(1));
 
-//    p(0) = -0.00899743;
-//    p(1) =  0.049505;
-
     std::cout << p << std::endl;
 
     if (!subphysics->boundary()->inside(p)) return;
@@ -1437,11 +1434,13 @@ void add_double_contact(){
 // Contact region boundary.
 //
 void contactregionboundarycb(Fl_Widget*, void*){
-    ContactRegionBoundary crb(subphysics);
+//    ContactRegionBoundary crb(subphysics);
+
+    ContactRegionBoundary *crb = subphysics->contact_region_boundary();
 
     for (int fam = 0; fam < subphysics->number_of_families(); fam++){
         std::vector<RealVector> curve;
-        crb.curve(fam, curve);
+        crb->curve(fam, curve);
 
         if (curve.size() > 1){
             SegmentedCurve *c = new SegmentedCurve(curve, 0.0, 0.0, 1.0);
