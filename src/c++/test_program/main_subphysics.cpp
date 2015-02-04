@@ -1718,6 +1718,10 @@ int main(){
 //        canvas->add(c);
 //    }
 
+    #ifdef FOAMDEBUG
+    ((FoamSubPhysics*)subphysics)->set_canvas(canvas);
+    #endif
+
     return Fl::run();
 }
 

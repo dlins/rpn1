@@ -574,7 +574,6 @@ int WaveCurveFactory::wavecurve(int type, const RealVector &initial_point, int f
                                 WaveCurve &hwc, 
                                 int &wavecurve_stopped_because, int &edge){
 
-    if (subphysics->inside_contact_region(initial_point, family)){
 
     // Initialize.
     //
@@ -610,7 +609,7 @@ int WaveCurveFactory::wavecurve(int type, const RealVector &initial_point, int f
     add_arclength(hwc.beginnig_of_second_half, hwc.wavecurve.size() - 1, -1.0, hwc);
 
     return WAVECURVE_OK;
-}
+
 }
 
 void WaveCurveFactory::add_arclength(int begin, int end, double factor, WaveCurve &hwc){

@@ -48,6 +48,11 @@ FoamSubPhysics::FoamSubPhysics() : ThreePhaseFlowSubPhysics(){
     epoil = new Parameter(std::string("epoil"), 0.0, 5.0, 3.0); // The author of the model lets this parameter 
                                                                 // vary between 0 and 5, but it is effectively varying between 2 and 5.
 
+    #ifdef FOAMDEBUG
+    fmdry->add(this);
+    fmoil->add(this);
+    #endif
+
     floil = cno_parameter; // This will remain thus until the difference between floil and cno is figured out.
                            // TODO: When that happens, add floil to the list of parameters.
                            //       Right now adding it would cause a segfault at dtor-time.
