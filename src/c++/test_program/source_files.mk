@@ -66,6 +66,7 @@ ccSRC +=  \
 	../rpnumerics/methods/Secondary_Bifurcations/Explicit_Bifurcation_Curves/Explicit_Bifurcation_Curves.cc \
 	../rpnumerics/methods/Viscosity_Matrix/Viscosity_Matrix.cc \
 	../rpnumerics/methods/Viscosity_Matrix/ViscosityJetMatrix.cc \
+	../rpnumerics/methods/HugoniotODE/HugoniotODE.cc \
 	../rpnumerics/methods/HugoniotCurve/HugoniotCurve.cc \
 	../rpnumerics/methods/HugoniotCurve/ImplicitHugoniotCurve.cc \
 	../rpnumerics/methods/CompositeCurve/CompositeCurve.cc \

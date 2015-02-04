@@ -16,7 +16,9 @@
 
 #include "WaveCurve.h"
 #include "HyperOctree.h"
-//#include "TestTools.h"
+
+
+class SubPhysics;
 
 class SubPhysics;
 

@@ -31,6 +31,7 @@
 #include "BifurcationCurve.h"
 
 #include "Double_Contact.h"
+#include "ContactRegionBoundary.h"
 
 //#include "Extension_Curve.h"
 //#include "Double_Contact.h"
@@ -95,6 +96,8 @@ protected:
     BifurcationCurve *bifurcationcurve_;
 
     Double_Contact *doublecontact_;
+
+    ContactRegionBoundary *contactregionboundary_;
 
 public:
     SubPhysics();
@@ -234,6 +237,11 @@ public:
     virtual unsigned int number_of_families(){
         return number_of_families_;
     }
+
+    virtual ContactRegionBoundary* contact_region_boundary(){
+        return contactregionboundary_;
+    }
+
 
 };
 

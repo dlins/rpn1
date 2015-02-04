@@ -649,7 +649,7 @@ int CompositeCurve::curve(const AccumulationFunction *RarAccum, const FluxFuncti
             std::cout << "Composite, first point: info = " << info << std::endl;
 
             if (info == SHOCKCURVE_NEWTON_DID_NOT_CONVERGE){
-//                TestTools::pause("Composite, SHOCKCURVE_NEWTON_DID_NOT_CONVERGE");
+
                 // In this case, try to retreat even more and create a new shockcurve.
                 Curve shockcurve;
                 std::vector<int> transition_current_index, transition_current_family, transition_reference_index, transition_reference_family;
@@ -770,21 +770,21 @@ int CompositeCurve::curve(const AccumulationFunction *RarAccum, const FluxFuncti
                                                        init_time,  rarcmp_point,
                                                        final_time, out);
 
-        #ifdef TESTCOMPOSITE
-        {
-            RealVector rarpointgraph(0, n, rarcmp_point);
-            Curve2D *rarc = new Curve2D(rarpointgraph, 1.0, 0.0, 0.0, CURVE2D_MARKERS);
-            canvas->add(rarc);
-            scroll->add("Rar point (test)", canvas, rarc);
-
-            RealVector cmppointgraph(n, n, rarcmp_point);
-            Curve2D *cmpc = new Curve2D(rarpointgraph, 0.0, 1.0, 0.0, CURVE2D_MARKERS);
-            canvas->add(cmpc);
-            scroll->add("Cmp point (test)", canvas, cmpc);
-
-            TestTools::pause("Composite point added.");
-        }
-        #endif
+//        #ifdef TESTCOMPOSITE
+//        {
+//            RealVector rarpointgraph(0, n, rarcmp_point);
+//            Curve2D *rarc = new Curve2D(rarpointgraph, 1.0, 0.0, 0.0, CURVE2D_MARKERS);
+//            canvas->add(rarc);
+//            scroll->add("Rar point (test)", canvas, rarc);
+//
+//            RealVector cmppointgraph(n, n, rarcmp_point);
+//            Curve2D *cmpc = new Curve2D(rarpointgraph, 0.0, 1.0, 0.0, CURVE2D_MARKERS);
+//            canvas->add(cmpc);
+//            scroll->add("Cmp point (test)", canvas, cmpc);
+//
+//            TestTools::pause("Composite point added.");
+//        }
+//        #endif
 
         if (use_field_near_double_contact){
             field = &composite_field_near_double_contact;

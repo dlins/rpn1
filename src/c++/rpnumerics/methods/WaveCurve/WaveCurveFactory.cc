@@ -44,6 +44,7 @@ WaveCurveFactory::WaveCurveFactory(SubPhysics *s): subphysics(s){
     type[1] = std::string("Composite Curve");
     type[2] = std::string("Shock Curve");
 
+
 }
 
 WaveCurveFactory::WaveCurveFactory(const AccumulationFunction *gg, const FluxFunction *ff, const Boundary *bb, const ODE_Solver *o,
@@ -63,6 +64,7 @@ WaveCurveFactory::WaveCurveFactory(const AccumulationFunction *gg, const FluxFun
     type[1] = std::string("Composite Curve");
     type[2] = std::string("Shock Curve");
 
+
 }
 
 WaveCurveFactory::~WaveCurveFactory(){
@@ -78,6 +80,8 @@ int WaveCurveFactory::Liu_half_wavecurve(const ReferencePoint &ref,
                                          WaveCurve &hwc,
                                          int &wavecurve_stopped_because, 
                                          int &edge){
+
+
 
     // Kludge to solve the fact that the shockspeed at the reference point is being returned as NaN, 
     // which messes up with the Riemann Profile.
@@ -572,8 +576,6 @@ int WaveCurveFactory::wavecurve(int type, const RealVector &initial_point, int f
 
     if (subphysics->inside_contact_region(initial_point, family)){
 
-    }
-
     // Initialize.
     //
     RealVector initial_direction;
@@ -608,6 +610,7 @@ int WaveCurveFactory::wavecurve(int type, const RealVector &initial_point, int f
     add_arclength(hwc.beginnig_of_second_half, hwc.wavecurve.size() - 1, -1.0, hwc);
 
     return WAVECURVE_OK;
+}
 }
 
 void WaveCurveFactory::add_arclength(int begin, int end, double factor, WaveCurve &hwc){
@@ -870,5 +873,6 @@ void WaveCurveFactory::R_regions(HugoniotContinuation *h, const WaveCurve &c, st
     }
 
     return;
+
 }
 

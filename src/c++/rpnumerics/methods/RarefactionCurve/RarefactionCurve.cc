@@ -383,6 +383,10 @@ int RarefactionCurve::curve(const RealVector &initial_point,
     // Verify if the initial point lies within the contact region.
     //
     if (subphysics->inside_contact_region(initial_point, family)){
+
+    }
+    else {
+    
     }
 
     f = subphysics->flux();
