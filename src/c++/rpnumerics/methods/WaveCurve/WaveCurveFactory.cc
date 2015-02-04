@@ -343,7 +343,6 @@ int WaveCurveFactory::Liu_half_wavecurve(const ReferencePoint &ref,
 
 //            hwc.wavecurve.push_back(cmpcurve);
 
-            if (info_cmp == COMPOSITE_OK){
                 #ifdef TESTWAVECURVEFACTORY
                 {
                     if (canvas != 0){
@@ -361,6 +360,24 @@ int WaveCurveFactory::Liu_half_wavecurve(const ReferencePoint &ref,
                 }
                 #endif
 
+            if (info_cmp == COMPOSITE_OK){
+//                #ifdef TESTWAVECURVEFACTORY
+//                {
+//                    if (canvas != 0){
+//                        Curve2D *c = new Curve2D(cmpcurve.curve, 0.0, 1.0, 0.0);
+//                        canvas->add(c);
+
+//                        if (scroll != 0){
+//                            std::stringstream ss;
+//                            ss << "Cmp., " << cmpcurve.curve.size();
+//                            scroll->add(ss.str().c_str(), canvas, c);
+//                        }
+
+//                        TestTools::pause("Composite plotted.");
+//                    }
+//                }
+//                #endif
+
                 cmpcurve.back_curve_index = rarefaction_list.back();
 
                 cmpcurve.back_curve_pointer.resize(cmpcurve.curve.size());
@@ -368,7 +385,6 @@ int WaveCurveFactory::Liu_half_wavecurve(const ReferencePoint &ref,
 
                 std::cout << "cmpcurve.back_curve_index = " << cmpcurve.back_curve_index << std::endl;
                 std::cout << "composite_stopped_because = " << composite_stopped_because << std::endl;
-
                 
                 hwc.wavecurve.push_back(cmpcurve);
 

@@ -13,8 +13,8 @@ CoreyQuadSubPhysics::CoreyQuadSubPhysics() : ThreePhaseFlowSubPhysics(){
     vel_parameter = new Parameter(std::string("vel"), 0.0);
 
     grw_parameter = new Parameter(std::string("grw"), 1.0);
-    gro_parameter = new Parameter(std::string("gro"), .8);
-    grg_parameter = new Parameter(std::string("grg"), .7);
+    gro_parameter = new Parameter(std::string("gro"), .7);
+    grg_parameter = new Parameter(std::string("grg"), .6);
 
     // TODO: Introduce these parameters into the flux's equations. When
     //       When that happens, add these parameters to the parameter list
@@ -59,8 +59,8 @@ CoreyQuadSubPhysics::CoreyQuadSubPhysics() : ThreePhaseFlowSubPhysics(){
     // GridValues.
     //
     std::vector<int> number_of_cells(2);
-    number_of_cells[0] = 512;
-    number_of_cells[1] = 512;
+    number_of_cells[0] = 128;
+    number_of_cells[1] = 128;
 
     gridvalues_ = new GridValues(boundary_, boundary_->minimums(), boundary_->maximums(), number_of_cells);
     for (int i = 0; i < equation_parameter_.size(); i++) equation_parameter_[i]->add(gridvalues_);
@@ -104,7 +104,8 @@ CoreyQuadSubPhysics::CoreyQuadSubPhysics() : ThreePhaseFlowSubPhysics(){
 //    Stone_Explicit_Bifurcation_Curves bc((StoneFluxFunction*)flux);
     compositecurve_ = new CompositeCurve(accumulation_, flux_, boundary_, shockcurve_, 0/*&bc*/);
 
-    odesolver_ = new LSODE;
+//    odesolver_ = new LSODE;
+    odesolver_ = new EulerSolver(boundary_, 10);
 
     // TEST HugoniotODE
 //    EulerSolver *euler = new EulerSolver(boundary_, 5);

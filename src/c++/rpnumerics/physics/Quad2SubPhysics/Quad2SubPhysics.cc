@@ -108,8 +108,8 @@ Quad2SubPhysics::Quad2SubPhysics(): SubPhysics(){
     //
     transformation_matrix_ = DoubleMatrix::eye(2);
 
-    xlabel_ = std::string("u");
-    ylabel_ = std::string("v");
+    label_.push_back(std::string("u"));
+    label_.push_back(std::string("v"));
 
     info_subphysics_ = std::string("Quad2SubPhysics");
 }

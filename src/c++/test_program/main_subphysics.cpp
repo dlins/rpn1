@@ -160,22 +160,14 @@ void Hugoniotcb(Fl_Widget*, void*){
         scroll->add(ss.str().c_str(), canvas, mcc);
     }
 
-//    std::vector<Curve> c;
-//    hugoniot->curve(ref, type, c);
-
-//    WaveCurve w;
-
-//    for (int i = 0; i < c.size(); i++){
-//        w.wavecurve.push_back(c[i]);
-//        w.wavecurve.back().type = SHOCK_CURVE;
-
-////        Curve2D *curve = new Curve2D(c[i].curve, 0.0, 0.0, 1.0);
-////        canvas->add(curve);
-//    }
-
-//    WaveCurvePlot *r = new WaveCurvePlot(w, CURVE2D_SOLID_LINE);
-//    canvas->add(r);
-//    scroll->add("Hugoniot", canvas, r);
+    // TEST ONLY
+    {
+        // Ref. point.
+        {
+//            Curve2D ref
+        }
+    }
+    // TEST ONLY
 
     return;
 }
@@ -866,6 +858,12 @@ void wavecurvefactioncb(Fl_Widget*, void*){
 //    initial_point(0) = 0.26629;
 //    initial_point(1) = 0.73193;
 
+    initial_point(0) = 0.5778336;
+    initial_point(1) = 0.05401;
+
+    initial_point(0) = 0.54;
+    initial_point(1) = 0.055;
+
     std::cout << "Wavecurve callback, initial point = " << initial_point << std::endl;
     if (!subphysics->boundary()->inside(initial_point)){
         std::stringstream ss;
@@ -927,8 +925,8 @@ void doublecontactbtncb(Fl_Widget*, void*){
 
     std::vector<RealVector> left_curve, right_curve;
 
-    int lfam = 1;
-    int rfam = 1;
+    int lfam = 0;
+    int rfam = 0;
 
     dc->curve(subphysics->flux(), subphysics->accumulation(), subphysics->gridvalues(), lfam,
               subphysics->flux(), subphysics->accumulation(), subphysics->gridvalues(), rfam,
@@ -1508,6 +1506,22 @@ void on_move_coords(Fl_Widget*, void*){
     return;
 }
 
+void rarefaction_field_plot(){
+    GridValues *g = subphysics->gridvalues();
+    g->fill_eigenpairs_on_grid(subphysics->flux(), subphysics->accumulation());
+
+    int rows = g->grid.rows();
+    int cols = g->grid.cols();
+
+    for (int i = 0; i < rows*cols; i++){
+        if (g->point_inside(i)){
+            
+        }
+    }
+
+    return;
+}
+
 int main(){
     Fl::scheme("gtk+");
     subphysics = 0;
@@ -1520,9 +1534,9 @@ int main(){
 
 //    subphysics = new StoneSubPhysics;
 //    subphysics = new Brooks_CoreySubPhysics;
-//    subphysics = new CoreyQuadSubPhysics;
+    subphysics = new CoreyQuadSubPhysics;
 //    subphysics = new KovalSubPhysics;
-    subphysics = new FoamSubPhysics;
+//    subphysics = new FoamSubPhysics;
 //    subphysics = new SorbieSubPhysics;
 //    subphysics = new TPCWSubPhysics;
 //    subphysics = new Quad2SubPhysics;
@@ -1555,11 +1569,12 @@ int main(){
             }
         }
 
-        canvas->set_transform_matrix(subphysics->transformation_matrix().data());
+//        canvas->set_transform_matrix(subphysics->transformation_matrix().data());
         canvas->nozoom();
 
-        canvas->xlabel(subphysics->xlabel().c_str());
-        canvas->ylabel(subphysics->ylabel().c_str());
+        std::vector<std::string> label = subphysics->label();
+        canvas->xlabel(label[0].c_str());
+        canvas->ylabel(label[1].c_str());
 
         // Scroll.
         //
@@ -1718,7 +1733,9 @@ int main(){
 //    }
 
     #ifdef FOAMDEBUG
-    ((FoamSubPhysics*)subphysics)->set_canvas(canvas);
+    if (subphysics->info_subphysics().compare(std::string("Foam")) == 0){
+        ((FoamSubPhysics*)subphysics)->set_canvas(canvas);
+    }
     #endif
 
     return Fl::run();

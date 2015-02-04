@@ -120,7 +120,7 @@ int CompositeCurve::composite_field(int *two_n, double *xi, double *pointpair, d
     // Check the orientation of cf. (THIS IS ONLY A TEST).
     //
     if (cf*composite_object->composite_reference_vector < 0.0){
-        cf *= -1.0;
+//        cf *= -1.0;
     }
 
     //

@@ -18,8 +18,9 @@ ThreePhaseFlowSubPhysics::ThreePhaseFlowSubPhysics() : SubPhysics() {
     O_vertex(1) = 1.0;
 
     info_subphysics_ = std::string("ThreePhaseFlow base class");
-    xlabel_ = std::string("sw");
-    ylabel_ = std::string("so");
+
+    label_.push_back(std::string("sw"));
+    label_.push_back(std::string("so"));
 
     // Extension curve.
     //

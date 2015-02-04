@@ -84,8 +84,9 @@ TPCWSubPhysics::TPCWSubPhysics(){
     transformation_matrix_ = DoubleMatrix::eye(3);
     transformation_matrix_(0, 0) = -1.0;
 
-    xlabel_ = std::string("s");
-    ylabel_ = std::string("Theta");
+    label_.push_back(std::string("s"));
+    label_.push_back(std::string("Theta"));
+    label_.push_back(std::string("u"));
     
     // Info.
     //
