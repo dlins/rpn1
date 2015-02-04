@@ -10,7 +10,17 @@
 
 #include "HugoniotODE.h"
 
+#define FOAMDEBUG
+#ifdef FOAMDEBUG
+#include "canvas.h"
+#include "curve2d.h"
+#endif
+
+#ifdef FOAMDEBUG
+class FoamSubPhysics : public ThreePhaseFlowSubPhysics, public Observer {
+#else
 class FoamSubPhysics : public ThreePhaseFlowSubPhysics {
+#endif
     private:
     protected:
         Parameter *nw_parameter,  *no_parameter,  *ng_parameter;
@@ -27,6 +37,11 @@ class FoamSubPhysics : public ThreePhaseFlowSubPhysics {
         //
         FoamShockObserver *fso;
         Parameter *max_distance_to_contact_region_parameter_;
+
+        #ifdef FOAMDEBUG
+        Canvas *canvas;
+        Curve2D *fm_curve;
+        #endif
     public:
         FoamSubPhysics();
         virtual ~FoamSubPhysics();
@@ -36,6 +51,33 @@ class FoamSubPhysics : public ThreePhaseFlowSubPhysics {
         Parameter* max_distance_to_contact_region_parameter(){
             return max_distance_to_contact_region_parameter_;
         }
+
+        #ifdef FOAMDEBUG
+        void set_canvas(Canvas *c){canvas = c; change(); return;}
+
+        void change(){
+            if (fm_curve != 0) canvas->erase(fm_curve);
+
+            RealVector p0(2), p1(2), p2(2);
+            p0(0) = fmdry->value();
+            p0(1) = 0.0;
+
+            p1(0) = fmdry->value();
+            p1(1) = fmoil->value();
+
+            p2(0) = 1.0 - fmoil->value();
+            p2(1) = fmoil->value();
+
+            std::vector<RealVector> fmp;
+            fmp.push_back(p0);
+            fmp.push_back(p1);
+            fmp.push_back(p2);
+
+            fm_curve = new Curve2D(fmp, 0.0, 0.0, 0.0);
+
+            canvas->add(fm_curve);
+        }
+        #endif
 };
 
 #endif // _FOAMSUBPHYSICS_
