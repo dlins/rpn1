@@ -71,6 +71,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
     int dimension = env->GetArrayLength(phasePointArray);
 
     double input [dimension];
+    
+    
 
 
 
@@ -96,7 +98,13 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
 
     //-------------------------------------------------------------------
 
+    if(dimension==3){//TODO Remove ! For 3D physics only
+        input[2]=1.0;
+    }
+    
     RealVector Uref(dimension, input);
+    
+    cout<<"Ponto de referencia: "<<Uref<<endl;
     
     const FluxFunction * flux = RpNumerics::physicsVector_->at(0)->flux();
     const AccumulationFunction * accum = RpNumerics::physicsVector_->at(0)->accumulation();
