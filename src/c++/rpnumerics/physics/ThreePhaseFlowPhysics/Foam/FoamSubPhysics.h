@@ -40,7 +40,7 @@ class FoamSubPhysics : public ThreePhaseFlowSubPhysics {
 
         #ifdef FOAMDEBUG
         Canvas *canvas;
-        Curve2D *fm_curve;
+        Curve2D *fm_hor_curve, *fm_ver_curve;
         #endif
     public:
         FoamSubPhysics();
@@ -56,8 +56,6 @@ class FoamSubPhysics : public ThreePhaseFlowSubPhysics {
         void set_canvas(Canvas *c){canvas = c; change(); return;}
 
         void change(){
-            if (fm_curve != 0) canvas->erase(fm_curve);
-
             RealVector p0(2), p1(2), p2(2);
             p0(0) = fmdry->value();
             p0(1) = 0.0;
@@ -68,14 +66,25 @@ class FoamSubPhysics : public ThreePhaseFlowSubPhysics {
             p2(0) = 1.0 - fmoil->value();
             p2(1) = fmoil->value();
 
-            std::vector<RealVector> fmp;
-            fmp.push_back(p0);
-            fmp.push_back(p1);
-            fmp.push_back(p2);
+            // Horizontal curve.
+            //
+            std::vector<RealVector> fm_hor;
+            fm_hor.push_back(p1);
+            fm_hor.push_back(p2);
 
-            fm_curve = new Curve2D(fmp, 0.0, 0.0, 0.0);
+            if (fm_hor_curve != 0) canvas->erase(fm_hor_curve);
+            fm_hor_curve = new Curve2D(fm_hor, .7, 0.0, 0.0);
+            canvas->add(fm_hor_curve);
 
-            canvas->add(fm_curve);
+            // Vertical curve.
+            //
+            std::vector<RealVector> fm_ver;
+            fm_ver.push_back(p0);
+            fm_ver.push_back(p1);
+
+            if (fm_ver_curve != 0) canvas->erase(fm_ver_curve);
+            fm_ver_curve = new Curve2D(fm_ver, 0.0, 0.0, 0.0);
+            canvas->add(fm_ver_curve);
         }
         #endif
 };
