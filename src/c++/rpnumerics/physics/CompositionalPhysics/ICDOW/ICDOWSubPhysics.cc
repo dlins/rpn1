@@ -124,8 +124,9 @@ ICDOWSubPhysics::ICDOWSubPhysics() : SubPhysics() {
     //
     transformation_matrix_ = DoubleMatrix::eye(2);
 
-    xlabel_ = std::string("sw");
-    ylabel_ = std::string("H+");
+    label_.push_back(std::string("sw"));
+    label_.push_back(std::string("H+"));
+    label_.push_back(std::string("u"));
     
     // Info.
     //

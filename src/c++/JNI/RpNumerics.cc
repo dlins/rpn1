@@ -64,9 +64,6 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_readNativePhysicsConfig
     jclass curveConfigurationClass = env->FindClass("rpn/configuration/CurveConfiguration");
 
 
-
-
-
     jclass physicsConfigurationParamsClass = env->FindClass("rpn/configuration/PhysicsConfigurationParams");
 
     jclass parameterLeafClass = env->FindClass("rpn/configuration/ParameterLeaf");
@@ -929,32 +926,39 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setBoundary
  * Method:    getXLabel
  * Signature: ()Ljava/lang/String;
  */
-JNIEXPORT jstring JNICALL Java_rpnumerics_RPNUMERICS_getXLabel
+JNIEXPORT jobject JNICALL Java_rpnumerics_RPNUMERICS_getLabelVector
 (JNIEnv * env, jclass cls) {
-
+    
+    
+    jclass vectorClass = env->FindClass("Ljava/util/Vector;");
+         
+    
     jclass stringClass = env->FindClass("Ljava/lang/String;");
+       
+    
+    jmethodID vectorConstructorID = env->GetMethodID(vectorClass, "<init>", "()V");
+    
+    jmethodID vectorAddMethodID = env->GetMethodID(vectorClass, "add", "(Ljava/lang/Object;)Z");
+    
+    
+    jobject vectorLabelNames = env->NewObject(vectorClass, vectorConstructorID);
+    
+    
+    for(int i=0;i < RpNumerics::physicsVector_->at(0)->label().size();i ++){
+        jstring xLabel = env->NewStringUTF(RpNumerics::physicsVector_->at(0)->label().at(i).c_str());
+        
+         env->CallBooleanMethod(vectorLabelNames, vectorAddMethodID, xLabel);
+        
+        
+        
+    }
 
-    jstring xLabel = env->NewStringUTF(RpNumerics::physicsVector_->at(0)->xlabel().c_str());
+    return vectorLabelNames;
 
-    return xLabel;
+
 
 }
 
-/*
- * Class:     rpnumerics_RPNUMERICS
- * Method:    getYLabel
- * Signature: ()Ljava/lang/String;
- */
-JNIEXPORT jstring JNICALL Java_rpnumerics_RPNUMERICS_getYLabel
-(JNIEnv * env, jclass cls) {
-
-    jclass stringClass = env->FindClass("Ljava/lang/String;");
-
-    jstring yLabel = env->NewStringUTF(RpNumerics::physicsVector_->at(0)->ylabel().c_str());
-
-    return yLabel;
-
-}
 
 /*
  * Class:     rpnumerics_RPNUMERICS

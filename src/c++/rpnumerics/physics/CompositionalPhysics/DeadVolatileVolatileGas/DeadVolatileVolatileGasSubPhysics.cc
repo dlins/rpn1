@@ -5,17 +5,17 @@ DeadVolatileVolatileGasSubPhysics::DeadVolatileVolatileGasSubPhysics() : SubPhys
 
     // Equation parameters.
     //
-    re_parameter  = new Parameter(std::string("re"), 44.0);// re_parameter->value(0.0);
-    rg_parameter  = new Parameter(std::string("rg"), 100.0);
+    re_parameter  = new Parameter(std::string("re"), 1.0);// re_parameter->value(0.0);
+    rg_parameter  = new Parameter(std::string("rg"), 1.6);
     phi_parameter = new Parameter(std::string("phi"), 0.2);
     
     // Thermodynamics parameters.
     //
-    B_parameter = new Parameter(std::string("B"), 7.0);
-    D_parameter = new Parameter(std::string("D"), 3.0);
+    B_parameter = new Parameter(std::string("B"), 120.0);
+    D_parameter = new Parameter(std::string("D"), 40.0);
 
-    mu_oB_parameter = new Parameter(std::string("mu_oB"), 10.0);
-    mu_oD_parameter = new Parameter(std::string("mu_oD"), 8.0);
+    mu_oB_parameter = new Parameter(std::string("mu_oB"), 4.0);
+    mu_oD_parameter = new Parameter(std::string("mu_oD"), 6.0);
     mu_G_parameter  = new Parameter(std::string("mu_G"), 1.0);
 
     // Thermodynamics proper.
@@ -115,8 +115,9 @@ DeadVolatileVolatileGasSubPhysics::DeadVolatileVolatileGasSubPhysics() : SubPhys
     //
     transformation_matrix_ = DoubleMatrix::eye(2);
 
-    xlabel_ = std::string("s");
-    ylabel_ = std::string("y");
+    label_.push_back(std::string("s"));
+    label_.push_back(std::string("y"));
+    label_.push_back(std::string("u"));
     
     // Info.
     //

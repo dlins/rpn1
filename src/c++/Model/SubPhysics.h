@@ -31,6 +31,7 @@
 #include "BifurcationCurve.h"
 
 #include "Double_Contact.h"
+#include "ContactRegionBoundary.h"
 
 //#include "Extension_Curve.h"
 //#include "Double_Contact.h"
@@ -83,7 +84,8 @@ protected:
     //
     DoubleMatrix transformation_matrix_;
 
-    std::string xlabel_, ylabel_;
+//    std::string xlabel_, ylabel_;
+    std::vector<std::string> label_;
 
     std::vector<Parameter*> equation_parameter_;
 
@@ -95,6 +97,8 @@ protected:
     BifurcationCurve *bifurcationcurve_;
 
     Double_Contact *doublecontact_;
+
+    ContactRegionBoundary *contactregionboundary_;
 
 public:
     SubPhysics();
@@ -145,12 +149,16 @@ public:
         return transformation_matrix_;
     }
 
-    virtual std::string xlabel() {
-        return xlabel_;
-    }
+//    virtual std::string xlabel() {
+//        return xlabel_;
+//    }
 
-    virtual std::string ylabel() {
-        return ylabel_;
+//    virtual std::string ylabel() {
+//        return ylabel_;
+//    }
+
+    virtual std::vector<std::string> label(){
+        return label_;
     }
 
     virtual void equation_parameter(std::vector<Parameter*> &ep) {
@@ -234,6 +242,12 @@ public:
     virtual unsigned int number_of_families(){
         return number_of_families_;
     }
+
+
+    virtual ContactRegionBoundary* contact_region_boundary(){
+        return contactregionboundary_;
+    }
+
 
 };
 

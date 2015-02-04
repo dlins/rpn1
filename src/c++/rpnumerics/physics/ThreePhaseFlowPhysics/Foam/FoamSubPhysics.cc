@@ -5,7 +5,6 @@ FoamSubPhysics::FoamSubPhysics() : ThreePhaseFlowSubPhysics(){
     muo_parameter = new Parameter(std::string("muo"), 5.0);
     mug_parameter = new Parameter(std::string("mug0"), 2e-2); // Notice that, even though the name is changed, this parameter is just mug.
 
-
     grw_parameter = new Parameter(std::string("grw"), 1.0);
     gro_parameter = new Parameter(std::string("gro"), 1.0);
     grg_parameter = new Parameter(std::string("grg"), 1.0);
@@ -47,6 +46,11 @@ FoamSubPhysics::FoamSubPhysics() : ThreePhaseFlowSubPhysics(){
     fmoil = new Parameter(std::string("fmoil"), 0.3);
     epoil = new Parameter(std::string("epoil"), 0.0, 5.0, 3.0); // The author of the model lets this parameter 
                                                                 // vary between 0 and 5, but it is effectively varying between 2 and 5.
+
+    #ifdef FOAMDEBUG
+    fmdry->add(this);
+    fmoil->add(this);
+    #endif
 
     floil = cno_parameter; // This will remain thus until the difference between floil and cno is figured out.
                            // TODO: When that happens, add floil to the list of parameters.
@@ -144,6 +148,11 @@ FoamSubPhysics::FoamSubPhysics() : ThreePhaseFlowSubPhysics(){
     compositecurve_ = new CompositeCurve(accumulation_, flux_, boundary_, shockcurve_, 0/*&bc*/);
 
     odesolver_ = new LSODE;
+
+    // TEST HugoniotODE
+//    EulerSolver *euler = new EulerSolver(boundary_, 5);
+    HugoniotODE *hode = new HugoniotODE(this, odesolver_);
+    hugoniot_curve.push_back(hode);
 
     // WaveCurve.
     //

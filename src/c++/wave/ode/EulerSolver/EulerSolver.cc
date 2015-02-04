@@ -1,6 +1,6 @@
 #include "EulerSolver.h"
 
-EulerSolver::EulerSolver(const Boundary *b, int n) : boundary(b), number_of_subdivisions(n) {
+EulerSolver::EulerSolver(const Boundary *b, int n): boundary(b), number_of_subdivisions(n) {
     number_of_subdivisions = std::max(2, n);
 }
 
@@ -8,7 +8,7 @@ EulerSolver::~EulerSolver(){
 }
 
 int EulerSolver::integrate_step(int (*field)(int*, double*, double*, double*, int*, double*),
-                                int (*jacobianfield)(int *, double *, double *, int *, int *, double *, int *),  
+                                int (*jacobianfield)(int*, double*, double*, int*, int*, double*, int*, int*, double*),  
                                 int *function_object, double *function_data, 
                                 const double init_time,  const RealVector &init_point,  
                                 const double final_time,       RealVector &final_point/*,

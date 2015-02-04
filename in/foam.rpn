@@ -4,8 +4,6 @@
     <PHASESPACE name="Phase Space">
         <RPNCONFIGURATION>
             <PHYSICS name="Foam">
-<<<<<<< HEAD
-                
                 
                 <PHYSICSCONFIG name="fluxfunction">
                     <PHYSICSPARAM name="grw" position="0" value ="1.0" />
@@ -48,18 +46,7 @@
                 
                 
                 
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-=======
->>>>>>> 000780397dc00a1a8f56a4a8cd334b12604708ef
+    
         
             </PHYSICS>
 

@@ -433,12 +433,16 @@ public void clearPointSelection(){
         Graphics2D gra = (Graphics2D)g;
         
         gra.setColor(Color.white);
-        GlyphVector xLabel = font.createGlyphVector(gra.getFontRenderContext(), RPNUMERICS.getXLabel());
+        
+        int[] compIndexes = scene_.getViewingTransform().projectionMap().getCompIndexes();
+        
+        
+        GlyphVector xLabel = font.createGlyphVector(gra.getFontRenderContext(), RPNUMERICS.getLabelVector().get(compIndexes[0]));//RPNUMERICS.getXLabel());
 
-        GlyphVector yLabel = font.createGlyphVector(gra.getFontRenderContext(), RPNUMERICS.getYLabel());
+        GlyphVector yLabel = font.createGlyphVector(gra.getFontRenderContext(), RPNUMERICS.getLabelVector().get(compIndexes[1]));
         int viewPortMargin =   scene().getViewingTransform().viewPlane().getViewport().getMargin();
         
-        gra.drawGlyphVector(yLabel, 0,(float) getHeight()/2);
+        gra.drawGlyphVector(yLabel, 5,(float) getHeight()/2);
         gra.drawGlyphVector(xLabel, (float) getWidth()/2,(float) getHeight()-viewPortMargin/2);
         
         

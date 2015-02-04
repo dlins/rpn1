@@ -24,8 +24,12 @@ SubPhysics::SubPhysics(){
     doublecontact_ = 0;
 
     number_of_families_ = 0;
+
+    contactregionboundary_ = new ContactRegionBoundary(this);
+
 }
 
 SubPhysics::~SubPhysics(){
+    delete contactregionboundary_;
 }
 

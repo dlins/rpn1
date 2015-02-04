@@ -145,18 +145,10 @@ JNIEXPORT void JNICALL Java_rpnumerics_RPNUMERICS_setEigenSortFunction
 
 /*
  * Class:     rpnumerics_RPNUMERICS
- * Method:    getXLabel
- * Signature: ()Ljava/lang/String;
+ * Method:    getLabelVector
+ * Signature: ()Ljava/util/Vector;
  */
-JNIEXPORT jstring JNICALL Java_rpnumerics_RPNUMERICS_getXLabel
-  (JNIEnv *, jclass);
-
-/*
- * Class:     rpnumerics_RPNUMERICS
- * Method:    getYLabel
- * Signature: ()Ljava/lang/String;
- */
-JNIEXPORT jstring JNICALL Java_rpnumerics_RPNUMERICS_getYLabel
+JNIEXPORT jobject JNICALL Java_rpnumerics_RPNUMERICS_getLabelVector
   (JNIEnv *, jclass);
 
 /*

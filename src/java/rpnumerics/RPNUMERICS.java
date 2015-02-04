@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.Vector;
 import rpn.configuration.ConfigurationProfile;
 import rpn.configuration.Parameter;
 import rpn.configuration.PhysicsConfiguration;
@@ -806,9 +807,7 @@ public class RPNUMERICS {
 
     public static native void setEigenSortFunction(String functionName);
 
-    public static native String getXLabel();
-
-    public static native String getYLabel();
+    public static native Vector<String> getLabelVector();
 
     public static native ArrayList<String> getTransisionalLinesNames();
 

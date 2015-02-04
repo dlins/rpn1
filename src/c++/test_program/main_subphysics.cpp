@@ -137,9 +137,6 @@ void Hugoniotcb(Fl_Widget*, void*){
 
     canvas->getxy(p(0), p(1));
 
-//    p(0) = -0.00899743;
-//    p(1) =  0.049505;
-
     std::cout << p << std::endl;
 
     if (!subphysics->boundary()->inside(p)) return;
@@ -163,22 +160,14 @@ void Hugoniotcb(Fl_Widget*, void*){
         scroll->add(ss.str().c_str(), canvas, mcc);
     }
 
-//    std::vector<Curve> c;
-//    hugoniot->curve(ref, type, c);
-
-//    WaveCurve w;
-
-//    for (int i = 0; i < c.size(); i++){
-//        w.wavecurve.push_back(c[i]);
-//        w.wavecurve.back().type = SHOCK_CURVE;
-
-////        Curve2D *curve = new Curve2D(c[i].curve, 0.0, 0.0, 1.0);
-////        canvas->add(curve);
-//    }
-
-//    WaveCurvePlot *r = new WaveCurvePlot(w, CURVE2D_SOLID_LINE);
-//    canvas->add(r);
-//    scroll->add("Hugoniot", canvas, r);
+    // TEST ONLY
+    {
+        // Ref. point.
+        {
+//            Curve2D ref
+        }
+    }
+    // TEST ONLY
 
     return;
 }
@@ -869,6 +858,10 @@ void wavecurvefactioncb(Fl_Widget*, void*){
 //    initial_point(0) = 0.26629;
 //    initial_point(1) = 0.73193;
 
+    initial_point(0) = 0.5778336;
+    initial_point(1) = 0.05401;
+
+
     std::cout << "Wavecurve callback, initial point = " << initial_point << std::endl;
     if (!subphysics->boundary()->inside(initial_point)){
         std::stringstream ss;
@@ -930,8 +923,8 @@ void doublecontactbtncb(Fl_Widget*, void*){
 
     std::vector<RealVector> left_curve, right_curve;
 
-    int lfam = 1;
-    int rfam = 1;
+    int lfam = 0;
+    int rfam = 0;
 
     dc->curve(subphysics->flux(), subphysics->accumulation(), subphysics->gridvalues(), lfam,
               subphysics->flux(), subphysics->accumulation(), subphysics->gridvalues(), rfam,
@@ -1437,11 +1430,21 @@ void add_double_contact(){
 // Contact region boundary.
 //
 void contactregionboundarycb(Fl_Widget*, void*){
+<<<<<<< HEAD
     ContactRegionBoundary crb(subphysics);
 
     for (int fam = 0; fam < subphysics->number_of_families(); fam++){
         std::vector<RealVector> curve;
         crb.curve(fam, curve);
+=======
+//    ContactRegionBoundary crb(subphysics);
+
+    ContactRegionBoundary *crb = subphysics->contact_region_boundary();
+
+    for (int fam = 0; fam < subphysics->number_of_families(); fam++){
+        std::vector<RealVector> curve;
+        crb->curve(fam, curve);
+>>>>>>> e818b8522a8c46f20e2cfffa5f3d846dd5dd501a
 
         if (curve.size() > 1){
             SegmentedCurve *c = new SegmentedCurve(curve, 0.0, 0.0, 1.0);
@@ -1509,6 +1512,25 @@ void on_move_coords(Fl_Widget*, void*){
     return;
 }
 
+<<<<<<< HEAD
+=======
+void rarefaction_field_plot(){
+    GridValues *g = subphysics->gridvalues();
+    g->fill_eigenpairs_on_grid(subphysics->flux(), subphysics->accumulation());
+
+    int rows = g->grid.rows();
+    int cols = g->grid.cols();
+
+    for (int i = 0; i < rows*cols; i++){
+        if (g->point_inside(i)){
+            
+        }
+    }
+
+    return;
+}
+
+>>>>>>> e818b8522a8c46f20e2cfffa5f3d846dd5dd501a
 int main(){
     Fl::scheme("gtk+");
     subphysics = 0;
@@ -1556,11 +1578,12 @@ int main(){
             }
         }
 
-        canvas->set_transform_matrix(subphysics->transformation_matrix().data());
+//        canvas->set_transform_matrix(subphysics->transformation_matrix().data());
         canvas->nozoom();
 
-        canvas->xlabel(subphysics->xlabel().c_str());
-        canvas->ylabel(subphysics->ylabel().c_str());
+        std::vector<std::string> label = subphysics->label();
+        canvas->xlabel(label[0].c_str());
+        canvas->ylabel(label[1].c_str());
 
         // Scroll.
         //
@@ -1718,6 +1741,15 @@ int main(){
 //        canvas->add(c);
 //    }
 
+<<<<<<< HEAD
+=======
+    #ifdef FOAMDEBUG
+    if (subphysics->info_subphysics().compare(std::string("Foam")) == 0){
+        ((FoamSubPhysics*)subphysics)->set_canvas(canvas);
+    }
+    #endif
+
+>>>>>>> e818b8522a8c46f20e2cfffa5f3d846dd5dd501a
     return Fl::run();
 }
 

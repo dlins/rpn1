@@ -120,7 +120,7 @@ int CompositeCurve::composite_field(int *two_n, double *xi, double *pointpair, d
     // Check the orientation of cf. (THIS IS ONLY A TEST).
     //
     if (cf*composite_object->composite_reference_vector < 0.0){
-        cf *= -1.0;
+//        cf *= -1.0;
     }
 
     //
@@ -649,7 +649,7 @@ int CompositeCurve::curve(const AccumulationFunction *RarAccum, const FluxFuncti
             std::cout << "Composite, first point: info = " << info << std::endl;
 
             if (info == SHOCKCURVE_NEWTON_DID_NOT_CONVERGE){
-//                TestTools::pause("Composite, SHOCKCURVE_NEWTON_DID_NOT_CONVERGE");
+
                 // In this case, try to retreat even more and create a new shockcurve.
                 Curve shockcurve;
                 std::vector<int> transition_current_index, transition_current_family, transition_reference_index, transition_reference_family;

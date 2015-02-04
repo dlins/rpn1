@@ -13,8 +13,9 @@ CoreyQuadSubPhysics::CoreyQuadSubPhysics() : ThreePhaseFlowSubPhysics(){
     vel_parameter = new Parameter(std::string("vel"), 0.0);
 
     grw_parameter = new Parameter(std::string("grw"), 1.0);
-    gro_parameter = new Parameter(std::string("gro"), .8);
-    grg_parameter = new Parameter(std::string("grg"), .7);
+    gro_parameter = new Parameter(std::string("gro"), .7);
+    grg_parameter = new Parameter(std::string("grg"), .6);
+
 
     // TODO: Introduce these parameters into the flux's equations. When
     //       When that happens, add these parameters to the parameter list
@@ -104,7 +105,13 @@ CoreyQuadSubPhysics::CoreyQuadSubPhysics() : ThreePhaseFlowSubPhysics(){
 //    Stone_Explicit_Bifurcation_Curves bc((StoneFluxFunction*)flux);
     compositecurve_ = new CompositeCurve(accumulation_, flux_, boundary_, shockcurve_, 0/*&bc*/);
 
-    odesolver_ = new LSODE;
+//    odesolver_ = new LSODE;
+    odesolver_ = new EulerSolver(boundary_, 10);
+
+    // TEST HugoniotODE
+//    EulerSolver *euler = new EulerSolver(boundary_, 5);
+    HugoniotODE *hode = new HugoniotODE(this, odesolver_);
+    hugoniot_curve.push_back(hode);
 
     // WaveCurve.
     //
@@ -157,3 +164,9 @@ CoreyQuadSubPhysics::~CoreyQuadSubPhysics(){
 bool CoreyQuadSubPhysics::inside_contact_region(const RealVector &p, int family){
     return false;
 }
+
+double CoreyQuadSubPhysics::distance_to_contact_region(const RealVector &p){
+    return std::numeric_limits<double>::infinity();
+}
+
+

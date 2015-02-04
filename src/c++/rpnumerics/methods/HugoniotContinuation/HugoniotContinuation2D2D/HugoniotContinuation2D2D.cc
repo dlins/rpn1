@@ -64,6 +64,9 @@ void HugoniotContinuation2D2D::jet_Hugoniot(const RealVector &F, const DoubleMat
     RealVector diff_F = F - ref.F;
     RealVector diff_G = G - ref.G;
 
+//    std::cout << "diff_F = " << diff_F << std::endl;
+//    std::cout << "diff_G = " << diff_G << std::endl;
+
     H.resize(1);
     H(0) = diff_F(0)*diff_G(1) - diff_F(1)*diff_G(0);
 

@@ -3,6 +3,7 @@
 
 ContactRegionBoundary::ContactRegionBoundary(SubPhysics *s): ImplicitFunction(){
     subphysics = s;
+
     gv = subphysics->gridvalues();
 }
 
@@ -31,6 +32,9 @@ int ContactRegionBoundary::function_on_square(double *foncub, int i, int j) {
 }
 
 void ContactRegionBoundary::curve(int fam, std::vector<RealVector> &curve){
+    gv = subphysics->gridvalues();
+
+
     curve.clear();
 
     family = fam;
