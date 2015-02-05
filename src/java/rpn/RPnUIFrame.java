@@ -163,7 +163,6 @@ public class RPnUIFrame extends JFrame implements PropertyChangeListener {
     
     private void createAuxiliarCurvesToolBar() {
         auxiliarCurvesToolBar_.setLayout(new GridLayout(3, 2));
-        
         for (RpModelPlotCommand button : auxButtonsToolBarList_) {
             auxiliarCurvesToolBar_.add(button.getContainer());
         }

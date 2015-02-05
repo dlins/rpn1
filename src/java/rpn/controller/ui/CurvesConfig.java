@@ -16,6 +16,7 @@ import rpn.command.CoincidenceExtensionCurvePlotAgent;
 import rpn.command.CoincidencePlotCommand;
 import rpn.command.CurveSelectionCommand;
 import rpn.command.CompositePlotCommand;
+import rpn.command.ContactRegionPlotCommand;
 import rpn.command.CurveRefineCommand;
 import rpn.command.DerivativeDiscriminantLevelCurvePlotCommand;
 import rpn.command.DiscriminantLevelCurvePlotCommand;
@@ -77,15 +78,13 @@ public class CurvesConfig extends UI_ACTION_SELECTED {
 
         CurveSelectionCommand.instance().setEnabled(true);
 
-        
         ZoomPlotCommand.instance().setEnabled(true);
         ZoomingAreaCommand.instance().setEnabled(true);
         AnnotationSelectionCommand.instance().setEnabled(true);
- 
-        
+
         ReferencePointSelectionCommand.instance().setEnabled(true);
-                
-        
+        ContactRegionPlotCommand.instance().setEnabled(true);
+
         CoincidencePlotCommand.instance().setEnabled(true);
         SubInflectionPlotCommand.instance().setEnabled(false);
         BuckleyLeverettiInflectionCommand.instance().setEnabled(true);
@@ -100,26 +99,16 @@ public class CurvesConfig extends UI_ACTION_SELECTED {
         EnvelopeCurveCommand.instance().setEnabled(true);
         SecondaryBifurcationCurveCommand.instance().setEnabled(true);
 
-        
-        
-        if(rpnumerics.RPNUMERICS.getTransisionalLinesNames().isEmpty()){
-            TransitionalLinePlotCommand.instance().setEnabled(false);            
-        }
-        else {
+        if (rpnumerics.RPNUMERICS.getTransisionalLinesNames().isEmpty()) {
+            TransitionalLinePlotCommand.instance().setEnabled(false);
+        } else {
 
             TransitionalLinePlotCommand.instance().setEnabled(true);
         }
 
-        
-
-        
-        
         RiemannResetCommand.instance().setEnabled(true);
 
-
     }
-
-  
 
     @Override
     public void userInputComplete(rpn.controller.ui.UIController ui,

@@ -19,6 +19,7 @@
 #ifdef FOAMDEBUG
 class FoamSubPhysics : public ThreePhaseFlowSubPhysics, public Observer {
 #else
+
 class FoamSubPhysics : public ThreePhaseFlowSubPhysics {
 #endif
     private:
@@ -52,6 +53,7 @@ class FoamSubPhysics : public ThreePhaseFlowSubPhysics {
         Parameter* max_distance_to_contact_region_parameter(){
             return max_distance_to_contact_region_parameter_;
         }
+
         #ifdef FOAMDEBUG
         void set_canvas(Canvas *c){canvas = c; change(); return;}
 

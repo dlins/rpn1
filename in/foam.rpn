@@ -4,6 +4,7 @@
     <PHASESPACE name="Phase Space">
         <RPNCONFIGURATION>
             <PHYSICS name="Foam">
+
                 
                 <PHYSICSCONFIG name="fluxfunction">
                     <PHYSICSPARAM name="grw" position="0" value ="1.0" />
@@ -43,11 +44,7 @@
 
                 </PHYSICSCONFIG>       
                 
-                
-                
-                
-    
-        
+ 
             </PHYSICS>
 
             <METHOD name="Newton">
@@ -67,7 +64,9 @@
                 <CURVEPARAM name="resolution" value="128 128"/>
             </CURVECONFIGURATION>
 
-
+            <CURVECONFIGURATION name="contactregion">
+                <CURVEPARAM name="family" value="0"/>
+            </CURVECONFIGURATION>
 
           
             <CURVECONFIGURATION name="bifurcationcurve">

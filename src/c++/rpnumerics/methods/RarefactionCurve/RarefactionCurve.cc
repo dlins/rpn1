@@ -1,6 +1,7 @@
 #include "RarefactionCurve.h"
 #include "Eigenproblem2x2.h"
 #include "SubPhysics.h"
+
 //RarefactionCurve::RarefactionCurve(const AccumulationFunction *gg, const FluxFunction *ff, const Boundary *bb){
 //    f = ff;
 //    g = gg;
@@ -381,7 +382,6 @@ int RarefactionCurve::curve(const RealVector &initial_point,
 
     // Verify if the initial point lies within the contact region.
     //
-    
     f = subphysics->flux();
     g = subphysics->accumulation();
     b = subphysics->boundary();

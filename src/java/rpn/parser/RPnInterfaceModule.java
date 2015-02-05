@@ -20,6 +20,7 @@ import rpn.command.BoundaryExtensionCurveCommand;
 import rpn.command.BuckleyLeverettiInflectionCommand;
 import rpn.command.CoincidencePlotCommand;
 import rpn.command.CompositePlotCommand;
+import rpn.command.ContactRegionPlotCommand;
 import rpn.command.DerivativeDiscriminantLevelCurvePlotCommand;
 import rpn.command.DiscriminantLevelCurvePlotCommand;
 import rpn.command.DiscriminantPointLevelCurvePlotCommand;
@@ -127,6 +128,11 @@ public class RPnInterfaceModule {
                 if (att.getValue("name").equals("ellipticboundaryextension")) {
                     auxtoolBar_.add(EllipticBoundaryExtensionCommand.instance());
                 }
+                
+                 if (att.getValue("name").equals("contactregion")) {
+                    auxtoolBar_.add(ContactRegionPlotCommand.instance());
+                }
+
 
                 if (att.getValue("name").equals("derivativediscriminant")) {
                     auxtoolBar_.add(DerivativeDiscriminantLevelCurvePlotCommand.instance());

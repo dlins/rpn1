@@ -1430,22 +1430,16 @@ void add_double_contact(){
 // Contact region boundary.
 //
 void contactregionboundarycb(Fl_Widget*, void*){
-<<<<<<< HEAD
+
     ContactRegionBoundary crb(subphysics);
 
-    for (int fam = 0; fam < subphysics->number_of_families(); fam++){
-        std::vector<RealVector> curve;
-        crb.curve(fam, curve);
-=======
-//    ContactRegionBoundary crb(subphysics);
+
 
     ContactRegionBoundary *crb = subphysics->contact_region_boundary();
 
     for (int fam = 0; fam < subphysics->number_of_families(); fam++){
         std::vector<RealVector> curve;
         crb->curve(fam, curve);
->>>>>>> e818b8522a8c46f20e2cfffa5f3d846dd5dd501a
-
         if (curve.size() > 1){
             SegmentedCurve *c = new SegmentedCurve(curve, 0.0, 0.0, 1.0);
             canvas->add(c);
@@ -1512,8 +1506,7 @@ void on_move_coords(Fl_Widget*, void*){
     return;
 }
 
-<<<<<<< HEAD
-=======
+
 void rarefaction_field_plot(){
     GridValues *g = subphysics->gridvalues();
     g->fill_eigenpairs_on_grid(subphysics->flux(), subphysics->accumulation());
@@ -1530,7 +1523,6 @@ void rarefaction_field_plot(){
     return;
 }
 
->>>>>>> e818b8522a8c46f20e2cfffa5f3d846dd5dd501a
 int main(){
     Fl::scheme("gtk+");
     subphysics = 0;
@@ -1741,15 +1733,14 @@ int main(){
 //        canvas->add(c);
 //    }
 
-<<<<<<< HEAD
-=======
+
     #ifdef FOAMDEBUG
     if (subphysics->info_subphysics().compare(std::string("Foam")) == 0){
         ((FoamSubPhysics*)subphysics)->set_canvas(canvas);
     }
     #endif
 
->>>>>>> e818b8522a8c46f20e2cfffa5f3d846dd5dd501a
+
     return Fl::run();
 }
 

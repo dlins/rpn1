@@ -46,6 +46,7 @@ class CoreyQuadSubPhysics : public ThreePhaseFlowSubPhysics {
             return Dp;
         }
 
+
         // Kludge (both of them)!
         virtual bool inside_contact_region(const RealVector &p, int family);
 

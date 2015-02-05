@@ -47,6 +47,7 @@
                 <CURVEPARAM name="resolution" value="120 120"/>
                 <CURVEPARAM name="method" value="Generic Implicit Hugoniot Curve"/>
                 <CURVEPARAM name="case" value="Generic point"/>
+                <CURVEPARAM name="direction" value="20"/>
                 
             </CURVECONFIGURATION> 
 
@@ -60,7 +61,9 @@
                 <CURVEPARAM name="resolution" value="128 128"/>
             </CURVECONFIGURATION>
 
-    
+            <CURVECONFIGURATION name="contactregion">
+                <CURVEPARAM name="family" value="0"/>
+            </CURVECONFIGURATION>
     
     
             <CURVECONFIGURATION name="doublecontactcurve">

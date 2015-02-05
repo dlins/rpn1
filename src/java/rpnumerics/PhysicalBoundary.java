@@ -11,12 +11,12 @@ public class PhysicalBoundary extends SegmentedCurve {
     public PhysicalBoundary(List<RealSegment> hSegments) {
 
         super(hSegments);
-        System.out.println("Tamanho da lista de segmentos : " + hSegments.size());
-        for (RealSegment realSegment : hSegments) {
-
-            System.out.println(realSegment);
-        }
-
+//        System.out.println("Tamanho da lista de segmentos : " + hSegments.size());
+//        for (RealSegment realSegment : hSegments) {
+//
+//            System.out.println(realSegment);
+//        }
+//
 
 
 

@@ -770,21 +770,21 @@ int CompositeCurve::curve(const AccumulationFunction *RarAccum, const FluxFuncti
                                                        init_time,  rarcmp_point,
                                                        final_time, out);
 
-        #ifdef TESTCOMPOSITE
-        {
-            RealVector rarpointgraph(0, n, rarcmp_point);
-            Curve2D *rarc = new Curve2D(rarpointgraph, 1.0, 0.0, 0.0, CURVE2D_MARKERS);
-            canvas->add(rarc);
-            scroll->add("Rar point (test)", canvas, rarc);
-
-            RealVector cmppointgraph(n, n, rarcmp_point);
-            Curve2D *cmpc = new Curve2D(rarpointgraph, 0.0, 1.0, 0.0, CURVE2D_MARKERS);
-            canvas->add(cmpc);
-            scroll->add("Cmp point (test)", canvas, cmpc);
-
-            TestTools::pause("Composite point added.");
-        }
-        #endif
+//        #ifdef TESTCOMPOSITE
+//        {
+//            RealVector rarpointgraph(0, n, rarcmp_point);
+//            Curve2D *rarc = new Curve2D(rarpointgraph, 1.0, 0.0, 0.0, CURVE2D_MARKERS);
+//            canvas->add(rarc);
+//            scroll->add("Rar point (test)", canvas, rarc);
+//
+//            RealVector cmppointgraph(n, n, rarcmp_point);
+//            Curve2D *cmpc = new Curve2D(rarpointgraph, 0.0, 1.0, 0.0, CURVE2D_MARKERS);
+//            canvas->add(cmpc);
+//            scroll->add("Cmp point (test)", canvas, cmpc);
+//
+//            TestTools::pause("Composite point added.");
+//        }
+//        #endif
 
         if (use_field_near_double_contact){
             field = &composite_field_near_double_contact;

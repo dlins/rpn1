@@ -79,6 +79,8 @@ public class RPnCurvesList extends Observable implements ActionListener, ListSel
 
         selectedGeometries_ = new ArrayList();
         geometryList_ = new ArrayList();
+        
+        geometriesToRemove_=new ArrayList<RpGeometry>();
 
         frame_.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 

@@ -243,7 +243,6 @@ public:
         return number_of_families_;
     }
 
-
     virtual ContactRegionBoundary* contact_region_boundary(){
         return contactregionboundary_;
     }

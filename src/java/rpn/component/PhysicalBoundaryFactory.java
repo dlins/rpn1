@@ -6,7 +6,6 @@
 package rpn.component;
 
 import rpnumerics.*;
-import rpnumerics.EllipticBoundary;
 import wave.util.RealSegment;
 
 public class PhysicalBoundaryFactory extends RpCalcBasedGeomFactory {
