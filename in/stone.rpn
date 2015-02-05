@@ -62,7 +62,9 @@
                 <CURVEPARAM name="resolution" value="128 128"/>
             </CURVECONFIGURATION>
 
-            
+             <CURVECONFIGURATION name="contactregion">
+                <CURVEPARAM name="family" value="0"/>
+            </CURVECONFIGURATION>
                 
                     
                             

@@ -409,6 +409,7 @@ CCSRC = \
 	JNIBoundaryExtensionCalc.cc \
 	JNIWaveCurveRRegionsCalc.cc \
 	JNIConnectionOrbitCalc.cc \
+	JNIContactRegionCalc.cc \
 	RpNumerics.cc \
 	JNIEllipticBoundaryExtension.cc \
 	JNIWaveCurveSpeedDiagram.cc \
