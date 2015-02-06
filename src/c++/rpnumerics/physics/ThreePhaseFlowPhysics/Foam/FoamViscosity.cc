@@ -10,6 +10,7 @@ FoamViscosity::FoamViscosity(Parameter *mug0,
                              Parameter *floil,
                              Parameter *epoil,
                              Parameter *fdry_switch, Parameter *fo_switch, // TEMPORARY HACK, KILL IT LATER! 
+                             Parameter *fdry_atan_polynomial_switch, // TEMPORARY HACK, KILL IT LATER! 
                              ThreePhaseFlowSubPhysics *t):
                              ThreePhaseFlowViscosity(t),
                              mug0_parameter(mug0),
@@ -22,7 +23,9 @@ FoamViscosity::FoamViscosity(Parameter *mug0,
                              floil_parameter(floil),
                              epoil_parameter(epoil),
                              fdry_switch_parameter(fdry_switch),
-                             fo_switch_parameter(fo_switch){
+                             fo_switch_parameter(fo_switch),
+                             fdry_atan_polynomial_switch_parameter(fdry_atan_polynomial_switch)
+{
 }
 
 FoamViscosity::~FoamViscosity(){
@@ -77,11 +80,20 @@ void FoamViscosity::Fdry_positive(double x, int degree, JetMatrix &fdry_jet){
 }
 
 void FoamViscosity::Fdry(double sw, int degree, JetMatrix &fdry_jet){
-    double epdry = epdry_parameter->value();
-    double fmdry = fmdry_parameter->value();
+    if (fdry_atan_polynomial_switch_parameter->value() > 0.0){
 
-    // Fdry_normalized(epdry*(sw - fmdry), degree, fdry_jet);
-    Fdry_positive(epdry*(sw - fmdry), degree, fdry_jet);
+        double epdry = epdry_parameter->value();
+        double fmdry = fmdry_parameter->value();
+
+        // Fdry_normalized(epdry*(sw - fmdry), degree, fdry_jet);
+        Fdry_positive(epdry*(sw - fmdry), degree, fdry_jet);
+    }
+    else {
+        fdry_jet.resize(1);
+        fdry_jet.set(0, 1.0);
+        fdry_jet.set(0, 0, 0.0);
+        fdry_jet.set(0, 0, 0, 0.0);
+    }
 
     return;
 }
@@ -176,7 +188,7 @@ int FoamViscosity::gas_viscosity_jet(const WaveState &w, int degree, JetMatrix &
 
     JetMatrix fdry_jet;
     if (fdry_switch_parameter->value() < 0.0) trivial_jet(fdry_jet);
-    else                                        Fdry(w(0)/* - fmdry*/, degree, fdry_jet);
+    else                                      Fdry(w(0)/* - fmdry*/, degree, fdry_jet);
 
     JetMatrix fo_jet;
     if (fo_switch_parameter->value() < 0.0) trivial_jet(fo_jet);

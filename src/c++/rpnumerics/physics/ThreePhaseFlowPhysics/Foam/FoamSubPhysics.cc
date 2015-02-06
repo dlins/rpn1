@@ -80,6 +80,9 @@ FoamSubPhysics::FoamSubPhysics() : ThreePhaseFlowSubPhysics(){
     fo_switch = new Parameter(std::string("fo switch"), 1.0);
     equation_parameter_.push_back(fo_switch);
 
+    fdry_atan_polynomial_switch = new Parameter(std::string("fdry polynomial"), 1.0);
+    equation_parameter_.push_back(fdry_atan_polynomial_switch);
+
     viscosity_ = new FoamViscosity(mug_parameter, 
                                    epdry,
                                    fdry,
@@ -90,6 +93,7 @@ FoamSubPhysics::FoamSubPhysics() : ThreePhaseFlowSubPhysics(){
                                    floil, 
                                    epoil,
                                    fdry_switch, fo_switch, // KILL IT LATER!
+                                   fdry_atan_polynomial_switch, // KILL IT LATER!
                                    this);
 
     // Flux.

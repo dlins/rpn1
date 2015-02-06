@@ -105,8 +105,8 @@ CoreyQuadSubPhysics::CoreyQuadSubPhysics() : ThreePhaseFlowSubPhysics(){
 //    Stone_Explicit_Bifurcation_Curves bc((StoneFluxFunction*)flux);
     compositecurve_ = new CompositeCurve(accumulation_, flux_, boundary_, shockcurve_, 0/*&bc*/);
 
-//    odesolver_ = new LSODE;
-    odesolver_ = new EulerSolver(boundary_, 10);
+    odesolver_ = new LSODE;
+//    odesolver_ = new EulerSolver(boundary_, 10);
 
     // TEST HugoniotODE
 //    EulerSolver *euler = new EulerSolver(boundary_, 5);

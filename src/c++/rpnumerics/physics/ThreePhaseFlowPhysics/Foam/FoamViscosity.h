@@ -20,6 +20,12 @@ class FoamViscosity: public ThreePhaseFlowViscosity {
 
         // TEMPORARY HACK, KILL IT LATER!
         Parameter *fdry_switch_parameter, *fo_switch_parameter;
+
+        // TEMPORARY HACK, KILL IT LATER!
+        // If greater than zero, use polynomial. If less than zero, use arctangent.
+        //
+        Parameter *fdry_atan_polynomial_switch_parameter;
+
         void trivial_jet(JetMatrix &j){
             j.resize(1);
             j.set(0, 1.0);
@@ -42,6 +48,7 @@ class FoamViscosity: public ThreePhaseFlowViscosity {
                       Parameter *floil,
                       Parameter *epoil,
                       Parameter *fdry_switch, Parameter *fo_switch, // TEMPORARY HACK, KILL IT LATER! 
+                      Parameter *fdry_atan_polynomial_switch, // TEMPORARY HACK, KILL IT LATER! 
                       ThreePhaseFlowSubPhysics *t);
         ~FoamViscosity();
 
