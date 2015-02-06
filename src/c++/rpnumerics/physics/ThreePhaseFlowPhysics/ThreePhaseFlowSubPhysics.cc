@@ -65,40 +65,40 @@ ThreePhaseFlowSubPhysics::~ThreePhaseFlowSubPhysics(){
 
 }
 
-bool ThreePhaseFlowSubPhysics::inside_contact_region(const RealVector &p, int family){
-    if (family == 0) {
-        if (p(0) < cnw_parameter->value() ||
-            p(1) < cno_parameter->value() ||
-            (1.0 - p(0) - p(1)) < cng_parameter->value()) return true;
-    }
-    else if (family == 1) {
-        if (p(0) < cnw_parameter->value() && 
-            p(1) < cno_parameter->value()) return true;
-    }
+//bool ThreePhaseFlowSubPhysics::inside_contact_region(const RealVector &p, int family){
+//    if (family == 0) {
+//        if (p(0) < cnw_parameter->value() ||
+//            p(1) < cno_parameter->value() ||
+//            (1.0 - p(0) - p(1)) < cng_parameter->value()) return true;
+//    }
+//    else if (family == 1) {
+//        if (p(0) < cnw_parameter->value() && 
+//            p(1) < cno_parameter->value()) return true;
+//    }
 
-    return false;
-}
+//    return false;
+//}
 
-double ThreePhaseFlowSubPhysics::distance_to_contact_region(const RealVector &p){
-    RealVector cn(3);
-    cn(0) = cnw_parameter->value();
-    cn(1) = cno_parameter->value();
-    cn(2) = cng_parameter->value();
+//double ThreePhaseFlowSubPhysics::distance_to_contact_region(const RealVector &p){
+//    RealVector cn(3);
+//    cn(0) = cnw_parameter->value();
+//    cn(1) = cno_parameter->value();
+//    cn(2) = cng_parameter->value();
 
-    RealVector paug(3);
-    paug(0) = p(0);
-    paug(1) = p(1);
-    paug(2) = 1.0 - p(0) - p(1);
+//    RealVector paug(3);
+//    paug(0) = p(0);
+//    paug(1) = p(1);
+//    paug(2) = 1.0 - p(0) - p(1);
 
-    RealVector res = paug - cn;
-    double min_distance = std::numeric_limits<double>::infinity();
+//    RealVector res = paug - cn;
+//    double min_distance = std::numeric_limits<double>::infinity();
 
-    for (int i = 0; i < 3; i++){
-        if (res(i) < 0.0) return 0.0;
+//    for (int i = 0; i < 3; i++){
+//        if (res(i) < 0.0) return 0.0;
 
-        min_distance = std::min(min_distance, res(i));
-    }
+//        min_distance = std::min(min_distance, res(i));
+//    }
 
-    return min_distance;
-}
+//    return min_distance;
+//}
 

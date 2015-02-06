@@ -182,6 +182,12 @@ int HugoniotContinuation::fill_hyperplane(const RealVector &origin, DoubleMatrix
         for (int j = 0; j < hyperplane.rows(); j++) hyperplane(j, i) *= inv_nrm;
     }
 
+//    std::cout << "hyperplane = " << hyperplane << std::endl;
+//    TestTools::pause();
+
+//    hyperplane(0) = 1.0;
+//    hyperplane(1) = 0.0;
+
     return HUGONIOTCONTINUATION_HYPERPLANE_OK;
 }
 
@@ -279,7 +285,7 @@ int HugoniotContinuation::Newton_step(const RealVector &previous_point, double &
 
     do {
         step_size *= 0.5;
-//        step_size = std::max(step_size*.5, 1e-3);
+//        step_size = std::max(step_size*.5, 1e-2);
 
         step_size_iterations++;
 
@@ -291,6 +297,19 @@ int HugoniotContinuation::Newton_step(const RealVector &previous_point, double &
         // (The columns are the basis' vectors).
         //
         int info_fill_hyperplane = fill_hyperplane(hyperplane_origin, hyperplane);
+
+//        {
+//        RealVector TestVector(2);
+//        TestVector(0) = 0.308417;
+//        TestVector(1) = 0.196032;
+
+//        if (norm(hyperplane_origin - TestVector) < .01){
+//            hyperplane(0) = 0.0;
+//            hyperplane(1) = -1.0;
+
+//            TestTools::pause("It should work!");
+//        }
+//        }
 
 //        std::cout << "hyperplane = " << hyperplane << std::endl;
         
@@ -440,6 +459,21 @@ int HugoniotContinuation::curve_engine(const RealVector &in, const RealVector &i
 //        int info_Newton_step = Newton_step(previous_point, step_size, number_of_steps_with_unchanged_size, previous_direction, hyperplane, Hugoniot_intersection);
 
         int info_Newton_step = Newton_step(previous_point, step_size, number_of_steps_with_unchanged_size, previous_direction, /*hyperplane, */Hugoniot_intersection);
+
+        #ifdef TESTHUGONIOT
+        {
+            if (canvas != 0 && Hugoniot_intersection.size() > 1){
+                Curve2D *c = new Curve2D(Hugoniot_intersection, 0.0, 0.0, 0.0, CURVE2D_MARKERS);
+                canvas->add(c);
+
+                std::stringstream ss;
+                ss << "Hug. " << Hugoniot_intersection << ", info = " << info_Newton_step;
+                scroll->add(ss.str().c_str(), canvas, c);
+
+                Fl::check();
+            }
+        }
+        #endif
 
         // Check if size_steps remains the same after a few steps.
         // If so, increase step_size;
@@ -652,6 +686,11 @@ HugoniotContinuation::HugoniotContinuation(const FluxFunction *ff, const Accumul
 
     info_ = std::string("HugoniotContinuation");
     method_ = EXPLICIT_HUGONIOT;
+
+    #ifdef TESTHUGONIOT
+    canvas = 0;
+    scroll = 0;
+    #endif
 }
 
 HugoniotContinuation::~HugoniotContinuation(){

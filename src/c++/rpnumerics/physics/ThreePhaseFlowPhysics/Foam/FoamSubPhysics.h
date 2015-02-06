@@ -30,6 +30,7 @@ class FoamSubPhysics : public ThreePhaseFlowSubPhysics {
 
         // TEMPORARY HACK, KILL IT LATER!
         Parameter *fdry_switch, *fo_switch;
+        Parameter *fdry_atan_polynomial_switch;
 
         // Most probably this will mutate into a feature of all subphyiscs: it seems to be really useful.
         // Some changes are due, the most important one is deciding what the name of this class

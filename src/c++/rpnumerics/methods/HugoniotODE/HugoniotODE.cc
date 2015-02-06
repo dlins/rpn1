@@ -38,7 +38,10 @@ int HugoniotODE::field(int *neq, double *xi, double *in, double *out, int *obj, 
                             H, nablaH);
 
     RealVector nablaH_vec(2);
-    for (int i = 0; i < 2; i++) nablaH_vec(i) = nablaH(i, 0);
+//    for (int i = 0; i < 2; i++) nablaH_vec(i) = nablaH(i, 0);
+
+    nablaH_vec(0) = nablaH(1, 0);
+    nablaH_vec(1) = -nablaH(0, 0);
     normalize(nablaH_vec);
 
 //    std::cout << nablaH << std::endl;
@@ -84,6 +87,8 @@ void HugoniotODE::curve_engine(const RealVector &initial_point, const RealVector
     double next_xi = xi + delta_xi;
 
     while (true){
+        if (c.curve.size() > 8000) return;
+
         int info_odesolver = odesolver->integrate_step(&HugoniotODE::field, 
                                                        0,
                                                        (int*)this, 0 /*double *function_data*/,
