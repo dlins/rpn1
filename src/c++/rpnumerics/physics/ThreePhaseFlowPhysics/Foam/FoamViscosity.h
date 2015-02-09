@@ -58,6 +58,7 @@ class FoamViscosity: public ThreePhaseFlowViscosity {
 
         void Fdry(double s, int degree, JetMatrix &fdry_jet);
         void Fdry_positive(double x, int degree, JetMatrix &fdry_jet);
+        void Fdry_negative(double sw, int degree, JetMatrix &fdry_jet);
         void Fdry_normalized(double x, int degree, JetMatrix &fdry_jet);
 };
 
