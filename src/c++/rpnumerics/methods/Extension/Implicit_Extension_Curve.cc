@@ -313,10 +313,10 @@ void Implicit_Extension_Curve::curve(const FluxFunction *df, const AccumulationF
     gv = &g;
     oc = &original_curve;
     
-    cout<<"Original curve: "<<original_curve.size()<<endl;
+//    cout<<"Original curve: "<<original_curve.size()<<endl;
 
-    std::cout << "Dimension of the curve: " << oc->at(0).size() << std::endl;
-    std::cout << "Characteristic: " << characteristic_where << std::endl;
+//    std::cout << "Dimension of the curve: " << oc->at(0).size() << std::endl;
+//    std::cout << "Characteristic: " << characteristic_where << std::endl;
 
     gv->fill_eigenpairs_on_grid(domain_ff, domain_aa);
 
@@ -326,7 +326,7 @@ void Implicit_Extension_Curve::curve(const FluxFunction *df, const AccumulationF
     if (gv->grid(0, 0).size() == 2) type_of_physic = &species_physic;
     else                            type_of_physic = &compositional_physic;
 
-    std::cout << "Inside Extension Curve: gv->grid(0, 0).size() = " << gv->grid(0, 0).size() << std::endl;
+//    std::cout << "Inside Extension Curve: gv->grid(0, 0).size() = " << gv->grid(0, 0).size() << std::endl;
     
     
     // Prepare the first point of the curve.
@@ -374,8 +374,8 @@ void Implicit_Extension_Curve::extension_of_curve(const FluxFunction *df, const 
     gv = &g;
     oc = &original_curve;
 
-    std::cout << "Dimension of the curve: " << oc->at(0).size() << std::endl;
-    std::cout << "Characteristic: " << characteristic_where << std::endl;
+//    std::cout << "Dimension of the curve: " << oc->at(0).size() << std::endl;
+//    std::cout << "Characteristic: " << characteristic_where << std::endl;
 
     gv->fill_eigenpairs_on_grid(domain_ff, domain_aa);
 

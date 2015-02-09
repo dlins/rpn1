@@ -375,7 +375,7 @@ int RarefactionCurve::curve(const RealVector &initial_point,
 
     // Verify that initial_point is inside the boundary
     if (!b->inside(initial_point)){
-        std::cout << "RarefactionCurve: The initial point " << initial_point << " is outside the domain! Aborting..." << std::endl; 
+//        std::cout << "RarefactionCurve: The initial point " << initial_point << " is outside the domain! Aborting..." << std::endl; 
 
         return RAREFACTION_ERROR;
     }
@@ -412,19 +412,19 @@ int RarefactionCurve::curve(const RealVector &initial_point,
     //
     int info_initialize;
 
-    std::cout << "Rarefaction, should_initialize = " << should_initialize << ", family = " << family << std::endl;
+//    std::cout << "Rarefaction, should_initialize = " << should_initialize << ", family = " << family << std::endl;
 
     if (should_initialize == RAREFACTION_INITIALIZE){
         info_initialize = initialize(initial_point, family, increase, reference_vector, dirdrv);
-        std::cout << "Rarefaction, initialized." << std::endl;
+//        std::cout << "Rarefaction, initialized." << std::endl;
     }
     else {
         info_initialize = initialize(initial_point, family, *direction, reference_vector, dirdrv);
-        std::cout << "Rarefaction, did not initialize." << std::endl;
+//        std::cout << "Rarefaction, did not initialize." << std::endl;
     }
 
     if (info_initialize == RAREFACTION_INIT_ERROR){
-        std::cout << "RarefactionCurve: The initialization failed. Aborting..." << std::endl; 
+//        std::cout << "RarefactionCurve: The initialization failed. Aborting..." << std::endl; 
 
         return RAREFACTION_ERROR;
     }
@@ -461,13 +461,13 @@ int RarefactionCurve::curve(const RealVector &initial_point,
                                                       next_xi, next_point);
 
         if (info_odesolver == ODE_SOLVER_ERROR){
-            std::cout << "RarefactionCurve: The solver failed to find the next point (Error = " << info_odesolver << "). Aborting..." << std::endl; 
+//            std::cout << "RarefactionCurve: The solver failed to find the next point (Error = " << info_odesolver << "). Aborting..." << std::endl; 
 
             return RAREFACTION_ERROR;
         }
 
         if (info_odesolver == ODE_SOLVER_POINT_OUTSIDE_DOMAIN){
-            std::cout << "RarefactionCurve: The solver passed a point outside the domain to the field (Error = " << info_odesolver << "). Aborting..." << std::endl; 
+//            std::cout << "RarefactionCurve: The solver passed a point outside the domain to the field (Error = " << info_odesolver << "). Aborting..." << std::endl; 
 
             return RAREFACTION_ERROR;
         }
@@ -543,25 +543,25 @@ int RarefactionCurve::curve(const RealVector &initial_point,
                                                              &elliptic_region_signal_event, (int*)this, (int*)0);
 
             if (info_bisection == BISECTION_FUNCTION_ERROR){
-                std::cout << "An error was reported by the signal function when called by Bisection. Leaving..." << std::endl;
+//                std::cout << "An error was reported by the signal function when called by Bisection. Leaving..." << std::endl;
 
                 rarcurve.reason_to_stop = RAREFACTION_ERROR;
                 return RAREFACTION_ERROR;
             }
             else if (info_bisection == BISECTION_EQUAL_SIGN){
-                std::cout << "Bisection detected that the signal event function has the same sign in both points. Leaving..." << std::endl;
+//                std::cout << "Bisection detected that the signal event function has the same sign in both points. Leaving..." << std::endl;
 
                 rarcurve.reason_to_stop = RAREFACTION_ERROR;
                 return RAREFACTION_ERROR;
             }
             else if (info_bisection == BISECTION_CONVERGENCE_ERROR){
-                std::cout << "Bisection did not converge when computing the elliptic region. Leaving..." << std::endl;
+//                std::cout << "Bisection did not converge when computing the elliptic region. Leaving..." << std::endl;
 
                 rarcurve.reason_to_stop = RAREFACTION_ERROR;
                 return RAREFACTION_ERROR;
             }
             else {
-                std::cout << "Bisection converged when computing the elliptic region." << std::endl;
+//                std::cout << "Bisection converged when computing the elliptic region." << std::endl;
 
                 add_point_to_curve(p_c, rarcurve);
 
@@ -622,25 +622,25 @@ int RarefactionCurve::curve(const RealVector &initial_point,
                                                              &inflection_signal_event, (int*)this, (int*)0);
 
             if (info_bisection == BISECTION_FUNCTION_ERROR){
-                std::cout << "An error was reported by the signal function when called by Bisection. Leaving..." << std::endl;
+//                std::cout << "An error was reported by the signal function when called by Bisection. Leaving..." << std::endl;
 
                 rarcurve.reason_to_stop = RAREFACTION_ERROR;
                 return RAREFACTION_ERROR;
             }
             else if (info_bisection == BISECTION_EQUAL_SIGN){
-                std::cout << "Bisection detected that the signal event function has the same sign in both points. Leaving..." << std::endl;
+//                std::cout << "Bisection detected that the signal event function has the same sign in both points. Leaving..." << std::endl;
 
                 rarcurve.reason_to_stop = RAREFACTION_ERROR;
                 return RAREFACTION_ERROR;
             }
             else if (info_bisection == BISECTION_CONVERGENCE_ERROR){
-                std::cout << "Bisection did not converge when computing the inflection. Leaving..." << std::endl;
+//                std::cout << "Bisection did not converge when computing the inflection. Leaving..." << std::endl;
 
                 rarcurve.reason_to_stop = RAREFACTION_ERROR;
                 return RAREFACTION_ERROR;
             }
             else {
-                std::cout << "Bisection converged when computing the inflection." << std::endl;
+//                std::cout << "Bisection converged when computing the inflection." << std::endl;
 
                 add_point_to_curve(p_c, rarcurve);
 
@@ -783,7 +783,7 @@ int RarefactionCurve::curve_from_boundary(const RealVector &initial_point, int s
     //
     RealVector to_interior = b->side_transverse_interior(initial_point, side);
 
-    std::cout << "to_interior = " << to_interior << std::endl;
+//    std::cout << "to_interior = " << to_interior << std::endl;
 
     // Find a point inside the domain, close to the initial point.
     //
@@ -819,9 +819,9 @@ int RarefactionCurve::curve_from_boundary(const RealVector &initial_point, int s
         double dd;
 
         initialize(inner_point, curve_family, increase, temp, dd);
-        std::cout << "dd = " << dd << ", temp = " << temp << std::endl;
+//        std::cout << "dd = " << dd << ", temp = " << temp << std::endl;
 
-        std::cout << "initial_direction = " << initial_direction << std::endl;
+//        std::cout << "initial_direction = " << initial_direction << std::endl;
     }
     else return RAREFACTION_ERROR;
 

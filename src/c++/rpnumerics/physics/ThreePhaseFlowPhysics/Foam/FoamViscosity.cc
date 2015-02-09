@@ -82,8 +82,6 @@ void FoamViscosity::Fdry(double sw, int degree, JetMatrix &fdry_jet) {
     double epdry = epdry_parameter->value();
     double fmdry = fmdry_parameter->value();
     if (fdry_atan_polynomial_switch_parameter->value() > 0.0) {
-
-        // Fdry_normalized(epdry*(sw - fmdry), degree, fdry_jet);
         Fdry_positive(epdry * (sw - fmdry), degree, fdry_jet);
     } else {
         Fdry_negative(epdry * (sw - fmdry), degree, fdry_jet);

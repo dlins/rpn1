@@ -132,7 +132,7 @@ void ShockCurve::find_system_for_sigma_equal_current_lambda(const RealVector &in
 // this method will not detect them. Therefor, this method must be replaced by one using (sigma - lambda). The family will be needed.
 //
 int ShockCurve::find_point_for_sigma_equal_current_lambda(const RealVector &in, RealVector &out){
-    RealVector iteration_point(in);  std::cout << "Iteration point = " << iteration_point << std::endl;
+    RealVector iteration_point(in);  //std::cout << "Iteration point = " << iteration_point << std::endl;
 
     int max_it = 20;
     int iterations = 0;
@@ -145,12 +145,12 @@ int ShockCurve::find_point_for_sigma_equal_current_lambda(const RealVector &in, 
     while (iterations < max_it && !found_point){
         find_system_for_sigma_equal_current_lambda(iteration_point, nablaH, H);
 
-        std::cout << "Inside Newton. nablaH =\n" << nablaH << "H = " << H << std::endl;
+//        std::cout << "Inside Newton. nablaH =\n" << nablaH << "H = " << H << std::endl;
 
         int info_solve = solve(transpose(nablaH), H, deviation);
 
         if (info_solve == REALVECTOR_SOLVE_LINEAR_SYSTEM_ERROR){
-            std::cout << "Error in Newton. nablaH =\n" << nablaH << "H = " << H << std::endl;
+//            std::cout << "Error in Newton. nablaH =\n" << nablaH << "H = " << H << std::endl;
 
             return REALVECTOR_SOLVE_LINEAR_SYSTEM_ERROR;
         }
@@ -161,7 +161,7 @@ int ShockCurve::find_point_for_sigma_equal_current_lambda(const RealVector &in, 
         // computational domain.
         //
         if (!computational_domain->inside(iteration_point)){
-            std::cout << "Newton method for sigma equal current lambda: point " << iteration_point << " is off-limits!" << std::endl;
+//            std::cout << "Newton method for sigma equal current lambda: point " << iteration_point << " is off-limits!" << std::endl;
             return REALVECTOR_SOLVE_LINEAR_SYSTEM_ERROR;
         }
 
@@ -171,14 +171,14 @@ int ShockCurve::find_point_for_sigma_equal_current_lambda(const RealVector &in, 
     }
 
     if (found_point){
-        std::cout << "*** Newton method for sigma equal current lambda converged!\n" << "Initial point = " << in << std::endl << std::endl << std::endl;
+//        std::cout << "*** Newton method for sigma equal current lambda converged!\n" << "Initial point = " << in << std::endl << std::endl << std::endl;
 
         out = iteration_point;
         return SHOCKCURVE_NEWTON_CONVERGED;
     }
     else {
         
-        std::cout << "Newton method for sigma equal current lambda did not converge. Deviation = " << deviation << std::endl << std::endl << std::endl;
+//        std::cout << "Newton method for sigma equal current lambda did not converge. Deviation = " << deviation << std::endl << std::endl << std::endl;
 
         return SHOCKCURVE_NEWTON_DID_NOT_CONVERGE;
     }
@@ -319,7 +319,7 @@ int ShockCurve::find_point_for_sigma_equal_reference_lambda(const RealVector &in
         int info_solve = solve(transpose(nablaH), H, deviation);
 
         if (info_solve == REALVECTOR_SOLVE_LINEAR_SYSTEM_ERROR){
-            std::cout << "Error in Newton. nablaH =\n" << nablaH << "H = " << H << std::endl;
+//            std::cout << "Error in Newton. nablaH =\n" << nablaH << "H = " << H << std::endl;
 
             return REALVECTOR_SOLVE_LINEAR_SYSTEM_ERROR;
         }
@@ -335,7 +335,7 @@ int ShockCurve::find_point_for_sigma_equal_reference_lambda(const RealVector &in
             // Out must be filled even if iteration_point lies outside of the domain.
             out = iteration_point;
 
-            std::cout << "Newton method within ShockCurve: point " << iteration_point << " is off-limits!" << std::endl;
+//            std::cout << "Newton method within ShockCurve: point " << iteration_point << " is off-limits!" << std::endl;
             return SHOCKCURVE_NEWTON_OUTSIDE_DOMAIN;
         }
 
@@ -346,7 +346,7 @@ int ShockCurve::find_point_for_sigma_equal_reference_lambda(const RealVector &in
            
     }
 
-    std::cout << "*** Found_point = " << found_point << std::endl << std::endl << std::endl;
+//    std::cout << "*** Found_point = " << found_point << std::endl << std::endl << std::endl;
 
     if (found_point){
         out = iteration_point;
@@ -354,7 +354,7 @@ int ShockCurve::find_point_for_sigma_equal_reference_lambda(const RealVector &in
     }
     else {
         
-        std::cout << "Newton did not converge. Iterations: " << iterations << std::endl;
+//        std::cout << "Newton did not converge. Iterations: " << iterations << std::endl;
 
         return SHOCKCURVE_NEWTON_DID_NOT_CONVERGE;
     }
@@ -456,8 +456,8 @@ int ShockCurve::local_speed_equality(const RealVector &previous_lambda_minus_sig
 
         if (info == SHOCKCURVE_NEWTON_CONVERGED){
             transition_points.push_back(TransitionPointStructure(alpha[i], accurate_transition, corresponding_family[i], true));
-            std::cout << "local_speed_equality." << std::endl;
-            for (int i = 0; i < transition_points.size(); i++) std::cout << "    local = " << transition_points[i].local << std::endl;
+//            std::cout << "local_speed_equality." << std::endl;
+//            for (int i = 0; i < transition_points.size(); i++) std::cout << "    local = " << transition_points[i].local << std::endl;
         }
         //else SHOCKCURVE_NEWTON_DID_NOT_CONVERGE;
     }
@@ -545,8 +545,8 @@ int ShockCurve::reference_speed_equality(const RealVector &previous_lambdaref_mi
 
         if (info == SHOCKCURVE_NEWTON_CONVERGED){
             transition_points.push_back(TransitionPointStructure(alpha[i], accurate_transition, corresponding_family[i], false));
-            std::cout << "reference_speed_equality." << std::endl;
-            for (int i = 0; i < transition_points.size(); i++) std::cout << "    local = " << transition_points[i].local << std::endl;
+//            std::cout << "reference_speed_equality." << std::endl;
+//            for (int i = 0; i < transition_points.size(); i++) std::cout << "    local = " << transition_points[i].local << std::endl;
         }
         //else SHOCKCURVE_NEWTON_DID_NOT_CONVERGE;
     }
@@ -574,8 +574,8 @@ void ShockCurve::add_point(Curve &c, const RealVector &p){
 //    std::cout << "Gjet.Jacobian() = \n" << Gjet.Jacobian() << std::endl << std::endl;
 
     if (Fjet.Jacobian().cols() == 0){
-        std::cout << "At shock. Fjet.Jacobian().cols() = 0. ABORTING." << std::endl;
-        std::cout << "    p = " << p << std::endl;
+//        std::cout << "At shock. Fjet.Jacobian().cols() = 0. ABORTING." << std::endl;
+//        std::cout << "    p = " << p << std::endl;
         exit(0);
     }
 
@@ -657,14 +657,14 @@ int ShockCurve::call_interruption_functions(const RealVector &previous_lambdaref
             transition_current_family.push_back(transition_points[i].family);
             transition_current_found = TRANSITION_CURRENT_FOUND;
 
-            std::cout << "Added one to current." << std::endl;
+//            std::cout << "Added one to current." << std::endl;
         }
         else{
             transition_reference_index.push_back(n);
             transition_reference_family.push_back(transition_points[i].family);
             transition_reference_found = TRANSITION_REFERENCE_FOUND;
 
-            std::cout << "Added one to reference." << std::endl;
+//            std::cout << "Added one to reference." << std::endl;
         }
 
         add_point(curve, transition_points[i].point);
@@ -758,7 +758,7 @@ int ShockCurve::curve_engine(const ReferencePoint &r, const RealVector &in, cons
 //        num++;
 //        if (num > maxnum) return SHOCKCURVE_OK;
 
-        std::cout << "Shock, inside while, previous_point = " <<  previous_point << std::endl;
+//        std::cout << "Shock, inside while, previous_point = " <<  previous_point << std::endl;
 
         RealVector Hugoniot_intersection;
         double sigma_between_points;
@@ -792,13 +792,13 @@ int ShockCurve::curve_engine(const ReferencePoint &r, const RealVector &in, cons
                                                step_size_increased, step_size, number_of_steps_with_unchanged_size, 
                                                Hugoniot_intersection, sigma_between_points,
                                                Hugoniot_direction);
-        std::cout << "    Aft." << std::endl;
+//        std::cout << "    Aft." << std::endl;
 
 //        std::cout << "       Curr. point = " << Hugoniot_intersection << ", curr. dir. = " << Hugoniot_direction << std::endl;
 //        std::cout << "       sigma_between_points = " << sigma_between_points << std::endl;
 
         if (info_curve_point == HUGONIOTCONTINUATION_NEWTON_ERROR){
-            std::cout << "info_curve_point = " << info_curve_point << std::endl;
+//            std::cout << "info_curve_point = " << info_curve_point << std::endl;
 
             std::stringstream ss;
             ss << "HUGONIOTCONTINUATION_NEWTON_ERROR. Hugoniot_intersection = " << Hugoniot_intersection;
@@ -934,10 +934,10 @@ int ShockCurve::curve_engine(const ReferencePoint &r, const RealVector &in, cons
 //                add_last_point_computed = true;
 //                find_next_point         = false;                
 
-                std::cout << "Shock. Curve leaves domain:" << std::endl;
-                std::cout << "    previous_point = " << previous_point << std::endl;
-                std::cout << "             point = " << Hugoniot_intersection << std::endl;
-                std::cout << "              info = " << info_intersect << std::endl;
+//                std::cout << "Shock. Curve leaves domain:" << std::endl;
+//                std::cout << "    previous_point = " << previous_point << std::endl;
+//                std::cout << "             point = " << Hugoniot_intersection << std::endl;
+//                std::cout << "              info = " << info_intersect << std::endl;
 
                 add_point(shockcurve, r);
 
@@ -1022,7 +1022,7 @@ int ShockCurve::curve(const ReferencePoint &ref,
 
     int n = ref.point.size();
 
-    std::cout << "Here" << std::endl;
+//    std::cout << "Here" << std::endl;
 
 //    // If the initial point lies near the coincidence curve, abort.
 //    // TODO: These lines below need to be improved.

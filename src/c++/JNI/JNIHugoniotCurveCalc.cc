@@ -104,7 +104,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_HugoniotCurveCalcND_calc__Lrpnumerics_
     
     RealVector Uref(dimension, input);
     
-    cout<<"Ponto de referencia: "<<Uref<<endl;
+//    cout<<"Ponto de referencia: "<<Uref<<endl;
     
     const FluxFunction * flux = RpNumerics::physicsVector_->at(0)->flux();
     const AccumulationFunction * accum = RpNumerics::physicsVector_->at(0)->accumulation();

@@ -65,7 +65,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ContactRegionCalc_calcNative
     
 
     
-
+    cout <<"tamanho da curva : "<<left_vrs.size()<<endl;
+    cout<<"familia: "<<family<<endl;
    
    
     if (left_vrs.size() == 0)

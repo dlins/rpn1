@@ -89,7 +89,7 @@ int LSODE::integrate_step(int (*field)(int*, double*, double*, double*, int*, do
     delete [] atol;
     
     if (istate != ODE_SOLVER_OK){
-        std::cout << "istate = " << istate << std::endl;
+//        std::cout << "istate = " << istate << std::endl;
 //        TestTools::pause("Error on LSODE.");
     }
 

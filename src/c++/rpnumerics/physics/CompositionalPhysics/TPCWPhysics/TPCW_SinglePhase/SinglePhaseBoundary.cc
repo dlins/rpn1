@@ -127,8 +127,8 @@ const char * SinglePhaseBoundary::boundaryType() const{
 }
 
 int SinglePhaseBoundary::intersection(const RealVector &p, const RealVector &q, RealVector &r, int &w) const {
-    std::cout << boundaryType() << ", p = " << p << ", q = " << q << std::endl;
-    std::cout << "inside(p) = " << inside(p) << ", inside(q) = " << inside(q) << std::endl;
+//    std::cout << boundaryType() << ", p = " << p << ", q = " << q << std::endl;
+//    std::cout << "inside(p) = " << inside(p) << ", inside(q) = " << inside(q) << std::endl;
 
     int info;
 
@@ -159,7 +159,7 @@ int SinglePhaseBoundary::intersection(const RealVector &p, const RealVector &q, 
         else w = SINGLEPHASE_TOTAL_COMPOSITION_SIDE;
     }
 
-    std::cout << "SinglePhaseBoundary::intersection(). p = " << p << ", q = " << q << ", r = " << r << ", w = " << w << std::endl;
+//    std::cout << "SinglePhaseBoundary::intersection(). p = " << p << ", q = " << q << ", r = " << r << ", w = " << w << std::endl;
 
     return info;
 }

@@ -328,7 +328,7 @@ int Utilities::find_point_on_level_curve(void *obj, double (*function_for_bisect
     int dup = 0;
 
     while (fp*fq > 0.0 && dup < max_dup){
-        std::cout << "while. dup = " << dup << std::endl;
+//        std::cout << "while. dup = " << dup << std::endl;
 
         q = p + 2.0*vec; // Was: q = 2.0*(p + vec); ERROR!!!
 

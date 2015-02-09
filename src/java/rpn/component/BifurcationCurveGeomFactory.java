@@ -155,9 +155,9 @@ public class BifurcationCurveGeomFactory extends RpCalcBasedGeomFactory {
         RealSegGeom[] bifurcationArrayRight = new RealSegGeom[curve.rightSegments().size()];
         RealSegGeom[] bifurcationArrayLeft = new RealSegGeom[curve.leftSegments().size()];
 
-        System.out.println("curve.segments().size() ::::::: " + curve.segments().size());
-        System.out.println("curve.rightSegments().size() :: " + curve.rightSegments().size());
-        System.out.println("curve.leftSegments().size() ::: " + curve.leftSegments().size());
+//        System.out.println("curve.segments().size() ::::::: " + curve.segments().size());
+//        System.out.println("curve.rightSegments().size() :: " + curve.rightSegments().size());
+//        System.out.println("curve.leftSegments().size() ::: " + curve.leftSegments().size());
 
         ViewingAttr leftViewingAtt = new ViewingAttr(Color.yellow);
         ViewingAttr rightViewingAttr = new ViewingAttr(Color.magenta);
@@ -177,7 +177,7 @@ public class BifurcationCurveGeomFactory extends RpCalcBasedGeomFactory {
             i++;
 
         }
-        System.out.println("createGeomFromSource() : valor de i ::: " + i);
+//        System.out.println("createGeomFromSource() : valor de i ::: " + i);
 
         int j = 0;
         for (Object realSegment : curve.leftSegments()) {
@@ -185,9 +185,9 @@ public class BifurcationCurveGeomFactory extends RpCalcBasedGeomFactory {
 
             j++;
         }
-        System.out.println("createGeomFromSource() : valor de j ::: " + j);
+//        System.out.println("createGeomFromSource() : valor de j ::: " + j);
 
-        System.out.println("createGeomFromSource() : valor de i+j ::: " + (i + j));
+//        System.out.println("createGeomFromSource() : valor de i+j ::: " + (i + j));
 
         BifurcationCurveGeomSide leftBifurcationGeom = new BifurcationCurveGeomSide(bifurcationArrayLeft, this);
         BifurcationCurveGeomSide rightBifurcationGeom = new BifurcationCurveGeomSide(bifurcationArrayRight, this);

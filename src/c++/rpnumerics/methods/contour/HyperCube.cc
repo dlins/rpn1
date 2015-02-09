@@ -644,7 +644,7 @@ void HyperCube::mkfnbr(int *fnbr_, int *comb_, //fnbr_[nsface_][nsface_], comb_[
         for (i = 0; i < n_ + 1; i++) {
             stor[i] = 0;
         }
-        cout << "Valor de n_: " << n_ << " Valor de m_: " << m_ << " Valor de nsface_: " << nsface_ << endl;
+//        cout << "Valor de n_: " << n_ << " Valor de m_: " << m_ << " Valor de nsface_: " << nsface_ << endl;
 
         for (i = 0; i < m_ + 1; i++) {
             stor[comb_[nf * (m_ + 1) + i]] = 1;

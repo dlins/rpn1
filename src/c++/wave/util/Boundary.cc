@@ -74,7 +74,7 @@ int Boundary::intersection(const RealVector &p, const RealVector &q, RealVector 
         } while (norm(pp - qq) > d && count < 100);
 
 
-        std::cout << "Boundary. Before returning, r = " << r << std::endl;
+//        std::cout << "Boundary. Before returning, r = " << r << std::endl;
         return BOUNDARY_INTERSECTION_FOUND;
 
     }

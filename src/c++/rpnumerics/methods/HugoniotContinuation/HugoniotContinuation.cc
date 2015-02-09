@@ -236,7 +236,7 @@ int HugoniotContinuation::Newton_in_hyperplane(const RealVector &origin, const D
 
         Newton_system_for_Hugoniot(hyperplane_point, hyperplane, Newton_matrix, error);
 
-        std::cout << "Newton_matrix =\n" << Newton_matrix << std::endl;
+//        std::cout << "Newton_matrix =\n" << Newton_matrix << std::endl;
 
         int info_correction = solve(Newton_matrix, error, correction);
         
@@ -249,11 +249,11 @@ int HugoniotContinuation::Newton_in_hyperplane(const RealVector &origin, const D
         iterations++;
         
         norm_correction = norm(correction);
-        std::cout << "    correction = " << correction << ", norm_correction = " << norm_correction << std::endl;
+//        std::cout << "    correction = " << correction << ", norm_correction = " << norm_correction << std::endl;
         
     } while (iterations < max_number_iterations && norm_correction > min_norm && norm_correction < 10.0); // TODO: 10.0 was fixed here, it must be fine-tuned, perhaps it should become a member.
     
-    std::cout << "Newton_in_hyperplane, iterations = " << iterations << std::endl;
+//    std::cout << "Newton_in_hyperplane, iterations = " << iterations << std::endl;
 
     if (iterations >= max_number_iterations) return HUGONIOTCONTINUATION_NEWTON_ERROR;
     
@@ -321,7 +321,7 @@ int HugoniotContinuation::Newton_step(const RealVector &previous_point, double &
         //
         info_newton = Newton_in_hyperplane(hyperplane_origin, hyperplane, Hugoniot_intersection);
 
-        std::cout << "info_newton = " << info_newton << ", hyperplane_origin = " << hyperplane_origin << ", Hugoniot_intersection = " << Hugoniot_intersection << std::endl;
+//        std::cout << "info_newton = " << info_newton << ", hyperplane_origin = " << hyperplane_origin << ", Hugoniot_intersection = " << Hugoniot_intersection << std::endl;
         if (info_newton != HUGONIOTCONTINUATION_NEWTON_OK){
             return HUGONIOTCONTINUATION_NEWTON_STEP_ERROR;
         } 
@@ -510,7 +510,7 @@ int HugoniotContinuation::curve_engine(const RealVector &in, const RealVector &i
         // If the bifurcation space was crossed, add the point where the space was intersected (found by linear interpolation)
         // to the curve.
 
-        previous_point     = Hugoniot_intersection; std::cout << Hugoniot_intersection << std::endl;
+        previous_point     = Hugoniot_intersection; //std::cout << Hugoniot_intersection << std::endl;
         previous_direction = Hugoniot_direction;
         
         // Verify if the new point lies within the domain or not.
@@ -563,7 +563,7 @@ int HugoniotContinuation::curve_point(const RealVector &previous_point, double p
 
     int info_Newton_step = Newton_step(previous_point, step_size, number_of_steps_with_unchanged_size, direction, Hugoniot_intersection);
 
-    std::cout << "info_Newton_step = " << info_Newton_step << ", Hugoniot_intersection = " << Hugoniot_intersection << std::endl;
+//    std::cout << "info_Newton_step = " << info_Newton_step << ", Hugoniot_intersection = " << Hugoniot_intersection << std::endl;
     if (info_Newton_step != HUGONIOTCONTINUATION_NEWTON_STEP_OK){
 //        TestTools::pause("Hug. 1");
 
@@ -595,7 +595,7 @@ int HugoniotContinuation::curve_point(const RealVector &previous_point, double p
         // TODO: The step_size should be decreased here!
     }
 
-    std::cout << "step_size = " << step_size << std::endl;
+//    std::cout << "step_size = " << step_size << std::endl;
 
         
     if (info_Newton_step != HUGONIOTCONTINUATION_NEWTON_STEP_OK){
@@ -700,7 +700,6 @@ HugoniotContinuation::~HugoniotContinuation(){
 //
 int HugoniotContinuation::curve(std::vector< std::vector<RealVector> > &curves){
     std::vector<int> edges;
-//    cout<<"Algo"<< reference_point.point<<"                 "<<ref.point<< endl;
     int info = all_curves(curves, edges);
 
     return info;
@@ -711,9 +710,9 @@ int HugoniotContinuation::disconnected_curve(const RealVector &point_on_edge, in
 }
 
 int HugoniotContinuation::all_curves(std::vector< std::vector<RealVector> > &curves, std::vector<int> &edges){
-//    cout <<"Em all"<<endl;
+
     int info = connected_curve(curves, edges);
-//    cout <<"ddfasdfasd"<<endl;
+
     std::vector<std::vector<RealVector> > disconnected_temp;
     std::vector<int> disconnected_edges;
 
