@@ -26,12 +26,18 @@
 // All methods within this class should be virtual, so the derived classes can
 // modify them as need be.
 //
+
+#define PARAMETER_FLOAT 1
+
 class Parameter:public Subject {
     private:
         // Users should not add any private members.
     protected:
         std::string name_;
+        std::string tooltip_;
         double min_, max_, value_;
+
+        int type_;
 
         virtual void copy(const Parameter *original);
     public:
@@ -46,6 +52,8 @@ class Parameter:public Subject {
         virtual Parameter operator=(const Parameter &original);
 
         virtual std::string name() const {return name_;}
+        virtual std::string tooltip() const {return tooltip_;}
+        virtual void tooltip(const std::string &s){tooltip_ = s; return;}
 
         virtual double min() const {return min_;}
         virtual void min(double m) {min_ = m; return;}

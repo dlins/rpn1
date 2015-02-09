@@ -82,12 +82,12 @@ void HugoniotODE::curve_engine(const RealVector &initial_point, const RealVector
     RealVector point(initial_point), next_point;
 
     double xi = 0.0;
-    double delta_xi = 1e-3;
+    double delta_xi = 1e-6;
 
     double next_xi = xi + delta_xi;
 
     while (true){
-        if (c.curve.size() > 8000) return;
+        if (c.curve.size() > 8000000) return;
 
         int info_odesolver = odesolver->integrate_step(&HugoniotODE::field, 
                                                        0,

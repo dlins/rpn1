@@ -389,6 +389,8 @@ void parametercb(Fl_Widget *w, void *param_obj){
 void add_parameters(int px, const std::vector<Parameter*> &vp){
     for (int i = 0; i < vp.size(); i++){
         Fl_Float_Input *input = new Fl_Float_Input(px, parametersgrp->y() + 10 + (25 + 10)*i, parametersgrp->w() - 10 - px, 25, vp[i]->name().c_str());
+        input->tooltip(vp[i]->tooltip().c_str());
+
         std::stringstream ss;
         ss << vp[i]->value();
         input->value(ss.str().c_str());
