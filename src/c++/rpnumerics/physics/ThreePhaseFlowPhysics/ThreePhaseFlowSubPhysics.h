@@ -100,9 +100,9 @@ class ThreePhaseFlowSubPhysics : public SubPhysics {
         //
         ThreePhaseFlowMobility* mobility(){return mobility_;}
 
-//        virtual bool inside_contact_region(const RealVector &p, int family);
+        virtual bool inside_contact_region(const RealVector &p, int family);
 
-//        virtual double distance_to_contact_region(const RealVector &p);
+        virtual double distance_to_contact_region(const RealVector &p);
 };
 
 #endif // _THREEPHASEFLOWSUBPHYSICS_
