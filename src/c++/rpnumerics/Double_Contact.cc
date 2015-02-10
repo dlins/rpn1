@@ -88,11 +88,11 @@ void Double_Contact::curve(const FluxFunction *lf, const AccumulationFunction *l
     left_curve.clear(); 
     right_curve.clear(); 
 
-    std::cout << "Before" << std::endl;
+//    std::cout << "Before" << std::endl;
 
     Contour2x2_Method::curve2x2(this, left_curve, right_curve);
 
-    std::cout << "After" << std::endl;
+//    std::cout << "After" << std::endl;
 
     return;
 }

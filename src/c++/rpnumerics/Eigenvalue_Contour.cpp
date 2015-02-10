@@ -153,7 +153,7 @@ void Eigenvalue_Contour::set_level_from_point(const FluxFunction *f, const Accum
     family = fam;
 
 
-    cout<<"Tamanho do p: "<<p.size()<<endl;
+//    cout<<"Tamanho do p: "<<p.size()<<endl;
     double JF[p.size()*p.size()], JG[p.size()*p.size()];
 
     f->fill_with_jet(p.size(), ((RealVector)p).components(), 1, 0, JF, 0);
