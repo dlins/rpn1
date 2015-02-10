@@ -9,6 +9,7 @@
 #include "FoamShockObserver.h"
 
 #include "HugoniotODE.h"
+#include "EulerSolver.h"
 
 //#define FOAMDEBUG
 #ifdef FOAMDEBUG

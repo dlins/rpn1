@@ -107,8 +107,8 @@ FoamSubPhysics::FoamSubPhysics() : ThreePhaseFlowSubPhysics(){
     // GridValues.
     //
     std::vector<int> number_of_cells(2);
-    number_of_cells[0] = 513;
-    number_of_cells[1] = 513;
+    number_of_cells[0] = 128;
+    number_of_cells[1] = 128;
 
     gridvalues_ = new GridValues(boundary_, boundary_->minimums(), boundary_->maximums(), number_of_cells);
     for (int i = 0; i < equation_parameter_.size(); i++) equation_parameter_[i]->add(gridvalues_);
@@ -155,8 +155,10 @@ FoamSubPhysics::FoamSubPhysics() : ThreePhaseFlowSubPhysics(){
     odesolver_ = new LSODE;
 
     // TEST HugoniotODE
-//    EulerSolver *euler = new EulerSolver(boundary_, 5);
-    HugoniotODE *hode = new HugoniotODE(this, odesolver_);
+    EulerSolver *euler = new EulerSolver(boundary_, 10);
+    HugoniotODE *hode = new HugoniotODE(this, euler);
+
+//    HugoniotODE *hode = new HugoniotODE(this, odesolver_);
     hugoniot_curve.push_back(hode);
 
     // WaveCurve.
