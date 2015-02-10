@@ -161,7 +161,7 @@ void Curve::disable_adjacent_cells(GridValues *g, int row, int col){
 }
 
 void Curve::disable_intersecting_cells(GridValues *g){
-    std::cout << "curve.size() = " << curve.size() << std::endl;
+//    std::cout << "curve.size() = " << curve.size() << std::endl;
 
     for (int k = 0; k < curve.size() - 1; k++){
 //        for (int i = 0; i < g->cell_type.rows(); i++){

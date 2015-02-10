@@ -89,6 +89,14 @@ class SubPhysics;
 #define MAX_COS_ANGLE (0.96)
 #endif
 
+//#define TESTHUGONIOT
+#ifdef TESTHUGONIOT
+#include "canvas.h"
+#include "canvasmenuscroll.h"
+#include "curve2d.h"
+#endif
+
+
 // This class computes the Hugoniot locus using a continuation method.
 // 
 // The class is abstract, as the following methods must be supplied by derived classes:
@@ -143,6 +151,11 @@ class HugoniotContinuation: public HugoniotCurve {
         // Derived classes must provide:
         //
         virtual RealVector orthogonalize(const RealVector &previous_direction, const DoubleMatrix &hyperplane) = 0;
+
+        #ifdef TESTHUGONIOT
+        Canvas *canvas;
+        CanvasMenuScroll *scroll;
+        #endif
     public:
         HugoniotContinuation(const FluxFunction *ff, const AccumulationFunction *gg, const Boundary *bb);
         virtual ~HugoniotContinuation();
@@ -267,6 +280,10 @@ class HugoniotContinuation: public HugoniotCurve {
 
             return;
         }
+
+        #ifdef TESTHUGONIOT
+        void set_canvas(Canvas *c, CanvasMenuScroll *s){canvas = c; scroll = s; return;}
+        #endif
 };
 
 #endif // _HUGONIOTCONTINUATION_

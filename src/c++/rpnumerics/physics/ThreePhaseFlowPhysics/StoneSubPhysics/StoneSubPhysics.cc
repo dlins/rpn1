@@ -39,7 +39,7 @@ StoneSubPhysics::StoneSubPhysics() : ThreePhaseFlowSubPhysics(){
     equation_parameter_.push_back(vel_parameter);
 
     flux_ = new StoneFluxFunction(grw_parameter, grg_parameter, gro_parameter, muw_parameter, mug_parameter, muo_parameter, vel_parameter, (StonePermeability*)permeability_);
-    std::cout << "Stone flux: " << (void*)flux_ << std::endl;
+//    std::cout << "Stone flux: " << (void*)flux_ << std::endl;
 
     // GridValues.
     //
@@ -50,7 +50,7 @@ StoneSubPhysics::StoneSubPhysics() : ThreePhaseFlowSubPhysics(){
     gridvalues_ = new GridValues(boundary_, boundary_->minimums(), boundary_->maximums(), number_of_cells);
     for (int i = 0; i < equation_parameter_.size(); i++) equation_parameter_[i]->add(gridvalues_);
     
-    cout<<"Em subphysics "<<(void * )gridvalues_<<endl;
+//    cout<<"Em subphysics "<<(void * )gridvalues_<<endl;
 
     // HugoniotContinuation.
     //

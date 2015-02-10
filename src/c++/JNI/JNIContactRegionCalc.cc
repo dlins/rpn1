@@ -56,14 +56,11 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ContactRegionCalc_calcNative
 
     int dimension = RpNumerics::physicsVector_->at(0)->boundary()->minimums().size();
 
-
-
     std::vector<RealVector > left_vrs;
 
     
     RpNumerics::physicsVector_->at(0)->contact_region_boundary()->curve(family,left_vrs);
- 
-  
+
     if (left_vrs.size() == 0)
         return NULL;
 

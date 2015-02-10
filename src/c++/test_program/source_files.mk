@@ -7,6 +7,7 @@ ccSRC +=  \
 	../Model/SubPhysics.cc \
 	../Model/TrivialAccumulationFunction.cc \
 	../Model/Parameter.cc \
+	../Model/CheckParameter.cc \
 	../Model/Physics.cc \
 	../Observer_Subject/Subject.cc \
 	../Observer_Subject/Observer.cc \

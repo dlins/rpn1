@@ -1,4 +1,5 @@
 #include "LSODE.h"
+//#include "TestTools.h"
 
 LSODE::LSODE(){
 }
@@ -87,6 +88,11 @@ int LSODE::integrate_step(int (*field)(int*, double*, double*, double*, int*, do
     delete [] rwork;
     delete [] atol;
     
+    if (istate != ODE_SOLVER_OK){
+//        std::cout << "istate = " << istate << std::endl;
+//        TestTools::pause("Error on LSODE.");
+    }
+
     // TODO: Perhaps the return codes should be augmented to cover all of LSODE's possible error codes.
     //
     if (istate == ODE_SOLVER_OK)                        return ODE_SOLVER_OK;

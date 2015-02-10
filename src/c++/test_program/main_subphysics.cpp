@@ -23,6 +23,7 @@
 #include "canvasmenuscroll.h"
 #include "curve2d.h"
 #include "segmentedcurve.h"
+#include "quiverplot.h"
 #include "MultiColoredCurve.h"
 #include "WaveCurvePlot.h"
 #include "LSODE.h"
@@ -137,6 +138,9 @@ void Hugoniotcb(Fl_Widget*, void*){
 
     canvas->getxy(p(0), p(1));
 
+//    p(0) = .64358;
+//    p(1) = .186065;
+
     std::cout << p << std::endl;
 
     if (!subphysics->boundary()->inside(p)) return;
@@ -160,14 +164,66 @@ void Hugoniotcb(Fl_Widget*, void*){
         scroll->add(ss.str().c_str(), canvas, mcc);
     }
 
-    // TEST ONLY
-    {
-        // Ref. point.
-        {
-//            Curve2D ref
-        }
-    }
-    // TEST ONLY
+//    // TEST ONLY
+//    {
+//        // Ref. point.
+//        {
+//            Curve2D *c = new Curve2D(ref.point, 0.0, 0.0, 0.0, CURVE2D_MARKERS);
+//            canvas->add(c);
+//            scroll->add("Ref.", canvas, c);
+//        }
+
+//        // Ref. + r.
+//        RealVector next_point;
+//        double eps = 1e-2;
+
+//        {
+//            std::vector<eigenpair> e;
+//            Eigen::eig(p.size(), ref.JF.data(), ref.JG.data(), e);
+
+//            RealVector r(p.size());
+//            for (int i = 0; i < p.size(); i++) r(i) = e[0].vrr[i];
+//            next_point = ref.point + eps*r;
+
+//            std::vector<RealVector> rr;
+//            rr.push_back(ref.point);
+//            rr.push_back(next_point);
+
+//            Curve2D *c = new Curve2D(rr, 1.0, 0.0, 0.0);
+//            canvas->add(c);
+//            scroll->add("Ref. + r.", canvas, c);
+//        }
+
+//        // Nabla.
+//        {
+//            JetMatrix Fjet, Gjet;
+//            subphysics->flux()->jet(next_point, Fjet, 1);
+//            subphysics->accumulation()->jet(next_point, Gjet, 1);
+
+//            RealVector H;
+//            DoubleMatrix nablaH;
+
+//            subphysics->Hugoniot_continuation()->set_reference_point(ref);
+//            subphysics->Hugoniot_continuation()->jet_Hugoniot(Fjet.function(), Fjet.Jacobian(), 
+//                                                              Gjet.function(), Gjet.Jacobian(), 
+//                                                              H, nablaH);
+
+//            RealVector nablaH_vec(2);
+////            for (int i = 0; i < 2; i++) nablaH_vec(i) = nablaH(i, 0);
+//            nablaH_vec(0) = nablaH(1, 0);
+//            nablaH_vec(1) = nablaH(0, 0);
+//            normalize(nablaH_vec);
+
+//            std::vector<RealVector> nn;
+//            nn.push_back(next_point);
+//            nn.push_back(next_point + eps*nablaH_vec);
+
+//            Curve2D *c = new Curve2D(nn, 0.0, 0.0, 1.0);
+//            canvas->add(c);
+//            scroll->add("next + nablaH", canvas, c);
+//        }
+//    }
+//    // TEST ONLY
 
     return;
 }
@@ -333,6 +389,8 @@ void parametercb(Fl_Widget *w, void *param_obj){
 void add_parameters(int px, const std::vector<Parameter*> &vp){
     for (int i = 0; i < vp.size(); i++){
         Fl_Float_Input *input = new Fl_Float_Input(px, parametersgrp->y() + 10 + (25 + 10)*i, parametersgrp->w() - 10 - px, 25, vp[i]->name().c_str());
+        input->tooltip(vp[i]->tooltip().c_str());
+
         std::stringstream ss;
         ss << vp[i]->value();
         input->value(ss.str().c_str());
@@ -1506,19 +1564,46 @@ void on_move_coords(Fl_Widget*, void*){
     return;
 }
 
+// TODO: The field should change with the parameters.
+//
+void rarefaction_field_plot(int family){
 
-void rarefaction_field_plot(){
     GridValues *g = subphysics->gridvalues();
     g->fill_eigenpairs_on_grid(subphysics->flux(), subphysics->accumulation());
 
     int rows = g->grid.rows();
     int cols = g->grid.cols();
 
+    int n = subphysics->boundary()->minimums().size();
+    double res_size = .5*norm(g->grid_resolution);
+
+    std::vector<Point2D> base, tip;
+
     for (int i = 0; i < rows*cols; i++){
         if (g->point_inside(i)){
+            RealVector r(n);
+            for (int j = 0; j < n; j++) r(j) = g->e(i)[family].vrr[j];
             
+            // Scale it a bit.
+            //
+            Point2D bp;
+            bp.x = g->grid(i)(0);
+            bp.y = g->grid(i)(1);
+            base.push_back(bp);
+
+            Point2D tp;
+            tp.x = bp.x + r(0)*res_size;
+            tp.y = bp.y + r(1)*res_size;
+            tip.push_back(tp);
         }
     }
+
+    QuiverPlot *qp = new QuiverPlot(base, tip, 0.0, 0.0, 0.0);
+    canvas->add(qp);
+
+    std::stringstream ss;
+    ss << "Rar. field, fam = " << family;
+    scroll->add(ss.str().c_str(), canvas, qp);
 
     return;
 }
@@ -1535,9 +1620,9 @@ int main(){
 
 //    subphysics = new StoneSubPhysics;
 //    subphysics = new Brooks_CoreySubPhysics;
-    subphysics = new CoreyQuadSubPhysics;
+//    subphysics = new CoreyQuadSubPhysics;
 //    subphysics = new KovalSubPhysics;
-//    subphysics = new FoamSubPhysics;
+    subphysics = new FoamSubPhysics;
 //    subphysics = new SorbieSubPhysics;
 //    subphysics = new TPCWSubPhysics;
 //    subphysics = new Quad2SubPhysics;
@@ -1740,6 +1825,12 @@ int main(){
     }
     #endif
 
+
+    #ifdef TESTHUGONIOT
+    subphysics->Hugoniot_continuation()->set_canvas(canvas, scroll);
+    #endif
+
+//    for (int i = 0; i < subphysics->number_of_families(); i++) rarefaction_field_plot(i);
 
     return Fl::run();
 }

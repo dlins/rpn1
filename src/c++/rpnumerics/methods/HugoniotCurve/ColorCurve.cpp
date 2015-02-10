@@ -546,13 +546,13 @@ void ColorCurve::classify_segment(RealVector &p, RealVector &q,
     std::vector<double> eigenvalue_p, eigenvalue_q;
     std::string ct_p, ct_q;
 
-    std::cout << "Before classifying p = " << p << std::endl;
+//    std::cout << "Before classifying p = " << p << std::endl;
     int type_p = classify_point(p, s_p, eigenvalue_p, ct_p);
-    std::cout << "After classifying p" << std::endl;
+//    std::cout << "After classifying p" << std::endl;
 
-    std::cout << "Before classifying q = " << q << std::endl;
+//    std::cout << "Before classifying q = " << q << std::endl;
     int type_q = classify_point(q, s_q, eigenvalue_q, ct_q);
-    std::cout << "After classifying q" << std::endl;
+//    std::cout << "After classifying q" << std::endl;
 
     if (type_p == UNCLASSIFIABLE_POINT || type_q == UNCLASSIFIABLE_POINT) return;
 
@@ -588,11 +588,11 @@ void ColorCurve::classify_segment(RealVector &p, RealVector &q,
         hpl.eigenvalue[0].component(j) = eigenvalue_p[j];
     }
 
-    std::cout << "        Begin classify_segment_with_data: p = " << type_p << ", q = " << type_q << std::endl;
+//    std::cout << "        Begin classify_segment_with_data: p = " << type_p << ", q = " << type_q << std::endl;
     classify_segment_with_data(p, s_p, eigenvalue_p, ct_p, type_p,
                                q, s_q, eigenvalue_q, ct_q, type_q,
                                hpl, classified_curve, transition_list);
-    std::cout << "        End classify_segment_with_data" << std::endl;
+//    std::cout << "        End classify_segment_with_data" << std::endl;
 
     return;
 }

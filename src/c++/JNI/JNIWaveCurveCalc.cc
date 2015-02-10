@@ -152,13 +152,13 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc
 //    cout << "Valor de origin" <<" "<<origin<<"  " <<originNumber << endl;
     
     
-    cout << "Valor de origin" <<origin<<endl;
-    
-    cout << "Valor de family" << familyNumber << endl;
-    
-    cout << "Valor de increase" << timeDirection << endl;
-
-    cout << "Ponto entrado: " << realVectorInput << endl;
+//    cout << "Valor de origin" <<origin<<endl;
+//    
+//    cout << "Valor de family" << familyNumber << endl;
+//    
+//    cout << "Valor de increase" << timeDirection << endl;
+//
+//    cout << "Ponto entrado: " << realVectorInput << endl;
 
     
 
@@ -246,13 +246,13 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc
 
 
 
-    cout << "Valor de curveID C++" << CURVEID << endl;
+//    cout << "Valor de curveID C++" << CURVEID << endl;
 
 
 
     if (info == WAVECURVEFACTORY_INVALID_PARAMETERS) {
 
-        cout<<"Wave curve factory : parametros invalidos "<<endl;
+//        cout<<"Wave curve factory : parametros invalidos "<<endl;
         
         delete hwc;
 
@@ -430,7 +430,7 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_WaveCurveCalc_nativeCalc
                 
                 
                 default :
-                    cout << "Tipo de curva nao conhecido !!" << endl;
+//                    cout << "Tipo de curva nao conhecido !!" << endl;
                     return NULL; 
 
             }

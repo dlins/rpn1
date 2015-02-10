@@ -345,7 +345,7 @@ class ShockCurve {
         void distance_to_contact_region(double d){
             distance_to_contact_region_ = d;
 
-            std::cout << "New distance: " << distance_to_contact_region_ << std::endl;
+//            std::cout << "New distance: " << distance_to_contact_region_ << std::endl;
             return;
         }
 

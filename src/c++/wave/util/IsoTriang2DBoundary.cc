@@ -115,8 +115,8 @@ void Three_Phase_Boundary::extension_curve(const FluxFunction *f, const Accumula
                               seg,
                               c, d);
     
-    cout<<"c: "<<c.size()<<endl;
-    cout<<"d: "<<d.size()<<endl;
+//    cout<<"c: "<<c.size()<<endl;
+//    cout<<"d: "<<d.size()<<endl;
     return;
 }
 

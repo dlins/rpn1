@@ -20,7 +20,7 @@ QuiverPlot::QuiverPlot(const vector<Point2D> &pb, const vector<Point2D> &pe, dou
             double length = sqrt((p0[i].x - p1[i].x)*(p0[i].x - p1[i].x) 
                                + (p0[i].y - p1[i].y)*(p0[i].y - p1[i].y));
 
-            printf("length = %f\n", length);
+//            printf("length = %f\n", length);
 
             // NaN test
             // Details here: http://bytes.com/groups/cpp/588254-how-check-double-inf-nan
@@ -50,8 +50,8 @@ QuiverPlot::QuiverPlot(const vector<Point2D> &pb, const vector<Point2D> &pe, dou
             if (ymax < pe[i].y) ymax = pe[i].y;
         }
 
-        pmin.x = xmin; pmin.y = ymin;
-        pmax.x = xmax; pmax.y = ymax;
+//        pmin.x = xmin; pmin.y = ymin;
+//        pmax.x = xmax; pmax.y = ymax;
     }
 }
 

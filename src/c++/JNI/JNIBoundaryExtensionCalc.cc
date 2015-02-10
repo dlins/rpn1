@@ -82,13 +82,13 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_BoundaryExtensionCurveCalc_nativeCalc
     GridValues * gv = RpNumerics::physicsVector_->at(0)->gridvalues();
 
 
-
-
-    cout << "domain family: " << domainFamily << endl;
-    cout << "characteristicWhere: " << characteristicWhere << endl;
-    cout << "Edge resolution: " << edgeResolution << endl;
-    cout << "edge: " << edge << endl;
-
+//
+//
+//    cout << "domain family: " << domainFamily << endl;
+//    cout << "characteristicWhere: " << characteristicWhere << endl;
+//    cout << "Edge resolution: " << edgeResolution << endl;
+//    cout << "edge: " << edge << endl;
+//
 
 
 //    std::vector<int> number_of_cells(2);
@@ -104,9 +104,9 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_BoundaryExtensionCurveCalc_nativeCalc
 
     physicsBoundary->extension_curve(flux, accum, *gv, edge, edgeResolution, true, domainFamily, characteristicWhere, curve_segments, domain_segments);
 
-    cout << "Tamanho de curve segments: " << curve_segments.size() << endl;
+//    cout << "Tamanho de curve segments: " << curve_segments.size() << endl;
     
-    cout << "Tamanho de domain segments: " << domain_segments.size() << endl;
+//    cout << "Tamanho de domain segments: " << domain_segments.size() << endl;
 
     if (curve_segments.size() == 0)return NULL;
 
