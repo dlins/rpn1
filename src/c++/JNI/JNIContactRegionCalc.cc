@@ -62,12 +62,8 @@ JNIEXPORT jobject JNICALL Java_rpnumerics_ContactRegionCalc_calcNative
 
     
     RpNumerics::physicsVector_->at(0)->contact_region_boundary()->curve(family,left_vrs);
-    
-
-    
-
-   
-   
+ 
+  
     if (left_vrs.size() == 0)
         return NULL;
 
